@@ -1,7 +1,7 @@
 import React from 'react';
 import './global';
 import { web3, kit } from './root'
-import { Image, StyleSheet, Text, Button, View, YellowBox } from 'react-native';
+import { Image, StyleSheet, Text, Button, View, YellowBox, NativeSyntheticEvent, NativeTouchEvent } from 'react-native';
 import {
     requestTxSig,
     waitForSignedTxs,
@@ -14,27 +14,40 @@ import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
 import { Linking } from 'expo'
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import ContractAddresses from './contracts/network.json';
+import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 
 
 YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
 
-export default class App extends React.Component {
 
-    state = {
-        address: 'Not logged in',
-        phoneNumber: 'Not logged in',
-        cUSDBalance: 'Not logged in',
-        nextClaim: 0,
-        claimDisabled: true,
-        isUser: false,
-        impactMarketContract: {}
+interface IAppState {
+    address: string;
+    phoneNumber: string;
+    cUSDBalance: string;
+    nextClaim: number;
+    claimDisabled: boolean;
+    isUser: boolean;
+    impactMarketContract: any;
+}
+export default class App extends React.Component<{}, IAppState> {
+
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            address: 'Not logged in',
+            phoneNumber: 'Not logged in',
+            cUSDBalance: 'Not logged in',
+            nextClaim: 0,
+            claimDisabled: true,
+            isUser: false,
+            impactMarketContract: {} as any
+        }
     }
 
     loadContracts = async () => {
         const instance = new web3.eth.Contract(
-            ImpactMarketContractABI,
+            ImpactMarketContractABI as any,
             ContractAddresses.alfajores.ImpactMarket,
-            { from: this.state.account }
         );
 
         this.loadAllowance(instance);
@@ -43,7 +56,7 @@ export default class App extends React.Component {
         })
     }
 
-    loadAllowance = async (instance) => {
+    loadAllowance = async (instance: any) => {
         const { address } = this.state;
         const cooldownTime = await instance.methods.cooldownClaim(address).call();
         const isUser = await instance.methods.isWhitelistUser(address).call();
@@ -73,13 +86,13 @@ export default class App extends React.Component {
 
         const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(kit.defaultAccount), stableToken.decimals()])
         let cUSDBalance = cUSDBalanceBig.toString()
-        this.setState({ cUSDBalance, isLoadingBalance: false })
+        this.setState({ cUSDBalance })
 
         this.setState({ address: dappkitResponse.address, phoneNumber: dappkitResponse.phoneNumber })
         this.loadContracts();
     }
 
-    handleClaimPress = async (ev) => {
+    handleClaimPress = async (ev: NativeSyntheticEvent<NativeTouchEvent>) => {
         const { impactMarketContract, address } = this.state;
         const requestId = 'user_claim'
         const dappName = 'Impact Market'
