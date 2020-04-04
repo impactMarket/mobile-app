@@ -1,167 +1,141 @@
 import React from 'react';
 import './global';
 import { web3, kit } from './root'
-import { Image, StyleSheet, Text, Button, View, YellowBox, NativeSyntheticEvent, NativeTouchEvent } from 'react-native';
 import {
-    requestTxSig,
-    waitForSignedTxs,
-    requestAccountAddress,
-    waitForAccountAuth,
-    FeeCurrency
-} from '@celo/dappkit'
-import { CeloContract } from '@celo/contractkit'
-import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
-import { Linking } from 'expo'
-import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
-import ContractAddresses from './contracts/network.json';
-import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
+    Image,
+    View,
+    YellowBox,
+    AsyncStorage,
+} from 'react-native';
+
+import { AntDesign } from '@expo/vector-icons';
+import { AppLoading, SplashScreen } from 'expo';
+import { Asset } from 'expo-asset';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Home from './tab/Home';
+import Community from './tab/Community';
+import Account from './tab/Account';
+import { NavigationContainer } from '@react-navigation/native';
+import Login from './components/Login';
+
+const Tab = createBottomTabNavigator();
 
 
 YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
 
 
 interface IAppState {
-    address: string;
+    isSplashReady: boolean;
+    isAppReady: boolean;
+    loggedIn: boolean;
+    account: string;
     phoneNumber: string;
-    cUSDBalance: string;
-    nextClaim: number;
-    claimDisabled: boolean;
-    isUser: boolean;
-    impactMarketContract: any;
 }
 export default class App extends React.Component<{}, IAppState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
-            address: 'Not logged in',
-            phoneNumber: 'Not logged in',
-            cUSDBalance: 'Not logged in',
-            nextClaim: 0,
-            claimDisabled: true,
-            isUser: false,
-            impactMarketContract: {} as any
+            isSplashReady: false,
+            isAppReady: false,
+            loggedIn: false,
+            account: '',
+            phoneNumber: '',
         }
     }
 
-    loadContracts = async () => {
-        const instance = new web3.eth.Contract(
-            ImpactMarketContractABI as any,
-            ContractAddresses.alfajores.ImpactMarket,
-        );
-
-        this.loadAllowance(instance);
-        this.setState({
-            impactMarketContract: instance,
-        })
-    }
-
-    loadAllowance = async (instance: any) => {
-        const { address } = this.state;
-        const cooldownTime = await instance.methods.cooldownClaim(address).call();
-        const isUser = await instance.methods.isWhitelistUser(address).call();
-        this.setState({
-            claimDisabled: cooldownTime * 1000 > new Date().getTime(),
-            nextClaim: cooldownTime * 1000,
-            isUser
-        })
-    }
-
-    login = async () => {
-        const requestId = 'login'
-        const dappName = 'Impact Market'
-        const callback = Linking.makeUrl('/my/path')
-
-        requestAccountAddress({
-            requestId,
-            dappName,
-            callback,
-        })
-
-        const dappkitResponse = await waitForAccountAuth(requestId)
-
-        kit.defaultAccount = dappkitResponse.address
-
-        const stableToken = await kit.contracts.getStableToken()
-
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(kit.defaultAccount), stableToken.decimals()])
-        let cUSDBalance = cUSDBalanceBig.toString()
-        this.setState({ cUSDBalance })
-
-        this.setState({ address: dappkitResponse.address, phoneNumber: dappkitResponse.phoneNumber })
-        this.loadContracts();
-    }
-
-    handleClaimPress = async (ev: NativeSyntheticEvent<NativeTouchEvent>) => {
-        const { impactMarketContract, address } = this.state;
-        const requestId = 'user_claim'
-        const dappName = 'Impact Market'
-        const callback = Linking.makeUrl('/my/path')
-
-        const txObject = await impactMarketContract.methods.claim()
-
-        requestTxSig(
-            kit,
-            [
-                {
-                    from: address,
-                    to: impactMarketContract.options.address,
-                    tx: txObject,
-                    feeCurrency: FeeCurrency.cUSD
-                }
-            ],
-            { requestId, dappName, callback }
-        )
-
-        const dappkitResponse = await waitForSignedTxs(requestId);
-        const tx = dappkitResponse.rawTxs[0];
-        let result = await toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt()
-
-        console.log(`Hello World contract update transcation receipt: `, result)
-        ev.preventDefault();
+    loginCallback = (account: string) => {
+        this.setState({ loggedIn: true, account });
     }
 
     render() {
-        const { claimDisabled, nextClaim, isUser } = this.state;
-        const userView = (
-            <>
-                {claimDisabled && nextClaim > 0 && <Text>Your next claim is at {new Date(nextClaim).toLocaleString()}</Text>}
-                <Button title="Claim" onPress={this.handleClaimPress} disabled={claimDisabled} />
-            </>
-        );
-        const nonUserView = (
-            <Text>You are not allowed!</Text>
-        );
+        const { loggedIn, isAppReady, isSplashReady, account } = this.state;
+        if (!isSplashReady) {
+            return (
+                <AppLoading
+                    startAsync={this._cacheSplashResourcesAsync}
+                    onFinish={() => this.setState({ isSplashReady: true })}
+                    onError={console.warn}
+                    autoHideSplash={false}
+                />
+            );
+        }
+
+        if (!isAppReady) {
+            return (
+                <View style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <Image
+                        source={require('./assets/splash.png')}
+                        onLoad={this._cacheResourcesAsync}
+                    />
+                </View>
+            );
+        }
+
+        if (!loggedIn) {
+            return <Login kit={kit} loginCallback={this.loginCallback} />
+        }
 
         return (
-            <View style={styles.container}>
-                <Image resizeMode='contain' source={require("./assets/white-wallet-rings.png")}></Image>
-                <Text>Open up client/App.js to start working on your app!</Text>
-
-                <Text style={styles.title}>Login first</Text>
-                <Button title="login()" onPress={() => this.login()} />
-                <Text style={styles.title}>Account Info:</Text>
-                <Text>Current Account Address:</Text>
-                <Text>{this.state.address}</Text>
-                <Text>Phone number: {this.state.phoneNumber}</Text>
-                <Text>cUSD Balance: {this.state.cUSDBalance}</Text>
-
-                {isUser ? userView : nonUserView}
-            </View>
+            <NavigationContainer>
+                <Tab.Navigator>
+                    <Tab.Screen
+                        name="Home"
+                        component={Home}
+                        initialParams={{kit, web3, account}}
+                        options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <AntDesign name="isv" size={size} color={color} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Community"
+                        component={Community}
+                        options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <AntDesign name="team" size={size} color={color} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Account"
+                        component={Account}
+                        initialParams={{props: { kit, account }}}
+                        options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <AntDesign name="user" size={size} color={color} />
+                            ),
+                        }}
+                    />
+                </Tab.Navigator>
+            </NavigationContainer>
         );
     }
-}
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#35d07f',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        marginVertical: 8,
-        fontSize: 20,
-        fontWeight: 'bold'
-    }
-});
+    _cacheSplashResourcesAsync = async () => {
+        const gif = require('./assets/splash.png');
+        return Asset.fromModule(gif).downloadAsync();
+    };
+
+    _cacheResourcesAsync = async () => {
+        SplashScreen.hide();
+        let account: string | null = '';
+        let phoneNumber: string | null = '';
+        try {
+            account = await AsyncStorage.getItem('ACCOUNT');
+            phoneNumber = await AsyncStorage.getItem('PHONENUMBER');
+            if (account !== null && phoneNumber !== null) {
+                // We have data!!
+                this.setState({ loggedIn: true, account, phoneNumber });
+            }
+        } catch (error) {
+            // Error retrieving data
+        }
+        this.setState({ isAppReady: true });
+    };
+}
