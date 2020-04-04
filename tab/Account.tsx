@@ -5,16 +5,25 @@ import {
     View,
 } from 'react-native';
 import { ContractKit } from '@celo/contractkit'
+import { connect, ConnectedProps } from 'react-redux';
 
 
 interface IAccountProps {
-    kit: ContractKit;
-    account: string;
 }
+const mapStateToProps = (state: any) => {
+    const { users } = state
+    return { users }
+};
+
+const connector = connect(mapStateToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & IAccountProps
 interface IAccountState {
     cUSDBalance: string;
 }
-export default class Account extends React.Component<IAccountProps, IAccountState> {
+class Account extends React.Component<Props, IAccountState> {
 
     constructor(props: any) {
         super(props);
@@ -22,19 +31,20 @@ export default class Account extends React.Component<IAccountProps, IAccountStat
             cUSDBalance: '',
         }
     }
+    
 
-    login = async () => {
-        const stableToken = await this.props.kit.contracts.getStableToken()
+    // login = async () => {
+    //     const stableToken = await this.props.kit.contracts.getStableToken()
 
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.account), stableToken.decimals()])
-        let cUSDBalance = cUSDBalanceBig.toString()
-        this.setState({ cUSDBalance })
-    }
+    //     const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.account), stableToken.decimals()])
+    //     let cUSDBalance = cUSDBalanceBig.toString()
+    //     this.setState({ cUSDBalance })
+    // }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>{this.props.account}</Text>
+                <Text>{this.props.users.account}</Text>
                 <Text>{this.state.cUSDBalance}</Text>
             </View>
         );
@@ -49,3 +59,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     }
 });
+
+export default connector(Account);

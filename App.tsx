@@ -17,8 +17,14 @@ import Community from './tab/Community';
 import Account from './tab/Account';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import userReducer from './helpers/UserReducer';
+import { setUserAddress } from './helpers/SetUserAddressAction';
+
 
 const Tab = createBottomTabNavigator();
+const store = createStore(userReducer);
 
 
 YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
@@ -28,8 +34,6 @@ interface IAppState {
     isSplashReady: boolean;
     isAppReady: boolean;
     loggedIn: boolean;
-    account: string;
-    phoneNumber: string;
 }
 export default class App extends React.Component<{}, IAppState> {
 
@@ -39,17 +43,15 @@ export default class App extends React.Component<{}, IAppState> {
             isSplashReady: false,
             isAppReady: false,
             loggedIn: false,
-            account: '',
-            phoneNumber: '',
         }
     }
 
     loginCallback = (account: string) => {
-        this.setState({ loggedIn: true, account });
+        this.setState({ loggedIn: true });
     }
 
     render() {
-        const { loggedIn, isAppReady, isSplashReady, account } = this.state;
+        const { loggedIn, isAppReady, isSplashReady } = this.state;
         if (!isSplashReady) {
             return (
                 <AppLoading
@@ -81,39 +83,39 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         return (
-            <NavigationContainer>
-                <Tab.Navigator>
-                    <Tab.Screen
-                        name="Home"
-                        component={Home}
-                        initialParams={{kit, web3, account}}
-                        options={{
-                            tabBarIcon: ({ color, size }) => (
-                                <AntDesign name="isv" size={size} color={color} />
-                            ),
-                        }}
-                    />
-                    <Tab.Screen
-                        name="Community"
-                        component={Community}
-                        options={{
-                            tabBarIcon: ({ color, size }) => (
-                                <AntDesign name="team" size={size} color={color} />
-                            ),
-                        }}
-                    />
-                    <Tab.Screen
-                        name="Account"
-                        component={Account}
-                        initialParams={{props: { kit, account }}}
-                        options={{
-                            tabBarIcon: ({ color, size }) => (
-                                <AntDesign name="user" size={size} color={color} />
-                            ),
-                        }}
-                    />
-                </Tab.Navigator>
-            </NavigationContainer>
+            <Provider store={store}>
+                <NavigationContainer>
+                    <Tab.Navigator>
+                        <Tab.Screen
+                            name="Home"
+                            component={Home}
+                            options={{
+                                tabBarIcon: ({ color, size }) => (
+                                    <AntDesign name="isv" size={size} color={color} />
+                                ),
+                            }}
+                        />
+                        <Tab.Screen
+                            name="Community"
+                            component={Community}
+                            options={{
+                                tabBarIcon: ({ color, size }) => (
+                                    <AntDesign name="team" size={size} color={color} />
+                                ),
+                            }}
+                        />
+                        <Tab.Screen
+                            name="Account"
+                            component={Account}
+                            options={{
+                                tabBarIcon: ({ color, size }) => (
+                                    <AntDesign name="user" size={size} color={color} />
+                                ),
+                            }}
+                        />
+                    </Tab.Navigator>
+                </NavigationContainer>
+            </Provider>
         );
     }
 
@@ -130,8 +132,9 @@ export default class App extends React.Component<{}, IAppState> {
             account = await AsyncStorage.getItem('ACCOUNT');
             phoneNumber = await AsyncStorage.getItem('PHONENUMBER');
             if (account !== null && phoneNumber !== null) {
+                store.dispatch(setUserAddress(account))
                 // We have data!!
-                this.setState({ loggedIn: true, account, phoneNumber });
+                this.setState({ loggedIn: true });
             }
         } catch (error) {
             // Error retrieving data

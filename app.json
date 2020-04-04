@@ -15,7 +15,7 @@
         "scheme": "celodappkit",
         "splash": {
             "image": "./assets/splash.png",
-            "resizeMode": "center",
+            "resizeMode": "cover",
             "backgroundColor": "#ffffff"
         },
         "updates": {
