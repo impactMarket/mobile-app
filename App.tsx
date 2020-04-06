@@ -19,8 +19,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import userReducer from './helpers/UserReducer';
-import { setUserAddress } from './helpers/SetUserAddressAction';
+import userReducer from './helpers/ReduxReducers';
+import { setUserCeloInfo, setCeloKit } from './helpers/ReduxActions';
+import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo } from './helpers/types';
 
 
 const Tab = createBottomTabNavigator();
@@ -46,12 +47,20 @@ export default class App extends React.Component<{}, IAppState> {
         }
     }
 
-    loginCallback = (account: string) => {
+    loginCallback = async (userCeloInfo: IUserCeloInfo) => {
+        try {
+            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userCeloInfo.address);
+            await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, userCeloInfo.phoneNumber);
+            store.dispatch(setUserCeloInfo({ address: userCeloInfo.address, phoneNumber: userCeloInfo.phoneNumber }))
+            store.dispatch(setCeloKit(kit));
+        } catch (error) {
+            // Error saving data
+        }
         this.setState({ loggedIn: true });
     }
 
     render() {
-        const { loggedIn, isAppReady, isSplashReady } = this.state;
+        const { isAppReady, isSplashReady, loggedIn } = this.state;
         if (!isSplashReady) {
             return (
                 <AppLoading
@@ -79,7 +88,7 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         if (!loggedIn) {
-            return <Login kit={kit} loginCallback={this.loginCallback} />
+            return <Login loginCallback={this.loginCallback} />
         }
 
         return (
@@ -126,19 +135,21 @@ export default class App extends React.Component<{}, IAppState> {
 
     _cacheResourcesAsync = async () => {
         SplashScreen.hide();
-        let account: string | null = '';
+        let address: string | null = '';
         let phoneNumber: string | null = '';
         try {
-            account = await AsyncStorage.getItem('ACCOUNT');
-            phoneNumber = await AsyncStorage.getItem('PHONENUMBER');
-            if (account !== null && phoneNumber !== null) {
-                store.dispatch(setUserAddress(account))
+            address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
+            phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
+            if (address !== null && phoneNumber !== null) {
+                store.dispatch(setUserCeloInfo({ address, phoneNumber }))
+                store.dispatch(setCeloKit(kit));
                 // We have data!!
                 this.setState({ loggedIn: true });
             }
         } catch (error) {
             // Error retrieving data
         }
+        store.dispatch(setCeloKit(kit))
         this.setState({ isAppReady: true });
     };
 }
