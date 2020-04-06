@@ -11,35 +11,16 @@ import {
     requestAccountAddress,
     waitForAccountAuth,
 } from '@celo/dappkit'
-import { ContractKit } from '@celo/contractkit'
 import { Linking } from 'expo'
-import { connect, ConnectedProps } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { setUserAddress } from '../helpers/SetUserAddressAction';
+import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo } from '../helpers/types';
 
 
 interface ILoginProps {
-    kit: ContractKit;
-    loginCallback: (account: string) => void;
+    loginCallback: (userCeloInfo: IUserCeloInfo) => void;
 }
-const mapDispatchToProps = (dispatch: any) => (
-    bindActionCreators({
-        setUserAddress,
-    }, dispatch)
-);
-const mapStateToProps = (state: any) => {
-    const { users } = state
-    return { users }
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & ILoginProps
 interface ILoginState {
 }
-class Login extends React.Component<Props, ILoginState> {
+export default class Login extends React.Component<ILoginProps, ILoginState> {
 
     constructor(props: any) {
         super(props);
@@ -60,10 +41,9 @@ class Login extends React.Component<Props, ILoginState> {
 
         const dappkitResponse = await waitForAccountAuth(requestId)
         try {
-            await AsyncStorage.setItem('ACCOUNT', dappkitResponse.address);
-            await AsyncStorage.setItem('PHONENUMBER', dappkitResponse.phoneNumber);
-            this.props.setUserAddress({ address: dappkitResponse.address })
-            this.props.loginCallback(dappkitResponse.address);
+            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, dappkitResponse.address);
+            await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, dappkitResponse.phoneNumber);
+            this.props.loginCallback({ address: dappkitResponse.address, phoneNumber: dappkitResponse.phoneNumber })
         } catch (error) {
             // Error saving data
         }
@@ -94,5 +74,3 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     }
 });
-
-export default connector(Login);
