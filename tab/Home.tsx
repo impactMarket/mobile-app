@@ -3,40 +3,49 @@ import {
     Image,
     StyleSheet,
     Text,
-    Button,
     View,
     YellowBox,
     NativeSyntheticEvent,
     NativeTouchEvent,
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import {
     requestTxSig,
     waitForSignedTxs,
     FeeCurrency
 } from '@celo/dappkit'
-import { ContractKit } from '@celo/contractkit'
 import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
 import { Linking } from 'expo'
 import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
 import ContractAddresses from '../contracts/network.json';
-import Web3 from 'web3';
+import { connect, ConnectedProps } from 'react-redux';
+import { IRootState } from '../helpers/types';
 
 
 YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
 
 
 interface IHomeProps {
-    web3: Web3;
-    kit: ContractKit;
-    account: string;
 }
+const mapStateToProps = (state: IRootState) => {
+    const { users } = state
+    return { users }
+};
+
+const connector = connect(mapStateToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & IHomeProps
 interface IHomeState {
     nextClaim: number;
     claimDisabled: boolean;
     isUser: boolean;
     impactMarketContract: any;
+    loading: boolean;
+    claiming: boolean;
 }
-export default class Home extends React.Component<IHomeProps, IHomeState> {
+class Home extends React.Component<Props, IHomeState> {
 
     constructor(props: any) {
         super(props);
@@ -44,12 +53,18 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
             nextClaim: 0,
             claimDisabled: true,
             isUser: false,
-            impactMarketContract: undefined as any
+            impactMarketContract: undefined as any,
+            loading: true,
+            claiming: false,
         }
     }
 
+    componentDidMount = () => {
+        this.loadContracts();
+    }
+
     loadContracts = async () => {
-        const instance = new web3.eth.Contract(
+        const instance = new this.props.users.kit.web3.eth.Contract(
             ImpactMarketContractABI as any,
             ContractAddresses.alfajores.ImpactMarket,
         );
@@ -61,30 +76,39 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
     }
 
     loadAllowance = async (instance: any) => {
-        const { account } = this.props;
-        const cooldownTime = await instance.methods.cooldownClaim(account).call();
-        const isUser = await instance.methods.isWhitelistUser(account).call();
+        const { address } = this.props.users.celoInfo;
+        const cooldownTime = await instance.methods.cooldownClaim(address).call();
+        const isUser = await instance.methods.isWhitelistUser(address).call();
+        const claimDisabled = cooldownTime * 1000 > new Date().getTime()
+        if (claimDisabled) {
+            setTimeout(() => {
+                this.loadAllowance(instance)
+            }, cooldownTime * 1000 - new Date().getTime());
+        }
         this.setState({
-            claimDisabled: cooldownTime * 1000 > new Date().getTime(),
+            claimDisabled,
             nextClaim: cooldownTime * 1000,
-            isUser
+            isUser,
+            loading: false,
         })
     }
 
     handleClaimPress = async (ev: NativeSyntheticEvent<NativeTouchEvent>) => {
         const { impactMarketContract } = this.state;
-        const { account, kit } = this.props;
+        const { celoInfo, kit } = this.props.users;
+        const { address } = celoInfo;
         const requestId = 'user_claim'
         const dappName = 'Impact Market'
         const callback = Linking.makeUrl('/my/path')
 
+        this.setState({ claiming: true });
         const txObject = await impactMarketContract.methods.claim()
 
         requestTxSig(
             kit,
             [
                 {
-                    from: account,
+                    from: address,
                     to: impactMarketContract.options.address,
                     tx: txObject,
                     feeCurrency: FeeCurrency.cUSD
@@ -95,18 +119,27 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
 
         const dappkitResponse = await waitForSignedTxs(requestId);
         const tx = dappkitResponse.rawTxs[0];
-        let result = await toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt()
+        toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt().then((result) => {
+            this.loadAllowance(impactMarketContract).then(() => {
+                this.setState({ claiming: false });
+            })
+            console.log(`Hello World contract update transcation receipt: `, result)
+        })
 
-        console.log(`Hello World contract update transcation receipt: `, result)
-        ev.preventDefault();
+        // ev.preventDefault();
     }
 
     render() {
-        const { claimDisabled, nextClaim, isUser } = this.state;
+        const { claimDisabled, nextClaim, isUser, loading, claiming } = this.state;
         const userView = (
             <>
                 {claimDisabled && nextClaim > 0 && <Text>Your next claim is at {new Date(nextClaim).toLocaleString()}</Text>}
-                <Button title="Claim" onPress={this.handleClaimPress} disabled={claimDisabled} />
+                <Button
+                    title="Claim"
+                    onPress={this.handleClaimPress}
+                    disabled={claimDisabled}
+                    loading={claiming}
+                />
             </>
         );
         const nonUserView = (
@@ -119,7 +152,8 @@ export default class Home extends React.Component<IHomeProps, IHomeState> {
         return (
             <View style={styles.container}>
                 <Image resizeMode='center' source={require("../assets/splash.png")}></Image>
-                {isUser ? userView : nonUserView}
+                {loading && <Text>Loading...</Text>}
+                {!loading && (isUser ? userView : nonUserView)}
             </View>
         );
     }
@@ -138,3 +172,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     }
 });
+
+export default connector(Home);
