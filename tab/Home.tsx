@@ -24,6 +24,8 @@ import { IRootState } from '../helpers/types';
 import { ethers } from 'ethers';
 import { ImpactMarketInstance, CommunityInstance } from '../contracts/types/truffle-contracts';
 
+import { Appbar, Avatar } from 'react-native-paper';
+
 
 interface IHomeProps {
 }
@@ -58,7 +60,7 @@ class Home extends React.Component<Props, IHomeState> {
             claiming: false,
         }
     }
-    
+
     componentDidMount = async () => {
         if (this.state.impactMarketContract === undefined) {
             await this.loadContracts();
@@ -176,10 +178,20 @@ class Home extends React.Component<Props, IHomeState> {
         );
 
         return (
-            <View style={styles.container}>
-                <Image resizeMode='center' source={require("../assets/logo.png")}></Image>
-                {loading && <Text>Loading...</Text>}
-                {!loading && (isBeneficiary ? userView : nonUserView)}
+            <View>
+                <Appbar.Header style={styles.appbar}>
+                    <Avatar.Image size={58} source={require('../assets/hello.png')} />
+                    <Appbar.Content
+                        title="0$"
+                        subtitle="Balance"
+                    />
+                    <Appbar.Action icon="magnify" />
+                    <Appbar.Action icon="dots-vertical" />
+                </Appbar.Header>
+                <View style={styles.container}>
+                    {loading && <Text>Loading...</Text>}
+                    {!loading && (isBeneficiary ? userView : nonUserView)}
+                </View>
             </View>
         );
     }
@@ -187,16 +199,16 @@ class Home extends React.Component<Props, IHomeState> {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#ffffff',
         alignItems: 'center',
-        justifyContent: 'center',
     },
     title: {
         marginVertical: 8,
         fontSize: 20,
         fontWeight: 'bold'
-    }
+    },
+    appbar: {
+        height: 120
+    },
 });
 
 export default connector(Home);
