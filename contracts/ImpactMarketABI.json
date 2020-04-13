@@ -1,9 +1,41 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_cUSDAddress",
+        "type": "address"
+      }
+    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_addr",
+        "type": "address"
+      }
+    ],
+    "name": "CommunityAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_addr",
+        "type": "address"
+      }
+    ],
+    "name": "CommunityRemoved",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -32,58 +64,6 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "WhitelistCommunityAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "WhitelistCommunityRemoved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "WhitelistUserAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "WhitelistUserRemoved",
-    "type": "event"
-  },
-  {
     "constant": false,
     "inputs": [
       {
@@ -99,56 +79,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_amountByClaim",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_baseIntervalTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_incIntervalTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_claimHardCap",
-        "type": "uint256"
-      }
-    ],
-    "name": "addWhitelistCommunity",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "addWhitelistUser",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [
       {
@@ -157,48 +87,12 @@
         "type": "address"
       }
     ],
-    "name": "commnitiesClaim",
+    "name": "communities",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "amountByClaim",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "baseIntervalTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "incIntervalTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "claimHardCap",
-        "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
+        "internalType": "bool",
         "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "cooldownClaim",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
     "payable": false,
@@ -227,74 +121,6 @@
     "type": "function"
   },
   {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "isWhitelistCommunity",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "isWhitelistUser",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_community",
-        "type": "address"
-      }
-    ],
-    "name": "isWhitelistUserInCommunity",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [],
     "name": "renounceWhitelistAdmin",
@@ -305,52 +131,49 @@
   },
   {
     "constant": false,
-    "inputs": [],
-    "name": "renounceWhitelistCommunity",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "renounceWhitelistUser",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
     "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "_firstCoordinator",
         "type": "address"
       },
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "userToCommunity",
-    "outputs": [
+        "internalType": "uint256",
+        "name": "_amountByClaim",
+        "type": "uint256"
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "_baseIntervalTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_incIntervalTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_claimHardCap",
+        "type": "uint256"
       }
     ],
+    "name": "addCommunity",
+    "outputs": [],
     "payable": false,
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "constant": false,
-    "inputs": [],
-    "name": "claim",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_community",
+        "type": "address"
+      }
+    ],
+    "name": "removeCommunity",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
