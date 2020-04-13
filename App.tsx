@@ -13,7 +13,8 @@ import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from './tab/Home';
-import Community from './tab/Community';
+import Activity from './tab/Activity';
+import Send from './tab/Send';
 import Account from './tab/Account';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
@@ -100,16 +101,25 @@ export default class App extends React.Component<{}, IAppState> {
                             component={Home}
                             options={{
                                 tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="isv" size={size} color={color} />
+                                    <AntDesign name="download" size={size} color={color} />
                                 ),
                             }}
                         />
                         <Tab.Screen
-                            name="Community"
-                            component={Community}
+                            name="Activity"
+                            component={Activity}
                             options={{
                                 tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="team" size={size} color={color} />
+                                    <AntDesign name="retweet" size={size} color={color} />
+                                ),
+                            }}
+                        />
+                        <Tab.Screen
+                            name="Send"
+                            component={Send}
+                            options={{
+                                tabBarIcon: ({ color, size }) => (
+                                    <AntDesign name="arrowup" size={size} color={color} />
                                 ),
                             }}
                         />
@@ -118,7 +128,7 @@ export default class App extends React.Component<{}, IAppState> {
                             component={Account}
                             options={{
                                 tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="user" size={size} color={color} />
+                                    <AntDesign name="setting" size={size} color={color} />
                                 ),
                             }}
                         />

@@ -27,7 +27,7 @@ import { ImpactMarketInstance, CommunityInstance } from '../contracts/types/truf
 
 interface IHomeProps {
 }
-const mapStateToProps = (state: IRootState) => {
+const mapStateToProps = (state: { users: IRootState }) => {
     const { users } = state
     return { users }
 };
@@ -66,7 +66,7 @@ class Home extends React.Component<Props, IHomeState> {
     }
 
     loadContracts = async () => {
-        const { address } = this.props.users.celoInfo;
+        const { address } = this.props.users.user.celoInfo;
         const provider = new ethers.providers.Web3Provider(this.props.users.kit.web3.currentProvider as any);
         const impactMarketContract = new ethers.Contract(
             ContractAddresses.alfajores.ImpactMarket,
@@ -90,7 +90,7 @@ class Home extends React.Component<Props, IHomeState> {
     }
 
     loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
-        const { address } = this.props.users.celoInfo;
+        const { address } = this.props.users.user.celoInfo;
         const cooldownTime = await (await communityInstance.cooldownClaim(address)).toNumber();
         const isBeneficiary = await communityInstance.beneficiaries(address);
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
@@ -111,8 +111,8 @@ class Home extends React.Component<Props, IHomeState> {
 
     handleClaimPress = async (ev: NativeSyntheticEvent<NativeTouchEvent>) => {
         const { impactMarketContract, communityContract } = this.state;
-        const { celoInfo, kit } = this.props.users;
-        const { address } = celoInfo;
+        const { user, kit } = this.props.users;
+        const { address } = user.celoInfo;
         const requestId = 'user_claim'
         const dappName = 'Impact Market'
         const callback = Linking.makeUrl('/my/path')
@@ -151,9 +151,15 @@ class Home extends React.Component<Props, IHomeState> {
 
     render() {
         const { claimDisabled, nextClaim, isBeneficiary, loading, claiming } = this.state;
+        const nextClaimMessage = (
+            <>
+                <Text>Please, wait until your next claim.</Text>
+                <Text>{new Date(nextClaim).toLocaleString()}</Text>
+            </>
+        )
         const userView = (
             <>
-                {claimDisabled && nextClaim > 0 && <Text>Your next claim is at {new Date(nextClaim).toLocaleString()}</Text>}
+                {claimDisabled && nextClaim > 0 && nextClaimMessage}
                 <Button
                     title="Claim"
                     onPress={this.handleClaimPress}

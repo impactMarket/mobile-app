@@ -10,7 +10,7 @@ import { IRootState } from '../helpers/types';
 
 interface IAccountProps {
 }
-const mapStateToProps = (state: IRootState) => {
+const mapStateToProps = (state: { users: IRootState }) => {
     const { users } = state
     return { users }
 };
@@ -35,7 +35,7 @@ class Account extends React.Component<Props, IAccountState> {
     componentDidMount = async () => {
         const stableToken = await this.props.users.kit.contracts.getStableToken()
 
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.users.celoInfo.address), stableToken.decimals()])
+        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.users.user.celoInfo.address), stableToken.decimals()])
         let cUSDBalance = cUSDBalanceBig.toString()
         this.setState({ cUSDBalance })
     }
@@ -44,9 +44,9 @@ class Account extends React.Component<Props, IAccountState> {
         return (
             <View style={styles.container}>
                 <Text>Your current address is</Text>
-                <Text>{this.props.users.celoInfo.address}</Text>
+                <Text>{this.props.users.user.celoInfo.address}</Text>
                 <Text>Phone Number</Text>
-                <Text>{this.props.users.celoInfo.phoneNumber}</Text>
+                <Text>{this.props.users.user.celoInfo.phoneNumber}</Text>
                 <Text>cUSD balance</Text>
                 <Text>{this.state.cUSDBalance}</Text>
             </View>
