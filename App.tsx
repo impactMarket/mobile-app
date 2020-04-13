@@ -28,7 +28,7 @@ const Tab = createBottomTabNavigator();
 const store = createStore(userReducer);
 
 
-YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
+// YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
 
 
 interface IAppState {
