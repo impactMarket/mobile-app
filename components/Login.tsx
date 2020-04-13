@@ -52,7 +52,7 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
     render() {
         return (
             <View style={styles.container}>
-                <Image resizeMode='center' source={require("../assets/splash.png")}></Image>
+                <Image resizeMode='center' source={require("../assets/logo.png")}></Image>
 
                 <Text style={styles.title}>Welcome, please login first.</Text>
                 <Button title="login" onPress={() => this.login()} />
