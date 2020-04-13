@@ -25,9 +25,6 @@ import { ethers } from 'ethers';
 import { ImpactMarketInstance, CommunityInstance } from '../contracts/types/truffle-contracts';
 
 
-// YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
-
-
 interface IHomeProps {
 }
 const mapStateToProps = (state: IRootState) => {
@@ -97,11 +94,12 @@ class Home extends React.Component<Props, IHomeState> {
         const cooldownTime = await (await communityInstance.cooldownClaim(address)).toNumber();
         const isBeneficiary = await communityInstance.beneficiaries(address);
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
-        if (claimDisabled) {
-            // TODO: if timeout is bigger than 10 minutes, ignore!
+        const remainingCooldown = cooldownTime * 1000 - new Date().getTime();
+        // if timeout is bigger than 3 minutes, ignore!
+        if (claimDisabled && remainingCooldown < 90000) {
             setTimeout(() => {
                 this.loadAllowance(communityInstance)
-            }, cooldownTime * 1000 - new Date().getTime());
+            }, remainingCooldown);
         }
         this.setState({
             claimDisabled,
