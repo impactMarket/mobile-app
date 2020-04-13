@@ -1,29 +1,41 @@
 import { combineReducers } from 'redux';
-import { SET_USER_CELO_INFO, IReduxState, UserActionTypes, SET_CELO_KIT } from './types';
+import { SET_USER_CELO_INFO, IRootState, UserActionTypes, SET_CELO_KIT, SET_COMMUNITY_CONTRACT, SET_IMPACTMARKET_CONTRACT } from './types';
 
-const INITIAL_STATE: IReduxState = {
-    celoInfo: {
-        address: '',
-        phoneNumber: '',
+const INITIAL_STATE: IRootState = {
+    user: {
+        celoInfo: {
+            address: '',
+            phoneNumber: '',
+        },
     },
     kit: undefined as any,
+    contracts: {
+        communityContract: undefined as any,
+        impactMarketContract: undefined as any,
+    }
 };
 
 const userReducer = (state = INITIAL_STATE, action: UserActionTypes) => {
+    let contracts;
+    let user;
     switch (action.type) {
         case SET_USER_CELO_INFO:
             // Pulls current and possible out of previous state
             // We do not want to alter state directly in case
             // another action is altering it at the same time
-
+            user = state.user;
+            user.celoInfo = action.payload;
             // Finally, update our redux state
-            return { ...state, celoInfo: action.payload };
+            return { ...state, user };
         case SET_CELO_KIT:
-            // Pulls current and possible out of previous state
-            // We do not want to alter state directly in case
-            // another action is altering it at the same time
-
-            // Finally, update our redux state
+            return { ...state, kit: action.payload };
+        case SET_COMMUNITY_CONTRACT:
+            contracts = state.contracts;
+            contracts.communityContract = action.payload;
+            return { ...state, kit: action.payload };
+        case SET_IMPACTMARKET_CONTRACT:
+            contracts = state.contracts;
+            contracts.impactMarketContract = action.payload;
             return { ...state, kit: action.payload };
         default:
             return state
