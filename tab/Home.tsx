@@ -4,11 +4,7 @@ import {
     StyleSheet,
     Text,
     View,
-    YellowBox,
-    NativeSyntheticEvent,
-    NativeTouchEvent,
 } from 'react-native';
-import { Button } from 'react-native-elements';
 import {
     requestTxSig,
     waitForSignedTxs,
@@ -24,7 +20,8 @@ import { IRootState } from '../helpers/types';
 import { ethers } from 'ethers';
 import { ImpactMarketInstance, CommunityInstance } from '../contracts/types/truffle-contracts';
 
-import { Appbar, Avatar } from 'react-native-paper';
+import { Appbar, Avatar, Button } from 'react-native-paper';
+import { AntDesign } from '@expo/vector-icons';
 
 
 interface IHomeProps {
@@ -111,7 +108,7 @@ class Home extends React.Component<Props, IHomeState> {
         })
     }
 
-    handleClaimPress = async (ev: NativeSyntheticEvent<NativeTouchEvent>) => {
+    handleClaimPress = async () => {
         const { impactMarketContract, communityContract } = this.state;
         const { user, kit } = this.props.users;
         const { address } = user.celoInfo;
@@ -145,29 +142,36 @@ class Home extends React.Component<Props, IHomeState> {
             this.loadAllowance(communityContract).then(() => {
                 this.setState({ claiming: false });
             })
-            console.log(`Hello World contract update transcation receipt: `, result)
         })
-
-        // ev.preventDefault();
     }
 
     render() {
         const { claimDisabled, nextClaim, isBeneficiary, loading, claiming } = this.state;
         const nextClaimMessage = (
             <>
-                <Text>Please, wait until your next claim.</Text>
-                <Text>{new Date(nextClaim).toLocaleString()}</Text>
+                <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Fehsolna</Text>
+                <Text style={{ fontSize: 20 }}><AntDesign name="enviromento" size={20} /> São Paulo</Text>
+                <Text style={{
+                    fontSize: 20,
+                    top: 20,
+                    width: '50%',
+                    textAlign: 'center'
+                }}>Every day you can claim $2 up to a total of $500</Text>
             </>
         )
         const userView = (
             <>
                 {claimDisabled && nextClaim > 0 && nextClaimMessage}
-                <Button
-                    title="Claim"
-                    onPress={this.handleClaimPress}
-                    disabled={claimDisabled}
-                    loading={claiming}
-                />
+                <View style={{ top: 90 }}>
+                    <Button
+                        mode="contained"
+                        onPress={this.handleClaimPress}
+                        disabled={claimDisabled}
+                        loading={claiming}
+                    >
+                        {claimDisabled ? new Date(nextClaim).toLocaleString() : 'Claim'}
+                    </Button>
+                </View>
             </>
         );
         const nonUserView = (
@@ -185,12 +189,24 @@ class Home extends React.Component<Props, IHomeState> {
                         title="0$"
                         subtitle="Balance"
                     />
-                    <Appbar.Action icon="magnify" />
-                    <Appbar.Action icon="dots-vertical" />
+                    <Appbar.Action icon="bell" />
                 </Appbar.Header>
-                <View style={styles.container}>
-                    {loading && <Text>Loading...</Text>}
-                    {!loading && (isBeneficiary ? userView : nonUserView)}
+                <View style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}>
+                    <Image
+                        source={require('../assets/favela.jpg')}
+                        style={{
+                            width: '100%',
+                            height: 500,
+                            opacity: 0.3
+                        }}
+                    />
+                    <View style={styles.container}>
+                        {loading && <Text>Loading...</Text>}
+                        {!loading && (isBeneficiary ? userView : nonUserView)}
+                    </View>
                 </View>
             </View>
         );
@@ -200,6 +216,8 @@ class Home extends React.Component<Props, IHomeState> {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
+        position: 'absolute',
+        top: 50
     },
     title: {
         marginVertical: 8,
@@ -208,6 +226,15 @@ const styles = StyleSheet.create({
     },
     appbar: {
         height: 120
+    },
+    button: {
+        backgroundColor: "blue",
+        padding: 20,
+        borderRadius: 5,
+    },
+    buttonText: {
+        fontSize: 20,
+        color: '#fff',
     },
 });
 

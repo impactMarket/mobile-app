@@ -23,10 +23,20 @@ import { createStore } from 'redux';
 import userReducer from './helpers/ReduxReducers';
 import { setUserCeloInfo, setCeloKit } from './helpers/ReduxActions';
 import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo } from './helpers/types';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 
 const Tab = createBottomTabNavigator();
 const store = createStore(userReducer);
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#3498db',
+        accent: '#f1c40f',
+    },
+};
 
 
 YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
@@ -93,48 +103,50 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         return (
-            <Provider store={store}>
-                <NavigationContainer>
-                    <Tab.Navigator>
-                        <Tab.Screen
-                            name="Home"
-                            component={Home}
-                            options={{
-                                tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="download" size={size} color={color} />
-                                ),
-                            }}
-                        />
-                        <Tab.Screen
-                            name="Activity"
-                            component={Activity}
-                            options={{
-                                tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="retweet" size={size} color={color} />
-                                ),
-                            }}
-                        />
-                        <Tab.Screen
-                            name="Send"
-                            component={Send}
-                            options={{
-                                tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="arrowup" size={size} color={color} />
-                                ),
-                            }}
-                        />
-                        <Tab.Screen
-                            name="Account"
-                            component={Account}
-                            options={{
-                                tabBarIcon: ({ color, size }) => (
-                                    <AntDesign name="setting" size={size} color={color} />
-                                ),
-                            }}
-                        />
-                    </Tab.Navigator>
-                </NavigationContainer>
-            </Provider>
+            <PaperProvider theme={theme}>
+                <Provider store={store}>
+                    <NavigationContainer>
+                        <Tab.Navigator>
+                            <Tab.Screen
+                                name="Home"
+                                component={Home}
+                                options={{
+                                    tabBarIcon: ({ color, size }) => (
+                                        <AntDesign name="download" size={size} color={color} />
+                                    ),
+                                }}
+                            />
+                            <Tab.Screen
+                                name="Activity"
+                                component={Activity}
+                                options={{
+                                    tabBarIcon: ({ color, size }) => (
+                                        <AntDesign name="retweet" size={size} color={color} />
+                                    ),
+                                }}
+                            />
+                            <Tab.Screen
+                                name="Send"
+                                component={Send}
+                                options={{
+                                    tabBarIcon: ({ color, size }) => (
+                                        <AntDesign name="arrowup" size={size} color={color} />
+                                    ),
+                                }}
+                            />
+                            <Tab.Screen
+                                name="Account"
+                                component={Account}
+                                options={{
+                                    tabBarIcon: ({ color, size }) => (
+                                        <AntDesign name="setting" size={size} color={color} />
+                                    ),
+                                }}
+                            />
+                        </Tab.Navigator>
+                    </NavigationContainer>
+                </Provider>
+            </PaperProvider>
         );
     }
 
