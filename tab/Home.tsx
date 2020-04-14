@@ -40,8 +40,6 @@ interface IHomeState {
     nextClaim: number;
     claimDisabled: boolean;
     isBeneficiary: boolean;
-    impactMarketContract?: ethers.Contract & ImpactMarketInstance;
-    communityContract?: ethers.Contract & CommunityInstance;
     loading: boolean;
     claiming: boolean;
 }
@@ -59,57 +57,17 @@ class Home extends React.Component<Props, IHomeState> {
     }
 
     componentDidMount = async () => {
-        if (this.state.impactMarketContract === undefined) {
-            await this.loadContracts();
+        const communityContract = this.props.users.contracts.communityContract;
+        if (this.props.users.contracts.communityContract !== undefined) {
+            const address = this.props.users.user.celoInfo.address;
+            const isBeneficiary = await communityContract.beneficiaries(address);
+            await this._loadAllowance(communityContract);
+            this.setState({ isBeneficiary });
         }
-    }
-
-    loadContracts = async () => {
-        const { address } = this.props.users.user.celoInfo;
-        const provider = new ethers.providers.Web3Provider(this.props.users.kit.web3.currentProvider as any);
-        const impactMarketContract = new ethers.Contract(
-            ContractAddresses.alfajores.ImpactMarket,
-            ImpactMarketContractABI,
-            provider,
-        ) as ethers.Contract & ImpactMarketInstance;
-        const logs = await provider.getLogs({
-            address: impactMarketContract.address,
-            fromBlock: 0,
-            topics: [ethers.utils.id("CommunityAdded(address)")]
-        })
-        const communityAddress = ethers.utils.getAddress(logs[0].topics[1].slice(26, logs[0].topics[1].length));
-        const communityContract = new ethers.Contract(
-            communityAddress,
-            CommunityContractABI as any,
-            provider,
-        ) as ethers.Contract & CommunityInstance;
-        const isBeneficiary = await communityContract.beneficiaries(address);
-        await this.loadAllowance(communityContract);
-        this.setState({ impactMarketContract, communityContract, isBeneficiary });
-    }
-
-    loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
-        const { address } = this.props.users.user.celoInfo;
-        const cooldownTime = await (await communityInstance.cooldownClaim(address)).toNumber();
-        const isBeneficiary = await communityInstance.beneficiaries(address);
-        const claimDisabled = cooldownTime * 1000 > new Date().getTime()
-        const remainingCooldown = cooldownTime * 1000 - new Date().getTime();
-        // if timeout is bigger than 3 minutes, ignore!
-        if (claimDisabled && remainingCooldown < 90000) {
-            setTimeout(() => {
-                this.loadAllowance(communityInstance)
-            }, remainingCooldown);
-        }
-        this.setState({
-            claimDisabled,
-            nextClaim: cooldownTime * 1000,
-            isBeneficiary,
-            loading: false,
-        })
     }
 
     handleClaimPress = async () => {
-        const { impactMarketContract, communityContract } = this.state;
+        const { impactMarketContract, communityContract } = this.props.users.contracts;
         const { user, kit } = this.props.users;
         const { address } = user.celoInfo;
         const requestId = 'user_claim'
@@ -139,7 +97,7 @@ class Home extends React.Component<Props, IHomeState> {
         const dappkitResponse = await waitForSignedTxs(requestId);
         const tx = dappkitResponse.rawTxs[0];
         toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt().then((result) => {
-            this.loadAllowance(communityContract).then(() => {
+            this._loadAllowance(communityContract).then(() => {
                 this.setState({ claiming: false });
             })
         })
@@ -147,7 +105,7 @@ class Home extends React.Component<Props, IHomeState> {
 
     render() {
         const { claimDisabled, nextClaim, isBeneficiary, loading, claiming } = this.state;
-        const nextClaimMessage = (
+        const userView = (
             <>
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Fehsolna</Text>
                 <Text style={{ fontSize: 20 }}><AntDesign name="enviromento" size={20} /> São Paulo</Text>
@@ -157,11 +115,6 @@ class Home extends React.Component<Props, IHomeState> {
                     width: '50%',
                     textAlign: 'center'
                 }}>Every day you can claim $2 up to a total of $500</Text>
-            </>
-        )
-        const userView = (
-            <>
-                {claimDisabled && nextClaim > 0 && nextClaimMessage}
                 <View style={{ top: 90 }}>
                     <Button
                         mode="contained"
@@ -210,6 +163,26 @@ class Home extends React.Component<Props, IHomeState> {
                 </View>
             </View>
         );
+    }
+
+    _loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
+        const { address } = this.props.users.user.celoInfo;
+        const cooldownTime = await (await communityInstance.cooldownClaim(address)).toNumber();
+        const isBeneficiary = await communityInstance.beneficiaries(address);
+        const claimDisabled = cooldownTime * 1000 > new Date().getTime()
+        const remainingCooldown = cooldownTime * 1000 - new Date().getTime();
+        // if timeout is bigger than 3 minutes, ignore!
+        if (claimDisabled && remainingCooldown < 90000) {
+            setTimeout(() => {
+                this._loadAllowance(communityInstance)
+            }, remainingCooldown);
+        }
+        this.setState({
+            claimDisabled,
+            nextClaim: cooldownTime * 1000,
+            isBeneficiary,
+            loading: false,
+        })
     }
 }
 

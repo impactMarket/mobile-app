@@ -21,9 +21,15 @@ import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import userReducer from './helpers/ReduxReducers';
-import { setUserCeloInfo, setCeloKit } from './helpers/ReduxActions';
+import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract } from './helpers/ReduxActions';
 import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo } from './helpers/types';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { ContractKit } from '@celo/contractkit/lib/kit';
+import { ethers } from 'ethers';
+import { ImpactMarketInstance, CommunityInstance } from './contracts/types/truffle-contracts';
+import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
+import CommunityContractABI from './contracts/CommunityABI.json'
+import ContractAddresses from './contracts/network.json';
 
 
 const Tab = createBottomTabNavigator();
@@ -33,7 +39,7 @@ const theme = {
     roundness: 2,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#3498db',
+        primary: '#ffffff',
         accent: '#f1c40f',
     },
 };
@@ -165,6 +171,7 @@ export default class App extends React.Component<{}, IAppState> {
             if (address !== null && phoneNumber !== null) {
                 store.dispatch(setUserCeloInfo({ address, phoneNumber }))
                 store.dispatch(setCeloKit(kit));
+                await this._loadContracts(address, kit);
                 // We have data!!
                 this.setState({ loggedIn: true });
             }
@@ -174,4 +181,30 @@ export default class App extends React.Component<{}, IAppState> {
         store.dispatch(setCeloKit(kit))
         this.setState({ isAppReady: true });
     };
+
+    _loadContracts = async (address: string, kit: ContractKit) => {
+        const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);
+        const impactMarketContract = new ethers.Contract(
+            ContractAddresses.alfajores.ImpactMarket,
+            ImpactMarketContractABI,
+            provider,
+        ) as ethers.Contract & ImpactMarketInstance;
+        const logs = await provider.getLogs({
+            address: impactMarketContract.address,
+            fromBlock: 0,
+            topics: [ethers.utils.id("CommunityAdded(address)")]
+        })
+        // change the following to support multiple communities
+        const communityAddress = ethers.utils
+            .getAddress(logs[0].topics[1].slice(26, logs[0].topics[1].length));
+        const communityContract = new ethers.Contract(
+            communityAddress,
+            CommunityContractABI as any,
+            provider,
+        ) as ethers.Contract & CommunityInstance;
+        store.dispatch(setImpactMarketContract(impactMarketContract));
+        store.dispatch(setCommunityContract(communityContract));
+        // const isBeneficiary = await communityContract.beneficiaries(address);
+        // TODO: set isBeneficiary 
+    }
 }
