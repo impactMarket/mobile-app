@@ -190,18 +190,17 @@ export default class App extends React.Component<{}, IAppState> {
             provider,
         ) as ethers.Contract & ImpactMarketInstance;
         const logs = await provider.getLogs({
-            address: impactMarketContract.address,
+            address: ContractAddresses.alfajores.ImpactMarket,
             fromBlock: 0,
             topics: [ethers.utils.id("CommunityAdded(address)")]
         })
         // change the following to support multiple communities
         const communityAddress = ethers.utils
             .getAddress(logs[0].topics[1].slice(26, logs[0].topics[1].length));
-        const communityContract = new ethers.Contract(
-            communityAddress,
+        const communityContract = new kit.web3.eth.Contract(
             CommunityContractABI as any,
-            provider,
-        ) as ethers.Contract & CommunityInstance;
+            communityAddress,
+        );
         store.dispatch(setImpactMarketContract(impactMarketContract));
         store.dispatch(setCommunityContract(communityContract));
         // const isBeneficiary = await communityContract.beneficiaries(address);

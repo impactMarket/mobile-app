@@ -60,33 +60,33 @@ class Home extends React.Component<Props, IHomeState> {
         const communityContract = this.props.users.contracts.communityContract;
         if (this.props.users.contracts.communityContract !== undefined) {
             const address = this.props.users.user.celoInfo.address;
-            const isBeneficiary = await communityContract.beneficiaries(address);
+            const isBeneficiary = await communityContract.methods.beneficiaries(address).call();
             await this._loadAllowance(communityContract);
             this.setState({ isBeneficiary });
         }
     }
 
     handleClaimPress = async () => {
-        const { impactMarketContract, communityContract } = this.props.users.contracts;
-        const { user, kit } = this.props.users;
+        const { user, kit, contracts } = this.props.users;
+        const { communityContract } = contracts;
         const { address } = user.celoInfo;
         const requestId = 'user_claim'
         const dappName = 'Impact Market'
         const callback = Linking.makeUrl('/my/path')
 
-        if (impactMarketContract === undefined || communityContract === undefined) {
+        if (communityContract === undefined) {
             // TODO: do something beatiful, la la la
             return;
         }
         this.setState({ claiming: true });
-        const txObject = await impactMarketContract.methods.claim()
+        const txObject = await communityContract.methods.claim()
 
         requestTxSig(
             kit,
             [
                 {
                     from: address,
-                    to: impactMarketContract.options.address,
+                    to: communityContract.options.address,
                     tx: txObject,
                     feeCurrency: FeeCurrency.cUSD
                 }
@@ -167,15 +167,15 @@ class Home extends React.Component<Props, IHomeState> {
 
     _loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
         const { address } = this.props.users.user.celoInfo;
-        const cooldownTime = await (await communityInstance.cooldownClaim(address)).toNumber();
-        const isBeneficiary = await communityInstance.beneficiaries(address);
+        const cooldownTime = parseInt((await communityInstance.methods.cooldownClaim(address).call()).toString(), 10);
+        const isBeneficiary = await communityInstance.methods.beneficiaries(address).call();
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
         const remainingCooldown = cooldownTime * 1000 - new Date().getTime();
         // if timeout is bigger than 3 minutes, ignore!
         if (claimDisabled && remainingCooldown < 90000) {
             setTimeout(() => {
-                this._loadAllowance(communityInstance)
-            }, remainingCooldown);
+                this.setState({ isBeneficiary: false });
+            }, remainingCooldown + 1000);
         }
         this.setState({
             claimDisabled,

@@ -1,6 +1,4 @@
 import { ContractKit } from "@celo/contractkit";
-import { ethers } from "ethers";
-import { ImpactMarketInstance, CommunityInstance } from "../contracts/types/truffle-contracts";
 
 export const STORAGE_USER_ADDRESS = '@celoinfo:address'
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
@@ -11,6 +9,7 @@ export const SET_IMPACTMARKET_CONTRACT = 'SET_IMPACTMARKET_CONTRACT';
 
 // state
 export interface IUserCeloInfo {
+    // verify if address is undefined to determine if user is logged in
     address: string;
     phoneNumber: string;
 }
@@ -20,8 +19,8 @@ export interface IUserState {
 }
 
 export interface IContractsState {
-    impactMarketContract: ethers.Contract & ImpactMarketInstance,
-    communityContract: ethers.Contract & CommunityInstance
+    impactMarketContract: any,
+    communityContract: any
 }
 
 export interface IRootState {
@@ -43,12 +42,12 @@ interface CeloKitAction {
 
 interface ImpactMarketAction {
     type: typeof SET_IMPACTMARKET_CONTRACT
-    payload: ethers.Contract & ImpactMarketInstance;
+    payload: any;
 }
 
 interface CommunityAction {
     type: typeof SET_COMMUNITY_CONTRACT
-    payload: ethers.Contract & CommunityInstance;
+    payload: any;
 }
 
 export type UserActionTypes = ISetUserCeloInfoAction | CeloKitAction | ImpactMarketAction | CommunityAction
