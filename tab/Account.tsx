@@ -28,27 +28,33 @@ class Account extends React.Component<Props, IAccountState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            cUSDBalance: '',
+            cUSDBalance: '(...)',
         }
     }
-    
+
     componentDidMount = async () => {
         const stableToken = await this.props.users.kit.contracts.getStableToken()
 
         const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.users.user.celoInfo.address), stableToken.decimals()])
-        let cUSDBalance = cUSDBalanceBig.toString()
+        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toString()
         this.setState({ cUSDBalance })
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>Your current address is</Text>
-                <Text>{this.props.users.user.celoInfo.address}</Text>
-                <Text>Phone Number</Text>
-                <Text>{this.props.users.user.celoInfo.phoneNumber}</Text>
-                <Text>cUSD balance</Text>
-                <Text>{this.state.cUSDBalance}</Text>
+                <View style={styles.item}>
+                    <Text style={{ fontWeight: 'bold'}}>Your current address is</Text>
+                    <Text>{this.props.users.user.celoInfo.address}</Text>
+                </View>
+                <View style={styles.item}>
+                    <Text style={{ fontWeight: 'bold'}}>Phone Number</Text>
+                    <Text>{this.props.users.user.celoInfo.phoneNumber}</Text>
+                </View>
+                <View style={styles.item}>
+                    <Text style={{ fontWeight: 'bold'}}>cUSD balance</Text>
+                    <Text>{this.state.cUSDBalance}</Text>
+                </View>
             </View>
         );
     }
@@ -58,6 +64,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    item: {
+        marginBottom: 50,
         alignItems: 'center',
         justifyContent: 'center',
     }
