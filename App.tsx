@@ -12,7 +12,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Home from './tab/Home';
+import HomeStackScreen from './tab/HomeStackScreen';
 import Activity from './tab/Activity';
 import Send from './tab/Send';
 import Account from './tab/Account';
@@ -115,7 +115,7 @@ export default class App extends React.Component<{}, IAppState> {
                         <Tab.Navigator>
                             <Tab.Screen
                                 name="Home"
-                                component={Home}
+                                component={HomeStackScreen}
                                 options={{
                                     tabBarIcon: ({ color, size }) => (
                                         <AntDesign name="download" size={size} color={color} />

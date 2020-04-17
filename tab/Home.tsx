@@ -25,6 +25,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 interface IHomeProps {
+    navigation: any;
 }
 const mapStateToProps = (state: { users: IRootState }) => {
     const { users } = state
@@ -124,6 +125,10 @@ class Home extends React.Component<Props, IHomeState> {
                     >
                         {claimDisabled ? new Date(nextClaim).toLocaleString() : 'Claim'}
                     </Button>
+                    <Text
+                        onPress={() => this.props.navigation.navigate('Details')}
+                        style={{ top: 15 }}
+                    >How claim works?</Text>
                 </View>
             </>
         );
