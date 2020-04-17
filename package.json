@@ -26,6 +26,7 @@
         "expo-contacts": "8.0.0",
         "expo-file-system": "8.0.0",
         "expo-font": "8.0.0",
+        "expo-linear-gradient": "8.1.0",
         "expo-permissions": "8.0.0",
         "expo-web-browser": "8.0.0",
         "https-browserify": "1.0.0",

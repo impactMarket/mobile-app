@@ -4,6 +4,7 @@ import {
     StyleSheet,
     Text,
     View,
+    ImageBackground,
 } from 'react-native';
 import {
     requestTxSig,
@@ -12,6 +13,7 @@ import {
 } from '@celo/dappkit'
 import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
 import { Linking } from 'expo'
+import { LinearGradient } from 'expo-linear-gradient';
 import ImpactMarketContractABI from '../../contracts/ImpactMarketABI.json'
 import CommunityContractABI from '../../contracts/CommunityABI.json'
 import ContractAddresses from '../../contracts/network.json';
@@ -153,14 +155,25 @@ class HomeScreen extends React.Component<Props, IHomeState> {
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}>
-                    <Image
+                    <ImageBackground
                         source={require('../../assets/favela.jpg')}
+                        resizeMode={'cover'}
                         style={{
                             width: '100%',
-                            height: 500,
-                            opacity: 0.3
+                            height: '100%',
                         }}
-                    />
+                    >
+                        <LinearGradient
+                            colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,0.3)', 'transparent']}
+                            style={{
+                                position: 'absolute',
+                                left: 0,
+                                right: 0,
+                                top: 0,
+                                height: 500,
+                            }}
+                        />
+                    </ImageBackground>
                     <View style={styles.container}>
                         {loading && <Text>Loading...</Text>}
                         {!loading && (isBeneficiary ? userView : nonUserView)}
