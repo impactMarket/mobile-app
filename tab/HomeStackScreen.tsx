@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './Home';
-import Details from './Details';
+import HomeScreen from './home/HomeScreen';
+import ClaimExplainedScreen from './home/ClaimExplainedScreen';
 
 
 
@@ -14,10 +14,10 @@ export default function HomeStackScreen() {
                 options={{
                     headerTransparent: true,
                   }}    
-                name="Home" 
-                component={Home}
+                name="HomeScreen" 
+                component={HomeScreen}
             />
-            <HomeStack.Screen name="Details" component={Details} />
+            <HomeStack.Screen name="ClaimExplainedScreen" component={ClaimExplainedScreen} />
         </HomeStack.Navigator>
     );
 }

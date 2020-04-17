@@ -36,7 +36,7 @@ class Account extends React.Component<Props, IAccountState> {
         const stableToken = await this.props.users.kit.contracts.getStableToken()
 
         const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.users.user.celoInfo.address), stableToken.decimals()])
-        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toString()
+        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toFixed(2)
         this.setState({ cUSDBalance })
     }
 
@@ -53,7 +53,7 @@ class Account extends React.Component<Props, IAccountState> {
                 </View>
                 <View style={styles.item}>
                     <Text style={{ fontWeight: 'bold'}}>cUSD balance</Text>
-                    <Text>{this.state.cUSDBalance}</Text>
+                    <Text>${this.state.cUSDBalance}</Text>
                 </View>
             </View>
         );

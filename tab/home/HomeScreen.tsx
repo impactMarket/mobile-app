@@ -12,13 +12,13 @@ import {
 } from '@celo/dappkit'
 import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
 import { Linking } from 'expo'
-import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
-import CommunityContractABI from '../contracts/CommunityABI.json'
-import ContractAddresses from '../contracts/network.json';
+import ImpactMarketContractABI from '../../contracts/ImpactMarketABI.json'
+import CommunityContractABI from '../../contracts/CommunityABI.json'
+import ContractAddresses from '../../contracts/network.json';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../helpers/types';
+import { IRootState } from '../../helpers/types';
 import { ethers } from 'ethers';
-import { ImpactMarketInstance, CommunityInstance } from '../contracts/types/truffle-contracts';
+import { ImpactMarketInstance, CommunityInstance } from '../../contracts/types/truffle-contracts';
 
 import { Appbar, Avatar, Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
@@ -44,7 +44,7 @@ interface IHomeState {
     loading: boolean;
     claiming: boolean;
 }
-class Home extends React.Component<Props, IHomeState> {
+class HomeScreen extends React.Component<Props, IHomeState> {
 
     constructor(props: any) {
         super(props);
@@ -126,8 +126,8 @@ class Home extends React.Component<Props, IHomeState> {
                         {claimDisabled ? new Date(nextClaim).toLocaleString() : 'Claim'}
                     </Button>
                     <Text
-                        onPress={() => this.props.navigation.navigate('Details')}
-                        style={{ top: 15 }}
+                        onPress={() => this.props.navigation.navigate('ClaimExplainedScreen')}
+                        style={{ top: 15, textAlign: 'center' }}
                     >How claim works?</Text>
                 </View>
             </>
@@ -142,7 +142,7 @@ class Home extends React.Component<Props, IHomeState> {
         return (
             <View>
                 <Appbar.Header style={styles.appbar}>
-                    <Avatar.Image size={58} source={require('../assets/hello.png')} />
+                    <Avatar.Image size={58} source={require('../../assets/hello.png')} />
                     <Appbar.Content
                         title="0$"
                         subtitle="Balance"
@@ -154,7 +154,7 @@ class Home extends React.Component<Props, IHomeState> {
                     alignItems: 'center',
                 }}>
                     <Image
-                        source={require('../assets/favela.jpg')}
+                        source={require('../../assets/favela.jpg')}
                         style={{
                             width: '100%',
                             height: 500,
@@ -216,4 +216,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(Home);
+export default connector(HomeScreen);
