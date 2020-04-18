@@ -5,10 +5,10 @@ import {
     View,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../helpers/types';
+import { IRootState } from '../../helpers/types';
 
 
-interface ISendProps {
+interface ICommunityProps {
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -19,10 +19,10 @@ const connector = connect(mapStateToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-type Props = PropsFromRedux & ISendProps
-interface ISendState {
+type Props = PropsFromRedux & ICommunityProps
+interface ICommunityState {
 }
-class Send extends React.Component<Props, ISendState> {
+class Community extends React.Component<Props, ICommunityState> {
 
     constructor(props: any) {
         super(props);
@@ -34,7 +34,7 @@ class Send extends React.Component<Props, ISendState> {
         
         return (
             <View style={styles.container}>
-                <Text>Welcome to Send View</Text>
+                <Text>Welcome to Community View</Text>
             </View>
         );
     }
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connector(Send);
+export default connector(Community);

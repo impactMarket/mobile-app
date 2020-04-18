@@ -13,9 +13,9 @@ import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeStackScreen from './tab/HomeStackScreen';
-import Activity from './tab/Activity';
-import Send from './tab/Send';
-import Account from './tab/Account';
+import Activity from './tab/activity/Activity';
+import Community from './tab/community/Community';
+import Settings from './tab/settings/Settings';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
@@ -118,7 +118,16 @@ export default class App extends React.Component<{}, IAppState> {
                                 component={HomeStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
-                                        <AntDesign name="download" size={props.size} color={props.color} />
+                                        <AntDesign name="home" size={props.size} color={props.color} />
+                                    ),
+                                }}
+                            />
+                            <Tab.Screen
+                                name="Community"
+                                component={Community}
+                                options={{
+                                    tabBarIcon: (props: any) => (
+                                        <AntDesign name="team" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />
@@ -132,17 +141,8 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                             />
                             <Tab.Screen
-                                name="Send"
-                                component={Send}
-                                options={{
-                                    tabBarIcon: (props: any) => (
-                                        <AntDesign name="arrowup" size={props.size} color={props.color} />
-                                    ),
-                                }}
-                            />
-                            <Tab.Screen
-                                name="Account"
-                                component={Account}
+                                name="Settings"
+                                component={Settings}
                                 options={{
                                     tabBarIcon: (props: any) => (
                                         <AntDesign name="setting" size={props.size} color={props.color} />

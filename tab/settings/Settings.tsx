@@ -5,10 +5,10 @@ import {
     View,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../helpers/types';
+import { IRootState } from '../../helpers/types';
 
 
-interface IAccountProps {
+interface ISettingsProps {
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -19,11 +19,11 @@ const connector = connect(mapStateToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-type Props = PropsFromRedux & IAccountProps
-interface IAccountState {
+type Props = PropsFromRedux & ISettingsProps
+interface ISettingsState {
     cUSDBalance: string;
 }
-class Account extends React.Component<Props, IAccountState> {
+class Settings extends React.Component<Props, ISettingsState> {
 
     constructor(props: any) {
         super(props);
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connector(Account);
+export default connector(Settings);

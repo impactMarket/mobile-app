@@ -126,7 +126,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
                     </Button>
                     <Text
                         onPress={() => this.props.navigation.navigate('ClaimExplainedScreen')}
-                        style={{ top: 15, textAlign: 'center' }}
+                        style={{ top: 15, textAlign: 'center', color: 'white' }}
                     >How claim works?</Text>
                 </View>
             </>

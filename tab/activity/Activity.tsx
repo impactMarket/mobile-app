@@ -5,7 +5,7 @@ import {
     View,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../helpers/types';
+import { IRootState } from '../../helpers/types';
 import { Appbar, Avatar, List } from 'react-native-paper';
 import { ethers } from 'ethers';
 
@@ -68,7 +68,7 @@ class Activity extends React.Component<Props, IActivityState> {
         return (
             <View>
                 <Appbar.Header style={styles.appbar}>
-                    <Avatar.Image size={58} source={require('../assets/hello.png')} />
+                    <Avatar.Image size={58} source={require('../../assets/hello.png')} />
                     <Appbar.Content
                         title="0$"
                         subtitle="Balance"
