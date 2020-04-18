@@ -23,14 +23,18 @@ export interface IContractsState {
     communityContract: any
 }
 
-export interface IRootState {
-    user: IUserState,
+export interface INetworkState {
     kit: ContractKit,
     contracts: IContractsState,
 }
 
+export interface IRootState {
+    user: IUserState,
+    network: INetworkState,
+}
+
 // action
-interface ISetUserCeloInfoAction {
+interface UserCeloInfoAction {
     type: typeof SET_USER_CELO_INFO
     payload: IUserCeloInfo
 }
@@ -50,4 +54,5 @@ interface CommunityAction {
     payload: any;
 }
 
-export type UserActionTypes = ISetUserCeloInfoAction | CeloKitAction | ImpactMarketAction | CommunityAction
+export type UserActionTypes = UserCeloInfoAction
+export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction

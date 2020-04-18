@@ -26,7 +26,7 @@ import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo } from '
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit/lib/kit';
 import { ethers } from 'ethers';
-import { ImpactMarketInstance, CommunityInstance } from './contracts/types/truffle-contracts';
+import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
 import ContractAddresses from './contracts/network.json';
@@ -117,8 +117,8 @@ export default class App extends React.Component<{}, IAppState> {
                                 name="Home"
                                 component={HomeStackScreen}
                                 options={{
-                                    tabBarIcon: ({ color, size }) => (
-                                        <AntDesign name="download" size={size} color={color} />
+                                    tabBarIcon: (props: any) => (
+                                        <AntDesign name="download" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />
@@ -126,8 +126,8 @@ export default class App extends React.Component<{}, IAppState> {
                                 name="Activity"
                                 component={Activity}
                                 options={{
-                                    tabBarIcon: ({ color, size }) => (
-                                        <AntDesign name="retweet" size={size} color={color} />
+                                    tabBarIcon: (props: any) => (
+                                        <AntDesign name="retweet" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />
@@ -135,8 +135,8 @@ export default class App extends React.Component<{}, IAppState> {
                                 name="Send"
                                 component={Send}
                                 options={{
-                                    tabBarIcon: ({ color, size }) => (
-                                        <AntDesign name="arrowup" size={size} color={color} />
+                                    tabBarIcon: (props: any) => (
+                                        <AntDesign name="arrowup" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />
@@ -144,8 +144,8 @@ export default class App extends React.Component<{}, IAppState> {
                                 name="Account"
                                 component={Account}
                                 options={{
-                                    tabBarIcon: ({ color, size }) => (
-                                        <AntDesign name="setting" size={size} color={color} />
+                                    tabBarIcon: (props: any) => (
+                                        <AntDesign name="setting" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />

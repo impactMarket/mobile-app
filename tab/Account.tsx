@@ -10,9 +10,9 @@ import { IRootState } from '../helpers/types';
 
 interface IAccountProps {
 }
-const mapStateToProps = (state: { users: IRootState }) => {
-    const { users } = state
-    return { users }
+const mapStateToProps = (state: IRootState) => {
+    const { user, network } = state
+    return { user, network }
 };
 
 const connector = connect(mapStateToProps)
@@ -33,9 +33,9 @@ class Account extends React.Component<Props, IAccountState> {
     }
 
     componentDidMount = async () => {
-        const stableToken = await this.props.users.kit.contracts.getStableToken()
+        const stableToken = await this.props.network.kit.contracts.getStableToken()
 
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.users.user.celoInfo.address), stableToken.decimals()])
+        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.user.celoInfo.address), stableToken.decimals()])
         let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toFixed(2)
         this.setState({ cUSDBalance })
     }
@@ -45,11 +45,11 @@ class Account extends React.Component<Props, IAccountState> {
             <View style={styles.container}>
                 <View style={styles.item}>
                     <Text style={{ fontWeight: 'bold'}}>Your current address is</Text>
-                    <Text>{this.props.users.user.celoInfo.address}</Text>
+                    <Text>{this.props.user.celoInfo.address}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={{ fontWeight: 'bold'}}>Phone Number</Text>
-                    <Text>{this.props.users.user.celoInfo.phoneNumber}</Text>
+                    <Text>{this.props.user.celoInfo.phoneNumber}</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={{ fontWeight: 'bold'}}>cUSD balance</Text>

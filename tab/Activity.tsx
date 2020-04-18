@@ -11,9 +11,9 @@ import { Appbar, Avatar, List } from 'react-native-paper';
 
 interface IActivityProps {
 }
-const mapStateToProps = (state: { users: IRootState }) => {
-    const { users } = state
-    return { users }
+const mapStateToProps = (state: IRootState) => {
+    const { user, network } = state
+    return { user, network }
 };
 
 const connector = connect(mapStateToProps)
@@ -30,6 +30,8 @@ class Activity extends React.Component<Props, IActivityState> {
         this.state = {
         }
     }
+
+    // TODO: load activity history
 
     render() {
         return (

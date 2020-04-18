@@ -1,37 +1,54 @@
 import { combineReducers } from 'redux';
-import { SET_USER_CELO_INFO, IRootState, UserActionTypes, SET_CELO_KIT, SET_COMMUNITY_CONTRACT, SET_IMPACTMARKET_CONTRACT } from './types';
+import {
+    IRootState,
+    UserActionTypes,
+    SET_USER_CELO_INFO,
+    SET_CELO_KIT,
+    SET_COMMUNITY_CONTRACT,
+    SET_IMPACTMARKET_CONTRACT,
+    IUserState,
+    INetworkState,
+    NetworkActionTypes,
+} from './types';
 
-const INITIAL_STATE: IRootState = {
-    user: {
-        celoInfo: {
-            address: '',
-            phoneNumber: '',
-        },
-    },
+
+const INITIAL_STATE_USER: IUserState = {
+    celoInfo: {
+        address: '',
+        phoneNumber: '',
+    }
+};
+
+const INITIAL_NETWORK_USER: INetworkState = {
     kit: undefined as any,
     contracts: {
         communityContract: undefined as any,
         impactMarketContract: undefined as any,
     }
+}
+
+const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
+    switch (action.type) {
+        case SET_USER_CELO_INFO:
+            return { ...state, celoInfo: action.payload };
+        default:
+            return state
+    }
 };
 
-const userReducer = (state = INITIAL_STATE, action: UserActionTypes) => {
+const networkReducer = (state = INITIAL_NETWORK_USER, action: NetworkActionTypes) => {
     let contracts;
     let user;
     switch (action.type) {
-        case SET_USER_CELO_INFO:
-            // Pulls current and possible out of previous state
-            // We do not want to alter state directly in case
-            // another action is altering it at the same time
-            user = state.user;
-            user.celoInfo = action.payload;
-            // Finally, update our redux state
-            return { ...state, user };
         case SET_CELO_KIT:
             return { ...state, kit: action.payload };
         case SET_COMMUNITY_CONTRACT:
+            // Pulls current and possible out of previous state
+            // We do not want to alter state directly in case
+            // another action is altering it at the same time
             contracts = state.contracts;
             contracts.communityContract = action.payload;
+            // Finally, update our redux state
             return { ...state, kit: action.payload };
         case SET_IMPACTMARKET_CONTRACT:
             contracts = state.contracts;
@@ -43,6 +60,7 @@ const userReducer = (state = INITIAL_STATE, action: UserActionTypes) => {
 };
 
 export default combineReducers({
-    users: userReducer,
+    user: userReducer,
+    network: networkReducer,
 })
 

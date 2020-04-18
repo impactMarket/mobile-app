@@ -10,9 +10,9 @@ import { IRootState } from '../helpers/types';
 
 interface ISendProps {
 }
-const mapStateToProps = (state: { users: IRootState }) => {
-    const { users } = state
-    return { users }
+const mapStateToProps = (state: IRootState) => {
+    const { user, network } = state
+    return { user, network }
 };
 
 const connector = connect(mapStateToProps)

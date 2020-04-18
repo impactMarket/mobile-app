@@ -14,13 +14,10 @@ import {
 import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
 import { Linking } from 'expo'
 import { LinearGradient } from 'expo-linear-gradient';
-import ImpactMarketContractABI from '../../contracts/ImpactMarketABI.json'
-import CommunityContractABI from '../../contracts/CommunityABI.json'
-import ContractAddresses from '../../contracts/network.json';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
 import { ethers } from 'ethers';
-import { ImpactMarketInstance, CommunityInstance } from '../../contracts/types/truffle-contracts';
+import { CommunityInstance } from '../../contracts/types/truffle-contracts';
 
 import { Appbar, Avatar, Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
@@ -29,9 +26,9 @@ import { AntDesign } from '@expo/vector-icons';
 interface IHomeProps {
     navigation: any;
 }
-const mapStateToProps = (state: { users: IRootState }) => {
-    const { users } = state
-    return { users }
+const mapStateToProps = (state: IRootState) => {
+    const { user, network } = state
+    return { user, network }
 };
 
 const connector = connect(mapStateToProps)
@@ -60,9 +57,9 @@ class HomeScreen extends React.Component<Props, IHomeState> {
     }
 
     componentDidMount = async () => {
-        const communityContract = this.props.users.contracts.communityContract;
-        if (this.props.users.contracts.communityContract !== undefined) {
-            const address = this.props.users.user.celoInfo.address;
+        const communityContract = this.props.network.contracts.communityContract;
+        if (this.props.network.contracts.communityContract !== undefined) {
+            const address = this.props.user.celoInfo.address;
             const isBeneficiary = await communityContract.methods.beneficiaries(address).call();
             await this._loadAllowance(communityContract);
             this.setState({ isBeneficiary });
@@ -70,8 +67,8 @@ class HomeScreen extends React.Component<Props, IHomeState> {
     }
 
     handleClaimPress = async () => {
-        const { user, kit, contracts } = this.props.users;
-        const { communityContract } = contracts;
+        const { user, network } = this.props;
+        const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
         const requestId = 'user_claim'
         const dappName = 'Impact Market'
@@ -85,7 +82,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
         const txObject = await communityContract.methods.claim()
 
         requestTxSig(
-            kit,
+            network.kit,
             [
                 {
                     from: address,
@@ -99,7 +96,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
 
         const dappkitResponse = await waitForSignedTxs(requestId);
         const tx = dappkitResponse.rawTxs[0];
-        toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt().then((result) => {
+        toTxResult(network.kit.web3.eth.sendSignedTransaction(tx)).waitReceipt().then((result) => {
             this._loadAllowance(communityContract).then(() => {
                 this.setState({ claiming: false });
             })
@@ -184,7 +181,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
     }
 
     _loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
-        const { address } = this.props.users.user.celoInfo;
+        const { address } = this.props.user.celoInfo;
         const cooldownTime = parseInt((await communityInstance.methods.cooldownClaim(address).call()).toString(), 10);
         const isBeneficiary = await communityInstance.methods.beneficiaries(address).call();
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
