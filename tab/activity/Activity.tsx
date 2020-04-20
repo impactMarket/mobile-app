@@ -25,7 +25,7 @@ type Props = PropsFromRedux & IActivityProps
 interface IActivityListItem {
     from: string;
     description: string;
-    ammount: string;
+    amount: string;
     status: string;
     timestamp: number;
 }
@@ -47,14 +47,14 @@ class Activity extends React.Component<Props, IActivityState> {
             {
                 from: 'Fehsolna',
                 description: 'Brasil',
-                ammount: '2',
+                amount: '2',
                 status: 'Claimed',
                 timestamp: 17263188,
             },
             {
                 from: 'Fehsolna',
                 description: 'Brasil',
-                ammount: '3',
+                amount: '3',
                 status: 'Claimed',
                 timestamp: 17263179,
             }
@@ -82,7 +82,7 @@ class Activity extends React.Component<Props, IActivityState> {
                         description={activity.description}
                         left={() => <Avatar.Text size={46} label={activity.from.slice(0, 1)} />}
                         right={() => <View>
-                            <Text>€{activity.ammount}</Text>
+                            <Text>€{activity.amount}</Text>
                             <Text>{activity.status}</Text>
                         </View>}
                     />)}
