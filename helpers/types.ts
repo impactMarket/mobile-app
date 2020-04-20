@@ -2,6 +2,7 @@ import { ContractKit } from "@celo/contractkit";
 
 export const STORAGE_USER_ADDRESS = '@celoinfo:address'
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
+export const STORAGE_STATUS_LOGIN_NOT_NOW = '@status:loginnotnow'
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
@@ -56,3 +57,8 @@ interface CommunityAction {
 
 export type UserActionTypes = UserCeloInfoAction
 export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction
+
+export interface ILoginCallbackAnswer {
+    celoInfo?: IUserCeloInfo;
+    loginNotNow?: boolean;
+}

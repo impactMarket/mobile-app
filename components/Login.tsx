@@ -5,18 +5,17 @@ import {
     Text,
     Button,
     View,
-    AsyncStorage,
 } from 'react-native';
 import {
     requestAccountAddress,
     waitForAccountAuth,
 } from '@celo/dappkit'
 import { Linking } from 'expo'
-import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo } from '../helpers/types';
+import { ILoginCallbackAnswer } from '../helpers/types';
 
 
 interface ILoginProps {
-    loginCallback: (userCeloInfo: IUserCeloInfo) => void;
+    loginCallback: (loginCallbackAnswer: ILoginCallbackAnswer) => void;
 }
 interface ILoginState {
 }
@@ -41,12 +40,21 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
 
         const dappkitResponse = await waitForAccountAuth(requestId)
         try {
-            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, dappkitResponse.address);
-            await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, dappkitResponse.phoneNumber);
-            this.props.loginCallback({ address: dappkitResponse.address, phoneNumber: dappkitResponse.phoneNumber })
+            this.props.loginCallback({
+                celoInfo: {
+                    address: dappkitResponse.address,
+                    phoneNumber: dappkitResponse.phoneNumber,
+                }
+            })
         } catch (error) {
             // Error saving data
         }
+    }
+
+    openWithoutLogin = () => {
+        this.props.loginCallback({
+            loginNotNow: true,
+        })
     }
 
     render() {
@@ -56,6 +64,10 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
 
                 <Text style={styles.title}>Welcome, please login first.</Text>
                 <Button title="login" onPress={() => this.login()} />
+
+                <View style={{ marginTop: 10 }}>
+                    <Button color="green" title="Not now" onPress={() => this.openWithoutLogin()} />
+                </View>
             </View>
         );
     }

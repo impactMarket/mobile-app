@@ -22,7 +22,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import userReducer from './helpers/ReduxReducers';
 import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract } from './helpers/ReduxActions';
-import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo } from './helpers/types';
+import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo, STORAGE_STATUS_LOGIN_NOT_NOW, ILoginCallbackAnswer } from './helpers/types';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit/lib/kit';
 import { ethers } from 'ethers';
@@ -30,6 +30,7 @@ import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
 import ContractAddresses from './contracts/network.json';
+import Explore from './tab/explore/Explore';
 
 
 const Tab = createBottomTabNavigator();
@@ -52,6 +53,7 @@ interface IAppState {
     isSplashReady: boolean;
     isAppReady: boolean;
     loggedIn: boolean;
+    loginNotNow: boolean;
 }
 export default class App extends React.Component<{}, IAppState> {
 
@@ -61,23 +63,32 @@ export default class App extends React.Component<{}, IAppState> {
             isSplashReady: false,
             isAppReady: false,
             loggedIn: false,
+            loginNotNow: false,
         }
     }
 
-    loginCallback = async (userCeloInfo: IUserCeloInfo) => {
+    loginCallback = async (loginCallbackAnswer: ILoginCallbackAnswer) => {
         try {
-            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userCeloInfo.address);
-            await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, userCeloInfo.phoneNumber);
-            store.dispatch(setUserCeloInfo({ address: userCeloInfo.address, phoneNumber: userCeloInfo.phoneNumber }))
+            if (loginCallbackAnswer.celoInfo !== undefined) {
+                await AsyncStorage.setItem(STORAGE_USER_ADDRESS, loginCallbackAnswer.celoInfo.address);
+                await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, loginCallbackAnswer.celoInfo.phoneNumber);
+                store.dispatch(setUserCeloInfo({
+                    address: loginCallbackAnswer.celoInfo.address,
+                    phoneNumber: loginCallbackAnswer.celoInfo.phoneNumber
+                }))
+                this.setState({ loggedIn: true });
+            } else if (loginCallbackAnswer.loginNotNow !== undefined) {
+                await AsyncStorage.setItem(STORAGE_STATUS_LOGIN_NOT_NOW, loginCallbackAnswer.loginNotNow.toString());
+                this.setState({ loginNotNow: true });
+            }
             store.dispatch(setCeloKit(kit));
         } catch (error) {
             // Error saving data
         }
-        this.setState({ loggedIn: true });
     }
 
     render() {
-        const { isAppReady, isSplashReady, loggedIn } = this.state;
+        const { isAppReady, isSplashReady, loggedIn, loginNotNow } = this.state;
         if (!isSplashReady) {
             return (
                 <AppLoading
@@ -102,6 +113,10 @@ export default class App extends React.Component<{}, IAppState> {
                     />
                 </View>
             );
+        }
+
+        if (loginNotNow) {
+            return <Provider store={store}><Explore /></Provider>
         }
 
         if (!loggedIn) {
