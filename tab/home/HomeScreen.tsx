@@ -107,9 +107,30 @@ class HomeScreen extends React.Component<Props, IHomeState> {
         })
     }
 
-    render() {
-        const { claimDisabled, nextClaim, isBeneficiary, loading, claiming, loggedIn } = this.state;
-        const userView = (
+    contentView = () => {
+        const {
+            claimDisabled,
+            nextClaim,
+            isBeneficiary,
+            loading,
+            claiming,
+            loggedIn,
+        } = this.state;
+        if (loading) {
+            return <Text>Loading...</Text>;
+        }
+        if (!loggedIn) {
+            return <Text>Login needed...</Text>;
+        }
+        if (!isBeneficiary) {
+            return (
+                <>
+                    <Text>Not available!</Text>
+                    <Text>Please, contact close communities.</Text>
+                </>
+            );
+        }
+        return (
             <>
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Fehsolna</Text>
                 <Text style={{ fontSize: 20 }}><AntDesign name="enviromento" size={20} /> São Paulo</Text>
@@ -135,13 +156,9 @@ class HomeScreen extends React.Component<Props, IHomeState> {
                 </View>
             </>
         );
-        const nonUserView = (
-            <>
-                <Text>Not available!</Text>
-                <Text>Please, contact close communities.</Text>
-            </>
-        );
+    }
 
+    render() {
         return (
             <View>
                 <Appbar.Header style={styles.appbar}>
@@ -176,8 +193,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
                         />
                     </ImageBackground>
                     <View style={styles.container}>
-                        {loading && <Text>Loading...</Text>}
-                        {!loading && (loggedIn ? (isBeneficiary ? userView : nonUserView) : <Text>Faz login!</Text>)}
+                        {this.contentView()}
                     </View>
                 </View>
             </View>

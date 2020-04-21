@@ -21,39 +21,31 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & ISettingsProps
 interface ISettingsState {
-    cUSDBalance: string;
 }
 class Settings extends React.Component<Props, ISettingsState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
-            cUSDBalance: '(...)',
         }
     }
-
-    componentDidMount = async () => {
-        const stableToken = await this.props.network.kit.contracts.getStableToken()
-
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(this.props.user.celoInfo.address), stableToken.decimals()])
-        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toFixed(2)
-        this.setState({ cUSDBalance })
-    }
-
     render() {
+        if (this.props.user.celoInfo.address.length === 0) {
+            return <Text>Login needed...</Text>;
+        }
         return (
             <View style={styles.container}>
                 <View style={styles.item}>
-                    <Text style={{ fontWeight: 'bold'}}>Your current address is</Text>
+                    <Text style={{ fontWeight: 'bold' }}>Your current address is</Text>
                     <Text>{this.props.user.celoInfo.address}</Text>
                 </View>
                 <View style={styles.item}>
-                    <Text style={{ fontWeight: 'bold'}}>Phone Number</Text>
+                    <Text style={{ fontWeight: 'bold' }}>Phone Number</Text>
                     <Text>{this.props.user.celoInfo.phoneNumber}</Text>
                 </View>
                 <View style={styles.item}>
-                    <Text style={{ fontWeight: 'bold'}}>cUSD balance</Text>
-                    <Text>${this.state.cUSDBalance}</Text>
+                    <Text style={{ fontWeight: 'bold' }}>cUSD balance</Text>
+                    <Text>${this.props.user.celoInfo.balance}</Text>
                 </View>
             </View>
         );
