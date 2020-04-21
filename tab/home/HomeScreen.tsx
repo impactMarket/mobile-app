@@ -42,6 +42,7 @@ interface IHomeState {
     isBeneficiary: boolean;
     loading: boolean;
     claiming: boolean;
+    loggedIn: boolean;
 }
 class HomeScreen extends React.Component<Props, IHomeState> {
 
@@ -53,6 +54,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
             isBeneficiary: false,
             loading: true,
             claiming: false,
+            loggedIn: false,
         }
     }
 
@@ -63,6 +65,8 @@ class HomeScreen extends React.Component<Props, IHomeState> {
             const isBeneficiary = await communityContract.methods.beneficiaries(address).call();
             await this._loadAllowance(communityContract);
             this.setState({ isBeneficiary });
+        } else if (this.props.user.celoInfo.address.length === 0) {
+            this.setState({ loading: false, loggedIn: false });
         }
     }
 
@@ -104,7 +108,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
     }
 
     render() {
-        const { claimDisabled, nextClaim, isBeneficiary, loading, claiming } = this.state;
+        const { claimDisabled, nextClaim, isBeneficiary, loading, claiming, loggedIn } = this.state;
         const userView = (
             <>
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Fehsolna</Text>
@@ -173,7 +177,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
                     </ImageBackground>
                     <View style={styles.container}>
                         {loading && <Text>Loading...</Text>}
-                        {!loading && (isBeneficiary ? userView : nonUserView)}
+                        {!loading && (loggedIn ? (isBeneficiary ? userView : nonUserView) : <Text>Faz login!</Text>)}
                     </View>
                 </View>
             </View>

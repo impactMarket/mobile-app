@@ -1,6 +1,7 @@
 import React from 'react';
 import './global';
-import { web3, kit } from './root'
+import Web3 from 'web3'
+import { newKitFromWeb3 } from "@celo/contractkit";
 import {
     Image,
     View,
@@ -12,9 +13,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeStackScreen from './tab/HomeStackScreen';
+import CommunityStackScreen from './tab/CommunityStackScreen';
 import Activity from './tab/activity/Activity';
-import Community from './tab/community/Community';
 import Settings from './tab/settings/Settings';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
@@ -22,7 +22,14 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import userReducer from './helpers/ReduxReducers';
 import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract } from './helpers/ReduxActions';
-import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER, IUserCeloInfo, STORAGE_STATUS_LOGIN_NOT_NOW, ILoginCallbackAnswer } from './helpers/types';
+import {
+    ILoginCallbackAnswer,
+    STORAGE_USER_ADDRESS,
+    STORAGE_USER_PHONE_NUMBER,
+    SET_USER_WALLET_BALANCE,
+    SET_USER_FIRST_TIME,
+    STORAGE_USER_FIRST_TIME,
+} from './helpers/types';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit/lib/kit';
 import { ethers } from 'ethers';
@@ -33,6 +40,8 @@ import ContractAddresses from './contracts/network.json';
 import Explore from './tab/explore/Explore';
 
 
+const provider = "https://alfajores-forno.celo-testnet.org"
+const kit = newKitFromWeb3(new Web3(provider));
 const Tab = createBottomTabNavigator();
 const store = createStore(userReducer);
 const theme = {
@@ -52,8 +61,7 @@ YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The pro
 interface IAppState {
     isSplashReady: boolean;
     isAppReady: boolean;
-    loggedIn: boolean;
-    loginNotNow: boolean;
+    firstTimeUser: boolean;
 }
 export default class App extends React.Component<{}, IAppState> {
 
@@ -62,24 +70,36 @@ export default class App extends React.Component<{}, IAppState> {
         this.state = {
             isSplashReady: false,
             isAppReady: false,
-            loggedIn: false,
-            loginNotNow: false,
+            firstTimeUser: true,
         }
     }
 
-    loginCallback = async (loginCallbackAnswer: ILoginCallbackAnswer) => {
+    getCurrentUserBalance = async (address: string) => {
+        const stableToken = await kit.contracts.getStableToken()
+
+        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(address), stableToken.decimals()])
+        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toFixed(2)
+        return cUSDBalance;
+    }
+
+    loginCallback = async (loginCallbackAnswer?: ILoginCallbackAnswer) => {
         try {
-            if (loginCallbackAnswer.celoInfo !== undefined) {
+            if (loginCallbackAnswer !== undefined) {
+                const cUSDBalance = await this.getCurrentUserBalance(loginCallbackAnswer.celoInfo.address);
+                //
                 await AsyncStorage.setItem(STORAGE_USER_ADDRESS, loginCallbackAnswer.celoInfo.address);
                 await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, loginCallbackAnswer.celoInfo.phoneNumber);
+                await AsyncStorage.setItem(SET_USER_WALLET_BALANCE, cUSDBalance);
+                await AsyncStorage.setItem(SET_USER_FIRST_TIME, 'false');
                 store.dispatch(setUserCeloInfo({
                     address: loginCallbackAnswer.celoInfo.address,
-                    phoneNumber: loginCallbackAnswer.celoInfo.phoneNumber
+                    phoneNumber: loginCallbackAnswer.celoInfo.phoneNumber,
+                    balance: cUSDBalance,
                 }))
-                this.setState({ loggedIn: true });
-            } else if (loginCallbackAnswer.loginNotNow !== undefined) {
-                await AsyncStorage.setItem(STORAGE_STATUS_LOGIN_NOT_NOW, loginCallbackAnswer.loginNotNow.toString());
-                this.setState({ loginNotNow: true });
+                this.setState({ firstTimeUser: false });
+            } else {
+                await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
+                this.setState({ firstTimeUser: false });
             }
             store.dispatch(setCeloKit(kit));
         } catch (error) {
@@ -88,7 +108,7 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     render() {
-        const { isAppReady, isSplashReady, loggedIn, loginNotNow } = this.state;
+        const { isAppReady, isSplashReady, firstTimeUser } = this.state;
         if (!isSplashReady) {
             return (
                 <AppLoading
@@ -115,11 +135,7 @@ export default class App extends React.Component<{}, IAppState> {
             );
         }
 
-        if (loginNotNow) {
-            return <Provider store={store}><Explore /></Provider>
-        }
-
-        if (!loggedIn) {
+        if (firstTimeUser) {
             return <Login loginCallback={this.loginCallback} />
         }
 
@@ -129,8 +145,8 @@ export default class App extends React.Component<{}, IAppState> {
                     <NavigationContainer>
                         <Tab.Navigator>
                             <Tab.Screen
-                                name="Home"
-                                component={HomeStackScreen}
+                                name="Explore"
+                                component={Explore}
                                 options={{
                                     tabBarIcon: (props: any) => (
                                         <AntDesign name="home" size={props.size} color={props.color} />
@@ -139,7 +155,7 @@ export default class App extends React.Component<{}, IAppState> {
                             />
                             <Tab.Screen
                                 name="Community"
-                                component={Community}
+                                component={CommunityStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
                                         <AntDesign name="team" size={props.size} color={props.color} />
@@ -147,7 +163,7 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                             />
                             <Tab.Screen
-                                name="Activity"
+                                name="Pay"
                                 component={Activity}
                                 options={{
                                     tabBarIcon: (props: any) => (
@@ -156,7 +172,7 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                             />
                             <Tab.Screen
-                                name="Settings"
+                                name="Account"
                                 component={Settings}
                                 options={{
                                     tabBarIcon: (props: any) => (
@@ -184,12 +200,15 @@ export default class App extends React.Component<{}, IAppState> {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
-                store.dispatch(setUserCeloInfo({ address, phoneNumber }))
+                const balance = await this.getCurrentUserBalance(address);
+                store.dispatch(setUserCeloInfo({ address, phoneNumber, balance }))
                 store.dispatch(setCeloKit(kit));
                 await this._loadContracts(address, kit);
                 // We have data!!
-                this.setState({ loggedIn: true });
             }
+            this.setState({
+                firstTimeUser: (await AsyncStorage.getItem(STORAGE_USER_FIRST_TIME)) === null
+            });
         } catch (error) {
             // Error retrieving data
         }

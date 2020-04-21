@@ -5,19 +5,19 @@ import ClaimExplainedScreen from './home/ClaimExplainedScreen';
 
 
 
-const HomeStack = createStackNavigator();
+const CommunityStack = createStackNavigator();
 
-export default function HomeStackScreen() {
+export default function CommunityStackScreen() {
     return (
-        <HomeStack.Navigator>
-            <HomeStack.Screen
+        <CommunityStack.Navigator>
+            <CommunityStack.Screen
                 options={{
                     headerTransparent: true,
                   }}    
                 name="HomeScreen" 
                 component={HomeScreen}
             />
-            <HomeStack.Screen name="ClaimExplainedScreen" component={ClaimExplainedScreen} />
-        </HomeStack.Navigator>
+            <CommunityStack.Screen name="ClaimExplainedScreen" component={ClaimExplainedScreen} />
+        </CommunityStack.Navigator>
     );
 }

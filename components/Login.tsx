@@ -15,7 +15,7 @@ import { ILoginCallbackAnswer } from '../helpers/types';
 
 
 interface ILoginProps {
-    loginCallback: (loginCallbackAnswer: ILoginCallbackAnswer) => void;
+    loginCallback: (loginCallbackAnswer?: ILoginCallbackAnswer) => void;
 }
 interface ILoginState {
 }
@@ -44,6 +44,7 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
                 celoInfo: {
                     address: dappkitResponse.address,
                     phoneNumber: dappkitResponse.phoneNumber,
+                    balance: '0',
                 }
             })
         } catch (error) {
@@ -52,9 +53,7 @@ export default class Login extends React.Component<ILoginProps, ILoginState> {
     }
 
     openWithoutLogin = () => {
-        this.props.loginCallback({
-            loginNotNow: true,
-        })
+        this.props.loginCallback();
     }
 
     render() {
