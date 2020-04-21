@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './home/HomeScreen';
-import ClaimExplainedScreen from './home/ClaimExplainedScreen';
+import CommunityScreen from './community/CommunityScreen';
+import ClaimExplainedScreen from './community/ClaimExplainedScreen';
 
 
 
@@ -15,9 +15,12 @@ export default function CommunityStackScreen() {
                     headerTransparent: true,
                   }}    
                 name="HomeScreen" 
-                component={HomeScreen}
+                component={CommunityScreen}
             />
-            <CommunityStack.Screen name="ClaimExplainedScreen" component={ClaimExplainedScreen} />
+            <CommunityStack.Screen
+                name="ClaimExplainedScreen"
+                component={ClaimExplainedScreen}
+            />
         </CommunityStack.Navigator>
     );
 }

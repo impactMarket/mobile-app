@@ -94,7 +94,7 @@ class Activity extends React.Component<Props, IActivityState> {
 
 const styles = StyleSheet.create({
     appbar: {
-        height: 120
+        height: 80
     },
 });
 

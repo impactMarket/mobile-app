@@ -64,7 +64,6 @@ class Explore extends React.Component<Props, IExploreState> {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
-                    <StatusBar backgroundColor="rgba(0, 0, 0, 0.2)" translucent />
                     {/** */}
                     <Headline style={{ margin: 10 }} onMagicTap={() => console.warn('oi')} >Explore</Headline>
                     {communities.map((community) => <Card key={community.title} elevation={12} style={styles.card}>

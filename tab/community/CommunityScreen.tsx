@@ -23,7 +23,7 @@ import { Appbar, Avatar, Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 
 
-interface IHomeProps {
+interface ICommunityProps {
     navigation: any;
 }
 const mapStateToProps = (state: IRootState) => {
@@ -35,8 +35,8 @@ const connector = connect(mapStateToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-type Props = PropsFromRedux & IHomeProps
-interface IHomeState {
+type Props = PropsFromRedux & ICommunityProps
+interface ICommunityState {
     nextClaim: number;
     claimDisabled: boolean;
     isBeneficiary: boolean;
@@ -44,7 +44,7 @@ interface IHomeState {
     claiming: boolean;
     loggedIn: boolean;
 }
-class HomeScreen extends React.Component<Props, IHomeState> {
+class CommunityScreen extends React.Component<Props, ICommunityState> {
 
     constructor(props: any) {
         super(props);
@@ -192,7 +192,7 @@ class HomeScreen extends React.Component<Props, IHomeState> {
                             }}
                         />
                     </ImageBackground>
-                    <View style={styles.container}>
+                    <View style={styles.contentView}>
                         {this.contentView()}
                     </View>
                 </View>
@@ -222,10 +222,10 @@ class HomeScreen extends React.Component<Props, IHomeState> {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    contentView: {
+        flex: 1,
         alignItems: 'center',
         position: 'absolute',
-        top: 50
     },
     title: {
         marginVertical: 8,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     appbar: {
-        height: 120
+        height: 80
     },
     button: {
         backgroundColor: "blue",
@@ -246,4 +246,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(HomeScreen);
+export default connector(CommunityScreen);

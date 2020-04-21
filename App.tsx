@@ -7,6 +7,7 @@ import {
     View,
     YellowBox,
     AsyncStorage,
+    StatusBar,
 } from 'react-native';
 
 import { AntDesign } from '@expo/vector-icons';
@@ -15,7 +16,7 @@ import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CommunityStackScreen from './tab/CommunityStackScreen';
 import Activity from './tab/activity/Activity';
-import Settings from './tab/settings/Settings';
+import Settings from './tab/account/Account';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
@@ -142,6 +143,7 @@ export default class App extends React.Component<{}, IAppState> {
         return (
             <PaperProvider theme={theme}>
                 <Provider store={store}>
+                    <StatusBar backgroundColor="rgba(0, 0, 0, 0.2)" translucent />
                     <NavigationContainer>
                         <Tab.Navigator>
                             <Tab.Screen
@@ -154,7 +156,7 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                             />
                             <Tab.Screen
-                                name="Community"
+                                name="My Community"
                                 component={CommunityStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (

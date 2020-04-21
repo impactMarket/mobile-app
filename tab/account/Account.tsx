@@ -31,7 +31,9 @@ class Settings extends React.Component<Props, ISettingsState> {
     }
     render() {
         if (this.props.user.celoInfo.address.length === 0) {
-            return <Text>Login needed...</Text>;
+            return <View style={styles.container}>
+                <Text>Login needed...</Text>
+            </View>;
         }
         return (
             <View style={styles.container}>
@@ -54,8 +56,7 @@ class Settings extends React.Component<Props, ISettingsState> {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#ffffff',
+        paddingTop: Expo.Constants.statusBarHeight,
         alignItems: 'center',
         justifyContent: 'center',
     },
