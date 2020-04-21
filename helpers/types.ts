@@ -62,3 +62,14 @@ export interface ILoginCallbackAnswer {
     celoInfo?: IUserCeloInfo;
     loginNotNow?: boolean;
 }
+
+export interface ICommunityInfo {
+    title: string;
+    location: string;
+    image: string;
+    backers: number;
+    beneficiaries: number;
+    ubiRate: number;
+    totalClaimed: number;
+    totalRaised: number;
+}
