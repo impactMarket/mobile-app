@@ -3,7 +3,6 @@ import {
     StyleSheet,
     Text,
     View,
-    StatusBar,
     ImageBackground,
     SafeAreaView,
     ScrollView
@@ -14,7 +13,8 @@ import { Card, Headline, ProgressBar, DataTable } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 
 
-interface IExploreProps {
+interface IExploreScreenProps {
+    navigation: any;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -25,11 +25,11 @@ const connector = connect(mapStateToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-type Props = PropsFromRedux & IExploreProps
-interface IExploreState {
+type Props = PropsFromRedux & IExploreScreenProps
+interface IExploreScreenState {
     communities: ICommunityInfo[];
 }
-class Explore extends React.Component<Props, IExploreState> {
+class ExploreScreen extends React.Component<Props, IExploreScreenState> {
 
     constructor(props: any) {
         super(props);
@@ -66,7 +66,15 @@ class Explore extends React.Component<Props, IExploreState> {
                 <ScrollView style={styles.scrollView}>
                     {/** */}
                     <Headline style={{ margin: 10 }} onMagicTap={() => console.warn('oi')} >Explore</Headline>
-                    {communities.map((community) => <Card key={community.title} elevation={12} style={styles.card}>
+                    {communities.map((community) => <Card
+                        key={community.title}
+                        elevation={12}
+                        style={styles.card}
+                        onPress={() => this.props.navigation.navigate('CommunityDetailsScreen', {
+                            itemId: 86,
+                            otherParam: 'anything you want here',
+                        })}
+                    >
                         {/* <Card.Cover
                             source={{ uri: community.image }}
                         /> */}
@@ -152,4 +160,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connector(Explore);
+export default connector(ExploreScreen);

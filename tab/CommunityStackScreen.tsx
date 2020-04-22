@@ -12,9 +12,9 @@ export default function CommunityStackScreen() {
         <CommunityStack.Navigator>
             <CommunityStack.Screen
                 options={{
-                    headerTransparent: true,
-                  }}    
-                name="HomeScreen" 
+                    headerShown: false
+                }}
+                name="HomeScreen"
                 component={CommunityScreen}
             />
             <CommunityStack.Screen

@@ -38,7 +38,7 @@ import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
 import ContractAddresses from './contracts/network.json';
-import Explore from './tab/explore/Explore';
+import ExploreStackScreen from './tab/ExploreStackScreen';
 
 
 const provider = "https://alfajores-forno.celo-testnet.org"
@@ -148,7 +148,7 @@ export default class App extends React.Component<{}, IAppState> {
                         <Tab.Navigator>
                             <Tab.Screen
                                 name="Explore"
-                                component={Explore}
+                                component={ExploreStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
                                         <AntDesign name="home" size={props.size} color={props.color} />
