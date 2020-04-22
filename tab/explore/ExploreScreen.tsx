@@ -70,10 +70,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                         key={community.title}
                         elevation={12}
                         style={styles.card}
-                        onPress={() => this.props.navigation.navigate('CommunityDetailsScreen', {
-                            itemId: 86,
-                            otherParam: 'anything you want here',
-                        })}
+                        onPress={() => this.props.navigation.navigate('CommunityDetailsScreen', community)}
                     >
                         {/* <Card.Cover
                             source={{ uri: community.image }}
