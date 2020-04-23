@@ -34,6 +34,7 @@
         "react-native-safe-area-context": "0.6.0",
         "react-native-screens": "2.0.0-alpha.12",
         "react-native-svg": "9.13.3",
+        "react-native-vector-icons": "6.6.0",
         "react-native-web": "0.11.7",
         "react-redux": "7.2.0",
         "redux": "4.0.5",
@@ -48,6 +49,7 @@
         "@types/react-redux": "7.1.7",
         "babel-preset-expo": "8.0.0",
         "chai": "4.2.0",
+        "eslint": "6.8.0",
         "jest-expo": "36.0.1",
         "typescript": "3.8.3"
     }
