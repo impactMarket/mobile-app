@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
         paddingTop: Expo.Constants.statusBarHeight,
         alignItems: 'center',
         justifyContent: 'center',
+        top: 50,
     },
     item: {
         marginBottom: 50,

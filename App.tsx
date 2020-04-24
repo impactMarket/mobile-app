@@ -22,7 +22,7 @@ import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import userReducer from './helpers/ReduxReducers';
-import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract } from './helpers/ReduxActions';
+import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract, setUserFirstTime } from './helpers/ReduxActions';
 import {
     ILoginCallbackAnswer,
     STORAGE_USER_ADDRESS,
@@ -73,39 +73,18 @@ export default class App extends React.Component<{}, IAppState> {
             isAppReady: false,
             firstTimeUser: true,
         }
-    }
+        store.subscribe(() => {
+            const previousValue = this.state.firstTimeUser
+            const currentValue = store.getState().user.firstTime;
 
-    getCurrentUserBalance = async (address: string) => {
-        const stableToken = await kit.contracts.getStableToken()
-
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(address), stableToken.decimals()])
-        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toFixed(2)
-        return cUSDBalance;
-    }
-
-    loginCallback = async (loginCallbackAnswer?: ILoginCallbackAnswer) => {
-        try {
-            if (loginCallbackAnswer !== undefined) {
-                const cUSDBalance = await this.getCurrentUserBalance(loginCallbackAnswer.celoInfo.address);
-                //
-                await AsyncStorage.setItem(STORAGE_USER_ADDRESS, loginCallbackAnswer.celoInfo.address);
-                await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, loginCallbackAnswer.celoInfo.phoneNumber);
-                await AsyncStorage.setItem(SET_USER_WALLET_BALANCE, cUSDBalance);
-                await AsyncStorage.setItem(SET_USER_FIRST_TIME, 'false');
-                store.dispatch(setUserCeloInfo({
-                    address: loginCallbackAnswer.celoInfo.address,
-                    phoneNumber: loginCallbackAnswer.celoInfo.phoneNumber,
-                    balance: cUSDBalance,
-                }))
-                this.setState({ firstTimeUser: false });
-            } else {
-                await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-                this.setState({ firstTimeUser: false });
+            if (previousValue !== currentValue) {
+                if (currentValue === false &&
+                    store.getState().user.celoInfo.address.length > 0) {
+                        this._authUser();
+                    }
+                this.setState({ firstTimeUser: currentValue });
             }
-            store.dispatch(setCeloKit(kit));
-        } catch (error) {
-            // Error saving data
-        }
+        })
     }
 
     render() {
@@ -137,7 +116,9 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         if (firstTimeUser) {
-            return <Login loginCallback={this.loginCallback} />
+            return <Provider store={store}>
+                <Login />
+            </Provider>
         }
 
         return (
@@ -189,6 +170,14 @@ export default class App extends React.Component<{}, IAppState> {
         );
     }
 
+    _getCurrentUserBalance = async (address: string) => {
+        const stableToken = await kit.contracts.getStableToken()
+
+        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(address), stableToken.decimals()])
+        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toFixed(2)
+        return cUSDBalance;
+    }
+
     _cacheSplashResourcesAsync = async () => {
         const gif = require('./assets/splash.png');
         return Asset.fromModule(gif).downloadAsync();
@@ -196,27 +185,32 @@ export default class App extends React.Component<{}, IAppState> {
 
     _cacheResourcesAsync = async () => {
         SplashScreen.hide();
+        await this._authUser();
+        this.setState({ isAppReady: true });
+    };
+    
+    _authUser = async () => {
         let address: string | null = '';
         let phoneNumber: string | null = '';
         try {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
-                const balance = await this.getCurrentUserBalance(address);
+                const balance = await this._getCurrentUserBalance(address);
                 store.dispatch(setUserCeloInfo({ address, phoneNumber, balance }))
-                store.dispatch(setCeloKit(kit));
                 await this._loadContracts(address, kit);
                 // We have data!!
             }
+            const firstTime = await AsyncStorage.getItem(STORAGE_USER_FIRST_TIME);
             this.setState({
-                firstTimeUser: (await AsyncStorage.getItem(STORAGE_USER_FIRST_TIME)) === null
+                firstTimeUser: firstTime === null
             });
+            store.dispatch(setUserFirstTime(firstTime !== 'false'));
         } catch (error) {
             // Error retrieving data
         }
         store.dispatch(setCeloKit(kit))
-        this.setState({ isAppReady: true });
-    };
+    }
 
     _loadContracts = async (address: string, kit: ContractKit) => {
         const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);

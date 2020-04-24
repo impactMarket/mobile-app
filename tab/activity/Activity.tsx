@@ -70,7 +70,7 @@ class Activity extends React.Component<Props, IActivityState> {
                 <Appbar.Header style={styles.appbar}>
                     <Avatar.Image size={58} source={require('../../assets/hello.png')} />
                     <Appbar.Content
-                        title="0$"
+                        title={this.props.user.celoInfo.balance + '$'}
                         subtitle="Balance"
                     />
                     <Appbar.Action icon="bell" />
