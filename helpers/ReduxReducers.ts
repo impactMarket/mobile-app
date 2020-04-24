@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import {
-    IRootState,
     UserActionTypes,
     SET_USER_CELO_INFO,
     SET_CELO_KIT,
@@ -9,6 +8,8 @@ import {
     IUserState,
     INetworkState,
     NetworkActionTypes,
+    SET_USER_WALLET_BALANCE,
+    SET_USER_FIRST_TIME,
 } from './types';
 
 
@@ -16,7 +17,9 @@ const INITIAL_STATE_USER: IUserState = {
     celoInfo: {
         address: '',
         phoneNumber: '',
-    }
+        balance: '0',
+    },
+    firstTime: true,
 };
 
 const INITIAL_NETWORK_USER: INetworkState = {
@@ -31,6 +34,12 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
     switch (action.type) {
         case SET_USER_CELO_INFO:
             return { ...state, celoInfo: action.payload };
+        case SET_USER_WALLET_BALANCE:
+            const celoInfo = state.celoInfo;
+            celoInfo.balance = action.payload;
+            return { ...state, celoInfo };
+        case SET_USER_FIRST_TIME:
+            return { ...state, firstTime: action.payload };
         default:
             return state
     }

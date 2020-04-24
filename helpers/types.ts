@@ -44,6 +44,16 @@ interface UserCeloInfoAction {
     payload: IUserCeloInfo
 }
 
+interface UserSetBalanceAction {
+    type: typeof SET_USER_WALLET_BALANCE
+    payload: string
+}
+
+interface UserSetFirstTimeAction {
+    type: typeof SET_USER_FIRST_TIME
+    payload: boolean
+}
+
 interface CeloKitAction {
     type: typeof SET_CELO_KIT
     payload: ContractKit;
@@ -59,7 +69,7 @@ interface CommunityAction {
     payload: any;
 }
 
-export type UserActionTypes = UserCeloInfoAction
+export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetFirstTimeAction
 export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction
 
 export interface ILoginCallbackAnswer {

@@ -6,6 +6,8 @@ import {
     SET_COMMUNITY_CONTRACT,
     SET_IMPACTMARKET_CONTRACT,
     NetworkActionTypes,
+    SET_USER_WALLET_BALANCE,
+    SET_USER_FIRST_TIME,
 } from "./types";
 import { ContractKit } from "@celo/contractkit";
 
@@ -14,6 +16,20 @@ export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
     return {
         type: SET_USER_CELO_INFO,
         payload: celoInfo,
+    }
+}
+
+export function setUserWalletBalance(balance: string): UserActionTypes {
+    return {
+        type: SET_USER_WALLET_BALANCE,
+        payload: balance,
+    }
+}
+
+export function setUserFirstTime(firstTime: boolean): UserActionTypes {
+    return {
+        type: SET_USER_FIRST_TIME,
+        payload: firstTime,
     }
 }
 
