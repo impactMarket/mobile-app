@@ -21,6 +21,7 @@ import { CommunityInstance } from '../../contracts/types/truffle-contracts';
 
 import { Appbar, Avatar, Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
+import { setUserFirstTime } from '../../helpers/ReduxActions';
 
 
 interface ICommunityProps {
@@ -41,6 +42,7 @@ interface ICommunityState {
     claimDisabled: boolean;
     isBeneficiary: boolean;
     loading: boolean;
+    loaded: boolean;
     claiming: boolean;
     loggedIn: boolean;
 }
@@ -52,21 +54,38 @@ class CommunityScreen extends React.Component<Props, ICommunityState> {
             nextClaim: 0,
             claimDisabled: true,
             isBeneficiary: false,
-            loading: true,
+            loading: false,
+            loaded: false,
             claiming: false,
             loggedIn: false,
         }
     }
 
-    componentDidMount = async () => {
-        const communityContract = this.props.network.contracts.communityContract;
-        if (this.props.network.contracts.communityContract !== undefined) {
-            const address = this.props.user.celoInfo.address;
+    loadPage = async (props: Readonly<Props>) => {
+        const communityContract = props.network.contracts.communityContract;
+        if (props.network.contracts.communityContract !== undefined) {
+            const address = props.user.celoInfo.address;
             const isBeneficiary = await communityContract.methods.beneficiaries(address).call();
             await this._loadAllowance(communityContract);
-            this.setState({ isBeneficiary });
-        } else if (this.props.user.celoInfo.address.length === 0) {
-            this.setState({ loading: false, loggedIn: false });
+            this.setState({ isBeneficiary, loading: false, loggedIn: true, loaded: true });
+        } else if (props.user.celoInfo.address.length === 0) {
+            this.setState({ loading: false, loggedIn: false, loaded: true });
+        }
+    }
+
+    // TODO: improve
+    componentDidMount = async () => {
+        if (!this.state.loaded && !this.state.loading) {
+            this.setState({ loading: true });
+            await this.loadPage(this.props);
+        }
+    }
+
+    // TODO: improve
+    UNSAFE_componentWillUpdate = async (nextProps: Readonly<Props>, nextState: Readonly<ICommunityState>, nextContext: any) => {
+        if (!this.state.loaded && !this.state.loading) {
+            this.setState({ loading: true });
+            await this.loadPage(nextProps);
         }
     }
 
@@ -120,7 +139,15 @@ class CommunityScreen extends React.Component<Props, ICommunityState> {
             return <Text>Loading...</Text>;
         }
         if (!loggedIn) {
-            return <Text>Login needed...</Text>;
+            return <>
+                <Text>Login needed...</Text>
+                <Button
+                    mode="contained"
+                    onPress={() => this.props.dispatch(setUserFirstTime(true))}
+                >
+                    Login now
+                </Button>
+            </>;
         }
         if (!isBeneficiary) {
             return (
@@ -164,13 +191,12 @@ class CommunityScreen extends React.Component<Props, ICommunityState> {
                 <Appbar.Header style={styles.appbar}>
                     <Avatar.Image size={58} source={require('../../assets/hello.png')} />
                     <Appbar.Content
-                        title="0$"
+                        title={this.props.user.celoInfo.balance + '$'}
                         subtitle="Balance"
                     />
                     <Appbar.Action icon="bell" />
                 </Appbar.Header>
                 <View style={{
-                    justifyContent: 'center',
                     alignItems: 'center',
                 }}>
                     <ImageBackground
@@ -226,6 +252,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         position: 'absolute',
+        top: 50,
     },
     title: {
         marginVertical: 8,
