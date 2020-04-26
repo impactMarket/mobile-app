@@ -28,10 +28,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & IExploreScreenProps
 interface IExploreScreenState {
     communities: ICommunityInfo[];
-    goExplore?: boolean; // go explore the world my friend <3
-    newCommunityForm: {
-        title: string;
-    }
+    optionMenuVisible: boolean; // go explore the world my friend <3
 }
 class ExploreScreen extends React.Component<Props, IExploreScreenState> {
 
@@ -60,60 +57,41 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                     totalRaised: 0.8,
                 }
             ],
-            newCommunityForm: {
-                title: '',
-            }
+            optionMenuVisible: true,
         }
     }
 
     render() {
         const {
             communities,
-            goExplore,
-            newCommunityForm,
+            optionMenuVisible,
         } = this.state;
 
-        if (goExplore === undefined) {
+        if (optionMenuVisible === true) {
             return (
                 <View style={{ ...styles.container, margin: 30 }}>
                     <Card>
                         <Card.Cover style={{ height: 100 }} source={{ uri: 'https://picsum.photos/500' }} />
                         <Card.Content>
                             <Title style={{ textAlign: 'center' }}>You don't have a community</Title>
-                            <Button mode="contained" onPress={() => this.setState({ goExplore: true })}>Explore</Button>
+                            <Button
+                                mode="contained"
+                                onPress={() => this.setState({ optionMenuVisible: false })}
+                            >
+                                Explore
+                            </Button>
                         </Card.Content>
                     </Card>
                     <Card style={{ marginTop: 50 }}>
-                        <Card.Cover style={{ height: 100 }} source={{ uri: 'https://picsum.photos/700' }} />
+                        <Card.Cover style={{ height: 100 }} source={{ uri: 'https://picsum.photos/600' }} />
                         <Card.Content>
                             <Title style={{ textAlign: 'center' }}>You have a community</Title>
-                            <Button mode="contained" onPress={() => this.setState({ goExplore: false })}>Create Community</Button>
-                        </Card.Content>
-                    </Card>
-                </View>
-            );
-        }
-
-        if (!goExplore) {
-            return (
-                <View style={{ ...styles.container, margin: 30 }}>
-                    <Card>
-                        <Card.Cover style={{ height: 100 }} source={{ uri: 'https://picsum.photos/700' }} />
-                        <Card.Content>
-                            <TextInput
-                                style={{ marginTop: 10 }}
-                                mode="outlined"
-                                label='Email'
-                                value={newCommunityForm.title}
-                                onChangeText={text => this.setState({ newCommunityForm: { title: text } })}
-                                />
                             <Button
-                                style={{ marginTop: 10 }}
                                 mode="contained"
-                                onPress={() => this.setState({ goExplore: false })}
+                                onPress={() => this.props.navigation.navigate('CreateCommunityScreen')}
                             >
                                 Create Community
-                                </Button>
+                            </Button>
                         </Card.Content>
                     </Card>
                 </View>

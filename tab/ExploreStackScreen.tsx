@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ExploreScreen from './explore/ExploreScreen';
 import CommunityDetailsScreen from './explore/CommunityDetailsScreen';
+import CreateCommunityScreen from './explore/CreateCommunityScreen';
 
 
 
@@ -20,6 +21,10 @@ export default function ExploreStackScreen() {
             <ExploreStack.Screen
                 name="CommunityDetailsScreen"
                 component={CommunityDetailsScreen}
+            />
+            <ExploreStack.Screen
+                name="CreateCommunityScreen"
+                component={CreateCommunityScreen}
             />
         </ExploreStack.Navigator>
     );
