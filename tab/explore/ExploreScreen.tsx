@@ -5,11 +5,11 @@ import {
     View,
     ImageBackground,
     SafeAreaView,
-    ScrollView
+    ScrollView,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState, ICommunityInfo } from '../../helpers/types';
-import { Card, Headline, ProgressBar, DataTable } from 'react-native-paper';
+import { Card, Headline, ProgressBar, DataTable, TextInput, Title, Paragraph, Button, Divider } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 
 
@@ -28,6 +28,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & IExploreScreenProps
 interface IExploreScreenState {
     communities: ICommunityInfo[];
+    goExplore?: boolean; // go explore the world my friend <3
+    newCommunityForm: {
+        title: string;
+    }
 }
 class ExploreScreen extends React.Component<Props, IExploreScreenState> {
 
@@ -55,12 +59,67 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                     totalClaimed: 0.6,
                     totalRaised: 0.8,
                 }
-            ]
+            ],
+            newCommunityForm: {
+                title: '',
+            }
         }
     }
 
     render() {
-        const { communities } = this.state;
+        const {
+            communities,
+            goExplore,
+            newCommunityForm,
+        } = this.state;
+
+        if (goExplore === undefined) {
+            return (
+                <View style={{ ...styles.container, margin: 30 }}>
+                    <Card>
+                        <Card.Cover style={{ height: 100 }} source={{ uri: 'https://picsum.photos/500' }} />
+                        <Card.Content>
+                            <Title style={{ textAlign: 'center' }}>You don't have a community</Title>
+                            <Button mode="contained" onPress={() => this.setState({ goExplore: true })}>Explore</Button>
+                        </Card.Content>
+                    </Card>
+                    <Card style={{ marginTop: 50 }}>
+                        <Card.Cover style={{ height: 100 }} source={{ uri: 'https://picsum.photos/700' }} />
+                        <Card.Content>
+                            <Title style={{ textAlign: 'center' }}>You have a community</Title>
+                            <Button mode="contained" onPress={() => this.setState({ goExplore: false })}>Create Community</Button>
+                        </Card.Content>
+                    </Card>
+                </View>
+            );
+        }
+
+        if (!goExplore) {
+            return (
+                <View style={{ ...styles.container, margin: 30 }}>
+                    <Card>
+                        <Card.Cover style={{ height: 100 }} source={{ uri: 'https://picsum.photos/700' }} />
+                        <Card.Content>
+                            <TextInput
+                                style={{ marginTop: 10 }}
+                                mode="outlined"
+                                label='Email'
+                                value={newCommunityForm.title}
+                                onChangeText={text => this.setState({ newCommunityForm: { title: text } })}
+                                />
+                            <Button
+                                style={{ marginTop: 10 }}
+                                mode="contained"
+                                onPress={() => this.setState({ goExplore: false })}
+                            >
+                                Create Community
+                                </Button>
+                        </Card.Content>
+                    </Card>
+                </View>
+            );
+        }
+
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scrollView}>
