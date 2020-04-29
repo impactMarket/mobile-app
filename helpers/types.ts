@@ -9,6 +9,8 @@ export const SET_USER_FIRST_TIME = 'SET_USER_FIRST_TIME';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
 export const SET_IMPACTMARKET_CONTRACT = 'SET_IMPACTMARKET_CONTRACT';
+export const SET_USER_IS_BENEFICIARY = 'SET_USER_IS_BENEFICIARY';
+export const SET_USER_IS_COMMUNITY_COORDINATOR = 'SET_USER_IS_COMMUNITY_COORDINATOR';
 
 // state
 export interface IUserCeloInfo {
@@ -18,8 +20,15 @@ export interface IUserCeloInfo {
     balance: string;
 }
 
+export interface IUserCommunityInfo {
+    isBeneficiary: boolean;
+    isCoordinator: boolean;
+    // TODO: communityAddress: string;
+}
+
 export interface IUserState {
     celoInfo: IUserCeloInfo,
+    community: IUserCommunityInfo,
     firstTime: boolean;
 }
 
@@ -54,6 +63,16 @@ interface UserSetFirstTimeAction {
     payload: boolean
 }
 
+interface UserSetIsBeneficiaryAction {
+    type: typeof SET_USER_IS_BENEFICIARY
+    payload: boolean
+}
+
+interface UserSetIsCommunityManagerAction {
+    type: typeof SET_USER_IS_COMMUNITY_COORDINATOR
+    payload: boolean
+}
+
 interface CeloKitAction {
     type: typeof SET_CELO_KIT
     payload: ContractKit;
@@ -69,7 +88,7 @@ interface CommunityAction {
     payload: any;
 }
 
-export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetFirstTimeAction
+export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetFirstTimeAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction
 export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction
 
 export interface ILoginCallbackAnswer {

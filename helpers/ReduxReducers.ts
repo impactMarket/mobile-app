@@ -10,6 +10,8 @@ import {
     NetworkActionTypes,
     SET_USER_WALLET_BALANCE,
     SET_USER_FIRST_TIME,
+    SET_USER_IS_BENEFICIARY,
+    SET_USER_IS_COMMUNITY_COORDINATOR,
 } from './types';
 
 
@@ -18,6 +20,10 @@ const INITIAL_STATE_USER: IUserState = {
         address: '',
         phoneNumber: '',
         balance: '0',
+    },
+    community: {
+        isBeneficiary: false,
+        isCoordinator: false,
     },
     firstTime: true,
 };
@@ -31,6 +37,7 @@ const INITIAL_NETWORK_USER: INetworkState = {
 }
 
 const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
+    const community = state.community;
     switch (action.type) {
         case SET_USER_CELO_INFO:
             return { ...state, celoInfo: action.payload };
@@ -40,6 +47,12 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
             return { ...state, celoInfo };
         case SET_USER_FIRST_TIME:
             return { ...state, firstTime: action.payload };
+        case SET_USER_IS_BENEFICIARY:
+            community.isBeneficiary = action.payload
+            return { ...state, community };
+        case SET_USER_IS_COMMUNITY_COORDINATOR:
+            community.isCoordinator = action.payload
+            return { ...state, community };
         default:
             return state
     }

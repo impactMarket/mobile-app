@@ -8,6 +8,8 @@ import {
     NetworkActionTypes,
     SET_USER_WALLET_BALANCE,
     SET_USER_FIRST_TIME,
+    SET_USER_IS_COMMUNITY_COORDINATOR,
+    SET_USER_IS_BENEFICIARY,
 } from "./types";
 import { ContractKit } from "@celo/contractkit";
 
@@ -23,6 +25,20 @@ export function setUserWalletBalance(balance: string): UserActionTypes {
     return {
         type: SET_USER_WALLET_BALANCE,
         payload: balance,
+    }
+}
+
+export function setUserIsBeneficiary(isBeneficiary: boolean): UserActionTypes {
+    return {
+        type: SET_USER_IS_BENEFICIARY,
+        payload: isBeneficiary,
+    }
+}
+
+export function setUserIsCommunityManager(isCommunityManager: boolean): UserActionTypes {
+    return {
+        type: SET_USER_IS_COMMUNITY_COORDINATOR,
+        payload: isCommunityManager,
     }
 }
 
