@@ -10,7 +10,7 @@ import {
     SET_USER_FIRST_TIME,
     SET_USER_IS_COMMUNITY_COORDINATOR,
     SET_USER_IS_BENEFICIARY,
-} from "./types";
+} from "../../types";
 import { ContractKit } from "@celo/contractkit";
 
 

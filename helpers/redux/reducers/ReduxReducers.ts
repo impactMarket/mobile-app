@@ -12,7 +12,7 @@ import {
     SET_USER_FIRST_TIME,
     SET_USER_IS_BENEFICIARY,
     SET_USER_IS_COMMUNITY_COORDINATOR,
-} from './types';
+} from '../../types';
 
 
 const INITIAL_STATE_USER: IUserState = {
