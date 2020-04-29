@@ -14,9 +14,9 @@ import { AntDesign } from '@expo/vector-icons';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CommunityStackScreen from './tab/CommunityStackScreen';
-import Activity from './tab/activity/Activity';
-import Settings from './tab/account/Account';
+import CommunityStackScreen from './views/CommunityStackScreen';
+import Activity from './views/activity/Activity';
+import Settings from './views/account/Account';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
@@ -38,7 +38,7 @@ import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
 import ContractAddresses from './contracts/network.json';
-import ExploreStackScreen from './tab/ExploreStackScreen';
+import ExploreStackScreen from './views/ExploreStackScreen';
 
 
 const provider = "https://alfajores-forno.celo-testnet.org"
