@@ -22,7 +22,7 @@ import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import userReducer from './helpers/ReduxReducers';
-import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract, setUserFirstTime } from './helpers/ReduxActions';
+import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract, setUserFirstTime, setUserIsBeneficiary, setUserIsCommunityManager } from './helpers/ReduxActions';
 import {
     ILoginCallbackAnswer,
     STORAGE_USER_ADDRESS,
@@ -80,8 +80,8 @@ export default class App extends React.Component<{}, IAppState> {
             if (previousValue !== currentValue) {
                 if (currentValue === false &&
                     store.getState().user.celoInfo.address.length > 0) {
-                        this._authUser();
-                    }
+                    this._authUser();
+                }
                 this.setState({ firstTimeUser: currentValue });
             }
         })
@@ -188,7 +188,7 @@ export default class App extends React.Component<{}, IAppState> {
         await this._authUser();
         this.setState({ isAppReady: true });
     };
-    
+
     _authUser = async () => {
         let address: string | null = '';
         let phoneNumber: string | null = '';
@@ -222,18 +222,29 @@ export default class App extends React.Component<{}, IAppState> {
         const logs = await provider.getLogs({
             address: ContractAddresses.alfajores.ImpactMarket,
             fromBlock: 0,
-            topics: [ethers.utils.id("CommunityAdded(address)")]
+            topics: [ethers.utils.id('CommunityAdded(address)')]
         })
+        // TODO: get the communities in second plan!
+        // cache this data
+        // also index it off-chain
         // change the following to support multiple communities
-        const communityAddress = ethers.utils
-            .getAddress(logs[0].topics[1].slice(26, logs[0].topics[1].length));
-        const communityContract = new kit.web3.eth.Contract(
-            CommunityContractABI as any,
-            communityAddress,
-        );
+        for (let l = 0; l < logs.length; l += 1) {
+            const communityAddress = ethers.utils
+                .getAddress(logs[l].topics[1].slice(26, logs[l].topics[1].length));
+            const communityContract = new kit.web3.eth.Contract(
+                CommunityContractABI as any,
+                communityAddress,
+            );
+            const isBeneficiary = (await communityContract.methods.beneficiaries(address).call());
+            const isCoordinator = (await communityContract.methods.isCoordinator(address).call());
+            // TODO: update with new contracts
+            if (isBeneficiary || isCoordinator) {
+                store.dispatch(setCommunityContract(communityContract));
+            }
+            store.dispatch(setUserIsBeneficiary(isBeneficiary));
+            store.dispatch(setUserIsCommunityManager(isCoordinator));
+            console.log('isBeneficiary', isBeneficiary);
+        }
         store.dispatch(setImpactMarketContract(impactMarketContract));
-        store.dispatch(setCommunityContract(communityContract));
-        // const isBeneficiary = await communityContract.beneficiaries(address);
-        // TODO: set isBeneficiary 
     }
 }
