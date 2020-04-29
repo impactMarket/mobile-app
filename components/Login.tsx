@@ -20,7 +20,7 @@ import {
     STORAGE_USER_FIRST_TIME,
     IRootState,
 } from '../helpers/types';
-import { setUserCeloInfo, setUserFirstTime } from '../helpers/ReduxActions';
+import { setUserCeloInfo, setUserFirstTime } from '../helpers/redux/actions/ReduxActions';
 import { ConnectedProps, connect } from 'react-redux';
 
 

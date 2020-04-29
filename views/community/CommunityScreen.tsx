@@ -21,7 +21,7 @@ import { CommunityInstance } from '../../contracts/types/truffle-contracts';
 
 import { Appbar, Avatar, Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-import { setUserFirstTime } from '../../helpers/ReduxActions';
+import { setUserFirstTime } from '../../helpers/redux/actions/ReduxActions';
 
 
 interface ICommunityProps {

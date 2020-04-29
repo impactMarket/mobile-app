@@ -21,8 +21,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import userReducer from './helpers/ReduxReducers';
-import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract, setUserFirstTime, setUserIsBeneficiary, setUserIsCommunityManager } from './helpers/ReduxActions';
+import userReducer from './helpers/redux/reducers/ReduxReducers';
+import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract, setUserFirstTime, setUserIsBeneficiary, setUserIsCommunityManager } from './helpers/redux/actions/ReduxActions';
 import {
     ILoginCallbackAnswer,
     STORAGE_USER_ADDRESS,
@@ -39,10 +39,10 @@ import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
 import ContractAddresses from './contracts/network.json';
 import ExploreStackScreen from './views/ExploreStackScreen';
+import config from './config';
 
 
-const provider = "https://alfajores-forno.celo-testnet.org"
-const kit = newKitFromWeb3(new Web3(provider));
+const kit = newKitFromWeb3(new Web3(config.jsonRpc));
 const Tab = createBottomTabNavigator();
 const store = createStore(userReducer);
 const theme = {
