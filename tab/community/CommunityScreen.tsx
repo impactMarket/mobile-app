@@ -149,6 +149,7 @@ class CommunityScreen extends React.Component<Props, ICommunityState> {
                 </Button>
             </>;
         }
+        // TODO: add community view
         if (!isBeneficiary) {
             return (
                 <>

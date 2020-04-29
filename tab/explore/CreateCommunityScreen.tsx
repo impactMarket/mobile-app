@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { TextInput, Card, Button, Paragraph } from 'react-native-paper';
+import axios from 'axios';
+import { connect, ConnectedProps } from 'react-redux';
+import { IRootState } from '../../helpers/types';
+
 
 interface INewCommunityFormFields {
     name: string;
@@ -22,7 +26,17 @@ interface ICommunityFormFieldsError {
     timeIncrement: boolean;
     maxAmount: boolean;
 }
-export default function CreateCommunityScreen() {
+
+const mapStateToProps = (state: IRootState) => {
+    const { user, network } = state
+    return { user, network }
+};
+
+const connector = connect(mapStateToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+function CreateCommunityScreen(props: PropsFromRedux) {
     const [newCommunityForm, setNewCommunityForm] = useState<INewCommunityFormFields>(
         {
             name: '',
@@ -47,6 +61,22 @@ export default function CreateCommunityScreen() {
             maxAmount: false,
         }
     );
+
+    useEffect(() => {
+
+        axios.get('http://192.168.0.209:5000/api/community/all')
+            .then(function (response) {
+                // handle success
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+    });
 
     const submitNewCommunity = () => {
         if (newCommunityForm.name.length === 0) {
@@ -75,6 +105,28 @@ export default function CreateCommunityScreen() {
         }
         else {
             // TODO: api call to save new community request
+            axios.post('http://localhost:5000/api/community/add', {
+                // TODO: change to contract address
+                // deploy first
+                walletAddress: props.user.celoInfo.address,
+                name: newCommunityForm.name,
+                description: newCommunityForm.description,
+                location: {
+                    title: newCommunityForm.location,
+                    latitude: 5,
+                    longitude: 6,
+                },
+                coverImage: newCommunityForm.coverImage,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            }).then((response: any) => {
+                console.log(response);
+            }).catch((error: any) => {
+                console.log(error);
+            });
         }
     }
 
@@ -285,3 +337,5 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
 });
+
+export default connector(CreateCommunityScreen);
