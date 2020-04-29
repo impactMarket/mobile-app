@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { TextInput, Card, Button, Paragraph } from 'react-native-paper';
-import axios from 'axios';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
+import { getAllCommunities, requestCreateCommunity } from '../../services';
 
 
 interface INewCommunityFormFields {
@@ -63,19 +63,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
     );
 
     useEffect(() => {
-
-        axios.get('http://192.168.0.209:5000/api/community/all')
-            .then(function (response) {
-                // handle success
-                console.log(response.data);
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-            .finally(function () {
-                // always executed
-            });
+        getAllCommunities().then((response) => console.log(response));
     });
 
     const submitNewCommunity = () => {
@@ -104,29 +92,14 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             setCommunityFormError({ ...communityFormError, maxAmount: true });
         }
         else {
-            // TODO: api call to save new community request
-            axios.post('http://localhost:5000/api/community/add', {
-                // TODO: change to contract address
-                // deploy first
-                walletAddress: props.user.celoInfo.address,
-                name: newCommunityForm.name,
-                description: newCommunityForm.description,
-                location: {
-                    title: newCommunityForm.location,
-                    latitude: 5,
-                    longitude: 6,
-                },
-                coverImage: newCommunityForm.coverImage,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                }
-            }).then((response: any) => {
-                console.log(response);
-            }).catch((error: any) => {
-                console.log(error);
-            });
+            requestCreateCommunity(
+                props.user.celoInfo.address,
+                newCommunityForm.name,
+                newCommunityForm.description,
+                newCommunityForm.location,
+                newCommunityForm.coverImage,
+            ).then(console.log);
+            // TODO: if false, show error, if true, show success and close!
         }
     }
 
