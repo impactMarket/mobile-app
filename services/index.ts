@@ -40,8 +40,16 @@ export async function requestCreateCommunity(
     requestByAddress: string,
     name: string,
     description: string,
-    locationTitle: string,
+    location: {
+        title: string,
+        latitude: number,
+        longitude: number,
+    },
     coverImage: string,
+    amountByClaim: number,
+    baseInterval: number,
+    incrementalInterval: number,
+    claimHardcap: number,
 ): Promise<boolean> {
     let response = 500;
     try {
@@ -51,12 +59,12 @@ export async function requestCreateCommunity(
             requestByAddress,
             name,
             description,
-            location: {
-                title: locationTitle,
-                latitude: 5,
-                longitude: 6,
-            },
+            location,
             coverImage,
+            amountByClaim,
+            baseInterval,
+            incrementalInterval,
+            claimHardcap,
         };
 
         const requestHeaders = {

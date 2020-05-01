@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, Alert } from 'react-native';
 import { TextInput, Card, Button, Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
 import { getAllCommunities, requestCreateCommunity } from '../../services';
+import { useNavigation } from '@react-navigation/native';
+import * as Location from 'expo-location';
 
 
 interface INewCommunityFormFields {
@@ -11,20 +13,20 @@ interface INewCommunityFormFields {
     description: string;
     location: string;
     coverImage: string;
-    claimAmount: string;
-    frequency: string;
-    timeIncrement: string;
-    maxAmount: string;
+    amountByClaim: string;
+    baseInterval: string;
+    incrementalInterval: string;
+    claimHardcap: string;
 }
 interface ICommunityFormFieldsError {
     name: boolean;
     description: boolean;
     location: boolean;
     coverImage: boolean;
-    claimAmount: boolean;
-    frequency: boolean;
-    timeIncrement: boolean;
-    maxAmount: boolean;
+    amountByClaim: boolean;
+    baseInterval: boolean;
+    incrementalInterval: boolean;
+    claimHardcap: boolean;
 }
 
 const mapStateToProps = (state: IRootState) => {
@@ -37,16 +39,19 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 function CreateCommunityScreen(props: PropsFromRedux) {
+    const navigation = useNavigation();
+
+    const [location, setLocation] = useState<Location.LocationData>();
     const [newCommunityForm, setNewCommunityForm] = useState<INewCommunityFormFields>(
         {
             name: '',
             description: '',
             location: '',
             coverImage: '',
-            claimAmount: '',
-            frequency: '',
-            timeIncrement: '',
-            maxAmount: '',
+            amountByClaim: '',
+            baseInterval: '',
+            incrementalInterval: '',
+            claimHardcap: '',
         }
     );
     const [communityFormError, setCommunityFormError] = useState<ICommunityFormFieldsError>(
@@ -55,19 +60,32 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             description: false,
             location: false,
             coverImage: false,
-            claimAmount: false,
-            frequency: false,
-            timeIncrement: false,
-            maxAmount: false,
+            amountByClaim: false,
+            baseInterval: false,
+            incrementalInterval: false,
+            claimHardcap: false,
         }
     );
 
     useEffect(() => {
-        getAllCommunities().then((response) => console.log(response));
-    });
+        const requestAccessToLocation = async () => {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                // TODO: do some stuff
+            }
+
+            let loc = await Location.getCurrentPositionAsync({});
+            setLocation(loc);
+            // console.log(loc);
+        }
+        requestAccessToLocation();
+    }, []);
 
     const submitNewCommunity = () => {
-        if (newCommunityForm.name.length === 0) {
+        if (location === undefined) {
+            // TODO: show error!
+        }
+        else if (newCommunityForm.name.length === 0) {
             setCommunityFormError({ ...communityFormError, name: true });
         }
         else if (newCommunityForm.description.length === 0) {
@@ -79,26 +97,46 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         else if (newCommunityForm.coverImage.length === 0) {
             setCommunityFormError({ ...communityFormError, coverImage: true });
         }
-        else if (newCommunityForm.claimAmount.length === 0) {
-            setCommunityFormError({ ...communityFormError, claimAmount: true });
+        else if (newCommunityForm.amountByClaim.length === 0) {
+            setCommunityFormError({ ...communityFormError, amountByClaim: true });
         }
-        else if (newCommunityForm.frequency.length === 0) {
-            setCommunityFormError({ ...communityFormError, frequency: true });
+        else if (newCommunityForm.baseInterval.length === 0) {
+            setCommunityFormError({ ...communityFormError, baseInterval: true });
         }
-        else if (newCommunityForm.timeIncrement.length === 0) {
-            setCommunityFormError({ ...communityFormError, timeIncrement: true });
+        else if (newCommunityForm.incrementalInterval.length === 0) {
+            setCommunityFormError({ ...communityFormError, incrementalInterval: true });
         }
-        else if (newCommunityForm.maxAmount.length === 0) {
-            setCommunityFormError({ ...communityFormError, maxAmount: true });
+        else if (newCommunityForm.claimHardcap.length === 0) {
+            setCommunityFormError({ ...communityFormError, claimHardcap: true });
         }
         else {
             requestCreateCommunity(
                 props.user.celoInfo.address,
                 newCommunityForm.name,
                 newCommunityForm.description,
-                newCommunityForm.location,
+                {
+                    title: newCommunityForm.location,
+                    latitude: location!.coords.latitude,
+                    longitude: location!.coords.longitude,
+                },
                 newCommunityForm.coverImage,
-            ).then(console.log);
+                parseInt(newCommunityForm.amountByClaim, 10),
+                parseInt(newCommunityForm.baseInterval, 10),
+                parseInt(newCommunityForm.incrementalInterval, 10),
+                parseInt(newCommunityForm.claimHardcap, 10),
+            ).then(() => {
+                navigation.goBack();
+                Alert.alert(
+                    'Success',
+                    'Your request to create a new community was placed!',
+                    [
+                        { text: 'OK' },
+                    ],
+                    { cancelable: false }
+                );
+            }).catch(() => {
+                //
+            });
             // TODO: if false, show error, if true, show success and close!
         }
     }
@@ -129,28 +167,28 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     setCommunityFormError({ ...communityFormError, coverImage: false });
                 }
                 break;
-            case 'claimAmount':
-                setNewCommunityForm({ ...newCommunityForm, claimAmount: value });
+            case 'amountByClaim':
+                setNewCommunityForm({ ...newCommunityForm, amountByClaim: value });
                 if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, claimAmount: false });
+                    setCommunityFormError({ ...communityFormError, amountByClaim: false });
                 }
                 break;
-            case 'frequency':
-                setNewCommunityForm({ ...newCommunityForm, frequency: value });
+            case 'baseInterval':
+                setNewCommunityForm({ ...newCommunityForm, baseInterval: value });
                 if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, frequency: false });
+                    setCommunityFormError({ ...communityFormError, baseInterval: false });
                 }
                 break;
-            case 'timeIncrement':
-                setNewCommunityForm({ ...newCommunityForm, timeIncrement: value });
+            case 'incrementalInterval':
+                setNewCommunityForm({ ...newCommunityForm, incrementalInterval: value });
                 if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, timeIncrement: false });
+                    setCommunityFormError({ ...communityFormError, incrementalInterval: false });
                 }
                 break;
-            case 'maxAmount':
-                setNewCommunityForm({ ...newCommunityForm, maxAmount: value });
+            case 'claimHardcap':
+                setNewCommunityForm({ ...newCommunityForm, claimHardcap: value });
                 if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, maxAmount: false });
+                    setCommunityFormError({ ...communityFormError, claimHardcap: false });
                 }
                 break;
         }
@@ -229,13 +267,13 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                         mode="outlined"
                         keyboardType="numeric"
                         label="Claim Amount"
-                        value={newCommunityForm.claimAmount}
-                        onChangeText={value => handleTextInputChanges('claimAmount', value)}
+                        value={newCommunityForm.amountByClaim}
+                        onChangeText={value => handleTextInputChanges('amountByClaim', value)}
                     />
                     <Paragraph
                         style={{
                             color: 'red',
-                            display: communityFormError.claimAmount ? 'flex' : 'none'
+                            display: communityFormError.amountByClaim ? 'flex' : 'none'
                         }}
                     >
                         Claim Amount is required!
@@ -244,30 +282,30 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                         style={styles.inputTextField}
                         mode="outlined"
                         keyboardType="numeric"
-                        label="Frequency"
-                        value={newCommunityForm.frequency}
-                        onChangeText={value => handleTextInputChanges('frequency', value)}
+                        label="Base Interval"
+                        value={newCommunityForm.baseInterval}
+                        onChangeText={value => handleTextInputChanges('baseInterval', value)}
                     />
                     <Paragraph
                         style={{
                             color: 'red',
-                            display: communityFormError.frequency ? 'flex' : 'none'
+                            display: communityFormError.baseInterval ? 'flex' : 'none'
                         }}
                     >
-                        Frequency is required!
+                        baseInterval is required!
                     </Paragraph>
                     <TextInput
                         style={styles.inputTextField}
                         mode="outlined"
                         keyboardType="numeric"
                         label="Time Increment"
-                        value={newCommunityForm.timeIncrement}
-                        onChangeText={value => handleTextInputChanges('timeIncrement', value)}
+                        value={newCommunityForm.incrementalInterval}
+                        onChangeText={value => handleTextInputChanges('incrementalInterval', value)}
                     />
                     <Paragraph
                         style={{
                             color: 'red',
-                            display: communityFormError.timeIncrement ? 'flex' : 'none'
+                            display: communityFormError.incrementalInterval ? 'flex' : 'none'
                         }}
                     >
                         Time Increment is required!
@@ -277,13 +315,13 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                         mode="outlined"
                         keyboardType="numeric"
                         label="Max Amount"
-                        value={newCommunityForm.maxAmount}
-                        onChangeText={value => handleTextInputChanges('maxAmount', value)}
+                        value={newCommunityForm.claimHardcap}
+                        onChangeText={value => handleTextInputChanges('claimHardcap', value)}
                     />
                     <Paragraph
                         style={{
                             color: 'red',
-                            display: communityFormError.maxAmount ? 'flex' : 'none'
+                            display: communityFormError.claimHardcap ? 'flex' : 'none'
                         }}
                     >
                         Max Amount is required!
