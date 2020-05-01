@@ -9,7 +9,7 @@
             "android",
             "web"
         ],
-        "version": "0.0.1-alpha.4",
+        "version": "0.0.1-alpha.5",
         "orientation": "portrait",
         "icon": "./assets/logo.png",
         "scheme": "celodappkit",
@@ -26,12 +26,12 @@
         ],
         "ios": {
             "bundleIdentifier": "com.impactmarket.wallet",
-            "buildNumber": "0.0.1a4",
+            "buildNumber": "0.0.1a5",
             "supportsTablet": true
         },
         "android": {
             "package": "com.impactmarket.wallet",
-            "versionCode": 4
+            "versionCode": 5
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
         "githubUrl": "https://github.com/obernardovieira/impactMarket"
