@@ -95,10 +95,25 @@ export interface ILoginCallbackAnswer {
     celoInfo: IUserCeloInfo;
 }
 
-export interface ICommunityInfo {
-    title: string;
-    location: string;
-    image: string;
+export interface ICommunity {
+    publicId: string;
+    requestByAddress: string;
+    contractAddress: string;
+    name: string;
+    description: string;
+    location: {
+        title: string;
+        latitude: number;
+        longitude: number;
+    };
+    coverImage: string;
+    status: string;
+    txCreationObj: any;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface ICommunityViewInfo extends ICommunity {
     backers: number;
     beneficiaries: number;
     ubiRate: number;

@@ -2,16 +2,18 @@ import * as React from 'react';
 import { Text, View, Dimensions } from 'react-native';
 import {
     LineChart,
-} from "react-native-chart-kit";
-import { ICommunityInfo } from '../../helpers/types';
+} from 'react-native-chart-kit';
+import {
+    ICommunityViewInfo,
+} from '../../helpers/types';
 
 
-export default function CommunityDetailsScreen({ route, navigation }: { route: any, navigation: any }) {
+export default function CommunityDetailsScreen({ route }: { route: any }) {
 
-    const community = route.params as ICommunityInfo;
+    const community = route.params as ICommunityViewInfo;
 
     const data = {
-        labels: ["January", "February", "March", "April", "May", "June"],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
         datasets: [
             {
                 data: [20, 45, 28, 80, 99, 43]
@@ -19,9 +21,9 @@ export default function CommunityDetailsScreen({ route, navigation }: { route: a
         ]
     };
     const chartConfig = {
-        backgroundGradientFrom: "#1E2923",
+        backgroundGradientFrom: '#1E2923',
         backgroundGradientFromOpacity: 0,
-        backgroundGradientTo: "#08130D",
+        backgroundGradientTo: '#08130D',
         backgroundGradientToOpacity: 0,
         strokeWidth: 1,
         barPercentage: 0.5,
@@ -31,12 +33,12 @@ export default function CommunityDetailsScreen({ route, navigation }: { route: a
             borderRadius: 6
         },
     };
-    const screenWidth = Dimensions.get("window").width;
+    const screenWidth = Dimensions.get('window').width;
 
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', margin: 50 }}>
-            <Text>title: {community.title}</Text>
-            <Text>location: {community.location}</Text>
+            <Text>title: {community.name}</Text>
+            <Text>location: {community.location.title}</Text>
             <Text>backers: {community.backers}</Text>
             <LineChart
                 data={data}

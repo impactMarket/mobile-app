@@ -7,10 +7,24 @@ import {
     SafeAreaView,
     ScrollView,
 } from 'react-native';
-import { connect, ConnectedProps } from 'react-redux';
-import { IRootState, ICommunityInfo } from '../../helpers/types';
-import { Card, Headline, ProgressBar, DataTable, TextInput, Title, Paragraph, Button, Divider } from 'react-native-paper';
+import {
+    connect,
+    ConnectedProps,
+} from 'react-redux';
+import {
+    IRootState,
+    ICommunityViewInfo,
+} from '../../helpers/types';
+import {
+    Card,
+    Headline,
+    ProgressBar,
+    DataTable,
+    Title,
+    Button,
+} from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
+import { getAllValidCommunities } from '../../services';
 
 
 interface IExploreScreenProps {
@@ -27,7 +41,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & IExploreScreenProps
 interface IExploreScreenState {
-    communities: ICommunityInfo[];
+    communities: ICommunityViewInfo[];
     optionMenuVisible: boolean; // go explore the world my friend <3
 }
 class ExploreScreen extends React.Component<Props, IExploreScreenState> {
@@ -35,30 +49,37 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            communities: [
-                {
-                    title: 'Fehsolna',
-                    location: 'São Paulo',
-                    image: 'https://picsum.photos/700',
-                    backers: 2,
-                    beneficiaries: 2,
+            communities: [],
+            optionMenuVisible: true,
+        }
+    }
+
+    componentDidMount = () => {
+        // load communities
+        getAllValidCommunities().then((communities) => {
+            const result = [] as ICommunityViewInfo[];
+            communities.forEach((community) => {
+                result.push({
+                    publicId: community.publicId,
+                    requestByAddress:  community.requestByAddress,
+                    contractAddress:  community.contractAddress,
+                    name: community.name,
+                    description:  community.description,
+                    location: community.location,
+                    coverImage: community.coverImage,
+                    status:  community.status,
+                    txCreationObj:  community.txCreationObj,
+                    createdAt:  community.createdAt,
+                    updatedAt:  community.updatedAt,
+                    backers: Math.floor(Math.random() * 6) + 1,
+                    beneficiaries: Math.floor(Math.random() * 6) + 1,
                     ubiRate: 1,
                     totalClaimed: 0.1,
                     totalRaised: 0.3,
-                },
-                {
-                    title: 'Curitiba',
-                    location: 'Rio de Janeiro',
-                    image: 'https://picsum.photos/600',
-                    backers: 5,
-                    beneficiaries: 12,
-                    ubiRate: 2,
-                    totalClaimed: 0.6,
-                    totalRaised: 0.8,
-                }
-            ],
-            optionMenuVisible: true,
-        }
+                });
+            });
+            this.setState({ communities: result });
+        });
     }
 
     render() {
@@ -104,7 +125,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                     {/** */}
                     <Headline style={{ margin: 10 }} onMagicTap={() => console.warn('oi')} >Explore</Headline>
                     {communities.map((community) => <Card
-                        key={community.title}
+                        key={community.name}
                         elevation={12}
                         style={styles.card}
                         onPress={() => this.props.navigation.navigate('CommunityDetailsScreen', community)}
@@ -114,7 +135,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                         /> */}
                         <Card.Content style={{ margin: 0 }}>
                             <ImageBackground
-                                source={{ uri: community.image }}
+                                source={{ uri: community.coverImage }}
                                 resizeMode={'cover'}
                                 style={{
                                     width: '100%',
@@ -124,8 +145,8 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                                     alignItems: 'center'
                                 }}
                             >
-                                <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>{community.title}</Text>
-                                <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location}</Text>
+                                <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>{community.name}</Text>
+                                <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
                             </ImageBackground>
                             <View>
                                 <DataTable>

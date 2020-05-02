@@ -110,10 +110,6 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             setCommunityFormError({ ...communityFormError, claimHardcap: true });
         }
         else {
-
-            const { network } = props;
-            const { communityContract } = network.contracts;
-            const txCreationObj = communityContract.methods.claim()
             requestCreateCommunity(
                 props.user.celoInfo.address,
                 newCommunityForm.name,
@@ -124,7 +120,12 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     longitude: location!.coords.longitude,
                 },
                 newCommunityForm.coverImage,
-                txCreationObj,
+                {
+                    amountByClaim: newCommunityForm.amountByClaim,
+                    baseInterval: newCommunityForm.baseInterval,
+                    incrementalInterval: newCommunityForm.incrementalInterval,
+                    claimHardcap: newCommunityForm.claimHardcap,
+                },
             ).then(() => {
                 navigation.goBack();
                 Alert.alert(

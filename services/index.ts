@@ -1,31 +1,15 @@
 import axios from 'axios';
 import config from '../config';
+import { ICommunity } from '../helpers/types';
 
-
-interface ICommunity {
-    publicId: string;
-    requestByAddress: string;
-    contractAddress: string;
-    name: string;
-    description: string;
-    location: {
-        title: string;
-        latitude: number;
-        longitude: number;
-    };
-    coverImage: string;
-    status: string;
-    createdAt: string;
-    updatedAt: string;
-}
 
 axios.defaults.baseURL = config.baseApiUrl;
 
-export async function getAllCommunities(): Promise<ICommunity[]> {
+export async function getAllValidCommunities(): Promise<ICommunity[]> {
     let response = [] as ICommunity[];
     try {
         // handle success
-        const result = await axios.get('/community/all')
+        const result = await axios.get('/community/all/valid')
         response = result.data;
     } catch (error) {
         // handle error
@@ -51,7 +35,6 @@ export async function requestCreateCommunity(
     let response = 500;
     try {
         // handle success
-
         const requestBody = {
             requestByAddress,
             name,
@@ -60,7 +43,6 @@ export async function requestCreateCommunity(
             coverImage,
             txCreationObj,
         };
-
         const requestHeaders = {
             headers: {
                 'Content-Type': 'application/json',
