@@ -46,10 +46,7 @@ export async function requestCreateCommunity(
         longitude: number,
     },
     coverImage: string,
-    amountByClaim: number,
-    baseInterval: number,
-    incrementalInterval: number,
-    claimHardcap: number,
+    txCreationObj: any,
 ): Promise<boolean> {
     let response = 500;
     try {
@@ -61,10 +58,7 @@ export async function requestCreateCommunity(
             description,
             location,
             coverImage,
-            amountByClaim,
-            baseInterval,
-            incrementalInterval,
-            claimHardcap,
+            txCreationObj,
         };
 
         const requestHeaders = {

@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, Alert } from 'react-native';
 import { TextInput, Card, Button, Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
-import { getAllCommunities, requestCreateCommunity } from '../../services';
+import { requestCreateCommunity } from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 
@@ -110,6 +110,10 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             setCommunityFormError({ ...communityFormError, claimHardcap: true });
         }
         else {
+
+            const { network } = props;
+            const { communityContract } = network.contracts;
+            const txCreationObj = communityContract.methods.claim()
             requestCreateCommunity(
                 props.user.celoInfo.address,
                 newCommunityForm.name,
@@ -120,10 +124,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     longitude: location!.coords.longitude,
                 },
                 newCommunityForm.coverImage,
-                parseInt(newCommunityForm.amountByClaim, 10),
-                parseInt(newCommunityForm.baseInterval, 10),
-                parseInt(newCommunityForm.incrementalInterval, 10),
-                parseInt(newCommunityForm.claimHardcap, 10),
+                txCreationObj,
             ).then(() => {
                 navigation.goBack();
                 Alert.alert(
@@ -135,9 +136,15 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     { cancelable: false }
                 );
             }).catch(() => {
-                //
+                Alert.alert(
+                    'Failure',
+                    'An error happened while placing the request to create a community!',
+                    [
+                        { text: 'OK' },
+                    ],
+                    { cancelable: false }
+                );
             });
-            // TODO: if false, show error, if true, show success and close!
         }
     }
 
