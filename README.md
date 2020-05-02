@@ -1,6 +1,7 @@
 <div align="center">
-    <img style="max-width: 308px; width: 100%" src="preview.jpeg">
+    <img style="max-height: 408px" src="preview.jpeg">
 </div>
+
 
 > A decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries in need or living in extreme poverty.
 
@@ -14,7 +15,7 @@ yarn
 
 ## Usage
 
-Install [expo](https://expo.io/) on your smarthpone, start the app with `yarn start` and acanr the QR.
+Install [expo](https://expo.io/) on your smartphone, start the app with `yarn start` and scan the QR.
 
 ## License
 [Apache-2.0](LICENSE)
