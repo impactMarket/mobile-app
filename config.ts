@@ -5,7 +5,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: 'http://192.168.0.209:5000/api',
+        baseApiUrl: 'http://192.168.1.110:5000/api',
 
         /**
          * JSON RPC url

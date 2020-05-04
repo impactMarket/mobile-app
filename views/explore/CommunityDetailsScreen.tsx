@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
     Text,
     View,
@@ -10,10 +10,11 @@ import {
     LineChart, ChartConfig,
 } from 'react-native-chart-kit';
 import {
-    ICommunityViewInfo,
+    ICommunityViewInfo, IUserState,
 } from '../../helpers/types';
-import { Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
+import ApplyAsBeneficiary from './actions/ApplyAsBeneficiary';
+import Donate from './actions/Donate';
 
 
 const chartConfig: ChartConfig = {
@@ -31,8 +32,8 @@ const chartConfig: ChartConfig = {
 };
 const screenWidth = Dimensions.get('window').width + 140;
 export default function CommunityDetailsScreen({ route }: { route: any }) {
-
-    const community = route.params as ICommunityViewInfo;
+    const community = route.params.community as ICommunityViewInfo;
+    const user = route.params.user as IUserState;
 
     const data = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June'],
@@ -42,14 +43,6 @@ export default function CommunityDetailsScreen({ route }: { route: any }) {
             }
         ]
     };
-
-    const handleDonateClick = () => {
-        // TODO:
-    }
-
-    const handleApplyAsBeneficiaryClick = () => {
-        // TODO:
-    }
 
     return (
         <View style={styles.container}>
@@ -82,19 +75,13 @@ export default function CommunityDetailsScreen({ route }: { route: any }) {
                     // marginVertical: 8,
                 }}
             />
-            <Button
-                mode="contained"
-                onPress={handleDonateClick}
-            >
-                Donate
-            </Button>
-            <Button
-                style={{ margin: 20 }}
-                mode="contained"
-                onPress={handleApplyAsBeneficiaryClick}
-            >
-                Apply as Beneficiary
-            </Button>
+            <Donate
+                community={community}
+                />
+            <ApplyAsBeneficiary
+                community={community}
+                beneficiaryWalletAddress={user.celoInfo.address}
+            />
         </View>
     );
 }
