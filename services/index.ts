@@ -1,11 +1,11 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity } from '../helpers/types';
+import { ICommunity, IBeneficiaryRequest } from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
 
-export async function getAllValidCommunities(): Promise<ICommunity[]> {
+async function getAllValidCommunities(): Promise<ICommunity[]> {
     let response = [] as ICommunity[];
     try {
         // handle success
@@ -19,8 +19,7 @@ export async function getAllValidCommunities(): Promise<ICommunity[]> {
     return response;
 }
 
-
-export async function requestCreateCommunity(
+async function requestCreateCommunity(
     requestByAddress: string,
     name: string,
     description: string,
@@ -57,4 +56,97 @@ export async function requestCreateCommunity(
         // always executed
     }
     return response === 200 ? true : false;
+}
+
+async function requestJoinAsBeneficiary(
+    walletAddress: string,
+    communityPublicId: string,
+): Promise<boolean> {
+    let response = 500;
+    try {
+        // handle success
+        const requestBody = {
+            walletAddress,
+            communityPublicId
+        };
+        const requestHeaders = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        };
+        const result = await axios.post('/beneficiary/request', requestBody, requestHeaders);
+        response = result.status;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response === 200 ? true : false;
+}
+
+async function getBeneficiariesRequestByCommunity(
+    communityPublicId: string,
+): Promise<IBeneficiaryRequest[]> {
+    let response = [] as IBeneficiaryRequest[];
+    try {
+        const result = await axios.get(`/beneficiary/${communityPublicId}`);
+        response = result.data;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function acceptBeneficiaryRequest(
+    acceptanceTransaction: string,
+    communityPublicId: string,
+): Promise<boolean> {
+    let response = 500;
+    try {
+        // handle success
+        const requestBody = {
+            acceptanceTransaction,
+            communityPublicId
+        };
+        const requestHeaders = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        };
+        const result = await axios.post('/beneficiary/accept', requestBody, requestHeaders);
+        response = result.status;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response === 200 ? true : false;
+}
+
+async function getCommunityByContractAddress(
+    communityContractAddress: string,
+): Promise<string> {
+    let response = '';
+    try {
+        const result = await axios.get(`/community/address/${communityContractAddress}`);
+        response = result.data[0];
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+export {
+    getAllValidCommunities,
+    requestCreateCommunity,
+    requestJoinAsBeneficiary,
+    getBeneficiariesRequestByCommunity,
+    acceptBeneficiaryRequest,
+    getCommunityByContractAddress,
 }
