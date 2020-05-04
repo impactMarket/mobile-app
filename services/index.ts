@@ -129,11 +129,11 @@ async function acceptBeneficiaryRequest(
 
 async function getCommunityByContractAddress(
     communityContractAddress: string,
-): Promise<string> {
-    let response = '';
+): Promise<ICommunity | undefined> {
+    let response: ICommunity = undefined as any;
     try {
         const result = await axios.get(`/community/address/${communityContractAddress}`);
-        response = result.data[0];
+        response = result.data as ICommunity;
     } catch (error) {
         // handle error
     } finally {
