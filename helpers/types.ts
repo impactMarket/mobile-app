@@ -120,3 +120,10 @@ export interface ICommunityViewInfo extends ICommunity {
     totalClaimed: number;
     totalRaised: number;
 }
+
+export interface IBeneficiaryRequest {
+    walletAddress: string;
+    communityPublicId: string;
+    createdAt: string;
+    updatedAt: string;
+}
