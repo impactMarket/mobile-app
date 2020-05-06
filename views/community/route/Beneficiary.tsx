@@ -3,14 +3,8 @@ import {
     StyleSheet,
     Text,
     View,
+    ImageBackground,
 } from 'react-native';
-import {
-    requestTxSig,
-    waitForSignedTxs,
-    FeeCurrency
-} from '@celo/dappkit'
-import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
-import { Linking } from 'expo'
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../../helpers/types';
 
@@ -19,6 +13,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { setUserFirstTime } from '../../../helpers/redux/actions/ReduxActions';
 import { CommunityInstance } from '../../../contracts/types/truffle-contracts';
 import { ethers } from 'ethers';
+import { LinearGradient } from 'expo-linear-gradient';
+import { celoWalletRequest } from '../../../services';
 
 
 interface IBeneficiaryViewProps {
@@ -90,33 +86,19 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
         const { user, network } = this.props;
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
-        const requestId = 'user_claim'
-        const dappName = 'Impact Market'
-        const callback = Linking.makeUrl('/my/path')
 
         if (communityContract === undefined) {
             // TODO: do something beatiful, la la la
             return;
         }
         this.setState({ claiming: true });
-        const txObject = await communityContract.methods.claim()
-
-        requestTxSig(
-            network.kit,
-            [
-                {
-                    from: address,
-                    to: communityContract.options.address,
-                    tx: txObject,
-                    feeCurrency: FeeCurrency.cUSD
-                }
-            ],
-            { requestId, dappName, callback }
-        )
-
-        const dappkitResponse = await waitForSignedTxs(requestId);
-        const tx = dappkitResponse.rawTxs[0];
-        toTxResult(network.kit.web3.eth.sendSignedTransaction(tx)).waitReceipt().then((result) => {
+        celoWalletRequest(
+            address,
+            communityContract.options.address,
+            await communityContract.methods.claim(),
+            'user_claim',
+            network,
+        ).then((result) => {
             this._loadAllowance(communityContract).then(() => {
                 this.setState({ claiming: false });
             })
@@ -147,30 +129,53 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
         }
 
         return (
-            <>
-                <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Fehsolna</Text>
-                <Text style={{ fontSize: 20 }}><AntDesign name="enviromento" size={20} /> São Paulo</Text>
-                <Text style={{
-                    fontSize: 20,
-                    top: 20,
-                    width: '50%',
-                    textAlign: 'center'
-                }}>Every day you can claim $2 up to a total of $500</Text>
-                <View style={{ top: 90 }}>
-                    <Button
-                        mode="contained"
-                        onPress={this.handleClaimPress}
-                        disabled={claimDisabled}
-                        loading={claiming}
-                    >
-                        {claimDisabled ? new Date(nextClaim).toLocaleString() : 'Claim'}
-                    </Button>
-                    <Text
-                        onPress={() => this.props.navigation.navigate('ClaimExplainedScreen')}
-                        style={{ top: 15, textAlign: 'center', color: 'white' }}
-                    >How claim works?</Text>
+            <View style={{
+                alignItems: 'center',
+            }}>
+                <ImageBackground
+                    source={require('../../../assets/favela.jpg')}
+                    resizeMode={'cover'}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                    }}
+                >
+                    <LinearGradient
+                        colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,0.3)', 'transparent']}
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            height: 500,
+                        }}
+                    />
+                </ImageBackground>
+                <View style={styles.contentView}>
+                    <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Fehsolna</Text>
+                    <Text style={{ fontSize: 20 }}><AntDesign name="enviromento" size={20} /> São Paulo</Text>
+                    <Text style={{
+                        fontSize: 20,
+                        top: 20,
+                        width: '50%',
+                        textAlign: 'center'
+                    }}>Every day you can claim $2 up to a total of $500</Text>
+                    <View style={{ top: 90 }}>
+                        <Button
+                            mode="contained"
+                            onPress={this.handleClaimPress}
+                            disabled={claimDisabled}
+                            loading={claiming}
+                        >
+                            {claimDisabled ? new Date(nextClaim).toLocaleString() : 'Claim'}
+                        </Button>
+                        <Text
+                            onPress={() => this.props.navigation.navigate('ClaimExplainedScreen')}
+                            style={{ top: 15, textAlign: 'center', color: 'white' }}
+                        >How claim works?</Text>
+                    </View>
                 </View>
-            </>
+            </View>
         );
     }
 
@@ -196,6 +201,12 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
 }
 
 const styles = StyleSheet.create({
+    contentView: {
+        flex: 1,
+        alignItems: 'center',
+        position: 'absolute',
+        top: 50,
+    },
 });
 
 export default connector(BeneficiaryView);

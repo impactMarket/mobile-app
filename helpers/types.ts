@@ -127,3 +127,8 @@ export interface IBeneficiaryRequest {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface IBasicBeneficiary {
+    walletAddress: string;
+    joined: number;
+}
