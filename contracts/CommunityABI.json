@@ -57,6 +57,38 @@
         "internalType": "address",
         "name": "_account",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "BeneficiaryClaim",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "BeneficiaryLocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
       }
     ],
     "name": "BeneficiaryRemoved",
@@ -130,9 +162,9 @@
     "name": "beneficiaries",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "enum Community.BeneficiaryState",
         "name": "",
-        "type": "bool"
+        "type": "uint8"
       }
     ],
     "payable": false,
@@ -251,6 +283,21 @@
       }
     ],
     "name": "addBeneficiary",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "lockBeneficiary",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
