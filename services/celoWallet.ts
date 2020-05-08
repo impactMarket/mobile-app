@@ -29,7 +29,7 @@ async function celoWalletRequest(
 
     const dappkitResponse = await waitForSignedTxs(requestId);
     const tx = dappkitResponse.rawTxs[0];
-    toTxResult(network.kit.web3.eth.sendSignedTransaction(tx)).waitReceipt();
+    return toTxResult(network.kit.web3.eth.sendSignedTransaction(tx)).waitReceipt();
 }
 
 export {

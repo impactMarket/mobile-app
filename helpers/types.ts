@@ -121,14 +121,9 @@ export interface ICommunityViewInfo extends ICommunity {
     totalRaised: number;
 }
 
-export interface IBeneficiaryRequest {
+export interface IBeneficiary {
     walletAddress: string;
     communityPublicId: string;
     createdAt: string;
     updatedAt: string;
-}
-
-export interface IBasicBeneficiary {
-    walletAddress: string;
-    joined: number;
 }
