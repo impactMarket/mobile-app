@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiaryRequest } from '../helpers/types';
+import { ICommunity, IBeneficiary } from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -87,11 +87,34 @@ async function requestJoinAsBeneficiary(
 
 async function getBeneficiariesRequestByCommunity(
     communityPublicId: string,
-): Promise<IBeneficiaryRequest[]> {
-    let response = [] as IBeneficiaryRequest[];
+): Promise<IBeneficiary[]> {
+    let response = [] as IBeneficiary[];
     try {
         const result = await axios.get(`/beneficiary/${communityPublicId}`);
         response = result.data;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function getBeneficiariesByCommunity(
+    communityContractAddress: string,
+): Promise<IBeneficiary[]> {
+    let response = [] as IBeneficiary[];
+    try {
+        const communityPublicId =
+            (await getCommunityByContractAddress(communityContractAddress))!
+                .publicId;
+        const result = await axios.get(`/transactions/beneficiariesof/${communityContractAddress}`);
+        response = result.data.map((b: any) => ({
+            walletAddress: b.values._account,
+            communityPublicId,
+            createdAt: b.createdAt,
+            updatedAt: b.updatedAt,
+        }));
     } catch (error) {
         // handle error
     } finally {
@@ -147,6 +170,7 @@ export {
     requestCreateCommunity,
     requestJoinAsBeneficiary,
     getBeneficiariesRequestByCommunity,
+    getBeneficiariesByCommunity,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
 }
