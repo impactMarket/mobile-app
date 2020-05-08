@@ -222,7 +222,7 @@ export default class App extends React.Component<{}, IAppState> {
         const logs = await provider.getLogs({
             address: ContractAddresses.alfajores.ImpactMarket,
             fromBlock: 0,
-            topics: [ethers.utils.id('CommunityAdded(address)')]
+            topics: [ethers.utils.id('CommunityAdded(address,address,uint256,uint256,uint256,uint256)')]
         })
         // TODO: get the communities in second plan!
         // cache this data
@@ -235,7 +235,7 @@ export default class App extends React.Component<{}, IAppState> {
                 CommunityContractABI as any,
                 communityAddress,
             );
-            const isBeneficiary = (await communityContract.methods.beneficiaries(address).call());
+            const isBeneficiary = (await communityContract.methods.beneficiaries(address).call()) === 1;
             const isCoordinator = (await communityContract.methods.isCoordinator(address).call());
             // TODO: update with new contracts
             if (isBeneficiary || isCoordinator) {
@@ -244,6 +244,7 @@ export default class App extends React.Component<{}, IAppState> {
             store.dispatch(setUserIsBeneficiary(isBeneficiary));
             store.dispatch(setUserIsCommunityManager(isCoordinator));
             console.log('isBeneficiary', isBeneficiary);
+            console.log('isCoordinator', isCoordinator);
         }
         store.dispatch(setImpactMarketContract(impactMarketContract));
     }

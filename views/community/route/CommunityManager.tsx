@@ -2,6 +2,7 @@ import React from 'react';
 import {
     StyleSheet,
     View,
+    Alert,
 } from 'react-native';
 import {
     connect,
@@ -9,8 +10,7 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-    IBeneficiaryRequest,
-    IBasicBeneficiary
+    IBeneficiary,
 } from '../../../helpers/types';
 import {
     Button,
@@ -22,8 +22,10 @@ import {
 import {
     getBeneficiariesRequestByCommunity,
     getCommunityByContractAddress,
-    celoWalletRequest
+    celoWalletRequest,
+    acceptBeneficiaryRequest
 } from '../../../services';
+import { getBeneficiariesByCommunity } from '../../../services/api';
 
 
 interface ICommunityManagerViewProps {
@@ -40,10 +42,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & ICommunityManagerViewProps
 interface ICommunityManagerViewState {
-    beneficiaryRequests: IBeneficiaryRequest[];
-    beneficiaries: IBasicBeneficiary[];
+    beneficiaryRequests: IBeneficiary[];
+    beneficiaries: IBeneficiary[];
     modalConfirmation: boolean;
-    requestConfirmation?: IBeneficiaryRequest;
+    requestConfirmation?: IBeneficiary;
 }
 class CommunityManagerView extends React.Component<Props, ICommunityManagerViewState> {
 
@@ -66,6 +68,8 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             }
             getBeneficiariesRequestByCommunity(community.publicId)
                 .then((beneficiaryRequests) => this.setState({ beneficiaryRequests }))
+            getBeneficiariesByCommunity(community.contractAddress)
+                .then((beneficiaries) => this.setState({ beneficiaries }))
         });
         // TODO: load current beneficiaries from a community
     }
@@ -88,9 +92,29 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             await communityContract.methods.addBeneficiary(requestConfirmation?.walletAddress),
             'accept_beneficiary_request',
             network,
-        ).then((result) => {
+        ).then(async (result) => {
             // TODO: update UI
-            console.log('result93', result)
+            const success = await acceptBeneficiaryRequest(result.transactionHash, communityContract.options.address);
+            if (success) {
+                Alert.alert(
+                    'Success',
+                    'You\'ve accepted the beneficiary request!',
+                    [
+                        { text: 'OK' },
+                    ],
+                    { cancelable: false }
+                );
+            } else {
+                Alert.alert(
+                    'Failure',
+                    'An error happened while accepting the request!',
+                    [
+                        { text: 'OK' },
+                    ],
+                    { cancelable: false }
+                );
+            }
+            this.setState({ modalConfirmation: false })
         })
     }
 
@@ -120,7 +144,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                         <List.Item
                             key={request.walletAddress}
                             title={request.walletAddress}
-                            description={request.joined}
+                            description={request.createdAt}
                         />
                     )}
                 </List.Section>
