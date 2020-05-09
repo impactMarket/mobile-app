@@ -3,6 +3,8 @@ import {
     requestCreateCommunity,
     requestJoinAsBeneficiary,
     getBeneficiariesRequestByCommunity,
+    findComunityToBeneficicary,
+    findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
 } from './api';
@@ -15,6 +17,8 @@ export {
     requestCreateCommunity,
     requestJoinAsBeneficiary,
     getBeneficiariesRequestByCommunity,
+    findComunityToBeneficicary,
+    findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
     //

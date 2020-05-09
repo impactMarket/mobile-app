@@ -123,6 +123,44 @@ async function getBeneficiariesByCommunity(
     return response;
 }
 
+async function findComunityToBeneficicary(
+    beneficiaryAddress: string,
+): Promise<ICommunity | undefined> {
+    let response: ICommunity | undefined = undefined;
+    try {
+        const result = await axios.get(`/transactions/beneficiaryin/${beneficiaryAddress}`);
+        if (result.data === "") {
+            response = undefined;
+        } else {
+            response = result.data;
+        }
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function findComunityToManager(
+    managerAddress: string,
+): Promise<ICommunity | undefined> {
+    let response: ICommunity | undefined = undefined;
+    try {
+        const result = await axios.get(`/transactions/managerin/${managerAddress}`);
+        if (result.data === "") {
+            response = undefined;
+        } else {
+            response = result.data;
+        }
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
 async function acceptBeneficiaryRequest(
     acceptanceTransaction: string,
     communityPublicId: string,
@@ -171,6 +209,8 @@ export {
     requestJoinAsBeneficiary,
     getBeneficiariesRequestByCommunity,
     getBeneficiariesByCommunity,
+    findComunityToBeneficicary,
+    findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
 }
