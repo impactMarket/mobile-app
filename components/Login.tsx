@@ -22,6 +22,7 @@ import {
 } from '../helpers/types';
 import { setUserCeloInfo, setUserFirstTime } from '../helpers/redux/actions/ReduxActions';
 import { ConnectedProps, connect } from 'react-redux';
+import { ethers } from 'ethers';
 
 
 interface ILoginProps {
@@ -67,13 +68,14 @@ class Login extends React.Component<Props, ILoginState> {
 
         const dappkitResponse = await waitForAccountAuth(requestId)
         try {
-            const cUSDBalance = await this.getCurrentUserBalance(dappkitResponse.address);
+            const userAddress = ethers.utils.getAddress(dappkitResponse.address);
+            const cUSDBalance = await this.getCurrentUserBalance(userAddress);
             //
-            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, dappkitResponse.address);
+            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
             await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, dappkitResponse.phoneNumber);
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
             this.props.dispatch(setUserCeloInfo({
-                address: dappkitResponse.address,
+                address: userAddress,
                 phoneNumber: dappkitResponse.phoneNumber,
                 balance: cUSDBalance,
             }))
