@@ -40,6 +40,7 @@ import CommunityContractABI from './contracts/CommunityABI.json'
 import ContractAddresses from './contracts/network.json';
 import ExploreStackScreen from './views/ExploreStackScreen';
 import config from './config';
+import { findComunityToBeneficicary, findComunityToManager } from './services';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -194,6 +195,7 @@ export default class App extends React.Component<{}, IAppState> {
         let phoneNumber: string | null = '';
         try {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
+            console.warn('address', address);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
                 const balance = await this._getCurrentUserBalance(address);
@@ -213,39 +215,35 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     _loadContracts = async (address: string, kit: ContractKit) => {
+        const isBeneficiary = await findComunityToBeneficicary(address);
+        const isCoordinator = await findComunityToManager(address);
+
+        const setCommunity = (address: string) => {
+            const communityContract = new kit.web3.eth.Contract(
+                CommunityContractABI as any,
+                address,
+            );
+            store.dispatch(setCommunityContract(communityContract));
+        };
+        if (isBeneficiary !== undefined) {
+            store.dispatch(setCommunityContract(isBeneficiary));
+            store.dispatch(setUserIsBeneficiary(true));
+            setCommunity(isBeneficiary.contractAddress);
+        }
+        else if (isCoordinator !== undefined) {
+            store.dispatch(setCommunityContract(isCoordinator));
+            store.dispatch(setUserIsCommunityManager(true));
+            setCommunity(isCoordinator.contractAddress);
+        }
+        console.warn('isBeneficiary', isBeneficiary !== undefined);
+        console.warn('isCoordinator', isCoordinator !== undefined);
+
         const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);
         const impactMarketContract = new ethers.Contract(
             ContractAddresses.alfajores.ImpactMarket,
             ImpactMarketContractABI,
             provider,
         ) as ethers.Contract & ImpactMarketInstance;
-        const logs = await provider.getLogs({
-            address: ContractAddresses.alfajores.ImpactMarket,
-            fromBlock: 0,
-            topics: [ethers.utils.id('CommunityAdded(address,address,uint256,uint256,uint256,uint256)')]
-        })
-        // TODO: get the communities in second plan!
-        // cache this data
-        // also index it off-chain
-        // change the following to support multiple communities
-        for (let l = 0; l < logs.length; l += 1) {
-            const communityAddress = ethers.utils
-                .getAddress(logs[l].topics[1].slice(26, logs[l].topics[1].length));
-            const communityContract = new kit.web3.eth.Contract(
-                CommunityContractABI as any,
-                communityAddress,
-            );
-            const isBeneficiary = (await communityContract.methods.beneficiaries(address).call()) === 1;
-            const isCoordinator = (await communityContract.methods.isCoordinator(address).call());
-            // TODO: update with new contracts
-            if (isBeneficiary || isCoordinator) {
-                store.dispatch(setCommunityContract(communityContract));
-            }
-            store.dispatch(setUserIsBeneficiary(isBeneficiary));
-            store.dispatch(setUserIsCommunityManager(isCoordinator));
-            console.log('isBeneficiary', isBeneficiary);
-            console.log('isCoordinator', isCoordinator);
-        }
         store.dispatch(setImpactMarketContract(impactMarketContract));
     }
 }
