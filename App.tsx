@@ -195,7 +195,6 @@ export default class App extends React.Component<{}, IAppState> {
         let phoneNumber: string | null = '';
         try {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
-            console.warn('address', address);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
                 const balance = await this._getCurrentUserBalance(address);
@@ -226,17 +225,13 @@ export default class App extends React.Component<{}, IAppState> {
             store.dispatch(setCommunityContract(communityContract));
         };
         if (isBeneficiary !== undefined) {
-            store.dispatch(setCommunityContract(isBeneficiary));
             store.dispatch(setUserIsBeneficiary(true));
             setCommunity(isBeneficiary.contractAddress);
         }
         else if (isCoordinator !== undefined) {
-            store.dispatch(setCommunityContract(isCoordinator));
             store.dispatch(setUserIsCommunityManager(true));
             setCommunity(isCoordinator.contractAddress);
         }
-        console.warn('isBeneficiary', isBeneficiary !== undefined);
-        console.warn('isCoordinator', isCoordinator !== undefined);
 
         const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);
         const impactMarketContract = new ethers.Contract(

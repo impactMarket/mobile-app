@@ -57,8 +57,7 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
     loadPage = async (props: Readonly<Props>) => {
         const communityContract = props.network.contracts.communityContract;
         if (props.network.contracts.communityContract !== undefined) {
-            const address = props.user.celoInfo.address;
-            const isBeneficiary = await communityContract.methods.beneficiaries(address).call();
+            const { isBeneficiary } = props.user.community;
             await this._loadAllowance(communityContract);
             this.setState({ isBeneficiary, loading: false, loggedIn: true, loaded: true });
         } else if (props.user.celoInfo.address.length === 0) {

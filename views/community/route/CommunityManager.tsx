@@ -11,6 +11,7 @@ import {
 import {
     IRootState,
     IBeneficiary,
+    ICommunity,
 } from '../../../helpers/types';
 import {
     Button,
@@ -46,6 +47,7 @@ interface ICommunityManagerViewState {
     beneficiaries: IBeneficiary[];
     modalConfirmation: boolean;
     requestConfirmation?: IBeneficiary;
+    community?: ICommunity;
 }
 class CommunityManagerView extends React.Component<Props, ICommunityManagerViewState> {
 
@@ -70,13 +72,14 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                 .then((beneficiaryRequests) => this.setState({ beneficiaryRequests }))
             getBeneficiariesByCommunity(community.contractAddress)
                 .then((beneficiaries) => this.setState({ beneficiaries }))
+            this.setState({ community });
         });
         // TODO: load current beneficiaries from a community
     }
 
     handleAcceptBeneficiaryRequest = async () => {
         // TODO: accept
-        const { requestConfirmation } = this.state;
+        const { requestConfirmation, community } = this.state;
         const { user, network } = this.props;
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
@@ -93,8 +96,8 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             'accept_beneficiary_request',
             network,
         ).then(async (result) => {
-            // TODO: update UI
-            const success = await acceptBeneficiaryRequest(result.transactionHash, communityContract.options.address);
+            // TODO: update UI (sending)
+            const success = await acceptBeneficiaryRequest(result.transactionHash, community!.publicId);
             if (success) {
                 Alert.alert(
                     'Success',
@@ -114,6 +117,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                     { cancelable: false }
                 );
             }
+            // TODO: update UI (sent)
             this.setState({ modalConfirmation: false })
         })
     }
@@ -124,9 +128,22 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             modalConfirmation,
             requestConfirmation,
             beneficiaries,
+            community,
         } = this.state;
+        if (community === undefined) {
+            return <View>
+                <Paragraph>Loading...</Paragraph>
+            </View>
+        }
         return (
             <View>
+                <View>
+                    <Paragraph>contractAddress {community.contractAddress}</Paragraph>
+                    <Paragraph>createdAt {community.createdAt}</Paragraph>
+                    <Paragraph>description {community.description}</Paragraph>
+                    <Paragraph>location {community.location.title}</Paragraph>
+                    <Paragraph>name {community.name}</Paragraph>
+                </View>
                 <List.Section>
                     <List.Subheader>Pending requests</List.Subheader>
                     {beneficiaryRequests.map((request) =>
