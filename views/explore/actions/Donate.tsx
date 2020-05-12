@@ -60,7 +60,11 @@ class Donate extends Component<Props, IDonateState> {
         const cUSDDecimals = await stableToken.decimals();
         const txObject = stableToken.transfer(
             this.props.community.contractAddress,
-            new ethers.utils.BigNumber(10).pow(cUSDDecimals).mul(this.state.amountDonate).toString()
+            new ethers.utils.BigNumber(
+                10 ** (cUSDDecimals - 3)
+            ).mul(
+                parseFloat(this.state.amountDonate) * 10 ** 3 // avoid dealing with decimals!
+            ).toString()
         ).txo
         const requestId = "donate-to-community";
         celoWalletRequest(
