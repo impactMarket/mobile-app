@@ -10,7 +10,12 @@ const ENV = {
         /**
          * JSON RPC url
          */
-        jsonRpc: 'https://alfajores-forno.celo-testnet.org'
+        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+
+        /**
+         * Contract Address to use in dev
+         */
+        impactMarketContractAddress: '0x03582fE5f7b2F33c572FDFeDEBcc994E50f5586E',
     },
     prod: {
         /**
@@ -21,7 +26,12 @@ const ENV = {
         /**
          * JSON RPC url
          */
-        jsonRpc: 'https://alfajores-forno.celo-testnet.org'
+        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+
+        /**
+         * Contract Address to use in dev
+         */
+        impactMarketContractAddress: '0x03582fE5f7b2F33c572FDFeDEBcc994E50f5586E',
     }
 }
 

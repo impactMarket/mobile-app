@@ -37,7 +37,6 @@ import { ethers } from 'ethers';
 import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
-import ContractAddresses from './contracts/network.json';
 import ExploreStackScreen from './views/ExploreStackScreen';
 import config from './config';
 import { findComunityToBeneficicary, findComunityToManager } from './services';
@@ -237,7 +236,7 @@ export default class App extends React.Component<{}, IAppState> {
 
         const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);
         const impactMarketContract = new ethers.Contract(
-            ContractAddresses.alfajores.ImpactMarket,
+            config.impactMarketContractAddress,
             ImpactMarketContractABI,
             provider,
         ) as ethers.Contract & ImpactMarketInstance;
