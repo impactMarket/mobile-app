@@ -31,11 +31,19 @@ const chartConfig: ChartConfig = {
     },
 };
 const screenWidth = Dimensions.get('window').width + 140;
-export default function CommunityDetailsScreen({ route }: { route: any }) {
-    const community = route.params.community as ICommunityViewInfo;
-    const user = route.params.user as IUserState;
+interface ICommunityDetailsScreen {
+    route: {
+        params: {
+            community: ICommunityViewInfo,
+            user: IUserState,
+        }
+    }
+}
+export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
+    const community = props.route.params.community as ICommunityViewInfo;
+    const user = props.route.params.user as IUserState;
 
-    const data = {
+    const dummyData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June'],
         datasets: [
             {
@@ -49,19 +57,15 @@ export default function CommunityDetailsScreen({ route }: { route: any }) {
             <ImageBackground
                 source={{ uri: community.coverImage }}
                 resizeMode={'cover'}
-                style={{
-                    width: '100%',
-                    height: 180,
-                    justifyContent: 'center',
-                    alignContent: 'center',
-                    alignItems: 'center'
-                }}
+                style={styles.imageBackground}
             >
-                <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>{community.name}</Text>
-                <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
+                <Text style={styles.communityName}>{community.name}</Text>
+                <Text style={styles.communityLocation}>
+                    <AntDesign name="enviromento" size={20} /> {community.location.title}
+                </Text>
             </ImageBackground>
             <LineChart
-                data={data}
+                data={dummyData}
                 width={screenWidth}
                 height={150}
                 chartConfig={chartConfig}
@@ -77,7 +81,7 @@ export default function CommunityDetailsScreen({ route }: { route: any }) {
             />
             <Donate
                 community={community}
-                />
+            />
             <ApplyAsBeneficiary
                 community={community}
                 beneficiaryWalletAddress={user.celoInfo.address}
@@ -90,5 +94,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-    }
+    },
+    imageBackground: {
+        width: '100%',
+        height: 180,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    communityName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    communityLocation: {
+        fontSize: 20,
+        color: 'white'
+    },
 });

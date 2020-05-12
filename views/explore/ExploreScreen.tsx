@@ -61,16 +61,16 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
             communities.forEach((community) => {
                 result.push({
                     publicId: community.publicId,
-                    requestByAddress:  community.requestByAddress,
-                    contractAddress:  community.contractAddress,
+                    requestByAddress: community.requestByAddress,
+                    contractAddress: community.contractAddress,
                     name: community.name,
-                    description:  community.description,
+                    description: community.description,
                     location: community.location,
                     coverImage: community.coverImage,
-                    status:  community.status,
-                    txCreationObj:  community.txCreationObj,
-                    createdAt:  community.createdAt,
-                    updatedAt:  community.updatedAt,
+                    status: community.status,
+                    txCreationObj: community.txCreationObj,
+                    createdAt: community.createdAt,
+                    updatedAt: community.updatedAt,
                     backers: Math.floor(Math.random() * 6) + 1,
                     beneficiaries: Math.floor(Math.random() * 6) + 1,
                     ubiRate: 1,
@@ -128,7 +128,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                         key={community.name}
                         elevation={12}
                         style={styles.card}
-                        onPress={() => this.props.navigation.navigate('CommunityDetailsScreen', { community: community, user: this.props.user})}
+                        onPress={() => this.props.navigation.navigate('CommunityDetailsScreen', { community: community, user: this.props.user })}
                     >
                         {/* <Card.Cover
                             source={{ uri: community.image }}

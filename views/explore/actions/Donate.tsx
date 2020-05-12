@@ -1,98 +1,184 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Clipboard,
     ToastAndroid,
+    Alert,
 } from 'react-native';
 import {
-    ICommunityViewInfo,
+    ICommunityViewInfo, IRootState,
 } from '../../../helpers/types';
-import { Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
+import {
+    Button,
+    Dialog,
+    Paragraph,
+    Portal,
+    TextInput,
+} from 'react-native-paper';
+import { ConnectedProps, connect } from 'react-redux';
+import { celoWalletRequest } from '../../../services';
+import { ethers } from 'ethers';
 
 
-export default function Donate(props: { community: ICommunityViewInfo }) {
-    const [openModalDonate, setOpenModalDonate] = useState(false);
-    const [openModalDonateWithCelo, setOpenModalDonateWithCelo] = useState(false);
-    const [amountDonate, setAmountDonate] = React.useState('');
-    const { community } = props;
+interface IExploreScreenProps {
+    community: ICommunityViewInfo
+}
+const mapStateToProps = (state: IRootState) => {
+    const { user, network } = state
+    return { user, network }
+};
 
-    const handleOpenDonateWithCelo = () => {
-        setOpenModalDonateWithCelo(true);
-        setOpenModalDonate(false);
+const connector = connect(mapStateToProps)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+type Props = PropsFromRedux & IExploreScreenProps
+interface IDonateState {
+    openModalDonate: boolean;
+    openModalDonateWithCelo: boolean;
+    donating: boolean;
+    amountDonate: string;
+}
+class Donate extends Component<Props, IDonateState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            openModalDonate: false,
+            openModalDonateWithCelo: false,
+            donating: false,
+            amountDonate: '',
+        }
     }
 
-    const handleDonateWithCeloWallet = () => {
-        // TODO: open modal to introduce amount and then send request
+    handleOpenDonateWithCelo = () => {
+        this.setState({ openModalDonate: false, openModalDonateWithCelo: true });
     }
 
-    const handleCopyAddressToClipboard = () => {
-        Clipboard.setString(community.contractAddress)
+    handleDonateWithCeloWallet = async () => {
+        this.setState({ donating: true });
+        const stableToken = await this.props.network.kit.contracts.getStableToken()
+        const cUSDDecimals = await stableToken.decimals();
+        const txObject = stableToken.transfer(
+            this.props.community.contractAddress,
+            new ethers.utils.BigNumber(10).pow(cUSDDecimals).mul(this.state.amountDonate).toString()
+        ).txo
+        const requestId = "donate-to-community";
+        celoWalletRequest(
+            this.props.user.celoInfo.address,
+            stableToken.address,
+            txObject,
+            requestId,
+            this.props.network,
+        ).then(() => {
+            Alert.alert(
+                'Success',
+                'You\'ve donated!',
+                [
+                    { text: 'OK' },
+                ],
+                { cancelable: false }
+            );
+        }).catch(() => {
+            Alert.alert(
+                'Failure',
+                'An error happened while donating!',
+                [
+                    { text: 'OK' },
+                ],
+                { cancelable: false }
+            );
+        }).finally(() => {
+            this.setState({
+                openModalDonate: false,
+                openModalDonateWithCelo: false,
+                donating: false,
+                amountDonate: '',
+            });
+        });
+    }
+
+    handleCopyAddressToClipboard = () => {
+        Clipboard.setString(this.props.community.contractAddress)
         ToastAndroid.show('Address copied to clipboard!', ToastAndroid.SHORT);
     }
 
-    return (
-        <>
-            <Button
-                mode="contained"
-                onPress={() => setOpenModalDonate(true)}
-            >
-                Donate
-            </Button>
-            <Portal>
-                <Dialog
-                    visible={openModalDonate}
-                    onDismiss={() => setOpenModalDonate(false)}
+    render() {
+        const {
+            openModalDonate,
+            openModalDonateWithCelo,
+            donating,
+            amountDonate,
+        } = this.state;
+        const {
+            community,
+        } = this.props;
+
+        return (
+            <>
+                <Button
+                    mode="contained"
+                    onPress={() => this.setState({ openModalDonate: true })}
                 >
-                    <Dialog.Title>Donate</Dialog.Title>
-                    <Dialog.Content>
-                        <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia eros ut tortor rhoncus fringilla.
-                        </Paragraph>
-                        <Paragraph style={{ marginTop: 20 }}>
-                            Donating to {community.name}
-                        </Paragraph>
-                        <Button
-                            mode="contained"
-                            onPress={handleCopyAddressToClipboard}
-                        >
-                            {community.contractAddress.substr(0, 10)}...{community.contractAddress.substr(community.contractAddress.length - 7, community.contractAddress.length)}
-                        </Button>
-                        <Button
-                            mode="contained"
-                            style={{ marginTop: 10 }}
-                            onPress={handleOpenDonateWithCelo}
-                        >
-                            Donate with Celo wallet
-                        </Button>
-                    </Dialog.Content>
-                    <Dialog.Actions>
-                        <Button mode="contained" onPress={() => setOpenModalDonate(false)}>Done</Button>
-                    </Dialog.Actions>
-                </Dialog>
-                <Dialog
-                    visible={openModalDonateWithCelo}
-                    onDismiss={() => setOpenModalDonateWithCelo(false)}
-                >
-                    <Dialog.Title>Donate</Dialog.Title>
-                    <Dialog.Content>
-                        <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia eros ut tortor rhoncus fringilla.
-                        </Paragraph>
-                        <TextInput
-                            label='Amount'
-                            mode="outlined"
-                            keyboardType="numeric"
-                            value={amountDonate}
-                            onChangeText={text => setAmountDonate(text)}
-                        />
-                    </Dialog.Content>
-                    <Dialog.Actions>
-                        <Button mode="contained" style={{ marginRight: 10 }} onPress={handleDonateWithCeloWallet}>Donate</Button>
-                        <Button mode="contained" onPress={() => setOpenModalDonateWithCelo(false)}>Close</Button>
-                    </Dialog.Actions>
-                </Dialog>
-            </Portal>
-        </>
-    );
+                    Donate
+                </Button>
+                <Portal>
+                    <Dialog
+                        visible={openModalDonate}
+                        onDismiss={() => this.setState({ openModalDonate: false })}
+                    >
+                        <Dialog.Title>Donate</Dialog.Title>
+                        <Dialog.Content>
+                            <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia eros ut tortor rhoncus fringilla.
+                            </Paragraph>
+                            <Paragraph style={{ marginTop: 20 }}>
+                                Donating to {community.name}
+                            </Paragraph>
+                            <Button
+                                mode="contained"
+                                onPress={this.handleCopyAddressToClipboard}
+                            >
+                                {community.contractAddress.substr(0, 10)}...{community.contractAddress.substr(community.contractAddress.length - 7, community.contractAddress.length)}
+                            </Button>
+                            <Button
+                                mode="contained"
+                                style={{ marginTop: 10 }}
+                                onPress={this.handleOpenDonateWithCelo}
+                            >
+                                Donate with Celo wallet
+                            </Button>
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button mode="contained" onPress={() => this.setState({ openModalDonate: false })}>Done</Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                    <Dialog
+                        visible={openModalDonateWithCelo}
+                        onDismiss={() => this.setState({ openModalDonateWithCelo: false })}
+                    >
+                        <Dialog.Title>Donate</Dialog.Title>
+                        <Dialog.Content>
+                            <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia eros ut tortor rhoncus fringilla.
+                            </Paragraph>
+                            <TextInput
+                                label='Amount ($)'
+                                mode="outlined"
+                                keyboardType="numeric"
+                                value={amountDonate}
+                                onChangeText={text => this.setState({ amountDonate: text })}
+                            />
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button mode="contained" loading={donating} style={{ marginRight: 10 }} onPress={this.handleDonateWithCeloWallet}>Donate</Button>
+                            <Button mode="contained" onPress={() => this.setState({ openModalDonateWithCelo: false })}>Close</Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
+            </>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
 });
+
+export default connector(Donate)

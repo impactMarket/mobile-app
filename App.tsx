@@ -174,8 +174,10 @@ export default class App extends React.Component<{}, IAppState> {
     _getCurrentUserBalance = async (address: string) => {
         const stableToken = await kit.contracts.getStableToken()
 
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(address), stableToken.decimals()])
-        let cUSDBalance = cUSDBalanceBig.div(10 ** 18).toFixed(2)
+        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all(
+            [stableToken.balanceOf(address), stableToken.decimals()]
+        )
+        let cUSDBalance = cUSDBalanceBig.div(10 ** cUSDDecimals).toFixed(2)
         return cUSDBalance;
     }
 
