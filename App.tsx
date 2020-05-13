@@ -10,8 +10,16 @@ import {
     StatusBar,
 } from 'react-native';
 
-import { AntDesign } from '@expo/vector-icons';
-import { AppLoading, SplashScreen } from 'expo';
+import {
+    Fontisto,
+    MaterialIcons,
+    FontAwesome,
+    MaterialCommunityIcons,
+} from '@expo/vector-icons';
+import {
+    AppLoading,
+    SplashScreen,
+} from 'expo';
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CommunityStackScreen from './views/CommunityStackScreen';
@@ -22,24 +30,36 @@ import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import userReducer from './helpers/redux/reducers/ReduxReducers';
-import { setUserCeloInfo, setCeloKit, setImpactMarketContract, setCommunityContract, setUserFirstTime, setUserIsBeneficiary, setUserIsCommunityManager } from './helpers/redux/actions/ReduxActions';
 import {
-    ILoginCallbackAnswer,
+    setUserCeloInfo,
+    setCeloKit,
+    setImpactMarketContract,
+    setCommunityContract,
+    setUserFirstTime,
+    setUserIsBeneficiary,
+    setUserIsCommunityManager,
+} from './helpers/redux/actions/ReduxActions';
+import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
-    SET_USER_WALLET_BALANCE,
-    SET_USER_FIRST_TIME,
     STORAGE_USER_FIRST_TIME,
 } from './helpers/types';
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import {
+    DefaultTheme,
+    Provider as PaperProvider,
+} from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit/lib/kit';
 import { ethers } from 'ethers';
 import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
-import ExploreStackScreen from './views/ExploreStackScreen';
+import CommunitiesStackScreen from './views/CommunitiesStackScreen';
+import MyCircleStackScreen from './views/MyCircleStackScreen';
 import config from './config';
-import { findComunityToBeneficicary, findComunityToManager } from './services';
+import {
+    findComunityToBeneficicary,
+    findComunityToManager,
+} from './services';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -47,11 +67,9 @@ const Tab = createBottomTabNavigator();
 const store = createStore(userReducer);
 const theme = {
     ...DefaultTheme,
-    roundness: 2,
+    roundness: 4,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#ffffff',
-        accent: '#f1c40f',
     },
 };
 
@@ -128,20 +146,20 @@ export default class App extends React.Component<{}, IAppState> {
                     <NavigationContainer>
                         <Tab.Navigator>
                             <Tab.Screen
-                                name="Explore"
-                                component={ExploreStackScreen}
+                                name="My Circle"
+                                component={MyCircleStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
-                                        <AntDesign name="home" size={props.size} color={props.color} />
+                                        <FontAwesome name="circle-o-notch" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />
                             <Tab.Screen
-                                name="My Community"
-                                component={CommunityStackScreen}
+                                name="Communities"
+                                component={CommunitiesStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
-                                        <AntDesign name="team" size={props.size} color={props.color} />
+                                        <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />
@@ -150,7 +168,7 @@ export default class App extends React.Component<{}, IAppState> {
                                 component={Activity}
                                 options={{
                                     tabBarIcon: (props: any) => (
-                                        <AntDesign name="retweet" size={props.size} color={props.color} />
+                                        <MaterialIcons name="attach-money" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />
@@ -159,7 +177,7 @@ export default class App extends React.Component<{}, IAppState> {
                                 component={Settings}
                                 options={{
                                     tabBarIcon: (props: any) => (
-                                        <AntDesign name="setting" size={props.size} color={props.color} />
+                                        <Fontisto name="wallet" size={props.size} color={props.color} />
                                     ),
                                 }}
                             />

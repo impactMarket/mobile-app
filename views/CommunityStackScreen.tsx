@@ -14,7 +14,7 @@ export default function CommunityStackScreen() {
                 options={{
                     headerShown: false
                 }}
-                name="HomeScreen"
+                name="CommunityScreen"
                 component={CommunityScreen}
             />
             <CommunityStack.Screen
