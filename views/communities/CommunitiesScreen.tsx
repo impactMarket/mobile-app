@@ -22,6 +22,7 @@ import {
     DataTable,
     Title,
     Button,
+    Appbar,
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
@@ -86,10 +87,17 @@ class CommunitiesScreen extends React.Component<Props, ICommunitiesScreenState> 
         } = this.state;
 
         return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView>
                 <ScrollView style={styles.scrollView}>
-                    {/** */}
-                    <Headline style={{ margin: 10 }} onMagicTap={() => console.warn('oi')} >Explore</Headline>
+                    <Appbar.Header style={styles.appbar}>
+                        <Appbar.Content title="Communities" />
+                        <Button
+                            mode="text"
+                            onPress={() => console.log('hi')}
+                        >
+                            Create
+                        </Button>
+                    </Appbar.Header>
                     {communities.map((community) => <Card
                         key={community.name}
                         elevation={12}
@@ -171,8 +179,8 @@ class CommunitiesScreen extends React.Component<Props, ICommunitiesScreenState> 
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: Expo.Constants.statusBarHeight,
+    appbar: {
+        backgroundColor: 'transparent',
     },
     scrollView: {
     },

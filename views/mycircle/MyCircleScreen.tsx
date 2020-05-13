@@ -46,7 +46,7 @@ function MyCircleScreen(props: Props) {
     const navigation = useNavigation();
 
     return (
-        <View>
+        <SafeAreaView>
             <Appbar.Header style={styles.appbar}>
                 <Appbar.Content title="My Circle" />
                 <Appbar.Action icon="help-circle-outline" />
@@ -83,16 +83,18 @@ function MyCircleScreen(props: Props) {
                 </Card>
                 {/** TODO: introduce empty space */}
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     scrollView: {
-        marginTop: 10
+        marginTop: 10,
+        marginBottom: 80
     },
     card: {
-        margin: 20,
+        marginHorizontal: 20,
+        marginVertical: 10,
     },
     appbar: {
         backgroundColor: 'transparent',

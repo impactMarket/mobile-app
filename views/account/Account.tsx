@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
+import { Appbar, Avatar } from 'react-native-paper';
 
 
 interface ISettingsProps {
@@ -37,6 +38,11 @@ class Settings extends React.Component<Props, ISettingsState> {
         }
         return (
             <View style={styles.container}>
+
+                <Appbar.Header>
+                    <Avatar.Image size={58} source={require('../../assets/hello.png')} />
+                    <Appbar.Action icon="bell" />
+                </Appbar.Header>
                 <View style={styles.item}>
                     <Text style={{ fontWeight: 'bold' }}>Your current address is</Text>
                     <Text>{this.props.user.celoInfo.address}</Text>

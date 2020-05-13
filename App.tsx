@@ -23,7 +23,7 @@ import {
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CommunityStackScreen from './views/CommunityStackScreen';
-import Activity from './views/activity/Activity';
+import Activity from './views/pay/PayScreen';
 import Settings from './views/account/Account';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
