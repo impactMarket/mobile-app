@@ -6,9 +6,31 @@ import {
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
-import { Appbar, Avatar } from 'react-native-paper';
+import { Appbar, Avatar, Card, Button, Headline, Subheading, Divider, List } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
+import { ChartConfig, BarChart } from 'react-native-chart-kit';
 
 
+const barChartConfig: ChartConfig = {
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientToOpacity: 0,
+    strokeWidth: 1,
+    barPercentage: 0.5,
+    color: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
+    propsForLabels: {
+        opacity: 0 // just make them transparent ¯\_(ツ)_/¯
+    }
+};
+const dummyData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'January', 'February', 'March', 'April', 'May', 'June'],
+    datasets: [
+        {
+            data: [10, 25, 31, 42, 39, 59, 61, 68, 63, 79, 89, 95]
+        }
+    ]
+};
 interface ISettingsProps {
 }
 const mapStateToProps = (state: IRootState) => {
@@ -21,51 +43,148 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & ISettingsProps
+interface IActivityListItem {
+    from: string;
+    description: string;
+    amount: string;
+    status: string;
+    timestamp: number;
+}
 interface ISettingsState {
+    activities: IActivityListItem[];
 }
 class Settings extends React.Component<Props, ISettingsState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
+            activities: [],
         }
     }
+
+    // TODO: load activity history
+    componentDidMount = () => {
+        const activities = [
+            {
+                from: 'Cliff',
+                description: 'Thanks friend!!',
+                amount: '2',
+                status: 'Received',
+                timestamp: 17263188,
+            },
+            {
+                from: 'Fehsolna',
+                description: 'Brasil',
+                amount: '3',
+                status: 'Claimed',
+                timestamp: 17263179,
+            }
+        ];
+        activities.sort((a, b) => a.timestamp - b.timestamp);
+        this.setState({ activities });
+    }
+
     render() {
+        const { activities } = this.state;
         if (this.props.user.celoInfo.address.length === 0) {
-            return <View style={styles.container}>
+            return <SafeAreaView>
                 <Text>Login needed...</Text>
-            </View>;
+            </SafeAreaView>;
         }
         return (
-            <View style={styles.container}>
-
-                <Appbar.Header>
-                    <Avatar.Image size={58} source={require('../../assets/hello.png')} />
-                    <Appbar.Action icon="bell" />
+            <SafeAreaView>
+                <Appbar.Header style={styles.appbar}>
+                    <Appbar.Content title="Pay" />
+                    <Appbar.Action icon="help-circle-outline" />
+                    <Appbar.Action icon="qrcode" />
                 </Appbar.Header>
-                <View style={styles.item}>
-                    <Text style={{ fontWeight: 'bold' }}>Your current address is</Text>
-                    <Text>{this.props.user.celoInfo.address}</Text>
-                </View>
-                <View style={styles.item}>
-                    <Text style={{ fontWeight: 'bold' }}>Phone Number</Text>
-                    <Text>{this.props.user.celoInfo.phoneNumber}</Text>
-                </View>
-                <View style={styles.item}>
-                    <Text style={{ fontWeight: 'bold' }}>cUSD balance</Text>
-                    <Text>${this.props.user.celoInfo.balance}</Text>
-                </View>
-            </View>
+                <ScrollView style={styles.scrollView}>
+
+                    <Card style={styles.card}>
+                        <Card.Content>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                <View>
+                                    <Text>Afonso Barbosa</Text>
+                                    <Text style={{ color: 'grey' }}>United States</Text>
+                                    <Button
+                                        mode="text"
+                                        onPress={() => console.log('hi')}
+                                    >
+                                        Edit Profile
+                                    </Button>
+                                </View>
+                                <Avatar.Image
+                                    style={{ alignSelf: 'center', right: -80 }}
+                                    size={58}
+                                    source={require('../../assets/hello.png')}
+                                />
+                            </View>
+                        </Card.Content>
+                    </Card>
+                    <Card style={styles.card}>
+                        <Card.Content>
+                            <Headline>Wallet Balance</Headline>
+                            <Divider />
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
+                                <View>
+                                    <Headline>€1</Headline>
+                                    <Text>0.89 cUSD</Text>
+                                </View>
+                                <BarChart
+                                    data={dummyData}
+                                    width={270}
+                                    height={45}
+                                    yAxisLabel=""
+                                    yAxisSuffix=""
+                                    withInnerLines={false}
+                                    chartConfig={barChartConfig}
+                                    style={{
+                                        marginLeft: -65,
+                                    }}
+                                />
+                            </View>
+                        </Card.Content>
+                    </Card>
+                    <Card style={styles.card}>
+                        <Card.Content>
+                            <Headline>Recent transactions</Headline>
+                            <Divider />
+                            {activities.map((activity) => <List.Item
+                                key={activity.timestamp}
+                                title={activity.from}
+                                description={activity.description}
+                                left={() => <Avatar.Text size={46} label={activity.from.slice(0, 1)} />}
+                                right={() => <View>
+                                    <Text>€{activity.amount}</Text>
+                                    <Text>{activity.status}</Text>
+                                </View>}
+                            />)}
+                            <Button
+                                mode="contained"
+                                style={{ marginLeft: 10 }}
+                                onPress={() => console.log('Pressed')}
+                            >
+                                All Transactions
+                            </Button>
+                        </Card.Content>
+                    </Card>
+                </ScrollView>
+            </SafeAreaView>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: Expo.Constants.statusBarHeight,
-        alignItems: 'center',
-        justifyContent: 'center',
-        top: 50,
+    scrollView: {
+        marginTop: 10,
+        marginBottom: 80
+    },
+    card: {
+        marginHorizontal: 20,
+        marginVertical: 10,
+    },
+    appbar: {
+        backgroundColor: 'transparent',
     },
     item: {
         marginBottom: 50,
