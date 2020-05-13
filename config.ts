@@ -35,11 +35,13 @@ const ENV = {
     }
 }
 
-function getEnvVars(env = '') {
-    if (env === null || env === undefined || env === '') return ENV.dev
-    if (env.indexOf('dev') !== -1) return ENV.dev
-    if (env.indexOf('prod') !== -1) return ENV.prod
-    return ENV.dev
+function getEnvVars() {
+    if (Constants.manifest.packagerOpts !== undefined) {
+        if (Constants.manifest.packagerOpts.dev !== undefined) {
+            return Constants.manifest.packagerOpts.dev ? ENV.dev: ENV.prod;
+        }
+    }
+    return ENV.prod;
 }
 
-export default getEnvVars(Constants.manifest.releaseChannel)
+export default getEnvVars()
