@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyCircleScreen from './mycircle/MyCircleScreen';
+import CreateCommunityScreen from './explore/CreateCommunityScreen';
 
 
 
@@ -15,6 +16,10 @@ export default function MyCircleStackScreen() {
                 }}
                 name="MyCircleScreen"
                 component={MyCircleScreen}
+            />
+            <MyCircleStack.Screen
+                name="CreateCommunityScreen"
+                component={CreateCommunityScreen}
             />
         </MyCircleStack.Navigator>
     );

@@ -122,13 +122,17 @@ class Settings extends React.Component<Props, ISettingsState> {
                         </Card.Content>
                     </Card>
                     <Card style={styles.card}>
+                        <Card.Title
+                            title=""
+                            style={{ backgroundColor: '#f0f0f0' }}
+                            subtitleStyle={{ color: 'grey' }}
+                            subtitle="WALLET BALANCE"
+                        />
                         <Card.Content>
-                            <Headline>Wallet Balance</Headline>
-                            <Divider />
                             <View style={{ flex: 1, flexDirection: 'row' }}>
                                 <View>
-                                    <Headline>€1</Headline>
-                                    <Text>0.89 cUSD</Text>
+                                    <Headline>€{this.props.user.celoInfo.balance}</Headline>
+                                    <Text>{this.props.user.celoInfo.balance} cUSD</Text>
                                 </View>
                                 <BarChart
                                     data={dummyData}
@@ -146,9 +150,13 @@ class Settings extends React.Component<Props, ISettingsState> {
                         </Card.Content>
                     </Card>
                     <Card style={styles.card}>
+                        <Card.Title
+                            title=""
+                            style={{ backgroundColor: '#f0f0f0' }}
+                            subtitleStyle={{ color: 'grey' }}
+                            subtitle="RECENT TRANSACTIONS"
+                        />
                         <Card.Content>
-                            <Headline>Recent transactions</Headline>
-                            <Divider />
                             {activities.map((activity) => <List.Item
                                 key={activity.timestamp}
                                 title={activity.from}

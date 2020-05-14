@@ -77,7 +77,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <AntDesign name="enviromento" size={20} /> {community.location.title}
                 </Text>
                 <LinearGradient
-                    colors={['transparent', 'rgba(246,246,246,0.3)', 'rgba(246,246,246,0.8)', 'rgba(246,246,246,1)']}
+                    colors={['transparent', 'rgba(246,246,246,1)']}
                     style={{
                         position: 'absolute',
                         left: 0,

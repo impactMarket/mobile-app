@@ -104,8 +104,13 @@ function PayScreen(props: Props) {
                     </Card.Content>
                 </Card>
                 <Card style={styles.card}>
+                    <Card.Title
+                        title=""
+                        style={{ backgroundColor: '#f0f0f0' }}
+                        subtitleStyle={{ color: 'grey' }}
+                        subtitle="RECENT"
+                    />
                     <Card.Content>
-                        <Headline>Recent</Headline>
                         {activities.map((activity) => <View key={activity.timestamp}>
                             <Divider />
                             <List.Item

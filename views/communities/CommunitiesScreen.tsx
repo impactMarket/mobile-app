@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -17,15 +17,14 @@ import {
 } from '../../helpers/types';
 import {
     Card,
-    Headline,
     ProgressBar,
     DataTable,
-    Title,
     Button,
     Appbar,
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
+import { useNavigation } from '@react-navigation/native';
 
 
 interface ICommunitiesScreenProps {
@@ -44,20 +43,15 @@ type Props = PropsFromRedux & ICommunitiesScreenProps
 interface ICommunitiesScreenState {
     communities: ICommunityViewInfo[];
 }
-class CommunitiesScreen extends React.Component<Props, ICommunitiesScreenState> {
+function CommunitiesScreen(props: Props) {
+    const navigation = useNavigation();
+    const [communities, setCommunities] = useState<ICommunityViewInfo[]>([]);
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            communities: [],
-        }
-    }
-
-    componentDidMount = () => {
-        // load communities
-        getAllValidCommunities().then((communities) => {
+    useEffect(() => {
+        const loadCommunities = async () => {
+            // load communities
             const result = [] as ICommunityViewInfo[];
-            communities.forEach((community) => {
+            (await getAllValidCommunities()).forEach((community) => {
                 result.push({
                     publicId: community.publicId,
                     requestByAddress: community.requestByAddress,
@@ -77,105 +71,100 @@ class CommunitiesScreen extends React.Component<Props, ICommunitiesScreenState> 
                     totalRaised: 0.3,
                 });
             });
-            this.setState({ communities: result });
-        });
-    }
+            setCommunities(result);
+        }
+        loadCommunities();
+    }, []);
 
-    render() {
-        const {
-            communities,
-        } = this.state;
-
-        return (
-            <SafeAreaView>
-                <ScrollView style={styles.scrollView}>
-                    <Appbar.Header style={styles.appbar}>
-                        <Appbar.Content title="Communities" />
-                        <Button
-                            mode="text"
-                            onPress={() => console.log('hi')}
-                        >
-                            Create
-                        </Button>
-                    </Appbar.Header>
-                    {communities.map((community) => <Card
-                        key={community.name}
-                        elevation={12}
-                        style={styles.card}
-                        onPress={() => this.props.navigation.navigate('CommunityDetailsScreen', { community: community, user: this.props.user })}
+    return (
+        <SafeAreaView>
+            <ScrollView style={styles.scrollView}>
+                <Appbar.Header style={styles.appbar}>
+                    <Appbar.Content title="Communities" />
+                    <Button
+                        mode="text"
+                        onPress={() => navigation.navigate('CreateCommunityScreen')}
                     >
-                        {/* <Card.Cover
+                        Create
+                        </Button>
+                </Appbar.Header>
+                {communities.map((community) => <Card
+                    key={community.name}
+                    elevation={12}
+                    style={styles.card}
+                    onPress={() => navigation.navigate('CommunityDetailsScreen', { community: community, user: props.user })}
+                >
+                    {/* <Card.Cover
                             source={{ uri: community.image }}
                         /> */}
-                        <Card.Content style={{ margin: 0 }}>
-                            <ImageBackground
-                                source={{ uri: community.coverImage }}
-                                resizeMode={'cover'}
-                                style={{
-                                    width: '100%',
-                                    height: 180,
-                                    justifyContent: 'center',
-                                    alignContent: 'center',
-                                    alignItems: 'center'
-                                }}
-                            >
-                                <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>{community.name}</Text>
-                                <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
-                            </ImageBackground>
-                            <View>
-                                <DataTable>
-                                    <DataTable.Row style={{ borderBottomColor: 'transparent', marginBottom: -20 }}>
-                                        <DataTable.Cell>
-                                            <Text style={{ fontWeight: 'bold' }}>{community.backers}</Text>
-                                        </DataTable.Cell>
-                                        <DataTable.Cell>
-                                            <Text style={{ fontWeight: 'bold' }}>{community.beneficiaries}</Text>
-                                        </DataTable.Cell>
-                                        <DataTable.Cell>
-                                            <Text style={{ fontWeight: 'bold' }}>${community.ubiRate}/day</Text>
-                                        </DataTable.Cell>
-                                    </DataTable.Row>
+                    <Card.Content style={{ margin: 0 }}>
+                        <ImageBackground
+                            source={{ uri: community.coverImage }}
+                            resizeMode={'cover'}
+                            style={{
+                                width: '100%',
+                                height: 180,
+                                justifyContent: 'center',
+                                alignContent: 'center',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>{community.name}</Text>
+                            <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
+                        </ImageBackground>
+                        <View>
+                            <DataTable>
+                                <DataTable.Row style={{ borderBottomColor: 'transparent', marginBottom: -20 }}>
+                                    <DataTable.Cell>
+                                        <Text style={{ fontWeight: 'bold' }}>{community.backers}</Text>
+                                    </DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Text style={{ fontWeight: 'bold' }}>{community.beneficiaries}</Text>
+                                    </DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Text style={{ fontWeight: 'bold' }}>${community.ubiRate}/day</Text>
+                                    </DataTable.Cell>
+                                </DataTable.Row>
 
-                                    <DataTable.Row style={{ borderBottomColor: 'transparent' }}>
-                                        <DataTable.Cell>
-                                            <Text style={{ color: 'grey' }}>Backers</Text>
-                                        </DataTable.Cell>
-                                        <DataTable.Cell>
-                                            <Text style={{ color: 'grey' }}>Beneficiaries</Text>
-                                        </DataTable.Cell>
-                                        <DataTable.Cell>
-                                            <Text style={{ color: 'grey' }}>UBI Rate</Text>
-                                        </DataTable.Cell>
-                                    </DataTable.Row>
-                                </DataTable>
-                                <View>
-                                    <ProgressBar
-                                        key="raised"
-                                        style={{
-                                            marginTop: 10,
-                                            backgroundColor: '#d6d6d6',
-                                            position: 'absolute'
-                                        }}
-                                        progress={community.totalRaised}
-                                        color="#5289ff"
-                                    />
-                                    <ProgressBar
-                                        key="claimed"
-                                        style={{
-                                            marginTop: 10,
-                                            backgroundColor: 'rgba(255,255,255,0)'
-                                        }}
-                                        progress={community.totalClaimed}
-                                        color="#50ad53"
-                                    />
-                                </View>
+                                <DataTable.Row style={{ borderBottomColor: 'transparent' }}>
+                                    <DataTable.Cell>
+                                        <Text style={{ color: 'grey' }}>Backers</Text>
+                                    </DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Text style={{ color: 'grey' }}>Beneficiaries</Text>
+                                    </DataTable.Cell>
+                                    <DataTable.Cell>
+                                        <Text style={{ color: 'grey' }}>UBI Rate</Text>
+                                    </DataTable.Cell>
+                                </DataTable.Row>
+                            </DataTable>
+                            <View>
+                                <ProgressBar
+                                    key="raised"
+                                    style={{
+                                        marginTop: 10,
+                                        backgroundColor: '#d6d6d6',
+                                        position: 'absolute'
+                                    }}
+                                    progress={community.totalRaised}
+                                    color="#5289ff"
+                                />
+                                <ProgressBar
+                                    key="claimed"
+                                    style={{
+                                        marginTop: 10,
+                                        backgroundColor: 'rgba(255,255,255,0)'
+                                    }}
+                                    progress={community.totalClaimed}
+                                    color="#50ad53"
+                                />
                             </View>
-                        </Card.Content>
-                    </Card>)}
-                </ScrollView>
-            </SafeAreaView>
-        );
-    }
+                        </View>
+                    </Card.Content>
+                </Card>)}
+            </ScrollView>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
