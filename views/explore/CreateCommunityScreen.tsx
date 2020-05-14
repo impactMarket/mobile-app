@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, Alert } from 'react-native';
-import { TextInput, Card, Button, Paragraph } from 'react-native-paper';
+import { StyleSheet, ScrollView, Alert, ImageBackground, Text, View, Picker } from 'react-native';
+import { TextInput, Card, Button, Paragraph, Subheading } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
 import { requestCreateCommunity } from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
+import { AntDesign } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 interface INewCommunityFormFields {
@@ -17,6 +19,7 @@ interface INewCommunityFormFields {
     baseInterval: string;
     incrementalInterval: string;
     claimHardcap: string;
+    currency: string;
 }
 interface ICommunityFormFieldsError {
     name: boolean;
@@ -27,6 +30,7 @@ interface ICommunityFormFieldsError {
     baseInterval: boolean;
     incrementalInterval: boolean;
     claimHardcap: boolean;
+    currency: boolean;
 }
 
 const mapStateToProps = (state: IRootState) => {
@@ -52,6 +56,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             baseInterval: '',
             incrementalInterval: '',
             claimHardcap: '',
+            currency: '',
         }
     );
     const [communityFormError, setCommunityFormError] = useState<ICommunityFormFieldsError>(
@@ -64,21 +69,22 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             baseInterval: false,
             incrementalInterval: false,
             claimHardcap: false,
+            currency: false,
         }
     );
 
     useEffect(() => {
-        const requestAccessToLocation = async () => {
-            let { status } = await Location.requestPermissionsAsync();
-            if (status !== 'granted') {
-                // TODO: do some stuff
-            }
+        // const requestAccessToLocation = async () => {
+        //     let { status } = await Location.requestPermissionsAsync();
+        //     if (status !== 'granted') {
+        //         // TODO: do some stuff
+        //     }
 
-            let loc = await Location.getCurrentPositionAsync({});
-            setLocation(loc);
-            // console.log(loc);
-        }
-        requestAccessToLocation();
+        //     let loc = await Location.getCurrentPositionAsync({});
+        //     setLocation(loc);
+        //     // console.log(loc);
+        // }
+        // requestAccessToLocation();
     }, []);
 
     const submitNewCommunity = () => {
@@ -204,7 +210,88 @@ function CreateCommunityScreen(props: PropsFromRedux) {
 
     return (
         <ScrollView>
-            <Card>
+            <View style={styles.container}>
+                <Card>
+                    <Card.Content>
+                        <Text style={{ color: 'grey', backgroundColor: '#f0f0f0' }}>
+                            Praesent eget condimentum enim, elementum viverra dui. Nam aliquam, nisi sit amet eleifend finibus, tellus metus dignissim est, vel fringilla urna mi ut lorem. Suspendisse blandit bibendum nunc, non bibendum mauris laoreet non. Morbi eget sollicitudin nunc. In laoreet nisi ac lacus maximus aliquet. Ut ullamcorper rutrum dolor non fringilla. Donec nunc metus, pulvinar ac dapibus eget, faucibus sit amet urna. Aliquam erat volutpat.
+                        </Text>
+                        <TextInput
+                            style={styles.inputTextField}
+                            mode="outlined"
+                            label="Name"
+                            value={newCommunityForm.name}
+                            onChangeText={value => handleTextInputChanges('name', value)}
+                        />
+                        <TextInput
+                            style={styles.inputTextField}
+                            mode="outlined"
+                            label="Description"
+                            value={newCommunityForm.description}
+                            onChangeText={value => handleTextInputChanges('description', value)}
+                            multiline={true}
+                            numberOfLines={6}
+                        />
+                    </Card.Content>
+                </Card>
+                <Card style={{ marginVertical: 15 }}>
+                    <Card.Content>
+                        <View style={styles.pickerBorder}>
+                            <Picker
+                                selectedValue={newCommunityForm.currency}
+                                style={styles.picker}
+                                onValueChange={(text, i) => setNewCommunityForm({ ...newCommunityForm, currency: text })}>
+                                <Picker.Item label="Euro (EUR)" value="eur" />
+                                <Picker.Item label="Dollar (USD)" value="usd" />
+                            </Picker>
+                        </View>
+                        <TextInput
+                            style={styles.inputTextField}
+                            mode="outlined"
+                            label="Claim AMount"
+                            value={newCommunityForm.amountByClaim}
+                            onChangeText={value => handleTextInputChanges('amountByClaim', value)}
+                        />
+                        <View style={styles.pickerBorder}>
+                            <Picker
+                                selectedValue={newCommunityForm.baseInterval}
+                                style={styles.picker}
+                                onValueChange={(value) => handleTextInputChanges('baseInterval', value)}>
+                                <Picker.Item label="Daily" value="86400" />
+                            </Picker>
+                        </View>
+                        <TextInput
+                            style={styles.inputTextField}
+                            mode="outlined"
+                            keyboardType="numeric"
+                            label="Time Increment (Hours)"
+                            value={newCommunityForm.incrementalInterval}
+                            onChangeText={value => handleTextInputChanges('incrementalInterval', value)}
+                        />
+                        <TextInput
+                            style={styles.inputTextField}
+                            mode="outlined"
+                            keyboardType="numeric"
+                            label="Max Amount"
+                            value={newCommunityForm.claimHardcap}
+                            onChangeText={value => handleTextInputChanges('claimHardcap', value)}
+                        />
+                    </Card.Content>
+                </Card>
+                <Button
+                    mode="outlined"
+                    onPress={() => console.log('oi')}
+                >
+                    Create Community
+                </Button>
+                <Text style={{ color: 'grey' }}>
+                    Praesent eget condimentum enim, elementum viverra dui. Nam aliquam, nisi sit amet eleifend finibus, tellus metus dignissim est, vel fringilla urna mi ut lorem. Suspendisse blandit bibendum nunc, non bibendum mauris laoreet non. Morbi eget sollicitudin nunc. In laoreet nisi ac lacus maximus aliquet. Ut ullamcorper rutrum dolor non fringilla. Donec nunc metus, pulvinar ac dapibus eget, faucibus sit amet urna. Aliquam erat volutpat.
+                </Text>
+            </View>
+
+
+
+            {/* <Card>
                 <Card.Cover
                     style={{ height: 100 }}
                     source={{ uri: 'https://picsum.photos/600' }}
@@ -342,7 +429,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                         Create Community
                     </Button>
                 </Card.Content>
-            </Card>
+            </Card> */}
         </ScrollView>
     );
 }
@@ -353,8 +440,39 @@ const styles = StyleSheet.create({
         marginRight: 30,
     },
     inputTextField: {
-        marginTop: 10,
+        marginVertical: 10,
     },
+    container: {
+        margin: 20
+    },
+    //
+    imageBackground: {
+        width: '100%',
+        height: 180,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    communityName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    communityLocation: {
+        fontSize: 20,
+        color: 'white'
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+    },
+    pickerBorder: {
+        marginVertical: 10,
+        borderStyle: 'solid',
+        borderColor: 'grey',
+        borderWidth: 1,
+        borderRadius: 5
+    }
 });
 
 export default connector(CreateCommunityScreen);
