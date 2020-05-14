@@ -3,6 +3,8 @@ import {
     StyleSheet,
     View,
     Alert,
+    Text,
+    ImageBackground,
 } from 'react-native';
 import {
     connect,
@@ -18,7 +20,9 @@ import {
     List,
     Portal,
     Dialog,
-    Paragraph
+    Paragraph,
+    Card,
+    Subheading
 } from 'react-native-paper';
 import {
     getBeneficiariesRequestByCommunity,
@@ -27,6 +31,9 @@ import {
     acceptBeneficiaryRequest
 } from '../../../services';
 import { getBeneficiariesByCommunity } from '../../../services/api';
+import { ScrollView } from 'react-native-gesture-handler';
+import { AntDesign } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 interface ICommunityManagerViewProps {
@@ -136,35 +143,137 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             </View>
         }
         return (
-            <View>
-                <View>
-                    <Paragraph>contractAddress {community.contractAddress}</Paragraph>
-                    <Paragraph>createdAt {community.createdAt}</Paragraph>
-                    <Paragraph>description {community.description}</Paragraph>
-                    <Paragraph>location {community.location.title}</Paragraph>
-                    <Paragraph>name {community.name}</Paragraph>
+            <ScrollView>
+                <ImageBackground
+                    source={{ uri: community.coverImage }}
+                    resizeMode={'cover'}
+                    style={styles.imageBackground}
+                >
+                    <Text style={styles.communityName}>{community.name}</Text>
+                    <Text style={styles.communityLocation}>
+                        <AntDesign name="enviromento" size={20} /> {community.location.title}
+                    </Text>
+                    <LinearGradient
+                        colors={['transparent', 'rgba(246,246,246,1)']}
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            height: 80,
+                        }}
+                    />
+                </ImageBackground>
+                <View style={styles.container}>
+                    <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet augue justo. In id dolor nec nisi vulputate cursus in a magna. Donec varius elementum ligula, vitae vulputate felis eleifend non. Donec pellentesque convallis congue. Vivamus sed vestibulum turpis, et suscipit lorem. Aenean vehicula pretium sapien.</Paragraph>
+                    <View style={{ flex: 1, flexDirection: 'row', marginVertical: 25 }}>
+                        <Button
+                            mode="outlined"
+                            onPress={() => console.log('Pressed')}
+                        >
+                            Edit
+                        </Button>
+                        <Button
+                            mode="outlined"
+                            style={{ marginLeft: 'auto' }}
+                            onPress={() => console.log('Pressed')}
+                        >
+                            More...
+                        </Button>
+                    </View>
+                    <Card>
+                        <Card.Title
+                            title=""
+                            style={{ backgroundColor: '#f0f0f0' }}
+                            subtitleStyle={{ color: 'grey' }}
+                            subtitle="BENEFICIARIES"
+                        />
+                        <Card.Content>
+                            <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
+                                <Subheading>Pending</Subheading>
+                                <Button
+                                    mode="contained"
+                                    style={{ marginLeft: 'auto' }}
+                                    onPress={() => console.log('Pressed')}
+                                >
+                                    4
+                                </Button>
+                            </View>
+                            <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
+                                <Subheading>Accepted</Subheading>
+                                <Button
+                                    mode="contained"
+                                    style={{ marginLeft: 'auto' }}
+                                    onPress={() => console.log('Pressed')}
+                                >
+                                    45
+                                </Button>
+                            </View>
+                            <Button
+                                mode="outlined"
+                                style={{ width: '100%' }}
+                                onPress={() => console.log('Pressed')}
+                            >
+                                Add Beneficiary
+                            </Button>
+                        </Card.Content>
+                    </Card>
+                    <Card style={{ marginVertical: 15 }}>
+                        <Card.Title
+                            title=""
+                            style={{ backgroundColor: '#f0f0f0' }}
+                            subtitleStyle={{ color: 'grey' }}
+                            subtitle="COMMUNITY LEADERS"
+                        />
+                        <Card.Content>
+                            <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
+                                <Subheading>Active</Subheading>
+                                <Button
+                                    mode="contained"
+                                    style={{ marginLeft: 'auto' }}
+                                    onPress={() => console.log('Pressed')}
+                                >
+                                    2
+                                </Button>
+                            </View>
+                            <Button
+                                mode="outlined"
+                                style={{ width: '100%' }}
+                                onPress={() => console.log('Pressed')}
+                            >
+                                Add Community Leader
+                            </Button>
+                        </Card.Content>
+                    </Card>
+                    {/* <View>
+                        <Paragraph>contractAddress {community.contractAddress}</Paragraph>
+                        <Paragraph>createdAt {community.createdAt}</Paragraph>
+                        <Paragraph>description {community.description}</Paragraph>
+                        <Paragraph>location {community.location.title}</Paragraph>
+                        <Paragraph>name {community.name}</Paragraph>
+                    </View>
+                    <List.Section>
+                        <List.Subheader>Pending requests</List.Subheader>
+                        {beneficiaryRequests.map((request) =>
+                            <List.Item
+                                key={request.walletAddress}
+                                title={request.walletAddress}
+                                description={request.createdAt}
+                                onPress={() => this.setState({ requestConfirmation: request, modalConfirmation: true })}
+                            />
+                        )}
+                    </List.Section>
+                    <List.Section>
+                        <List.Subheader>Community Beneficiaries</List.Subheader>
+                        {beneficiaries.map((request) =>
+                            <List.Item
+                                key={request.walletAddress}
+                                title={request.walletAddress}
+                                description={request.createdAt}
+                            />
+                        )}
+                    </List.Section> */}
                 </View>
-                <List.Section>
-                    <List.Subheader>Pending requests</List.Subheader>
-                    {beneficiaryRequests.map((request) =>
-                        <List.Item
-                            key={request.walletAddress}
-                            title={request.walletAddress}
-                            description={request.createdAt}
-                            onPress={() => this.setState({ requestConfirmation: request, modalConfirmation: true })}
-                        />
-                    )}
-                </List.Section>
-                <List.Section>
-                    <List.Subheader>Community Beneficiaries</List.Subheader>
-                    {beneficiaries.map((request) =>
-                        <List.Item
-                            key={request.walletAddress}
-                            title={request.walletAddress}
-                            description={request.createdAt}
-                        />
-                    )}
-                </List.Section>
                 <Portal>
                     <Dialog
                         visible={modalConfirmation}
@@ -180,12 +289,31 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>
-            </View>
+            </ScrollView>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        margin: 20
+    },
+    imageBackground: {
+        width: '100%',
+        height: 180,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    communityName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    communityLocation: {
+        fontSize: 20,
+        color: 'white'
+    },
 });
 
 export default connector(CommunityManagerView);

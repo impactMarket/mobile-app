@@ -140,7 +140,7 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
                     }}
                 >
                     <LinearGradient
-                        colors={['rgba(255,255,255,1)', 'rgba(255,255,255,0.8)', 'rgba(255,255,255,0.3)', 'transparent']}
+                        colors={['transparent', 'rgba(246,246,246,1)']}
                         style={{
                             position: 'absolute',
                             left: 0,
