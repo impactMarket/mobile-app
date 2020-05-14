@@ -97,7 +97,8 @@ export default class App extends React.Component<{}, IAppState> {
 
             if (previousValue !== currentValue) {
                 if (currentValue === false &&
-                    store.getState().user.celoInfo.address.length > 0) {
+                    store.getState().user.celoInfo.address.length > 0
+                ) {
                     this._authUser();
                 }
                 this.setState({ firstTimeUser: currentValue });
@@ -139,30 +140,47 @@ export default class App extends React.Component<{}, IAppState> {
             </Provider>
         }
 
+        const tabsToUser = () => {
+            if (store.getState().user.celoInfo.address.length === 0) {
+                return <>
+                    <Tab.Screen
+                        name="My Circle"
+                        component={MyCircleStackScreen}
+                        options={{
+                            tabBarIcon: (props: any) => (
+                                <FontAwesome name="circle-o-notch" size={props.size} color={props.color} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen
+                        name="Communities"
+                        component={CommunitiesStackScreen}
+                        options={{
+                            tabBarIcon: (props: any) => (
+                                <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
+                            ),
+                        }}
+                    />
+                </>;
+            }
+            return <Tab.Screen
+                name="Community"
+                component={CommunityStackScreen}
+                options={{
+                    tabBarIcon: (props: any) => (
+                        <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
+                    ),
+                }}
+            />
+        }
+
         return (
             <PaperProvider theme={theme}>
                 <Provider store={store}>
                     <StatusBar backgroundColor="rgba(0, 0, 0, 0.2)" translucent />
                     <NavigationContainer>
                         <Tab.Navigator>
-                            <Tab.Screen
-                                name="My Circle"
-                                component={MyCircleStackScreen}
-                                options={{
-                                    tabBarIcon: (props: any) => (
-                                        <FontAwesome name="circle-o-notch" size={props.size} color={props.color} />
-                                    ),
-                                }}
-                            />
-                            <Tab.Screen
-                                name="Communities"
-                                component={CommunitiesStackScreen}
-                                options={{
-                                    tabBarIcon: (props: any) => (
-                                        <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
-                                    ),
-                                }}
-                            />
+                            {tabsToUser()}
                             <Tab.Screen
                                 name="Pay"
                                 component={Activity}
