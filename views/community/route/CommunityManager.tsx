@@ -14,6 +14,7 @@ import {
     IRootState,
     IBeneficiary,
     ICommunity,
+    ICommunityViewInfo,
 } from '../../../helpers/types';
 import {
     Button,
@@ -22,7 +23,9 @@ import {
     Dialog,
     Paragraph,
     Card,
-    Subheading
+    Subheading,
+    Title,
+    ProgressBar
 } from 'react-native-paper';
 import {
     getBeneficiariesRequestByCommunity,
@@ -54,7 +57,7 @@ interface ICommunityManagerViewState {
     beneficiaries: IBeneficiary[];
     modalConfirmation: boolean;
     requestConfirmation?: IBeneficiary;
-    community?: ICommunity;
+    community?: ICommunityViewInfo;
 }
 class CommunityManagerView extends React.Component<Props, ICommunityManagerViewState> {
 
@@ -68,9 +71,10 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
     }
 
     componentDidMount = () => {
+        const { _address } = this.props.network.contracts.communityContract;
         getCommunityByContractAddress(
-            this.props.network.contracts.communityContract._address,
-        ).then((community) => {
+            _address,
+        ).then(async (community) => {
             if (community === undefined) {
                 // TODO: show error
                 return;
@@ -79,13 +83,26 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                 .then((beneficiaryRequests) => this.setState({ beneficiaryRequests }))
             getBeneficiariesByCommunity(community.contractAddress)
                 .then((beneficiaries) => this.setState({ beneficiaries }))
-            this.setState({ community });
+
+            const stableToken = await this.props.network.kit.contracts.getStableToken();
+            const [cUSDBalanceBig, cUSDDecimals] = await Promise.all(
+                [stableToken.balanceOf(_address), stableToken.decimals()]
+            )
+            let cUSDBalance = cUSDBalanceBig.div(10 ** cUSDDecimals).toFixed(2)
+
+            const _community: ICommunityViewInfo = {
+                ...community,
+                backers: 5,
+                beneficiaries: 8,
+                ubiRate: 1,
+                totalClaimed: 0.2,
+                totalRaised: parseFloat(cUSDBalance),
+            }
+            this.setState({ community: _community });
         });
-        // TODO: load current beneficiaries from a community
     }
 
     handleAcceptBeneficiaryRequest = async () => {
-        // TODO: accept
         const { requestConfirmation, community } = this.state;
         const { user, network } = this.props;
         const { communityContract } = network.contracts;
@@ -242,6 +259,52 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                 onPress={() => console.log('Pressed')}
                             >
                                 Add Community Leader
+                            </Button>
+                        </Card.Content>
+                    </Card>
+                    <Card style={{ marginVertical: 15 }}>
+                        <Card.Content>
+                            <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5, justifyContent: 'center' }}>
+                                <View style={{ width: '50%', alignItems: 'center' }}>
+                                    <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.beneficiaries}</Title>
+                                    <Text style={{ color: 'grey' }}>Beneficiaries</Text>
+                                </View>
+                                <View style={{ width: '50%', alignItems: 'center' }}>
+                                    <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.backers}</Title>
+                                    <Text style={{ color: 'grey' }}>Backers</Text>
+                                </View>
+                            </View>
+                            <View>
+                                <ProgressBar
+                                    key="raised"
+                                    style={{
+                                        marginTop: 10,
+                                        backgroundColor: '#d6d6d6',
+                                        position: 'absolute'
+                                    }}
+                                    progress={community.totalRaised}
+                                    color="#5289ff"
+                                />
+                                <ProgressBar
+                                    key="claimed"
+                                    style={{
+                                        marginTop: 10,
+                                        backgroundColor: 'rgba(255,255,255,0)'
+                                    }}
+                                    progress={community.totalClaimed}
+                                    color="#50ad53"
+                                />
+                            </View>
+                            <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
+                                <Text>37% Claimed</Text>
+                                <Text style={{ marginLeft: 'auto' }}>${community.totalRaised} Raised</Text>
+                            </View>
+                            <Button
+                                mode="outlined"
+                                style={{ width: '100%' }}
+                                onPress={() => console.log('Pressed')}
+                            >
+                                Full Dashboard
                             </Button>
                         </Card.Content>
                     </Card>
