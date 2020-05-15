@@ -6,7 +6,7 @@ import {
     ImageBackground,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../../../helpers/types';
+import { IRootState, ICommunity } from '../../../helpers/types';
 
 import { Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
@@ -14,7 +14,8 @@ import { setUserFirstTime } from '../../../helpers/redux/actions/ReduxActions';
 import { CommunityInstance } from '../../../contracts/types/truffle-contracts';
 import { ethers } from 'ethers';
 import { LinearGradient } from 'expo-linear-gradient';
-import { celoWalletRequest } from '../../../services';
+import { celoWalletRequest, getCommunityByContractAddress } from '../../../services';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 interface IBeneficiaryViewProps {
@@ -33,11 +34,11 @@ type Props = PropsFromRedux & IBeneficiaryViewProps
 interface IBeneficiaryViewState {
     nextClaim: number;
     claimDisabled: boolean;
-    isBeneficiary: boolean;
     loading: boolean;
     loaded: boolean;
     claiming: boolean;
     loggedIn: boolean;
+    community?: ICommunity;
 }
 class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
 
@@ -46,7 +47,6 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
         this.state = {
             nextClaim: 0,
             claimDisabled: true,
-            isBeneficiary: false,
             loading: false,
             loaded: false,
             claiming: false,
@@ -57,12 +57,22 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
     loadPage = async (props: Readonly<Props>) => {
         const communityContract = props.network.contracts.communityContract;
         if (props.network.contracts.communityContract !== undefined) {
-            const { isBeneficiary } = props.user.community;
             await this._loadAllowance(communityContract);
-            this.setState({ isBeneficiary, loading: false, loggedIn: true, loaded: true });
+            this.setState({ loading: false, loggedIn: true, loaded: true });
         } else if (props.user.celoInfo.address.length === 0) {
             this.setState({ loading: false, loggedIn: false, loaded: true });
         }
+
+        getCommunityByContractAddress(
+            this.props.network.contracts.communityContract._address,
+        ).then((community) => {
+            if (community === undefined) {
+                // TODO: show error
+                return;
+            }
+            this.setState({ community });
+        });
+        // TODO: load current beneficiaries from a community
     }
 
     // TODO: improve
@@ -111,8 +121,10 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
             loading,
             claiming,
             loggedIn,
+            community
         } = this.state;
-        if (loading) {
+        // const { isBeneficiary } = this.props.user.community;
+        if (loading || community === undefined) {
             return <Text>Loading...</Text>;
         }
         if (!loggedIn) {
@@ -128,38 +140,32 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
         }
 
         return (
-            <View style={{
-                alignItems: 'center',
-            }}>
+            <ScrollView>
                 <ImageBackground
-                    source={require('../../../assets/favela.jpg')}
+                    source={{ uri: /* community.coverImage */ 'https://picsum.photos/600' }}
                     resizeMode={'cover'}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                    }}
+                    style={styles.imageBackground}
                 >
+                    <Text style={styles.communityName}>{community.name}</Text>
+                    <Text style={styles.communityLocation}>
+                        <AntDesign name="enviromento" size={20} /> {/*community.location.title*/ 'São Paulo'}
+                    </Text>
                     <LinearGradient
                         colors={['transparent', 'rgba(246,246,246,1)']}
                         style={{
                             position: 'absolute',
                             left: 0,
                             right: 0,
-                            top: 0,
-                            height: 500,
+                            bottom: 0,
+                            height: 80,
                         }}
                     />
                 </ImageBackground>
-                <View style={styles.contentView}>
-                    <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Fehsolna</Text>
-                    <Text style={{ fontSize: 20 }}><AntDesign name="enviromento" size={20} /> São Paulo</Text>
-                    <Text style={{
-                        fontSize: 20,
-                        top: 20,
-                        width: '50%',
-                        textAlign: 'center'
-                    }}>Every day you can claim $2 up to a total of $500</Text>
-                    <View style={{ top: 90 }}>
+                <View>
+                    <Text style={styles.mainPageContent}>
+                        Every day you can claim $2 up to a total of $500
+                    </Text>
+                    <View style={styles.container}>
                         <Button
                             mode="contained"
                             onPress={this.handleClaimPress}
@@ -170,41 +176,59 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
                         </Button>
                         <Text
                             onPress={() => this.props.navigation.navigate('ClaimExplainedScreen')}
-                            style={{ top: 15, textAlign: 'center', color: 'white' }}
+                            style={{ marginVertical: 15, textAlign: 'center' }}
                         >How claim works?</Text>
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 
     _loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
         const { address } = this.props.user.celoInfo;
         const cooldownTime = parseInt((await communityInstance.methods.cooldownClaim(address).call()).toString(), 10);
-        const isBeneficiary = await communityInstance.methods.beneficiaries(address).call();
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
         const remainingCooldown = cooldownTime * 1000 - new Date().getTime();
         // if timeout is bigger than 3 minutes, ignore!
         if (claimDisabled && remainingCooldown < 90000) {
             setTimeout(() => {
-                this.setState({ isBeneficiary: false });
-            }, remainingCooldown + 1000);
+                this.setState({ claimDisabled: false });
+            }, remainingCooldown);
         }
         this.setState({
             claimDisabled,
             nextClaim: cooldownTime * 1000,
-            isBeneficiary,
             loading: false,
         })
     }
 }
 
 const styles = StyleSheet.create({
-    contentView: {
-        flex: 1,
-        alignItems: 'center',
-        position: 'absolute',
-        top: 50,
+    mainPageContent: {
+        fontSize: 30,
+        marginVertical: 30,
+        marginHorizontal: '20%',
+        width: '50%',
+        textAlign: 'center',
+    },
+    container: {
+        margin: 20
+    },
+    imageBackground: {
+        width: '100%',
+        height: 250,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    communityName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: 'white'
+    },
+    communityLocation: {
+        fontSize: 20,
+        color: 'white'
     },
 });
 

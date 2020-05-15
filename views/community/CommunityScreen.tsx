@@ -37,19 +37,9 @@ class CommunityScreen extends React.Component<Props, ICommunityState> {
 
     contentView = () => {
         if (this.props.user.community.isBeneficiary) {
-            return <View>
-                <Appbar.Header style={styles.appbar}>
-                    <Avatar.Image size={58} source={require('../../assets/hello.png')} />
-                    <Appbar.Content
-                        title={this.props.user.celoInfo.balance + '$'}
-                        subtitle="Balance"
-                    />
-                    <Appbar.Action icon="bell" />
-                </Appbar.Header>
-                <BeneficiaryView
-                    navigation={this.props.navigation}
-                />
-            </View>;
+            return <BeneficiaryView
+                navigation={this.props.navigation}
+            />
         } else if (this.props.user.community.isCoordinator) {
             return <CommunityManagerView
                 navigation={this.props.navigation}
