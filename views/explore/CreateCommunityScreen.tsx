@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, Alert, ImageBackground, Text, View, Picker } from 'react-native';
-import { TextInput, Card, Button, Paragraph, Subheading } from 'react-native-paper';
+import { StyleSheet, ScrollView, Alert, Text, View, Picker, TextInput, TextInputProperties } from 'react-native';
+import { Card, Button, Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
 import { requestCreateCommunity } from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
-import { AntDesign } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 interface INewCommunityFormFields {
@@ -21,17 +19,6 @@ interface INewCommunityFormFields {
     claimHardcap: string;
     currency: string;
 }
-interface ICommunityFormFieldsError {
-    name: boolean;
-    description: boolean;
-    location: boolean;
-    coverImage: boolean;
-    amountByClaim: boolean;
-    baseInterval: boolean;
-    incrementalInterval: boolean;
-    claimHardcap: boolean;
-    currency: boolean;
-}
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -42,16 +29,28 @@ const connector = connect(mapStateToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
+interface IStyledTextInputProps extends TextInputProperties {
+    label: string;
+}
+const StyledTextInput = (props: IStyledTextInputProps) => <>
+    <Paragraph style={styles.inputTextFieldLabel}>{props.label}</Paragraph>
+    <TextInput
+        style={styles.inputTextField}
+        {...props}
+    />
+</>;
+
 function CreateCommunityScreen(props: PropsFromRedux) {
     const navigation = useNavigation();
 
+    const [sending, setSending] = useState(false);
     const [location, setLocation] = useState<Location.LocationData>();
     const [newCommunityForm, setNewCommunityForm] = useState<INewCommunityFormFields>(
         {
             name: '',
             description: '',
             location: '',
-            coverImage: '',
+            coverImage: 'https://picsum.photos/600',
             amountByClaim: '',
             baseInterval: '',
             incrementalInterval: '',
@@ -59,80 +58,44 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             currency: '',
         }
     );
-    const [communityFormError, setCommunityFormError] = useState<ICommunityFormFieldsError>(
-        {
-            name: false,
-            description: false,
-            location: false,
-            coverImage: false,
-            amountByClaim: false,
-            baseInterval: false,
-            incrementalInterval: false,
-            claimHardcap: false,
-            currency: false,
-        }
-    );
 
     useEffect(() => {
-        // const requestAccessToLocation = async () => {
-        //     let { status } = await Location.requestPermissionsAsync();
-        //     if (status !== 'granted') {
-        //         // TODO: do some stuff
-        //     }
+        const requestAccessToLocation = async () => {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                // TODO: do some stuff
+            }
 
-        //     let loc = await Location.getCurrentPositionAsync({});
-        //     setLocation(loc);
-        //     // console.log(loc);
-        // }
-        // requestAccessToLocation();
+            let loc = await Location.getCurrentPositionAsync({});
+            setLocation(loc);
+            // console.log(loc);
+        }
+        requestAccessToLocation();
     }, []);
 
     const submitNewCommunity = () => {
         if (location === undefined) {
             // TODO: show error!
         }
-        else if (newCommunityForm.name.length === 0) {
-            setCommunityFormError({ ...communityFormError, name: true });
-        }
-        else if (newCommunityForm.description.length === 0) {
-            setCommunityFormError({ ...communityFormError, description: true });
-        }
-        else if (newCommunityForm.location.length === 0) {
-            setCommunityFormError({ ...communityFormError, location: true });
-        }
-        else if (newCommunityForm.coverImage.length === 0) {
-            setCommunityFormError({ ...communityFormError, coverImage: true });
-        }
-        else if (newCommunityForm.amountByClaim.length === 0) {
-            setCommunityFormError({ ...communityFormError, amountByClaim: true });
-        }
-        else if (newCommunityForm.baseInterval.length === 0) {
-            setCommunityFormError({ ...communityFormError, baseInterval: true });
-        }
-        else if (newCommunityForm.incrementalInterval.length === 0) {
-            setCommunityFormError({ ...communityFormError, incrementalInterval: true });
-        }
-        else if (newCommunityForm.claimHardcap.length === 0) {
-            setCommunityFormError({ ...communityFormError, claimHardcap: true });
-        }
-        else {
-            requestCreateCommunity(
-                props.user.celoInfo.address,
-                newCommunityForm.name,
-                newCommunityForm.description,
-                {
-                    title: newCommunityForm.location,
-                    latitude: location!.coords.latitude,
-                    longitude: location!.coords.longitude,
-                },
-                newCommunityForm.coverImage,
-                {
-                    amountByClaim: newCommunityForm.amountByClaim,
-                    baseInterval: newCommunityForm.baseInterval,
-                    incrementalInterval: newCommunityForm.incrementalInterval,
-                    claimHardcap: newCommunityForm.claimHardcap,
-                },
-            ).then(() => {
+        setSending(true);
+        requestCreateCommunity(
+            props.user.celoInfo.address,
+            newCommunityForm.name,
+            newCommunityForm.description,
+            {
+                title: newCommunityForm.location,
+                latitude: location!.coords.latitude,
+                longitude: location!.coords.longitude,
+            },
+            newCommunityForm.coverImage,
+            {
+                amountByClaim: newCommunityForm.amountByClaim,
+                baseInterval: newCommunityForm.baseInterval,
+                incrementalInterval: (parseInt(newCommunityForm.incrementalInterval, 10) * 3600).toString(),
+                claimHardcap: newCommunityForm.claimHardcap,
+            },
+        ).then((success) => {
+            if(success) {
                 navigation.goBack();
                 Alert.alert(
                     'Success',
@@ -142,7 +105,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     ],
                     { cancelable: false }
                 );
-            }).catch(() => {
+            } else {
                 Alert.alert(
                     'Failure',
                     'An error happened while placing the request to create a community!',
@@ -151,59 +114,36 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     ],
                     { cancelable: false }
                 );
-            });
-        }
+            }
+            setSending(false);
+        });
     }
 
     const handleTextInputChanges = (name: string, value: string) => {
         switch (name) {
             case 'name':
                 setNewCommunityForm({ ...newCommunityForm, name: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, name: false });
-                }
                 break;
             case 'description':
                 setNewCommunityForm({ ...newCommunityForm, description: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, description: false });
-                }
                 break;
             case 'location':
                 setNewCommunityForm({ ...newCommunityForm, location: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, location: false });
-                }
                 break;
             case 'coverImage':
                 setNewCommunityForm({ ...newCommunityForm, coverImage: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, coverImage: false });
-                }
                 break;
             case 'amountByClaim':
                 setNewCommunityForm({ ...newCommunityForm, amountByClaim: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, amountByClaim: false });
-                }
                 break;
             case 'baseInterval':
                 setNewCommunityForm({ ...newCommunityForm, baseInterval: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, baseInterval: false });
-                }
                 break;
             case 'incrementalInterval':
                 setNewCommunityForm({ ...newCommunityForm, incrementalInterval: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, incrementalInterval: false });
-                }
                 break;
             case 'claimHardcap':
                 setNewCommunityForm({ ...newCommunityForm, claimHardcap: value });
-                if (value.length > 0) {
-                    setCommunityFormError({ ...communityFormError, claimHardcap: false });
-                }
                 break;
         }
     }
@@ -213,66 +153,66 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             <View style={styles.container}>
                 <Card>
                     <Card.Content>
-                        <Text style={{ color: 'grey', backgroundColor: '#f0f0f0' }}>
+                        <Text style={{ color: 'grey', backgroundColor: '#f0f0f0', paddingVertical: 10 }}>
                             Praesent eget condimentum enim, elementum viverra dui. Nam aliquam, nisi sit amet eleifend finibus, tellus metus dignissim est, vel fringilla urna mi ut lorem. Suspendisse blandit bibendum nunc, non bibendum mauris laoreet non. Morbi eget sollicitudin nunc. In laoreet nisi ac lacus maximus aliquet. Ut ullamcorper rutrum dolor non fringilla. Donec nunc metus, pulvinar ac dapibus eget, faucibus sit amet urna. Aliquam erat volutpat.
                         </Text>
-                        <TextInput
-                            style={styles.inputTextField}
-                            mode="outlined"
+                        <StyledTextInput
                             label="Name"
                             value={newCommunityForm.name}
                             onChangeText={value => handleTextInputChanges('name', value)}
                         />
-                        <TextInput
-                            style={styles.inputTextField}
-                            mode="outlined"
+                        <StyledTextInput
                             label="Description"
                             value={newCommunityForm.description}
                             onChangeText={value => handleTextInputChanges('description', value)}
                             multiline={true}
                             numberOfLines={6}
                         />
+                        <StyledTextInput
+                            label="City"
+                            value={newCommunityForm.location}
+                            onChangeText={value => handleTextInputChanges('location', value)}
+                        />
                     </Card.Content>
                 </Card>
                 <Card style={{ marginVertical: 15 }}>
                     <Card.Content>
+                        <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
                         <View style={styles.pickerBorder}>
                             <Picker
                                 selectedValue={newCommunityForm.currency}
                                 style={styles.picker}
-                                onValueChange={(text, i) => setNewCommunityForm({ ...newCommunityForm, currency: text })}>
+                                onValueChange={(text, i) => setNewCommunityForm({ ...newCommunityForm, currency: text })}
+                            >
                                 <Picker.Item label="Euro (EUR)" value="eur" />
                                 <Picker.Item label="Dollar (USD)" value="usd" />
                             </Picker>
                         </View>
-                        <TextInput
-                            style={styles.inputTextField}
-                            mode="outlined"
-                            label="Claim AMount"
+                        <StyledTextInput
+                            label="Claim Amount"
+                            keyboardType="numeric"
                             value={newCommunityForm.amountByClaim}
                             onChangeText={value => handleTextInputChanges('amountByClaim', value)}
                         />
+                        <Paragraph style={styles.inputTextFieldLabel}>Base Interval</Paragraph>
                         <View style={styles.pickerBorder}>
                             <Picker
                                 selectedValue={newCommunityForm.baseInterval}
                                 style={styles.picker}
-                                onValueChange={(value) => handleTextInputChanges('baseInterval', value)}>
+                                onValueChange={(value) => handleTextInputChanges('baseInterval', value)}
+                            >
                                 <Picker.Item label="Daily" value="86400" />
                             </Picker>
                         </View>
-                        <TextInput
-                            style={styles.inputTextField}
-                            mode="outlined"
+                        <StyledTextInput
+                            label="Incremental Time (in hours)"
                             keyboardType="numeric"
-                            label="Time Increment (Hours)"
                             value={newCommunityForm.incrementalInterval}
                             onChangeText={value => handleTextInputChanges('incrementalInterval', value)}
                         />
-                        <TextInput
-                            style={styles.inputTextField}
-                            mode="outlined"
+                        <StyledTextInput
+                            label="Max Claim"
                             keyboardType="numeric"
-                            label="Max Amount"
                             value={newCommunityForm.claimHardcap}
                             onChangeText={value => handleTextInputChanges('claimHardcap', value)}
                         />
@@ -280,156 +220,15 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                 </Card>
                 <Button
                     mode="outlined"
-                    onPress={() => console.log('oi')}
+                    loading={sending}
+                    onPress={() => submitNewCommunity()}
                 >
                     Create Community
                 </Button>
-                <Text style={{ color: 'grey' }}>
+                <Text style={{ color: 'grey', marginVertical: 20 }}>
                     Praesent eget condimentum enim, elementum viverra dui. Nam aliquam, nisi sit amet eleifend finibus, tellus metus dignissim est, vel fringilla urna mi ut lorem. Suspendisse blandit bibendum nunc, non bibendum mauris laoreet non. Morbi eget sollicitudin nunc. In laoreet nisi ac lacus maximus aliquet. Ut ullamcorper rutrum dolor non fringilla. Donec nunc metus, pulvinar ac dapibus eget, faucibus sit amet urna. Aliquam erat volutpat.
                 </Text>
             </View>
-
-
-
-            {/* <Card>
-                <Card.Cover
-                    style={{ height: 100 }}
-                    source={{ uri: 'https://picsum.photos/600' }}
-                />
-                <Card.Content style={styles.cardContent}>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        label="Name"
-                        value={newCommunityForm.name}
-                        onChangeText={value => handleTextInputChanges('name', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.name ? 'flex' : 'none'
-                        }}
-                    >
-                        Name is required!
-                    </Paragraph>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        label="Description"
-                        value={newCommunityForm.description}
-                        onChangeText={value => handleTextInputChanges('description', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.description ? 'flex' : 'none'
-                        }}
-                    >
-                        Description is required!
-                    </Paragraph>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        label="Location"
-                        value={newCommunityForm.location}
-                        onChangeText={value => handleTextInputChanges('location', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.location ? 'flex' : 'none'
-                        }}
-                    >
-                        Location is required!
-                    </Paragraph>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        label="Cover Image"
-                        value={newCommunityForm.coverImage}
-                        onChangeText={value => handleTextInputChanges('coverImage', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.coverImage ? 'flex' : 'none'
-                        }}
-                    >
-                        Cover Image is required!
-                    </Paragraph>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        keyboardType="numeric"
-                        label="Claim Amount"
-                        value={newCommunityForm.amountByClaim}
-                        onChangeText={value => handleTextInputChanges('amountByClaim', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.amountByClaim ? 'flex' : 'none'
-                        }}
-                    >
-                        Claim Amount is required!
-                    </Paragraph>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        keyboardType="numeric"
-                        label="Base Interval"
-                        value={newCommunityForm.baseInterval}
-                        onChangeText={value => handleTextInputChanges('baseInterval', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.baseInterval ? 'flex' : 'none'
-                        }}
-                    >
-                        baseInterval is required!
-                    </Paragraph>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        keyboardType="numeric"
-                        label="Time Increment"
-                        value={newCommunityForm.incrementalInterval}
-                        onChangeText={value => handleTextInputChanges('incrementalInterval', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.incrementalInterval ? 'flex' : 'none'
-                        }}
-                    >
-                        Time Increment is required!
-                    </Paragraph>
-                    <TextInput
-                        style={styles.inputTextField}
-                        mode="outlined"
-                        keyboardType="numeric"
-                        label="Max Amount"
-                        value={newCommunityForm.claimHardcap}
-                        onChangeText={value => handleTextInputChanges('claimHardcap', value)}
-                    />
-                    <Paragraph
-                        style={{
-                            color: 'red',
-                            display: communityFormError.claimHardcap ? 'flex' : 'none'
-                        }}
-                    >
-                        Max Amount is required!
-                    </Paragraph>
-                    <Button
-                        style={styles.inputTextField}
-                        mode="contained"
-                        onPress={() => submitNewCommunity()}
-                    >
-                        Create Community
-                    </Button>
-                </Card.Content>
-            </Card> */}
         </ScrollView>
     );
 }
@@ -439,8 +238,17 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         marginRight: 30,
     },
+    inputTextFieldLabel: {
+        color: 'grey',
+        fontFamily: 'sans-serif-thin'
+    },
     inputTextField: {
-        marginVertical: 10,
+        padding: 10,
+        marginVertical: 5,
+        borderStyle: 'solid',
+        borderColor: 'grey',
+        borderWidth: 1,
+        borderRadius: 5
     },
     container: {
         margin: 20
