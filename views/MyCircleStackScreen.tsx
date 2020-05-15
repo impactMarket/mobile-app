@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import MyCircleScreen from './mycircle/MyCircleScreen';
-import CreateCommunityScreen from './explore/CreateCommunityScreen';
+import CreateCommunityScreen from './CreateCommunityScreen';
 
 
 

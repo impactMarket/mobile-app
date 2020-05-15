@@ -31,7 +31,7 @@ const dummyData = {
         }
     ]
 };
-interface ISettingsProps {
+interface IAccountScreenProps {
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -42,7 +42,7 @@ const connector = connect(mapStateToProps)
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-type Props = PropsFromRedux & ISettingsProps
+type Props = PropsFromRedux & IAccountScreenProps
 interface IActivityListItem {
     from: string;
     description: string;
@@ -50,10 +50,10 @@ interface IActivityListItem {
     status: string;
     timestamp: number;
 }
-interface ISettingsState {
+interface IAccountScreenState {
     activities: IActivityListItem[];
 }
-class Settings extends React.Component<Props, ISettingsState> {
+class AccountScreen extends React.Component<Props, IAccountScreenState> {
 
     constructor(props: any) {
         super(props);
@@ -96,7 +96,7 @@ class Settings extends React.Component<Props, ISettingsState> {
                 <Appbar.Header style={styles.appbar}>
                     <Appbar.Content title="Pay" />
                     <Appbar.Action icon="help-circle-outline" />
-                    <Appbar.Action icon="qrcode" />
+                    <Appbar.Action icon="qrcode" onPress={() => /** onPress={() => navigation.navigate('UserShowScanQRScreen') */ console.log('oi') }/>
                 </Appbar.Header>
                 <ScrollView style={styles.scrollView}>
 
@@ -201,4 +201,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connector(Settings);
+export default connector(AccountScreen);

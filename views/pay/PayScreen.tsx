@@ -11,6 +11,7 @@ import { Appbar, Avatar, List, Card, Divider, Button, Headline } from 'react-nat
 import { ethers } from 'ethers';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
 
 interface IPayScreenProps {
@@ -37,6 +38,8 @@ interface IPayment {
     note: string;
 }
 function PayScreen(props: Props) {
+    const navigation = useNavigation();
+
     const [activities, setActivities] = useState<IPayScreenListItem[]>([]);
     const [payment, setPayment] = useState<IPayment>({ amount: '', to: '', note: '' });
 
@@ -57,7 +60,6 @@ function PayScreen(props: Props) {
                     timestamp: 17263179,
                 }
             ];
-            console.log('load history');
             return activities.sort((a, b) => a.timestamp - b.timestamp);
         }
         setActivities(loadHistory());
@@ -67,9 +69,9 @@ function PayScreen(props: Props) {
         <SafeAreaView>
             <Appbar.Header style={styles.appbar}>
                 <Appbar.Content title="Pay" />
-                <Text>{'Balance: ' + props.user.celoInfo.balance + '$'}</Text>
+                <Text>{`Balance: ${props.user.celoInfo.balance}$`}</Text>
                 <Appbar.Action icon="help-circle-outline" />
-                <Appbar.Action icon="qrcode" />
+                <Appbar.Action icon="qrcode" onPress={() => navigation.navigate('UserShowScanQRScreen')} />
             </Appbar.Header>
             <ScrollView style={styles.scrollView}>
                 <Card style={styles.card}>

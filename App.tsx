@@ -23,8 +23,8 @@ import {
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CommunityStackScreen from './views/CommunityStackScreen';
-import Activity from './views/pay/PayScreen';
-import Settings from './views/account/Account';
+import PayStackScreen from './views/PayStackScreen';
+import AccountStackScreen from './views/AccountStackScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
@@ -183,7 +183,7 @@ export default class App extends React.Component<{}, IAppState> {
                             {tabsToUser()}
                             <Tab.Screen
                                 name="Pay"
-                                component={Activity}
+                                component={PayStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
                                         <MaterialIcons name="attach-money" size={props.size} color={props.color} />
@@ -192,7 +192,7 @@ export default class App extends React.Component<{}, IAppState> {
                             />
                             <Tab.Screen
                                 name="Account"
-                                component={Settings}
+                                component={AccountStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
                                         <Fontisto name="wallet" size={props.size} color={props.color} />

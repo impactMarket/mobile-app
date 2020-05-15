@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import CommunityDetailsScreen from './communities/CommunityDetailsScreen';
-import CreateCommunityScreen from './explore/CreateCommunityScreen';
+import CreateCommunityScreen from './CreateCommunityScreen';
 
 
 
