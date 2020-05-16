@@ -141,7 +141,10 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         const tabsToUser = () => {
-            if (store.getState().user.celoInfo.address.length === 0) {
+            const user = store.getState().user;
+            if (user.celoInfo.address.length === 0 || (
+                user.community.isBeneficiary === false && user.community.isCoordinator === false
+            )) {
                 return <>
                     <Tab.Screen
                         name="My Circle"

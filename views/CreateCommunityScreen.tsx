@@ -66,9 +66,9 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                 // TODO: do some stuff
             }
 
-            let loc = await Location.getCurrentPositionAsync({});
+            let loc = await Location.getCurrentPositionAsync();
             setLocation(loc);
-            // console.log(loc);
+            console.log('loc', loc);
         }
         requestAccessToLocation();
     }, []);

@@ -37,6 +37,7 @@ import { getBeneficiariesByCommunity } from '../../../services/api';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 
 interface ICommunityManagerViewProps {
@@ -53,24 +54,28 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & ICommunityManagerViewProps
 interface ICommunityManagerViewState {
-    beneficiaryRequests: IBeneficiary[];
+    newBeneficiaryAddress: string;
     beneficiaries: IBeneficiary[];
-    modalConfirmation: boolean;
+    modalNewBeneficiary: boolean;
     requestConfirmation?: IBeneficiary;
     community?: ICommunityViewInfo;
+    hasPermission: boolean;
+    scanned: boolean;
 }
 class CommunityManagerView extends React.Component<Props, ICommunityManagerViewState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
-            beneficiaryRequests: [],
+            newBeneficiaryAddress: '',
             beneficiaries: [],
-            modalConfirmation: false,
+            modalNewBeneficiary: false,
+            hasPermission: false,
+            scanned: false,
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         const { _address } = this.props.network.contracts.communityContract;
         getCommunityByContractAddress(
             _address,
@@ -79,8 +84,6 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                 // TODO: show error
                 return;
             }
-            getBeneficiariesRequestByCommunity(community.publicId)
-                .then((beneficiaryRequests) => this.setState({ beneficiaryRequests }))
             getBeneficiariesByCommunity(community.contractAddress)
                 .then((beneficiaries) => this.setState({ beneficiaries }))
 
@@ -100,10 +103,12 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             }
             this.setState({ community: _community });
         });
+        const { status } = await BarCodeScanner.requestPermissionsAsync();
+        this.setState({ hasPermission: status === 'granted' });
     }
 
-    handleAcceptBeneficiaryRequest = async () => {
-        const { requestConfirmation, community } = this.state;
+    handleAddBeneficiary = async () => {
+        const { newBeneficiaryAddress, community } = this.state;
         const { user, network } = this.props;
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
@@ -113,52 +118,65 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             return;
         }
 
+        // TODO: validate newBeneficiaryAddress
+
         celoWalletRequest(
             address,
             communityContract.options.address,
-            await communityContract.methods.addBeneficiary(requestConfirmation?.walletAddress),
+            await communityContract.methods.addBeneficiary(newBeneficiaryAddress),
             'accept_beneficiary_request',
             network,
-        ).then(async (result) => {
-            // TODO: update UI (sending)
-            const success = await acceptBeneficiaryRequest(result.transactionHash, community!.publicId);
-            if (success) {
-                Alert.alert(
-                    'Success',
-                    'You\'ve accepted the beneficiary request!',
-                    [
-                        { text: 'OK' },
-                    ],
-                    { cancelable: false }
-                );
-            } else {
-                Alert.alert(
-                    'Failure',
-                    'An error happened while accepting the request!',
-                    [
-                        { text: 'OK' },
-                    ],
-                    { cancelable: false }
-                );
-            }
-            // TODO: update UI (sent)
-            this.setState({ modalConfirmation: false })
-        })
+        ).then(() => {
+            Alert.alert(
+                'Success',
+                'You\'ve accepted the beneficiary request!',
+                [
+                    { text: 'OK' },
+                ],
+                { cancelable: false }
+            );
+        }).catch(() => {
+            Alert.alert(
+                'Failure',
+                'An error happened while accepting the request!',
+                [
+                    { text: 'OK' },
+                ],
+                { cancelable: false }
+            );
+
+        }).finally(() => {
+            this.setState({ modalNewBeneficiary: false })
+        });
     }
+
+    handleBarCodeScanned = ({ type, data }: { type: any, data: any }) => {
+        this.setState({ scanned: true, newBeneficiaryAddress: data });
+    };
 
     render() {
         const {
-            beneficiaryRequests,
-            modalConfirmation,
+            newBeneficiaryAddress,
+            modalNewBeneficiary,
             requestConfirmation,
             beneficiaries,
             community,
+            hasPermission,
+            scanned,
         } = this.state;
         if (community === undefined) {
             return <View>
                 <Paragraph>Loading...</Paragraph>
             </View>
         }
+
+        if (hasPermission === null) {
+            return <Text>Requesting for camera permission</Text>;
+        }
+        if (hasPermission === false) {
+            return <Text>No access to camera</Text>;
+        }
+
         return (
             <ScrollView>
                 <ImageBackground
@@ -229,7 +247,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                             <Button
                                 mode="outlined"
                                 style={{ width: '100%' }}
-                                onPress={() => console.log('Pressed')}
+                                onPress={() => this.setState({ modalNewBeneficiary: true })}
                             >
                                 Add Beneficiary
                             </Button>
@@ -322,7 +340,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                 key={request.walletAddress}
                                 title={request.walletAddress}
                                 description={request.createdAt}
-                                onPress={() => this.setState({ requestConfirmation: request, modalConfirmation: true })}
+                                onPress={() => this.setState({ requestConfirmation: request, modalNewBeneficiary: true })}
                             />
                         )}
                     </List.Section>
@@ -339,16 +357,47 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                 </View>
                 <Portal>
                     <Dialog
-                        visible={modalConfirmation}
-                        onDismiss={() => this.setState({ modalConfirmation: false })}
+                        visible={modalNewBeneficiary}
+                        onDismiss={() => this.setState({ modalNewBeneficiary: false })}
                     >
                         <Dialog.Title>Confirmation</Dialog.Title>
-                        <Dialog.Content>
-                            <Paragraph>Do you really want to approve {requestConfirmation?.walletAddress}?</Paragraph>
+                        <Dialog.Content style={{ height: 350, width: '100%' }}>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    flexDirection: 'column',
+                                    justifyContent: 'flex-end',
+                                }}>
+
+                                <BarCodeScanner
+                                    onBarCodeScanned={this.handleBarCodeScanned}
+                                    style={StyleSheet.absoluteFillObject}
+                                />
+
+                                {scanned && <Button onPress={() => this.setState({ scanned: false })}>Tap to Scan Again</Button>}
+                            </View>
+                            <Paragraph>Current scanned address:</Paragraph>
+                            <Paragraph style={{ fontWeight: 'bold' }}>{newBeneficiaryAddress}</Paragraph>
+                            <Paragraph>Click Add to add as beneficiary</Paragraph>
                         </Dialog.Content>
                         <Dialog.Actions>
-                            <Button mode="contained" style={{ marginRight: 10 }} onPress={this.handleAcceptBeneficiaryRequest}>Accept</Button>
-                            <Button mode="contained" onPress={() => this.setState({ modalConfirmation: false })}>Done</Button>
+                            <Button
+                                mode="contained"
+                                disabled={newBeneficiaryAddress.length === 0}
+                                style={{ marginRight: 10 }}
+                                onPress={this.handleAddBeneficiary}
+                            >
+                                Add
+                                </Button>
+                            <Button
+                                mode="contained"
+                                onPress={() => this.setState({
+                                    modalNewBeneficiary: false,
+                                    newBeneficiaryAddress: ''
+                                })}
+                            >
+                                Cancel
+                            </Button>
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>
