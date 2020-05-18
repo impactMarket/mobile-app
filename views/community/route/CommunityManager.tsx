@@ -13,12 +13,10 @@ import {
 import {
     IRootState,
     IBeneficiary,
-    ICommunity,
     ICommunityViewInfo,
 } from '../../../helpers/types';
 import {
     Button,
-    List,
     Portal,
     Dialog,
     Paragraph,
@@ -28,16 +26,20 @@ import {
     ProgressBar
 } from 'react-native-paper';
 import {
-    getBeneficiariesRequestByCommunity,
     getCommunityByContractAddress,
     celoWalletRequest,
-    acceptBeneficiaryRequest
+    getBeneficiariesInCommunity,
+    getCommunityManagersInCommunity,
+    getCommunityRaisedAmount,
+    getCommunityClaimedAmount,
+    getBackersInCommunity,
+    getCommunityVars,
 } from '../../../services';
-import { getBeneficiariesByCommunity } from '../../../services/api';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { calculateCommunityProgress } from '../../../helpers';
 
 
 interface ICommunityManagerViewProps {
@@ -55,7 +57,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & ICommunityManagerViewProps
 interface ICommunityManagerViewState {
     newBeneficiaryAddress: string;
-    beneficiaries: IBeneficiary[];
     modalNewBeneficiary: boolean;
     requestConfirmation?: IBeneficiary;
     community?: ICommunityViewInfo;
@@ -68,7 +69,6 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
         super(props);
         this.state = {
             newBeneficiaryAddress: '',
-            beneficiaries: [],
             modalNewBeneficiary: false,
             hasPermission: false,
             scanned: false,
@@ -77,32 +77,31 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
 
     componentDidMount = async () => {
         const { _address } = this.props.network.contracts.communityContract;
-        getCommunityByContractAddress(
-            _address,
-        ).then(async (community) => {
-            if (community === undefined) {
-                // TODO: show error
-                return;
-            }
-            getBeneficiariesByCommunity(community.contractAddress)
-                .then((beneficiaries) => this.setState({ beneficiaries }))
+        const community = await getCommunityByContractAddress(_address);
+        if (community === undefined) {
+            // TODO: show error
+            return;
+        }
+        console.log(community.contractAddress);
+        const beneficiaries = await getBeneficiariesInCommunity(community.contractAddress);
+        const managers = await getCommunityManagersInCommunity(community.contractAddress);
+        const backers = await getBackersInCommunity(community.contractAddress);
+        const vars = await getCommunityVars(community.contractAddress);
 
-            const stableToken = await this.props.network.kit.contracts.getStableToken();
-            const [cUSDBalanceBig, cUSDDecimals] = await Promise.all(
-                [stableToken.balanceOf(_address), stableToken.decimals()]
-            )
-            let cUSDBalance = cUSDBalanceBig.div(10 ** cUSDDecimals).toFixed(2)
+        const claimed = await getCommunityClaimedAmount(community.contractAddress);
+        const raised = await getCommunityRaisedAmount(community.contractAddress);
 
-            const _community: ICommunityViewInfo = {
-                ...community,
-                backers: 5,
-                beneficiaries: 8,
-                ubiRate: 1,
-                totalClaimed: 0.2,
-                totalRaised: parseFloat(cUSDBalance),
-            }
-            this.setState({ community: _community });
-        });
+        const _community: ICommunityViewInfo = {
+            ...community,
+            backers,
+            beneficiaries,
+            managers,
+            ubiRate: 1,
+            totalClaimed: claimed,
+            totalRaised: raised,
+            vars,
+        }
+        this.setState({ community: _community });
         const { status } = await BarCodeScanner.requestPermissionsAsync();
         this.setState({ hasPermission: status === 'granted' });
     }
@@ -158,8 +157,6 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
         const {
             newBeneficiaryAddress,
             modalNewBeneficiary,
-            requestConfirmation,
-            beneficiaries,
             community,
             hasPermission,
             scanned,
@@ -204,12 +201,14 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 25 }}>
                         <Button
                             mode="outlined"
+                            disabled={true}
                             onPress={() => console.log('Pressed')}
                         >
                             Edit
                         </Button>
                         <Button
                             mode="outlined"
+                            disabled={true}
                             style={{ marginLeft: 'auto' }}
                             onPress={() => console.log('Pressed')}
                         >
@@ -225,23 +224,13 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                         />
                         <Card.Content>
                             <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
-                                <Subheading>Pending</Subheading>
-                                <Button
-                                    mode="contained"
-                                    style={{ marginLeft: 'auto' }}
-                                    onPress={() => console.log('Pressed')}
-                                >
-                                    4
-                                </Button>
-                            </View>
-                            <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
                                 <Subheading>Accepted</Subheading>
                                 <Button
                                     mode="contained"
                                     style={{ marginLeft: 'auto' }}
                                     onPress={() => console.log('Pressed')}
                                 >
-                                    45
+                                    {community.beneficiaries.length}
                                 </Button>
                             </View>
                             <Button
@@ -268,7 +257,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                     style={{ marginLeft: 'auto' }}
                                     onPress={() => console.log('Pressed')}
                                 >
-                                    2
+                                    {community.managers.length}
                                 </Button>
                             </View>
                             <Button
@@ -284,11 +273,11 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                         <Card.Content>
                             <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5, justifyContent: 'center' }}>
                                 <View style={{ width: '50%', alignItems: 'center' }}>
-                                    <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.beneficiaries}</Title>
+                                    <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.beneficiaries.length}</Title>
                                     <Text style={{ color: 'grey' }}>Beneficiaries</Text>
                                 </View>
                                 <View style={{ width: '50%', alignItems: 'center' }}>
-                                    <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.backers}</Title>
+                                    <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.backers.length}</Title>
                                     <Text style={{ color: 'grey' }}>Backers</Text>
                                 </View>
                             </View>
@@ -300,7 +289,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                         backgroundColor: '#d6d6d6',
                                         position: 'absolute'
                                     }}
-                                    progress={community.totalRaised}
+                                    progress={calculateCommunityProgress('raised', community)}
                                     color="#5289ff"
                                 />
                                 <ProgressBar
@@ -309,16 +298,17 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                         marginTop: 10,
                                         backgroundColor: 'rgba(255,255,255,0)'
                                     }}
-                                    progress={community.totalClaimed}
+                                    progress={calculateCommunityProgress('claimed', community)}
                                     color="#50ad53"
                                 />
                             </View>
                             <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
-                                <Text>37% Claimed</Text>
+                                <Text>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
                                 <Text style={{ marginLeft: 'auto' }}>${community.totalRaised} Raised</Text>
                             </View>
                             <Button
                                 mode="outlined"
+                                disabled={true}
                                 style={{ width: '100%' }}
                                 onPress={() => console.log('Pressed')}
                             >
@@ -326,34 +316,6 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                             </Button>
                         </Card.Content>
                     </Card>
-                    {/* <View>
-                        <Paragraph>contractAddress {community.contractAddress}</Paragraph>
-                        <Paragraph>createdAt {community.createdAt}</Paragraph>
-                        <Paragraph>description {community.description}</Paragraph>
-                        <Paragraph>location {community.location.title}</Paragraph>
-                        <Paragraph>name {community.name}</Paragraph>
-                    </View>
-                    <List.Section>
-                        <List.Subheader>Pending requests</List.Subheader>
-                        {beneficiaryRequests.map((request) =>
-                            <List.Item
-                                key={request.walletAddress}
-                                title={request.walletAddress}
-                                description={request.createdAt}
-                                onPress={() => this.setState({ requestConfirmation: request, modalNewBeneficiary: true })}
-                            />
-                        )}
-                    </List.Section>
-                    <List.Section>
-                        <List.Subheader>Community Beneficiaries</List.Subheader>
-                        {beneficiaries.map((request) =>
-                            <List.Item
-                                key={request.walletAddress}
-                                title={request.walletAddress}
-                                description={request.createdAt}
-                            />
-                        )}
-                    </List.Section> */}
                 </View>
                 <Portal>
                     <Dialog
