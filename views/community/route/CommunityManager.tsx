@@ -23,7 +23,8 @@ import {
     Card,
     Subheading,
     Title,
-    ProgressBar
+    ProgressBar,
+    List
 } from 'react-native-paper';
 import {
     getCommunityByContractAddress,
@@ -58,6 +59,8 @@ type Props = PropsFromRedux & ICommunityManagerViewProps
 interface ICommunityManagerViewState {
     newBeneficiaryAddress: string;
     modalNewBeneficiary: boolean;
+    modalListBeneficiary: boolean;
+    modalListManagers: boolean;
     requestConfirmation?: IBeneficiary;
     community?: ICommunityViewInfo;
     hasPermission: boolean;
@@ -70,6 +73,8 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
         this.state = {
             newBeneficiaryAddress: '',
             modalNewBeneficiary: false,
+            modalListBeneficiary: false,
+            modalListManagers: false,
             hasPermission: false,
             scanned: false,
         }
@@ -82,14 +87,13 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             // TODO: show error
             return;
         }
-        console.log(community.contractAddress);
-        const beneficiaries = await getBeneficiariesInCommunity(community.contractAddress);
-        const managers = await getCommunityManagersInCommunity(community.contractAddress);
-        const backers = await getBackersInCommunity(community.contractAddress);
-        const vars = await getCommunityVars(community.contractAddress);
+        const beneficiaries = await getBeneficiariesInCommunity(_address);
+        const managers = await getCommunityManagersInCommunity(_address);
+        const backers = await getBackersInCommunity(_address);
+        const vars = await getCommunityVars(_address);
 
-        const claimed = await getCommunityClaimedAmount(community.contractAddress);
-        const raised = await getCommunityRaisedAmount(community.contractAddress);
+        const claimed = await getCommunityClaimedAmount(_address);
+        const raised = await getCommunityRaisedAmount(_address);
 
         const _community: ICommunityViewInfo = {
             ...community,
@@ -126,6 +130,14 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             'accept_beneficiary_request',
             network,
         ).then(() => {
+
+            // TODO: update UI
+            setTimeout(() => {
+                const { _address } = this.props.network.contracts.communityContract;
+                getBeneficiariesInCommunity(_address)
+                    .then((beneficiaries) => this.setState({ community: { ...this.state.community!, beneficiaries } }));
+            }, 10000);
+
             Alert.alert(
                 'Success',
                 'You\'ve accepted the beneficiary request!',
@@ -157,6 +169,8 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
         const {
             newBeneficiaryAddress,
             modalNewBeneficiary,
+            modalListBeneficiary,
+            modalListManagers,
             community,
             hasPermission,
             scanned,
@@ -227,8 +241,9 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                 <Subheading>Accepted</Subheading>
                                 <Button
                                     mode="contained"
+                                    disabled={community.beneficiaries.length === 0}
                                     style={{ marginLeft: 'auto' }}
-                                    onPress={() => console.log('Pressed')}
+                                    onPress={() => this.setState({ modalListBeneficiary: true })}
                                 >
                                     {community.beneficiaries.length}
                                 </Button>
@@ -255,7 +270,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                 <Button
                                     mode="contained"
                                     style={{ marginLeft: 'auto' }}
-                                    onPress={() => console.log('Pressed')}
+                                    onPress={() => this.setState({ modalListManagers: true })}
                                 >
                                     {community.managers.length}
                                 </Button>
@@ -304,7 +319,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                             </View>
                             <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
                                 <Text>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
-                                <Text style={{ marginLeft: 'auto' }}>${community.totalRaised} Raised</Text>
+                                <Text style={{ marginLeft: 'auto' }}>${community.totalRaised.toString()} Raised</Text>
                             </View>
                             <Button
                                 mode="outlined"
@@ -359,6 +374,52 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                                 })}
                             >
                                 Cancel
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                    <Dialog
+                        visible={modalListBeneficiary}
+                        onDismiss={() => this.setState({ modalListBeneficiary: false })}
+                    >
+                        <Dialog.Title>Beneficiaries</Dialog.Title>
+                        <Dialog.Content>
+                            {community.beneficiaries.map((beneficiary) => <List.Item
+                                key={beneficiary}
+                                title="User Name"
+                                description={`${beneficiary.slice(0, 12)}..${beneficiary.slice(31, 42)}`}
+                            />)}
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button
+                                mode="contained"
+                                onPress={() => this.setState({
+                                    modalListBeneficiary: false
+                                })}
+                            >
+                                Close
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                    <Dialog
+                        visible={modalListManagers}
+                        onDismiss={() => this.setState({ modalListManagers: false })}
+                    >
+                        <Dialog.Title>Managers</Dialog.Title>
+                        <Dialog.Content>
+                            {community.managers.map((manager) => <List.Item
+                                key={manager}
+                                title="User Name"
+                                description={`${manager.slice(0, 12)}..${manager.slice(31, 42)}`}
+                            />)}
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button
+                                mode="contained"
+                                onPress={() => this.setState({
+                                    modalListManagers: false
+                                })}
+                            >
+                                Close
                             </Button>
                         </Dialog.Actions>
                     </Dialog>
