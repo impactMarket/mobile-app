@@ -48,7 +48,7 @@ import {
     DefaultTheme,
     Provider as PaperProvider,
 } from 'react-native-paper';
-import { ContractKit } from '@celo/contractkit/lib/kit';
+import { ContractKit } from '@celo/contractkit';
 import { ethers } from 'ethers';
 import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
@@ -60,6 +60,7 @@ import {
     findComunityToBeneficicary,
     findComunityToManager,
 } from './services';
+import axios from 'axios';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));

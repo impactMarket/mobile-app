@@ -16,6 +16,11 @@ const ENV = {
          * Contract Address to use in dev
          */
         impactMarketContractAddress: '0xD84673f624C45a23eCD73AeFd4069214092aA886',
+
+        /**
+         * Used to query
+         */
+        baseBlockScoutApiUrl: 'https://alfajores-blockscout.celo-testnet.org/api'
     },
     prod: {
         /**
@@ -32,13 +37,18 @@ const ENV = {
          * Contract Address to use in dev
          */
         impactMarketContractAddress: '0x74DF0a14C1358e78A904822ddCA8b85D969b3c3c',
+
+        /**
+         * Used to query
+         */
+        baseBlockScoutApiUrl: 'https://alfajores-blockscout.celo-testnet.org/api'
     }
 }
 
 function getEnvVars() {
     if (Constants.manifest.packagerOpts !== undefined) {
         if (Constants.manifest.packagerOpts.dev !== undefined) {
-            return Constants.manifest.packagerOpts.dev ? ENV.dev: ENV.prod;
+            return Constants.manifest.packagerOpts.dev ? ENV.dev : ENV.prod;
         }
     }
     return ENV.prod;

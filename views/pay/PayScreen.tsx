@@ -12,6 +12,8 @@ import { ethers } from 'ethers';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import config from '../../config';
 
 
 interface IPayScreenProps {
@@ -43,26 +45,38 @@ function PayScreen(props: Props) {
     const [activities, setActivities] = useState<IPayScreenListItem[]>([]);
     const [payment, setPayment] = useState<IPayment>({ amount: '', to: '', note: '' });
 
-    // TODO: load activity history
     useEffect(() => {
-        const loadHistory = () => {
-            const activities = [
-                {
-                    from: 'Fehsolna',
-                    phone: 89713782,
-                    txs: 5,
-                    timestamp: 17263188,
-                },
-                {
-                    from: 'Curitiba',
-                    phone: 72319093,
-                    txs: 1,
-                    timestamp: 17263179,
+        const loadHistory = async () => {
+            // also get and store transactions
+            // TODO: move this to API
+            const results = await axios.get(
+                `${config.baseBlockScoutApiUrl}?module=account&action=tokentx&address=${props.user.celoInfo.address}`);
+            // filter necessary
+            const rawTxs: { from: string, to: string, timestamp: number }[] = results
+                .data.result.map((result: any) => (
+                    { from: result.from, to: result.to, timestamp: parseInt(result.timeStamp, 10) }
+                )).slice(0, 20);
+            let txs: { timestamp: number, address: string }[] = rawTxs.map((tx) => {
+                if (tx.from.toLowerCase() === props.user.celoInfo.address.toLowerCase()) {
+                    return { timestamp: tx.timestamp, address: tx.to }
                 }
-            ];
-            return activities.sort((a, b) => a.timestamp - b.timestamp);
+                return { timestamp: tx.timestamp, address: tx.from }
+            })
+            // sort
+            txs = txs.sort((a, b) => a.timestamp - b.timestamp);
+            // group
+            const result: IPayScreenListItem[] = [];
+            const groupedTxs = txs.reduce((r, a) => {
+                r[a.address] = r[a.address] || [];
+                r[a.address].push(a);
+                return r;
+            }, Object.create(null));
+            Object.keys(groupedTxs).forEach((k) => result.push(
+                { from: k, phone: 555, txs: groupedTxs[k].length, timestamp: groupedTxs[k][0].timestamp }
+            ))
+            return result.slice(0, Math.min(5, result.length));
         }
-        setActivities(loadHistory());
+        loadHistory().then(setActivities);
     }, []);
 
     return (
@@ -113,7 +127,7 @@ function PayScreen(props: Props) {
                         subtitle="RECENT"
                     />
                     <Card.Content>
-                        {activities.map((activity) => <View key={activity.timestamp}>
+                        {activities.map((activity) => <View key={activity.from}>
                             <Divider />
                             <List.Item
                                 title={activity.from}
