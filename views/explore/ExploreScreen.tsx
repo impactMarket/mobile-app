@@ -25,6 +25,7 @@ import {
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
+import { BigNumber } from 'ethers/utils';
 
 
 interface IExploreScreenProps {
@@ -71,11 +72,13 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                     txCreationObj: community.txCreationObj,
                     createdAt: community.createdAt,
                     updatedAt: community.updatedAt,
-                    backers: Math.floor(Math.random() * 6) + 1,
-                    beneficiaries: Math.floor(Math.random() * 6) + 1,
+                    // TODO: get real values
+                    backers: ['0x0','0x0','0x0'],
+                    beneficiaries: ['0x0','0x0','0x0'],
+                    managers: ['0x0','0x0','0x0'],
                     ubiRate: 1,
-                    totalClaimed: 0.1,
-                    totalRaised: 0.3,
+                    totalClaimed: new BigNumber(10),
+                    totalRaised: new BigNumber(30),
                 });
             });
             this.setState({ communities: result });
@@ -152,10 +155,10 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                                 <DataTable>
                                     <DataTable.Row style={{ borderBottomColor: 'transparent', marginBottom: -20 }}>
                                         <DataTable.Cell>
-                                            <Text style={{ fontWeight: 'bold' }}>{community.backers}</Text>
+                                            <Text style={{ fontWeight: 'bold' }}>{community.backers.length}</Text>
                                         </DataTable.Cell>
                                         <DataTable.Cell>
-                                            <Text style={{ fontWeight: 'bold' }}>{community.beneficiaries}</Text>
+                                            <Text style={{ fontWeight: 'bold' }}>{community.beneficiaries.length}</Text>
                                         </DataTable.Cell>
                                         <DataTable.Cell>
                                             <Text style={{ fontWeight: 'bold' }}>${community.ubiRate}/day</Text>
@@ -182,7 +185,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                                             backgroundColor: '#d6d6d6',
                                             position: 'absolute'
                                         }}
-                                        progress={community.totalRaised}
+                                        progress={community.totalRaised.toNumber() / 100}
                                         color="#5289ff"
                                     />
                                     <ProgressBar
@@ -191,7 +194,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                                             marginTop: 10,
                                             backgroundColor: 'rgba(255,255,255,0)'
                                         }}
-                                        progress={community.totalClaimed}
+                                        progress={community.totalClaimed.toNumber() / 100}
                                         color="#50ad53"
                                     />
                                 </View>
