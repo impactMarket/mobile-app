@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiary } from '../helpers/types';
+import { ICommunity, IBeneficiary, ICommunityVars } from '../helpers/types';
+import { BigNumber } from 'ethers/utils';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -100,29 +101,6 @@ async function getBeneficiariesRequestByCommunity(
     return response;
 }
 
-async function getBeneficiariesByCommunity(
-    communityContractAddress: string,
-): Promise<IBeneficiary[]> {
-    let response = [] as IBeneficiary[];
-    try {
-        const communityPublicId =
-            (await getCommunityByContractAddress(communityContractAddress))!
-                .publicId;
-        const result = await axios.get(`/transactions/beneficiariesof/${communityContractAddress}`);
-        response = result.data.map((b: any) => ({
-            walletAddress: b.values._account,
-            communityPublicId,
-            createdAt: b.createdAt,
-            updatedAt: b.updatedAt,
-        }));
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
-}
-
 async function findComunityToBeneficicary(
     beneficiaryAddress: string,
 ): Promise<ICommunity | undefined> {
@@ -203,14 +181,114 @@ async function getCommunityByContractAddress(
     return response;
 }
 
+async function getBeneficiariesInCommunity(
+    communityContractAddress: string,
+): Promise<string[]> {
+    let response: string[] = [];
+    try {
+        const result = await axios.get(`/transactions/community/beneficiaries/${communityContractAddress}`);
+        response = result.data as string[];
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function getCommunityManagersInCommunity(
+    communityContractAddress: string,
+): Promise<string[]> {
+    let response: string[] = [];
+    try {
+        const result = await axios.get(`/transactions/community/managers/${communityContractAddress}`);
+        response = result.data as string[];
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function getBackersInCommunity(
+    communityContractAddress: string,
+): Promise<string[]> {
+    let response: string[] = [];
+    try {
+        const result = await axios.get(`/transactions/community/backers/${communityContractAddress}`);
+        response = result.data as string[];
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function getCommunityVars(
+    communityContractAddress: string,
+): Promise<ICommunityVars> {
+    let response: ICommunityVars = {} as any;
+    try {
+        const result = await axios.get(`/transactions/community/vars/${communityContractAddress}`);
+        response = {
+            _amountByClaim: new BigNumber(result.data._amountByClaim),
+            _baseIntervalTime: new BigNumber(result.data._amountByClaim),
+            _incIntervalTime: new BigNumber(result.data._amountByClaim),
+            _claimHardCap: new BigNumber(result.data._amountByClaim)
+        };
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function getCommunityRaisedAmount(
+    communityContractAddress: string,
+): Promise<BigNumber> {
+    let response = new BigNumber(0);
+    try {
+        const result = await axios.get(`/transactions/community/raised/${communityContractAddress}`);
+        response = new BigNumber(result.data);
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function getCommunityClaimedAmount(
+    communityContractAddress: string,
+): Promise<BigNumber> {
+    let response = new BigNumber(0);
+    try {
+        const result = await axios.get(`/transactions/community/claimed/${communityContractAddress}`);
+        response = new BigNumber(result.data);
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
 export {
     getAllValidCommunities,
     requestCreateCommunity,
     requestJoinAsBeneficiary,
     getBeneficiariesRequestByCommunity,
-    getBeneficiariesByCommunity,
     findComunityToBeneficicary,
     findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
+    getBeneficiariesInCommunity,
+    getCommunityManagersInCommunity,
+    getBackersInCommunity,
+    getCommunityVars,
+    getCommunityRaisedAmount,
+    getCommunityClaimedAmount,
 }
