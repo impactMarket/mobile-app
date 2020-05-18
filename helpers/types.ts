@@ -1,5 +1,5 @@
 import { ContractKit } from "@celo/contractkit";
-import { BigNumber } from "ethers/utils";
+import { ethers } from "ethers";
 
 export const STORAGE_USER_ADDRESS = '@celoinfo:address'
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
@@ -119,8 +119,8 @@ export interface ICommunityViewInfo extends ICommunity {
     beneficiaries: string[];
     managers: string[];
     ubiRate: number;
-    totalClaimed: BigNumber;
-    totalRaised: BigNumber;
+    totalClaimed: ethers.utils.BigNumber;
+    totalRaised: ethers.utils.BigNumber;
     vars?: ICommunityVars;
 }
 
@@ -132,8 +132,8 @@ export interface IBeneficiary {
 }
 
 export interface ICommunityVars {
-    _amountByClaim: BigNumber,
-    _baseIntervalTime: BigNumber,
-    _incIntervalTime: BigNumber,
-    _claimHardCap: BigNumber
+    _amountByClaim: ethers.utils.BigNumber,
+    _baseIntervalTime: ethers.utils.BigNumber,
+    _incIntervalTime: ethers.utils.BigNumber,
+    _claimHardCap: ethers.utils.BigNumber
 }
