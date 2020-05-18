@@ -25,7 +25,7 @@ import {
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
-import { BigNumber } from 'ethers/utils';
+import { ethers } from 'ethers';
 
 
 interface IExploreScreenProps {
@@ -77,8 +77,8 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                     beneficiaries: ['0x0','0x0','0x0'],
                     managers: ['0x0','0x0','0x0'],
                     ubiRate: 1,
-                    totalClaimed: new BigNumber(10),
-                    totalRaised: new BigNumber(30),
+                    totalClaimed: new ethers.utils.BigNumber(10),
+                    totalRaised: new ethers.utils.BigNumber(30),
                 });
             });
             this.setState({ communities: result });
