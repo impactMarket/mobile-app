@@ -10,6 +10,7 @@ import { Appbar, Avatar, Card, Button, Headline, Subheading, Divider, List } fro
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ChartConfig, BarChart } from 'react-native-chart-kit';
+import { setUserFirstTime } from '../../helpers/redux/actions/ReduxActions';
 
 
 const barChartConfig: ChartConfig = {
@@ -89,6 +90,12 @@ class AccountScreen extends React.Component<Props, IAccountScreenState> {
         if (this.props.user.celoInfo.address.length === 0) {
             return <SafeAreaView>
                 <Text>Login needed...</Text>
+                <Button
+                    mode="contained"
+                    onPress={() => this.props.dispatch(setUserFirstTime(true))}
+                >
+                    Login now
+                </Button>
             </SafeAreaView>;
         }
         return (
