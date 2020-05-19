@@ -69,6 +69,12 @@ function CommunitiesScreen(props: Props) {
                     ubiRate: 1,
                     totalClaimed: new ethers.utils.BigNumber(10),
                     totalRaised: new ethers.utils.BigNumber(30),
+                    vars: {
+                        _amountByClaim: new ethers.utils.BigNumber(2),
+                        _baseIntervalTime: new ethers.utils.BigNumber(86400),
+                        _claimHardCap: new ethers.utils.BigNumber(500),
+                        _incIntervalTime: new ethers.utils.BigNumber(1000),
+                    }
                 });
             });
             setCommunities(result);
