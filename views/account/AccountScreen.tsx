@@ -3,14 +3,40 @@ import {
     StyleSheet,
     Text,
     View,
+    AsyncStorage,
 } from 'react-native';
-import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../../helpers/types';
-import { Appbar, Avatar, Card, Button, Headline, Subheading, Divider, List } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
-import { ChartConfig, BarChart } from 'react-native-chart-kit';
-import { setUserFirstTime } from '../../helpers/redux/actions/ReduxActions';
+import {
+    connect,
+    ConnectedProps
+} from 'react-redux';
+import {
+    IRootState,
+    STORAGE_USER_FIRST_TIME
+} from '../../helpers/types';
+import {
+    Appbar,
+    Avatar,
+    Card,
+    Button,
+    Headline,
+    List
+} from 'react-native-paper';
+import {
+    SafeAreaView
+} from 'react-native-safe-area-context';
+import {
+    ScrollView
+} from 'react-native-gesture-handler';
+import {
+    ChartConfig,
+    BarChart
+} from 'react-native-chart-kit';
+import {
+    setUserFirstTime,
+    setUserIsCommunityManager,
+    setUserIsBeneficiary,
+    setUserCeloInfo
+} from '../../helpers/redux/actions/ReduxActions';
 
 
 const barChartConfig: ChartConfig = {
@@ -85,6 +111,19 @@ class AccountScreen extends React.Component<Props, IAccountScreenState> {
         this.setState({ activities });
     }
 
+    handleLogout = () => {
+        AsyncStorage.clear();
+        AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
+        setUserIsCommunityManager(false);
+        setUserIsBeneficiary(false);
+        setUserCeloInfo({
+            address: '',
+            phoneNumber: '',
+            balance: '0',
+        });
+        setUserFirstTime(false);
+    }
+
     render() {
         const { activities } = this.state;
         if (this.props.user.celoInfo.address.length === 0) {
@@ -103,7 +142,7 @@ class AccountScreen extends React.Component<Props, IAccountScreenState> {
                 <Appbar.Header style={styles.appbar}>
                     <Appbar.Content title="Pay" />
                     <Appbar.Action icon="help-circle-outline" />
-                    <Appbar.Action icon="qrcode" onPress={() => /** onPress={() => navigation.navigate('UserShowScanQRScreen') */ console.log('oi') }/>
+                    <Appbar.Action icon="qrcode" />
                 </Appbar.Header>
                 <ScrollView style={styles.scrollView}>
 
@@ -115,6 +154,7 @@ class AccountScreen extends React.Component<Props, IAccountScreenState> {
                                     <Text style={{ color: 'grey' }}>United States</Text>
                                     <Button
                                         mode="text"
+                                        disabled={true}
                                         onPress={() => console.log('hi')}
                                     >
                                         Edit Profile
@@ -176,6 +216,7 @@ class AccountScreen extends React.Component<Props, IAccountScreenState> {
                             />)}
                             <Button
                                 mode="contained"
+                                disabled={true}
                                 style={{ marginLeft: 10 }}
                                 onPress={() => console.log('Pressed')}
                             >
@@ -183,6 +224,13 @@ class AccountScreen extends React.Component<Props, IAccountScreenState> {
                             </Button>
                         </Card.Content>
                     </Card>
+                    <Button
+                        mode="contained"
+                        style={{ marginLeft: 10 }}
+                        onPress={this.handleLogout}
+                    >
+                        Logout
+                    </Button>
                 </ScrollView>
             </SafeAreaView>
         );
