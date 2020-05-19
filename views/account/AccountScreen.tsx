@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -37,6 +37,9 @@ import {
     setUserIsBeneficiary,
     setUserCeloInfo
 } from '../../helpers/redux/actions/ReduxActions';
+import {
+    useNavigation
+} from '@react-navigation/native';
 
 
 const barChartConfig: ChartConfig = {
@@ -77,164 +80,154 @@ interface IActivityListItem {
     status: string;
     timestamp: number;
 }
-interface IAccountScreenState {
-    activities: IActivityListItem[];
-}
-class AccountScreen extends React.Component<Props, IAccountScreenState> {
-
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            activities: [],
-        }
-    }
+function AccountScreen(props: Props) {
+    const navigation = useNavigation();
+    const [activities, setActivities] = useState<IActivityListItem[]>([]);
 
     // TODO: load activity history
-    componentDidMount = () => {
-        const activities = [
-            {
-                from: 'Cliff',
-                description: 'Thanks friend!!',
-                amount: '2',
-                status: 'Received',
-                timestamp: 17263188,
-            },
-            {
-                from: 'Fehsolna',
-                description: 'Brasil',
-                amount: '3',
-                status: 'Claimed',
-                timestamp: 17263179,
-            }
-        ];
-        activities.sort((a, b) => a.timestamp - b.timestamp);
-        this.setState({ activities });
-    }
+    useEffect(() => {
+        const loadActivities = () => {
+            const _activities = [
+                {
+                    from: 'Cliff',
+                    description: 'Thanks friend!!',
+                    amount: '2',
+                    status: 'Received',
+                    timestamp: 17263188,
+                },
+                {
+                    from: 'Fehsolna',
+                    description: 'Brasil',
+                    amount: '3',
+                    status: 'Claimed',
+                    timestamp: 17263179,
+                }
+            ];
+            _activities.sort((a, b) => a.timestamp - b.timestamp);
+            setActivities(_activities);
+        }
+        loadActivities();
+    }, []);
 
-    handleLogout = () => {
+    const handleLogout = () => {
         AsyncStorage.clear();
         AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-        setUserIsCommunityManager(false);
-        setUserIsBeneficiary(false);
-        setUserCeloInfo({
+        props.dispatch(setUserCeloInfo({
             address: '',
             phoneNumber: '',
             balance: '0',
-        });
-        setUserFirstTime(false);
+        }));
+        props.dispatch(setUserIsCommunityManager(false));
+        props.dispatch(setUserIsBeneficiary(false));
     }
 
-    render() {
-        const { activities } = this.state;
-        if (this.props.user.celoInfo.address.length === 0) {
-            return <SafeAreaView>
-                <Text>Login needed...</Text>
+    if (props.user.celoInfo.address.length === 0) {
+        return <SafeAreaView>
+            <Text>Login needed...</Text>
+            <Button
+                mode="contained"
+                onPress={() => props.dispatch(setUserFirstTime(true))}
+            >
+                Login now
+            </Button>
+        </SafeAreaView>;
+    }
+    return (
+        <SafeAreaView>
+            <Appbar.Header style={styles.appbar}>
+                <Appbar.Content title="Pay" />
+                <Appbar.Action icon="help-circle-outline" />
+                <Appbar.Action icon="qrcode" onPress={() => navigation.navigate('UserShowScanQRScreen')} />
+            </Appbar.Header>
+            <ScrollView style={styles.scrollView}>
+                <Card style={styles.card}>
+                    <Card.Content>
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View>
+                                <Text>John Doe</Text>
+                                <Text style={{ color: 'grey' }}>United States</Text>
+                                <Button
+                                    mode="text"
+                                    disabled={true}
+                                    onPress={() => console.log('hi')}
+                                >
+                                    Edit Profile
+                                </Button>
+                            </View>
+                            <Avatar.Image
+                                style={{ alignSelf: 'center', right: -80 }}
+                                size={58}
+                                source={require('../../assets/hello.png')}
+                            />
+                        </View>
+                    </Card.Content>
+                </Card>
+                <Card style={styles.card}>
+                    <Card.Title
+                        title=""
+                        style={{ backgroundColor: '#f0f0f0' }}
+                        subtitleStyle={{ color: 'grey' }}
+                        subtitle="WALLET BALANCE"
+                    />
+                    <Card.Content>
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View>
+                                <Headline>€{props.user.celoInfo.balance}</Headline>
+                                <Text>{props.user.celoInfo.balance} cUSD</Text>
+                            </View>
+                            <BarChart
+                                data={dummyData}
+                                width={270}
+                                height={45}
+                                yAxisLabel=""
+                                yAxisSuffix=""
+                                withInnerLines={false}
+                                chartConfig={barChartConfig}
+                                style={{
+                                    marginLeft: -65,
+                                }}
+                            />
+                        </View>
+                    </Card.Content>
+                </Card>
+                <Card style={styles.card}>
+                    <Card.Title
+                        title=""
+                        style={{ backgroundColor: '#f0f0f0' }}
+                        subtitleStyle={{ color: 'grey' }}
+                        subtitle="RECENT TRANSACTIONS"
+                    />
+                    <Card.Content>
+                        {activities.map((activity) => <List.Item
+                            key={activity.timestamp}
+                            title={activity.from}
+                            description={activity.description}
+                            left={() => <Avatar.Text size={46} label={activity.from.slice(0, 1)} />}
+                            right={() => <View>
+                                <Text>€{activity.amount}</Text>
+                                <Text>{activity.status}</Text>
+                            </View>}
+                        />)}
+                        <Button
+                            mode="contained"
+                            disabled={true}
+                            style={{ marginLeft: 10 }}
+                            onPress={() => console.log('Pressed')}
+                        >
+                            All Transactions
+                            </Button>
+                    </Card.Content>
+                </Card>
                 <Button
                     mode="contained"
-                    onPress={() => this.props.dispatch(setUserFirstTime(true))}
+                    style={{ marginLeft: 10 }}
+                    onPress={handleLogout}
                 >
-                    Login now
+                    Logout
                 </Button>
-            </SafeAreaView>;
-        }
-        return (
-            <SafeAreaView>
-                <Appbar.Header style={styles.appbar}>
-                    <Appbar.Content title="Pay" />
-                    <Appbar.Action icon="help-circle-outline" />
-                    <Appbar.Action icon="qrcode" />
-                </Appbar.Header>
-                <ScrollView style={styles.scrollView}>
-
-                    <Card style={styles.card}>
-                        <Card.Content>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <View>
-                                    <Text>Afonso Barbosa</Text>
-                                    <Text style={{ color: 'grey' }}>United States</Text>
-                                    <Button
-                                        mode="text"
-                                        disabled={true}
-                                        onPress={() => console.log('hi')}
-                                    >
-                                        Edit Profile
-                                    </Button>
-                                </View>
-                                <Avatar.Image
-                                    style={{ alignSelf: 'center', right: -80 }}
-                                    size={58}
-                                    source={require('../../assets/hello.png')}
-                                />
-                            </View>
-                        </Card.Content>
-                    </Card>
-                    <Card style={styles.card}>
-                        <Card.Title
-                            title=""
-                            style={{ backgroundColor: '#f0f0f0' }}
-                            subtitleStyle={{ color: 'grey' }}
-                            subtitle="WALLET BALANCE"
-                        />
-                        <Card.Content>
-                            <View style={{ flex: 1, flexDirection: 'row' }}>
-                                <View>
-                                    <Headline>€{this.props.user.celoInfo.balance}</Headline>
-                                    <Text>{this.props.user.celoInfo.balance} cUSD</Text>
-                                </View>
-                                <BarChart
-                                    data={dummyData}
-                                    width={270}
-                                    height={45}
-                                    yAxisLabel=""
-                                    yAxisSuffix=""
-                                    withInnerLines={false}
-                                    chartConfig={barChartConfig}
-                                    style={{
-                                        marginLeft: -65,
-                                    }}
-                                />
-                            </View>
-                        </Card.Content>
-                    </Card>
-                    <Card style={styles.card}>
-                        <Card.Title
-                            title=""
-                            style={{ backgroundColor: '#f0f0f0' }}
-                            subtitleStyle={{ color: 'grey' }}
-                            subtitle="RECENT TRANSACTIONS"
-                        />
-                        <Card.Content>
-                            {activities.map((activity) => <List.Item
-                                key={activity.timestamp}
-                                title={activity.from}
-                                description={activity.description}
-                                left={() => <Avatar.Text size={46} label={activity.from.slice(0, 1)} />}
-                                right={() => <View>
-                                    <Text>€{activity.amount}</Text>
-                                    <Text>{activity.status}</Text>
-                                </View>}
-                            />)}
-                            <Button
-                                mode="contained"
-                                disabled={true}
-                                style={{ marginLeft: 10 }}
-                                onPress={() => console.log('Pressed')}
-                            >
-                                All Transactions
-                            </Button>
-                        </Card.Content>
-                    </Card>
-                    <Button
-                        mode="contained"
-                        style={{ marginLeft: 10 }}
-                        onPress={this.handleLogout}
-                    >
-                        Logout
-                    </Button>
-                </ScrollView>
-            </SafeAreaView>
-        );
-    }
+            </ScrollView>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
