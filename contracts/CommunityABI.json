@@ -104,6 +104,19 @@
         "type": "address"
       }
     ],
+    "name": "BeneficiaryUnlocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
     "name": "CoordinatorAdded",
     "type": "event"
   },
@@ -175,6 +188,27 @@
     "constant": true,
     "inputs": [],
     "name": "claimHardCap",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "claimedByUser",
     "outputs": [
       {
         "internalType": "uint256",
@@ -298,6 +332,21 @@
       }
     ],
     "name": "lockBeneficiary",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "unlockBeneficiary",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

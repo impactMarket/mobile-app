@@ -11,17 +11,15 @@ declare global {
       require(name: "Community"): TruffleContracts.CommunityContract;
       require(name: "Context"): TruffleContracts.ContextContract;
       require(name: "cUSD"): TruffleContracts.cUSDContract;
+      require(name: "ERC20"): TruffleContracts.ERC20Contract;
+      require(name: "ERC20Mintable"): TruffleContracts.ERC20MintableContract;
+      require(name: "IERC20"): TruffleContracts.IERC20Contract;
       require(name: "ImpactMarket"): TruffleContracts.ImpactMarketContract;
       require(name: "Migrations"): TruffleContracts.MigrationsContract;
+      require(name: "MinterRole"): TruffleContracts.MinterRoleContract;
       require(
         name: "WhitelistAdminRole"
       ): TruffleContracts.WhitelistAdminRoleContract;
-      require(
-        name: "WhitelistedCommunity"
-      ): TruffleContracts.WhitelistedCommunityContract;
-      require(
-        name: "WhitelistedUser"
-      ): TruffleContracts.WhitelistedUserContract;
     }
   }
 }
