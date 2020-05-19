@@ -148,6 +148,14 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         }
     }
 
+    if (props.user.celoInfo.address.length === 0) {
+        return <ScrollView>
+            <View style={styles.container}>
+                <Text>You need to login to create communities.</Text>
+            </View>
+        </ScrollView>
+    }
+
     return (
         <ScrollView>
             <View style={styles.container}>
