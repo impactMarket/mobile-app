@@ -7,8 +7,7 @@ import {
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 import { IRootState } from '../../helpers/types';
-import { Appbar, Avatar, List, Card, Divider, Button, Headline } from 'react-native-paper';
-import { ethers } from 'ethers';
+import { Appbar, Avatar, List, Card, Divider, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
@@ -34,16 +33,13 @@ interface IPayScreenListItem {
     txs: number;
     timestamp: number;
 }
-interface IPayment {
-    amount: string;
-    to: string;
-    note: string;
-}
 function PayScreen(props: Props) {
     const navigation = useNavigation();
 
     const [activities, setActivities] = useState<IPayScreenListItem[]>([]);
-    const [payment, setPayment] = useState<IPayment>({ amount: '', to: '', note: '' });
+    const [paymentAmount, setPaymentAmount] = useState<string>('');
+    const [paymentTo, setPaymentTo] = useState<string>('');
+    const [paymentNote, setPaymentNote] = useState<string>('');
 
     useEffect(() => {
         const loadHistory = async () => {
@@ -94,25 +90,26 @@ function PayScreen(props: Props) {
                             style={{ padding: 10, textAlign: 'center', fontSize: 35, fontWeight: 'bold' }}
                             placeholder='0$'
                             keyboardType="numeric"
-                            value={payment.amount}
-                            onChangeText={text => setPayment({ ...payment, amount: text })}
+                            value={paymentAmount}
+                            onChangeText={setPaymentAmount}
                         />
                         <Divider />
                         <TextInput
                             style={{ padding: 10 }}
                             placeholder='Name, address or phone number'
-                            value={payment.to}
-                            onChangeText={text => setPayment({ ...payment, to: text })}
+                            value={paymentTo}
+                            onChangeText={setPaymentTo}
                         />
                         <Divider />
                         <TextInput
                             style={{ padding: 10 }}
                             placeholder='Note (optional)'
-                            value={payment.note}
-                            onChangeText={text => setPayment({ ...payment, note: text })}
+                            value={paymentNote}
+                            onChangeText={setPaymentNote}
                         />
                         <Button
                             mode="outlined"
+                            disabled={true}
                             onPress={() => console.log('oi')}
                         >
                             Pay
