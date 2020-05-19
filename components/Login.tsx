@@ -37,15 +37,7 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & ILoginProps
-interface ILoginState {
-}
-class Login extends React.Component<Props, ILoginState> {
-
-    constructor(props: any) {
-        super(props);
-        this.state = {
-        }
-    }
+class Login extends React.Component<Props, {}> {
 
     getCurrentUserBalance = async (address: string) => {
         const stableToken = await this.props.network.kit.contracts.getStableToken()
@@ -85,7 +77,7 @@ class Login extends React.Component<Props, ILoginState> {
             console.log(error);
         }
     }
-    
+
     openWithoutLogin = async () => {
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
         this.props.dispatch(setUserFirstTime(false));
