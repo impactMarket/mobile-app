@@ -7,17 +7,30 @@ import {
     ImageBackground,
 } from 'react-native';
 import {
-    LineChart, ChartConfig, BarChart, BarChartProps
+    LineChart,
+    ChartConfig,
+    BarChart
 } from 'react-native-chart-kit';
 import {
-    ICommunityViewInfo, IUserState,
+    ICommunityViewInfo,
+    IUserState,
 } from '../../helpers/types';
 import { AntDesign } from '@expo/vector-icons';
-import ApplyAsBeneficiary from './actions/ApplyAsBeneficiary';
 import Donate from './actions/Donate';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Paragraph, Button, Card, Divider, Headline, Subheading } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
+import {
+    LinearGradient
+} from 'expo-linear-gradient';
+import {
+    Paragraph,
+    Button,
+    Card,
+    Divider,
+    Headline,
+    Subheading
+} from 'react-native-paper';
+import {
+    ScrollView
+} from 'react-native-gesture-handler';
 
 
 const lineChartConfig: ChartConfig = {
@@ -89,14 +102,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             </ImageBackground>
             <View style={styles.container}>
                 <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet augue justo. In id dolor nec nisi vulputate cursus in a magna. Donec varius elementum ligula, vitae vulputate felis eleifend non. Donec pellentesque convallis congue. Vivamus sed vestibulum turpis, et suscipit lorem. Aenean vehicula pretium sapien.</Paragraph>
-                <View style={{ flex: 1, flexDirection: 'row', marginVertical: 25 }}>
-                    <ApplyAsBeneficiary
-                        community={community}
-                        beneficiaryWalletAddress={user.celoInfo.address}
-                    />
+                <View style={{ flex: 1, flexDirection: 'row-reverse', marginVertical: 25 }}>
                     <Button
                         mode="contained"
-                        style={{ marginLeft: 10 }}
+                        disabled={true}
                         onPress={() => console.log('Pressed')}
                     >
                         See More
@@ -106,8 +115,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <Card.Content>
                         <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                             <View>
-                                <Headline>€1.8</Headline>
-                                <Paragraph style={{ color: '#b0b0b0' }}>Up to €500 / beneficiary</Paragraph>
+                                <Headline>€{community.vars?._amountByClaim.toString()}</Headline>
+                                <Paragraph style={{ color: '#b0b0b0' }}>Up to €{community.vars?._claimHardCap.toString()} / beneficiary</Paragraph>
                             </View>
                         </View>
                         <Divider />
@@ -162,25 +171,28 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <Button
                         mode="contained"
+                        disabled={true}
                         style={{ marginHorizontal: 5 }}
                         onPress={() => console.log('Pressed')}
                     >
                         €10
-                        </Button>
+                    </Button>
                     <Button
                         mode="contained"
+                        disabled={true}
                         style={{ marginHorizontal: 5 }}
                         onPress={() => console.log('Pressed')}
                     >
                         €20
-                        </Button>
+                    </Button>
                     <Button
                         mode="contained"
+                        disabled={true}
                         style={{ marginHorizontal: 5 }}
                         onPress={() => console.log('Pressed')}
                     >
                         €50
-                        </Button>
+                    </Button>
                     <Donate
                         community={props.route.params.community}
                     />
