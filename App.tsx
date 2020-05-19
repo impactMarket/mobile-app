@@ -82,6 +82,8 @@ interface IAppState {
     isSplashReady: boolean;
     isAppReady: boolean;
     firstTimeUser: boolean;
+    // loggedIn is not used anywhere, only forces update!
+    loggedIn: boolean;
 }
 export default class App extends React.Component<{}, IAppState> {
 
@@ -91,18 +93,24 @@ export default class App extends React.Component<{}, IAppState> {
             isSplashReady: false,
             isAppReady: false,
             firstTimeUser: true,
+            loggedIn: false,
         }
         store.subscribe(() => {
-            const previousValue = this.state.firstTimeUser
-            const currentValue = store.getState().user.firstTime;
+            const previousFirstTimeUser = this.state.firstTimeUser;
+            const previousLoggedIn = this.state.loggedIn;
+            const currentFirstTimeUser = store.getState().user.firstTime;
+            const currentLoggedIn = store.getState().user.celoInfo.address.length > 0;
 
-            if (previousValue !== currentValue) {
-                if (currentValue === false &&
+            if (previousFirstTimeUser !== currentFirstTimeUser) {
+                if (currentFirstTimeUser === false &&
                     store.getState().user.celoInfo.address.length > 0
                 ) {
                     this._authUser();
                 }
-                this.setState({ firstTimeUser: currentValue });
+                this.setState({ firstTimeUser: currentFirstTimeUser });
+            }
+            if (previousLoggedIn !== currentLoggedIn) {
+                this.setState({ loggedIn: currentLoggedIn });
             }
         })
     }
@@ -167,15 +175,26 @@ export default class App extends React.Component<{}, IAppState> {
                     />
                 </>;
             }
-            return <Tab.Screen
-                name="Community"
-                component={CommunityStackScreen}
-                options={{
-                    tabBarIcon: (props: any) => (
-                        <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
-                    ),
-                }}
-            />
+            return <>
+                <Tab.Screen
+                    name="Community"
+                    component={CommunityStackScreen}
+                    options={{
+                        tabBarIcon: (props: any) => (
+                            <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
+                        ),
+                    }}
+                />
+                <Tab.Screen
+                    name="Pay"
+                    component={PayStackScreen}
+                    options={{
+                        tabBarIcon: (props: any) => (
+                            <MaterialIcons name="attach-money" size={props.size} color={props.color} />
+                        ),
+                    }}
+                />
+            </>;
         }
 
         return (
@@ -185,15 +204,6 @@ export default class App extends React.Component<{}, IAppState> {
                     <NavigationContainer>
                         <Tab.Navigator>
                             {tabsToUser()}
-                            <Tab.Screen
-                                name="Pay"
-                                component={PayStackScreen}
-                                options={{
-                                    tabBarIcon: (props: any) => (
-                                        <MaterialIcons name="attach-money" size={props.size} color={props.color} />
-                                    ),
-                                }}
-                            />
                             <Tab.Screen
                                 name="Account"
                                 component={AccountStackScreen}
@@ -245,7 +255,8 @@ export default class App extends React.Component<{}, IAppState> {
             }
             const firstTime = await AsyncStorage.getItem(STORAGE_USER_FIRST_TIME);
             this.setState({
-                firstTimeUser: firstTime === null
+                firstTimeUser: firstTime === null,
+                loggedIn: (address !== null && phoneNumber !== null)
             });
             store.dispatch(setUserFirstTime(firstTime !== 'false'));
         } catch (error) {

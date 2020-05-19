@@ -31,7 +31,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                 <Card.Content>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View>
-                            <Text>Afonso Barbosa</Text>
+                            <Text>John Doe</Text>
                             <Text style={{ color: 'grey' }}>United States</Text>
                         </View>
                         <Avatar.Image
