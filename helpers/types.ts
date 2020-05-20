@@ -114,14 +114,21 @@ export interface ICommunity {
     updatedAt: string;
 }
 
-export interface ICommunityViewInfo extends ICommunity {
+export interface ICommunityInfo extends ICommunity {
     backers: string[];
     beneficiaries: string[];
     managers: string[];
     ubiRate: number;
-    totalClaimed: ethers.utils.BigNumber;
-    totalRaised: ethers.utils.BigNumber;
-    vars?: ICommunityVars;
+    totalClaimed: string;
+    totalRaised: string;
+    vars: ICommunityVars;
+}
+
+export interface ICommunityVars {
+    _amountByClaim: string;
+    _baseIntervalTime: string;
+    _incIntervalTime: string;
+    _claimHardCap: string;
 }
 
 export interface IBeneficiary {
@@ -129,11 +136,4 @@ export interface IBeneficiary {
     communityPublicId: string;
     createdAt: string;
     updatedAt: string;
-}
-
-export interface ICommunityVars {
-    _amountByClaim: ethers.utils.BigNumber,
-    _baseIntervalTime: ethers.utils.BigNumber,
-    _incIntervalTime: ethers.utils.BigNumber,
-    _claimHardCap: ethers.utils.BigNumber
 }
