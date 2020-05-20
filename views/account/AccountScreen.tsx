@@ -220,7 +220,7 @@ function AccountScreen(props: Props) {
                 </Card>
                 <Button
                     mode="contained"
-                    style={{ marginLeft: 10 }}
+                    style={styles.card}
                     onPress={handleLogout}
                 >
                     Logout

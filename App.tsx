@@ -151,9 +151,7 @@ export default class App extends React.Component<{}, IAppState> {
 
         const tabsToUser = () => {
             const user = store.getState().user;
-            if (user.celoInfo.address.length === 0 || (
-                user.community.isBeneficiary === false && user.community.isCoordinator === false
-            )) {
+            if (user.community.isBeneficiary === false && user.community.isCoordinator === false) {
                 return <>
                     <Tab.Screen
                         name="My Circle"
@@ -175,26 +173,15 @@ export default class App extends React.Component<{}, IAppState> {
                     />
                 </>;
             }
-            return <>
-                <Tab.Screen
-                    name="Community"
-                    component={CommunityStackScreen}
-                    options={{
-                        tabBarIcon: (props: any) => (
-                            <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
-                        ),
-                    }}
-                />
-                <Tab.Screen
-                    name="Pay"
-                    component={PayStackScreen}
-                    options={{
-                        tabBarIcon: (props: any) => (
-                            <MaterialIcons name="attach-money" size={props.size} color={props.color} />
-                        ),
-                    }}
-                />
-            </>;
+            return <Tab.Screen
+                name="Community"
+                component={CommunityStackScreen}
+                options={{
+                    tabBarIcon: (props: any) => (
+                        <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
+                    ),
+                }}
+            />;
         }
 
         return (
@@ -204,6 +191,15 @@ export default class App extends React.Component<{}, IAppState> {
                     <NavigationContainer>
                         <Tab.Navigator>
                             {tabsToUser()}
+                            {store.getState().user.celoInfo.address.length > 0 && <Tab.Screen
+                                name="Pay"
+                                component={PayStackScreen}
+                                options={{
+                                    tabBarIcon: (props: any) => (
+                                        <MaterialIcons name="attach-money" size={props.size} color={props.color} />
+                                    ),
+                                }}
+                            />}
                             <Tab.Screen
                                 name="Account"
                                 component={AccountStackScreen}
