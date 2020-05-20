@@ -50,7 +50,7 @@ class Login extends React.Component<Props, {}> {
     login = async () => {
         const requestId = 'login'
         const dappName = 'Impact Market'
-        const callback = Linking.makeUrl('impactmarketapp://login')
+        const callback = Linking.makeUrl('impactmarketmobile://login')
 
         requestAccountAddress({
             requestId,

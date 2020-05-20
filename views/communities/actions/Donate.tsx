@@ -4,6 +4,7 @@ import {
     Clipboard,
     ToastAndroid,
     Alert,
+    Platform,
 } from 'react-native';
 import {
     ICommunityInfo, IRootState,
@@ -103,7 +104,10 @@ class Donate extends Component<Props, IDonateState> {
 
     handleCopyAddressToClipboard = () => {
         Clipboard.setString(this.props.community.contractAddress)
-        ToastAndroid.show('Address copied to clipboard!', ToastAndroid.SHORT);
+        if (Platform.OS === 'android') {
+            ToastAndroid.show('Address copied to clipboard!', ToastAndroid.SHORT);
+        }
+        // TODO: add ios notification
     }
 
     render() {
