@@ -36,7 +36,7 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0xeb74F9d4f4b4c1D73bcc9f0fDF5f413A2346A8De',
+        impactMarketContractAddress: '0xc6788e373D89241fAc01224008b3ffF758EB5ce6',
 
         /**
          * Used to query
