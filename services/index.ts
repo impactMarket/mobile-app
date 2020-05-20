@@ -7,12 +7,6 @@ import {
     findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
-    getBeneficiariesInCommunity,
-    getCommunityManagersInCommunity,
-    getBackersInCommunity,
-    getCommunityVars,
-    getCommunityRaisedAmount,
-    getCommunityClaimedAmount,
 } from './api';
 import {
     celoWalletRequest,
@@ -27,12 +21,6 @@ export {
     findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
-    getBeneficiariesInCommunity,
-    getCommunityManagersInCommunity,
-    getBackersInCommunity,
-    getCommunityVars,
-    getCommunityRaisedAmount,
-    getCommunityClaimedAmount,
     //
     celoWalletRequest,
 }

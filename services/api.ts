@@ -1,13 +1,12 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiary, ICommunityVars } from '../helpers/types';
-import { ethers } from 'ethers';
+import { ICommunity, IBeneficiary, ICommunityInfo } from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
 
-async function getAllValidCommunities(): Promise<ICommunity[]> {
-    let response = [] as ICommunity[];
+async function getAllValidCommunities(): Promise<ICommunityInfo[]> {
+    let response = [] as ICommunityInfo[];
     try {
         // handle success
         const result = await axios.get('/community/all/valid')
@@ -168,107 +167,11 @@ async function acceptBeneficiaryRequest(
 
 async function getCommunityByContractAddress(
     communityContractAddress: string,
-): Promise<ICommunity | undefined> {
-    let response: ICommunity = undefined as any;
+): Promise<ICommunityInfo | undefined> {
+    let response: ICommunityInfo = undefined as any;
     try {
         const result = await axios.get(`/community/address/${communityContractAddress}`);
-        response = result.data as ICommunity;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
-}
-
-async function getBeneficiariesInCommunity(
-    communityContractAddress: string,
-): Promise<string[]> {
-    let response: string[] = [];
-    try {
-        const result = await axios.get(`/transactions/community/beneficiaries/${communityContractAddress}`);
-        response = result.data as string[];
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
-}
-
-async function getCommunityManagersInCommunity(
-    communityContractAddress: string,
-): Promise<string[]> {
-    let response: string[] = [];
-    try {
-        const result = await axios.get(`/transactions/community/managers/${communityContractAddress}`);
-        response = result.data as string[];
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
-}
-
-async function getBackersInCommunity(
-    communityContractAddress: string,
-): Promise<string[]> {
-    let response: string[] = [];
-    try {
-        const result = await axios.get(`/transactions/community/backers/${communityContractAddress}`);
-        response = result.data as string[];
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
-}
-
-async function getCommunityVars(
-    communityContractAddress: string,
-): Promise<ICommunityVars> {
-    let response: ICommunityVars = {} as any;
-    try {
-        const result = await axios.get(`/transactions/community/vars/${communityContractAddress}`);
-        console.log('result', result);
-        response = {
-            _amountByClaim: new ethers.utils.BigNumber(result.data._amountByClaim),
-            _baseIntervalTime: new ethers.utils.BigNumber(result.data._baseIntervalTime),
-            _incIntervalTime: new ethers.utils.BigNumber(result.data._incIntervalTime),
-            _claimHardCap: new ethers.utils.BigNumber(result.data._claimHardCap)
-        };
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
-}
-
-async function getCommunityRaisedAmount(
-    communityContractAddress: string,
-): Promise<ethers.utils.BigNumber> {
-    let response = new ethers.utils.BigNumber(0);
-    try {
-        const result = await axios.get(`/transactions/community/raised/${communityContractAddress}`);
-        response = new ethers.utils.BigNumber(result.data);
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
-}
-
-async function getCommunityClaimedAmount(
-    communityContractAddress: string,
-): Promise<ethers.utils.BigNumber> {
-    let response = new ethers.utils.BigNumber(0);
-    try {
-        const result = await axios.get(`/transactions/community/claimed/${communityContractAddress}`);
-        response = new ethers.utils.BigNumber(result.data);
+        response = result.data as ICommunityInfo;
     } catch (error) {
         // handle error
     } finally {
@@ -286,10 +189,4 @@ export {
     findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
-    getBeneficiariesInCommunity,
-    getCommunityManagersInCommunity,
-    getBackersInCommunity,
-    getCommunityVars,
-    getCommunityRaisedAmount,
-    getCommunityClaimedAmount,
 }
