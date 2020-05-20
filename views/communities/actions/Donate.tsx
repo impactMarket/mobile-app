@@ -145,6 +145,7 @@ class Donate extends Component<Props, IDonateState> {
                             </Button>
                             <Button
                                 mode="contained"
+                                disabled={this.props.user.celoInfo.address.length === 0}
                                 style={{ marginTop: 10 }}
                                 onPress={this.handleOpenDonateWithCelo}
                             >
