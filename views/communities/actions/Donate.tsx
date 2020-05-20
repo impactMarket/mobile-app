@@ -6,7 +6,7 @@ import {
     Alert,
 } from 'react-native';
 import {
-    ICommunityViewInfo, IRootState,
+    ICommunityInfo, IRootState,
 } from '../../../helpers/types';
 import {
     Button,
@@ -21,7 +21,7 @@ import { ethers } from 'ethers';
 
 
 interface IExploreScreenProps {
-    community: ICommunityViewInfo
+    community: ICommunityInfo
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state

@@ -13,7 +13,7 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-    ICommunityViewInfo,
+    ICommunityInfo,
 } from '../../helpers/types';
 import {
     Card,
@@ -25,7 +25,7 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
 import { useNavigation } from '@react-navigation/native';
-import { ethers } from 'ethers';
+import { calculateCommunityProgress } from '../../helpers';
 
 
 interface ICommunitiesScreenProps {
@@ -43,41 +43,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & ICommunitiesScreenProps
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
-    const [communities, setCommunities] = useState<ICommunityViewInfo[]>([]);
+    const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 
     useEffect(() => {
-        const loadCommunities = async () => {
-            // load communities
-            const result = [] as ICommunityViewInfo[];
-            (await getAllValidCommunities()).forEach((community) => {
-                result.push({
-                    publicId: community.publicId,
-                    requestByAddress: community.requestByAddress,
-                    contractAddress: community.contractAddress,
-                    name: community.name,
-                    description: community.description,
-                    location: community.location,
-                    coverImage: community.coverImage,
-                    status: community.status,
-                    txCreationObj: community.txCreationObj,
-                    createdAt: community.createdAt,
-                    updatedAt: community.updatedAt,
-                    // TODO: get real values
-                    backers: ['0x0','0x0','0x0'],
-                    beneficiaries: ['0x0','0x0','0x0'],
-                    managers: ['0x0','0x0','0x0'],
-                    ubiRate: 1,
-                    totalClaimed: new ethers.utils.BigNumber(10),
-                    totalRaised: new ethers.utils.BigNumber(30),
-                    vars: {
-                        _amountByClaim: new ethers.utils.BigNumber(2),
-                        _baseIntervalTime: new ethers.utils.BigNumber(86400),
-                        _claimHardCap: new ethers.utils.BigNumber(500),
-                        _incIntervalTime: new ethers.utils.BigNumber(1000),
-                    }
-                });
-            });
-            setCommunities(result);
+        const loadCommunities = () => {
+            getAllValidCommunities().then(setCommunities);
         }
         loadCommunities();
     }, []);
@@ -152,7 +122,7 @@ function CommunitiesScreen(props: Props) {
                                         backgroundColor: '#d6d6d6',
                                         position: 'absolute'
                                     }}
-                                    progress={community.totalRaised.toNumber() / 100}
+                                    progress={calculateCommunityProgress('raised', community)}
                                     color="#5289ff"
                                 />
                                 <ProgressBar
@@ -161,7 +131,7 @@ function CommunitiesScreen(props: Props) {
                                         marginTop: 10,
                                         backgroundColor: 'rgba(255,255,255,0)'
                                     }}
-                                    progress={community.totalClaimed.toNumber() / 100}
+                                    progress={calculateCommunityProgress('claimed', community)}
                                     color="#50ad53"
                                 />
                             </View>

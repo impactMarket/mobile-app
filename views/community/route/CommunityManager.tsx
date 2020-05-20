@@ -13,7 +13,7 @@ import {
 import {
     IRootState,
     IBeneficiary,
-    ICommunityViewInfo,
+    ICommunityInfo,
 } from '../../../helpers/types';
 import {
     Button,
@@ -29,12 +29,6 @@ import {
 import {
     getCommunityByContractAddress,
     celoWalletRequest,
-    getBeneficiariesInCommunity,
-    getCommunityManagersInCommunity,
-    getCommunityRaisedAmount,
-    getCommunityClaimedAmount,
-    getBackersInCommunity,
-    getCommunityVars,
 } from '../../../services';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
@@ -62,7 +56,7 @@ interface ICommunityManagerViewState {
     modalListBeneficiary: boolean;
     modalListManagers: boolean;
     requestConfirmation?: IBeneficiary;
-    community?: ICommunityViewInfo;
+    community?: ICommunityInfo;
     hasPermission: boolean;
     scanned: boolean;
 }
@@ -87,25 +81,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             // TODO: show error
             return;
         }
-        const beneficiaries = await getBeneficiariesInCommunity(_address);
-        const managers = await getCommunityManagersInCommunity(_address);
-        const backers = await getBackersInCommunity(_address);
-        const vars = await getCommunityVars(_address);
-
-        const claimed = await getCommunityClaimedAmount(_address);
-        const raised = await getCommunityRaisedAmount(_address);
-
-        const _community: ICommunityViewInfo = {
-            ...community,
-            backers,
-            beneficiaries,
-            managers,
-            ubiRate: 1,
-            totalClaimed: claimed,
-            totalRaised: raised,
-            vars,
-        }
-        this.setState({ community: _community });
+        this.setState({ community });
         const { status } = await BarCodeScanner.requestPermissionsAsync();
         this.setState({ hasPermission: status === 'granted' });
     }
@@ -134,8 +110,8 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             // TODO: update UI
             setTimeout(() => {
                 const { _address } = this.props.network.contracts.communityContract;
-                getBeneficiariesInCommunity(_address)
-                    .then((beneficiaries) => this.setState({ community: { ...this.state.community!, beneficiaries } }));
+                getCommunityByContractAddress(_address)
+                    .then((community) => this.setState({ community }));
             }, 10000);
 
             Alert.alert(

@@ -10,7 +10,7 @@ import {
     LineChart, ChartConfig,
 } from 'react-native-chart-kit';
 import {
-    ICommunityViewInfo, IUserState,
+    ICommunityInfo, IUserState,
 } from '../../helpers/types';
 import { AntDesign } from '@expo/vector-icons';
 import ApplyAsBeneficiary from './actions/ApplyAsBeneficiary';
@@ -34,13 +34,13 @@ const screenWidth = Dimensions.get('window').width + 140;
 interface ICommunityDetailsScreen {
     route: {
         params: {
-            community: ICommunityViewInfo,
+            community: ICommunityInfo,
             user: IUserState,
         }
     }
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
-    const community = props.route.params.community as ICommunityViewInfo;
+    const community = props.route.params.community as ICommunityInfo;
     const user = props.route.params.user as IUserState;
 
     const dummyData = {

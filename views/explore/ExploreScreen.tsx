@@ -13,7 +13,7 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-    ICommunityViewInfo,
+    ICommunityInfo,
 } from '../../helpers/types';
 import {
     Card,
@@ -25,7 +25,7 @@ import {
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
-import { ethers } from 'ethers';
+import { calculateCommunityProgress } from '../../helpers';
 
 
 interface IExploreScreenProps {
@@ -42,7 +42,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & IExploreScreenProps
 interface IExploreScreenState {
-    communities: ICommunityViewInfo[];
+    communities: ICommunityInfo[];
     optionMenuVisible: boolean; // go explore the world my friend <3
 }
 class ExploreScreen extends React.Component<Props, IExploreScreenState> {
@@ -57,32 +57,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
 
     componentDidMount = () => {
         // load communities
-        getAllValidCommunities().then((communities) => {
-            const result = [] as ICommunityViewInfo[];
-            communities.forEach((community) => {
-                result.push({
-                    publicId: community.publicId,
-                    requestByAddress: community.requestByAddress,
-                    contractAddress: community.contractAddress,
-                    name: community.name,
-                    description: community.description,
-                    location: community.location,
-                    coverImage: community.coverImage,
-                    status: community.status,
-                    txCreationObj: community.txCreationObj,
-                    createdAt: community.createdAt,
-                    updatedAt: community.updatedAt,
-                    // TODO: get real values
-                    backers: ['0x0','0x0','0x0'],
-                    beneficiaries: ['0x0','0x0','0x0'],
-                    managers: ['0x0','0x0','0x0'],
-                    ubiRate: 1,
-                    totalClaimed: new ethers.utils.BigNumber(10),
-                    totalRaised: new ethers.utils.BigNumber(30),
-                });
-            });
-            this.setState({ communities: result });
-        });
+        getAllValidCommunities().then((communities) => this.setState({ communities }));
     }
 
     render() {
@@ -185,7 +160,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                                             backgroundColor: '#d6d6d6',
                                             position: 'absolute'
                                         }}
-                                        progress={community.totalRaised.toNumber() / 100}
+                                        progress={calculateCommunityProgress('raised', community)}
                                         color="#5289ff"
                                     />
                                     <ProgressBar
@@ -194,7 +169,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                                             marginTop: 10,
                                             backgroundColor: 'rgba(255,255,255,0)'
                                         }}
-                                        progress={community.totalClaimed.toNumber() / 100}
+                                        progress={calculateCommunityProgress('raised', community)}
                                         color="#50ad53"
                                     />
                                 </View>

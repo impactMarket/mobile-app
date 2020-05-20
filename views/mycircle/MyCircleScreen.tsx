@@ -13,7 +13,7 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-    ICommunityViewInfo,
+    ICommunityInfo,
 } from '../../helpers/types';
 import {
     Card,

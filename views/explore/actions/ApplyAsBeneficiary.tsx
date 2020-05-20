@@ -3,7 +3,7 @@ import {
     StyleSheet, Alert,
 } from 'react-native';
 import {
-    ICommunityViewInfo,
+    ICommunityInfo,
 } from '../../../helpers/types';
 import {
     Button,
@@ -14,7 +14,7 @@ import {
 import { requestJoinAsBeneficiary } from '../../../services';
 
 
-export default function ApplyAsBeneficiary(props: { community: ICommunityViewInfo, beneficiaryWalletAddress: string }) {
+export default function ApplyAsBeneficiary(props: { community: ICommunityInfo, beneficiaryWalletAddress: string }) {
     const [openModalApplyAsBeneficiary, setOpenModalApplyAsBeneficiary] = useState(false);
     const { community } = props;
 
