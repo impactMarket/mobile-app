@@ -12,7 +12,7 @@ async function celoWalletRequest(
     network: INetworkState,
 ): Promise<any> {
     const dappName = 'Impact Market'
-    const callback = Linking.makeUrl('/my/path')
+    const callback = Linking.makeUrl('impactmarketapp://' + requestId)
 
     requestTxSig(
         network.kit,
