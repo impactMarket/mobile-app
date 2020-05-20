@@ -6,7 +6,7 @@ import {
     ImageBackground,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState, ICommunity } from '../../../helpers/types';
+import { IRootState, ICommunityInfo } from '../../../helpers/types';
 
 import { Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
@@ -38,7 +38,7 @@ interface IBeneficiaryViewState {
     loaded: boolean;
     claiming: boolean;
     loggedIn: boolean;
-    community?: ICommunity;
+    community?: ICommunityInfo;
 }
 class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
 
@@ -142,13 +142,13 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
         return (
             <ScrollView>
                 <ImageBackground
-                    source={{ uri: /* community.coverImage */ 'https://picsum.photos/600' }}
+                    source={{ uri: community.coverImage }}
                     resizeMode={'cover'}
                     style={styles.imageBackground}
                 >
                     <Text style={styles.communityName}>{community.name}</Text>
                     <Text style={styles.communityLocation}>
-                        <AntDesign name="enviromento" size={20} /> {/*community.location.title*/ 'São Paulo'}
+                        <AntDesign name="enviromento" size={20} /> {community.location.title}
                     </Text>
                     <LinearGradient
                         colors={['transparent', 'rgba(246,246,246,1)']}
@@ -163,7 +163,7 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
                 </ImageBackground>
                 <View>
                     <Text style={styles.mainPageContent}>
-                        Every day you can claim $2 up to a total of $500
+                        Every day you can claim ${community.vars._amountByClaim} up to a total of ${community.vars._claimHardCap}
                     </Text>
                     <View style={styles.container}>
                         <Button
