@@ -16,6 +16,8 @@ import { ethers } from 'ethers';
 import { LinearGradient } from 'expo-linear-gradient';
 import { celoWalletRequest, getCommunityByContractAddress } from '../../../services';
 import { ScrollView } from 'react-native-gesture-handler';
+import config from '../../../config';
+import { humanifyNumber } from '../../../helpers';
 
 
 interface IBeneficiaryViewProps {
@@ -163,7 +165,7 @@ class BeneficiaryView extends React.Component<Props, IBeneficiaryViewState> {
                 </ImageBackground>
                 <View>
                     <Text style={styles.mainPageContent}>
-                        Every day you can claim ${community.vars._amountByClaim} up to a total of ${community.vars._claimHardCap}
+                        Every day you can claim ${humanifyNumber(community.vars._amountByClaim)} up to a total of ${humanifyNumber(community.vars._claimHardCap)}
                     </Text>
                     <View style={styles.container}>
                         <Button

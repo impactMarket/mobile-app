@@ -6,6 +6,8 @@ import { IRootState } from '../helpers/types';
 import { requestCreateCommunity } from '../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
+import { ethers } from 'ethers';
+import config from '../config';
 
 
 interface INewCommunityFormFields {
@@ -89,10 +91,10 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             },
             newCommunityForm.coverImage,
             {
-                amountByClaim: newCommunityForm.amountByClaim,
+                amountByClaim: new ethers.utils.BigNumber(newCommunityForm.amountByClaim).mul(10** config.cUSDDecimals).toString(),
                 baseInterval: newCommunityForm.baseInterval,
                 incrementalInterval: (parseInt(newCommunityForm.incrementalInterval, 10) * 3600).toString(),
-                claimHardcap: newCommunityForm.claimHardcap,
+                claimHardcap: new ethers.utils.BigNumber(newCommunityForm.claimHardcap).mul(10** config.cUSDDecimals).toString(),
             },
         ).then((success) => {
             if(success) {
@@ -129,9 +131,6 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                 break;
             case 'location':
                 setNewCommunityForm({ ...newCommunityForm, location: value });
-                break;
-            case 'coverImage':
-                setNewCommunityForm({ ...newCommunityForm, coverImage: value });
                 break;
             case 'amountByClaim':
                 setNewCommunityForm({ ...newCommunityForm, amountByClaim: value });
@@ -210,6 +209,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                                 onValueChange={(value) => handleTextInputChanges('baseInterval', value)}
                             >
                                 <Picker.Item label="Daily" value="86400" />
+                                <Picker.Item label="Weekly" value="604800" />
                             </Picker>
                         </View>
                         <StyledTextInput

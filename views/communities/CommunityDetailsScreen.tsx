@@ -31,6 +31,9 @@ import {
 import {
     ScrollView
 } from 'react-native-gesture-handler';
+import { ethers } from 'ethers';
+import config from '../../config';
+import { humanifyNumber } from '../../helpers';
 
 
 const lineChartConfig: ChartConfig = {
@@ -115,8 +118,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <Card.Content>
                         <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                             <View>
-                                <Headline>€{community.vars?._amountByClaim.toString()}</Headline>
-                                <Paragraph style={{ color: '#b0b0b0' }}>Up to €{community.vars?._claimHardCap.toString()} / beneficiary</Paragraph>
+                                <Headline>€{humanifyNumber(community.vars._amountByClaim)}</Headline>
+                                <Paragraph style={{ color: '#b0b0b0' }}>Up to €{humanifyNumber(community.vars._claimHardCap)} / beneficiary</Paragraph>
                             </View>
                         </View>
                         <Divider />
