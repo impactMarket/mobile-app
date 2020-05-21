@@ -25,12 +25,12 @@ Install [expo](https://expo.io/) on your smartphone, start the app with `yarn st
 - [x] Integrate mobile app with base smart contract in testnet
 - [x] Update mobile app, use new smart contracts
 - [x] Explore and create new communities
-- [ ] Community coordinator page manager (WIP)
+- [x] Community coordinator page manager
 - [x] Admin webui (to use until end of phase 2)
 - [ ] Transaction history and pay option (WIP)
-- [ ] Multi-language
-- [ ] Create UI according to design planing
+- [ ] Create UI according to design planing (WIP)
 - [ ] Do some heavy testing (simulate real world)
+- [ ] Multi-language
 - [ ] ...
 
 ## License
