@@ -118,8 +118,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <Card.Content>
                         <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                             <View>
-                                <Headline>€{humanifyNumber(community.vars._amountByClaim)}</Headline>
-                                <Paragraph style={{ color: '#b0b0b0' }}>Up to €{humanifyNumber(community.vars._claimHardCap)} / beneficiary</Paragraph>
+                                <Headline>${humanifyNumber(community.vars._amountByClaim)}</Headline>
+                                <Paragraph style={{ color: '#b0b0b0' }}>Up to ${humanifyNumber(community.vars._claimHardCap)} / beneficiary</Paragraph>
                             </View>
                         </View>
                         <Divider />
@@ -178,7 +178,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         style={{ marginHorizontal: 5 }}
                         onPress={() => console.log('Pressed')}
                     >
-                        €10
+                        $10
                     </Button>
                     <Button
                         mode="contained"
@@ -186,7 +186,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         style={{ marginHorizontal: 5 }}
                         onPress={() => console.log('Pressed')}
                     >
-                        €20
+                        $20
                     </Button>
                     <Button
                         mode="contained"
@@ -194,7 +194,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         style={{ marginHorizontal: 5 }}
                         onPress={() => console.log('Pressed')}
                     >
-                        €50
+                        $50
                     </Button>
                     <Donate
                         community={props.route.params.community}

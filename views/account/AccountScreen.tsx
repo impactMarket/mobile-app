@@ -172,7 +172,7 @@ function AccountScreen(props: Props) {
                     <Card.Content>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <View>
-                                <Headline>€{props.user.celoInfo.balance}</Headline>
+                                <Headline>${props.user.celoInfo.balance}</Headline>
                                 <Text>{props.user.celoInfo.balance} cUSD</Text>
                             </View>
                             <BarChart
@@ -204,7 +204,7 @@ function AccountScreen(props: Props) {
                             description={activity.description}
                             left={() => <Avatar.Text size={46} label={activity.from.slice(0, 1)} />}
                             right={() => <View>
-                                <Text>€{activity.amount}</Text>
+                                <Text>${activity.amount}</Text>
                                 <Text>{activity.status}</Text>
                             </View>}
                         />)}

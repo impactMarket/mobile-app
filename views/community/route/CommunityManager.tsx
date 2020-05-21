@@ -297,7 +297,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                             </View>
                             <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
                                 <Text>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
-                                <Text style={{ marginLeft: 'auto' }}>${new ethers.utils.BigNumber(community.totalRaised).div(10 ** config.cUSDDecimals).toString()} Raised</Text>
+                                <Text style={{ marginLeft: 'auto' }}>${new ethers.utils.BigNumber(community.totalRaised).div(new ethers.utils.BigNumber(10).pow(config.cUSDDecimals)).toString()} Raised</Text>
                             </View>
                             <Button
                                 mode="outlined"

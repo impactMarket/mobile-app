@@ -222,7 +222,8 @@ export default class App extends React.Component<{}, IAppState> {
         const [cUSDBalanceBig, cUSDDecimals] = await Promise.all(
             [stableToken.balanceOf(address), stableToken.decimals()]
         )
-        let cUSDBalance = cUSDBalanceBig.div(10 ** cUSDDecimals).toFixed(2)
+        const decimals = new ethers.utils.BigNumber(10).pow(cUSDDecimals).toString();
+        let cUSDBalance = cUSDBalanceBig.div(decimals).toFixed(2)
         return cUSDBalance;
     }
 

@@ -62,7 +62,7 @@ class Donate extends Component<Props, IDonateState> {
         const txObject = stableToken.transfer(
             this.props.community.contractAddress,
             new ethers.utils.BigNumber(
-                10 ** (cUSDDecimals - 3)
+                new ethers.utils.BigNumber(10).pow(cUSDDecimals - 3)
             ).mul(
                 parseFloat(this.state.amountDonate) * 10 ** 3 // avoid dealing with decimals!
             ).toString()

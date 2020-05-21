@@ -54,7 +54,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             location: '',
             coverImage: 'https://picsum.photos/600',
             amountByClaim: '',
-            baseInterval: '',
+            baseInterval: '86400',
             incrementalInterval: '',
             claimHardcap: '',
             currency: '',
@@ -79,6 +79,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         if (location === undefined) {
             // TODO: show error!
         }
+        const decimals = new ethers.utils.BigNumber(10).pow(config.cUSDDecimals);
         setSending(true);
         requestCreateCommunity(
             props.user.celoInfo.address,
@@ -91,13 +92,13 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             },
             newCommunityForm.coverImage,
             {
-                amountByClaim: new ethers.utils.BigNumber(newCommunityForm.amountByClaim).mul(10** config.cUSDDecimals).toString(),
+                amountByClaim: new ethers.utils.BigNumber(newCommunityForm.amountByClaim).mul(decimals).toString(),
                 baseInterval: newCommunityForm.baseInterval,
                 incrementalInterval: (parseInt(newCommunityForm.incrementalInterval, 10) * 3600).toString(),
-                claimHardcap: new ethers.utils.BigNumber(newCommunityForm.claimHardcap).mul(10** config.cUSDDecimals).toString(),
+                claimHardcap: new ethers.utils.BigNumber(newCommunityForm.claimHardcap).mul(decimals).toString(),
             },
         ).then((success) => {
-            if(success) {
+            if (success) {
                 navigation.goBack();
                 Alert.alert(
                     'Success',
@@ -191,7 +192,6 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                                 style={styles.picker}
                                 onValueChange={(text, i) => setNewCommunityForm({ ...newCommunityForm, currency: text })}
                             >
-                                <Picker.Item label="Euro (EUR)" value="eur" />
                                 <Picker.Item label="Dollar (USD)" value="usd" />
                             </Picker>
                         </View>

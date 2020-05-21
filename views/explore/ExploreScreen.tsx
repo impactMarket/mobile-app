@@ -25,7 +25,7 @@ import {
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
-import { calculateCommunityProgress } from '../../helpers';
+import { calculateCommunityProgress, claimFrequencyToText, humanifyNumber } from '../../helpers';
 
 
 interface IExploreScreenProps {
@@ -136,7 +136,7 @@ class ExploreScreen extends React.Component<Props, IExploreScreenState> {
                                             <Text style={{ fontWeight: 'bold' }}>{community.beneficiaries.length}</Text>
                                         </DataTable.Cell>
                                         <DataTable.Cell>
-                                            <Text style={{ fontWeight: 'bold' }}>${community.ubiRate}/day</Text>
+                                            <Text style={{ fontWeight: 'bold' }}>${humanifyNumber(community.vars._amountByClaim)}/{claimFrequencyToText(community.vars._baseIntervalTime)}</Text>
                                         </DataTable.Cell>
                                     </DataTable.Row>
 
