@@ -9,7 +9,7 @@
             "android",
             "web"
         ],
-        "version": "0.0.1-alpha.11",
+        "version": "0.0.1-alpha.12",
         "orientation": "portrait",
         "icon": "./assets/logo.png",
         "scheme": "impactmarketmobile",
@@ -26,12 +26,12 @@
         ],
         "ios": {
             "bundleIdentifier": "com.impactmarket.mobile",
-            "buildNumber": "0.0.1a11",
+            "buildNumber": "0.0.1a12",
             "supportsTablet": true
         },
         "android": {
             "package": "com.impactmarket.mobile",
-            "versionCode": 11
+            "versionCode": 12
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
         "githubUrl": "https://github.com/obernardovieira/impactMarket"
