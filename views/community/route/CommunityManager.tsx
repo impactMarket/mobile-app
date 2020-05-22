@@ -5,6 +5,7 @@ import {
     Alert,
     Text,
     ImageBackground,
+    RefreshControl,
 } from 'react-native';
 import {
     connect,
@@ -61,6 +62,7 @@ interface ICommunityManagerViewState {
     community?: ICommunityInfo;
     hasPermission: boolean;
     scanned: boolean;
+    refreshing: boolean;
 }
 class CommunityManagerView extends React.Component<Props, ICommunityManagerViewState> {
 
@@ -73,6 +75,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             modalListManagers: false,
             hasPermission: false,
             scanned: false,
+            refreshing: true,
         }
     }
 
@@ -83,7 +86,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
             // TODO: show error
             return;
         }
-        this.setState({ community });
+        this.setState({ community, refreshing: false });
         const { status } = await BarCodeScanner.requestPermissionsAsync();
         this.setState({ hasPermission: status === 'granted' });
     }
@@ -143,6 +146,15 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
         this.setState({ scanned: true, newBeneficiaryAddress: data });
     };
 
+    onRefresh = () => {
+        const { _address } = this.props.network.contracts.communityContract;
+        getCommunityByContractAddress(_address).then((community) => {
+            if (community !== undefined) {
+                this.setState({ community, refreshing: false });
+            }
+        });
+    }
+
     render() {
         const {
             newBeneficiaryAddress,
@@ -167,7 +179,15 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
         }
 
         return (
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        //refresh control used for the Pull to Refresh
+                        refreshing={this.state.refreshing}
+                        onRefresh={this.onRefresh.bind(this)}
+                    />
+                }
+            >
                 <ImageBackground
                     source={{ uri: community.coverImage }}
                     resizeMode={'cover'}

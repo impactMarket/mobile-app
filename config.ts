@@ -26,7 +26,7 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0x2354d9642a68b04157027f8fE2fE551521D29563',
+        impactMarketContractAddress: '0x4D94E934A5A218655028388ebb0Ae79Ba8d48373',
     },
     prod: {
         /**
