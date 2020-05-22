@@ -135,7 +135,7 @@ function AccountScreen(props: Props) {
     return (
         <SafeAreaView>
             <Appbar.Header style={styles.appbar}>
-                <Appbar.Content title="Pay" />
+                <Appbar.Content title="Account" />
                 <Appbar.Action icon="help-circle-outline" />
                 <Appbar.Action icon="qrcode" onPress={() => navigation.navigate('UserShowScanQRScreen')} />
             </Appbar.Header>

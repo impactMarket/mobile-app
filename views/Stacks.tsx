@@ -12,7 +12,7 @@ import ClaimExplainedScreen from './community/ClaimExplainedScreen';
 import MyCircleScreen from './mycircle/MyCircleScreen';
 import CreateCommunityScreen from './common/CreateCommunityScreen';
 
-import PayScreen from './pay/PayScreen';
+import PayScreen from './pay';
 
 
 
