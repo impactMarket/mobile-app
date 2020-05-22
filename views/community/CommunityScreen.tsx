@@ -1,49 +1,34 @@
 import React from 'react';
 import {
-    StyleSheet,
     Text,
-    View,
 } from 'react-native';
-import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../../helpers/types';
+import {
+    connect,
+    ConnectedProps
+} from 'react-redux';
+import {
+    IRootState
+} from '../../helpers/types';
 
-import { Appbar, Avatar } from 'react-native-paper';
-import BeneficiaryView from './route/Beneficiary';
-import CommunityManagerView from './route/CommunityManager';
+import BeneficiaryView from './view/beneficiary';
+import CommunityManagerView from './view/communitymanager';
 
 
-interface ICommunityProps {
-    navigation: any;
-}
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
     return { user, network }
 };
-
 const connector = connect(mapStateToProps)
-
 type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux
 
-type Props = PropsFromRedux & ICommunityProps
-interface ICommunityState {
-}
-class CommunityScreen extends React.Component<Props, ICommunityState> {
+function CommunityScreen(props: Props) {
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-        }
-    }
-
-    contentView = () => {
-        if (this.props.user.community.isBeneficiary) {
-            return <BeneficiaryView
-                navigation={this.props.navigation}
-            />
-        } else if (this.props.user.community.isCoordinator) {
-            return <CommunityManagerView
-                navigation={this.props.navigation}
-            />;
+    const contentView = () => {
+        if (props.user.community.isBeneficiary) {
+            return <BeneficiaryView />
+        } else if (props.user.community.isCoordinator) {
+            return <CommunityManagerView />;
         } else {
             return (
                 <>
@@ -54,15 +39,7 @@ class CommunityScreen extends React.Component<Props, ICommunityState> {
         }
     }
 
-    render() {
-        return this.contentView();
-    }
+    return contentView();
 }
-
-const styles = StyleSheet.create({
-    appbar: {
-        height: 80
-    },
-});
 
 export default connector(CommunityScreen);

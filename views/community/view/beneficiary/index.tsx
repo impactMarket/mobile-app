@@ -6,18 +6,17 @@ import {
     ImageBackground,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState, ICommunityInfo } from '../../../helpers/types';
+import { IRootState, ICommunityInfo } from '../../../../helpers/types';
 
 import { Button } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-import { setUserFirstTime } from '../../../helpers/redux/actions/ReduxActions';
-import { CommunityInstance } from '../../../contracts/types/truffle-contracts';
+import { setUserFirstTime } from '../../../../helpers/redux/actions/ReduxActions';
+import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 import { ethers } from 'ethers';
 import { LinearGradient } from 'expo-linear-gradient';
-import { celoWalletRequest, getCommunityByContractAddress } from '../../../services';
+import { celoWalletRequest, getCommunityByContractAddress } from '../../../../services';
 import { ScrollView } from 'react-native-gesture-handler';
-import config from '../../../config';
-import { humanifyNumber } from '../../../helpers';
+import { humanifyNumber } from '../../../../helpers';
 
 
 interface IBeneficiaryViewProps {
