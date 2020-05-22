@@ -22,9 +22,13 @@ import {
 } from 'expo';
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CommunityStackScreen from './views/CommunityStackScreen';
-import PayStackScreen from './views/PayStackScreen';
-import AccountStackScreen from './views/AccountStackScreen';
+import {
+    CommunityStackScreen,
+    PayStackScreen,
+    AccountStackScreen,
+    CommunitiesStackScreen,
+    MyCircleStackScreen,
+} from './views/Stacks';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
 import { Provider } from 'react-redux';
@@ -53,8 +57,6 @@ import { ethers } from 'ethers';
 import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
 import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
 import CommunityContractABI from './contracts/CommunityABI.json'
-import CommunitiesStackScreen from './views/CommunitiesStackScreen';
-import MyCircleStackScreen from './views/MyCircleStackScreen';
 import config from './config';
 import {
     findComunityToBeneficicary,

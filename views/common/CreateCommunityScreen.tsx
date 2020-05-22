@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, Alert, Text, View, Picker, TextInput, TextInputProperties } from 'react-native';
 import { Card, Button, Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../helpers/types';
-import { requestCreateCommunity } from '../services';
+import { IRootState } from '../../helpers/types';
+import { requestCreateCommunity } from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
-import config from '../config';
+import config from '../../config';
 import BigNumber from 'bignumber.js';
 
 

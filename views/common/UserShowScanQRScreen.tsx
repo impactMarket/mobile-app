@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../helpers/types';
+import { IRootState } from '../../helpers/types';
 import { useNavigation } from '@react-navigation/native';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { Paragraph, Headline, Subheading, Card, Button, Text, Avatar } from 'react-native-paper';
@@ -37,7 +37,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                         <Avatar.Image
                             style={{ alignSelf: 'center', marginLeft: 'auto' }}
                             size={58}
-                            source={require('../assets/hello.png')}
+                            source={require('../../assets/hello.png')}
                         />
                     </View>
                     <View style={styles.qrView}>
