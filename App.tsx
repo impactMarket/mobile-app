@@ -60,7 +60,7 @@ import {
     findComunityToBeneficicary,
     findComunityToManager,
 } from './services';
-import axios from 'axios';
+import BigNumber from 'bignumber.js';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -222,7 +222,7 @@ export default class App extends React.Component<{}, IAppState> {
         const [cUSDBalanceBig, cUSDDecimals] = await Promise.all(
             [stableToken.balanceOf(address), stableToken.decimals()]
         )
-        const decimals = new ethers.utils.BigNumber(10).pow(cUSDDecimals).toString();
+        const decimals = new BigNumber(10).pow(cUSDDecimals).toString();
         let cUSDBalance = cUSDBalanceBig.div(decimals).toFixed(2)
         return cUSDBalance;
     }

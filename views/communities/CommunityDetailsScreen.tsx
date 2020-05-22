@@ -31,8 +31,6 @@ import {
 import {
     ScrollView
 } from 'react-native-gesture-handler';
-import { ethers } from 'ethers';
-import config from '../../config';
 import { humanifyNumber } from '../../helpers';
 
 

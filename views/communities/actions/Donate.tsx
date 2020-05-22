@@ -18,7 +18,7 @@ import {
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from '../../../services';
-import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 
 
 interface IExploreScreenProps {
@@ -61,10 +61,10 @@ class Donate extends Component<Props, IDonateState> {
         const cUSDDecimals = await stableToken.decimals();
         const txObject = stableToken.transfer(
             this.props.community.contractAddress,
-            new ethers.utils.BigNumber(
-                new ethers.utils.BigNumber(10).pow(cUSDDecimals - 3)
-            ).mul(
-                parseFloat(this.state.amountDonate) * 10 ** 3 // avoid dealing with decimals!
+            new BigNumber(
+                this.state.amountDonate
+            ).multipliedBy(
+                new BigNumber(10).pow(cUSDDecimals)
             ).toString()
         ).txo
         const requestId = "donate-to-community";

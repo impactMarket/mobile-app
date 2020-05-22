@@ -6,8 +6,8 @@ import { IRootState } from '../helpers/types';
 import { requestCreateCommunity } from '../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
-import { ethers } from 'ethers';
 import config from '../config';
+import BigNumber from 'bignumber.js';
 
 
 interface INewCommunityFormFields {
@@ -79,7 +79,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         if (location === undefined) {
             // TODO: show error!
         }
-        const decimals = new ethers.utils.BigNumber(10).pow(config.cUSDDecimals);
+        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         setSending(true);
         requestCreateCommunity(
             props.user.celoInfo.address,
@@ -92,10 +92,10 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             },
             newCommunityForm.coverImage,
             {
-                amountByClaim: new ethers.utils.BigNumber(newCommunityForm.amountByClaim).mul(decimals).toString(),
+                amountByClaim: new BigNumber(newCommunityForm.amountByClaim).multipliedBy(decimals).toString(),
                 baseInterval: newCommunityForm.baseInterval,
                 incrementalInterval: (parseInt(newCommunityForm.incrementalInterval, 10) * 3600).toString(),
-                claimHardcap: new ethers.utils.BigNumber(newCommunityForm.claimHardcap).mul(decimals).toString(),
+                claimHardcap: new BigNumber(newCommunityForm.claimHardcap).multipliedBy(decimals).toString(),
             },
         ).then((success) => {
             if (success) {

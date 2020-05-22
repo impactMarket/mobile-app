@@ -36,8 +36,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { calculateCommunityProgress } from '../../../helpers';
-import { ethers } from 'ethers';
 import config from '../../../config';
+import BigNumber from 'bignumber.js';
 
 
 interface ICommunityManagerViewProps {
@@ -317,7 +317,7 @@ class CommunityManagerView extends React.Component<Props, ICommunityManagerViewS
                             </View>
                             <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
                                 <Text>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
-                                <Text style={{ marginLeft: 'auto' }}>${new ethers.utils.BigNumber(community.totalRaised).div(new ethers.utils.BigNumber(10).pow(config.cUSDDecimals)).toString()} Raised</Text>
+                                <Text style={{ marginLeft: 'auto' }}>${new BigNumber(community.totalRaised).div(new BigNumber(10).pow(config.cUSDDecimals)).toFixed(2)} Raised</Text>
                             </View>
                             <Button
                                 mode="outlined"

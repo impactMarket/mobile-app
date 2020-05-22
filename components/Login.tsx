@@ -23,6 +23,7 @@ import {
 import { setUserCeloInfo, setUserFirstTime } from '../helpers/redux/actions/ReduxActions';
 import { ConnectedProps, connect } from 'react-redux';
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 
 
 interface ILoginProps {
@@ -43,7 +44,7 @@ class Login extends React.Component<Props, {}> {
         const stableToken = await this.props.network.kit.contracts.getStableToken()
 
         const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(address), stableToken.decimals()])
-        const decimals = new ethers.utils.BigNumber(10).pow(cUSDDecimals).toString();
+        const decimals = new BigNumber(10).pow(cUSDDecimals).toString();
         let cUSDBalance = cUSDBalanceBig.div(decimals).toFixed(2)
         return cUSDBalance;
     }
