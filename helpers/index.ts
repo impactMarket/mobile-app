@@ -20,13 +20,12 @@ export function calculateCommunityProgress(
     toCalculte: string /*'raised' | 'claimed'*/,
     community: ICommunityInfo
 ): number {
-    const decimals = new BigNumber(10).pow(config.cUSDDecimals);
     if (toCalculte === 'raised') {
         const m = new BigNumber(community.vars._claimHardCap).multipliedBy(community.beneficiaries.length);
         const result = new BigNumber(community.totalRaised).div(m.eq(0) ? 1 : m);
-        return result.div(decimals).toNumber();
+        return result.toNumber();
     }
     const result = new BigNumber(community.totalClaimed)
         .div(new BigNumber(community.totalRaised).eq(0) ? 1 : community.totalRaised);
-    return result.div(decimals).toNumber();
+    return result.toNumber();
 }
