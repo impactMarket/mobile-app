@@ -82,17 +82,18 @@ class Claim extends React.Component<Props, IClaimState> {
         const { address } = this.props.user.celoInfo;
         const cooldownTime = parseInt((await communityInstance.methods.cooldownClaim(address).call()).toString(), 10);
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
-        const remainingCooldown = cooldownTime * 1000 - new Date().getTime();
         if (claimDisabled) {
-            let duration = moment.duration(remainingCooldown, 'seconds');
             const interval = 1000;
-            const intervalTimer = setInterval(() => {
-                duration = moment.duration(duration.seconds() - interval, 'seconds');
-                this.setState({ nextClaim: duration });
-                if (duration.seconds() === 0) {
+            const updateTimer = () => {
+                const timeLeft = moment.duration(moment(cooldownTime * 1000).diff(moment())); 
+                this.setState({ nextClaim: timeLeft });
+                if (timeLeft.asSeconds() === 0) {
+                    this.setState({ claimDisabled: false })
                     clearInterval(intervalTimer);
                 }
-            }, interval);
+            }
+            updateTimer();
+            const intervalTimer = setInterval(updateTimer, interval);
         }
         this.setState({ claimDisabled })
     }
