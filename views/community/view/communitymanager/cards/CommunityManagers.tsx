@@ -10,7 +10,7 @@ import {
     Button,
     Card,
 } from 'react-native-paper';
-import ListCommunityManagers from '../ListCommunityManagers';
+import ListCommunityManagers from '../components/ListCommunityManagers';
 
 
 interface ICommunityManagersProps {

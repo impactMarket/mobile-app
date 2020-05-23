@@ -11,7 +11,7 @@ import {
 import {
     IRootState,
     IBeneficiary,
-} from '../../../../helpers/types';
+} from '../../../../../helpers/types';
 import {
     Button,
     Portal,
@@ -20,7 +20,7 @@ import {
 } from 'react-native-paper';
 import {
     celoWalletRequest,
-} from '../../../../services';
+} from '../../../../../services';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 

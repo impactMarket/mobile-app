@@ -17,8 +17,8 @@ import {
 import {
     getCommunityByContractAddress,
 } from '../../../../../services';
-import AddBeneficiary from '../AddBeneficiary';
-import ListBeneficiaries from '../ListBeneficiaries';
+import AddBeneficiary from '../components/AddBeneficiary';
+import ListBeneficiaries from '../components/ListBeneficiaries';
 
 
 interface IBeneficiariesProps {
