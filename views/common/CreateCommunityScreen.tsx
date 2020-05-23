@@ -1,7 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, Alert, Text, View, Picker, TextInput, TextInputProperties } from 'react-native';
-import { Card, Button, Paragraph } from 'react-native-paper';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useState } from 'react';
+import {
+    StyleSheet,
+    ScrollView,
+    Alert,
+    Text,
+    View,
+    Picker,
+    TextInput,
+    TextInputProperties
+} from 'react-native';
+import {
+    Card,
+    Button,
+    Paragraph
+} from 'react-native-paper';
+import {
+    connect,
+    ConnectedProps
+} from 'react-redux';
 import { IRootState } from '../../helpers/types';
 import { requestCreateCommunity } from '../../services';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +26,16 @@ import config from '../../config';
 import BigNumber from 'bignumber.js';
 
 
+const mapStateToProps = (state: IRootState) => {
+    const { user, network } = state
+    return { user, network }
+};
+const connector = connect(mapStateToProps)
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+interface IStyledTextInputProps extends TextInputProperties {
+    label: string;
+}
 interface INewCommunityFormFields {
     name: string;
     description: string;
@@ -20,19 +46,6 @@ interface INewCommunityFormFields {
     incrementalInterval: string;
     claimHardcap: string;
     currency: string;
-}
-
-const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
-};
-
-const connector = connect(mapStateToProps)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-interface IStyledTextInputProps extends TextInputProperties {
-    label: string;
 }
 const StyledTextInput = (props: IStyledTextInputProps) => <>
     <Paragraph style={styles.inputTextFieldLabel}>{props.label}</Paragraph>
@@ -46,7 +59,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
     const navigation = useNavigation();
 
     const [sending, setSending] = useState(false);
-    const [location, setLocation] = useState<Location.LocationData>();
+    const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
     const [newCommunityForm, setNewCommunityForm] = useState<INewCommunityFormFields>(
         {
             name: '',
@@ -61,23 +74,10 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         }
     );
 
-    useEffect(() => {
-        const requestAccessToLocation = async () => {
-            let { status } = await Location.requestPermissionsAsync();
-            if (status !== 'granted') {
-                // TODO: do some stuff
-            }
-
-            let loc = await Location.getCurrentPositionAsync();
-            setLocation(loc);
-            console.log('loc', loc);
-        }
-        requestAccessToLocation();
-    }, []);
-
     const submitNewCommunity = () => {
         if (location === undefined) {
             // TODO: show error!
+            return;
         }
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         setSending(true);
@@ -87,8 +87,8 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             newCommunityForm.description,
             {
                 title: newCommunityForm.location,
-                latitude: location!.coords.latitude,
-                longitude: location!.coords.longitude,
+                latitude: gpsLocation!.coords.latitude,
+                longitude: gpsLocation!.coords.longitude,
             },
             newCommunityForm.coverImage,
             {
@@ -148,6 +148,18 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         }
     }
 
+    const enableGPSLocation = async () => {
+        let { status } = await Location.requestPermissionsAsync();
+        if (status !== 'granted') {
+            // TODO: do some stuff
+            return;
+        }
+
+        let loc = await Location.getCurrentPositionAsync();
+        setGpsLocation(loc);
+        console.log('loc', loc);
+    }
+
     if (props.user.celoInfo.address.length === 0) {
         return <ScrollView>
             <View style={styles.container}>
@@ -181,6 +193,12 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                             value={newCommunityForm.location}
                             onChangeText={value => handleTextInputChanges('location', value)}
                         />
+                        {location === undefined && <Button
+                            mode="outlined"
+                            onPress={() => enableGPSLocation()}
+                        >
+                            Enable GPS Location
+                        </Button>}
                     </Card.Content>
                 </Card>
                 <Card style={{ marginVertical: 15 }}>
