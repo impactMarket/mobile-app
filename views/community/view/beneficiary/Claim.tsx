@@ -7,6 +7,8 @@ import { CommunityInstance } from '../../../../contracts/types/truffle-contracts
 import { ethers } from 'ethers';
 import { celoWalletRequest } from '../../../../services';
 
+import moment from 'moment';
+
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -18,7 +20,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux
 
 interface IClaimState {
-    nextClaim: number;
+    nextClaim: moment.Duration;
     claimDisabled: boolean;
     claiming: boolean;
 }
@@ -27,7 +29,7 @@ class Claim extends React.Component<Props, IClaimState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            nextClaim: 0,
+            nextClaim: moment.duration(0),
             claimDisabled: true,
             claiming: false,
         }
@@ -71,7 +73,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 disabled={claimDisabled}
                 loading={claiming}
             >
-                {claimDisabled ? new Date(nextClaim).toLocaleString() : 'Claim'}
+                {claimDisabled ? `${nextClaim.days()}d ${nextClaim.hours()}h ${nextClaim.minutes()}m ${nextClaim.seconds()}s` : 'Claim'}
             </Button>
         );
     }
@@ -81,16 +83,18 @@ class Claim extends React.Component<Props, IClaimState> {
         const cooldownTime = parseInt((await communityInstance.methods.cooldownClaim(address).call()).toString(), 10);
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
         const remainingCooldown = cooldownTime * 1000 - new Date().getTime();
-        // if timeout is bigger than 3 minutes, ignore!
-        if (claimDisabled && remainingCooldown < 90000) {
-            setTimeout(() => {
-                this.setState({ claimDisabled: false });
-            }, remainingCooldown);
+        if (claimDisabled) {
+            let duration = moment.duration(remainingCooldown, 'seconds');
+            const interval = 1000;
+            const intervalTimer = setInterval(() => {
+                duration = moment.duration(duration.seconds() - interval, 'seconds');
+                this.setState({ nextClaim: duration });
+                if (duration.seconds() === 0) {
+                    clearInterval(intervalTimer);
+                }
+            }, interval);
         }
-        this.setState({
-            claimDisabled,
-            nextClaim: cooldownTime * 1000,
-        })
+        this.setState({ claimDisabled })
     }
 }
 
