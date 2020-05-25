@@ -37,6 +37,7 @@ interface IAddBeneficiaryState {
     hasPermission: boolean;
     scanned: boolean;
     useCamera: boolean;
+    addInProgress: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -57,6 +58,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             hasPermission: false,
             scanned: false,
             useCamera: true,
+            addInProgress: false,
         }
     }
 
@@ -66,18 +68,30 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
         const { user, network } = this.props;
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
+        let addressToAdd: string;
 
         if (communityContract === undefined) {
             // TODO: do something beatiful, la la la
             return;
         }
 
-        // TODO: validate newBeneficiaryAddress
+        try {
+            addressToAdd = ethers.utils.getAddress(newBeneficiaryAddress);
+        } catch (e) {
+            Alert.alert(
+                'Failure',
+                'You are trying to add an invalid address!',
+                [{ text: 'Close' }],
+                { cancelable: false }
+            );
+            return;
+        }
 
+        this.setState({ addInProgress: true });
         celoWalletRequest(
             address,
             communityContract.options.address,
-            await communityContract.methods.addBeneficiary(newBeneficiaryAddress),
+            await communityContract.methods.addBeneficiary(addressToAdd),
             'accept_beneficiary_request',
             network,
         ).then(() => {
@@ -88,23 +102,19 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             Alert.alert(
                 'Success',
                 'You\'ve accepted the beneficiary request!',
-                [
-                    { text: 'OK' },
-                ],
+                [{ text: 'OK' }],
                 { cancelable: false }
             );
         }).catch(() => {
             Alert.alert(
                 'Failure',
                 'An error happened while accepting the request!',
-                [
-                    { text: 'OK' },
-                ],
+                [{ text: 'Close' }],
                 { cancelable: false }
             );
 
         }).finally(() => {
-            this.setState({ modalNewBeneficiary: false })
+            this.setState({ modalNewBeneficiary: false, addInProgress: false })
         });
     }
 
@@ -132,6 +142,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             hasPermission,
             scanned,
             useCamera,
+            addInProgress,
         } = this.state;
         let inputMethod;
 
@@ -200,14 +211,16 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                             </Button>
                             <Button
                                 mode="contained"
-                                disabled={newBeneficiaryAddress.length === 0}
+                                disabled={newBeneficiaryAddress.length === 0 || addInProgress}
+                                loading={addInProgress}
                                 style={{ marginRight: 10 }}
                                 onPress={this.handleAddBeneficiary}
                             >
                                 Add
-                                </Button>
+                            </Button>
                             <Button
                                 mode="contained"
+                                disabled={addInProgress}
                                 onPress={() => this.setState({
                                     modalNewBeneficiary: false,
                                     newBeneficiaryAddress: ''
