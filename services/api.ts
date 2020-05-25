@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiary, ICommunityInfo } from '../helpers/types';
+import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction } from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -121,8 +121,8 @@ async function findComunityToBeneficicary(
 
 async function findComunityToManager(
     managerAddress: string,
-): Promise<ICommunity | undefined> {
-    let response: ICommunity | undefined = undefined;
+): Promise<ICommunity | ITransaction | undefined> {
+    let response: ICommunity | ITransaction | undefined = undefined;
     try {
         const result = await axios.get(`/transactions/managerin/${managerAddress}`);
         if (result.data === "") {
