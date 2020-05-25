@@ -22,6 +22,8 @@ import {
     celoWalletRequest,
 } from '../../../../../services';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { ethers } from 'ethers';
+import ValidatedTextInput from '../../../../../components/ValidatedTextInput';
 
 
 interface IAddBeneficiaryProps {
@@ -34,6 +36,7 @@ interface IAddBeneficiaryState {
     requestConfirmation?: IBeneficiary;
     hasPermission: boolean;
     scanned: boolean;
+    useCamera: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -53,6 +56,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             modalListBeneficiary: false,
             hasPermission: false,
             scanned: false,
+            useCamera: true,
         }
     }
 
@@ -105,7 +109,14 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
     }
 
     handleBarCodeScanned = ({ type, data }: { type: any, data: any }) => {
-        this.setState({ scanned: true, newBeneficiaryAddress: data });
+        let scannedAddress: string;
+        try {
+            const parsed = JSON.parse(data);
+            scannedAddress = ethers.utils.getAddress(parsed.address);
+        } catch (e) {
+            scannedAddress = ethers.utils.getAddress(data);
+        }
+        this.setState({ scanned: true, newBeneficiaryAddress: scannedAddress });
     };
 
     handleAskCameraPermission = async () => {
@@ -120,26 +131,46 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             modalNewBeneficiary,
             hasPermission,
             scanned,
+            useCamera,
         } = this.state;
-        let barCodeScanner;
+        let inputMethod;
 
-        if (hasPermission === null || hasPermission === false) {
-            barCodeScanner = <Button onPress={this.handleAskCameraPermission}>Allow camera</Button>;
-        } else {
-            barCodeScanner = <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
-                }}>
-
-                <BarCodeScanner
-                    onBarCodeScanned={this.handleBarCodeScanned}
-                    style={StyleSheet.absoluteFillObject}
+        if (!useCamera) {
+            inputMethod = <>
+                <ValidatedTextInput
+                    label="Beneficiary Address"
+                    value={newBeneficiaryAddress}
+                    required={true}
+                    onChangeText={value => this.setState({ newBeneficiaryAddress: value })}
                 />
+            </>;
+        }
+        else if (hasPermission === null || hasPermission === false) {
+            inputMethod = <Button mode="contained" onPress={this.handleAskCameraPermission}>Allow camera</Button>;
+        } else {
+            inputMethod = <>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'column',
+                        justifyContent: 'flex-end',
+                    }}>
 
-                {scanned && <Button onPress={() => this.setState({ scanned: false })}>Tap to Scan Again</Button>}
-            </View>
+                    <BarCodeScanner
+                        onBarCodeScanned={this.handleBarCodeScanned}
+                        style={StyleSheet.absoluteFillObject}
+                    />
+
+                    {scanned && <Button onPress={() => this.setState({ scanned: false })}>Tap to Scan Again</Button>}
+                </View>
+                <Paragraph>Current Address:</Paragraph>
+                {
+                    newBeneficiaryAddress.length > 0 &&
+                    <Paragraph style={{ fontWeight: 'bold' }}>
+                        {newBeneficiaryAddress.slice(0, 12)}..{newBeneficiaryAddress.slice(31, 42)}
+                    </Paragraph>
+                }
+            </>
         }
 
         return (
@@ -156,14 +187,17 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                         visible={modalNewBeneficiary}
                         onDismiss={() => this.setState({ modalNewBeneficiary: false })}
                     >
-                        <Dialog.Title>Confirmation</Dialog.Title>
                         <Dialog.Content style={{ height: 350, width: '100%' }}>
-                            {barCodeScanner}
-                            <Paragraph>Current scanned address:</Paragraph>
-                            <Paragraph style={{ fontWeight: 'bold' }}>{newBeneficiaryAddress}</Paragraph>
-                            <Paragraph>Click Add to add as beneficiary</Paragraph>
+                            {inputMethod}
                         </Dialog.Content>
                         <Dialog.Actions>
+                            <Button
+                                mode="outlined"
+                                style={{ marginHorizontal: 10 }}
+                                onPress={() => this.setState({ newBeneficiaryAddress: '', useCamera: !useCamera })}
+                            >
+                                Use {useCamera ? 'text' : 'camera'}
+                            </Button>
                             <Button
                                 mode="contained"
                                 disabled={newBeneficiaryAddress.length === 0}
