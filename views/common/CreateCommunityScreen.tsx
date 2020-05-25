@@ -6,8 +6,6 @@ import {
     Text,
     View,
     Picker,
-    TextInput,
-    TextInputProperties
 } from 'react-native';
 import {
     Card,
@@ -24,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import config from '../../config';
 import BigNumber from 'bignumber.js';
+import ValidatedTextInput from '../../components/ValidatedTextInput';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -33,69 +32,72 @@ const mapStateToProps = (state: IRootState) => {
 const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-interface IStyledTextInputProps extends TextInputProperties {
-    label: string;
-}
-interface INewCommunityFormFields {
-    name: string;
-    description: string;
-    location: string;
-    coverImage: string;
-    amountByClaim: string;
-    baseInterval: string;
-    incrementalInterval: string;
-    claimHardcap: string;
-    currency: string;
-}
-const StyledTextInput = (props: IStyledTextInputProps) => <>
-    <Paragraph style={styles.inputTextFieldLabel}>{props.label}</Paragraph>
-    <TextInput
-        style={styles.inputTextField}
-        {...props}
-    />
-</>;
-
 function CreateCommunityScreen(props: PropsFromRedux) {
     const navigation = useNavigation();
 
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
-    const [newCommunityForm, setNewCommunityForm] = useState<INewCommunityFormFields>(
-        {
-            name: '',
-            description: '',
-            location: '',
-            coverImage: 'https://picsum.photos/600',
-            amountByClaim: '',
-            baseInterval: '86400',
-            incrementalInterval: '',
-            claimHardcap: '',
-            currency: '',
-        }
-    );
+    //
+    const [isNameValid, setIsNameValid] = useState(false);
+    const [isDescriptionValid, setIsDescriptionValid] = useState(false);
+    const [isLocationNameValid, setIsLocationNameValid] = useState(false);
+    const [isAmountByClaimValid, setIsAmountByClaimValid] = useState(false);
+    const [isIncrementalIntervalValid, setIsIncrementalIntervalValid] = useState(false);
+    const [isClaimHardcapValid, setIsClaimHardcapValid] = useState(false);
+    //
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [locationTitle, setLocationTitle] = useState('');
+    const [coverImage, setCoverImage] = useState('https://picsum.photos/600');
+    const [amountByClaim, setAmountByClaim] = useState('');
+    const [baseInterval, setBaseInterval] = useState('86400');
+    const [incrementalInterval, setIncrementalInterval] = useState('');
+    const [claimHardcap, setClaimHardcap] = useState('');
+    const [currency, setCurrency] = useState('');
 
     const submitNewCommunity = () => {
-        if (location === undefined) {
+        if (gpsLocation === undefined) {
             // TODO: show error!
+            return;
+        }
+        if (new BigNumber(claimHardcap).lt(amountByClaim)) {
+            Alert.alert('Failure',
+                'Claim Amount should be bigger that Max Claim!',
+                [{ text: 'OK' }], { cancelable: false }
+            );
+            return;
+        }
+        if (new BigNumber(amountByClaim).eq(0)) {
+            Alert.alert('Failure',
+                'Claim Amount should not be zero!',
+                [{ text: 'OK' }], { cancelable: false }
+            );
+            return;
+        }
+        if (new BigNumber(claimHardcap).eq(0)) {
+            Alert.alert('Failure',
+                'Max Claim should not be zero!',
+                [{ text: 'OK' }], { cancelable: false }
+            );
             return;
         }
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         setSending(true);
         requestCreateCommunity(
             props.user.celoInfo.address,
-            newCommunityForm.name,
-            newCommunityForm.description,
+            name,
+            description,
             {
-                title: newCommunityForm.location,
+                title: locationTitle,
                 latitude: gpsLocation!.coords.latitude,
                 longitude: gpsLocation!.coords.longitude,
             },
-            newCommunityForm.coverImage,
+            coverImage,
             {
-                amountByClaim: new BigNumber(newCommunityForm.amountByClaim).multipliedBy(decimals).toString(),
-                baseInterval: newCommunityForm.baseInterval,
-                incrementalInterval: (parseInt(newCommunityForm.incrementalInterval, 10) * 3600).toString(),
-                claimHardcap: new BigNumber(newCommunityForm.claimHardcap).multipliedBy(decimals).toString(),
+                amountByClaim: new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
+                baseInterval: baseInterval,
+                incrementalInterval: (parseInt(incrementalInterval, 10) * 3600).toString(),
+                claimHardcap: new BigNumber(claimHardcap).multipliedBy(decimals).toString(),
             },
         ).then((success) => {
             if (success) {
@@ -122,32 +124,6 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         });
     }
 
-    const handleTextInputChanges = (name: string, value: string) => {
-        switch (name) {
-            case 'name':
-                setNewCommunityForm({ ...newCommunityForm, name: value });
-                break;
-            case 'description':
-                setNewCommunityForm({ ...newCommunityForm, description: value });
-                break;
-            case 'location':
-                setNewCommunityForm({ ...newCommunityForm, location: value });
-                break;
-            case 'amountByClaim':
-                setNewCommunityForm({ ...newCommunityForm, amountByClaim: value });
-                break;
-            case 'baseInterval':
-                setNewCommunityForm({ ...newCommunityForm, baseInterval: value });
-                break;
-            case 'incrementalInterval':
-                setNewCommunityForm({ ...newCommunityForm, incrementalInterval: value });
-                break;
-            case 'claimHardcap':
-                setNewCommunityForm({ ...newCommunityForm, claimHardcap: value });
-                break;
-        }
-    }
-
     const enableGPSLocation = async () => {
         let { status } = await Location.requestPermissionsAsync();
         if (status !== 'granted') {
@@ -159,6 +135,15 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         setGpsLocation(loc);
         console.log('loc', loc);
     }
+
+    const isSubmitAvailable = isNameValid &&
+        isDescriptionValid &&
+        isLocationNameValid &&
+        isAmountByClaimValid &&
+        isIncrementalIntervalValid &&
+        isClaimHardcapValid &&
+        gpsLocation !== undefined &&
+        !sending;
 
     if (props.user.celoInfo.address.length === 0) {
         return <ScrollView>
@@ -176,28 +161,44 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                         <Text style={{ color: 'grey', backgroundColor: '#f0f0f0', paddingVertical: 10 }}>
                             Praesent eget condimentum enim, elementum viverra dui. Nam aliquam, nisi sit amet eleifend finibus, tellus metus dignissim est, vel fringilla urna mi ut lorem. Suspendisse blandit bibendum nunc, non bibendum mauris laoreet non. Morbi eget sollicitudin nunc. In laoreet nisi ac lacus maximus aliquet. Ut ullamcorper rutrum dolor non fringilla. Donec nunc metus, pulvinar ac dapibus eget, faucibus sit amet urna. Aliquam erat volutpat.
                         </Text>
-                        <StyledTextInput
+                        <ValidatedTextInput
                             label="Name"
-                            value={newCommunityForm.name}
-                            onChangeText={value => handleTextInputChanges('name', value)}
+                            value={name}
+                            maxLength={32}
+                            required={true}
+                            setValid={setIsNameValid}
+                            onChangeText={value => setName(value)}
                         />
-                        <StyledTextInput
+                        <ValidatedTextInput
                             label="Description"
-                            value={newCommunityForm.description}
-                            onChangeText={value => handleTextInputChanges('description', value)}
+                            value={description}
+                            maxLength={256}
+                            required={true}
+                            setValid={setIsDescriptionValid}
+                            onChangeText={value => setDescription(value)}
                             multiline={true}
                             numberOfLines={6}
                         />
-                        <StyledTextInput
+                        <ValidatedTextInput
                             label="City"
-                            value={newCommunityForm.location}
-                            onChangeText={value => handleTextInputChanges('location', value)}
+                            value={locationTitle}
+                            maxLength={32}
+                            required={true}
+                            setValid={setIsLocationNameValid}
+                            onChangeText={value => setLocationTitle(value)}
                         />
-                        {location === undefined && <Button
+                        {gpsLocation === undefined && <Button
                             mode="outlined"
                             onPress={() => enableGPSLocation()}
                         >
-                            Enable GPS Location
+                            Get GPS Location
+                        </Button>}
+                        {gpsLocation !== undefined && <Button
+                            icon="check"
+                            mode="outlined"
+                            disabled={true}
+                        >
+                            Valid Coordinates
                         </Button>}
                     </Card.Content>
                 </Card>
@@ -206,47 +207,54 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                         <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
                         <View style={styles.pickerBorder}>
                             <Picker
-                                selectedValue={newCommunityForm.currency}
+                                selectedValue={currency}
                                 style={styles.picker}
-                                onValueChange={(text, i) => setNewCommunityForm({ ...newCommunityForm, currency: text })}
+                                onValueChange={(text) => setCurrency(text)}
                             >
                                 <Picker.Item label="Dollar (USD)" value="usd" />
                             </Picker>
                         </View>
-                        <StyledTextInput
+                        <ValidatedTextInput
                             label="Claim Amount"
                             keyboardType="numeric"
-                            value={newCommunityForm.amountByClaim}
-                            onChangeText={value => handleTextInputChanges('amountByClaim', value)}
+                            value={amountByClaim}
+                            required={true}
+                            setValid={setIsAmountByClaimValid}
+                            onChangeText={value => setAmountByClaim(value)}
                         />
                         <Paragraph style={styles.inputTextFieldLabel}>Base Interval</Paragraph>
                         <View style={styles.pickerBorder}>
                             <Picker
-                                selectedValue={newCommunityForm.baseInterval}
+                                selectedValue={baseInterval}
                                 style={styles.picker}
-                                onValueChange={(value) => handleTextInputChanges('baseInterval', value)}
+                                onValueChange={(value) => setBaseInterval(value)}
                             >
                                 <Picker.Item label="Daily" value="86400" />
                                 <Picker.Item label="Weekly" value="604800" />
                             </Picker>
                         </View>
-                        <StyledTextInput
+                        <ValidatedTextInput
                             label="Incremental Time (in hours)"
                             keyboardType="numeric"
-                            value={newCommunityForm.incrementalInterval}
-                            onChangeText={value => handleTextInputChanges('incrementalInterval', value)}
+                            value={incrementalInterval}
+                            required={true}
+                            setValid={setIsIncrementalIntervalValid}
+                            onChangeText={value => setIncrementalInterval(value)}
                         />
-                        <StyledTextInput
+                        <ValidatedTextInput
                             label="Max Claim"
                             keyboardType="numeric"
-                            value={newCommunityForm.claimHardcap}
-                            onChangeText={value => handleTextInputChanges('claimHardcap', value)}
+                            value={claimHardcap}
+                            required={true}
+                            setValid={setIsClaimHardcapValid}
+                            onChangeText={value => setClaimHardcap(value)}
                         />
                     </Card.Content>
                 </Card>
                 <Button
                     mode="outlined"
                     loading={sending}
+                    disabled={!isSubmitAvailable}
                     onPress={() => submitNewCommunity()}
                 >
                     Create Community

@@ -24,7 +24,6 @@ export interface IUserCeloInfo {
 export interface IUserCommunityInfo {
     isBeneficiary: boolean;
     isCoordinator: boolean;
-    // TODO: communityAddress: string;
 }
 
 export interface IUserState {
@@ -94,6 +93,14 @@ export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityA
 
 export interface ILoginCallbackAnswer {
     celoInfo: IUserCeloInfo;
+}
+
+export interface ITransaction {
+    tx: string; // Note that the `null assertion` `!` is required in strict mode.
+    from: string;
+    contractAddress: string;
+    event: string;
+    values: any;
 }
 
 export interface ICommunity {
