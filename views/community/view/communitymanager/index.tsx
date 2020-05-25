@@ -66,6 +66,24 @@ function CommunityManagerView(props: Props) {
         });
     }
 
+    const communityStatus = (_community: ICommunityInfo) => {
+        if (_community.status === 'pending') {
+            return <Text>Communtiy is still waiting approval</Text>
+        }
+        return <>
+            <Beneficiaries
+                community={_community}
+                updateCommunity={(_communityUpdate) => setCommunity(_communityUpdate)}
+            />
+            <CommunityManagers
+                managers={_community.managers}
+            />
+            <Status
+                community={_community}
+            />
+        </>
+    }
+
     if (community === undefined) {
         return <View>
             <Paragraph>Loading...</Paragraph>
@@ -121,16 +139,7 @@ function CommunityManagerView(props: Props) {
                         More...
                         </Button>
                 </View>
-                <Beneficiaries
-                    community={community}
-                    updateCommunity={(_community) => setCommunity(_community)}
-                />
-                <CommunityManagers
-                    managers={community.managers}
-                />
-                <Status
-                    community={community}
-                />
+                {communityStatus(community)}
             </View>
         </ScrollView>
     );
