@@ -42,7 +42,6 @@ function PayScreen(props: Props) {
         <SafeAreaView>
             <Appbar.Header style={styles.appbar}>
                 <Appbar.Content title="Pay" />
-                <Text>{`Balance: ${props.user.celoInfo.balance}$`}</Text>
                 <Appbar.Action icon="help-circle-outline" />
                 <Appbar.Action icon="qrcode" onPress={() => navigation.navigate('UserShowScanQRScreen')} />
             </Appbar.Header>
@@ -56,6 +55,7 @@ function PayScreen(props: Props) {
                             value={paymentAmount}
                             onChangeText={setPaymentAmount}
                         />
+                        <Text style={{ color: 'grey', textAlign: 'center', marginBottom: 8 }}>{`Balance: ${props.user.celoInfo.balance}$`}</Text>
                         <Divider />
                         <TextInput
                             style={{ padding: 10 }}

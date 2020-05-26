@@ -121,7 +121,7 @@ function CommunityManagerView(props: Props) {
                 />
             </ImageBackground>
             <View style={styles.container}>
-                <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet augue justo. In id dolor nec nisi vulputate cursus in a magna. Donec varius elementum ligula, vitae vulputate felis eleifend non. Donec pellentesque convallis congue. Vivamus sed vestibulum turpis, et suscipit lorem. Aenean vehicula pretium sapien.</Paragraph>
+                <Paragraph>{community.description}</Paragraph>
                 <View style={{ flex: 1, flexDirection: 'row', marginVertical: 25 }}>
                     <Button
                         mode="outlined"

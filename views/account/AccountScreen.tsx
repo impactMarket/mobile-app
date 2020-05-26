@@ -40,6 +40,7 @@ import {
 import {
     useNavigation
 } from '@react-navigation/native';
+import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 
 
 const barChartConfig: ChartConfig = {
@@ -73,38 +74,34 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 type Props = PropsFromRedux & IAccountScreenProps
-interface IActivityListItem {
-    from: string;
-    description: string;
-    amount: string;
-    status: string;
-    timestamp: number;
-}
 function AccountScreen(props: Props) {
     const navigation = useNavigation();
-    const [activities, setActivities] = useState<IActivityListItem[]>([]);
+    const [activities, setActivities] = useState<IListActionItem[]>([]);
 
     // TODO: load activity history
     useEffect(() => {
         const loadActivities = () => {
             const _activities = [
                 {
+                    title: 'Cliff',
                     from: 'Cliff',
                     description: 'Thanks friend!!',
-                    amount: '2',
-                    status: 'Received',
-                    timestamp: 17263188,
+                    value: '2',
+                    timestamp: 1590519328,
+                    key: '1590519328',
                 },
                 {
+                    title: 'Fehsolna',
                     from: 'Fehsolna',
+                    avatar: 'https://www.kindpng.com/picc/m/24-248442_female-user-avatar-woman-profile-member-user-profile.png',
                     description: 'Brasil',
-                    amount: '3',
-                    status: 'Claimed',
-                    timestamp: 17263179,
+                    value: '3',
+                    timestamp: 1590119328,
+                    key: '1590119328',
                 }
             ];
             _activities.sort((a, b) => a.timestamp - b.timestamp);
-            setActivities(_activities);
+            setActivities(_activities.reverse());
         }
         loadActivities();
     }, []);
@@ -198,15 +195,10 @@ function AccountScreen(props: Props) {
                         subtitle="RECENT TRANSACTIONS"
                     />
                     <Card.Content>
-                        {activities.map((activity) => <List.Item
+                        {activities.map((activity) => <ListActionItem
                             key={activity.timestamp}
-                            title={activity.from}
-                            description={activity.description}
-                            left={() => <Avatar.Text size={46} label={activity.from.slice(0, 1)} />}
-                            right={() => <View>
-                                <Text>${activity.amount}</Text>
-                                <Text>{activity.status}</Text>
-                            </View>}
+                            item={activity}
+                            prefix={{ top: '$' }}
                         />)}
                         <Button
                             mode="contained"
@@ -215,7 +207,7 @@ function AccountScreen(props: Props) {
                             onPress={() => console.log('Pressed')}
                         >
                             All Transactions
-                            </Button>
+                        </Button>
                     </Card.Content>
                 </Card>
                 <Button
