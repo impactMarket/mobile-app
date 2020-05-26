@@ -5,7 +5,7 @@ import {
     View,
 } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../../helpers/types';
+import { IRootState, IRecentTxListItem } from '../../helpers/types';
 import {
     Avatar,
     List,
@@ -16,6 +16,8 @@ import axios from 'axios';
 import config from '../../config';
 import { PhoneNumberUtils } from '@celo/utils'
 import * as Contacts from 'expo-contacts';
+import { tokenTx } from '../../services/api';
+import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 
 
 
@@ -28,46 +30,10 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux
 
-interface IRecentTxListItem {
-    from: string;
-    phone: number; // lol
-    txs: number;
-    timestamp: number;
-}
 function RecentTx(props: Props) {
-    const [activities, setActivities] = useState<IRecentTxListItem[]>([]);
+    const [activities, setActivities] = useState<IListActionItem[]>([]);
 
     useEffect(() => {
-        const loadHistory = async () => {
-            // also get and store transactions
-            // TODO: move this to API
-            const results = await axios.get(
-                `${config.baseBlockScoutApiUrl}?module=account&action=tokentx&address=${props.user.celoInfo.address}`);
-            // filter necessary
-            const rawTxs: { from: string, to: string, timestamp: number }[] = results
-                .data.result.map((result: any) => (
-                    { from: result.from, to: result.to, timestamp: parseInt(result.timeStamp, 10) }
-                )).slice(0, 20);
-            let txs: { timestamp: number, address: string }[] = rawTxs.map((tx) => {
-                if (tx.from.toLowerCase() === props.user.celoInfo.address.toLowerCase()) {
-                    return { timestamp: tx.timestamp, address: tx.to }
-                }
-                return { timestamp: tx.timestamp, address: tx.from }
-            })
-            // sort
-            txs = txs.sort((a, b) => a.timestamp - b.timestamp);
-            // group
-            const result: IRecentTxListItem[] = [];
-            const groupedTxs = txs.reduce((r, a) => {
-                r[a.address] = r[a.address] || [];
-                r[a.address].push(a);
-                return r;
-            }, Object.create(null));
-            Object.keys(groupedTxs).forEach((k) => result.push(
-                { from: k, phone: 555, txs: groupedTxs[k].length, timestamp: groupedTxs[k][0].timestamp }
-            ))
-            return result.slice(0, Math.min(5, result.length));
-        }
         // TODO: improve
         // 1st. simplify
         // 2nd. get names instead of just numbers
@@ -107,7 +73,14 @@ function RecentTx(props: Props) {
             }
         }
         loadContacts();
-        loadHistory().then(setActivities);
+        tokenTx(props.user.celoInfo.address)
+            .then((txs) => setActivities(txs.map((t) => ({
+                key: t.from,
+                timestamp: t.timestamp,
+                description: '',
+                from: t.from,
+                value: t.txs.toString(),
+            }))));
     }, []);
 
     return (
@@ -119,17 +92,11 @@ function RecentTx(props: Props) {
                 subtitle="RECENT"
             />
             <Card.Content>
-                {activities.map((activity) => <View key={activity.from}>
-                    <Divider />
-                    <List.Item
-                        title={activity.from}
-                        description={activity.phone}
-                        left={() => <Avatar.Text size={46} label={activity.from.slice(0, 1)} />}
-                        right={() => <View>
-                            <Text style={{ color: 'grey' }}>{activity.txs} transactions</Text>
-                        </View>}
-                    />
-                </View>)}
+                {activities.map((activity) => <ListActionItem
+                    key={activity.from}
+                    item={activity}
+                    suffix={{ top: ' txs' }}
+                />)}
             </Card.Content>
         </Card>
     );

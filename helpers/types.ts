@@ -143,3 +143,9 @@ export interface IBeneficiary {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface IRecentTxListItem {
+    from: string;
+    txs: number;
+    timestamp: number;
+}

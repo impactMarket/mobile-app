@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction } from '../helpers/types';
+import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction, IRecentTxListItem } from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -180,6 +180,36 @@ async function getCommunityByContractAddress(
     return response;
 }
 
+async function getCommunityNamesFromAddresses(
+    communitiesContractAddresses: string,
+): Promise<{ contractAddress: string; name: string; }[]> {
+    let response: { contractAddress: string; name: string; }[] = [];
+    try {
+        const result = await axios.get(`/community/getnames/${communitiesContractAddresses}`);
+        response = result.data as { contractAddress: string; name: string; }[];
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function tokenTx(
+    accountAddress: string,
+): Promise<IRecentTxListItem[]> {
+    let response: IRecentTxListItem[] = [];
+    try {
+        const result = await axios.get(`/transactions/tokentx/${accountAddress}`);
+        response = result.data as IRecentTxListItem[];
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
 export {
     getAllValidCommunities,
     requestCreateCommunity,
@@ -189,4 +219,6 @@ export {
     findComunityToManager,
     acceptBeneficiaryRequest,
     getCommunityByContractAddress,
+    getCommunityNamesFromAddresses,
+    tokenTx,
 }

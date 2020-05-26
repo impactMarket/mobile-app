@@ -7,11 +7,6 @@ const commonConfig = {
     jsonRpc: 'https://alfajores-forno.celo-testnet.org',
 
     /**
-     * Used to query
-     */
-    baseBlockScoutApiUrl: 'https://alfajores-blockscout.celo-testnet.org/api',
-
-    /**
      * cUSD decimals to use in ui format
      */
     cUSDDecimals: 18
