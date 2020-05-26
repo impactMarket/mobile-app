@@ -177,7 +177,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                 <Paragraph>Current Address:</Paragraph>
                 {
                     newBeneficiaryAddress.length > 0 &&
-                    <Paragraph style={{ fontWeight: 'bold' }}>
+                    <Paragraph style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>
                         {newBeneficiaryAddress.slice(0, 12)}..{newBeneficiaryAddress.slice(31, 42)}
                     </Paragraph>
                 }

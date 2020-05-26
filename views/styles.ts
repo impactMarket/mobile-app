@@ -16,6 +16,7 @@ export default StyleSheet.create({
     communityName: {
         fontSize: 25,
         fontWeight: 'bold',
+        fontFamily: 'Gelion-Bold',
         color: 'white'
     },
     communityLocation: {

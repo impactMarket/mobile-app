@@ -50,7 +50,7 @@ function PayScreen(props: Props) {
                 <Card style={styles.card}>
                     <Card.Content>
                         <TextInput
-                            style={{ padding: 10, textAlign: 'center', fontSize: 35, fontWeight: 'bold' }}
+                            style={{ padding: 10, textAlign: 'center', fontSize: 35, fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}
                             placeholder='0$'
                             keyboardType="numeric"
                             value={paymentAmount}

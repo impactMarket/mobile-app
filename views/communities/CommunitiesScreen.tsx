@@ -85,20 +85,20 @@ function CommunitiesScreen(props: Props) {
                                 alignItems: 'center'
                             }}
                         >
-                            <Text style={{ fontSize: 25, fontWeight: 'bold', color: 'white' }}>{community.name}</Text>
+                            <Text style={{ fontSize: 25, fontWeight: 'bold', fontFamily: 'Gelion-Bold', color: 'white' }}>{community.name}</Text>
                             <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
                         </ImageBackground>
                         <View>
                             <DataTable>
                                 <DataTable.Row style={{ borderBottomColor: 'transparent', marginBottom: -20 }}>
                                     <DataTable.Cell>
-                                        <Text style={{ fontWeight: 'bold' }}>{community.backers.length}</Text>
+                                        <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>{community.backers.length}</Text>
                                     </DataTable.Cell>
                                     <DataTable.Cell>
-                                        <Text style={{ fontWeight: 'bold' }}>{community.beneficiaries.length}</Text>
+                                        <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>{community.beneficiaries.length}</Text>
                                     </DataTable.Cell>
                                     <DataTable.Cell>
-                                        <Text style={{ fontWeight: 'bold' }}>${humanifyNumber(community.vars._amountByClaim)}/{claimFrequencyToText(community.vars._baseIntervalTime)}</Text>
+                                        <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>${humanifyNumber(community.vars._amountByClaim)}/{claimFrequencyToText(community.vars._baseIntervalTime)}</Text>
                                     </DataTable.Cell>
                                 </DataTable.Row>
 

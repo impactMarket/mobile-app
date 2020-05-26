@@ -80,7 +80,7 @@ class Claim extends React.Component<Props, IClaimState> {
 
     _loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
         const { address } = this.props.user.celoInfo;
-        const cooldownTime = parseInt((await communityInstance.methods.cooldownClaim(address).call()).toString(), 10);
+        const cooldownTime = parseInt((await communityInstance.methods.cooldown(address).call()).toString(), 10);
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
         if (claimDisabled) {
             const interval = 1000;

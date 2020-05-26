@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
     title: {
         marginVertical: 8,
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'Gelion-Bold'
     }
 });
 

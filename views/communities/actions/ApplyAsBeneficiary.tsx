@@ -63,7 +63,7 @@ export default function ApplyAsBeneficiary(props: { community: ICommunityInfo, b
                     <Dialog.Content>
                         <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia eros ut tortor rhoncus fringilla. Quisque imperdiet, arcu ut iaculis dignissim, massa leo vehicula nisl, in semper velit elit vitae eros.
                         </Paragraph>
-                        <Paragraph style={{ marginTop: 20, fontWeight: 'bold' }}>Applying to {community.name}</Paragraph>
+                        <Paragraph style={{ marginTop: 20, fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>Applying to {community.name}</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button mode="contained" style={{ marginRight: 10 }} onPress={() => handleApplyHasBeneficiary()}>

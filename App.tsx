@@ -9,6 +9,7 @@ import {
     AsyncStorage,
     StatusBar,
 } from 'react-native';
+import * as Font from 'expo-font';
 
 import {
     Fontisto,
@@ -51,6 +52,7 @@ import {
 import {
     DefaultTheme,
     Provider as PaperProvider,
+    configureFonts,
 } from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit';
 import { ethers } from 'ethers';
@@ -74,6 +76,22 @@ const theme = {
     colors: {
         ...DefaultTheme.colors,
     },
+    fonts: configureFonts({
+        default: {
+            regular: {
+                fontFamily: 'Gelion-Regular',
+            },
+            medium: {
+                fontFamily: 'Gelion-Regular',
+            },
+            light: {
+                fontFamily: 'Gelion-Light',
+            },
+            thin: {
+                fontFamily: 'Gelion-Thin',
+            },
+        }
+    })
 };
 
 
@@ -236,6 +254,30 @@ export default class App extends React.Component<{}, IAppState> {
 
     _cacheResourcesAsync = async () => {
         SplashScreen.hide();
+        await Font.loadAsync({
+            // Load a font `Montserrat` from a static resource
+            // Montserrat: require('./assets/fonts/Montserrat.ttf'),
+
+            // Any string can be used as the fontFamily name. Here we use an object to provide more control
+            'Gelion-SemiBold': {
+                uri: require('./fonts/FontGelion/Gelion-SemiBold.ttf'),
+            },
+            'Gelion-Bold': {
+                uri: require('./fonts/FontGelion/Gelion-Bold.ttf'),
+            },
+            'Gelion-Regular': {
+                uri: require('./fonts/FontGelion/Gelion-Regular.ttf'),
+            },
+            'Gelion-Medium': {
+                uri: require('./fonts/FontGelion/Gelion-Medium.ttf'),
+            },
+            'Gelion-Light': {
+                uri: require('./fonts/FontGelion/Gelion-Light.ttf'),
+            },
+            'Gelion-Thin': {
+                uri: require('./fonts/FontGelion/Gelion-Thin.ttf'),
+            },
+        });
         await this._authUser();
         this.setState({ isAppReady: true });
     };

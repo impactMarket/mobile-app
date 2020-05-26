@@ -150,7 +150,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         <Subheading>Daily Volume</Subheading>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <AntDesign name="arrowup" size={12} color="green" />
-                            <Text style={{ fontWeight: 'bold' }}>12%</Text>
+                            <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>12%</Text>
                             <Text> Last 30 days</Text>
                         </View>
                         <BarChart
@@ -218,6 +218,7 @@ const styles = StyleSheet.create({
     communityName: {
         fontSize: 25,
         fontWeight: 'bold',
+        fontFamily: 'Gelion-Bold',
         color: 'white'
     },
     communityLocation: {
