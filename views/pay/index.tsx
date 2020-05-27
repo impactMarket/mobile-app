@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
     StyleSheet,
     Text,
-    View,
     TextInput
 } from 'react-native';
 import {
@@ -11,7 +10,6 @@ import {
 } from 'react-redux';
 import { IRootState } from '../../helpers/types';
 import {
-    Appbar,
     Card,
     Divider,
     Button
@@ -20,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import RecentTx from './RecentTx';
+import Header from '../../components/Header';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -40,11 +39,11 @@ function PayScreen(props: Props) {
 
     return (
         <SafeAreaView>
-            <Appbar.Header style={styles.appbar}>
-                <Appbar.Content title="Pay" />
-                <Appbar.Action icon="help-circle-outline" />
-                <Appbar.Action icon="qrcode" onPress={() => navigation.navigate('UserShowScanQRScreen')} />
-            </Appbar.Header>
+            <Header
+                title="Pay"
+                hasQr={true}
+                navigation={navigation}
+            />
             <ScrollView style={styles.scrollView}>
                 <Card style={styles.card}>
                     <Card.Content>

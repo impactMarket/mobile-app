@@ -41,6 +41,7 @@ import {
     useNavigation
 } from '@react-navigation/native';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
+import Header from '../../components/Header';
 
 
 const barChartConfig: ChartConfig = {
@@ -131,92 +132,74 @@ function AccountScreen(props: Props) {
     }
     return (
         <SafeAreaView>
-            <Appbar.Header style={styles.appbar}>
-                <Appbar.Content title="Account" />
-                <Appbar.Action icon="help-circle-outline" />
-                <Appbar.Action icon="qrcode" onPress={() => navigation.navigate('UserShowScanQRScreen')} />
-            </Appbar.Header>
+            <Header
+                title="Account"
+                navigation={navigation}
+            >
+                <Button
+                    mode="text"
+                    disabled={true}
+                    onPress={() => console.log('hi')}
+                >
+                    Edit Profile
+                </Button>
+            </Header>
             <ScrollView style={styles.scrollView}>
-                <Card style={styles.card}>
+                <Card style={styles.card} elevation={5}>
                     <Card.Content>
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <View>
-                                <Text>John Doe</Text>
-                                <Text style={{ color: 'grey' }}>United States</Text>
-                                <Button
-                                    mode="text"
-                                    disabled={true}
-                                    onPress={() => console.log('hi')}
-                                >
-                                    Edit Profile
-                                </Button>
-                            </View>
-                            <Avatar.Image
-                                style={{ alignSelf: 'center', right: -80 }}
-                                size={58}
-                                source={require('../../assets/hello.png')}
-                            />
-                        </View>
-                    </Card.Content>
-                </Card>
-                <Card style={styles.card}>
-                    <Card.Title
-                        title=""
-                        style={{ backgroundColor: '#f0f0f0' }}
-                        subtitleStyle={{ color: 'grey' }}
-                        subtitle="WALLET BALANCE"
-                    />
-                    <Card.Content>
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <View>
-                                <Headline>${props.user.celoInfo.balance}</Headline>
-                                <Text>{props.user.celoInfo.balance} cUSD</Text>
-                            </View>
-                            <BarChart
-                                data={dummyData}
-                                width={270}
-                                height={45}
-                                yAxisLabel=""
-                                yAxisSuffix=""
-                                withInnerLines={false}
-                                chartConfig={barChartConfig}
+                        <Text style={{ color: 'grey' }}>BALANCE</Text>
+                        <View style={{ alignItems: 'center' }}>
+                            <Headline
                                 style={{
-                                    marginLeft: -65,
+                                    fontFamily: "Gelion-Bold",
+                                    fontSize: 56,
+                                    fontWeight: "bold",
+                                    lineHeight: 56,
+                                    letterSpacing: 0,
+                                    marginTop: 20
                                 }}
-                            />
+                            >
+                                ${props.user.celoInfo.balance}
+                            </Headline>
+                            <Text>{props.user.celoInfo.balance} cUSD</Text>
                         </View>
                     </Card.Content>
                 </Card>
-                <Card style={styles.card}>
-                    <Card.Title
-                        title=""
-                        style={{ backgroundColor: '#f0f0f0' }}
-                        subtitleStyle={{ color: 'grey' }}
-                        subtitle="RECENT TRANSACTIONS"
-                    />
-                    <Card.Content>
-                        {activities.map((activity) => <ListActionItem
-                            key={activity.timestamp}
-                            item={activity}
-                            prefix={{ top: '$' }}
-                        />)}
-                        <Button
-                            mode="contained"
-                            disabled={true}
-                            style={{ marginLeft: 10 }}
-                            onPress={() => console.log('Pressed')}
-                        >
-                            All Transactions
-                        </Button>
-                    </Card.Content>
-                </Card>
+                <View style={styles.card}>
+                    <Headline
+                        style={{
+                            opacity: 0.48,
+                            fontFamily: "Gelion-Bold",
+                            fontSize: 13,
+                            fontWeight: "500",
+                            fontStyle: "normal",
+                            lineHeight: 12,
+                            letterSpacing: 0.7,
+                        }}
+                    >
+                        RECENT TRANSACTIONS
+                    </Headline>
+                    {activities.map((activity) => <ListActionItem
+                        key={activity.timestamp}
+                        item={activity}
+                        prefix={{ top: '$' }}
+                    />)}
+                    <Button
+                        mode="contained"
+                        disabled={true}
+                        style={{ marginLeft: 10 }}
+                        onPress={() => console.log('Pressed')}
+                    >
+                        All Transactions
+                    </Button>
+                </View>
                 <Button
                     mode="contained"
                     style={styles.card}
                     onPress={handleLogout}
                 >
                     Logout
-                </Button>
+                    </Button>
             </ScrollView>
         </SafeAreaView>
     );
