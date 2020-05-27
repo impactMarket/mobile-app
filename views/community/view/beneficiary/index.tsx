@@ -18,8 +18,9 @@ import {
     ICommunityInfo
 } from '../../../../helpers/types';
 import { getCommunityByContractAddress } from '../../../../services';
-import { humanifyNumber } from '../../../../helpers';
 import Claim from './Claim';
+import { Button } from 'react-native-paper';
+import { iptcColors } from '../../../../helpers';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -54,7 +55,13 @@ function BeneficiaryView(props: Props) {
     }
 
     return (
-        <ScrollView>
+        <View
+            style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+            }}
+        >
             <ImageBackground
                 source={{ uri: community.coverImage }}
                 resizeMode={'cover'}
@@ -75,19 +82,29 @@ function BeneficiaryView(props: Props) {
                     }}
                 />
             </ImageBackground>
-            <View>
-                <Text style={styles.mainPageContent}>
-                    Every day you can claim ${humanifyNumber(community.vars._amountByClaim)} up to a total of ${humanifyNumber(community.vars._claimHardCap)}
-                </Text>
-                <View style={styles.container}>
-                    <Claim />
-                    <Text
-                        onPress={() => navigation.navigate('ClaimExplainedScreen')}
-                        style={{ marginVertical: 15, textAlign: 'center' }}
-                    >How claim works?</Text>
-                </View>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <Button
+                    mode="contained"
+                    style={{ margin: 30, height: 35 }}
+                    disabled={true}
+                >
+                    More about your community
+                </Button>
+                <Claim
+                    claimAmount={community.vars._amountByClaim}
+                />
+                <Text
+                    onPress={() => navigation.navigate('ClaimExplainedScreen')}
+                    style={styles.howClaimsWork}
+                >How claim works?</Text>
             </View>
-        </ScrollView>
+        </View>
     );
 }
 
@@ -118,6 +135,16 @@ const styles = StyleSheet.create({
     communityLocation: {
         fontSize: 20,
         color: 'white'
+    },
+    howClaimsWork: {
+        fontFamily: 'Gelion-Bold',
+        fontSize: 18,
+        fontWeight: "500",
+        fontStyle: "normal",
+        letterSpacing: 0.3,
+        textAlign: "center",
+        color: iptcColors.softBlue,
+        height: 25
     },
 });
 

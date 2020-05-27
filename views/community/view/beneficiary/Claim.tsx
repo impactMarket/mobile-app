@@ -6,8 +6,14 @@ import { Button } from 'react-native-paper';
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 import { ethers } from 'ethers';
 import { celoWalletRequest } from '../../../../services';
+import { humanifyNumber, iptcColors } from '../../../../helpers';
 
 import moment from 'moment';
+import { Text } from 'react-native-paper';
+import {
+    StyleSheet,
+    View
+} from 'react-native';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -17,8 +23,11 @@ const mapStateToProps = (state: IRootState) => {
 
 const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux
+type Props = PropsFromRedux & IClaimProps
 
+interface IClaimProps {
+    claimAmount: string;
+}
 interface IClaimState {
     nextClaim: moment.Duration;
     claimDisabled: boolean;
@@ -50,7 +59,7 @@ class Claim extends React.Component<Props, IClaimState> {
             address,
             communityContract.options.address,
             await communityContract.methods.claim(),
-            'beneficiary_claim',
+            'beneficiaryclaim',
             network,
         ).then(() => {
             this._loadAllowance(communityContract).then(() => {
@@ -66,6 +75,17 @@ class Claim extends React.Component<Props, IClaimState> {
             claiming,
         } = this.state;
 
+        if (claimDisabled) {
+            return <View style={{ height: 90 }}>
+                <Text style={styles.mainPageContent}>
+                    You can claim ${humanifyNumber(this.props.claimAmount)} in
+                </Text>
+                <Text style={styles.claimCountDown}>
+                    {nextClaim.days()}d {nextClaim.hours()}h {nextClaim.minutes()}m {nextClaim.seconds()}s
+                </Text>
+            </View>
+        }
+
         return (
             <Button
                 mode="contained"
@@ -73,19 +93,19 @@ class Claim extends React.Component<Props, IClaimState> {
                 disabled={claimDisabled}
                 loading={claiming}
             >
-                {claimDisabled ? `${nextClaim.days()}d ${nextClaim.hours()}h ${nextClaim.minutes()}m ${nextClaim.seconds()}s` : 'Claim'}
+                Claim
             </Button>
         );
     }
 
     _loadAllowance = async (communityInstance: ethers.Contract & CommunityInstance) => {
         const { address } = this.props.user.celoInfo;
-        const cooldownTime = parseInt((await communityInstance.methods.cooldown(address).call()).toString(), 10);
+        const cooldownTime = parseInt((await communityInstance.methods.cooldownClaim(address).call()).toString(), 10);
         const claimDisabled = cooldownTime * 1000 > new Date().getTime()
         if (claimDisabled) {
             const interval = 1000;
             const updateTimer = () => {
-                const timeLeft = moment.duration(moment(cooldownTime * 1000).diff(moment())); 
+                const timeLeft = moment.duration(moment(cooldownTime * 1000).diff(moment()));
                 this.setState({ nextClaim: timeLeft });
                 if (timeLeft.asSeconds() === 0) {
                     this.setState({ claimDisabled: false })
@@ -98,5 +118,41 @@ class Claim extends React.Component<Props, IClaimState> {
         this.setState({ claimDisabled })
     }
 }
+
+const styles = StyleSheet.create({
+    mainPageContent: {
+        fontSize: 27,
+        textAlign: 'center',
+    },
+    container: {
+        margin: 20
+    },
+    imageBackground: {
+        width: '100%',
+        height: 250,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    communityName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        fontFamily: 'Gelion-Bold',
+        color: 'white'
+    },
+    communityLocation: {
+        fontSize: 20,
+        color: 'white'
+    },
+    claimCountDown: {
+        fontFamily: "Gelion-Bold",
+        fontSize: 37,
+        fontWeight: "bold",
+        fontStyle: "normal",
+        letterSpacing: 0.61,
+        textAlign: "center",
+        color: iptcColors.greenishTeal
+    },
+});
 
 export default connector(Claim);

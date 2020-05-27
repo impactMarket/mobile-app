@@ -29,3 +29,8 @@ export function calculateCommunityProgress(
         .div(new BigNumber(community.totalRaised).eq(0) ? 1 : community.totalRaised);
     return result.toNumber();
 }
+
+export var iptcColors = {
+    greenishTeal: "#2dce89",
+    softBlue: "#5e72e4"
+}
