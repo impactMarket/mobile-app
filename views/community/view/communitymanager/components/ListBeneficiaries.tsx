@@ -41,12 +41,12 @@ class ListBeneficiaries extends React.Component<Props, IListBeneficiariesState> 
         return (
             <>
                 <Button
-                    mode="contained"
+                    mode="outlined"
                     disabled={this.props.beneficiaries.length === 0}
-                    style={{ marginLeft: 'auto' }}
+                    style={{ marginVertical: 5 }}
                     onPress={() => this.setState({ modalListBeneficiary: true })}
                 >
-                    {this.props.beneficiaries.length}
+                    Added ({this.props.beneficiaries.length})
                 </Button>
                 <Portal>
                     <Dialog

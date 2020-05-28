@@ -17,6 +17,7 @@ import {
 import {
     Button,
     Paragraph,
+    IconButton,
 } from 'react-native-paper';
 import {
     getCommunityByContractAddress,
@@ -27,7 +28,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Beneficiaries from './cards/Beneficiaries';
 import Status from './cards/Status';
 import CommunityManagers from './cards/CommunityManagers';
-import styles from '../../../styles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '../../../../components/Header';
+import { useNavigation } from '@react-navigation/native';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -39,6 +42,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux
 
 function CommunityManagerView(props: Props) {
+    const navigation = useNavigation();
     const [community, setCommunity] = useState<ICommunityInfo>();
     const [refreshing, setRefreshing] = useState(false);
 
@@ -75,9 +79,6 @@ function CommunityManagerView(props: Props) {
                 community={_community}
                 updateCommunity={(_communityUpdate) => setCommunity(_communityUpdate)}
             />
-            <CommunityManagers
-                managers={_community.managers}
-            />
             <Status
                 community={_community}
             />
@@ -91,58 +92,73 @@ function CommunityManagerView(props: Props) {
     }
 
     return (
-        <ScrollView
-            refreshControl={
-                <RefreshControl
-                    //refresh control used for the Pull to Refresh
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />
-            }
-        >
-            <ImageBackground
-                source={{ uri: community.coverImage }}
-                resizeMode={'cover'}
-                style={styles.imageBackground}
+        <>
+            <Header
+                title="Manager"
+                navigation={navigation}
             >
-                <Text style={styles.communityName}>{community.name}</Text>
-                <Text style={styles.communityLocation}>
-                    <AntDesign name="enviromento" size={20} /> {community.location.title}
-                </Text>
-                <LinearGradient
-                    colors={['transparent', 'rgba(246,246,246,1)']}
-                    style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        height: 80,
-                    }}
+                <IconButton
+                    icon="dots-horizontal"
+                    style={{ backgroundColor: '#eaedf0' }}
+                    onPress={() => console.log('Pressed')}
                 />
-            </ImageBackground>
-            <View style={styles.container}>
-                <Paragraph>{community.description}</Paragraph>
-                <View style={{ flex: 1, flexDirection: 'row', marginVertical: 25 }}>
-                    <Button
-                        mode="outlined"
-                        disabled={true}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        Edit
-                        </Button>
-                    <Button
-                        mode="outlined"
-                        disabled={true}
-                        style={{ marginLeft: 'auto' }}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        More...
-                        </Button>
+            </Header>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        //refresh control used for the Pull to Refresh
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
+                <ImageBackground
+                    source={{ uri: community.coverImage }}
+                    resizeMode={'cover'}
+                    style={styles.imageBackground}
+                >
+                    <Text style={styles.communityName}>{community.name}</Text>
+                    <LinearGradient
+                        colors={['transparent', 'rgba(246,246,246,1)']}
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            height: 80,
+                        }}
+                    />
+                </ImageBackground>
+                <View style={styles.container}>
+                    {communityStatus(community)}
                 </View>
-                {communityStatus(community)}
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        marginTop: -40,
+        marginHorizontal: 20
+    },
+    imageBackground: {
+        width: '100%',
+        height: 180,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    communityName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        fontFamily: 'Gelion-Bold',
+        color: 'white'
+    },
+    communityLocation: {
+        fontSize: 20,
+        color: 'white'
+    },
+});
 
 export default connector(CommunityManagerView);

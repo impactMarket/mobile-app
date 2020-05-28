@@ -187,8 +187,8 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
         return (
             <>
                 <Button
-                    mode="outlined"
-                    style={{ width: '100%' }}
+                    mode="contained"
+                    style={{ marginVertical: 5 }}
                     onPress={() => this.setState({ modalNewBeneficiary: true })}
                 >
                     Add Beneficiary
