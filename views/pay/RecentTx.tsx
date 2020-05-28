@@ -11,6 +11,7 @@ import {
     List,
     Card,
     Divider,
+    Headline,
 } from 'react-native-paper';
 import axios from 'axios';
 import config from '../../config';
@@ -84,21 +85,26 @@ function RecentTx(props: Props) {
     }, []);
 
     return (
-        <Card style={styles.card}>
-            <Card.Title
-                title=""
-                style={{ backgroundColor: '#f0f0f0' }}
-                subtitleStyle={{ color: 'grey' }}
-                subtitle="RECENT"
-            />
-            <Card.Content>
-                {activities.map((activity) => <ListActionItem
-                    key={activity.from}
-                    item={activity}
-                    suffix={{ top: ' txs' }}
-                />)}
-            </Card.Content>
-        </Card>
+        <View style={styles.card}>
+            <Headline
+                style={{
+                    opacity: 0.48,
+                    fontFamily: "Gelion-Bold",
+                    fontSize: 13,
+                    fontWeight: "500",
+                    fontStyle: "normal",
+                    lineHeight: 12,
+                    letterSpacing: 0.7,
+                }}
+            >
+                RECENT TRANSACTIONS
+            </Headline>
+            {activities.map((activity) => <ListActionItem
+                key={activity.from}
+                item={activity}
+                suffix={{ top: ' txs' }}
+            />)}
+        </View>
     );
 }
 

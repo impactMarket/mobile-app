@@ -38,7 +38,7 @@ function PayScreen(props: Props) {
     const [paymentNote, setPaymentNote] = useState<string>('');
 
     return (
-        <SafeAreaView>
+        <>
             <Header
                 title="Pay"
                 hasQr={true}
@@ -80,14 +80,13 @@ function PayScreen(props: Props) {
                 </Card>
                 <RecentTx />
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
     scrollView: {
-        marginTop: 10,
-        marginBottom: 80
+        marginTop: 10
     },
     card: {
         marginHorizontal: 20,
