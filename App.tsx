@@ -65,6 +65,8 @@ import {
     findComunityToManager,
 } from './services';
 import BigNumber from 'bignumber.js';
+import BeneficiaryView from './views/community/view/beneficiary';
+import CommunityManagerView from './views/community/view/communitymanager';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -172,36 +174,35 @@ export default class App extends React.Component<{}, IAppState> {
         const tabsToUser = () => {
             const user = store.getState().user;
             if (user.community.isBeneficiary === false && user.community.isCoordinator === false) {
-                return <>
-                    <Tab.Screen
-                        name="My Circle"
-                        component={MyCircleStackScreen}
-                        options={{
-                            tabBarIcon: (props: any) => (
-                                <FontAwesome name="circle-o-notch" size={props.size} color={props.color} />
-                            ),
-                        }}
-                    />
-                    <Tab.Screen
-                        name="Communities"
-                        component={CommunitiesStackScreen}
-                        options={{
-                            tabBarIcon: (props: any) => (
-                                <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
-                            ),
-                        }}
-                    />
-                </>;
+                return <Tab.Screen
+                    name="Communities"
+                    component={CommunitiesStackScreen}
+                    options={{
+                        tabBarIcon: (props: any) => (
+                            <Image
+                                source={require(`./assets/tab/communities.png`)}
+                                style={{ width: props.size, height: props.size - 3 }}
+                            />
+                        ),
+                    }}
+                />;
             }
-            return <Tab.Screen
-                name="Community"
-                component={CommunityStackScreen}
-                options={{
-                    tabBarIcon: (props: any) => (
-                        <MaterialCommunityIcons name="account-group" size={props.size} color={props.color} />
-                    ),
-                }}
-            />;
+            if (store.getState().user.community.isBeneficiary) {
+                return <BeneficiaryView />
+            } else if (store.getState().user.community.isCoordinator) {
+                return <Tab.Screen
+                    name="Manage"
+                    component={CommunityManagerView}
+                    options={{
+                        tabBarIcon: (props: any) => (
+                            <Image
+                                source={require('./assets/tab/manage.png')}
+                                style={{ width: props.size, height: props.size - 5 }}
+                            />
+                        ),
+                    }}
+                />;
+            }
         }
 
         return (
@@ -215,8 +216,11 @@ export default class App extends React.Component<{}, IAppState> {
                                 name="Pay"
                                 component={PayStackScreen}
                                 options={{
-                                    tabBarIcon: (props: any) => (
-                                        <MaterialIcons name="attach-money" size={props.size} color={props.color} />
+                                    tabBarIcon: (props: { focused: boolean, color: string, size: number }) => (
+                                        <Image
+                                            source={require(`./assets/tab/pay.png`)}
+                                            style={{ width: props.size + 3, height: props.size + 3 }}
+                                        />
                                     ),
                                 }}
                             />}
@@ -225,7 +229,10 @@ export default class App extends React.Component<{}, IAppState> {
                                 component={AccountStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
-                                        <Fontisto name="wallet" size={props.size} color={props.color} />
+                                        <Image
+                                            source={require(`./assets/tab/wallet.png`)}
+                                            style={{ width: props.size - 5, height: props.size - 5 }}
+                                        />
                                     ),
                                 }}
                             />
