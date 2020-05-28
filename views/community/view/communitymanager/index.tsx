@@ -18,17 +18,16 @@ import {
     Button,
     Paragraph,
     IconButton,
+    Dialog,
+    Portal,
 } from 'react-native-paper';
 import {
     getCommunityByContractAddress,
 } from '../../../../services';
 import { ScrollView } from 'react-native-gesture-handler';
-import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Beneficiaries from './cards/Beneficiaries';
 import Status from './cards/Status';
-import CommunityManagers from './cards/CommunityManagers';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 
@@ -44,6 +43,7 @@ type Props = PropsFromRedux
 function CommunityManagerView(props: Props) {
     const navigation = useNavigation();
     const [community, setCommunity] = useState<ICommunityInfo>();
+    const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
@@ -100,7 +100,7 @@ function CommunityManagerView(props: Props) {
                 <IconButton
                     icon="dots-horizontal"
                     style={{ backgroundColor: '#eaedf0' }}
-                    onPress={() => console.log('Pressed')}
+                    onPress={() => setOpenModalMore(true)}
                 />
             </Header>
             <ScrollView
@@ -133,6 +133,36 @@ function CommunityManagerView(props: Props) {
                     {communityStatus(community)}
                 </View>
             </ScrollView>
+            <Portal>
+                <Dialog
+                    visible={openModalMore}
+                    onDismiss={() => setOpenModalMore(false)}
+                >
+                    <Dialog.Content>
+                        <Button
+                            mode="outlined"
+                            style={{ marginVertical: 10 }}
+                            disabled={true}
+                        >
+                            Edit community details
+                        </Button>
+                        <Button
+                            mode="outlined"
+                            style={{ marginVertical: 10 }}
+                            disabled={true}
+                        >
+                            View as public
+                        </Button>
+                        <Button
+                            mode="outlined"
+                            style={{ marginVertical: 10 }}
+                            disabled={true}
+                        >
+                            Share
+                        </Button>
+                    </Dialog.Content>
+                </Dialog>
+            </Portal>
         </>
     );
 }

@@ -67,6 +67,7 @@ import {
 import BigNumber from 'bignumber.js';
 import BeneficiaryView from './views/community/view/beneficiary';
 import CommunityManagerView from './views/community/view/communitymanager';
+import { iptcColors } from './helpers';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -77,6 +78,7 @@ const theme = {
     roundness: 4,
     colors: {
         ...DefaultTheme.colors,
+        primary: iptcColors.softBlue,
     },
     fonts: configureFonts({
         default: {
@@ -188,7 +190,18 @@ export default class App extends React.Component<{}, IAppState> {
                 />;
             }
             if (store.getState().user.community.isBeneficiary) {
-                return <BeneficiaryView />
+                return <Tab.Screen
+                    name="Claim"
+                    component={BeneficiaryView}
+                    options={{
+                        tabBarIcon: (props: any) => (
+                            <Image
+                                source={require('./assets/tab/claim.png')}
+                                style={{ width: props.size + 2, height: props.size - 5 }}
+                            />
+                        ),
+                    }}
+                />;
             } else if (store.getState().user.community.isCoordinator) {
                 return <Tab.Screen
                     name="Manage"

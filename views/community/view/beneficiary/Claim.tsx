@@ -92,8 +92,26 @@ class Claim extends React.Component<Props, IClaimState> {
                 onPress={this.handleClaimPress}
                 disabled={claimDisabled}
                 loading={claiming}
+                style={{
+                    width: 170,
+                    height: 57,
+                    borderRadius: 8,
+                    alignSelf: 'center'
+                }}
             >
-                Claim
+                <Text
+                    style={{
+                        fontFamily: "Gelion-Bold",
+                        fontSize: 28,
+                        fontWeight: "bold",
+                        fontStyle: "normal",
+                        letterSpacing: 0.46,
+                        textAlign: "center",
+                        color: 'white'
+                    }}
+                >
+                    Claim ${humanifyNumber(this.props.claimAmount)}
+                </Text>
             </Button>
         );
     }

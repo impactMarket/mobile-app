@@ -45,12 +45,12 @@ class Status extends React.Component<Props, {}> {
                 <Card.Content>
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5, justifyContent: 'center' }}>
                         <View style={{ width: '50%', alignItems: 'center' }}>
-                            <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.beneficiaries.length}</Title>
-                            <Text style={{ color: 'grey' }}>Beneficiaries</Text>
+                            <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.beneficiaries.length}</Title>
+                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>Beneficiaries</Text>
                         </View>
                         <View style={{ width: '50%', alignItems: 'center' }}>
-                            <Title style={{ fontSize: 40, paddingVertical: 10 }}>{community.backers.length}</Title>
-                            <Text style={{ color: 'grey' }}>Backers</Text>
+                            <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.backers.length}</Title>
+                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>Backers</Text>
                         </View>
                     </View>
                     <View>
@@ -75,8 +75,8 @@ class Status extends React.Component<Props, {}> {
                         />
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
-                        <Text>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
-                        <Text style={{ marginLeft: 'auto' }}>${new BigNumber(community.totalRaised).div(new BigNumber(10).pow(config.cUSDDecimals)).toFixed(2)} Raised</Text>
+                        <Text style={{ fontFamily: 'Gelion-Regular' }}>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
+                        <Text style={{ marginLeft: 'auto', fontFamily: 'Gelion-Regular' }}>${new BigNumber(community.totalRaised).div(new BigNumber(10).pow(config.cUSDDecimals)).toFixed(2)} Raised</Text>
                     </View>
                     <Button
                         mode="outlined"
