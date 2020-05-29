@@ -125,6 +125,9 @@ class Donate extends Component<Props, IDonateState> {
             <>
                 <Button
                     mode="contained"
+                    style={{
+                        borderRadius: 0,
+                    }}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
                     Donate

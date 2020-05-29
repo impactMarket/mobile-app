@@ -102,17 +102,19 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 />
             </ImageBackground>
             <View style={styles.container}>
-                <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet augue justo. In id dolor nec nisi vulputate cursus in a magna. Donec varius elementum ligula, vitae vulputate felis eleifend non. Donec pellentesque convallis congue. Vivamus sed vestibulum turpis, et suscipit lorem. Aenean vehicula pretium sapien.</Paragraph>
-                <View style={{ flex: 1, flexDirection: 'row-reverse', marginVertical: 25 }}>
-                    <Button
-                        mode="contained"
-                        disabled={true}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        See More
-                    </Button>
-                </View>
                 <Card>
+                    <Card.Content>
+                        <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet augue justo. In id dolor nec nisi vulputate cursus in a magna. Donec varius elementum ligula, vitae vulputate felis eleifend non. Donec pellentesque convallis congue. Vivamus sed vestibulum turpis, et suscipit lorem. Aenean vehicula pretium sapien.</Paragraph>
+                        <Button
+                            mode="contained"
+                            disabled={true}
+                            onPress={() => console.log('Pressed')}
+                        >
+                            See More
+                        </Button>
+                    </Card.Content>
+                </Card>
+                <Card style={{ marginVertical: 25 }}>
                     <Card.Content>
                         <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                             <View>
@@ -145,7 +147,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         </View>
                     </Card.Content>
                 </Card>
-                <Card style={{ marginVertical: 25 }}>
+                {/* <Card style={{ marginVertical: 25 }}>
                     <Card.Content>
                         <Subheading>Daily Volume</Subheading>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -166,46 +168,18 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             }}
                         />
                     </Card.Content>
-                </Card>
+                </Card> */}
             </View>
-            <View style={{ backgroundColor: 'white', width: '100%', alignItems: 'center', padding: 10 }}>
-                <View style={{ flex: 1, flexDirection: 'row' }}>
-                    <Button
-                        mode="contained"
-                        disabled={true}
-                        style={{ marginHorizontal: 5 }}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        $10
-                    </Button>
-                    <Button
-                        mode="contained"
-                        disabled={true}
-                        style={{ marginHorizontal: 5 }}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        $20
-                    </Button>
-                    <Button
-                        mode="contained"
-                        disabled={true}
-                        style={{ marginHorizontal: 5 }}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        $50
-                    </Button>
-                    <Donate
-                        community={props.route.params.community}
-                    />
-                </View>
-                <Text>50 donations will empower 7 people out of poverty.</Text>
-            </View>
+            <Donate
+                community={props.route.params.community}
+            />
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: -40,
         margin: 20
     },
     imageBackground: {
