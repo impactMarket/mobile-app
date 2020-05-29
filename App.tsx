@@ -24,11 +24,9 @@ import {
 import { Asset } from 'expo-asset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
-    CommunityStackScreen,
     PayStackScreen,
-    AccountStackScreen,
+    WalletStackScreen,
     CommunitiesStackScreen,
-    MyCircleStackScreen,
 } from './views/Stacks';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
@@ -168,9 +166,11 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         if (firstTimeUser) {
-            return <Provider store={store}>
-                <Login />
-            </Provider>
+            return <PaperProvider theme={theme}>
+                <Provider store={store}>
+                    <Login />
+                </Provider>
+            </PaperProvider>
         }
 
         const tabsToUser = () => {
@@ -238,8 +238,8 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                             />}
                             <Tab.Screen
-                                name="Account"
-                                component={AccountStackScreen}
+                                name="Wallet"
+                                component={WalletStackScreen}
                                 options={{
                                     tabBarIcon: (props: any) => (
                                         <Image

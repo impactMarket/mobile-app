@@ -1,18 +1,14 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import AccountScreen from './account/AccountScreen';
+import WalletScreen from './wallet';
 import UserShowScanQRScreen from './common/UserShowScanQRScreen';
 
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import CommunityDetailsScreen from './communities/CommunityDetailsScreen';
-
-import CommunityScreen from './community/CommunityScreen';
-import ClaimExplainedScreen from './community/ClaimExplainedScreen';
-
-import MyCircleScreen from './mycircle/MyCircleScreen';
 import CreateCommunityScreen from './common/CreateCommunityScreen';
 
 import PayScreen from './pay';
+import EditProfile from './wallet/EditProfile';
 
 
 
@@ -36,23 +32,23 @@ export function PayStackScreen() {
     );
 }
 
-const AccountStack = createStackNavigator();
+const WalletStack = createStackNavigator();
 
-export function AccountStackScreen() {
+export function WalletStackScreen() {
     return (
-        <AccountStack.Navigator>
-            <AccountStack.Screen
+        <WalletStack.Navigator>
+            <WalletStack.Screen
                 options={{
                     headerShown: false,
                 }}
-                name="AccountScreen"
-                component={AccountScreen}
+                name="WalletScreen"
+                component={WalletScreen}
             />
-            <AccountStack.Screen
-                name="UserShowScanQRScreen"
-                component={UserShowScanQRScreen}
+            <WalletStack.Screen
+                name="EditProfile"
+                component={EditProfile}
             />
-        </AccountStack.Navigator>
+        </WalletStack.Navigator>
     );
 }
 
@@ -77,45 +73,5 @@ export function CommunitiesStackScreen() {
                 component={CreateCommunityScreen}
             />
         </CommunitiesStack.Navigator>
-    );
-}
-
-const CommunityStack = createStackNavigator();
-
-export function CommunityStackScreen() {
-    return (
-        <CommunityStack.Navigator>
-            <CommunityStack.Screen
-                options={{
-                    headerShown: false
-                }}
-                name="CommunityScreen"
-                component={CommunityScreen}
-            />
-            <CommunityStack.Screen
-                name="ClaimExplainedScreen"
-                component={ClaimExplainedScreen}
-            />
-        </CommunityStack.Navigator>
-    );
-}
-
-const MyCircleStack = createStackNavigator();
-
-export function MyCircleStackScreen() {
-    return (
-        <MyCircleStack.Navigator>
-            <MyCircleStack.Screen
-                options={{
-                    headerShown: false
-                }}
-                name="MyCircleScreen"
-                component={MyCircleScreen}
-            />
-            <MyCircleStack.Screen
-                name="CreateCommunityScreen"
-                component={CreateCommunityScreen}
-            />
-        </MyCircleStack.Navigator>
     );
 }

@@ -67,7 +67,7 @@ class Donate extends Component<Props, IDonateState> {
                 new BigNumber(10).pow(cUSDDecimals)
             ).toString()
         ).txo
-        const requestId = "donate-to-community";
+        const requestId = "donatetocommunity";
         celoWalletRequest(
             this.props.user.celoInfo.address,
             stableToken.address,

@@ -92,7 +92,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             address,
             communityContract.options.address,
             await communityContract.methods.addBeneficiary(addressToAdd),
-            'accept_beneficiary_request',
+            'acceptbeneficiaryrequest',
             network,
         ).then(() => {
 
@@ -189,7 +189,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                 <Button
                     mode="contained"
                     style={{ marginVertical: 5 }}
-                    onPress={() => this.setState({ modalNewBeneficiary: true })}
+                    onPress={() => this.setState({ modalNewBeneficiary: true, newBeneficiaryAddress: '', addInProgress: false })}
                 >
                     Add Beneficiary
                 </Button>
