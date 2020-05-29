@@ -1,9 +1,7 @@
 import React from 'react';
 import {
-    Image,
     StyleSheet,
     Text,
-    Button,
     View,
     AsyncStorage,
 } from 'react-native';
@@ -24,6 +22,7 @@ import { setUserCeloInfo, setUserFirstTime } from '../helpers/redux/actions/Redu
 import { ConnectedProps, connect } from 'react-redux';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { Button } from 'react-native-paper';
 
 
 interface ILoginProps {
@@ -54,6 +53,8 @@ class Login extends React.Component<Props, {}> {
         const dappName = 'Impact Market'
         const callback = Linking.makeUrl('impactmarketmobile://login')
 
+        // TODO: add loading
+
         requestAccountAddress({
             requestId,
             dappName,
@@ -78,6 +79,8 @@ class Login extends React.Component<Props, {}> {
             // Error saving data
             console.log(error);
         }
+
+        // TODO: remove loading
     }
 
     openWithoutLogin = async () => {
@@ -87,32 +90,112 @@ class Login extends React.Component<Props, {}> {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Image resizeMode='center' source={require("../assets/logo.png")}></Image>
+            // <View style={styles.container}>
+            //     <Image resizeMode='center' source={require("../assets/logo.png")}></Image>
 
-                <Text style={styles.title}>Welcome, please login first.</Text>
-                <Button title="login" onPress={() => this.login()} />
+            //     <Text style={styles.title}>Welcome, please login first.</Text>
+            //     <Button title="login" onPress={() => this.login()} />
 
-                <View style={{ marginTop: 10 }}>
-                    <Button color="green" title="Not now" onPress={() => this.openWithoutLogin()} />
+            //     <View style={{ marginTop: 10 }}>
+            //         <Button color="green" title="Not now" onPress={() => this.openWithoutLogin()} />
+            //     </View>
+            // </View>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    margin: 20
+                }}
+            >
+                <Text style={styles.description}>To continue please</Text>
+                <Text style={styles.title}>Connect to your Celo Wallet</Text>
+                <Text style={styles.description}>ImpactMarket operates on top of  Celo Network, financial system that creates conditions for prosperity for everyone.</Text>
+                <Text style={styles.description}>With Celo Wallet you can send money to anyone in the world with just a mobile phone.</Text>
+                <Text style={styles.stepText}>Step 1</Text>
+                <Text style={styles.instructionText}>Download the Celo app</Text>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                    }}
+                >
+                    <Button
+                        mode="contained"
+                        disabled={true}
+                        style={{ marginHorizontal: 10, width: '40%' }}
+                    >
+                        iOS
+                    </Button>
+                    <Button
+                        mode="contained"
+                        disabled={true}
+                        style={{ marginHorizontal: 10, width: '40%' }}
+                    >
+                        Android
+                    </Button>
                 </View>
+                <Text style={styles.stepText}>Step 2</Text>
+                <Text style={styles.instructionText}>Install the Celo App and create a Celo account</Text>
+                <Text style={styles.stepText}>Final Step</Text>
+                <Button
+                    mode="contained"
+                    onPress={() => this.login()}
+                    style={{ width: '80%' }}
+                >
+                    Connect to Celo Wallet
+                </Button>
+                <Button
+                    mode="outlined"
+                    onPress={() => this.openWithoutLogin()}
+                    style={{ width: '80%' }}
+                >
+                    Not now
+                </Button>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ffffff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
     title: {
-        marginVertical: 8,
-        fontSize: 20,
-        fontWeight: 'bold',
-        fontFamily: 'Gelion-Bold'
+        height: 62,
+        fontFamily: "Gelion-Bold",
+        fontSize: 30,
+        fontWeight: "bold",
+        fontStyle: "normal",
+        lineHeight: 31,
+        letterSpacing: 0.7,
+        textAlign: "center",
+        color: "#1e3252"
+    },
+    description: {
+        fontFamily: "Gelion-Regular",
+        fontSize: 19,
+        fontWeight: "normal",
+        fontStyle: "normal",
+        letterSpacing: 0,
+        textAlign: "center",
+        color: "#8898aa"
+    },
+    stepText: {
+        fontFamily: "Gelion-Bold",
+        fontSize: 19,
+        fontWeight: "bold",
+        fontStyle: "normal",
+        letterSpacing: 0,
+        textAlign: "center",
+        color: "#172b4d"
+    },
+    instructionText: {
+        height: 23,
+        fontFamily: "Gelion-Regular",
+        fontSize: 19,
+        fontWeight: "normal",
+        fontStyle: "normal",
+        letterSpacing: 0,
+        textAlign: "center",
+        color: "#172b4d"
     }
 });
 
