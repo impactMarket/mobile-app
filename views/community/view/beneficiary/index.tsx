@@ -21,6 +21,7 @@ import { getCommunityByContractAddress } from '../../../../services';
 import Claim from './Claim';
 import { Button } from 'react-native-paper';
 import { iptcColors } from '../../../../helpers';
+import Header from '../../../../components/Header';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -62,6 +63,11 @@ function BeneficiaryView(props: Props) {
                 justifyContent: 'space-between',
             }}
         >
+            <Header
+                title="Claim"
+                navigation={navigation}
+                hasShare={true}
+            />
             <ImageBackground
                 source={{ uri: community.coverImage }}
                 resizeMode={'cover'}
