@@ -8,18 +8,14 @@ import * as TruffleContracts from ".";
 declare global {
   namespace Truffle {
     interface Artifacts {
+      require(name: "AccessControl"): TruffleContracts.AccessControlContract;
       require(name: "Community"): TruffleContracts.CommunityContract;
       require(name: "Context"): TruffleContracts.ContextContract;
       require(name: "cUSD"): TruffleContracts.cUSDContract;
       require(name: "ERC20"): TruffleContracts.ERC20Contract;
-      require(name: "ERC20Mintable"): TruffleContracts.ERC20MintableContract;
       require(name: "IERC20"): TruffleContracts.IERC20Contract;
       require(name: "ImpactMarket"): TruffleContracts.ImpactMarketContract;
       require(name: "Migrations"): TruffleContracts.MigrationsContract;
-      require(name: "MinterRole"): TruffleContracts.MinterRoleContract;
-      require(
-        name: "WhitelistAdminRole"
-      ): TruffleContracts.WhitelistAdminRoleContract;
     }
   }
 }
