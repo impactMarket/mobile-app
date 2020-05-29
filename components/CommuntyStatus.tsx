@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -10,19 +10,19 @@ import {
 import {
     IRootState,
     ICommunityInfo,
-} from '../../../../../helpers/types';
+} from '../helpers/types';
 import {
-    Button,
     Card,
     Title,
     ProgressBar,
 } from 'react-native-paper';
-import { calculateCommunityProgress } from '../../../../../helpers';
-import config from '../../../../../config';
+import { calculateCommunityProgress } from '../helpers';
+import config from '../config';
 import BigNumber from 'bignumber.js';
 
 
-interface IStatusProps {
+interface ICommuntyStatusProps {
+    children?: any; // linter issues are a bit anoying sometimes
     community: ICommunityInfo;
 }
 const mapStateToProps = (state: IRootState) => {
@@ -31,9 +31,9 @@ const mapStateToProps = (state: IRootState) => {
 };
 const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & IStatusProps
+type Props = PropsFromRedux & ICommuntyStatusProps
 
-class Status extends React.Component<Props, {}> {
+class CommuntyStatus extends Component<Props, {}> {
 
     render() {
         const {
@@ -78,18 +78,11 @@ class Status extends React.Component<Props, {}> {
                         <Text style={{ fontFamily: 'Gelion-Regular' }}>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
                         <Text style={{ marginLeft: 'auto', fontFamily: 'Gelion-Regular' }}>${new BigNumber(community.totalRaised).div(new BigNumber(10).pow(config.cUSDDecimals)).toFixed(2)} Raised</Text>
                     </View>
-                    <Button
-                        mode="outlined"
-                        disabled={true}
-                        style={{ width: '100%' }}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        Full Dashboard
-                    </Button>
+                    {this.props.children}
                 </Card.Content>
             </Card>
         );
     }
 }
 
-export default connector(Status);
+export default connector(CommuntyStatus);

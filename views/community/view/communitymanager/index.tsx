@@ -27,7 +27,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 import Beneficiaries from './cards/Beneficiaries';
-import Status from './cards/Status';
+import CommuntyStatus from '../../../../components/CommuntyStatus';
 import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 
@@ -79,9 +79,16 @@ function CommunityManagerView(props: Props) {
                 community={_community}
                 updateCommunity={(_communityUpdate) => setCommunity(_communityUpdate)}
             />
-            <Status
-                community={_community}
-            />
+            <CommuntyStatus community={_community}>
+                <Button
+                    mode="outlined"
+                    disabled={true}
+                    style={{ width: '100%' }}
+                    onPress={() => console.log('Pressed')}
+                >
+                    Full Dashboard
+                </Button>
+            </CommuntyStatus>
         </>
     }
 

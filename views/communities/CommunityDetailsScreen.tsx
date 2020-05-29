@@ -2,14 +2,12 @@ import React from 'react';
 import {
     Text,
     View,
-    Dimensions,
     StyleSheet,
     ImageBackground,
 } from 'react-native';
 import {
     LineChart,
     ChartConfig,
-    BarChart
 } from 'react-native-chart-kit';
 import {
     ICommunityInfo,
@@ -26,12 +24,12 @@ import {
     Card,
     Divider,
     Headline,
-    Subheading
 } from 'react-native-paper';
 import {
     ScrollView
 } from 'react-native-gesture-handler';
 import { humanifyNumber } from '../../helpers';
+import CommuntyStatus from '../../components/CommuntyStatus';
 
 
 const lineChartConfig: ChartConfig = {
@@ -46,18 +44,6 @@ const lineChartConfig: ChartConfig = {
     },
     fillShadowGradientOpacity: 0
 };
-const barChartConfig: ChartConfig = {
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientToOpacity: 0,
-    strokeWidth: 1,
-    barPercentage: 0.5,
-    color: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
-    propsForLabels: {
-        opacity: 0 // just make them transparent ¯\_(ツ)_/¯
-    }
-};
-const screenWidth = Dimensions.get('window').width;
 interface ICommunityDetailsScreen {
     route: {
         params: {
@@ -104,7 +90,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             <View style={styles.container}>
                 <Card>
                     <Card.Content>
-                        <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet augue justo. In id dolor nec nisi vulputate cursus in a magna. Donec varius elementum ligula, vitae vulputate felis eleifend non. Donec pellentesque convallis congue. Vivamus sed vestibulum turpis, et suscipit lorem. Aenean vehicula pretium sapien.</Paragraph>
+                        <Paragraph>{community.description}</Paragraph>
                         <Button
                             mode="contained"
                             disabled={true}
@@ -147,31 +133,19 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         </View>
                     </Card.Content>
                 </Card>
-                {/* <Card style={{ marginVertical: 25 }}>
-                    <Card.Content>
-                        <Subheading>Daily Volume</Subheading>
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <AntDesign name="arrowup" size={12} color="green" />
-                            <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>12%</Text>
-                            <Text> Last 30 days</Text>
-                        </View>
-                        <BarChart
-                            data={dummyData}
-                            width={300}
-                            height={220}
-                            yAxisLabel=""
-                            yAxisSuffix=""
-                            withInnerLines={false}
-                            chartConfig={barChartConfig}
-                            style={{
-                                marginLeft: -50,
-                            }}
-                        />
-                    </Card.Content>
-                </Card> */}
+                <CommuntyStatus community={community}>
+                    <Button
+                        mode="outlined"
+                        disabled={true}
+                        style={{ width: '100%' }}
+                        onPress={() => console.log('Pressed')}
+                    >
+                        Explore Community Contract
+                    </Button>
+                </CommuntyStatus>
             </View>
             <Donate
-                community={props.route.params.community}
+                community={community}
             />
         </ScrollView>
     );
