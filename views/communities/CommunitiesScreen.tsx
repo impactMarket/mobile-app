@@ -66,18 +66,19 @@ function CommunitiesScreen(props: Props) {
                 </Appbar.Header>
                 {communities.map((community) => <Card
                     key={community.name}
-                    elevation={12}
+                    elevation={1}
                     style={styles.card}
                     onPress={() => navigation.navigate('CommunityDetailsScreen', { community: community, user: props.user })}
                 >
                     {/* <Card.Cover
                             source={{ uri: community.image }}
                         /> */}
-                    <Card.Content style={{ margin: 0 }}>
+                    <Card.Content style={{ margin: -16 }}>
                         <ImageBackground
                             source={{ uri: community.coverImage }}
                             resizeMode={'cover'}
                             style={{
+                                borderRadius: 40,
                                 width: '100%',
                                 height: 180,
                                 justifyContent: 'center',
@@ -88,37 +89,25 @@ function CommunitiesScreen(props: Props) {
                             <Text style={{ fontSize: 25, fontWeight: 'bold', fontFamily: 'Gelion-Bold', color: 'white' }}>{community.name}</Text>
                             <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
                         </ImageBackground>
-                        <View>
-                            <DataTable>
-                                <DataTable.Row style={{ borderBottomColor: 'transparent', marginBottom: -20 }}>
-                                    <DataTable.Cell>
-                                        <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>{community.backers.length}</Text>
-                                    </DataTable.Cell>
-                                    <DataTable.Cell>
-                                        <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>{community.beneficiaries.length}</Text>
-                                    </DataTable.Cell>
-                                    <DataTable.Cell>
-                                        <Text style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>${humanifyNumber(community.vars._amountByClaim)}/{claimFrequencyToText(community.vars._baseIntervalTime)}</Text>
-                                    </DataTable.Cell>
-                                </DataTable.Row>
-
-                                <DataTable.Row style={{ borderBottomColor: 'transparent' }}>
-                                    <DataTable.Cell>
-                                        <Text style={{ color: 'grey' }}>Backers</Text>
-                                    </DataTable.Cell>
-                                    <DataTable.Cell>
-                                        <Text style={{ color: 'grey' }}>Beneficiaries</Text>
-                                    </DataTable.Cell>
-                                    <DataTable.Cell>
-                                        <Text style={{ color: 'grey' }}>UBI Rate</Text>
-                                    </DataTable.Cell>
-                                </DataTable.Row>
-                            </DataTable>
-                            <View>
+                        <View style={{ margin: 10 }}>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                                <View>
+                                    <Text style={styles.cellHeader}>{community.beneficiaries.length}</Text>
+                                    <Text style={styles.cellDescription}>Beneficiaries</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.cellHeader}>${humanifyNumber(community.vars._amountByClaim)}</Text>
+                                    <Text style={styles.cellDescription}>{claimFrequencyToText(community.vars._baseIntervalTime)}</Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.cellHeader}>{community.backers.length}</Text>
+                                    <Text style={styles.cellDescription}>Backers</Text>
+                                </View>
+                            </View>
+                            <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
                                 <ProgressBar
                                     key="raised"
                                     style={{
-                                        marginTop: 10,
                                         backgroundColor: '#d6d6d6',
                                         position: 'absolute'
                                     }}
@@ -128,7 +117,6 @@ function CommunitiesScreen(props: Props) {
                                 <ProgressBar
                                     key="claimed"
                                     style={{
-                                        marginTop: 10,
                                         backgroundColor: 'rgba(255,255,255,0)'
                                     }}
                                     progress={calculateCommunityProgress('claimed', community)}
@@ -151,6 +139,25 @@ const styles = StyleSheet.create({
     },
     card: {
         margin: 30,
+        padding: 0
+    },
+    cellHeader: {
+        fontFamily: "Gelion-Bold",
+        fontSize: 24,
+        fontWeight: "bold",
+        fontStyle: "normal",
+        letterSpacing: 0,
+        textAlign: "center",
+        color: "#172b4d"
+    },
+    cellDescription: {
+        fontFamily: "Gelion-Regular",
+        fontSize: 15,
+        fontWeight: "normal",
+        fontStyle: "normal",
+        lineHeight: 18,
+        letterSpacing: 0.25,
+        color: "#7e8da6"
     }
 });
 
