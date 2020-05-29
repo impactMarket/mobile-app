@@ -3,7 +3,6 @@ import {
     StyleSheet,
     Text,
     View,
-    AsyncStorage,
 } from 'react-native';
 import {
     connect,
@@ -11,15 +10,11 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-    STORAGE_USER_FIRST_TIME
 } from '../../helpers/types';
 import {
-    Appbar,
-    Avatar,
     Card,
     Button,
     Headline,
-    List
 } from 'react-native-paper';
 import {
     SafeAreaView
@@ -28,14 +23,7 @@ import {
     ScrollView
 } from 'react-native-gesture-handler';
 import {
-    ChartConfig,
-    BarChart
-} from 'react-native-chart-kit';
-import {
     setUserFirstTime,
-    setUserIsCommunityManager,
-    setUserIsBeneficiary,
-    setUserCeloInfo
 } from '../../helpers/redux/actions/ReduxActions';
 import {
     useNavigation
@@ -44,38 +32,15 @@ import ListActionItem, { IListActionItem } from '../../components/ListActionItem
 import Header from '../../components/Header';
 
 
-const barChartConfig: ChartConfig = {
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientToOpacity: 0,
-    strokeWidth: 1,
-    barPercentage: 0.5,
-    color: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
-    propsForLabels: {
-        opacity: 0 // just make them transparent ¯\_(ツ)_/¯
-    }
-};
-const dummyData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-        {
-            data: [10, 25, 31, 42, 39, 59, 61, 68, 63, 79, 89, 95]
-        }
-    ]
-};
-interface IAccountScreenProps {
-}
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
     return { user, network }
 };
-
 const connector = connect(mapStateToProps)
-
 type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux
 
-type Props = PropsFromRedux & IAccountScreenProps
-function AccountScreen(props: Props) {
+function WalletScreen(props: Props) {
     const navigation = useNavigation();
     const [activities, setActivities] = useState<IListActionItem[]>([]);
 
@@ -107,23 +72,14 @@ function AccountScreen(props: Props) {
         loadActivities();
     }, []);
 
-    const handleLogout = () => {
-        AsyncStorage.clear();
-        AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-        props.dispatch(setUserCeloInfo({
-            address: '',
-            phoneNumber: '',
-            balance: '0',
-        }));
-        props.dispatch(setUserIsCommunityManager(false));
-        props.dispatch(setUserIsBeneficiary(false));
-    }
-
     if (props.user.celoInfo.address.length === 0) {
         return <SafeAreaView>
-            <Text>Login needed...</Text>
             <Button
                 mode="contained"
+                style={{
+                    alignSelf: 'center',
+                    marginTop: '50%'
+                }}
                 onPress={() => props.dispatch(setUserFirstTime(true))}
             >
                 Login now
@@ -138,8 +94,7 @@ function AccountScreen(props: Props) {
             >
                 <Button
                     mode="text"
-                    disabled={true}
-                    onPress={() => console.log('hi')}
+                    onPress={() => navigation.navigate('EditProfile')}
                 >
                     Edit Profile
                 </Button>
@@ -193,13 +148,6 @@ function AccountScreen(props: Props) {
                         All Transactions
                     </Button>
                 </View>
-                <Button
-                    mode="contained"
-                    style={styles.card}
-                    onPress={handleLogout}
-                >
-                    Logout
-                </Button>
             </ScrollView>
         </>
     );
@@ -223,4 +171,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connector(AccountScreen);
+export default connector(WalletScreen);
