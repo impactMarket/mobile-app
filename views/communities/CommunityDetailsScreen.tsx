@@ -126,9 +126,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     marginLeft: -70,
                                 }}
                             />
-                            <View>
-                                <Headline>35%</Headline>
-                                <Paragraph style={{ color: '#b0b0b0' }}>Self-sustainability index</Paragraph>
+                            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', marginRight: 0 }}>
+                                <Headline style={{
+                                    fontFamily: "Gelion-Regular",
+                                    fontSize: 36,
+                                    fontStyle: "normal",
+                                    lineHeight: 36,
+                                    letterSpacing: 0,
+                                    textAlign: 'right'
+                                }}>35%</Headline>
+                                <Paragraph style={{ color: '#b0b0b0' }}>Self-Sustainability Index</Paragraph>
                             </View>
                         </View>
                     </Card.Content>
@@ -147,7 +154,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             <Donate
                 community={community}
             />
-        </ScrollView>
+        </ScrollView >
     );
 }
 

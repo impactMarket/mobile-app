@@ -101,14 +101,14 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
 
             Alert.alert(
                 'Success',
-                'You\'ve accepted the beneficiary request!',
+                'You\'ve successfully added a new beneficiary!',
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
         }).catch(() => {
             Alert.alert(
                 'Failure',
-                'An error happened while accepting the request!',
+                'An error happened while adding the request!',
                 [{ text: 'Close' }],
                 { cancelable: false }
             );
