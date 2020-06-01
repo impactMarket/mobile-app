@@ -20,14 +20,21 @@ export function calculateCommunityProgress(
     toCalculte: string /*'raised' | 'claimed'*/,
     community: ICommunityInfo
 ): number {
-    if (toCalculte === 'raised') {
-        const m = new BigNumber(community.vars._claimHardCap).multipliedBy(community.beneficiaries.length);
-        const result = new BigNumber(community.totalRaised).div(m.eq(0) ? 1 : m);
-        return result.toNumber();
+    const m = new BigNumber(community.vars._claimHardCap)
+        .multipliedBy(community.beneficiaries.length);
+    // in theory, it's the total claimed is relative to the total raised.
+    // But to draw the progress bar, it's relative to the progress bar size.
+    const result = new BigNumber(
+        toCalculte === 'raised' ? community.totalRaised : community.totalClaimed
+    ).div(m.eq(0) ? 1 : m);
+    return parseFloat(result.toFixed(2));
+}
+
+export function getCountryFromPhoneNumber(phoneNumber: string) {
+    console.log(phoneNumber);
+    if (phoneNumber.slice(0, 4) === '+351') {
+        return '🇵🇹 Portugal'
     }
-    const result = new BigNumber(community.totalClaimed)
-        .div(new BigNumber(community.totalRaised).eq(0) ? 1 : community.totalRaised);
-    return result.toNumber();
 }
 
 export var iptcColors = {
