@@ -30,6 +30,7 @@ const INITIAL_STATE_USER: IUserState = {
 
 const INITIAL_NETWORK_USER: INetworkState = {
     kit: undefined as any,
+    // TODO: save community object from database with contract inside
     contracts: {
         communityContract: undefined as any,
         impactMarketContract: undefined as any,

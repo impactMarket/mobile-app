@@ -12,12 +12,6 @@ import {
 import * as Font from 'expo-font';
 
 import {
-    Fontisto,
-    MaterialIcons,
-    FontAwesome,
-    MaterialCommunityIcons,
-} from '@expo/vector-icons';
-import {
     AppLoading,
     SplashScreen,
 } from 'expo';
@@ -52,7 +46,6 @@ import {
     DefaultTheme,
     Provider as PaperProvider,
     configureFonts,
-    Headline,
 } from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit';
 import { ethers } from 'ethers';
@@ -66,7 +59,6 @@ import {
 } from './services';
 import BigNumber from 'bignumber.js';
 import BeneficiaryView from './views/community/view/beneficiary';
-import CommunityManagerView from './views/community/view/communitymanager';
 import { iptcColors } from './helpers';
 
 

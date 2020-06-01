@@ -48,6 +48,9 @@ export function WalletStackScreen() {
                 component={WalletScreen}
             />
             <WalletStack.Screen
+                options={{
+                    headerShown: false,
+                }}
                 name="EditProfile"
                 component={EditProfile}
             />

@@ -1,28 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View } from 'react-native';
-import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../../helpers/types';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import {
+    StyleSheet,
+    ScrollView,
+    View
+} from 'react-native';
+import {
+    connect,
+    ConnectedProps
+} from 'react-redux';
+import {
+    IRootState
+} from '../../helpers/types';
 import SvgQRCode from 'react-native-qrcode-svg';
-import { Paragraph, Headline, Subheading, Card, Button, Text, Avatar } from 'react-native-paper';
+import {
+    Headline,
+    Subheading,
+    Card,
+    Button,
+    Text,
+    Avatar
+} from 'react-native-paper';
+import { getCountryFromPhoneNumber } from '../../helpers';
 
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
     return { user, network }
 };
-
 const connector = connect(mapStateToProps)
-
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-
 function UserShowScanQRScreen(props: PropsFromRedux) {
-    const navigation = useNavigation();
-
-    useEffect(() => {
-    }, []);
-
     return (
         <ScrollView style={styles.contentView}>
             <Headline>Scan to pay</Headline>
@@ -32,7 +40,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View>
                             <Text>John Doe</Text>
-                            <Text style={{ color: 'grey' }}>United States</Text>
+                            <Text style={{ color: 'grey' }}>{getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}</Text>
                         </View>
                         <Avatar.Image
                             style={{ alignSelf: 'center', marginLeft: 'auto' }}
@@ -48,6 +56,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                     </View>
                     <Button
                         mode="outlined"
+                        disabled={true}
                         onPress={() => console.log('oi')}
                     >
                         Scan to Pay
