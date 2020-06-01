@@ -93,7 +93,7 @@ export function CommunityManagerStackSreen() {
             />
             <CommunityManagerStack.Screen
                 options={{
-                    backgroundColor: 'transparent'
+                    headerShown: false
                 }}
                 name="AddedScreen"
                 component={AddedScreen}

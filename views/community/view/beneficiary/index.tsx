@@ -66,6 +66,7 @@ function BeneficiaryView(props: Props) {
             <Header
                 title="Claim"
                 navigation={navigation}
+                hasHelp={true}
                 hasShare={true}
             />
             <ImageBackground

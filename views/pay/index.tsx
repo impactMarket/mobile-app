@@ -41,6 +41,7 @@ function PayScreen(props: Props) {
         <>
             <Header
                 title="Pay"
+                hasHelp={true}
                 hasQr={true}
                 navigation={navigation}
             />

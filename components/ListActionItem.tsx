@@ -60,7 +60,7 @@ export default class ListActionItem extends Component<IListActionItemProps, {}> 
             `${this.props.item.from.slice(0, 5)}..${this.props.item.from.slice(37, 42)}` :
             this.props.item.from;
 
-        return <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
+        return <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ marginRight: 5 }}>{avatarSrc}</View>
                 <View style={{ justifyContent: 'center' }}>
