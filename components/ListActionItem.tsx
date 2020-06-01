@@ -60,17 +60,33 @@ export default class ListActionItem extends Component<IListActionItemProps, {}> 
             `${this.props.item.from.slice(0, 5)}..${this.props.item.from.slice(37, 42)}` :
             this.props.item.from;
 
-        return <List.Item
-            key={this.props.item.key}
-            title={from}
-            description={this.props.item.description}
-            left={() => avatarSrc}
-            right={() => this.props.item.value !== undefined && renderRight}
-        />;
+        return <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', margin: 20 }}>
+            <View style={{ flexDirection: 'row' }}>
+                <View style={{ marginRight: 5 }}>{avatarSrc}</View>
+                <View style={{ justifyContent: 'center' }}>
+                    <Text style={styles.textTitle}>{from}</Text>
+                    <Text style={styles.textDescription}>{this.props.item.description}</Text>
+                </View>
+            </View>
+            <View style={{ marginLeft: 'auto' }}>
+                {this.props.children}
+                {this.props.item.value !== undefined && renderRight}
+            </View>
+        </View>
     }
 }
 
 const styles = StyleSheet.create({
+    textTitle: {
+        fontFamily: "Gelion-Regular",
+        fontSize: 20,
+        letterSpacing: 0,
+    },
+    textDescription: {
+        fontFamily: "Gelion-Regular",
+        letterSpacing: 0.25,
+        color: "grey"
+    },
     rightTextTop: {
         textAlign: 'right',
         fontSize: 20
