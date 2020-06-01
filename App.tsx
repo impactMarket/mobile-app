@@ -27,6 +27,7 @@ import {
     PayStackScreen,
     WalletStackScreen,
     CommunitiesStackScreen,
+    CommunityManagerStackSreen,
 } from './views/Stacks';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './components/Login';
@@ -51,6 +52,7 @@ import {
     DefaultTheme,
     Provider as PaperProvider,
     configureFonts,
+    Headline,
 } from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit';
 import { ethers } from 'ethers';
@@ -205,7 +207,7 @@ export default class App extends React.Component<{}, IAppState> {
             } else if (store.getState().user.community.isCoordinator) {
                 return <Tab.Screen
                     name="Manage"
-                    component={CommunityManagerView}
+                    component={CommunityManagerStackSreen}
                     options={{
                         tabBarIcon: (props: any) => (
                             <Image

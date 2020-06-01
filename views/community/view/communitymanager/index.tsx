@@ -71,25 +71,25 @@ function CommunityManagerView(props: Props) {
     }
 
     const communityStatus = (_community: ICommunityInfo) => {
-        if (_community.status === 'pending') {
-            return <Text>Communtiy is still waiting approval</Text>
-        }
-        return <>
-            <Beneficiaries
-                community={_community}
-                updateCommunity={(_communityUpdate) => setCommunity(_communityUpdate)}
-            />
-            <CommuntyStatus community={_community}>
-                <Button
-                    mode="outlined"
-                    disabled={true}
-                    style={{ width: '100%' }}
-                    onPress={() => console.log('Pressed')}
-                >
-                    Full Dashboard
+        if (_community.status === 'valid') {
+            return <>
+                <Beneficiaries
+                    community={_community}
+                    updateCommunity={(_communityUpdate) => setCommunity(_communityUpdate)}
+                />
+                <CommuntyStatus community={_community}>
+                    <Button
+                        mode="outlined"
+                        disabled={true}
+                        style={{ width: '100%' }}
+                        onPress={() => console.log('Pressed')}
+                    >
+                        Full Dashboard
                 </Button>
-            </CommuntyStatus>
-        </>
+                </CommuntyStatus>
+            </>
+        }
+        return <Text>Communtiy is still waiting approval</Text>
     }
 
     if (community === undefined) {
@@ -104,11 +104,11 @@ function CommunityManagerView(props: Props) {
                 title="Manager"
                 navigation={navigation}
             >
-                <IconButton
+                {community.status === 'valid' && <IconButton
                     icon="dots-horizontal"
                     style={{ backgroundColor: '#eaedf0' }}
                     onPress={() => setOpenModalMore(true)}
-                />
+                />}
             </Header>
             <ScrollView
                 refreshControl={

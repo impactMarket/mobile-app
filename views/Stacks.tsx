@@ -9,6 +9,9 @@ import CreateCommunityScreen from './common/CreateCommunityScreen';
 
 import PayScreen from './pay';
 import EditProfile from './wallet/EditProfile';
+import CommunityManagerView from './community/view/communitymanager';
+import AddedScreen from './community/view/communitymanager/AddedScreen';
+import RemovedScreen from './community/view/communitymanager/RemovedScreen';
 
 
 
@@ -73,5 +76,32 @@ export function CommunitiesStackScreen() {
                 component={CreateCommunityScreen}
             />
         </CommunitiesStack.Navigator>
+    );
+}
+
+const CommunityManagerStack = createStackNavigator();
+
+export function CommunityManagerStackSreen() {
+    return (
+        <CommunityManagerStack.Navigator>
+            <CommunityManagerStack.Screen
+                options={{
+                    headerShown: false
+                }}
+                name="CommunityManager"
+                component={CommunityManagerView}
+            />
+            <CommunityManagerStack.Screen
+                options={{
+                    backgroundColor: 'transparent'
+                }}
+                name="AddedScreen"
+                component={AddedScreen}
+            />
+            <CommunityManagerStack.Screen
+                name="RemovedScreen"
+                component={RemovedScreen}
+            />
+        </CommunityManagerStack.Navigator>
     );
 }

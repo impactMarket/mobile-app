@@ -1,8 +1,5 @@
 import React from 'react';
 import {
-    View,
-} from 'react-native';
-import {
     connect,
     ConnectedProps
 } from 'react-redux';
@@ -12,14 +9,14 @@ import {
 } from '../../../../../helpers/types';
 import {
     Card,
-    Subheading,
     Headline,
+    Button,
 } from 'react-native-paper';
 import {
     getCommunityByContractAddress,
 } from '../../../../../services';
 import AddBeneficiary from '../components/AddBeneficiary';
-import ListBeneficiaries from '../components/ListBeneficiaries';
+import { useNavigation } from '@react-navigation/native';
 
 
 interface IBeneficiariesProps {
@@ -35,6 +32,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & IBeneficiariesProps
 
 function Beneficiaries(props: Props) {
+    const navigation = useNavigation();
     return (
         <Card>
             <Card.Content>
@@ -51,9 +49,21 @@ function Beneficiaries(props: Props) {
                 >
                     BENEFICIARIES
             </Headline>
-                <ListBeneficiaries
-                    beneficiaries={props.community.beneficiaries}
-                />
+                <Button
+                    mode="outlined"
+                    disabled={props.community.beneficiaries.length === 0}
+                    style={{ marginVertical: 5 }}
+                    onPress={() => navigation.navigate('AddedScreen', { beneficiaries: props.community.beneficiaries })}
+                >
+                    Added ({props.community.beneficiaries.length})
+                </Button>
+                <Button
+                    mode="outlined"
+                    disabled={true}
+                    style={{ marginVertical: 5 }}
+                >
+                    Removed (0)
+                </Button>
                 <AddBeneficiary
                     addBeneficiaryCallback={() => {
                         const { _address } = props.network.contracts.communityContract;
