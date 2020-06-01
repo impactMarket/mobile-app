@@ -43,7 +43,15 @@ function AddedScreen(props: Props) {
                     key: beneficiary,
                     timestamp: 0
                 }}
-            />)}
+            >
+                <Button
+                    mode="outlined"
+                    disabled={true}
+                    style={{ marginVertical: 5 }}
+                >
+                    Remove
+                </Button>
+            </ListActionItem>)}
         </ScrollView>
     );
 }
