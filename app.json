@@ -15,8 +15,7 @@
         "scheme": "impactmarketmobile",
         "splash": {
             "image": "./assets/splash.png",
-            "resizeMode": "cover",
-            "backgroundColor": "#ffffff"
+            "backgroundColor": "#2362FB"
         },
         "updates": {
             "fallbackToCacheTimeout": 0
