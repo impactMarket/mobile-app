@@ -210,6 +210,48 @@ async function tokenTx(
     return response;
 }
 
+async function getUsername(
+    address: string,
+): Promise<string> {
+    let response = '';
+    try {
+        const result = await axios.get(`/username/${address}`);
+        response = result.data as string;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+async function setUsername(
+    address: string,
+    username: string,
+): Promise<boolean> {
+    let response = 500;
+    try {
+        // handle success
+        const requestBody = {
+            address,
+            username
+        };
+        const requestHeaders = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        };
+        const result = await axios.post('/username', requestBody, requestHeaders);
+        response = result.status;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response === 200 ? true : false;
+}
+
 export {
     getAllValidCommunities,
     requestCreateCommunity,
@@ -221,4 +263,6 @@ export {
     getCommunityByContractAddress,
     getCommunityNamesFromAddresses,
     tokenTx,
+    getUsername,
+    setUsername,
 }

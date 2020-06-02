@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     AsyncStorage,
     StyleSheet,
@@ -30,6 +30,7 @@ import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { getCountryFromPhoneNumber } from '../../helpers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
+import { getUsername, setUsername } from '../../services/api';
 
 
 interface IEditProfileProps {
@@ -46,6 +47,13 @@ type Props = PropsFromRedux & IEditProfileProps
 function EditProfile(props: Props) {
     const navigation = useNavigation();
     const [name, setName] = useState('');
+
+    useEffect(() => {
+        const loadName = () => {
+            getUsername(props.user.celoInfo.address).then(setName);
+        }
+        loadName();
+    });
 
     const handleLogout = () => {
         AsyncStorage.clear();
@@ -87,6 +95,7 @@ function EditProfile(props: Props) {
                         value={name}
                         maxLength={32}
                         required={true}
+                        onEndEditing={(e) => setUsername(props.user.celoInfo.address, name)}
                         onChangeText={value => setName(value)}
                     />
                     <TextInput
