@@ -2,6 +2,11 @@ import Constants from 'expo-constants';
 
 const commonConfig = {
     /**
+     * Block explorer base URL. Contract address is added at the end.
+     */
+    blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
+
+    /**
      * JSON RPC url
      */
     jsonRpc: 'https://alfajores-forno.celo-testnet.org',
