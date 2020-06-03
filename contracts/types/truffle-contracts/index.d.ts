@@ -163,6 +163,8 @@ export interface CommunityInstance extends Truffle.ContractInstance {
     txDetails?: Truffle.TransactionDetails
   ): Promise<BigNumber>;
 
+  cUSDAddress(txDetails?: Truffle.TransactionDetails): Promise<string>;
+
   claimHardCap(txDetails?: Truffle.TransactionDetails): Promise<BigNumber>;
 
   claimed(
@@ -226,6 +228,8 @@ export interface CommunityInstance extends Truffle.ContractInstance {
     arg0: string | BigNumber,
     txDetails?: Truffle.TransactionDetails
   ): Promise<BigNumber>;
+
+  locked(txDetails?: Truffle.TransactionDetails): Promise<boolean>;
 
   renounceRole: {
     (
@@ -399,6 +403,78 @@ export interface CommunityInstance extends Truffle.ContractInstance {
     call(txDetails?: Truffle.TransactionDetails): Promise<void>;
     sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
     estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
+  };
+
+  edit: {
+    (
+      _amountByClaim: number | BigNumber | string,
+      _baseIntervalTime: number | BigNumber | string,
+      _incIntervalTime: number | BigNumber | string,
+      _claimHardCap: number | BigNumber | string,
+      _cUSDAddress: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      _amountByClaim: number | BigNumber | string,
+      _baseIntervalTime: number | BigNumber | string,
+      _incIntervalTime: number | BigNumber | string,
+      _claimHardCap: number | BigNumber | string,
+      _cUSDAddress: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _amountByClaim: number | BigNumber | string,
+      _baseIntervalTime: number | BigNumber | string,
+      _incIntervalTime: number | BigNumber | string,
+      _claimHardCap: number | BigNumber | string,
+      _cUSDAddress: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _amountByClaim: number | BigNumber | string,
+      _baseIntervalTime: number | BigNumber | string,
+      _incIntervalTime: number | BigNumber | string,
+      _claimHardCap: number | BigNumber | string,
+      _cUSDAddress: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  lock: {
+    (txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse
+    >;
+    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
+  };
+
+  unlock: {
+    (txDetails?: Truffle.TransactionDetails): Promise<
+      Truffle.TransactionResponse
+    >;
+    call(txDetails?: Truffle.TransactionDetails): Promise<void>;
+    sendTransaction(txDetails?: Truffle.TransactionDetails): Promise<string>;
+    estimateGas(txDetails?: Truffle.TransactionDetails): Promise<number>;
+  };
+
+  migrateFunds: {
+    (
+      _newCommunity: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      _newCommunity: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _newCommunity: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _newCommunity: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
   };
 }
 
