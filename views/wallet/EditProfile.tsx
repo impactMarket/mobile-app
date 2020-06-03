@@ -49,11 +49,8 @@ function EditProfile(props: Props) {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        const loadName = () => {
-            getUsername(props.user.celoInfo.address).then(setName);
-        }
-        loadName();
-    });
+        getUsername(props.user.celoInfo.address).then(setName);
+    }, []);
 
     const handleLogout = () => {
         AsyncStorage.clear();

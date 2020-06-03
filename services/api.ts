@@ -216,7 +216,7 @@ async function getUsername(
     let response = '';
     try {
         const result = await axios.get(`/username/${address}`);
-        response = result.data as string;
+        response = result.data.username as string;
     } catch (error) {
         // handle error
     } finally {
@@ -242,7 +242,7 @@ async function setUsername(
                 'Accept': 'application/json',
             }
         };
-        const result = await axios.post('/username', requestBody, requestHeaders);
+        const result = await axios.post('/username/', requestBody, requestHeaders);
         response = result.status;
     } catch (error) {
         // handle error
