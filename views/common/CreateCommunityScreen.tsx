@@ -144,6 +144,7 @@ function CreateCommunityScreen(props: Props) {
                     !new BigNumber(claimHardcap).multipliedBy(decimals).eq(_claimHardCap)
                 ) {
                     // if one of the fields is changed, sent contract edit!
+                    const cUSDAddress = await props.network.contracts.communityContract.methods.cUSDAddress().call();
                     await celoWalletRequest(
                         props.user.celoInfo.address,
                         community.contractAddress,
@@ -152,7 +153,7 @@ function CreateCommunityScreen(props: Props) {
                             baseInterval,
                             (parseInt(incrementalInterval, 10) * 3600).toString(),
                             new BigNumber(claimHardcap).multipliedBy(decimals).toString(),
-                            await props.network.contracts.communityContract.method.cUSDAddress().call(),
+                            cUSDAddress,
                         ),
                         'editcommunity',
                         props.network,
@@ -171,20 +172,21 @@ function CreateCommunityScreen(props: Props) {
                 )
                 if (!success) {
                     throw new Error('Some error!');
+                } else {
+                    navigation.goBack();
+                    Alert.alert(
+                        'Success',
+                        'Your community was updated!',
+                        [
+                            { text: 'OK' },
+                        ],
+                        { cancelable: false }
+                    );
                 }
-                navigation.goBack();
-                Alert.alert(
-                    'Success',
-                    'Your request to create a new community was placed!',
-                    [
-                        { text: 'OK' },
-                    ],
-                    { cancelable: false }
-                );
             } catch (e) {
                 Alert.alert(
                     'Failure',
-                    'An error happened while placing the request to create a community!',
+                    'An error happened while updating your community!',
                     [
                         { text: 'OK' },
                     ],
@@ -346,7 +348,6 @@ function CreateCommunityScreen(props: Props) {
                             <ValidatedTextInput
                                 label="Claim Amount"
                                 keyboardType="numeric"
-                                editable={!editing}
                                 value={amountByClaim}
                                 required={true}
                                 setValid={setIsAmountByClaimValid}
@@ -355,12 +356,11 @@ function CreateCommunityScreen(props: Props) {
                             <Paragraph style={styles.inputTextFieldLabel}>Base Interval</Paragraph>
                             <View style={styles.pickerBorder}>
                                 <Picker
-                                    enabled={!editing}
                                     selectedValue={baseInterval}
                                     style={styles.picker}
                                     onValueChange={(value) => setBaseInterval(value)}
                                 >
-                                    <Picker.Item label="Hourly" value="3600" />
+                                    <Picker.Item label="Hourly" value="3601" />
                                     <Picker.Item label="Daily" value="86400" />
                                     <Picker.Item label="Weekly" value="604800" />
                                 </Picker>
@@ -368,7 +368,6 @@ function CreateCommunityScreen(props: Props) {
                             <ValidatedTextInput
                                 label="Incremental Time (in hours)"
                                 keyboardType="numeric"
-                                editable={!editing}
                                 value={incrementalInterval}
                                 required={true}
                                 setValid={setIsIncrementalIntervalValid}
@@ -377,7 +376,6 @@ function CreateCommunityScreen(props: Props) {
                             <ValidatedTextInput
                                 label="Max Claim"
                                 keyboardType="numeric"
-                                editable={!editing}
                                 value={claimHardcap}
                                 required={true}
                                 setValid={setIsClaimHardcapValid}
