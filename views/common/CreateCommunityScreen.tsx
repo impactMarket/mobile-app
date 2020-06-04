@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     ScrollView,
@@ -16,25 +16,38 @@ import {
     connect,
     ConnectedProps
 } from 'react-redux';
-import { IRootState } from '../../helpers/types';
-import { requestCreateCommunity } from '../../services';
+import { IRootState, ICommunityInfo, IUserState } from '../../helpers/types';
+import { requestCreateCommunity, celoWalletRequest } from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import config from '../../config';
 import BigNumber from 'bignumber.js';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
+import { humanifyNumber } from '../../helpers';
+import Header from '../../components/Header';
+import { editCommunity } from '../../services/api';
 
 
+interface ICreateCommunityScreen {
+    route: {
+        params: {
+            community: ICommunityInfo,
+            user: IUserState,
+        }
+    }
+}
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
     return { user, network }
 };
 const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux & ICreateCommunityScreen;
 
-function CreateCommunityScreen(props: PropsFromRedux) {
+function CreateCommunityScreen(props: Props) {
     const navigation = useNavigation();
 
+    const [editing, setEditing] = useState(false);
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
     //
@@ -53,9 +66,41 @@ function CreateCommunityScreen(props: PropsFromRedux) {
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementalInterval, setIncrementalInterval] = useState('');
     const [claimHardcap, setClaimHardcap] = useState('');
-    const [currency, setCurrency] = useState('');
+    const [currency, setCurrency] = useState('usd');
 
-    const submitNewCommunity = () => {
+    useEffect(() => {
+        if (props.route.params !== undefined) {
+            const community = props.route.params.community as ICommunityInfo;
+            if (community !== undefined) {
+                setName(community.name);
+                setDescription(community.description);
+                setLocationTitle(community.location.title);
+                setGpsLocation({
+                    coords: {
+                        latitude: community.location.latitude,
+                        longitude: community.location.longitude,
+                    }
+                } as Location.LocationData)
+                // cover image
+                setAmountByClaim(humanifyNumber(community.vars._amountByClaim));
+                setBaseInterval(community.vars._baseIntervalTime);
+                setIncrementalInterval(new BigNumber(community.vars._incIntervalTime).div(3600).toString());
+                setClaimHardcap(humanifyNumber(community.vars._claimHardCap));
+                // currency
+
+                setIsNameValid(true);
+                setIsDescriptionValid(true);
+                setIsLocationNameValid(true);
+                setIsAmountByClaimValid(true);
+                setIsIncrementalIntervalValid(true);
+                setIsClaimHardcapValid(true);
+
+                setEditing(true);
+            }
+        }
+    }, []);
+
+    const submitNewCommunity = async () => {
         if (gpsLocation === undefined) {
             // TODO: show error!
             return;
@@ -81,26 +126,52 @@ function CreateCommunityScreen(props: PropsFromRedux) {
             );
             return;
         }
-        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         setSending(true);
-        requestCreateCommunity(
-            props.user.celoInfo.address,
-            name,
-            description,
-            {
-                title: locationTitle,
-                latitude: gpsLocation!.coords.latitude,
-                longitude: gpsLocation!.coords.longitude,
-            },
-            coverImage,
-            {
-                amountByClaim: new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
-                baseInterval: baseInterval,
-                incrementalInterval: (parseInt(incrementalInterval, 10) * 3600).toString(),
-                claimHardcap: new BigNumber(claimHardcap).multipliedBy(decimals).toString(),
-            },
-        ).then((success) => {
-            if (success) {
+        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
+        if (editing) {
+            const community = props.route.params.community as ICommunityInfo;
+            const {
+                _amountByClaim,
+                _baseIntervalTime,
+                _claimHardCap,
+                _incIntervalTime
+            } = props.route.params.community.vars;
+            try {
+                if (
+                    !new BigNumber(amountByClaim).multipliedBy(decimals).eq(_amountByClaim) ||
+                    baseInterval !== _baseIntervalTime ||
+                    parseInt(incrementalInterval, 10) * 3600 !== parseInt(_incIntervalTime, 10) ||
+                    !new BigNumber(claimHardcap).multipliedBy(decimals).eq(_claimHardCap)
+                ) {
+                    // if one of the fields is changed, sent contract edit!
+                    await celoWalletRequest(
+                        props.user.celoInfo.address,
+                        community.contractAddress,
+                        await props.network.contracts.communityContract.methods.edit(
+                            new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
+                            baseInterval,
+                            (parseInt(incrementalInterval, 10) * 3600).toString(),
+                            new BigNumber(claimHardcap).multipliedBy(decimals).toString(),
+                            await props.network.contracts.communityContract.method.cUSDAddress().call(),
+                        ),
+                        'editcommunity',
+                        props.network,
+                    )
+                }
+                const success = await editCommunity(
+                    community.publicId,
+                    name,
+                    description,
+                    {
+                        title: locationTitle,
+                        latitude: gpsLocation!.coords.latitude,
+                        longitude: gpsLocation!.coords.longitude,
+                    },
+                    coverImage
+                )
+                if (!success) {
+                    throw new Error('Some error!');
+                }
                 navigation.goBack();
                 Alert.alert(
                     'Success',
@@ -110,7 +181,7 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     ],
                     { cancelable: false }
                 );
-            } else {
+            } catch (e) {
                 Alert.alert(
                     'Failure',
                     'An error happened while placing the request to create a community!',
@@ -119,9 +190,50 @@ function CreateCommunityScreen(props: PropsFromRedux) {
                     ],
                     { cancelable: false }
                 );
+            } finally {
+                setSending(false);
             }
-            setSending(false);
-        });
+        } else {
+            requestCreateCommunity(
+                props.user.celoInfo.address,
+                name,
+                description,
+                {
+                    title: locationTitle,
+                    latitude: gpsLocation!.coords.latitude,
+                    longitude: gpsLocation!.coords.longitude,
+                },
+                coverImage,
+                {
+                    amountByClaim: new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
+                    baseInterval: baseInterval,
+                    incrementalInterval: (parseInt(incrementalInterval, 10) * 3600).toString(),
+                    claimHardcap: new BigNumber(claimHardcap).multipliedBy(decimals).toString(),
+                },
+            ).then((success) => {
+                if (success) {
+                    navigation.goBack();
+                    Alert.alert(
+                        'Success',
+                        'Your request to create a new community was placed!',
+                        [
+                            { text: 'OK' },
+                        ],
+                        { cancelable: false }
+                    );
+                } else {
+                    Alert.alert(
+                        'Failure',
+                        'An error happened while placing the request to create a community!',
+                        [
+                            { text: 'OK' },
+                        ],
+                        { cancelable: false }
+                    );
+                }
+                setSending(false);
+            });
+        }
     }
 
     const enableGPSLocation = async () => {
@@ -146,124 +258,150 @@ function CreateCommunityScreen(props: PropsFromRedux) {
         !sending;
 
     if (props.user.celoInfo.address.length === 0) {
-        return <ScrollView>
+        return <View>
+            <Header
+                title={editing ? 'Edit Community' : 'New Community'}
+                navigation={navigation}
+                hasBack={true}
+            />
             <View style={styles.container}>
                 <Text>You need to login to create communities.</Text>
             </View>
-        </ScrollView>
+        </View>
     }
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <Card>
-                    <Card.Content>
-                        <Text style={{ color: 'grey', backgroundColor: '#f0f0f0', paddingVertical: 10 }}>
-                            Praesent eget condimentum enim, elementum viverra dui. Nam aliquam, nisi sit amet eleifend finibus, tellus metus dignissim est, vel fringilla urna mi ut lorem. Suspendisse blandit bibendum nunc, non bibendum mauris laoreet non. Morbi eget sollicitudin nunc. In laoreet nisi ac lacus maximus aliquet. Ut ullamcorper rutrum dolor non fringilla. Donec nunc metus, pulvinar ac dapibus eget, faucibus sit amet urna. Aliquam erat volutpat.
-                        </Text>
-                        <ValidatedTextInput
-                            label="Name"
-                            value={name}
-                            maxLength={32}
-                            required={true}
-                            setValid={setIsNameValid}
-                            onChangeText={value => setName(value)}
-                        />
-                        <ValidatedTextInput
-                            label="Description"
-                            value={description}
-                            maxLength={256}
-                            required={true}
-                            setValid={setIsDescriptionValid}
-                            onChangeText={value => setDescription(value)}
-                            multiline={true}
-                            numberOfLines={6}
-                        />
-                        <ValidatedTextInput
-                            label="City"
-                            value={locationTitle}
-                            maxLength={32}
-                            required={true}
-                            setValid={setIsLocationNameValid}
-                            onChangeText={value => setLocationTitle(value)}
-                        />
-                        {gpsLocation === undefined && <Button
-                            mode="outlined"
-                            onPress={() => enableGPSLocation()}
-                        >
-                            Get GPS Location
-                        </Button>}
-                        {gpsLocation !== undefined && <Button
-                            icon="check"
-                            mode="outlined"
-                            disabled={true}
-                        >
-                            Valid Coordinates
-                        </Button>}
-                    </Card.Content>
-                </Card>
-                <Card style={{ marginVertical: 15 }}>
-                    <Card.Content>
-                        <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
-                        <View style={styles.pickerBorder}>
-                            <Picker
-                                selectedValue={currency}
-                                style={styles.picker}
-                                onValueChange={(text) => setCurrency(text)}
+        <>
+            <Header
+                title={editing ? 'Edit Community' : 'New Community'}
+                navigation={navigation}
+                hasBack={true}
+            />
+            <ScrollView>
+                <View style={styles.container}>
+                    <Card>
+                        <Card.Content style={{ margin: -16 }}>
+                            <Text style={{ ...styles.textNote, backgroundColor: '#f0f0f0', padding: 16 }}>
+                                By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.
+                            </Text>
+                            <View
+                                style={{
+                                    margin: 16
+                                }}
                             >
-                                <Picker.Item label="Dollar (USD)" value="usd" />
-                            </Picker>
-                        </View>
-                        <ValidatedTextInput
-                            label="Claim Amount"
-                            keyboardType="numeric"
-                            value={amountByClaim}
-                            required={true}
-                            setValid={setIsAmountByClaimValid}
-                            onChangeText={value => setAmountByClaim(value)}
-                        />
-                        <Paragraph style={styles.inputTextFieldLabel}>Base Interval</Paragraph>
-                        <View style={styles.pickerBorder}>
-                            <Picker
-                                selectedValue={baseInterval}
-                                style={styles.picker}
-                                onValueChange={(value) => setBaseInterval(value)}
-                            >
-                                <Picker.Item label="Daily" value="86400" />
-                                <Picker.Item label="Weekly" value="604800" />
-                            </Picker>
-                        </View>
-                        <ValidatedTextInput
-                            label="Incremental Time (in hours)"
-                            keyboardType="numeric"
-                            value={incrementalInterval}
-                            required={true}
-                            setValid={setIsIncrementalIntervalValid}
-                            onChangeText={value => setIncrementalInterval(value)}
-                        />
-                        <ValidatedTextInput
-                            label="Max Claim"
-                            keyboardType="numeric"
-                            value={claimHardcap}
-                            required={true}
-                            setValid={setIsClaimHardcapValid}
-                            onChangeText={value => setClaimHardcap(value)}
-                        />
-                    </Card.Content>
-                </Card>
-                <Button
-                    mode="outlined"
-                    loading={sending}
-                    disabled={!isSubmitAvailable}
-                    onPress={() => submitNewCommunity()}
-                >
-                    Create Community
-                </Button>
-                <Text style={{ color: 'grey', marginVertical: 20 }}>
-                    Praesent eget condimentum enim, elementum viverra dui. Nam aliquam, nisi sit amet eleifend finibus, tellus metus dignissim est, vel fringilla urna mi ut lorem. Suspendisse blandit bibendum nunc, non bibendum mauris laoreet non. Morbi eget sollicitudin nunc. In laoreet nisi ac lacus maximus aliquet. Ut ullamcorper rutrum dolor non fringilla. Donec nunc metus, pulvinar ac dapibus eget, faucibus sit amet urna. Aliquam erat volutpat.
-                </Text>
-            </View>
-        </ScrollView>
+                                <ValidatedTextInput
+                                    label="Name"
+                                    value={name}
+                                    maxLength={32}
+                                    required={true}
+                                    setValid={setIsNameValid}
+                                    onChangeText={value => setName(value)}
+                                />
+                                <ValidatedTextInput
+                                    label="Description"
+                                    value={description}
+                                    maxLength={256}
+                                    required={true}
+                                    setValid={setIsDescriptionValid}
+                                    onChangeText={value => setDescription(value)}
+                                    multiline={true}
+                                    numberOfLines={6}
+                                />
+                                <ValidatedTextInput
+                                    label="City"
+                                    value={locationTitle}
+                                    maxLength={32}
+                                    required={true}
+                                    setValid={setIsLocationNameValid}
+                                    onChangeText={value => setLocationTitle(value)}
+                                />
+                                {gpsLocation === undefined && <Button
+                                    mode="outlined"
+                                    onPress={() => enableGPSLocation()}
+                                >
+                                    Get GPS Location
+                            </Button>}
+                                {gpsLocation !== undefined && <Button
+                                    icon="check"
+                                    mode="outlined"
+                                    disabled={true}
+                                >
+                                    Valid Coordinates
+                                </Button>}
+                            </View>
+                        </Card.Content>
+                    </Card>
+                    <Card style={{ marginVertical: 15 }}>
+                        <Card.Content>
+                            <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
+                            <View style={styles.pickerBorder}>
+                                <Picker
+                                    selectedValue={currency}
+                                    style={styles.picker}
+                                    onValueChange={(text) => setCurrency(text)}
+                                >
+                                    <Picker.Item label="Dollar (USD)" value="usd" />
+                                </Picker>
+                            </View>
+                            <ValidatedTextInput
+                                label="Claim Amount"
+                                keyboardType="numeric"
+                                editable={!editing}
+                                value={amountByClaim}
+                                required={true}
+                                setValid={setIsAmountByClaimValid}
+                                onChangeText={value => setAmountByClaim(value)}
+                            />
+                            <Paragraph style={styles.inputTextFieldLabel}>Base Interval</Paragraph>
+                            <View style={styles.pickerBorder}>
+                                <Picker
+                                    enabled={!editing}
+                                    selectedValue={baseInterval}
+                                    style={styles.picker}
+                                    onValueChange={(value) => setBaseInterval(value)}
+                                >
+                                    <Picker.Item label="Hourly" value="3600" />
+                                    <Picker.Item label="Daily" value="86400" />
+                                    <Picker.Item label="Weekly" value="604800" />
+                                </Picker>
+                            </View>
+                            <ValidatedTextInput
+                                label="Incremental Time (in hours)"
+                                keyboardType="numeric"
+                                editable={!editing}
+                                value={incrementalInterval}
+                                required={true}
+                                setValid={setIsIncrementalIntervalValid}
+                                onChangeText={value => setIncrementalInterval(value)}
+                            />
+                            <ValidatedTextInput
+                                label="Max Claim"
+                                keyboardType="numeric"
+                                editable={!editing}
+                                value={claimHardcap}
+                                required={true}
+                                setValid={setIsClaimHardcapValid}
+                                onChangeText={value => setClaimHardcap(value)}
+                            />
+                        </Card.Content>
+                    </Card>
+                    <Button
+                        mode="outlined"
+                        loading={sending}
+                        disabled={!isSubmitAvailable}
+                        onPress={() => submitNewCommunity()}
+                    >
+                        {editing ? 'Edit' : 'Create'} Community
+                    </Button>
+                    <Text style={{ ...styles.textNote, marginVertical: 20 }}>
+                        Note: These values should be a minimum basic income that is sufficient to meet your beneficiaries' basic needs. They can claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.
+                    </Text>
+                    <Text style={styles.textNote}>
+                        If there is another person or organization among your community you believe is more suitable to drive this initiative, let them know about this possibility and encourage them to create a community.
+                    </Text>
+                </View>
+            </ScrollView>
+        </>
     );
 }
 
@@ -288,6 +426,10 @@ const styles = StyleSheet.create({
         margin: 20
     },
     //
+    textNote: {
+        color: 'grey',
+        fontFamily: 'Gelion-Regular',
+    },
     imageBackground: {
         width: '100%',
         height: 180,
