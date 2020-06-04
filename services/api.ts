@@ -58,6 +58,43 @@ async function requestCreateCommunity(
     return response === 200 ? true : false;
 }
 
+async function editCommunity(
+    publicId: string,
+    name: string,
+    description: string,
+    location: {
+        title: string,
+        latitude: number,
+        longitude: number,
+    },
+    coverImage: string,
+): Promise<boolean> {
+    let response = 500;
+    try {
+        // handle success
+        const requestBody = {
+            publicId,
+            name,
+            description,
+            location,
+            coverImage,
+        };
+        const requestHeaders = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        };
+        const result = await axios.post('/community/edit', requestBody, requestHeaders);
+        response = result.status;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response === 200 ? true : false;
+}
+
 async function requestJoinAsBeneficiary(
     walletAddress: string,
     communityPublicId: string,
@@ -255,6 +292,7 @@ async function setUsername(
 export {
     getAllValidCommunities,
     requestCreateCommunity,
+    editCommunity,
     requestJoinAsBeneficiary,
     getBeneficiariesRequestByCommunity,
     findComunityToBeneficicary,
