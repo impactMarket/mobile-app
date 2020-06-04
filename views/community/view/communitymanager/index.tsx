@@ -149,14 +149,24 @@ function CommunityManagerView(props: Props) {
                         <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
-                            disabled={true}
+                            onPress={() => {
+                                setOpenModalMore(false);
+                                navigation.navigate('CreateCommunityScreen',
+                                    { community: community }
+                                )
+                            }}
                         >
                             Edit community details
                         </Button>
                         <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
-                            onPress={() => { setOpenModalMore(false); navigation.navigate('CommunityDetailsScreen', { community: community, user: props.user }) }}
+                            onPress={() => {
+                                setOpenModalMore(false);
+                                navigation.navigate('CommunityDetailsScreen',
+                                    { community: community, user: props.user }
+                                )
+                            }}
                         >
                             View as public
                         </Button>

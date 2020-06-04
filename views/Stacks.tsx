@@ -71,10 +71,16 @@ export function CommunitiesStackScreen() {
                 component={CommunitiesScreen}
             />
             <CommunitiesStack.Screen
+                options={{
+                    headerShown: false,
+                }}
                 name="CommunityDetailsScreen"
                 component={CommunityDetailsScreen}
             />
             <CommunitiesStack.Screen
+                options={{
+                    headerShown: false,
+                }}
                 name="CreateCommunityScreen"
                 component={CreateCommunityScreen}
             />
@@ -111,6 +117,13 @@ export function CommunityManagerStackSreen() {
                 }}
                 name="CommunityDetailsScreen"
                 component={CommunityDetailsScreen}
+            />
+            <CommunitiesStack.Screen
+                options={{
+                    headerShown: false
+                }}
+                name="CreateCommunityScreen"
+                component={CreateCommunityScreen}
             />
         </CommunityManagerStack.Navigator>
     );

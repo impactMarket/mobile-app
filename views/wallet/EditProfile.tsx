@@ -62,6 +62,7 @@ function EditProfile(props: Props) {
         }));
         props.dispatch(setUserIsCommunityManager(false));
         props.dispatch(setUserIsBeneficiary(false));
+        navigation.goBack();
     }
 
     return (

@@ -25,19 +25,24 @@ import BigNumber from 'bignumber.js';
 import { Button } from 'react-native-paper';
 
 
-interface ILoginProps {
+interface ILoginState {
+    connecting: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
     return { user, network }
 };
-
 const connector = connect(mapStateToProps)
-
 type PropsFromRedux = ConnectedProps<typeof connector>
+type Props = PropsFromRedux
 
-type Props = PropsFromRedux & ILoginProps
-class Login extends React.Component<Props, {}> {
+class Login extends React.Component<Props, ILoginState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            connecting: false,
+        }
+    }
 
     getCurrentUserBalance = async (address: string) => {
         const stableToken = await this.props.network.kit.contracts.getStableToken()
@@ -52,7 +57,7 @@ class Login extends React.Component<Props, {}> {
         const requestId = 'login'
         const dappName = 'Impact Market'
         const callback = Linking.makeUrl('impactmarketmobile://login')
-
+        this.setState({ connecting: true });
         // TODO: add loading
 
         requestAccountAddress({
@@ -78,6 +83,8 @@ class Login extends React.Component<Props, {}> {
         } catch (error) {
             // Error saving data
             console.log(error);
+        } finally {
+            this.setState({ connecting: false });
         }
 
         // TODO: remove loading
@@ -89,17 +96,8 @@ class Login extends React.Component<Props, {}> {
     }
 
     render() {
+        const { connecting } = this.state;
         return (
-            // <View style={styles.container}>
-            //     <Image resizeMode='center' source={require("../assets/logo.png")}></Image>
-
-            //     <Text style={styles.title}>Welcome, please login first.</Text>
-            //     <Button title="login" onPress={() => this.login()} />
-
-            //     <View style={{ marginTop: 10 }}>
-            //         <Button color="green" title="Not now" onPress={() => this.openWithoutLogin()} />
-            //     </View>
-            // </View>
             <View
                 style={{
                     flex: 1,
@@ -141,6 +139,8 @@ class Login extends React.Component<Props, {}> {
                 <Button
                     mode="contained"
                     onPress={() => this.login()}
+                    disabled={connecting}
+                    loading={connecting}
                     style={{ width: '80%' }}
                 >
                     Connect to Celo Wallet
@@ -148,6 +148,7 @@ class Login extends React.Component<Props, {}> {
                 <Button
                     mode="outlined"
                     onPress={() => this.openWithoutLogin()}
+                    disabled={connecting}
                     style={{ width: '80%' }}
                 >
                     Not now

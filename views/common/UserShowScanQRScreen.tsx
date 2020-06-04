@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     ScrollView,
@@ -21,6 +21,7 @@ import {
     Avatar
 } from 'react-native-paper';
 import { getCountryFromPhoneNumber } from '../../helpers';
+import { getUsername } from '../../services/api';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -31,6 +32,10 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 function UserShowScanQRScreen(props: PropsFromRedux) {
+    const [name, setName] = useState('');
+    useEffect(() => {
+        getUsername(props.user.celoInfo.address).then(setName);
+    });
     return (
         <ScrollView style={styles.contentView}>
             <Headline>Scan to pay</Headline>
@@ -39,7 +44,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                 <Card.Content>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View>
-                            <Text>John Doe</Text>
+                            <Text>{name}</Text>
                             <Text style={{ color: 'grey' }}>{getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}</Text>
                         </View>
                         <Avatar.Image

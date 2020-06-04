@@ -52,14 +52,12 @@ interface ICommunityDetailsScreen {
     route: {
         params: {
             community: ICommunityInfo,
-            user: IUserState,
         }
     }
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const navigation = useNavigation();
     const community = props.route.params.community as ICommunityInfo;
-    const user = props.route.params.user as IUserState;
 
     const [seeFullDescription, setSeeFullDescription] = useState(false);
 
@@ -73,7 +71,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     };
 
     let description;
-    if (seeFullDescription) {
+    if (seeFullDescription || community.description.indexOf('\n') == -1) {
         description = community.description;
     } else {
         description = community.description.slice(0, community.description.indexOf('\n'));
