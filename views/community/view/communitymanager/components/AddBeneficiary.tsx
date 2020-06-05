@@ -114,7 +114,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             );
 
         }).finally(() => {
-            this.setState({ modalNewBeneficiary: false, addInProgress: false })
+            this.setState({ modalNewBeneficiary: false, addInProgress: false, scanned: false })
         });
     }
 
@@ -189,7 +189,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                 <Button
                     mode="contained"
                     style={{ marginVertical: 5 }}
-                    onPress={() => this.setState({ modalNewBeneficiary: true, newBeneficiaryAddress: '', addInProgress: false })}
+                    onPress={() => this.setState({ modalNewBeneficiary: true, newBeneficiaryAddress: '', addInProgress: false, scanned: false })}
                 >
                     Add Beneficiary
                 </Button>

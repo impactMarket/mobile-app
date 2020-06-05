@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     },
     inputTextFieldLabel: {
         color: 'grey',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Gelion-Thin'
     },
     inputTextField: {
         padding: 10,
@@ -448,6 +448,7 @@ const styles = StyleSheet.create({
     picker: {
         height: 50,
         width: '100%',
+        fontFamily: 'Gelion-Regular',
     },
     pickerBorder: {
         marginVertical: 10,

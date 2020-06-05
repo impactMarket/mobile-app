@@ -180,7 +180,7 @@ class Donate extends Component<Props, IDonateState> {
                             />
                         </Dialog.Content>
                         <Dialog.Actions>
-                            <Button mode="contained" loading={donating} style={{ marginRight: 10 }} onPress={this.handleDonateWithCeloWallet}>Donate</Button>
+                            <Button mode="contained" loading={donating} disabled={donating} style={{ marginRight: 10 }} onPress={this.handleDonateWithCeloWallet}>Donate</Button>
                             <Button mode="contained" onPress={() => this.setState({ openModalDonateWithCelo: false })}>Close</Button>
                         </Dialog.Actions>
                     </Dialog>
