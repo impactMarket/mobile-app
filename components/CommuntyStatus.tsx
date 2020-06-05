@@ -75,7 +75,7 @@ class CommuntyStatus extends Component<Props, {}> {
                         />
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
-                        <Text style={{ fontFamily: 'Gelion-Regular' }}>{calculateCommunityProgress('claimed', community) * 100}% Claimed</Text>
+                        <Text style={{ fontFamily: 'Gelion-Regular' }}>{calculateCommunityProgress('claimedbyraised', community) * 100}% Claimed</Text>
                         <Text style={{ marginLeft: 'auto', fontFamily: 'Gelion-Regular' }}>${new BigNumber(community.totalRaised).div(new BigNumber(10).pow(config.cUSDDecimals)).toFixed(2)} Raised</Text>
                     </View>
                     {this.props.children}

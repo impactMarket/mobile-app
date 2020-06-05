@@ -17,13 +17,16 @@ export function humanifyNumber(inputNumber: BigNumber | string): string {
 }
 
 export function calculateCommunityProgress(
-    toCalculte: string /*'raised' | 'claimed'*/,
+    toCalculte: string /*'raised' | 'claimed' | 'claimedbyraised'*/,
     community: ICommunityInfo
 ): number {
     const m = new BigNumber(community.vars._claimHardCap)
         .multipliedBy(community.beneficiaries.length);
     // in theory, it's the total claimed is relative to the total raised.
     // But to draw the progress bar, it's relative to the progress bar size.
+    if (toCalculte === 'claimedbyraised') {
+        return parseFloat(new BigNumber(community.totalClaimed).div(community.totalRaised === '0' ? 1 : community.totalRaised).toFixed(2));
+    }
     const result = new BigNumber(
         toCalculte === 'raised' ? community.totalRaised : community.totalClaimed
     ).div(m.eq(0) ? 1 : m);
