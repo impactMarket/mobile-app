@@ -54,9 +54,10 @@ export default class ValidatedTextInput extends Component<IStyledTextInputProps,
 const styles = StyleSheet.create({
     inputTextFieldLabel: {
         color: 'grey',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Gelion-Thin'
     },
     inputTextField: {
+        fontFamily: 'Gelion-Regular',
         padding: 10,
         marginVertical: 5,
         borderStyle: 'solid',
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     inputTextNotValid: {
+        fontFamily: 'Gelion-Regular',
         color: 'red',
     }
 });
