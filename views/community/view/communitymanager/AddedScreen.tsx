@@ -16,6 +16,7 @@ import { IRootState } from '../../../../helpers/types';
 import ListActionItem from '../../../../components/ListActionItem';
 import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
+import { celoWalletRequest } from '../../../../services';
 
 
 interface IAddedScreenProps {
@@ -36,6 +37,30 @@ type Props = PropsFromRedux & IAddedScreenProps
 function AddedScreen(props: Props) {
     const navigation = useNavigation();
     const beneficiaries = props.route.params.beneficiaries as string[];
+
+    const [removing, setRemoving] = useState(false);
+
+    const handleRemoveBeneficiary = async (beneficiary: string) => {
+        const { user, network } = props;
+        const { communityContract } = network.contracts;
+        const { address } = user.celoInfo;
+
+        setRemoving(true);
+        celoWalletRequest(
+            address,
+            communityContract.options.address,
+            await communityContract.methods.removeBeneficiary(beneficiary),
+            'removebeneficiary',
+            network,
+        ).then(() => {
+            //
+        }).catch((e) => {
+            //
+        }).finally(() => {
+            setRemoving(false);
+        })
+    }
+
     return (
         <>
             <Header
@@ -56,8 +81,10 @@ function AddedScreen(props: Props) {
                 >
                     <Button
                         mode="outlined"
-                        disabled={true}
+                        disabled={removing}
+                        loading={removing}
                         style={{ marginVertical: 5 }}
+                        onPress={() => handleRemoveBeneficiary(beneficiary)}
                     >
                         Remove
                 </Button>

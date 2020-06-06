@@ -123,7 +123,10 @@ export interface ICommunity {
 
 export interface ICommunityInfo extends ICommunity {
     backers: string[];
-    beneficiaries: string[];
+    beneficiaries: {
+        added: string[];
+        removed: string[];
+    };
     managers: string[];
     totalClaimed: string;
     totalRaised: string;

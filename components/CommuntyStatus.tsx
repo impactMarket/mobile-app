@@ -45,7 +45,7 @@ class CommuntyStatus extends Component<Props, {}> {
                 <Card.Content>
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5, justifyContent: 'center' }}>
                         <View style={{ width: '50%', alignItems: 'center' }}>
-                            <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.beneficiaries.length}</Title>
+                            <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.beneficiaries.added.length}</Title>
                             <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>Beneficiaries</Text>
                         </View>
                         <View style={{ width: '50%', alignItems: 'center' }}>

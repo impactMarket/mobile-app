@@ -51,18 +51,19 @@ function Beneficiaries(props: Props) {
             </Headline>
                 <Button
                     mode="outlined"
-                    disabled={props.community.beneficiaries.length === 0}
+                    disabled={props.community.beneficiaries.added.length === 0}
                     style={{ marginVertical: 5 }}
-                    onPress={() => navigation.navigate('AddedScreen', { beneficiaries: props.community.beneficiaries })}
-                >
-                    Added ({props.community.beneficiaries.length})
+                    onPress={() => navigation.navigate('AddedScreen', { beneficiaries: props.community.beneficiaries.added })}
+                    >
+                    Added ({props.community.beneficiaries.added.length})
                 </Button>
                 <Button
                     mode="outlined"
-                    disabled={true}
+                    disabled={props.community.beneficiaries.removed.length === 0}
                     style={{ marginVertical: 5 }}
+                    onPress={() => navigation.navigate('RemovedScreen', { beneficiaries: props.community.beneficiaries.removed })}
                 >
-                    Removed (0)
+                    Removed ({props.community.beneficiaries.removed.length})
                 </Button>
                 <AddBeneficiary
                     addBeneficiaryCallback={() => {

@@ -108,6 +108,9 @@ export function CommunityManagerStackSreen() {
                 component={AddedScreen}
             />
             <CommunityManagerStack.Screen
+                options={{
+                    headerShown: false
+                }}
                 name="RemovedScreen"
                 component={RemovedScreen}
             />

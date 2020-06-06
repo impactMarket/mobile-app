@@ -92,7 +92,7 @@ function CommunitiesScreen(props: Props) {
                         <View style={{ margin: 10 }}>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                                 <View>
-                                    <Text style={styles.cellHeader}>{community.beneficiaries.length}</Text>
+                                    <Text style={styles.cellHeader}>{community.beneficiaries.added.length}</Text>
                                     <Text style={styles.cellDescription}>Beneficiaries</Text>
                                 </View>
                                 <View>
