@@ -30,6 +30,7 @@ import {
 } from '@react-navigation/native';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 import Header from '../../components/Header';
+import faker from 'faker';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -49,19 +50,20 @@ function WalletScreen(props: Props) {
         const loadActivities = () => {
             const _activities = [
                 {
-                    title: 'Cliff',
-                    from: 'Cliff',
-                    description: 'Thanks friend!!',
-                    value: '2',
+                    title: faker.name.firstName(),
+                    from: faker.name.firstName(),
+                    avatar: faker.image.avatar(),
+                    description: faker.lorem.words(3),
+                    value: faker.finance.amount(1, 39, 2),
                     timestamp: 1590519328,
                     key: '1590519328',
                 },
                 {
-                    title: 'Fehsolna',
-                    from: 'Fehsolna',
-                    avatar: 'https://www.kindpng.com/picc/m/24-248442_female-user-avatar-woman-profile-member-user-profile.png',
-                    description: 'Brasil',
-                    value: '3',
+                    title: faker.name.firstName(),
+                    from: faker.name.firstName(),
+                    avatar: faker.image.avatar(),
+                    description: faker.lorem.words(3),
+                    value: faker.finance.amount(1, 39, 2),
                     timestamp: 1590119328,
                     key: '1590119328',
                 }
