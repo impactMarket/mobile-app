@@ -31,6 +31,7 @@ import {
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 import Header from '../../components/Header';
 import faker from 'faker';
+import RecentTx from './RecentTx';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -91,7 +92,7 @@ function WalletScreen(props: Props) {
     return (
         <>
             <Header
-                title="Account"
+                title="Wallet"
                 navigation={navigation}
             >
                 <Button
@@ -122,34 +123,7 @@ function WalletScreen(props: Props) {
                         </View>
                     </Card.Content>
                 </Card>
-                <View style={styles.card}>
-                    <Headline
-                        style={{
-                            opacity: 0.48,
-                            fontFamily: "Gelion-Bold",
-                            fontSize: 13,
-                            fontWeight: "500",
-                            fontStyle: "normal",
-                            lineHeight: 12,
-                            letterSpacing: 0.7,
-                        }}
-                    >
-                        RECENT TRANSACTIONS
-                    </Headline>
-                    {activities.map((activity) => <ListActionItem
-                        key={activity.timestamp}
-                        item={activity}
-                        prefix={{ top: '$' }}
-                    />)}
-                    <Button
-                        mode="contained"
-                        disabled={true}
-                        style={{ marginLeft: 10 }}
-                        onPress={() => console.log('Pressed')}
-                    >
-                        All Transactions
-                    </Button>
-                </View>
+                <RecentTx />
             </ScrollView>
         </>
     );

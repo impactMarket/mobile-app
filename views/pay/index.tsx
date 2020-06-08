@@ -14,11 +14,10 @@ import {
     Divider,
     Button
 } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import RecentTx from './RecentTx';
 import Header from '../../components/Header';
+import RecentPayments from './RecentPayments';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -79,7 +78,7 @@ function PayScreen(props: Props) {
                         </Button>
                     </Card.Content>
                 </Card>
-                <RecentTx />
+                <RecentPayments />
             </ScrollView>
         </>
     );
