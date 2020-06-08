@@ -28,9 +28,7 @@ import {
 import {
     useNavigation
 } from '@react-navigation/native';
-import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 import Header from '../../components/Header';
-import faker from 'faker';
 import RecentTx from './RecentTx';
 
 
@@ -44,36 +42,6 @@ type Props = PropsFromRedux
 
 function WalletScreen(props: Props) {
     const navigation = useNavigation();
-    const [activities, setActivities] = useState<IListActionItem[]>([]);
-
-    // TODO: load activity history
-    useEffect(() => {
-        const loadActivities = () => {
-            const _activities = [
-                {
-                    title: faker.name.firstName(),
-                    from: faker.name.firstName(),
-                    avatar: faker.image.avatar(),
-                    description: faker.lorem.words(3),
-                    value: faker.finance.amount(1, 39, 2),
-                    timestamp: 1590519328,
-                    key: '1590519328',
-                },
-                {
-                    title: faker.name.firstName(),
-                    from: faker.name.firstName(),
-                    avatar: faker.image.avatar(),
-                    description: faker.lorem.words(3),
-                    value: faker.finance.amount(1, 39, 2),
-                    timestamp: 1590119328,
-                    key: '1590119328',
-                }
-            ];
-            _activities.sort((a, b) => a.timestamp - b.timestamp);
-            setActivities(_activities.reverse());
-        }
-        loadActivities();
-    }, []);
 
     if (props.user.celoInfo.address.length === 0) {
         return <SafeAreaView>

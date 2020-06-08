@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction, IRecentTxListItem } from '../helpers/types';
+import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction, IRecentTxListItem, IRecentPaymentsListItem } from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -247,6 +247,21 @@ async function tokenTx(
     return response;
 }
 
+async function paymentsTx(
+    accountAddress: string,
+): Promise<IRecentPaymentsListItem[]> {
+    let response: IRecentPaymentsListItem[] = [];
+    try {
+        const result = await axios.get(`/transactions/paymentstx/${accountAddress}`);
+        response = result.data as IRecentPaymentsListItem[];
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
 async function getUsername(
     address: string,
 ): Promise<string> {
@@ -301,6 +316,7 @@ export {
     getCommunityByContractAddress,
     getCommunityNamesFromAddresses,
     tokenTx,
+    paymentsTx,
     getUsername,
     setUsername,
 }

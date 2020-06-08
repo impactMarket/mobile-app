@@ -152,3 +152,9 @@ export interface IRecentTxListItem {
     txs: number;
     timestamp: number;
 }
+
+export interface IRecentPaymentsListItem {
+    to: string;
+    value: string;
+    timestamp: number;
+}
