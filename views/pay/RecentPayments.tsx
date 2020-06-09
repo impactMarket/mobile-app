@@ -48,7 +48,7 @@ function RecentPayments(props: Props) {
                     letterSpacing: 0.7,
                 }}
             >
-                RECENT PAYMENTS
+                RECENT
             </Headline>
             {activities.map((activity) => <ListActionItem
                 key={activity.from}

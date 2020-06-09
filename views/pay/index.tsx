@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
     Text,
-    TextInput
+    TextInput,
+    RefreshControl
 } from 'react-native';
 import {
     connect,
@@ -35,6 +36,12 @@ function PayScreen(props: Props) {
     const [paymentAmount, setPaymentAmount] = useState<string>('');
     const [paymentTo, setPaymentTo] = useState<string>('');
     const [paymentNote, setPaymentNote] = useState<string>('');
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = () => {
+        //
+        setRefreshing(false);
+    }
 
     return (
         <>
@@ -44,7 +51,16 @@ function PayScreen(props: Props) {
                 hasQr={true}
                 navigation={navigation}
             />
-            <ScrollView style={styles.scrollView}>
+            <ScrollView
+                style={styles.scrollView}
+                refreshControl={
+                    <RefreshControl
+                        //refresh control used for the Pull to Refresh
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <Card style={styles.card}>
                     <Card.Content>
                         <TextInput
