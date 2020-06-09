@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle } from 'react';
 import {
     StyleSheet,
     View,
 } from 'react-native';
-import { connect, ConnectedProps } from 'react-redux';
-import { IRootState } from '../../helpers/types';
 import {
     Headline,
 } from 'react-native-paper';
@@ -12,20 +10,30 @@ import { paymentsTx } from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 
 
-const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
-};
-
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux
-
-function RecentPayments(props: Props) {
+interface IRecentPaymentsProps {
+    userAddress: string;
+}
+export interface IRecentPaymentsRef {
+    updateRecentPayments: () => void;
+}
+const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps>((props, ref) => {
     const [activities, setActivities] = useState<IListActionItem[]>([]);
 
+    useImperativeHandle(ref, () => ({
+        updateRecentPayments() {
+            paymentsTx(props.userAddress)
+                .then((payments) => setActivities(payments.map((p) => ({
+                    key: p.to,
+                    timestamp: p.timestamp,
+                    description: '',
+                    from: p.to,
+                    value: p.value.toString(),
+                }))));
+        }
+    }));
+
     useEffect(() => {
-        paymentsTx(props.user.celoInfo.address)
+        paymentsTx(props.userAddress)
             .then((payments) => setActivities(payments.map((p) => ({
                 key: p.to,
                 timestamp: p.timestamp,
@@ -57,7 +65,7 @@ function RecentPayments(props: Props) {
             />)}
         </View>
     );
-}
+})
 
 const styles = StyleSheet.create({
     card: {
@@ -66,4 +74,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(RecentPayments);
+export default RecentPayments;

@@ -3,6 +3,7 @@ import {
     StyleSheet,
     Text,
     View,
+    RefreshControl,
 } from 'react-native';
 import {
     connect,
@@ -29,7 +30,7 @@ import {
     useNavigation
 } from '@react-navigation/native';
 import Header from '../../components/Header';
-import RecentTx from './RecentTx';
+import RecentTx, { IRecentTxRef } from './RecentTx';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -42,6 +43,13 @@ type Props = PropsFromRedux
 
 function WalletScreen(props: Props) {
     const navigation = useNavigation();
+    const [refreshing, setRefreshing] = useState(false);
+    const recentPaymentsRef = React.createRef<IRecentTxRef>();
+
+    const onRefresh = () => {
+        recentPaymentsRef.current?.updateRecentTx();
+        setRefreshing(false);
+    }
 
     if (props.user.celoInfo.address.length === 0) {
         return <SafeAreaView>
@@ -70,7 +78,16 @@ function WalletScreen(props: Props) {
                     Edit Profile
                 </Button>
             </Header>
-            <ScrollView style={styles.scrollView}>
+            <ScrollView
+                style={styles.scrollView}
+                refreshControl={
+                    <RefreshControl
+                        //refresh control used for the Pull to Refresh
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <Card style={styles.card} elevation={5}>
                     <Card.Content>
                         <Text style={{ color: 'grey' }}>BALANCE</Text>
@@ -91,7 +108,7 @@ function WalletScreen(props: Props) {
                         </View>
                     </Card.Content>
                 </Card>
-                <RecentTx />
+                <RecentTx userAddress={props.user.celoInfo.address} ref={recentPaymentsRef} />
             </ScrollView>
         </>
     );

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -18,7 +18,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
-import RecentPayments from './RecentPayments';
+import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -37,9 +37,10 @@ function PayScreen(props: Props) {
     const [paymentTo, setPaymentTo] = useState<string>('');
     const [paymentNote, setPaymentNote] = useState<string>('');
     const [refreshing, setRefreshing] = useState(false);
+    const recentPaymentsRef = React.createRef<IRecentPaymentsRef>();
 
     const onRefresh = () => {
-        //
+        recentPaymentsRef.current?.updateRecentPayments();
         setRefreshing(false);
     }
 
@@ -94,7 +95,7 @@ function PayScreen(props: Props) {
                         </Button>
                     </Card.Content>
                 </Card>
-                <RecentPayments />
+                <RecentPayments userAddress={props.user.celoInfo.address} ref={recentPaymentsRef} />
             </ScrollView>
         </>
     );
