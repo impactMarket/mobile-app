@@ -13,24 +13,15 @@ export function claimFrequencyToText(frequency: BigNumber | string): string {
 // cUSD has 18 zeros!
 export function humanifyNumber(inputNumber: BigNumber | string): string {
     const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-    return new BigNumber(inputNumber).div(decimals).toString();
+    return new BigNumber(inputNumber).div(decimals).toFixed(2);
 }
 
 export function calculateCommunityProgress(
-    toCalculte: string /*'raised' | 'claimed' | 'claimedbyraised'*/,
+    toCalculte: string /*'raised' | 'claimed'*/,
     community: ICommunityInfo
 ): number {
     const m = new BigNumber(community.vars._claimHardCap)
         .multipliedBy(community.beneficiaries.added.length + community.beneficiaries.removed.length);
-    // in theory, it's the total claimed is relative to the total raised.
-    // But to draw the progress bar, it's relative to the progress bar size.
-    if (toCalculte === 'claimedbyraised') {
-        return parseFloat(
-            new BigNumber(community.totalClaimed)
-                .div(community.totalRaised === '0' ? 1 : community.totalRaised)
-                .toFixed(2)
-        );
-    }
     const result = new BigNumber(
         toCalculte === 'raised' ? community.totalRaised : community.totalClaimed
     ).div(m.eq(0) ? 1 : m);

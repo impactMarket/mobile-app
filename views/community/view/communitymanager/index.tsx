@@ -85,7 +85,7 @@ function CommunityManagerView(props: Props) {
                         onPress={() => console.log('Pressed')}
                     >
                         Full Dashboard
-                </Button>
+                    </Button>
                 </CommuntyStatus>
             </>
         }

@@ -16,7 +16,7 @@ import {
     Title,
     ProgressBar,
 } from 'react-native-paper';
-import { calculateCommunityProgress } from '../helpers';
+import { calculateCommunityProgress, humanifyNumber } from '../helpers';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 
@@ -39,6 +39,15 @@ class CommuntyStatus extends Component<Props, {}> {
         const {
             community,
         } = this.props;
+
+        // in theory, it's the total claimed is relative to the total raised.
+        // But to draw the progress bar, it's relative to the progress bar size.
+        const claimedByRaised = parseFloat(
+            new BigNumber(community.totalClaimed)
+                .div(community.totalRaised === '0' ? 1 : community.totalRaised)
+                .multipliedBy(100)
+                .toFixed(2)
+        );
 
         return (
             <Card style={{ marginVertical: 15 }}>
@@ -75,8 +84,8 @@ class CommuntyStatus extends Component<Props, {}> {
                         />
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
-                        <Text style={{ fontFamily: 'Gelion-Regular' }}>{calculateCommunityProgress('claimedbyraised', community) * 100}% Claimed</Text>
-                        <Text style={{ marginLeft: 'auto', fontFamily: 'Gelion-Regular' }}>${new BigNumber(community.totalRaised).div(new BigNumber(10).pow(config.cUSDDecimals)).toFixed(2)} Raised</Text>
+                        <Text style={{ fontFamily: 'Gelion-Regular' }}>{claimedByRaised}% Claimed</Text>
+                        <Text style={{ marginLeft: 'auto', fontFamily: 'Gelion-Regular' }}>${humanifyNumber(community.totalRaised)} Raised</Text>
                     </View>
                     {this.props.children}
                 </Card.Content>
