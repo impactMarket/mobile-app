@@ -22,6 +22,8 @@ import {
 } from 'react-native-paper';
 import { getCountryFromPhoneNumber } from '../../helpers';
 import { getUsername } from '../../services/api';
+import { useNavigation } from '@react-navigation/native';
+import Header from '../../components/Header';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -32,43 +34,52 @@ const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
 
 function UserShowScanQRScreen(props: PropsFromRedux) {
+    const navigation = useNavigation();
     const [name, setName] = useState('');
+
     useEffect(() => {
         getUsername(props.user.celoInfo.address).then(setName);
     });
     return (
-        <ScrollView style={styles.contentView}>
-            <Headline>Scan to pay</Headline>
-            <Subheading>Show QR to be scanned</Subheading>
-            <Card style={styles.card}>
-                <Card.Content>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <View>
-                            <Text>{name}</Text>
-                            <Text style={{ color: 'grey' }}>{getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}</Text>
+        <>
+            <Header
+                title="Your QR Code"
+                navigation={navigation}
+                hasBack={true}
+            />
+            <ScrollView style={styles.contentView}>
+                <Headline>Scan to pay</Headline>
+                <Subheading>Show QR to be scanned</Subheading>
+                <Card style={styles.card}>
+                    <Card.Content>
+                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                            <View>
+                                <Text>{name}</Text>
+                                <Text style={{ color: 'grey' }}>{getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}</Text>
+                            </View>
+                            <Avatar.Image
+                                style={{ alignSelf: 'center', marginLeft: 'auto' }}
+                                size={58}
+                                source={require('../../assets/hello.png')}
+                            />
                         </View>
-                        <Avatar.Image
-                            style={{ alignSelf: 'center', marginLeft: 'auto' }}
-                            size={58}
-                            source={require('../../assets/hello.png')}
-                        />
-                    </View>
-                    <View style={styles.qrView}>
-                        <SvgQRCode
-                            value={props.user.celoInfo.address}
-                            size={200}
-                        />
-                    </View>
-                    <Button
-                        mode="outlined"
-                        disabled={true}
-                        onPress={() => console.log('oi')}
-                    >
-                        Scan to Pay
+                        <View style={styles.qrView}>
+                            <SvgQRCode
+                                value={props.user.celoInfo.address}
+                                size={200}
+                            />
+                        </View>
+                        <Button
+                            mode="outlined"
+                            disabled={true}
+                            onPress={() => console.log('oi')}
+                        >
+                            Scan to Pay
                     </Button>
-                </Card.Content>
-            </Card>
-        </ScrollView>
+                    </Card.Content>
+                </Card>
+            </ScrollView>
+        </>
     );
 }
 

@@ -28,6 +28,9 @@ export function PayStackScreen() {
                 component={PayScreen}
             />
             <PayStack.Screen
+                options={{
+                    headerShown: false
+                }}
                 name="UserShowScanQRScreen"
                 component={UserShowScanQRScreen}
             />
