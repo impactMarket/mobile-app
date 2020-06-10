@@ -16,15 +16,7 @@ import {
     SplashScreen,
 } from 'expo';
 import { Asset } from 'expo-asset';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {
-    PayStackScreen,
-    WalletStackScreen,
-    CommunitiesStackScreen,
-    CommunityManagerStackSreen,
-} from './views/Stacks';
 import { NavigationContainer } from '@react-navigation/native';
-import Login from './components/Login';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import userReducer from './helpers/redux/reducers/ReduxReducers';
@@ -60,13 +52,21 @@ import {
     findComunityToManager,
 } from './services';
 import BigNumber from 'bignumber.js';
-import BeneficiaryView from './views/community/view/beneficiary';
 import { iptcColors } from './helpers';
 import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-context';
+import { createStackNavigator } from '@react-navigation/stack';
+import Tabs from './views/Tabs';
+
+import UserShowScanQRScreen from './views/common/UserShowScanQRScreen';
+import CommunityDetailsScreen from './views/common/CommunityDetailsScreen';
+import CreateCommunityScreen from './views/common/CreateCommunityScreen';
+import EditProfile from './views/wallet/EditProfile';
+import AddedScreen from './views/community/view/communitymanager/AddedScreen';
+import RemovedScreen from './views/community/view/communitymanager/RemovedScreen';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 const store = createStore(userReducer);
 const theme = {
     ...DefaultTheme,
@@ -233,83 +233,62 @@ export default class App extends React.Component<{}, IAppState> {
             </SafeAreaProvider>
         }
 
-        const tabsToUser = () => {
-            const user = store.getState().user;
-            if (user.community.isBeneficiary === false && user.community.isCoordinator === false) {
-                return <Tab.Screen
-                    name="Communities"
-                    component={CommunitiesStackScreen}
-                    options={{
-                        tabBarIcon: (props: any) => (
-                            <Image
-                                source={require(`./assets/tab/communities.png`)}
-                                style={{ width: props.size, height: props.size - 3 }}
-                            />
-                        ),
-                    }}
-                />;
-            }
-            if (store.getState().user.community.isBeneficiary) {
-                return <Tab.Screen
-                    name="Claim"
-                    component={BeneficiaryView}
-                    options={{
-                        tabBarIcon: (props: any) => (
-                            <Image
-                                source={require('./assets/tab/claim.png')}
-                                style={{ width: props.size + 2, height: props.size - 5 }}
-                            />
-                        ),
-                    }}
-                />;
-            } else if (store.getState().user.community.isCoordinator) {
-                return <Tab.Screen
-                    name="Manage"
-                    component={CommunityManagerStackSreen}
-                    options={{
-                        tabBarIcon: (props: any) => (
-                            <Image
-                                source={require('./assets/tab/manage.png')}
-                                style={{ width: props.size, height: props.size - 5 }}
-                            />
-                        ),
-                    }}
-                />;
-            }
-        }
-
         return (
             <PaperProvider theme={theme}>
                 <Provider store={store}>
                     <StatusBar backgroundColor="rgba(0, 0, 0, 0.2)" translucent />
                     <NavigationContainer>
-                        <Tab.Navigator>
-                            {tabsToUser()}
-                            {store.getState().user.celoInfo.address.length > 0 && <Tab.Screen
-                                name="Pay"
-                                component={PayStackScreen}
+                        <Stack.Navigator>
+                            <Stack.Screen
                                 options={{
-                                    tabBarIcon: (props: { focused: boolean, color: string, size: number }) => (
-                                        <Image
-                                            source={require(`./assets/tab/pay.png`)}
-                                            style={{ width: props.size + 3, height: props.size + 3 }}
-                                        />
-                                    ),
+                                    headerShown: false,
                                 }}
-                            />}
-                            <Tab.Screen
-                                name="Wallet"
-                                component={WalletStackScreen}
-                                options={{
-                                    tabBarIcon: (props: any) => (
-                                        <Image
-                                            source={require(`./assets/tab/wallet.png`)}
-                                            style={{ width: props.size - 5, height: props.size - 5 }}
-                                        />
-                                    ),
-                                }}
+                                name="Home"
+                                component={Tabs}
                             />
-                        </Tab.Navigator>
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="UserShowScanQRScreen"
+                                component={UserShowScanQRScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="EditProfile"
+                                component={EditProfile}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="CommunityDetailsScreen"
+                                component={CommunityDetailsScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="CreateCommunityScreen"
+                                component={CreateCommunityScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="AddedScreen"
+                                component={AddedScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="RemovedScreen"
+                                component={RemovedScreen}
+                            />
+                        </Stack.Navigator>
                     </NavigationContainer>
                 </Provider>
             </PaperProvider>

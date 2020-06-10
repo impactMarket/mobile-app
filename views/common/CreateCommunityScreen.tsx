@@ -82,10 +82,10 @@ function CreateCommunityScreen(props: Props) {
                     }
                 } as Location.LocationData)
                 // cover image
-                setAmountByClaim(humanifyNumber(community.vars._amountByClaim));
+                setAmountByClaim(humanifyNumber(community.vars._amountByClaim).toString());
                 setBaseInterval(community.vars._baseIntervalTime);
                 setIncrementalInterval(new BigNumber(community.vars._incIntervalTime).div(3600).toString());
-                setClaimHardcap(humanifyNumber(community.vars._claimHardCap));
+                setClaimHardcap(humanifyNumber(community.vars._claimHardCap).toString());
                 // currency
 
                 setIsNameValid(true);
