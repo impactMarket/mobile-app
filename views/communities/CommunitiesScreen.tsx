@@ -4,7 +4,6 @@ import {
     Text,
     View,
     ImageBackground,
-    SafeAreaView,
     ScrollView,
 } from 'react-native';
 import {
@@ -18,14 +17,17 @@ import {
 import {
     Card,
     ProgressBar,
-    DataTable,
     Button,
-    Appbar,
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 import { getAllValidCommunities } from '../../services';
 import { useNavigation } from '@react-navigation/native';
-import { calculateCommunityProgress, claimFrequencyToText, humanifyNumber } from '../../helpers';
+import {
+    calculateCommunityProgress,
+    claimFrequencyToText,
+    humanifyNumber
+} from '../../helpers';
+import Header from '../../components/Header';
 
 
 interface ICommunitiesScreenProps {
@@ -53,17 +55,19 @@ function CommunitiesScreen(props: Props) {
     }, []);
 
     return (
-        <SafeAreaView>
+        <>
+            <Header
+                title="Communities"
+                navigation={navigation}
+            >
+                <Button
+                    mode="text"
+                    onPress={() => navigation.navigate('CreateCommunityScreen')}
+                >
+                    Create
+                </Button>
+            </Header>
             <ScrollView style={styles.scrollView}>
-                <Appbar.Header style={styles.appbar}>
-                    <Appbar.Content title="Communities" />
-                    <Button
-                        mode="text"
-                        onPress={() => navigation.navigate('CreateCommunityScreen')}
-                    >
-                        Create
-                        </Button>
-                </Appbar.Header>
                 {communities.map((community) => <Card
                     key={community.name}
                     elevation={1}
@@ -86,8 +90,21 @@ function CommunitiesScreen(props: Props) {
                                 alignItems: 'center'
                             }}
                         >
-                            <Text style={{ fontSize: 25, fontWeight: 'bold', fontFamily: 'Gelion-Bold', color: 'white' }}>{community.name}</Text>
-                            <Text style={{ fontSize: 20, color: 'white' }}><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
+                            <Text
+                                style={{
+                                    fontSize: 25,
+                                    fontWeight: 'bold',
+                                    fontFamily: 'Gelion-Bold',
+                                    color: 'white',
+                                    textAlign: 'center'
+                                }}
+                            >{community.name}</Text>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    color: 'white'
+                                }}
+                            ><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
                         </ImageBackground>
                         <View style={{ margin: 10 }}>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -127,7 +144,7 @@ function CommunitiesScreen(props: Props) {
                     </Card.Content>
                 </Card>)}
             </ScrollView>
-        </SafeAreaView>
+        </>
     );
 }
 

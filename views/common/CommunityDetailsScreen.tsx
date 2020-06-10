@@ -28,7 +28,7 @@ import {
 import {
     ScrollView
 } from 'react-native-gesture-handler';
-import { humanifyNumber } from '../../helpers';
+import { humanifyNumber, claimFrequencyToText } from '../../helpers';
 import CommuntyStatus from '../../components/CommuntyStatus';
 import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
@@ -39,9 +39,9 @@ import config from '../../config';
 const lineChartConfig: ChartConfig = {
     backgroundGradientFromOpacity: 0,
     backgroundGradientToOpacity: 0,
-    strokeWidth: 1,
+    strokeWidth: 2,
     barPercentage: 0.5,
-    color: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
+    color: (opacity = 1) => `rgba(45,206,137,1)`,
     labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
     style: {
         // borderRadius: 6
@@ -124,7 +124,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         <Card.Content>
                             <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                                 <View>
-                                    <Headline>${humanifyNumber(community.vars._amountByClaim)}</Headline>
+                                    <Headline>${humanifyNumber(community.vars._amountByClaim)} / {claimFrequencyToText(community.vars._baseIntervalTime)}</Headline>
                                     <Paragraph style={{ color: '#b0b0b0' }}>Up to ${humanifyNumber(community.vars._claimHardCap)} / beneficiary</Paragraph>
                                 </View>
                             </View>
@@ -155,9 +155,12 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                         letterSpacing: 0,
                                         textAlign: 'right'
                                     }}>35%</Headline>
-                                    <Paragraph style={{ color: '#b0b0b0' }}>Self-Sustainability Index</Paragraph>
+                                    <Paragraph>Self-Sustainability Index</Paragraph>
                                 </View>
                             </View>
+                            <Paragraph style={styles.ssiExplained}>
+                                SSI indicates how self-sustainable a community is and how it progresses overtime, by measuring their beneficiaries claim urgency
+                            </Paragraph>
                         </Card.Content>
                     </Card>
                     <CommuntyStatus community={community}>
@@ -194,10 +197,19 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
-        color: 'white'
+        color: 'white',
+        textAlign: 'center'
     },
     communityLocation: {
         fontSize: 20,
         color: 'white'
     },
+    ssiExplained: {
+        fontSize: 15,
+        fontWeight: "normal",
+        fontStyle: "normal",
+        lineHeight: 18,
+        letterSpacing: 0.25,
+        color: '#b0b0b0'
+    }
 });

@@ -63,6 +63,7 @@ import CreateCommunityScreen from './views/common/CreateCommunityScreen';
 import EditProfile from './views/wallet/EditProfile';
 import AddedScreen from './views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './views/community/view/communitymanager/RemovedScreen';
+import LoginScreen from './views/common/LoginScreen';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -129,6 +130,7 @@ export default class App extends React.Component<{}, IAppState> {
                 this.setState({ firstTimeUser: currentFirstTimeUser });
             }
             if (previousLoggedIn !== currentLoggedIn) {
+                this._authUser();
                 this.setState({ loggedIn: currentLoggedIn });
             }
         })
@@ -181,7 +183,7 @@ export default class App extends React.Component<{}, IAppState> {
                             }}
                         >
                             <Image
-                                style={{ height: 81, maxWidth: '50%' }}
+                                style={{ height: 82, maxWidth: '51%' }}
                                 source={require('./assets/splash/logo.png')}
                             />
                             <Image
@@ -287,6 +289,13 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                                 name="RemovedScreen"
                                 component={RemovedScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="LoginScreen"
+                                component={LoginScreen}
                             />
                         </Stack.Navigator>
                     </NavigationContainer>

@@ -59,7 +59,7 @@ function WalletScreen(props: Props) {
                     alignSelf: 'center',
                     marginTop: '50%'
                 }}
-                onPress={() => props.dispatch(setUserFirstTime(true))}
+                onPress={() => navigation.navigate('LoginScreen')}
             >
                 Login now
             </Button>
