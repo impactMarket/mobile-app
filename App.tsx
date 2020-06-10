@@ -46,6 +46,8 @@ import {
     DefaultTheme,
     Provider as PaperProvider,
     configureFonts,
+    Text,
+    Button,
 } from 'react-native-paper';
 import { ContractKit } from '@celo/contractkit';
 import { ethers } from 'ethers';
@@ -60,6 +62,7 @@ import {
 import BigNumber from 'bignumber.js';
 import BeneficiaryView from './views/community/view/beneficiary';
 import { iptcColors } from './helpers';
+import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-context';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -131,6 +134,11 @@ export default class App extends React.Component<{}, IAppState> {
         })
     }
 
+    openExploreCommunities = async () => {
+        await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
+        store.dispatch(setUserFirstTime(false));
+    }
+
     render() {
         const { isAppReady, isSplashReady, firstTimeUser } = this.state;
         if (!isSplashReady) {
@@ -160,11 +168,69 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         if (firstTimeUser) {
-            return <PaperProvider theme={theme}>
-                <Provider store={store}>
-                    <Login />
-                </Provider>
-            </PaperProvider>
+            return <SafeAreaProvider>
+                <SafeAreaConsumer>{insets =>
+                    <PaperProvider theme={theme}>
+                        <View
+                            style={{
+                                paddingTop: insets?.top,
+                                flex: 1,
+                                flexDirection: 'column',
+                                justifyContent: 'space-around',
+                                alignItems: 'center'
+                            }}
+                        >
+                            <Image
+                                style={{ height: 81, maxWidth: '50%' }}
+                                source={require('./assets/splash/logo.png')}
+                            />
+                            <Image
+                                style={{ height: 136, maxWidth: '100%' }}
+                                source={require('./assets/splash/diversity.png')}
+                            />
+                            <Text
+                                style={{
+                                    fontFamily: "Gelion-Regular",
+                                    fontSize: 19,
+                                    fontWeight: "normal",
+                                    fontStyle: "normal",
+                                    lineHeight: 26,
+                                    letterSpacing: 0,
+                                    textAlign: "center",
+                                    color: "#172b4d",
+                                    marginHorizontal: 40
+                                }}
+                            >
+                                impactMarket enables any vulnerable community to create its own unconditional basic income system for their beneficiaries, where each member can claim a fixed amount on a regular basis and make payments for free
+                            </Text>
+                            <View>
+                                <Text
+                                    style={{
+                                        fontFamily: "Gelion-Regular",
+                                        fontSize: 19,
+                                        fontWeight: "normal",
+                                        fontStyle: "normal",
+                                        lineHeight: 26,
+                                        letterSpacing: 0,
+                                        textAlign: "center",
+                                        color: "#172b4d",
+                                        marginHorizontal: 40
+                                    }}
+                                >
+                                    Back those beneficiaries by donating to their communities.
+                                </Text>
+                                <Button
+                                    mode="contained"
+                                    style={{ width: '100%', alignSelf: 'center' }}
+                                    onPress={() => this.openExploreCommunities()}
+                                >
+                                    Explore Communities
+                                </Button>
+                            </View>
+                        </View>
+                    </PaperProvider>
+                }</SafeAreaConsumer>
+            </SafeAreaProvider>
         }
 
         const tabsToUser = () => {
