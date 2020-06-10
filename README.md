@@ -1,5 +1,5 @@
 <div align="center">
-    <img style="max-height: 408px" src="preview.jpeg">
+    <img src="preview.jpeg" width="250">
 </div>
 
 
@@ -18,6 +18,8 @@ yarn
 ## Usage
 
 Install [expo](https://expo.io/) on your smartphone, start the app with `yarn start` and scan the QR.
+
+If you have an android, you can try our demo [here](https://expo.io/@impactmarket/).
 
 ## Step by step...
 
