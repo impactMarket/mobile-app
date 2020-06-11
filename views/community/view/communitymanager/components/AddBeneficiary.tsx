@@ -24,6 +24,7 @@ import {
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { ethers } from 'ethers';
 import ValidatedTextInput from '../../../../../components/ValidatedTextInput';
+import { iptcColors } from '../../../../../helpers';
 
 
 interface IAddBeneficiaryProps {
@@ -61,7 +62,6 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             addInProgress: false,
         }
     }
-
 
     handleAddBeneficiary = async () => {
         const { newBeneficiaryAddress } = this.state;
@@ -134,6 +134,9 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
         this.setState({ hasPermission: status === 'granted' });
     }
 
+    handleOpenAddBeneficiary = () => {
+        this.setState({ modalNewBeneficiary: true, newBeneficiaryAddress: '', addInProgress: false, scanned: false });
+    }
 
     render() {
         const {
@@ -188,8 +191,11 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             <>
                 <Button
                     mode="contained"
-                    style={{ marginVertical: 5 }}
-                    onPress={() => this.setState({ modalNewBeneficiary: true, newBeneficiaryAddress: '', addInProgress: false, scanned: false })}
+                    style={{
+                        marginVertical: 5,
+                        backgroundColor: iptcColors.greenishTeal
+                    }}
+                    onPress={this.handleOpenAddBeneficiary}
                 >
                     Add Beneficiary
                 </Button>

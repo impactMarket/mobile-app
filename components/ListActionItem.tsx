@@ -64,7 +64,7 @@ export default class ListActionItem extends Component<IListActionItemProps, {}> 
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ marginRight: 5 }}>{avatarSrc}</View>
                 <View style={{ justifyContent: 'center' }}>
-                    <Text style={styles.textTitle}>{from}</Text>
+                    <Text style={styles.textTitle}>{from.length > 15 ? from.slice(0, 15) + '...' : from}</Text>
                     <Text style={styles.textDescription}>{this.props.item.description}</Text>
                 </View>
             </View>

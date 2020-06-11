@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
+    StyleSheet,
 } from 'react-native';
 import {
     connect,
@@ -16,7 +17,7 @@ import {
     Title,
     ProgressBar,
 } from 'react-native-paper';
-import { calculateCommunityProgress, humanifyNumber } from '../helpers';
+import { calculateCommunityProgress, humanifyNumber, iptcColors } from '../helpers';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 
@@ -80,12 +81,18 @@ class CommuntyStatus extends Component<Props, {}> {
                                 backgroundColor: 'rgba(255,255,255,0)'
                             }}
                             progress={calculateCommunityProgress('claimed', community)}
-                            color="#50ad53"
+                            color={iptcColors.greenishTeal}
                         />
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
-                        <Text style={{ fontFamily: 'Gelion-Regular' }}>{claimedByRaised}% Claimed</Text>
-                        <Text style={{ marginLeft: 'auto', fontFamily: 'Gelion-Regular' }}>${humanifyNumber(community.totalRaised)} Raised</Text>
+                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={styles.sphereClaimed}></View>
+                            <Text style={{ fontFamily: 'Gelion-Regular' }}>{claimedByRaised}% Claimed</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={styles.sphereRaised}></View>
+                            <Text style={{ fontFamily: 'Gelion-Regular' }}>${humanifyNumber(community.totalRaised)} Raised</Text>
+                        </View>
                     </View>
                     {this.props.children}
                 </Card.Content>
@@ -93,5 +100,22 @@ class CommuntyStatus extends Component<Props, {}> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    sphereClaimed: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: iptcColors.greenishTeal,
+        marginRight: 5
+    },
+    sphereRaised: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: iptcColors.softBlue,
+        marginRight: 5
+    },
+});
 
 export default connector(CommuntyStatus);

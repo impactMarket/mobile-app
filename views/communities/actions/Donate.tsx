@@ -19,6 +19,7 @@ import {
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from '../../../services';
 import BigNumber from 'bignumber.js';
+import { iptcColors } from '../../../helpers';
 
 
 interface IExploreScreenProps {
@@ -127,6 +128,7 @@ class Donate extends Component<Props, IDonateState> {
                     mode="contained"
                     style={{
                         borderRadius: 0,
+                        backgroundColor: iptcColors.greenishTeal
                     }}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
