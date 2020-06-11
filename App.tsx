@@ -52,7 +52,7 @@ import {
     findComunityToManager,
 } from './services';
 import BigNumber from 'bignumber.js';
-import { iptcColors } from './helpers';
+import { iptcColors, loadContracts } from './helpers';
 import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './views/Tabs';
@@ -139,6 +139,7 @@ export default class App extends React.Component<{}, IAppState> {
     openExploreCommunities = async () => {
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
         store.dispatch(setUserFirstTime(false));
+        this.setState({ firstTimeUser: false });
     }
 
     render() {
@@ -359,7 +360,7 @@ export default class App extends React.Component<{}, IAppState> {
             if (address !== null && phoneNumber !== null) {
                 const balance = await this._getCurrentUserBalance(address);
                 store.dispatch(setUserCeloInfo({ address, phoneNumber, balance }))
-                await this._loadContracts(address, kit);
+                await loadContracts(address, kit, store);
                 // We have data!!
             }
             const firstTime = await AsyncStorage.getItem(STORAGE_USER_FIRST_TIME);
@@ -372,34 +373,5 @@ export default class App extends React.Component<{}, IAppState> {
             // Error retrieving data
         }
         store.dispatch(setCeloKit(kit))
-    }
-
-    _loadContracts = async (address: string, kit: ContractKit) => {
-        const isBeneficiary = await findComunityToBeneficicary(address);
-        const isCoordinator = await findComunityToManager(address);
-
-        const setCommunity = (address: string) => {
-            const communityContract = new kit.web3.eth.Contract(
-                CommunityContractABI as any,
-                address,
-            );
-            store.dispatch(setCommunityContract(communityContract));
-        };
-        if (isBeneficiary !== undefined) {
-            store.dispatch(setUserIsBeneficiary(true));
-            setCommunity(isBeneficiary.contractAddress);
-        }
-        else if (isCoordinator !== undefined) {
-            store.dispatch(setUserIsCommunityManager(true));
-            setCommunity(isCoordinator.contractAddress);
-        }
-
-        const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);
-        const impactMarketContract = new ethers.Contract(
-            config.impactMarketContractAddress,
-            ImpactMarketContractABI,
-            provider,
-        ) as ethers.Contract & ImpactMarketInstance;
-        store.dispatch(setImpactMarketContract(impactMarketContract));
     }
 }
