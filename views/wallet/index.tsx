@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -23,9 +23,6 @@ import {
 import {
     ScrollView
 } from 'react-native-gesture-handler';
-import {
-    setUserFirstTime,
-} from '../../helpers/redux/actions/ReduxActions';
 import {
     useNavigation
 } from '@react-navigation/native';

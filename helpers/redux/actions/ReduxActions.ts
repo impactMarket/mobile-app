@@ -7,9 +7,10 @@ import {
     SET_IMPACTMARKET_CONTRACT,
     NetworkActionTypes,
     SET_USER_WALLET_BALANCE,
-    SET_USER_FIRST_TIME,
     SET_USER_IS_COMMUNITY_COORDINATOR,
     SET_USER_IS_BENEFICIARY,
+    RESET_USER_APP,
+    RESET_NETWORK_APP,
 } from "../../types";
 import { ContractKit } from "@celo/contractkit";
 
@@ -42,13 +43,6 @@ export function setUserIsCommunityManager(isCommunityManager: boolean): UserActi
     }
 }
 
-export function setUserFirstTime(firstTime: boolean): UserActionTypes {
-    return {
-        type: SET_USER_FIRST_TIME,
-        payload: firstTime,
-    }
-}
-
 export function setCeloKit(kit: ContractKit): NetworkActionTypes {
     return {
         type: SET_CELO_KIT,
@@ -67,5 +61,19 @@ export function setCommunityContract(community: any): NetworkActionTypes {
     return {
         type: SET_COMMUNITY_CONTRACT,
         payload: community,
+    }
+}
+
+export function resetUserApp(): UserActionTypes {
+    return {
+        type: RESET_USER_APP,
+        payload: {},
+    }
+}
+
+export function resetNetworkContractsApp(): NetworkActionTypes {
+    return {
+        type: RESET_NETWORK_APP,
+        payload: {},
     }
 }

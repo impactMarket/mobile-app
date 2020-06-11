@@ -16,7 +16,7 @@ import {
     STORAGE_USER_FIRST_TIME,
     IRootState,
 } from '../../helpers/types';
-import { setUserCeloInfo, setUserFirstTime } from '../../helpers/redux/actions/ReduxActions';
+import { setUserCeloInfo } from '../../helpers/redux/actions/ReduxActions';
 import { ConnectedProps, connect, useStore } from 'react-redux';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -65,7 +65,7 @@ function LoginScreen(props: Props) {
             const cUSDBalance = await getCurrentUserBalance(userAddress);
             //
             const unsubscribe = store.subscribe(() => {
-                if (store.getState().network.contracts.communityContract !== undefined) {
+                if (store.getState().user.celoInfo.address.length > 0) {
                     setConnecting(false);
                     navigation.goBack();
                     unsubscribe();
@@ -74,13 +74,12 @@ function LoginScreen(props: Props) {
             await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
             await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, dappkitResponse.phoneNumber);
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
+            await loadContracts(userAddress, props.network.kit, props);
             props.dispatch(setUserCeloInfo({
                 address: userAddress,
                 phoneNumber: dappkitResponse.phoneNumber,
                 balance: cUSDBalance,
             }))
-            props.dispatch(setUserFirstTime(false));
-            await loadContracts(userAddress, props.network.kit, props);
         } catch (error) {
             // Error saving data
             console.log(error);

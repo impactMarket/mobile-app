@@ -15,11 +15,11 @@ import {
 import {
     Button,
     Avatar,
-    Text,
     TextInput
 } from 'react-native-paper';
 import {
-    resetReduxStoreApp, setUserCeloInfo, setUserIsCommunityManager, setUserIsBeneficiary
+    resetUserApp,
+    resetNetworkContractsApp
 } from '../../helpers/redux/actions/ReduxActions';
 import {
     ScrollView
@@ -50,16 +50,11 @@ function EditProfile(props: Props) {
         getUsername(props.user.celoInfo.address).then(setName);
     }, []);
 
-    const handleLogout = () => {
-        AsyncStorage.clear();
-        AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-        props.dispatch(setUserCeloInfo({
-            address: '',
-            phoneNumber: '',
-            balance: '0',
-        }));
-        props.dispatch(setUserIsCommunityManager(false));
-        props.dispatch(setUserIsBeneficiary(false));
+    const handleLogout = async () => {
+        await AsyncStorage.clear();
+        await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
+        props.dispatch(resetUserApp());
+        props.dispatch(resetNetworkContractsApp());
         navigation.goBack();
     }
 

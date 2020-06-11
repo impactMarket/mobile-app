@@ -9,9 +9,10 @@ import {
     INetworkState,
     NetworkActionTypes,
     SET_USER_WALLET_BALANCE,
-    SET_USER_FIRST_TIME,
     SET_USER_IS_BENEFICIARY,
     SET_USER_IS_COMMUNITY_COORDINATOR,
+    RESET_USER_APP,
+    RESET_NETWORK_APP,
 } from '../../types';
 
 
@@ -25,7 +26,6 @@ const INITIAL_STATE_USER: IUserState = {
         isBeneficiary: false,
         isCoordinator: false,
     },
-    firstTime: true,
 };
 
 const INITIAL_NETWORK_USER: INetworkState = {
@@ -40,14 +40,25 @@ const INITIAL_NETWORK_USER: INetworkState = {
 const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
     const community = state.community;
     switch (action.type) {
+        case RESET_USER_APP:
+            // DO NOT RETURN INITIAL_STATE_USER
+            return {
+                celoInfo: {
+                    address: '',
+                    phoneNumber: '',
+                    balance: '0',
+                },
+                community: {
+                    isBeneficiary: false,
+                    isCoordinator: false,
+                },
+            };
         case SET_USER_CELO_INFO:
             return { ...state, celoInfo: action.payload };
         case SET_USER_WALLET_BALANCE:
             const celoInfo = state.celoInfo;
             celoInfo.balance = action.payload;
             return { ...state, celoInfo };
-        case SET_USER_FIRST_TIME:
-            return { ...state, firstTime: action.payload };
         case SET_USER_IS_BENEFICIARY:
             community.isBeneficiary = action.payload
             return { ...state, community };
@@ -61,8 +72,16 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
 
 const networkReducer = (state = INITIAL_NETWORK_USER, action: NetworkActionTypes) => {
     let contracts;
-    let user;
     switch (action.type) {
+        case RESET_NETWORK_APP:
+            // ERASE ONLY THE CONTRACTS
+            return {
+                ...state,
+                contracts: {
+                    communityContract: undefined,
+                    impactMarketContract: undefined
+                }
+            };
         case SET_CELO_KIT:
             return { ...state, kit: action.payload };
         case SET_COMMUNITY_CONTRACT:

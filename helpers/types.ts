@@ -1,17 +1,17 @@
 import { ContractKit } from "@celo/contractkit";
-import { ethers } from "ethers";
 
 export const STORAGE_USER_ADDRESS = '@celoinfo:address'
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
 export const STORAGE_USER_FIRST_TIME = '@status:firstime'
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';
 export const SET_USER_WALLET_BALANCE = 'SET_USER_WALLET_BALANCE';
-export const SET_USER_FIRST_TIME = 'SET_USER_FIRST_TIME';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
 export const SET_IMPACTMARKET_CONTRACT = 'SET_IMPACTMARKET_CONTRACT';
 export const SET_USER_IS_BENEFICIARY = 'SET_USER_IS_BENEFICIARY';
 export const SET_USER_IS_COMMUNITY_COORDINATOR = 'SET_USER_IS_COMMUNITY_COORDINATOR';
+export const RESET_USER_APP = 'RESET_USER_APP';
+export const RESET_NETWORK_APP = 'RESET_NETWORK_APP';
 
 // state
 export interface IUserCeloInfo {
@@ -29,7 +29,6 @@ export interface IUserCommunityInfo {
 export interface IUserState {
     celoInfo: IUserCeloInfo,
     community: IUserCommunityInfo,
-    firstTime: boolean;
 }
 
 export interface IContractsState {
@@ -58,11 +57,6 @@ interface UserSetBalanceAction {
     payload: string
 }
 
-interface UserSetFirstTimeAction {
-    type: typeof SET_USER_FIRST_TIME
-    payload: boolean
-}
-
 interface UserSetIsBeneficiaryAction {
     type: typeof SET_USER_IS_BENEFICIARY
     payload: boolean
@@ -88,8 +82,18 @@ interface CommunityAction {
     payload: any;
 }
 
-export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetFirstTimeAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction
-export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction
+interface ResetUserAction {
+    type: typeof RESET_USER_APP
+    payload: any;
+}
+
+interface ResetNetworkAction {
+    type: typeof RESET_NETWORK_APP
+    payload: any;
+}
+
+export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction
+export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction | ResetNetworkAction
 
 export interface ILoginCallbackAnswer {
     celoInfo: IUserCeloInfo;

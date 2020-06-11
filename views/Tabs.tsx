@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
     Image,
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BeneficiaryView from './community/view/beneficiary';
 import { IRootState } from '../helpers/types';
-import { connect, ConnectedProps, useStore } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import WalletScreen from './wallet';
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import PayScreen from './pay';
@@ -25,20 +25,6 @@ const Tab = createBottomTabNavigator();
 function Tabs(props: Props) {
     const tabsToUser = () => {
         const user = props.user;
-        if (user.community.isBeneficiary === false && user.community.isCoordinator === false) {
-            return <Tab.Screen
-                name="Communities"
-                component={CommunitiesScreen}
-                options={{
-                    tabBarIcon: (props: any) => (
-                        <Image
-                            source={require(`../assets/tab/communities.png`)}
-                            style={{ width: props.size, height: props.size - 3 }}
-                        />
-                    ),
-                }}
-            />;
-        }
         if (user.community.isBeneficiary) {
             return <Tab.Screen
                 name="Claim"
@@ -66,6 +52,18 @@ function Tabs(props: Props) {
                 }}
             />;
         }
+        return <Tab.Screen
+            name="Communities"
+            component={CommunitiesScreen}
+            options={{
+                tabBarIcon: (props: any) => (
+                    <Image
+                        source={require(`../assets/tab/communities.png`)}
+                        style={{ width: props.size, height: props.size - 3 }}
+                    />
+                ),
+            }}
+        />;
     }
 
     return (

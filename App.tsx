@@ -23,11 +23,6 @@ import userReducer from './helpers/redux/reducers/ReduxReducers';
 import {
     setUserCeloInfo,
     setCeloKit,
-    setImpactMarketContract,
-    setCommunityContract,
-    setUserFirstTime,
-    setUserIsBeneficiary,
-    setUserIsCommunityManager,
 } from './helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
@@ -41,16 +36,7 @@ import {
     Text,
     Button,
 } from 'react-native-paper';
-import { ContractKit } from '@celo/contractkit';
-import { ethers } from 'ethers';
-import { ImpactMarketInstance } from './contracts/types/truffle-contracts';
-import ImpactMarketContractABI from './contracts/ImpactMarketABI.json'
-import CommunityContractABI from './contracts/CommunityABI.json'
 import config from './config';
-import {
-    findComunityToBeneficicary,
-    findComunityToManager,
-} from './services';
 import BigNumber from 'bignumber.js';
 import { iptcColors, loadContracts } from './helpers';
 import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-context';
@@ -116,21 +102,14 @@ export default class App extends React.Component<{}, IAppState> {
             loggedIn: false,
         }
         store.subscribe(() => {
-            const previousFirstTimeUser = this.state.firstTimeUser;
             const previousLoggedIn = this.state.loggedIn;
-            const currentFirstTimeUser = store.getState().user.firstTime;
             const currentLoggedIn = store.getState().user.celoInfo.address.length > 0;
 
-            if (previousFirstTimeUser !== currentFirstTimeUser) {
-                if (currentFirstTimeUser === false &&
-                    store.getState().user.celoInfo.address.length > 0
-                ) {
+            if (previousLoggedIn !== currentLoggedIn) {
+                console.log('entra aqui!', new Date().getTime(), store.getState().user);
+                if (currentLoggedIn) {
                     this._authUser();
                 }
-                this.setState({ firstTimeUser: currentFirstTimeUser });
-            }
-            if (previousLoggedIn !== currentLoggedIn) {
-                this._authUser();
                 this.setState({ loggedIn: currentLoggedIn });
             }
         })
@@ -138,7 +117,6 @@ export default class App extends React.Component<{}, IAppState> {
 
     openExploreCommunities = async () => {
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-        store.dispatch(setUserFirstTime(false));
         this.setState({ firstTimeUser: false });
     }
 
@@ -368,7 +346,6 @@ export default class App extends React.Component<{}, IAppState> {
                 firstTimeUser: firstTime === null,
                 loggedIn: (address !== null && phoneNumber !== null)
             });
-            store.dispatch(setUserFirstTime(firstTime !== 'false'));
         } catch (error) {
             // Error retrieving data
         }
