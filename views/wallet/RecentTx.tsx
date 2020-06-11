@@ -4,7 +4,7 @@ import {
     View,
 } from 'react-native';
 import {
-    Headline,
+    Headline, ActivityIndicator,
 } from 'react-native-paper';
 import { tokenTx } from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
@@ -19,17 +19,22 @@ export interface IRecentTxRef {
 }
 const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => {
     const [activities, setActivities] = useState<IListActionItem[]>([]);
+    const [loadingTxs, setLoadingTxs] = useState(true);
 
     useImperativeHandle(ref, () => ({
         updateRecentTx() {
+            setLoadingTxs(true);
             tokenTx(props.userAddress)
-                .then((txs) => setActivities(txs.map((t) => ({
-                    key: t.from,
-                    timestamp: t.timestamp,
-                    description: '',
-                    from: t.from,
-                    value: t.txs.toString(),
-                }))));
+                .then((txs) => {
+                    setActivities(txs.map((t) => ({
+                        key: t.from,
+                        timestamp: t.timestamp,
+                        description: '',
+                        from: t.from,
+                        value: t.txs.toString(),
+                    })));
+                    setLoadingTxs(false);
+                });
         }
     }));
 
@@ -74,13 +79,16 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
         // }
         // loadContacts();
         tokenTx(props.userAddress)
-            .then((txs) => setActivities(txs.map((t) => ({
-                key: t.from,
-                timestamp: t.timestamp,
-                description: '',
-                from: t.from,
-                value: t.txs.toString(),
-            }))));
+            .then((txs) => {
+                setActivities(txs.map((t) => ({
+                    key: t.from,
+                    timestamp: t.timestamp,
+                    description: '',
+                    from: t.from,
+                    value: t.txs.toString(),
+                })));
+                setLoadingTxs(false);
+            });
     }, []);
 
     return (
@@ -98,6 +106,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
             >
                 RECENT TRANSACTIONS
             </Headline>
+            <ActivityIndicator animating={loadingTxs} />
             {activities.map((activity) => <ListActionItem
                 key={activity.from}
                 item={activity}

@@ -4,7 +4,7 @@ import {
     View,
 } from 'react-native';
 import {
-    Headline,
+    Headline, ActivityIndicator,
 } from 'react-native-paper';
 import { paymentsTx } from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
@@ -18,29 +18,37 @@ export interface IRecentPaymentsRef {
 }
 const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps>((props, ref) => {
     const [activities, setActivities] = useState<IListActionItem[]>([]);
+    const [loadingPayments, setLoadingPayments] = useState(true);
 
     useImperativeHandle(ref, () => ({
         updateRecentPayments() {
+            setLoadingPayments(true);
             paymentsTx(props.userAddress)
-                .then((payments) => setActivities(payments.map((p) => ({
-                    key: p.to,
-                    timestamp: p.timestamp,
-                    description: '',
-                    from: p.to,
-                    value: p.value.toString(),
-                }))));
+                .then((payments) => {
+                    setActivities(payments.map((p) => ({
+                        key: p.to,
+                        timestamp: p.timestamp,
+                        description: '',
+                        from: p.to,
+                        value: p.value.toString(),
+                    })))
+                    setLoadingPayments(false);
+                });
         }
     }));
 
     useEffect(() => {
         paymentsTx(props.userAddress)
-            .then((payments) => setActivities(payments.map((p) => ({
-                key: p.to,
-                timestamp: p.timestamp,
-                description: '',
-                from: p.to,
-                value: p.value.toString(),
-            }))));
+            .then((payments) => {
+                setActivities(payments.map((p) => ({
+                    key: p.to,
+                    timestamp: p.timestamp,
+                    description: '',
+                    from: p.to,
+                    value: p.value.toString(),
+                })));
+                setLoadingPayments(false);
+            });
     }, []);
 
     return (
@@ -58,6 +66,7 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
             >
                 RECENT
             </Headline>
+            <ActivityIndicator animating={loadingPayments} />
             {activities.map((activity) => <ListActionItem
                 key={activity.from}
                 item={activity}
