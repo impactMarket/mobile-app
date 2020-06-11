@@ -90,7 +90,7 @@ class Claim extends React.Component<Props, IClaimState> {
             <Button
                 mode="contained"
                 onPress={this.handleClaimPress}
-                disabled={claimDisabled}
+                disabled={claimDisabled || claiming}
                 loading={claiming}
                 style={{
                     width: 170,

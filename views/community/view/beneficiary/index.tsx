@@ -19,9 +19,10 @@ import {
 } from '../../../../helpers/types';
 import { getCommunityByContractAddress } from '../../../../services';
 import Claim from './Claim';
-import { Button } from 'react-native-paper';
-import { iptcColors } from '../../../../helpers';
+import { Button, ProgressBar } from 'react-native-paper';
+import { iptcColors, humanifyNumber } from '../../../../helpers';
 import Header from '../../../../components/Header';
+import BigNumber from 'bignumber.js';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -35,6 +36,8 @@ type Props = PropsFromRedux
 function BeneficiaryView(props: Props) {
     const navigation = useNavigation();
     const [community, setCommunity] = useState<ICommunityInfo>();
+    const [claimedAmount, setClaimedAmount] = useState(0);
+    const [claimedProgress, setClaimedProgress] = useState(0.1);
 
     useEffect(() => {
         const loadCommunity = async () => {
@@ -44,6 +47,12 @@ function BeneficiaryView(props: Props) {
                 // TODO: show error
                 return;
             }
+            const amount = await props.network.contracts.communityContract
+                .methods.claimed(props.user.celoInfo.address).call();
+
+            const progress = new BigNumber(amount.toString()).div(_community.vars._claimHardCap);
+            setClaimedAmount(humanifyNumber(amount.toString()));
+            setClaimedProgress(progress.toNumber());
             setCommunity(_community);
         }
         loadCommunity();
@@ -97,19 +106,37 @@ function BeneficiaryView(props: Props) {
                 }}
             >
                 <Button
-                    mode="contained"
+                    mode="outlined"
                     style={{ margin: 30, height: 35 }}
-                    disabled={true}
+                    onPress={() => navigation.navigate('CommunityDetailsScreen',
+                        { community: community, user: props.user }
+                    )}
                 >
                     More about your community
                 </Button>
                 <Claim
                     claimAmount={community.vars._amountByClaim}
                 />
-                <Text
-                    onPress={() => navigation.navigate('ClaimExplainedScreen')}
-                    style={styles.howClaimsWork}
-                >How claim works?</Text>
+                <View>
+                    <Text
+                        onPress={() => navigation.navigate('ClaimExplainedScreen')}
+                        style={styles.haveClaimed}
+                    >You have claimed ${claimedAmount} out of ${humanifyNumber(community.vars._claimHardCap)}</Text>
+                    <ProgressBar
+                        key="claimedbybeneficiary"
+                        style={{
+                            backgroundColor: '#d6d6d6',
+                            marginHorizontal: 30,
+                            marginVertical: 13
+                        }}
+                        progress={claimedProgress}
+                        color="#5289ff"
+                    />
+                    <Text
+                        onPress={() => navigation.navigate('ClaimExplainedScreen')}
+                        style={styles.howClaimsWork}
+                    >How claim works?</Text>
+                </View>
             </View>
         </View>
     );
@@ -137,7 +164,8 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
-        color: 'white'
+        color: 'white',
+        textAlign: 'center'
     },
     communityLocation: {
         fontSize: 20,
@@ -153,6 +181,16 @@ const styles = StyleSheet.create({
         color: iptcColors.softBlue,
         height: 25
     },
+    haveClaimed: {
+        fontFamily: "Gelion-Regular",
+        fontSize: 15,
+        fontWeight: "normal",
+        fontStyle: "normal",
+        lineHeight: 14,
+        letterSpacing: 0.25,
+        textAlign: "center",
+        color: "#7e8da6"
+    }
 });
 
 export default connector(BeneficiaryView);
