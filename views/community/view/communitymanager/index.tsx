@@ -48,6 +48,9 @@ function CommunityManagerView(props: Props) {
 
     useEffect(() => {
         const loadCommunity = async () => {
+            if (props.network.contracts.communityContract === undefined) {
+                return;
+            }
             const { _address } = props.network.contracts.communityContract;
             const _community = await getCommunityByContractAddress(_address);
             if (_community === undefined) {
@@ -58,7 +61,7 @@ function CommunityManagerView(props: Props) {
             setRefreshing(false);
         }
         loadCommunity();
-    }, []);
+    }, [props.network.contracts.communityContract]);
 
     const onRefresh = () => {
         const { _address } = props.network.contracts.communityContract;

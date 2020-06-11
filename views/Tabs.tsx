@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Image,
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BeneficiaryView from './community/view/beneficiary';
 import { IRootState } from '../helpers/types';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useStore } from 'react-redux';
 import WalletScreen from './wallet';
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import PayScreen from './pay';

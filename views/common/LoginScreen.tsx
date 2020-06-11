@@ -17,11 +17,12 @@ import {
     IRootState,
 } from '../../helpers/types';
 import { setUserCeloInfo, setUserFirstTime } from '../../helpers/redux/actions/ReduxActions';
-import { ConnectedProps, connect } from 'react-redux';
+import { ConnectedProps, connect, useStore } from 'react-redux';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { loadContracts } from '../../helpers';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -33,6 +34,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux
 
 function LoginScreen(props: Props) {
+    const store = useStore();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
 
@@ -48,9 +50,8 @@ function LoginScreen(props: Props) {
     const login = async () => {
         const requestId = 'login'
         const dappName = 'Impact Market'
-        const callback = Linking.makeUrl('impactmarketmobile://LoginScreen')
+        const callback = Linking.makeUrl('impactmarketmobile://login')
         setConnecting(true);
-        // TODO: add loading
 
         requestAccountAddress({
             requestId,
@@ -63,6 +64,13 @@ function LoginScreen(props: Props) {
             const userAddress = ethers.utils.getAddress(dappkitResponse.address);
             const cUSDBalance = await getCurrentUserBalance(userAddress);
             //
+            const unsubscribe = store.subscribe(() => {
+                if (store.getState().network.contracts.communityContract !== undefined) {
+                    setConnecting(false);
+                    navigation.goBack();
+                    unsubscribe();
+                }
+            })
             await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
             await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, dappkitResponse.phoneNumber);
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
@@ -72,15 +80,13 @@ function LoginScreen(props: Props) {
                 balance: cUSDBalance,
             }))
             props.dispatch(setUserFirstTime(false));
+            await loadContracts(userAddress, props.network.kit, props);
         } catch (error) {
             // Error saving data
             console.log(error);
-        } finally {
             setConnecting(false);
             navigation.goBack();
         }
-
-        // TODO: remove loading
     }
 
     return (

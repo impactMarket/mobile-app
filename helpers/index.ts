@@ -1,6 +1,14 @@
 import { ICommunityInfo } from "./types";
 import config from "../config";
 import BigNumber from "bignumber.js";
+import { Store, AnyAction } from "redux";
+import { ContractKit } from "@celo/contractkit";
+import { findComunityToBeneficicary, findComunityToManager } from "../services/api";
+import { setCommunityContract, setUserIsBeneficiary, setUserIsCommunityManager, setImpactMarketContract } from "./redux/actions/ReduxActions";
+import { ethers } from "ethers";
+import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
+import CommunityContractABI from '../contracts/CommunityABI.json'
+import { ImpactMarketInstance } from "../contracts/types/truffle-contracts";
 
 
 export function claimFrequencyToText(frequency: BigNumber | string): string {
@@ -39,4 +47,33 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
 export var iptcColors = {
     greenishTeal: "#2dce89",
     softBlue: "#5e72e4"
+}
+
+export async function loadContracts(address: string, kit: ContractKit, store: any) {
+    const isBeneficiary = await findComunityToBeneficicary(address);
+    const isCoordinator = await findComunityToManager(address);
+
+    const setCommunity = (address: string) => {
+        const communityContract = new kit.web3.eth.Contract(
+            CommunityContractABI as any,
+            address,
+        );
+        store.dispatch(setCommunityContract(communityContract));
+    };
+    if (isBeneficiary !== undefined) {
+        store.dispatch(setUserIsBeneficiary(true));
+        setCommunity(isBeneficiary.contractAddress);
+    }
+    else if (isCoordinator !== undefined) {
+        store.dispatch(setUserIsCommunityManager(true));
+        setCommunity(isCoordinator.contractAddress);
+    }
+
+    const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);
+    const impactMarketContract = new ethers.Contract(
+        config.impactMarketContractAddress,
+        ImpactMarketContractABI,
+        provider,
+    ) as ethers.Contract & ImpactMarketInstance;
+    store.dispatch(setImpactMarketContract(impactMarketContract));
 }

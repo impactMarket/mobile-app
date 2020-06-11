@@ -41,6 +41,9 @@ function BeneficiaryView(props: Props) {
 
     useEffect(() => {
         const loadCommunity = async () => {
+            if (props.network.contracts.communityContract === undefined) {
+                return;
+            }
             const { _address } = props.network.contracts.communityContract;
             const _community = await getCommunityByContractAddress(_address);
             if (_community === undefined) {
@@ -56,7 +59,7 @@ function BeneficiaryView(props: Props) {
             setCommunity(_community);
         }
         loadCommunity();
-    }, []);
+    }, [props.network.contracts.communityContract]);
 
 
     // const { isBeneficiary } = this.props.user.community;

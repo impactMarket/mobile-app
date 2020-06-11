@@ -19,9 +19,7 @@ import {
     TextInput
 } from 'react-native-paper';
 import {
-    setUserCeloInfo,
-    setUserIsCommunityManager,
-    setUserIsBeneficiary
+    resetReduxStoreApp, setUserCeloInfo, setUserIsCommunityManager, setUserIsBeneficiary
 } from '../../helpers/redux/actions/ReduxActions';
 import {
     ScrollView
