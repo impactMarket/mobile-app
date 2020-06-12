@@ -12,7 +12,7 @@ import {
     connect,
     ConnectedProps
 } from 'react-redux';
-import { IRootState } from '../../../../helpers/types';
+import { IRootState, IAddressAndName } from '../../../../helpers/types';
 import ListActionItem from '../../../../components/ListActionItem';
 import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
@@ -22,7 +22,7 @@ import { celoWalletRequest } from '../../../../services';
 interface IRemovedScreenProps {
     route: {
         params: {
-            beneficiaries: string[];
+            beneficiaries: IAddressAndName[];
         }
     }
 }
@@ -36,7 +36,7 @@ type Props = PropsFromRedux & IRemovedScreenProps
 
 function RemovedScreen(props: Props) {
     const navigation = useNavigation();
-    const beneficiaries = props.route.params.beneficiaries as string[];
+    const beneficiaries = props.route.params.beneficiaries as IAddressAndName[];
 
     console.log(beneficiaries);
     return (
@@ -49,11 +49,11 @@ function RemovedScreen(props: Props) {
             />
             <ScrollView style={{ marginHorizontal: 15 }}>
                 {beneficiaries.map((beneficiary) => <ListActionItem
-                    key={beneficiary}
+                    key={beneficiary.address}
                     item={{
                         description: '',
-                        from: beneficiary,
-                        key: beneficiary,
+                        from: beneficiary.name,
+                        key: beneficiary.address,
                         timestamp: 0
                     }}
                 >

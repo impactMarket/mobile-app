@@ -10,7 +10,6 @@ import { tokenTx } from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 
 
-
 interface IRecentTxProps {
     userAddress: string;
 }
@@ -27,10 +26,10 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
             tokenTx(props.userAddress)
                 .then((txs) => {
                     setActivities(txs.map((t) => ({
-                        key: t.from,
+                        key: t.from.address,
                         timestamp: t.timestamp,
                         description: '',
-                        from: t.from,
+                        from: t.from.name,
                         value: t.txs.toString(),
                     })));
                     setLoadingTxs(false);
@@ -81,10 +80,10 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
         tokenTx(props.userAddress)
             .then((txs) => {
                 setActivities(txs.map((t) => ({
-                    key: t.from,
+                    key: t.from.address,
                     timestamp: t.timestamp,
                     description: '',
-                    from: t.from,
+                    from: t.from.name,
                     value: t.txs.toString(),
                 })));
                 setLoadingTxs(false);

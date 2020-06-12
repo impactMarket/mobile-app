@@ -107,6 +107,15 @@ export interface ITransaction {
     values: any;
 }
 
+export interface IBeneficiary {
+    walletAddress: string;
+    communityPublicId: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+// **API and app**
+
 export interface ICommunity {
     publicId: string;
     requestByAddress: string;
@@ -128,8 +137,8 @@ export interface ICommunity {
 export interface ICommunityInfo extends ICommunity {
     backers: string[];
     beneficiaries: {
-        added: string[];
-        removed: string[];
+        added: IAddressAndName[];
+        removed: IAddressAndName[];
     };
     managers: string[];
     totalClaimed: string;
@@ -144,21 +153,25 @@ export interface ICommunityVars {
     _claimHardCap: string;
 }
 
-export interface IBeneficiary {
-    walletAddress: string;
-    communityPublicId: string;
-    createdAt: string;
-    updatedAt: string;
+export interface IAddressAndName {
+    address: string;
+    name: string;
 }
 
-export interface IRecentTxListItem {
-    from: string;
+export interface IRecentTxAPI {
+    from: {
+        address: string;
+        name: string;
+    };
     txs: number;
     timestamp: number;
 }
 
-export interface IRecentPaymentsListItem {
-    to: string;
+export interface IPaymentsTxAPI {
+    to: {
+        address: string;
+        name: string;
+    };
     value: string;
     timestamp: number;
 }

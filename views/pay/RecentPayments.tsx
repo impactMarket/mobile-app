@@ -26,10 +26,10 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
             paymentsTx(props.userAddress)
                 .then((payments) => {
                     setActivities(payments.map((p) => ({
-                        key: p.to,
+                        key: p.to.address,
                         timestamp: p.timestamp,
                         description: '',
-                        from: p.to,
+                        from: p.to.name,
                         value: p.value.toString(),
                     })))
                     setLoadingPayments(false);
@@ -41,10 +41,10 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
         paymentsTx(props.userAddress)
             .then((payments) => {
                 setActivities(payments.map((p) => ({
-                    key: p.to,
+                    key: p.to.address,
                     timestamp: p.timestamp,
                     description: '',
-                    from: p.to,
+                    from: p.to.name,
                     value: p.value.toString(),
                 })));
                 setLoadingPayments(false);
