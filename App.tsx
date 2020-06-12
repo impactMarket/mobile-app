@@ -8,6 +8,7 @@ import {
     YellowBox,
     AsyncStorage,
     StatusBar,
+    ToastAndroid,
 } from 'react-native';
 import * as Font from 'expo-font';
 
@@ -18,7 +19,7 @@ import {
 import { Asset } from 'expo-asset';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, Unsubscribe } from 'redux';
 import userReducer from './helpers/redux/reducers/ReduxReducers';
 import {
     setUserCeloInfo,
@@ -90,8 +91,10 @@ interface IAppState {
     firstTimeUser: boolean;
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
+    testnetWarning: boolean;
 }
 export default class App extends React.Component<{}, IAppState> {
+    private unsubscribeStore: Unsubscribe = undefined as any;
 
     constructor(props: any) {
         super(props);
@@ -100,8 +103,12 @@ export default class App extends React.Component<{}, IAppState> {
             isAppReady: false,
             firstTimeUser: true,
             loggedIn: false,
+            testnetWarning: false,
         }
-        store.subscribe(() => {
+    }
+
+    componentDidMount = () => {
+        this.unsubscribeStore = store.subscribe(() => {
             const previousLoggedIn = this.state.loggedIn;
             const currentLoggedIn = store.getState().user.celoInfo.address.length > 0;
 
@@ -112,7 +119,14 @@ export default class App extends React.Component<{}, IAppState> {
                 }
                 this.setState({ loggedIn: currentLoggedIn });
             }
-        })
+        });
+        setTimeout(() => this.setState({ testnetWarning: false }), 10000);
+    }
+
+    componentWillUnmount = () => {
+        try {
+            this.unsubscribeStore();
+        } catch (e) { }
     }
 
     openExploreCommunities = async () => {
@@ -121,7 +135,12 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     render() {
-        const { isAppReady, isSplashReady, firstTimeUser } = this.state;
+        const {
+            isAppReady,
+            isSplashReady,
+            firstTimeUser,
+            testnetWarning,
+        } = this.state;
         if (!isSplashReady) {
             return (
                 <AppLoading
@@ -218,6 +237,21 @@ export default class App extends React.Component<{}, IAppState> {
             <PaperProvider theme={theme}>
                 <Provider store={store}>
                     <StatusBar backgroundColor="rgba(0, 0, 0, 0.2)" translucent />
+                    <View
+                        style={{
+                            backgroundColor: '#45c7ff',
+                            width: '100%',
+                            paddingTop: 40,
+                            paddingBottom: 10,
+                            paddingHorizontal: 20,
+                            position: 'absolute',
+                            zIndex: testnetWarning ? 1 : -1,
+                        }}
+                    >
+                        <Text style={{ textAlign: 'center' }}>
+                            A friendly reminder you're using the Alfajores network build - the balances are not real.
+                        </Text>
+                    </View>
                     <NavigationContainer>
                         <Stack.Navigator>
                             <Stack.Screen
@@ -344,7 +378,8 @@ export default class App extends React.Component<{}, IAppState> {
             const firstTime = await AsyncStorage.getItem(STORAGE_USER_FIRST_TIME);
             this.setState({
                 firstTimeUser: firstTime === null,
-                loggedIn: (address !== null && phoneNumber !== null)
+                loggedIn: (address !== null && phoneNumber !== null),
+                testnetWarning: (firstTime !== undefined || firstTime !== 'true')
             });
         } catch (error) {
             // Error retrieving data
