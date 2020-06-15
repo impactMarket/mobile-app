@@ -3,6 +3,7 @@ import {
     AsyncStorage,
     StyleSheet,
     View,
+    Picker,
 } from 'react-native';
 import {
     connect,
@@ -15,7 +16,8 @@ import {
 import {
     Button,
     Avatar,
-    TextInput
+    TextInput,
+    Paragraph
 } from 'react-native-paper';
 import {
     resetUserApp,
@@ -28,7 +30,7 @@ import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { getCountryFromPhoneNumber } from '../../helpers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
-import { getUsername, setUsername } from '../../services/api';
+import { getUser, setUsername, setUserCurrency } from '../../services/api';
 
 
 interface IEditProfileProps {
@@ -45,9 +47,19 @@ type Props = PropsFromRedux & IEditProfileProps
 function EditProfile(props: Props) {
     const navigation = useNavigation();
     const [name, setName] = useState('');
+    const [currency, setCurrency] = useState('usd');
 
     useEffect(() => {
-        getUsername(props.user.celoInfo.address).then(setName);
+        getUser(props.user.celoInfo.address).then((user) => {
+            if (user !== undefined) {
+                if (user.username !== null) {
+                    setName(user.username);
+                }
+                if (user.currency !== null) {
+                    setCurrency(user.currency);
+                }
+            }
+        });
     }, []);
 
     const handleLogout = async () => {
@@ -89,6 +101,20 @@ function EditProfile(props: Props) {
                         onEndEditing={(e) => setUsername(props.user.celoInfo.address, name)}
                         onChangeText={value => setName(value)}
                     />
+                    <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
+                    <View style={styles.pickerBorder}>
+                        <Picker
+                            selectedValue={currency}
+                            style={styles.picker}
+                            onValueChange={(text) =>{
+                                setCurrency(text);
+                                setUserCurrency(props.user.celoInfo.address, text);
+                            }}
+                        >
+                            <Picker.Item label="Dollar (USD)" value="usd" />
+                            <Picker.Item label="Euro (EUR)" value="eur" />
+                        </Picker>
+                    </View>
                     <TextInput
                         label="Country"
                         style={{ marginVertical: 3 }}
@@ -119,7 +145,23 @@ const styles = StyleSheet.create({
     },
     container: {
         marginHorizontal: 20
-    }
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+        fontFamily: 'Gelion-Regular',
+    },
+    pickerBorder: {
+        marginVertical: 10,
+        borderStyle: 'solid',
+        borderColor: 'grey',
+        borderWidth: 1,
+        borderRadius: 5
+    },
+    inputTextFieldLabel: {
+        color: 'grey',
+        fontFamily: 'Gelion-Thin'
+    },
 });
 
 

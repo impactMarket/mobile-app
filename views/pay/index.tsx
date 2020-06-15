@@ -19,6 +19,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
+import { humanifyNumber, amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -66,12 +67,19 @@ function PayScreen(props: Props) {
                     <Card.Content>
                         <TextInput
                             style={{ padding: 10, textAlign: 'center', fontSize: 35, fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}
-                            placeholder='0$'
+                            placeholder={`${getUserCurrencySymbol(props.user.user)}0`}
                             keyboardType="numeric"
                             value={paymentAmount}
                             onChangeText={setPaymentAmount}
                         />
-                        <Text style={{ color: 'grey', textAlign: 'center', marginBottom: 8 }}>{`Balance: ${props.user.celoInfo.balance}$`}</Text>
+                        <Text style={{
+                            color: 'grey',
+                            textAlign: 'center',
+                            marginBottom: 8
+                        }}>
+                            Balance: {getUserCurrencySymbol(props.user.user)}
+                            {amountToUserCurrency(props.user.celoInfo.balance, props.user.user)}
+                        </Text>
                         <Divider />
                         <TextInput
                             style={{ padding: 10 }}
@@ -95,7 +103,7 @@ function PayScreen(props: Props) {
                         </Button>
                     </Card.Content>
                 </Card>
-                <RecentPayments userAddress={props.user.celoInfo.address} ref={recentPaymentsRef} />
+                <RecentPayments user={props.user} ref={recentPaymentsRef} />
             </ScrollView>
         </>
     );

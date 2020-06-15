@@ -21,7 +21,7 @@ import {
     Avatar
 } from 'react-native-paper';
 import { getCountryFromPhoneNumber } from '../../helpers';
-import { getUsername } from '../../services/api';
+import { getUser } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
 
@@ -38,7 +38,13 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        getUsername(props.user.celoInfo.address).then(setName);
+        getUser(props.user.celoInfo.address).then((user) => {
+            if (user !== undefined) {
+                if (user.username !== null) {
+                    setName(user.username);
+                }
+            }
+        });
     });
     return (
         <>

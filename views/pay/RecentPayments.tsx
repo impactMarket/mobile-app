@@ -8,10 +8,12 @@ import {
 } from 'react-native-paper';
 import { paymentsTx } from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
+import { amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
+import { IUserState } from '../../helpers/types';
 
 
 interface IRecentPaymentsProps {
-    userAddress: string;
+    user: IUserState;
 }
 export interface IRecentPaymentsRef {
     updateRecentPayments: () => void;
@@ -23,14 +25,15 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
     useImperativeHandle(ref, () => ({
         updateRecentPayments() {
             setLoadingPayments(true);
-            paymentsTx(props.userAddress)
+            paymentsTx(props.user.celoInfo.address)
                 .then((payments) => {
+                    console.log(payments)
                     setActivities(payments.map((p) => ({
                         key: p.to.address,
                         timestamp: p.timestamp,
                         description: '',
                         from: p.to.name,
-                        value: p.value.toString(),
+                        value: amountToUserCurrency(p.value, props.user.user).toString(),
                     })))
                     setLoadingPayments(false);
                 });
@@ -38,14 +41,14 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
     }));
 
     useEffect(() => {
-        paymentsTx(props.userAddress)
+        paymentsTx(props.user.celoInfo.address)
             .then((payments) => {
                 setActivities(payments.map((p) => ({
                     key: p.to.address,
                     timestamp: p.timestamp,
                     description: '',
                     from: p.to.name,
-                    value: p.value.toString(),
+                    value: amountToUserCurrency(p.value, props.user.user).toString(),
                 })));
                 setLoadingPayments(false);
             });
@@ -70,7 +73,7 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
             {activities.map((activity) => <ListActionItem
                 key={activity.from}
                 item={activity}
-                prefix={{ top: '$' }}
+                prefix={{ top: getUserCurrencySymbol(props.user.user) }}
             />)}
         </View>
     );
