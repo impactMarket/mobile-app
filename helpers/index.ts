@@ -1,15 +1,28 @@
-import { ICommunityInfo } from "./types";
-import config from "../config";
-import BigNumber from "bignumber.js";
-import { Store, AnyAction } from "redux";
-import { ContractKit } from "@celo/contractkit";
-import { findComunityToBeneficicary, findComunityToManager } from "../services/api";
-import { setCommunityContract, setUserIsBeneficiary, setUserIsCommunityManager, setImpactMarketContract } from "./redux/actions/ReduxActions";
-import { ethers } from "ethers";
+import { ICommunityInfo, IUser, IUserState, IUserInfo } from './types';
+import config from '../config';
+import BigNumber from 'bignumber.js';
+import { ContractKit } from '@celo/contractkit';
+import { findComunityToBeneficicary, findComunityToManager } from '../services/api';
+import { setCommunityContract, setUserIsBeneficiary, setUserIsCommunityManager, setImpactMarketContract } from './redux/actions/ReduxActions';
+import { ethers } from 'ethers';
 import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
 import CommunityContractABI from '../contracts/CommunityABI.json'
-import { ImpactMarketInstance } from "../contracts/types/truffle-contracts";
+import { ImpactMarketInstance } from '../contracts/types/truffle-contracts';
 
+
+export function getUserCurrencySymbol(user: IUserInfo) {
+    switch(user.currency.toUpperCase()) {
+        case 'EUR':
+            return '€'
+        default:
+            return '$'
+    }
+}
+
+export function amountToUserCurrency(amount: BigNumber | string, user: IUserInfo) {
+    let exchangeRate = user.exchangeRate;
+    return humanifyNumber(new BigNumber(amount).multipliedBy(exchangeRate));
+}
 
 export function claimFrequencyToText(frequency: BigNumber | string): string {
     const f = new BigNumber(frequency);
@@ -38,15 +51,14 @@ export function calculateCommunityProgress(
 }
 
 export function getCountryFromPhoneNumber(phoneNumber: string) {
-    console.log(phoneNumber);
     if (phoneNumber.slice(0, 4) === '+351') {
         return '🇵🇹 Portugal'
     }
 }
 
 export var iptcColors = {
-    greenishTeal: "#2dce89",
-    softBlue: "#5e72e4"
+    greenishTeal: '#2dce89',
+    softBlue: '#5e72e4'
 }
 
 export async function loadContracts(address: string, kit: ContractKit, store: any) {

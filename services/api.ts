@@ -1,6 +1,6 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction, IRecentTxAPI, IPaymentsTxAPI } from '../helpers/types';
+import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction, IRecentTxAPI, IPaymentsTxAPI, IUser } from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -262,13 +262,13 @@ async function paymentsTx(
     return response;
 }
 
-async function getUsername(
+async function getUser(
     address: string,
-): Promise<string> {
-    let response = '';
+): Promise<IUser | undefined> {
+    let response = undefined as any;
     try {
-        const result = await axios.get(`/username/${address}`);
-        response = result.data.username as string;
+        const result = await axios.get(`/user/${address}`);
+        response = result.data as IUser;
     } catch (error) {
         // handle error
     } finally {
@@ -294,7 +294,7 @@ async function setUsername(
                 'Accept': 'application/json',
             }
         };
-        const result = await axios.post('/username/', requestBody, requestHeaders);
+        const result = await axios.post('/user/username', requestBody, requestHeaders);
         response = result.status;
     } catch (error) {
         // handle error
@@ -302,6 +302,48 @@ async function setUsername(
         // always executed
     }
     return response === 200 ? true : false;
+}
+
+async function setUserCurrency(
+    address: string,
+    currency: string,
+): Promise<boolean> {
+    let response = 500;
+    try {
+        // handle success
+        const requestBody = {
+            address,
+            currency
+        };
+        const requestHeaders = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        };
+        const result = await axios.post('/user/currency', requestBody, requestHeaders);
+        response = result.status;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response === 200 ? true : false;
+}
+
+async function getExchangeRate(
+    currency: string,
+): Promise<number> {
+    let response = 1;
+    try {
+        const result = await axios.get('https://api.exchangeratesapi.io/latest?base=USD');
+        response = result.data.rates[currency.toUpperCase()] as number;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
 }
 
 export {
@@ -317,6 +359,8 @@ export {
     getCommunityNamesFromAddresses,
     tokenTx,
     paymentsTx,
-    getUsername,
+    getUser,
     setUsername,
+    setUserCurrency,
+    getExchangeRate,
 }
