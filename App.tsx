@@ -24,6 +24,7 @@ import userReducer from './helpers/redux/reducers/ReduxReducers';
 import {
     setUserCeloInfo,
     setCeloKit,
+    setUserInfo,
 } from './helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
@@ -51,6 +52,7 @@ import EditProfile from './views/wallet/EditProfile';
 import AddedScreen from './views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './views/community/view/communitymanager/RemovedScreen';
 import LoginScreen from './views/common/LoginScreen';
+import { getExchangeRate, getUser } from './services/api';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -319,13 +321,8 @@ export default class App extends React.Component<{}, IAppState> {
 
     _getCurrentUserBalance = async (address: string) => {
         const stableToken = await kit.contracts.getStableToken()
-
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all(
-            [stableToken.balanceOf(address), stableToken.decimals()]
-        )
-        const decimals = new BigNumber(10).pow(cUSDDecimals).toString();
-        let cUSDBalance = cUSDBalanceBig.div(decimals).toFixed(2)
-        return cUSDBalance;
+        const cUSDBalanceBig = await stableToken.balanceOf(address)
+        return new BigNumber(cUSDBalanceBig.toString());
     }
 
     _cacheSplashResourcesAsync = async () => {
@@ -371,7 +368,21 @@ export default class App extends React.Component<{}, IAppState> {
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
                 const balance = await this._getCurrentUserBalance(address);
+                const user = await getUser(address);
                 store.dispatch(setUserCeloInfo({ address, phoneNumber, balance }))
+                if (user !== undefined) {
+                    let name = '';
+                    let currency = 'USD';
+                    let exchangeRate = 1;
+                    if (user.username !== null) {
+                        name = user.username;
+                    }
+                    if (user.currency !== null) {
+                        currency = user.currency;
+                        exchangeRate = await getExchangeRate(user.currency.toUpperCase());
+                    }
+                    store.dispatch(setUserInfo({ name, currency, exchangeRate }))
+                }
                 await loadContracts(address, kit, store);
                 // We have data!!
             }
