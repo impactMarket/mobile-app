@@ -17,7 +17,7 @@ import {
     Title,
     ProgressBar,
 } from 'react-native-paper';
-import { calculateCommunityProgress, humanifyNumber, iptcColors } from '../helpers';
+import { calculateCommunityProgress, humanifyNumber, iptcColors, amountToUserCurrency, getUserCurrencySymbol } from '../helpers';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 
@@ -39,6 +39,7 @@ class CommuntyStatus extends Component<Props, {}> {
     render() {
         const {
             community,
+            user,
         } = this.props;
 
         // in theory, it's the total claimed is relative to the total raised.
@@ -91,7 +92,10 @@ class CommuntyStatus extends Component<Props, {}> {
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View style={styles.sphereRaised}></View>
-                            <Text style={{ fontFamily: 'Gelion-Regular' }}>${humanifyNumber(community.totalRaised)} Raised</Text>
+                            <Text style={{ fontFamily: 'Gelion-Regular' }}>
+                                {getUserCurrencySymbol(user.user)}
+                                {amountToUserCurrency(community.totalRaised, user.user)} Raised
+                            </Text>
                         </View>
                     </View>
                     {this.props.children}

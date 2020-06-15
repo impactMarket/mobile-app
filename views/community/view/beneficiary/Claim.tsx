@@ -6,7 +6,7 @@ import { Button } from 'react-native-paper';
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 import { ethers } from 'ethers';
 import { celoWalletRequest } from '../../../../services';
-import { humanifyNumber, iptcColors } from '../../../../helpers';
+import { humanifyNumber, iptcColors, getUserCurrencySymbol, amountToUserCurrency } from '../../../../helpers';
 
 import moment from 'moment';
 import { Text } from 'react-native-paper';
@@ -110,7 +110,8 @@ class Claim extends React.Component<Props, IClaimState> {
                         color: 'white'
                     }}
                 >
-                    Claim ${humanifyNumber(this.props.claimAmount)}
+                    Claim {getUserCurrencySymbol(this.props.user.user)}
+                    {amountToUserCurrency(this.props.claimAmount, this.props.user.user)}
                 </Text>
             </Button>
         );
