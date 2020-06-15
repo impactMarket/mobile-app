@@ -1,9 +1,11 @@
 import { ContractKit } from "@celo/contractkit";
+import BigNumber from "bignumber.js";
 
 export const STORAGE_USER_ADDRESS = '@celoinfo:address'
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
 export const STORAGE_USER_FIRST_TIME = '@status:firstime'
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';
+export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_USER_WALLET_BALANCE = 'SET_USER_WALLET_BALANCE';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
@@ -18,7 +20,13 @@ export interface IUserCeloInfo {
     // verify if address is undefined to determine if user is logged in
     address: string;
     phoneNumber: string;
-    balance: string;
+    balance: BigNumber;
+}
+
+export interface IUserInfo {
+    name: string,
+    currency: string,
+    exchangeRate: number,
 }
 
 export interface IUserCommunityInfo {
@@ -28,6 +36,7 @@ export interface IUserCommunityInfo {
 
 export interface IUserState {
     celoInfo: IUserCeloInfo,
+    user: IUserInfo,
     community: IUserCommunityInfo,
 }
 
@@ -52,9 +61,14 @@ interface UserCeloInfoAction {
     payload: IUserCeloInfo
 }
 
+interface UserInfoAction {
+    type: typeof SET_USER_INFO
+    payload: IUserInfo
+}
+
 interface UserSetBalanceAction {
     type: typeof SET_USER_WALLET_BALANCE
-    payload: string
+    payload: BigNumber
 }
 
 interface UserSetIsBeneficiaryAction {
@@ -92,7 +106,7 @@ interface ResetNetworkAction {
     payload: any;
 }
 
-export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction
+export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction
 export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction | ResetNetworkAction
 
 export interface ILoginCallbackAnswer {
@@ -151,6 +165,12 @@ export interface ICommunityVars {
     _baseIntervalTime: string;
     _incIntervalTime: string;
     _claimHardCap: string;
+}
+
+export interface IUser {
+    address: string;
+    username: string | null;
+    currency: string | null;
 }
 
 export interface IAddressAndName {

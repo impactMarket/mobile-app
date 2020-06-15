@@ -13,14 +13,21 @@ import {
     SET_USER_IS_COMMUNITY_COORDINATOR,
     RESET_USER_APP,
     RESET_NETWORK_APP,
+    SET_USER_INFO,
 } from '../../types';
+import BigNumber from 'bignumber.js';
 
 
 const INITIAL_STATE_USER: IUserState = {
     celoInfo: {
         address: '',
         phoneNumber: '',
-        balance: '0',
+        balance: new BigNumber(0),
+    },
+    user: {
+        name: '',
+        currency: 'USD',
+        exchangeRate: 1,
     },
     community: {
         isBeneficiary: false,
@@ -46,7 +53,12 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
                 celoInfo: {
                     address: '',
                     phoneNumber: '',
-                    balance: '0',
+                    balance: new BigNumber(0),
+                },
+                user: {
+                    name: '',
+                    currency: 'USD',
+                    exchangeRate: 1,
                 },
                 community: {
                     isBeneficiary: false,
@@ -55,6 +67,8 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
             };
         case SET_USER_CELO_INFO:
             return { ...state, celoInfo: action.payload };
+        case SET_USER_INFO:
+            return { ...state, user: action.payload };
         case SET_USER_WALLET_BALANCE:
             const celoInfo = state.celoInfo;
             celoInfo.balance = action.payload;
