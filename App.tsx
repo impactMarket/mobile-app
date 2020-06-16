@@ -8,7 +8,6 @@ import {
     YellowBox,
     AsyncStorage,
     StatusBar,
-    ToastAndroid,
 } from 'react-native';
 import * as Font from 'expo-font';
 
@@ -17,7 +16,7 @@ import {
     SplashScreen,
 } from 'expo';
 import { Asset } from 'expo-asset';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { createStore, Unsubscribe } from 'redux';
 import userReducer from './helpers/redux/reducers/ReduxReducers';
@@ -81,6 +80,13 @@ const theme = {
             },
         }
     })
+};
+const navigationTheme = {
+    ...NavigationDefaultTheme,
+    colors: {
+        ...NavigationDefaultTheme.colors,
+        primary: iptcColors.softBlue,
+    },
 };
 
 
@@ -254,7 +260,7 @@ export default class App extends React.Component<{}, IAppState> {
                             A friendly reminder you're using the Alfajores network build - the balances are not real.
                         </Text>
                     </View>
-                    <NavigationContainer>
+                    <NavigationContainer theme={navigationTheme}>
                         <Stack.Navigator>
                             <Stack.Screen
                                 options={{

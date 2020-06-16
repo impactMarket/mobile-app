@@ -4,12 +4,23 @@ import {
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BeneficiaryView from './community/view/beneficiary';
-import { IRootState } from '../helpers/types';
+import { IRootState, ITabBarIconProps } from '../helpers/types';
 import { connect, ConnectedProps } from 'react-redux';
 import WalletScreen from './wallet';
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import PayScreen from './pay';
 import CommunityManagerView from './community/view/communitymanager';
+
+const ActiveClaimIcon = require('../assets/tab/active/claim.png');
+const InactiveClaimIcon = require('../assets/tab/claim.png');
+const ActiveManageIcon = require('../assets/tab/active/manage.png');
+const InactiveManageIcon = require('../assets/tab/manage.png');
+const ActiveCommunitiesIcon = require('../assets/tab/active/communities.png');
+const InactiveCommunitiesIcon = require('../assets/tab/communities.png');
+const ActivePayIcon = require('../assets/tab/active/pay.png');
+const InactivePayIcon = require('../assets/tab/pay.png');
+const ActiveWalletIcon = require('../assets/tab/active/wallet.png');
+const InactiveWalletIcon = require('../assets/tab/wallet.png');
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -23,6 +34,27 @@ type Props = PropsFromRedux
 const Tab = createBottomTabNavigator();
 
 function Tabs(props: Props) {
+
+    const selectTabBarIcon = (focused: boolean, tab: string) => {
+        switch (tab) {
+            case 'claim':
+                if (focused) return ActiveClaimIcon;
+                return InactiveClaimIcon;
+            case 'manage':
+                if (focused) return ActiveManageIcon;
+                return InactiveManageIcon;
+            case 'communities':
+                if (focused) return ActiveCommunitiesIcon;
+                return InactiveCommunitiesIcon;
+            case 'pay':
+                if (focused) return ActivePayIcon;
+                return InactivePayIcon;
+            case 'wallet':
+                if (focused) return ActiveWalletIcon;
+                return InactiveWalletIcon;
+        }
+    }
+
     const tabsToUser = () => {
         const user = props.user;
         if (user.community.isBeneficiary) {
@@ -30,9 +62,9 @@ function Tabs(props: Props) {
                 name="Claim"
                 component={BeneficiaryView}
                 options={{
-                    tabBarIcon: (props: any) => (
+                    tabBarIcon: (props: ITabBarIconProps) => (
                         <Image
-                            source={require('../assets/tab/claim.png')}
+                            source={selectTabBarIcon(props.focused, 'claim')}
                             style={{ width: props.size + 2, height: props.size - 5 }}
                         />
                     ),
@@ -43,9 +75,9 @@ function Tabs(props: Props) {
                 name="Manage"
                 component={CommunityManagerView}
                 options={{
-                    tabBarIcon: (props: any) => (
+                    tabBarIcon: (props: ITabBarIconProps) => (
                         <Image
-                            source={require('../assets/tab/manage.png')}
+                            source={selectTabBarIcon(props.focused, 'manage')}
                             style={{ width: props.size, height: props.size - 5 }}
                         />
                     ),
@@ -56,9 +88,9 @@ function Tabs(props: Props) {
             name="Communities"
             component={CommunitiesScreen}
             options={{
-                tabBarIcon: (props: any) => (
+                tabBarIcon: (props: ITabBarIconProps) => (
                     <Image
-                        source={require(`../assets/tab/communities.png`)}
+                        source={selectTabBarIcon(props.focused, 'communities')}
                         style={{ width: props.size, height: props.size - 3 }}
                     />
                 ),
@@ -73,9 +105,9 @@ function Tabs(props: Props) {
                 name="Pay"
                 component={PayScreen}
                 options={{
-                    tabBarIcon: (props: { focused: boolean, color: string, size: number }) => (
+                    tabBarIcon: (props: ITabBarIconProps) => (
                         <Image
-                            source={require(`../assets/tab/pay.png`)}
+                            source={selectTabBarIcon(props.focused, 'pay')}
                             style={{ width: props.size + 3, height: props.size + 3 }}
                         />
                     ),
@@ -85,10 +117,9 @@ function Tabs(props: Props) {
                 name="Wallet"
                 component={WalletScreen}
                 options={{
-                    headerShown: false,
-                    tabBarIcon: (props: any) => (
+                    tabBarIcon: (props: ITabBarIconProps) => (
                         <Image
-                            source={require(`../assets/tab/wallet.png`)}
+                            source={selectTabBarIcon(props.focused, 'wallet')}
                             style={{ width: props.size - 5, height: props.size - 5 }}
                         />
                     ),

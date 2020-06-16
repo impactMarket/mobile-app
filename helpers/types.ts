@@ -128,6 +128,12 @@ export interface IBeneficiary {
     updatedAt: string;
 }
 
+export interface ITabBarIconProps {
+    focused: boolean,
+    color: string,
+    size: number
+}
+
 // **API and app**
 
 export interface ICommunity {
