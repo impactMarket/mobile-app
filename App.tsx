@@ -369,7 +369,7 @@ export default class App extends React.Component<{}, IAppState> {
             if (address !== null && phoneNumber !== null) {
                 const balance = await this._getCurrentUserBalance(address);
                 const user = await getUser(address);
-                store.dispatch(setUserCeloInfo({ address, phoneNumber, balance }))
+                store.dispatch(setUserCeloInfo({ address, phoneNumber, balance: balance.toString() }))
                 if (user !== undefined) {
                     let name = '';
                     let currency = 'USD';

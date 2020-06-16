@@ -15,14 +15,13 @@ import {
     RESET_NETWORK_APP,
     SET_USER_INFO,
 } from '../../types';
-import BigNumber from 'bignumber.js';
 
 
 const INITIAL_STATE_USER: IUserState = {
     celoInfo: {
         address: '',
         phoneNumber: '',
-        balance: new BigNumber(0),
+        balance: '0',
     },
     user: {
         name: '',
@@ -53,7 +52,7 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
                 celoInfo: {
                     address: '',
                     phoneNumber: '',
-                    balance: new BigNumber(0),
+                    balance: '0',
                 },
                 user: {
                     name: '',

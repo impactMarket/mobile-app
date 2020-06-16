@@ -15,7 +15,6 @@ import {
     IUserInfo,
 } from "../../types";
 import { ContractKit } from "@celo/contractkit";
-import BigNumber from "bignumber.js";
 
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
@@ -32,7 +31,7 @@ export function setUserInfo(userInfo: IUserInfo): UserActionTypes {
     }
 }
 
-export function setUserWalletBalance(balance: BigNumber): UserActionTypes {
+export function setUserWalletBalance(balance: string): UserActionTypes {
     return {
         type: SET_USER_WALLET_BALANCE,
         payload: balance,

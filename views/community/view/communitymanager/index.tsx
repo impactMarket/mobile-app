@@ -5,7 +5,6 @@ import {
     Text,
     ImageBackground,
     RefreshControl,
-    Share,
 } from 'react-native';
 import {
     connect,
@@ -73,26 +72,6 @@ function CommunityManagerView(props: Props) {
             }
         });
     }
-
-    const handleShare = async () => {
-        try {
-            const result = await Share.share({
-                message: 'React Native | A framework for building native apps using React',
-            });
-
-            if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                    // shared with activity type of result.activityType
-                } else {
-                    // shared
-                }
-            } else if (result.action === Share.dismissedAction) {
-                // dismissed
-            }
-        } catch (error) {
-            alert(error.message);
-        }
-    };
 
     const communityStatus = (_community: ICommunityInfo) => {
         if (_community.status === 'valid') {
@@ -197,7 +176,7 @@ function CommunityManagerView(props: Props) {
                         <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
-                            onPress={handleShare}
+                            disabled={true}
                         >
                             Share
                         </Button>

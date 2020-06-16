@@ -50,16 +50,8 @@ function EditProfile(props: Props) {
     const [currency, setCurrency] = useState('usd');
 
     useEffect(() => {
-        getUser(props.user.celoInfo.address).then((user) => {
-            if (user !== undefined) {
-                if (user.username !== null) {
-                    setName(user.username);
-                }
-                if (user.currency !== null) {
-                    setCurrency(user.currency);
-                }
-            }
-        });
+        setName(props.user.user.name);
+        setCurrency(props.user.user.currency);
     }, []);
 
     const handleLogout = async () => {

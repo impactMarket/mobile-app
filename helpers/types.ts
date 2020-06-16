@@ -20,7 +20,7 @@ export interface IUserCeloInfo {
     // verify if address is undefined to determine if user is logged in
     address: string;
     phoneNumber: string;
-    balance: BigNumber;
+    balance: string;
 }
 
 export interface IUserInfo {
@@ -68,7 +68,7 @@ interface UserInfoAction {
 
 interface UserSetBalanceAction {
     type: typeof SET_USER_WALLET_BALANCE
-    payload: BigNumber
+    payload: string
 }
 
 interface UserSetIsBeneficiaryAction {
