@@ -10,7 +10,6 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-    IBeneficiary,
 } from '../../../../../helpers/types';
 import {
     Button,
@@ -34,7 +33,6 @@ interface IAddBeneficiaryState {
     newBeneficiaryAddress: string;
     modalNewBeneficiary: boolean;
     modalListBeneficiary: boolean;
-    requestConfirmation?: IBeneficiary;
     hasPermission: boolean;
     scanned: boolean;
     useCamera: boolean;

@@ -121,13 +121,6 @@ export interface ITransaction {
     values: any;
 }
 
-export interface IBeneficiary {
-    walletAddress: string;
-    communityPublicId: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
 export interface ITabBarIconProps {
     focused: boolean,
     color: string,

@@ -1,6 +1,13 @@
 import axios from 'axios';
 import config from '../config';
-import { ICommunity, IBeneficiary, ICommunityInfo, ITransaction, IRecentTxAPI, IPaymentsTxAPI, IUser } from '../helpers/types';
+import {
+    ICommunity,
+    ICommunityInfo,
+    ITransaction,
+    IRecentTxAPI,
+    IPaymentsTxAPI,
+    IUser
+} from '../helpers/types';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -120,21 +127,6 @@ async function requestJoinAsBeneficiary(
         // always executed
     }
     return response === 200 ? true : false;
-}
-
-async function getBeneficiariesRequestByCommunity(
-    communityPublicId: string,
-): Promise<IBeneficiary[]> {
-    let response = [] as IBeneficiary[];
-    try {
-        const result = await axios.get(`/beneficiary/${communityPublicId}`);
-        response = result.data;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
 }
 
 async function findComunityToBeneficicary(
@@ -351,7 +343,6 @@ export {
     requestCreateCommunity,
     editCommunity,
     requestJoinAsBeneficiary,
-    getBeneficiariesRequestByCommunity,
     findComunityToBeneficicary,
     findComunityToManager,
     acceptBeneficiaryRequest,
