@@ -52,6 +52,7 @@ import AddedScreen from './views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './views/community/view/communitymanager/RemovedScreen';
 import LoginScreen from './views/common/LoginScreen';
 import { getExchangeRate, getUser } from './services/api';
+import ClaimExplainedScreen from './views/community/view/beneficiary/ClaimExplainedScreen';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -289,6 +290,13 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                                 name="CommunityDetailsScreen"
                                 component={CommunityDetailsScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="ClaimExplainedScreen"
+                                component={ClaimExplainedScreen}
                             />
                             <Stack.Screen
                                 options={{
