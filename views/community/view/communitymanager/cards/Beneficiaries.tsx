@@ -48,7 +48,7 @@ function Beneficiaries(props: Props) {
                     }}
                 >
                     BENEFICIARIES
-            </Headline>
+                </Headline>
                 <Button
                     mode="outlined"
                     disabled={props.community.beneficiaries.added.length === 0}

@@ -5,6 +5,7 @@ import {
     TextInputProperties,
     NativeSyntheticEvent,
     TextInputEndEditingEventData,
+    View,
 } from 'react-native';
 import {
     Paragraph
@@ -15,6 +16,7 @@ interface IStyledTextInputProps extends TextInputProperties {
     label: string;
     required?: boolean;
     setValid?: (valid: boolean) => void;
+    marginBox?: number;
 }
 interface IStyledTextInputState {
     valid: boolean;
@@ -39,15 +41,15 @@ export default class ValidatedTextInput extends Component<IStyledTextInputProps,
 
     render() {
         const { valid } = this.state;
-        return <>
-            <Paragraph style={styles.inputTextFieldLabel}>{this.props.label} {this.props.required ? '(*)': ''}</Paragraph>
+        return <View style={{ margin: this.props.marginBox }}>
+            <Paragraph style={styles.inputTextFieldLabel}>{this.props.label}</Paragraph>
             <TextInput
                 style={styles.inputTextField}
                 onEndEditing={this.handleEndEditing}
                 {...this.props}
             />
             {!valid && <Paragraph style={styles.inputTextNotValid}>Not Valid!</Paragraph>}
-        </>;
+        </View>;
     }
 }
 
@@ -58,12 +60,6 @@ const styles = StyleSheet.create({
     },
     inputTextField: {
         fontFamily: 'Gelion-Regular',
-        padding: 10,
-        marginVertical: 5,
-        borderStyle: 'solid',
-        borderColor: 'grey',
-        borderWidth: 1,
-        borderRadius: 5
     },
     inputTextNotValid: {
         fontFamily: 'Gelion-Regular',

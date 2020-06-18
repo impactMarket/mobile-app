@@ -10,7 +10,9 @@ import {
 import {
     Card,
     Button,
-    Paragraph
+    Paragraph,
+    Headline,
+    Divider
 } from 'react-native-paper';
 import {
     connect,
@@ -53,20 +55,25 @@ function CreateCommunityScreen(props: Props) {
     //
     const [isNameValid, setIsNameValid] = useState(false);
     const [isDescriptionValid, setIsDescriptionValid] = useState(false);
-    const [isLocationNameValid, setIsLocationNameValid] = useState(false);
+    const [isCityValid, setIsCityValid] = useState(false);
+    const [isCountryValid, setIsCountryValid] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(false);
     const [isAmountByClaimValid, setIsAmountByClaimValid] = useState(false);
     const [isIncrementalIntervalValid, setIsIncrementalIntervalValid] = useState(false);
     const [isClaimHardcapValid, setIsClaimHardcapValid] = useState(false);
     //
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [locationTitle, setLocationTitle] = useState('');
+    const [city, setCity] = useState('');
+    const [country, setCountry] = useState('');
+    const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('https://picsum.photos/600');
     const [amountByClaim, setAmountByClaim] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementalInterval, setIncrementalInterval] = useState('');
     const [claimHardcap, setClaimHardcap] = useState('');
     const [currency, setCurrency] = useState('usd');
+    const [visibility, setVisivility] = useState('public');
 
     useEffect(() => {
         if (props.route.params !== undefined) {
@@ -74,7 +81,7 @@ function CreateCommunityScreen(props: Props) {
             if (community !== undefined) {
                 setName(community.name);
                 setDescription(community.description);
-                setLocationTitle(community.location.title);
+                setCity(community.location.title); // TODO:
                 setGpsLocation({
                     coords: {
                         latitude: community.location.latitude,
@@ -90,7 +97,7 @@ function CreateCommunityScreen(props: Props) {
 
                 setIsNameValid(true);
                 setIsDescriptionValid(true);
-                setIsLocationNameValid(true);
+                setIsCityValid(true);
                 setIsAmountByClaimValid(true);
                 setIsIncrementalIntervalValid(true);
                 setIsClaimHardcapValid(true);
@@ -164,7 +171,7 @@ function CreateCommunityScreen(props: Props) {
                     name,
                     description,
                     {
-                        title: locationTitle,
+                        title: city, // TODO:
                         latitude: gpsLocation!.coords.latitude,
                         longitude: gpsLocation!.coords.longitude,
                     },
@@ -201,7 +208,7 @@ function CreateCommunityScreen(props: Props) {
                 name,
                 description,
                 {
-                    title: locationTitle,
+                    title: city, // TODO:
                     latitude: gpsLocation!.coords.latitude,
                     longitude: gpsLocation!.coords.longitude,
                 },
@@ -252,7 +259,9 @@ function CreateCommunityScreen(props: Props) {
 
     const isSubmitAvailable = isNameValid &&
         isDescriptionValid &&
-        isLocationNameValid &&
+        isCityValid &&
+        isCountryValid &&
+        isEmailValid &&
         isAmountByClaimValid &&
         isIncrementalIntervalValid &&
         isClaimHardcapValid &&
@@ -275,32 +284,63 @@ function CreateCommunityScreen(props: Props) {
     return (
         <>
             <Header
-                title={editing ? 'Edit Community' : 'New Community'}
+                title={editing ? 'Edit' : 'Create'}
                 navigation={navigation}
                 hasBack={true}
-            />
+            >
+                <Button
+                    mode="text"
+                    loading={sending}
+                    disabled={!isSubmitAvailable}
+                    onPress={() => submitNewCommunity()}
+                >
+                    Submit
+                </Button>
+            </Header>
             <ScrollView>
                 <View style={styles.container}>
                     <Card>
                         <Card.Content style={{ margin: -16 }}>
-                            <Text style={{ ...styles.textNote, backgroundColor: '#f0f0f0', padding: 16 }}>
-                                By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.
-                            </Text>
-                            <View
+                            <Headline
                                 style={{
-                                    margin: 16
+                                    opacity: 0.48,
+                                    fontFamily: "Gelion-Regular",
+                                    fontSize: 13,
+                                    fontWeight: "500",
+                                    fontStyle: "normal",
+                                    lineHeight: 12,
+                                    letterSpacing: 0.7,
+                                    paddingHorizontal: 16,
+                                    paddingVertical: 10
                                 }}
                             >
+                                COMMUNITY DETAILS
+                            </Headline>
+                            <Text style={{
+                                ...styles.textNote,
+                                backgroundColor: '#f0f0f0',
+                                padding: 16,
+                                borderTopColor: '#d8d8d8',
+                                borderTopWidth: 1,
+                                borderBottomColor: '#d8d8d8',
+                                borderBottomWidth: 1
+                            }}>
+                                By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.
+                            </Text>
+                            <View>
                                 <ValidatedTextInput
-                                    label="Name"
+                                    label="Community Name"
+                                    marginBox={16}
                                     value={name}
                                     maxLength={32}
                                     required={true}
                                     setValid={setIsNameValid}
                                     onChangeText={value => setName(value)}
                                 />
+                                <Divider />
                                 <ValidatedTextInput
-                                    label="Description"
+                                    label="Short Description"
+                                    marginBox={16}
                                     value={description}
                                     maxLength={256}
                                     required={true}
@@ -309,88 +349,123 @@ function CreateCommunityScreen(props: Props) {
                                     multiline={true}
                                     numberOfLines={6}
                                 />
+                                <Divider />
                                 <ValidatedTextInput
                                     label="City"
-                                    value={locationTitle}
+                                    marginBox={16}
+                                    value={city}
                                     maxLength={32}
                                     required={true}
-                                    setValid={setIsLocationNameValid}
-                                    onChangeText={value => setLocationTitle(value)}
+                                    setValid={setIsCityValid}
+                                    onChangeText={value => setCity(value)}
+                                />
+                                <Divider />
+                                <ValidatedTextInput
+                                    label="Country"
+                                    marginBox={16}
+                                    value={country}
+                                    maxLength={32}
+                                    required={true}
+                                    setValid={setIsCountryValid}
+                                    onChangeText={value => setCountry(value)}
                                 />
                                 {gpsLocation === undefined && <Button
                                     mode="outlined"
+                                    style={{ marginHorizontal: 16 }}
                                     onPress={() => enableGPSLocation()}
                                 >
                                     Get GPS Location
-                            </Button>}
+                                </Button>}
                                 {gpsLocation !== undefined && <Button
                                     icon="check"
                                     mode="outlined"
+                                    style={{ marginHorizontal: 16 }}
                                     disabled={true}
                                 >
                                     Valid Coordinates
                                 </Button>}
+                                <ValidatedTextInput
+                                    label="Email"
+                                    marginBox={16}
+                                    value={email}
+                                    maxLength={32}
+                                    required={true}
+                                    setValid={setIsEmailValid}
+                                    onChangeText={value => setEmail(value)}
+                                />
                             </View>
                         </Card.Content>
                     </Card>
-                    <Card style={{ marginVertical: 15 }}>
-                        <Card.Content>
-                            <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
-                            <View style={styles.pickerBorder}>
-                                <Picker
-                                    selectedValue={currency}
-                                    style={styles.picker}
-                                    onValueChange={(text) => setCurrency(text)}
-                                >
-                                    <Picker.Item label="Dollar (USD)" value="usd" />
-                                </Picker>
-                            </View>
-                            <ValidatedTextInput
-                                label="Claim Amount"
-                                keyboardType="numeric"
-                                value={amountByClaim}
-                                required={true}
-                                setValid={setIsAmountByClaimValid}
-                                onChangeText={value => setAmountByClaim(value)}
-                            />
-                            <Paragraph style={styles.inputTextFieldLabel}>Base Interval</Paragraph>
-                            <View style={styles.pickerBorder}>
-                                <Picker
-                                    selectedValue={baseInterval}
-                                    style={styles.picker}
-                                    onValueChange={(value) => setBaseInterval(value)}
-                                >
-                                    <Picker.Item label="Hourly" value="3601" />
-                                    <Picker.Item label="Daily" value="86400" />
-                                    <Picker.Item label="Weekly" value="604800" />
-                                </Picker>
-                            </View>
-                            <ValidatedTextInput
-                                label="Incremental Time (in hours)"
-                                keyboardType="numeric"
-                                value={incrementalInterval}
-                                required={true}
-                                setValid={setIsIncrementalIntervalValid}
-                                onChangeText={value => setIncrementalInterval(value)}
-                            />
-                            <ValidatedTextInput
-                                label="Max Claim"
-                                keyboardType="numeric"
-                                value={claimHardcap}
-                                required={true}
-                                setValid={setIsClaimHardcapValid}
-                                onChangeText={value => setClaimHardcap(value)}
-                            />
-                        </Card.Content>
-                    </Card>
-                    <Button
-                        mode="outlined"
-                        loading={sending}
-                        disabled={!isSubmitAvailable}
-                        onPress={() => submitNewCommunity()}
+                    <Headline
+                        style={{
+                            opacity: 0.48,
+                            fontFamily: "Gelion-Regular",
+                            fontSize: 13,
+                            fontWeight: "500",
+                            fontStyle: "normal",
+                            lineHeight: 12,
+                            letterSpacing: 0.7,
+                            marginTop: 20,
+                            marginHorizontal: 10
+                        }}
                     >
-                        {editing ? 'Edit' : 'Create'} Community
-                    </Button>
+                        CONTRACT DETAILS
+                    </Headline>
+                    <View style={{ marginBottom: 15 }}>
+                        <ValidatedTextInput
+                            label="Claim Amount"
+                            marginBox={10}
+                            keyboardType="numeric"
+                            value={amountByClaim}
+                            required={true}
+                            setValid={setIsAmountByClaimValid}
+                            onChangeText={value => setAmountByClaim(value)}
+                        />
+                        <Divider />
+                        <ValidatedTextInput
+                            label="Total claim ammount per beneficiary"
+                            marginBox={10}
+                            keyboardType="numeric"
+                            value={claimHardcap}
+                            required={true}
+                            setValid={setIsClaimHardcapValid}
+                            onChangeText={value => setClaimHardcap(value)}
+                        />
+                        <Divider />
+                        <Paragraph style={styles.inputTextFieldLabel}>Frequency</Paragraph>
+                        <View style={styles.pickerBorder}>
+                            <Picker
+                                selectedValue={baseInterval}
+                                style={styles.picker}
+                                onValueChange={(value) => setBaseInterval(value)}
+                            >
+                                <Picker.Item label="Hourly" value="3601" />
+                                <Picker.Item label="Daily" value="86400" />
+                                <Picker.Item label="Weekly" value="604800" />
+                            </Picker>
+                        </View>
+                        <ValidatedTextInput
+                            label="Time increment after each claim (in hours)"
+                            marginBox={10}
+                            keyboardType="numeric"
+                            value={incrementalInterval}
+                            required={true}
+                            setValid={setIsIncrementalIntervalValid}
+                            onChangeText={value => setIncrementalInterval(value)}
+                        />
+                        <Divider />
+                        <Paragraph style={styles.inputTextFieldLabel}>Visivility</Paragraph>
+                        <View style={styles.pickerBorder}>
+                            <Picker
+                                selectedValue={visibility}
+                                style={styles.picker}
+                                onValueChange={(text) => setVisivility(text)}
+                            >
+                                <Picker.Item label="Public" value="public" />
+                                <Picker.Item label="Private" value="private" />
+                            </Picker>
+                        </View>
+                    </View>
                     <Text style={{ ...styles.textNote, marginVertical: 20 }}>
                         Note: These values should be a minimum basic income that is sufficient to meet your beneficiaries' basic needs. They can claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.
                     </Text>
@@ -409,6 +484,7 @@ const styles = StyleSheet.create({
         marginRight: 30,
     },
     inputTextFieldLabel: {
+        marginHorizontal: 10,
         color: 'grey',
         fontFamily: 'Gelion-Thin'
     },
@@ -425,7 +501,7 @@ const styles = StyleSheet.create({
     },
     //
     textNote: {
-        color: 'grey',
+        // color: 'grey',
         fontFamily: 'Gelion-Regular',
     },
     imageBackground: {
@@ -451,7 +527,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Gelion-Regular',
     },
     pickerBorder: {
-        marginVertical: 10,
+        margin: 10,
         borderStyle: 'solid',
         borderColor: 'grey',
         borderWidth: 1,
