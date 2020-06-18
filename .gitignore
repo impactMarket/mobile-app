@@ -59,3 +59,5 @@ buck-out/
 .expo/*
 
 web-build/
+.env
+.extra

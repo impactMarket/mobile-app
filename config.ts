@@ -21,7 +21,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: 'http://192.168.1.110:5000/api',
+        baseApiUrl: 'http://192.168.1.103:5000/api',
 
         /**
          * Contract Address to use in dev
@@ -42,6 +42,7 @@ const ENV = {
 }
 
 function getEnvVars() {
+    console.log('Constants.manifest.extra', Constants.manifest.extra, process.env.EXPO_FIGMENT_API_KEY);
     if (Constants.manifest.packagerOpts !== undefined) {
         if (Constants.manifest.packagerOpts.dev !== undefined) {
             return Constants.manifest.packagerOpts.dev ? { ...commonConfig, ...ENV.dev } : { ...commonConfig, ...ENV.prod };
