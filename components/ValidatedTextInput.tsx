@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    TextInput,
+    // TextInput,
     TextInputProperties,
     NativeSyntheticEvent,
     TextInputEndEditingEventData,
     View,
 } from 'react-native';
 import {
-    Paragraph
+    Paragraph, TextInput
 } from 'react-native-paper';
 
 
@@ -42,8 +42,9 @@ export default class ValidatedTextInput extends Component<IStyledTextInputProps,
     render() {
         const { valid } = this.state;
         return <View style={{ margin: this.props.marginBox }}>
-            <Paragraph style={styles.inputTextFieldLabel}>{this.props.label}</Paragraph>
             <TextInput
+                mode="flat"
+                underlineColor="transparent"
                 style={styles.inputTextField}
                 onEndEditing={this.handleEndEditing}
                 {...this.props}
@@ -60,6 +61,8 @@ const styles = StyleSheet.create({
     },
     inputTextField: {
         fontFamily: 'Gelion-Regular',
+        backgroundColor: 'transparent',
+        paddingHorizontal: 0,
     },
     inputTextNotValid: {
         fontFamily: 'Gelion-Regular',
