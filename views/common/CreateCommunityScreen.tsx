@@ -72,7 +72,6 @@ function CreateCommunityScreen(props: Props) {
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementalInterval, setIncrementalInterval] = useState('');
     const [claimHardcap, setClaimHardcap] = useState('');
-    const [currency, setCurrency] = useState('usd');
     const [visibility, setVisivility] = useState('public');
 
     useEffect(() => {
@@ -81,7 +80,10 @@ function CreateCommunityScreen(props: Props) {
             if (community !== undefined) {
                 setName(community.name);
                 setDescription(community.description);
-                setCity(community.location.title); // TODO:
+                setCity(community.city);
+                setCountry(community.country);
+                setEmail(community.email);
+                setVisivility(community.visibility);
                 setGpsLocation({
                     coords: {
                         latitude: community.location.latitude,
@@ -170,11 +172,14 @@ function CreateCommunityScreen(props: Props) {
                     community.publicId,
                     name,
                     description,
+                    city,
+                    country,
                     {
-                        title: city, // TODO:
                         latitude: gpsLocation!.coords.latitude,
                         longitude: gpsLocation!.coords.longitude,
                     },
+                    email,
+                    visibility,
                     coverImage
                 )
                 if (!success) {
@@ -207,11 +212,14 @@ function CreateCommunityScreen(props: Props) {
                 props.user.celoInfo.address,
                 name,
                 description,
+                city,
+                country,
                 {
-                    title: city, // TODO:
                     latitude: gpsLocation!.coords.latitude,
                     longitude: gpsLocation!.coords.longitude,
                 },
+                email,
+                visibility,
                 coverImage,
                 {
                     amountByClaim: new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
@@ -423,7 +431,7 @@ function CreateCommunityScreen(props: Props) {
                         />
                         <Divider />
                         <ValidatedTextInput
-                            label="Total claim ammount per beneficiary"
+                            label="Total claim amount per beneficiary"
                             marginBox={10}
                             keyboardType="numeric"
                             value={claimHardcap}
@@ -454,7 +462,7 @@ function CreateCommunityScreen(props: Props) {
                             onChangeText={value => setIncrementalInterval(value)}
                         />
                         <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>Visivility</Paragraph>
+                        <Paragraph style={styles.inputTextFieldLabel}>Visibility</Paragraph>
                         <View style={styles.pickerBorder}>
                             <Picker
                                 selectedValue={visibility}

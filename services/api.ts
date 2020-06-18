@@ -30,11 +30,14 @@ async function requestCreateCommunity(
     requestByAddress: string,
     name: string,
     description: string,
-    location: {
-        title: string,
+    city: string,
+    country: string,
+    gps: {
         latitude: number,
         longitude: number,
     },
+    email: string,
+    visibility: string,
     coverImage: string,
     txCreationObj: any,
 ): Promise<boolean> {
@@ -45,7 +48,11 @@ async function requestCreateCommunity(
             requestByAddress,
             name,
             description,
-            location,
+            city,
+            country,
+            gps,
+            email,
+            visibility,
             coverImage,
             txCreationObj,
         };
@@ -69,11 +76,14 @@ async function editCommunity(
     publicId: string,
     name: string,
     description: string,
-    location: {
-        title: string,
+    city: string,
+    country: string,
+    gps: {
         latitude: number,
         longitude: number,
     },
+    email: string,
+    visibility: string,
     coverImage: string,
 ): Promise<boolean> {
     let response = 500;
@@ -83,7 +93,11 @@ async function editCommunity(
             publicId,
             name,
             description,
-            location,
+            city,
+            country,
+            gps,
+            email,
+            visibility,
             coverImage,
         };
         const requestHeaders = {

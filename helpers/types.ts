@@ -135,11 +135,14 @@ export interface ICommunity {
     contractAddress: string;
     name: string;
     description: string;
+    city: string;
+    country: string;
     location: {
-        title: string;
         latitude: number;
         longitude: number;
     };
+    email: string;
+    visibility: string;
     coverImage: string;
     status: string;
     txCreationObj: any;
