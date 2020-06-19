@@ -15,7 +15,9 @@ import {
 interface IStyledTextInputProps extends TextInputProperties {
     label: string;
     required?: boolean;
+    isValid?: boolean;
     setValid?: (valid: boolean) => void;
+    whenEndEditing?: (e: NativeSyntheticEvent<TextInputEndEditingEventData>) => void;
     marginBox?: number;
 }
 interface IStyledTextInputState {
@@ -31,11 +33,11 @@ export default class ValidatedTextInput extends Component<IStyledTextInputProps,
     }
 
     handleEndEditing = (e: NativeSyntheticEvent<TextInputEndEditingEventData>) => {
-        const valid = !(this.props.required && e.nativeEvent.text.length === 0);
         if (this.props.setValid !== undefined) {
+            const valid = !(this.props.required && e.nativeEvent.text.length === 0);
             this.props.setValid(valid);
+            this.setState({ valid });
         }
-        this.setState({ valid });
         e.preventDefault();
     }
 
@@ -46,10 +48,10 @@ export default class ValidatedTextInput extends Component<IStyledTextInputProps,
                 mode="flat"
                 underlineColor="transparent"
                 style={styles.inputTextField}
-                onEndEditing={this.handleEndEditing}
+                onEndEditing={this.props.whenEndEditing !== undefined ? this.props.whenEndEditing : this.handleEndEditing}
                 {...this.props}
             />
-            {!valid && <Paragraph style={styles.inputTextNotValid}>Not Valid!</Paragraph>}
+            {!valid || (this.props.isValid !== undefined ? !this.props.isValid : false) && <Paragraph style={styles.inputTextNotValid}>Not Valid!</Paragraph>}
         </View>;
     }
 }

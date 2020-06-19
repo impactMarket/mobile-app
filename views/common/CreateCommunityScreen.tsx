@@ -25,7 +25,7 @@ import * as Location from 'expo-location';
 import config from '../../config';
 import BigNumber from 'bignumber.js';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
-import { humanifyNumber } from '../../helpers';
+import { humanifyNumber, loadContracts, validateEmail } from '../../helpers';
 import Header from '../../components/Header';
 import { editCommunity } from '../../services/api';
 
@@ -229,15 +229,18 @@ function CreateCommunityScreen(props: Props) {
                 },
             ).then((success) => {
                 if (success) {
-                    navigation.goBack();
-                    Alert.alert(
-                        'Success',
-                        'Your request to create a new community was placed!',
-                        [
-                            { text: 'OK' },
-                        ],
-                        { cancelable: false }
-                    );
+                    loadContracts(props.user.celoInfo.address, props.network.kit, props)
+                        .then(() => {
+                            navigation.goBack();
+                            Alert.alert(
+                                'Success',
+                                'Your request to create a new community was placed!',
+                                [
+                                    { text: 'OK' },
+                                ],
+                                { cancelable: false }
+                            );
+                        })
                 } else {
                     Alert.alert(
                         'Failure',
@@ -398,7 +401,12 @@ function CreateCommunityScreen(props: Props) {
                                     value={email}
                                     maxLength={32}
                                     required={true}
-                                    setValid={setIsEmailValid}
+                                    keyboardType="email-address"
+                                    isValid={isEmailValid}
+                                    whenEndEditing={(e) => {
+                                        setIsEmailValid(validateEmail(email));
+                                        console.log(email, validateEmail(email));
+                                    }}
                                     onChangeText={value => setEmail(value)}
                                 />
                             </View>
