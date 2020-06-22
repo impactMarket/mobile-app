@@ -352,6 +352,35 @@ async function getExchangeRate(
     return response;
 }
 
+async function uploadImageAsync(uri: string) {
+    let response;
+    try {
+        // handle success
+        let uriParts = uri.split('.');
+        let fileType = uriParts[uriParts.length - 1];
+
+        let formData = new FormData();
+        formData.append('photo', {
+            uri,
+            name: `photo.${fileType}`,
+            type: `image/${fileType}`,
+        } as any);
+        const requestHeaders = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+            }
+        };
+        const result = await axios.post('/s3/upload', formData, requestHeaders);
+        response = result;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
 export {
     getAllValidCommunities,
     requestCreateCommunity,
@@ -368,4 +397,5 @@ export {
     setUsername,
     setUserCurrency,
     getExchangeRate,
+    uploadImageAsync,
 }

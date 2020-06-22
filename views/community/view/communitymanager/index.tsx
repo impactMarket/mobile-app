@@ -20,6 +20,7 @@ import {
     IconButton,
     Dialog,
     Portal,
+    Headline,
 } from 'react-native-paper';
 import {
     getCommunityByContractAddress,
@@ -75,7 +76,7 @@ function CommunityManagerView(props: Props) {
 
     const communityStatus = (_community: ICommunityInfo) => {
         if (_community.status === 'valid') {
-            return <>
+            return <View style={styles.container}>
                 <Beneficiaries
                     community={_community}
                     updateCommunity={(_communityUpdate) => setCommunity(_communityUpdate)}
@@ -90,9 +91,42 @@ function CommunityManagerView(props: Props) {
                         Full Dashboard
                     </Button>
                 </CommuntyStatus>
-            </>
+            </View>
         }
-        return <Text>Communtiy is still waiting approval</Text>
+        return <View style={{
+            marginHorizontal: 20,
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between'
+        }}
+        >
+            <Headline
+                style={{
+                    fontFamily: "Gelion-Regular",
+                    fontSize: 22,
+                    fontWeight: "bold",
+                    fontStyle: "normal",
+                    lineHeight: 22,
+                    letterSpacing: 0,
+                    textAlign: "center",
+                }}
+            >
+                Pending Approval
+            </Headline>
+            <Text
+                style={{
+                    fontFamily: "Gelion-Regular",
+                    fontSize: 19,
+                    fontWeight: "normal",
+                    fontStyle: "normal",
+                    lineHeight: 19,
+                    letterSpacing: 0,
+                    textAlign: "center",
+                }}
+            >
+                This community has not yet been approved. If you have any question please contact us at hello@impactmarket.com
+            </Text>
+        </View>
     }
 
     if (community === undefined) {
@@ -139,9 +173,7 @@ function CommunityManagerView(props: Props) {
                         }}
                     />
                 </ImageBackground>
-                <View style={styles.container}>
-                    {communityStatus(community)}
-                </View>
+                {communityStatus(community)}
             </ScrollView>
             <Portal>
                 <Dialog

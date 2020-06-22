@@ -6,6 +6,7 @@ import {
     Text,
     View,
     Picker,
+    ImageBackground,
 } from 'react-native';
 import {
     Card,
@@ -27,7 +28,8 @@ import BigNumber from 'bignumber.js';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
 import { humanifyNumber, loadContracts, validateEmail } from '../../helpers';
 import Header from '../../components/Header';
-import { editCommunity } from '../../services/api';
+import { editCommunity, uploadImageAsync } from '../../services/api';
+import * as ImagePicker from 'expo-image-picker';
 
 
 interface ICreateCommunityScreen {
@@ -67,7 +69,7 @@ function CreateCommunityScreen(props: Props) {
     const [city, setCity] = useState('');
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
-    const [coverImage, setCoverImage] = useState('https://picsum.photos/600');
+    const [coverImage, setCoverImage] = useState('');
     const [amountByClaim, setAmountByClaim] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementalInterval, setIncrementalInterval] = useState('');
@@ -185,6 +187,7 @@ function CreateCommunityScreen(props: Props) {
                 if (!success) {
                     throw new Error('Some error!');
                 } else {
+                    await loadContracts(props.user.celoInfo.address, props.network.kit, props);
                     navigation.goBack();
                     Alert.alert(
                         'Success',
@@ -208,6 +211,28 @@ function CreateCommunityScreen(props: Props) {
                 setSending(false);
             }
         } else {
+            let uploadResponse, uploadImagePath;
+            try {
+                uploadResponse = await uploadImageAsync(coverImage);
+                if (uploadResponse?.status === 200) {
+                    uploadImagePath = uploadResponse.data.location;
+                }
+                // console.log('uploadResponse', uploadResponse);
+            } catch (e) {
+                console.log({ uploadResponse });
+                console.log({ uploadImagePath });
+                console.log({ e });
+                Alert.alert(
+                    'Failure',
+                    'An error happened while placing the request to create a community!',
+                    [
+                        { text: 'OK' },
+                    ],
+                    { cancelable: false }
+                );
+                setSending(false);
+                return;
+            }
             requestCreateCommunity(
                 props.user.celoInfo.address,
                 name,
@@ -220,7 +245,7 @@ function CreateCommunityScreen(props: Props) {
                 },
                 email,
                 visibility,
-                coverImage,
+                uploadImagePath,
                 {
                     amountByClaim: new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
                     baseInterval: baseInterval,
@@ -231,6 +256,7 @@ function CreateCommunityScreen(props: Props) {
                 if (success) {
                     loadContracts(props.user.celoInfo.address, props.network.kit, props)
                         .then(() => {
+                            setSending(false);
                             navigation.goBack();
                             Alert.alert(
                                 'Success',
@@ -250,8 +276,8 @@ function CreateCommunityScreen(props: Props) {
                         ],
                         { cancelable: false }
                     );
+                    setSending(false);
                 }
-                setSending(false);
             });
         }
     }
@@ -268,6 +294,21 @@ function CreateCommunityScreen(props: Props) {
         console.log('loc', loc);
     }
 
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            setCoverImage(result.uri);
+        }
+    };
+
     const isSubmitAvailable = isNameValid &&
         isDescriptionValid &&
         isCityValid &&
@@ -277,6 +318,7 @@ function CreateCommunityScreen(props: Props) {
         isIncrementalIntervalValid &&
         isClaimHardcapValid &&
         gpsLocation !== undefined &&
+        coverImage.length > 0 &&
         !sending;
 
     if (props.user.celoInfo.address.length === 0) {
@@ -339,6 +381,15 @@ function CreateCommunityScreen(props: Props) {
                                 By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.
                             </Text>
                             <View>
+                                <ImageBackground source={coverImage.length === 0 ? require('../../assets/placeholder.png') : { uri: coverImage }} style={styles.imageCover}>
+                                    <Button
+                                        mode="contained"
+                                        style={{ margin: 16 }}
+                                        onPress={pickImage}
+                                    >
+                                        {coverImage.length === 0 ? 'Select Cover Image' : 'Change Cover Image'}
+                                    </Button>
+                                </ImageBackground>
                                 <ValidatedTextInput
                                     label="Community Name"
                                     marginBox={16}
@@ -520,13 +571,6 @@ const styles = StyleSheet.create({
         // color: 'grey',
         fontFamily: 'Gelion-Regular',
     },
-    imageBackground: {
-        width: '100%',
-        height: 180,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center'
-    },
     communityName: {
         fontSize: 25,
         fontWeight: 'bold',
@@ -548,7 +592,15 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         borderWidth: 1,
         borderRadius: 5
-    }
+    },
+    imageCover: {
+        flex: 1,
+        flexDirection: 'column',
+        resizeMode: 'cover',
+        justifyContent: "flex-end",
+        width: '100%',
+        height: 180,
+    },
 });
 
 export default connector(CreateCommunityScreen);

@@ -21,7 +21,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: 'http://192.168.1.103:5000/api',
+        baseApiUrl: 'http://192.168.1.109:5000/api',
 
         /**
          * Contract Address to use in dev
