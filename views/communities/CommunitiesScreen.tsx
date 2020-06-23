@@ -104,7 +104,7 @@ function CommunitiesScreen(props: Props) {
                                     fontSize: 20,
                                     color: 'white'
                                 }}
-                            ><AntDesign name="enviromento" size={20} /> {community.location.title}</Text>
+                            ><AntDesign name="enviromento" size={20} /> {community.city}, {community.country}</Text>
                         </ImageBackground>
                         <View style={{ margin: 10 }}>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>

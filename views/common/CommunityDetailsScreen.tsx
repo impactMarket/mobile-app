@@ -94,7 +94,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 >
                     <Text style={styles.communityName}>{community.name}</Text>
                     <Text style={styles.communityLocation}>
-                        <AntDesign name="enviromento" size={20} /> {community.location.title}
+                        <AntDesign name="enviromento" size={20} /> {community.city}, {community.country}
                     </Text>
                     <LinearGradient
                         colors={['transparent', 'rgba(246,246,246,1)']}
