@@ -9,7 +9,7 @@ const commonConfig = {
     /**
      * JSON RPC url
      */
-    jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+    jsonRpc: `https://celo-alfajores.datahub.figment.network/apikey/${process.env.EXPO_FIGMENT_API_KEY}/`,
 
     /**
      * cUSD decimals to use in ui format
@@ -21,7 +21,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: 'http://192.168.1.109:5000/api',
+        baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
 
         /**
          * Contract Address to use in dev

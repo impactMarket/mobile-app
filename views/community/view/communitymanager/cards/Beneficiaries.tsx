@@ -12,11 +12,9 @@ import {
     Headline,
     Button,
 } from 'react-native-paper';
-import {
-    getCommunityByContractAddress,
-} from '../../../../../services';
 import AddBeneficiary from '../components/AddBeneficiary';
 import { useNavigation } from '@react-navigation/native';
+import { updateCommunityInfo } from '../../../../../helpers';
 
 
 interface IBeneficiariesProps {
@@ -66,11 +64,7 @@ function Beneficiaries(props: Props) {
                     Removed ({props.community.beneficiaries.removed.length})
                 </Button>
                 <AddBeneficiary
-                    addBeneficiaryCallback={() => {
-                        const { _address } = props.network.contracts.communityContract;
-                        getCommunityByContractAddress(_address)
-                            .then((community) => props.updateCommunity(community!));
-                    }}
+                    addBeneficiaryCallback={() => updateCommunityInfo(props.user.celoInfo.address, props)}
                 />
             </Card.Content>
         </Card>
