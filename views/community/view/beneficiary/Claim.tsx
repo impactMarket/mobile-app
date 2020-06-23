@@ -27,6 +27,7 @@ type Props = PropsFromRedux & IClaimProps
 
 interface IClaimProps {
     claimAmount: string;
+    updateClaimedAmount: () => void;
 }
 interface IClaimState {
     nextClaim: moment.Duration;
@@ -64,6 +65,7 @@ class Claim extends React.Component<Props, IClaimState> {
         ).then(() => {
             this._loadAllowance(communityContract).then(() => {
                 this.setState({ claiming: false });
+                this.props.updateClaimedAmount();
             })
         })
     }
@@ -94,7 +96,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 loading={claiming}
                 style={{
                     width: 170,
-                    height: 57,
+                    height: 50,
                     borderRadius: 8,
                     alignSelf: 'center'
                 }}
@@ -102,7 +104,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 <Text
                     style={{
                         fontFamily: "Gelion-Bold",
-                        fontSize: 28,
+                        fontSize: 25,
                         fontWeight: "bold",
                         fontStyle: "normal",
                         letterSpacing: 0.46,

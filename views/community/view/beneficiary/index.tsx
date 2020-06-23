@@ -11,7 +11,6 @@ import {
 } from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import {
     IRootState,
@@ -61,6 +60,12 @@ function BeneficiaryView(props: Props) {
         loadCommunity();
     }, [props.network.contracts.communityContract]);
 
+    const updateClaimedAmount = async () => {
+        const amount = await props.network.contracts.communityContract
+            .methods.claimed(props.user.celoInfo.address).call();
+
+        setClaimedAmount(humanifyNumber(amount.toString()));
+    }
 
     // const { isBeneficiary } = this.props.user.community;
     if (community === undefined) {
@@ -119,6 +124,7 @@ function BeneficiaryView(props: Props) {
                 </Button>
                 <Claim
                     claimAmount={community.vars._amountByClaim}
+                    updateClaimedAmount={updateClaimedAmount}
                 />
                 <View>
                     <Text
@@ -158,7 +164,7 @@ const styles = StyleSheet.create({
     },
     imageBackground: {
         width: '100%',
-        height: 250,
+        height: 200,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center'
