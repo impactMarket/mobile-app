@@ -13,6 +13,8 @@ import {
     RESET_NETWORK_APP,
     SET_USER_INFO,
     IUserInfo,
+    ICommunityInfo,
+    SET_COMMUNITY,
 } from "../../types";
 import { ContractKit } from "@celo/contractkit";
 
@@ -69,6 +71,13 @@ export function setImpactMarketContract(impactMarket: any): NetworkActionTypes {
 export function setCommunityContract(community: any): NetworkActionTypes {
     return {
         type: SET_COMMUNITY_CONTRACT,
+        payload: community,
+    }
+}
+
+export function setCommunity(community: ICommunityInfo): NetworkActionTypes {
+    return {
+        type: SET_COMMUNITY,
         payload: community,
     }
 }

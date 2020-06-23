@@ -1,5 +1,4 @@
 import { ContractKit } from "@celo/contractkit";
-import BigNumber from "bignumber.js";
 
 export const STORAGE_USER_ADDRESS = '@celoinfo:address'
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
@@ -9,6 +8,7 @@ export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_USER_WALLET_BALANCE = 'SET_USER_WALLET_BALANCE';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
+export const SET_COMMUNITY = 'SET_COMMUNITY';
 export const SET_IMPACTMARKET_CONTRACT = 'SET_IMPACTMARKET_CONTRACT';
 export const SET_USER_IS_BENEFICIARY = 'SET_USER_IS_BENEFICIARY';
 export const SET_USER_IS_COMMUNITY_COORDINATOR = 'SET_USER_IS_COMMUNITY_COORDINATOR';
@@ -47,6 +47,7 @@ export interface IContractsState {
 
 export interface INetworkState {
     kit: ContractKit,
+    community: ICommunityInfo,
     contracts: IContractsState,
 }
 
@@ -86,14 +87,19 @@ interface CeloKitAction {
     payload: ContractKit;
 }
 
-interface ImpactMarketAction {
+interface SetImpactMarketContractAction {
     type: typeof SET_IMPACTMARKET_CONTRACT
     payload: any;
 }
 
-interface CommunityAction {
+interface SetCommunityContractAction {
     type: typeof SET_COMMUNITY_CONTRACT
     payload: any;
+}
+
+interface SetCommunityAction {
+    type: typeof SET_COMMUNITY
+    payload: ICommunityInfo;
 }
 
 interface ResetUserAction {
@@ -107,14 +113,10 @@ interface ResetNetworkAction {
 }
 
 export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction
-export type NetworkActionTypes = CeloKitAction | ImpactMarketAction | CommunityAction | ResetNetworkAction
-
-export interface ILoginCallbackAnswer {
-    celoInfo: IUserCeloInfo;
-}
+export type NetworkActionTypes = CeloKitAction | SetImpactMarketContractAction | SetCommunityContractAction | SetCommunityAction | ResetNetworkAction
 
 export interface ITransaction {
-    tx: string; // Note that the `null assertion` `!` is required in strict mode.
+    tx: string;
     from: string;
     contractAddress: string;
     event: string;

@@ -3,7 +3,7 @@ import config from '../config';
 import BigNumber from 'bignumber.js';
 import { ContractKit } from '@celo/contractkit';
 import { findComunityToBeneficicary, findComunityToManager } from '../services/api';
-import { setCommunityContract, setUserIsBeneficiary, setUserIsCommunityManager, setImpactMarketContract } from './redux/actions/ReduxActions';
+import { setCommunityContract, setUserIsBeneficiary, setUserIsCommunityManager, setImpactMarketContract, setCommunity } from './redux/actions/ReduxActions';
 import { ethers } from 'ethers';
 import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
 import CommunityContractABI from '../contracts/CommunityABI.json'
@@ -62,25 +62,15 @@ export var iptcColors = {
 }
 
 export async function loadContracts(address: string, kit: ContractKit, store: any) {
-    const isBeneficiary = await findComunityToBeneficicary(address);
-    const isCoordinator = await findComunityToManager(address);
-
-    const setCommunity = (address: string) => {
+    const fSetCommunity = (c: ICommunityInfo) => {
+        // c.contractAddress can be null if community approval is still pending
         const communityContract = new kit.web3.eth.Contract(
             CommunityContractABI as any,
-            address,
+            c.contractAddress,
         );
+        store.dispatch(setCommunity(c));
         store.dispatch(setCommunityContract(communityContract));
     };
-    if (isBeneficiary !== undefined) {
-        store.dispatch(setUserIsBeneficiary(true));
-        setCommunity(isBeneficiary.contractAddress);
-    }
-    else if (isCoordinator !== undefined) {
-        store.dispatch(setUserIsCommunityManager(true));
-        setCommunity(isCoordinator.contractAddress);
-    }
-
     const provider = new ethers.providers.Web3Provider(kit.web3.currentProvider as any);
     const impactMarketContract = new ethers.Contract(
         config.impactMarketContractAddress,
@@ -88,6 +78,32 @@ export async function loadContracts(address: string, kit: ContractKit, store: an
         provider,
     ) as ethers.Contract & ImpactMarketInstance;
     store.dispatch(setImpactMarketContract(impactMarketContract));
+
+    const isBeneficiary = await findComunityToBeneficicary(address);
+    if (isBeneficiary !== undefined) {
+        store.dispatch(setUserIsBeneficiary(true));
+        fSetCommunity(isBeneficiary);
+        return;
+    }
+    const isCoordinator = await findComunityToManager(address);
+    if (isCoordinator !== undefined) {
+        store.dispatch(setUserIsCommunityManager(true));
+        fSetCommunity(isCoordinator);
+        return;
+    }
+}
+
+export async function updateCommunityInfo(address: string, store: any) {
+    const isBeneficiary = await findComunityToBeneficicary(address);
+    if (isBeneficiary !== undefined) {
+        store.dispatch(setCommunity(isBeneficiary));
+        return;
+    }
+    const isCoordinator = await findComunityToManager(address);
+    if (isCoordinator !== undefined) {
+        store.dispatch(setCommunity(isCoordinator));
+        return;
+    }
 }
 
 export function validateEmail(email: string) {

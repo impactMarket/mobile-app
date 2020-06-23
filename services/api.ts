@@ -145,8 +145,8 @@ async function requestJoinAsBeneficiary(
 
 async function findComunityToBeneficicary(
     beneficiaryAddress: string,
-): Promise<ICommunity | undefined> {
-    let response: ICommunity | undefined = undefined;
+): Promise<ICommunityInfo | undefined> {
+    let response: ICommunityInfo | undefined;
     try {
         const result = await axios.get(`/transactions/beneficiaryin/${beneficiaryAddress}`);
         if (result.data === "") {
@@ -164,8 +164,8 @@ async function findComunityToBeneficicary(
 
 async function findComunityToManager(
     managerAddress: string,
-): Promise<ICommunity | ITransaction | undefined> {
-    let response: ICommunity | ITransaction | undefined = undefined;
+): Promise<ICommunityInfo | undefined> {
+    let response: ICommunityInfo | undefined;
     try {
         const result = await axios.get(`/transactions/managerin/${managerAddress}`);
         if (result.data === "") {

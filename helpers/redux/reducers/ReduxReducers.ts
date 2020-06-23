@@ -14,6 +14,7 @@ import {
     RESET_USER_APP,
     RESET_NETWORK_APP,
     SET_USER_INFO,
+    SET_COMMUNITY,
 } from '../../types';
 
 
@@ -37,6 +38,7 @@ const INITIAL_STATE_USER: IUserState = {
 const INITIAL_NETWORK_USER: INetworkState = {
     kit: undefined as any,
     // TODO: save community object from database with contract inside
+    community: undefined as any,
     contracts: {
         communityContract: undefined as any,
         impactMarketContract: undefined as any,
@@ -97,6 +99,8 @@ const networkReducer = (state = INITIAL_NETWORK_USER, action: NetworkActionTypes
             };
         case SET_CELO_KIT:
             return { ...state, kit: action.payload };
+        case SET_COMMUNITY:
+            return { ...state, community: action.payload };
         case SET_COMMUNITY_CONTRACT:
             // Pulls current and possible out of previous state
             // We do not want to alter state directly in case
