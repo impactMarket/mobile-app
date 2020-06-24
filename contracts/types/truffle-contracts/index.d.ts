@@ -12,10 +12,10 @@ export interface AccessControlContract
 export interface CommunityContract extends Truffle.Contract<CommunityInstance> {
   "new"(
     _firstManager: string | BigNumber,
-    _amountByClaim: number | BigNumber | string,
-    _baseIntervalTime: number | BigNumber | string,
-    _incIntervalTime: number | BigNumber | string,
-    _claimHardCap: number | BigNumber | string,
+    _claimAmount: number | BigNumber | string,
+    _baseInterval: number | BigNumber | string,
+    _incrementInterval: number | BigNumber | string,
+    _maxClaim: number | BigNumber | string,
     _cUSDAddress: string | BigNumber,
     meta?: Truffle.TransactionDetails
   ): Promise<CommunityInstance>;
@@ -154,7 +154,7 @@ export interface CommunityInstance extends Truffle.ContractInstance {
 
   DEFAULT_ADMIN_ROLE(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
-  amountByClaim(txDetails?: Truffle.TransactionDetails): Promise<BigNumber>;
+  claimAmount(txDetails?: Truffle.TransactionDetails): Promise<BigNumber>;
 
   baseIntervalTime(txDetails?: Truffle.TransactionDetails): Promise<BigNumber>;
 
@@ -407,34 +407,34 @@ export interface CommunityInstance extends Truffle.ContractInstance {
 
   edit: {
     (
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       _cUSDAddress: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse>;
     call(
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       _cUSDAddress: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
     sendTransaction(
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       _cUSDAddress: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       _cUSDAddress: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
@@ -971,34 +971,34 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
   addCommunity: {
     (
       _firstManager: string | BigNumber,
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse>;
     call(
       _firstManager: string | BigNumber,
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
     sendTransaction(
       _firstManager: string | BigNumber,
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
       _firstManager: string | BigNumber,
-      _amountByClaim: number | BigNumber | string,
-      _baseIntervalTime: number | BigNumber | string,
-      _incIntervalTime: number | BigNumber | string,
-      _claimHardCap: number | BigNumber | string,
+      _claimAmount: number | BigNumber | string,
+      _baseInterval: number | BigNumber | string,
+      _incrementInterval: number | BigNumber | string,
+      _maxClaim: number | BigNumber | string,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };

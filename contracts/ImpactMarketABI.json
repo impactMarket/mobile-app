@@ -28,25 +28,25 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_amountByClaim",
+        "name": "_claimAmount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_baseIntervalTime",
+        "name": "_baseInterval",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_incIntervalTime",
+        "name": "_incrementInterval",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_claimHardCap",
+        "name": "_maxClaim",
         "type": "uint256"
       }
     ],
@@ -317,22 +317,22 @@
       },
       {
         "internalType": "uint256",
-        "name": "_amountByClaim",
+        "name": "_claimAmount",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_baseIntervalTime",
+        "name": "_baseInterval",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_incIntervalTime",
+        "name": "_incrementInterval",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "_claimHardCap",
+        "name": "_maxClaim",
         "type": "uint256"
       }
     ],

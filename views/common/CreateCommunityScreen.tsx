@@ -60,9 +60,9 @@ function CreateCommunityScreen(props: Props) {
     const [isCityValid, setIsCityValid] = useState(false);
     const [isCountryValid, setIsCountryValid] = useState(false);
     const [isEmailValid, setIsEmailValid] = useState(false);
-    const [isAmountByClaimValid, setIsAmountByClaimValid] = useState(false);
+    const [isClaimAmountValid, setIsClaimAmountValid] = useState(false);
     const [isIncrementalIntervalValid, setIsIncrementalIntervalValid] = useState(false);
-    const [isClaimHardcapValid, setIsClaimHardcapValid] = useState(false);
+    const [isMaxClaimValid, setIsMaxClaimValid] = useState(false);
     //
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -70,10 +70,10 @@ function CreateCommunityScreen(props: Props) {
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('');
-    const [amountByClaim, setAmountByClaim] = useState('');
+    const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementalInterval, setIncrementalInterval] = useState('');
-    const [claimHardcap, setClaimHardcap] = useState('');
+    const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisivility] = useState('public');
 
     useEffect(() => {
@@ -93,18 +93,18 @@ function CreateCommunityScreen(props: Props) {
                     }
                 } as Location.LocationData)
                 // cover image
-                setAmountByClaim(humanifyNumber(community.vars._amountByClaim).toString());
-                setBaseInterval(community.vars._baseIntervalTime);
-                setIncrementalInterval(new BigNumber(community.vars._incIntervalTime).div(3600).toString());
-                setClaimHardcap(humanifyNumber(community.vars._claimHardCap).toString());
+                setClaimAmount(humanifyNumber(community.vars._claimAmount).toString());
+                setBaseInterval(community.vars._baseInterval);
+                setIncrementalInterval(new BigNumber(community.vars._incrementInterval).div(3600).toString());
+                setMaxClaim(humanifyNumber(community.vars._maxClaim).toString());
                 // currency
 
                 setIsNameValid(true);
                 setIsDescriptionValid(true);
                 setIsCityValid(true);
-                setIsAmountByClaimValid(true);
+                setIsClaimAmountValid(true);
                 setIsIncrementalIntervalValid(true);
-                setIsClaimHardcapValid(true);
+                setIsMaxClaimValid(true);
 
                 setEditing(true);
             }
@@ -116,21 +116,21 @@ function CreateCommunityScreen(props: Props) {
             // TODO: show error!
             return;
         }
-        if (new BigNumber(claimHardcap).lt(amountByClaim)) {
+        if (new BigNumber(maxClaim).lt(claimAmount)) {
             Alert.alert('Failure',
                 'Claim Amount should be bigger that Max Claim!',
                 [{ text: 'OK' }], { cancelable: false }
             );
             return;
         }
-        if (new BigNumber(amountByClaim).eq(0)) {
+        if (new BigNumber(claimAmount).eq(0)) {
             Alert.alert('Failure',
                 'Claim Amount should not be zero!',
                 [{ text: 'OK' }], { cancelable: false }
             );
             return;
         }
-        if (new BigNumber(claimHardcap).eq(0)) {
+        if (new BigNumber(maxClaim).eq(0)) {
             Alert.alert('Failure',
                 'Max Claim should not be zero!',
                 [{ text: 'OK' }], { cancelable: false }
@@ -142,29 +142,27 @@ function CreateCommunityScreen(props: Props) {
         if (editing) {
             const community = props.route.params.community as ICommunityInfo;
             const {
-                _amountByClaim,
-                _baseIntervalTime,
-                _claimHardCap,
-                _incIntervalTime
+                _claimAmount,
+                _baseInterval,
+                _maxClaim,
+                _incrementInterval
             } = props.route.params.community.vars;
             try {
                 if (
-                    !new BigNumber(amountByClaim).multipliedBy(decimals).eq(_amountByClaim) ||
-                    baseInterval !== _baseIntervalTime ||
-                    parseInt(incrementalInterval, 10) * 3600 !== parseInt(_incIntervalTime, 10) ||
-                    !new BigNumber(claimHardcap).multipliedBy(decimals).eq(_claimHardCap)
+                    !new BigNumber(claimAmount).multipliedBy(decimals).eq(_claimAmount) ||
+                    baseInterval !== _baseInterval ||
+                    parseInt(incrementalInterval, 10) * 3600 !== parseInt(_incrementInterval, 10) ||
+                    !new BigNumber(maxClaim).multipliedBy(decimals).eq(_maxClaim)
                 ) {
                     // if one of the fields is changed, sent contract edit!
-                    const cUSDAddress = await props.network.contracts.communityContract.methods.cUSDAddress().call();
                     await celoWalletRequest(
                         props.user.celoInfo.address,
                         community.contractAddress,
                         await props.network.contracts.communityContract.methods.edit(
-                            new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
+                            new BigNumber(claimAmount).multipliedBy(decimals).toString(),
+                            new BigNumber(maxClaim).multipliedBy(decimals).toString(),
                             baseInterval,
                             (parseInt(incrementalInterval, 10) * 3600).toString(),
-                            new BigNumber(claimHardcap).multipliedBy(decimals).toString(),
-                            cUSDAddress,
                         ),
                         'editcommunity',
                         props.network,
@@ -247,10 +245,10 @@ function CreateCommunityScreen(props: Props) {
                 visibility,
                 uploadImagePath,
                 {
-                    amountByClaim: new BigNumber(amountByClaim).multipliedBy(decimals).toString(),
+                    claimAmount: new BigNumber(claimAmount).multipliedBy(decimals).toString(),
+                    maxClaim: new BigNumber(maxClaim).multipliedBy(decimals).toString(),
                     baseInterval: baseInterval,
                     incrementalInterval: (parseInt(incrementalInterval, 10) * 3600).toString(),
-                    claimHardcap: new BigNumber(claimHardcap).multipliedBy(decimals).toString(),
                 },
             ).then((success) => {
                 if (success) {
@@ -314,9 +312,9 @@ function CreateCommunityScreen(props: Props) {
         isCityValid &&
         isCountryValid &&
         isEmailValid &&
-        isAmountByClaimValid &&
+        isClaimAmountValid &&
         isIncrementalIntervalValid &&
-        isClaimHardcapValid &&
+        isMaxClaimValid &&
         gpsLocation !== undefined &&
         coverImage.length > 0 &&
         !sending;
@@ -483,20 +481,20 @@ function CreateCommunityScreen(props: Props) {
                             label="Claim Amount"
                             marginBox={10}
                             keyboardType="numeric"
-                            value={amountByClaim}
+                            value={claimAmount}
                             required={true}
-                            setValid={setIsAmountByClaimValid}
-                            onChangeText={value => setAmountByClaim(value)}
+                            setValid={setIsClaimAmountValid}
+                            onChangeText={value => setClaimAmount(value)}
                         />
                         <Divider />
                         <ValidatedTextInput
                             label="Total claim amount per beneficiary"
                             marginBox={10}
                             keyboardType="numeric"
-                            value={claimHardcap}
+                            value={maxClaim}
                             required={true}
-                            setValid={setIsClaimHardcapValid}
-                            onChangeText={value => setClaimHardcap(value)}
+                            setValid={setIsMaxClaimValid}
+                            onChangeText={value => setMaxClaim(value)}
                         />
                         <Divider />
                         <Paragraph style={styles.inputTextFieldLabel}>Frequency</Paragraph>

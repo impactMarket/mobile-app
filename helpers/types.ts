@@ -165,10 +165,10 @@ export interface ICommunityInfo extends ICommunity {
 }
 
 export interface ICommunityVars {
-    _amountByClaim: string;
-    _baseIntervalTime: string;
-    _incIntervalTime: string;
-    _claimHardCap: string;
+    _claimAmount: string;
+    _baseInterval: string;
+    _incrementInterval: string;
+    _maxClaim: string;
 }
 
 export interface IUser {

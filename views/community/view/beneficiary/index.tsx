@@ -52,7 +52,7 @@ function BeneficiaryView(props: Props) {
             const amount = await props.network.contracts.communityContract
                 .methods.claimed(props.user.celoInfo.address).call();
 
-            const progress = new BigNumber(amount.toString()).div(_community.vars._claimHardCap);
+            const progress = new BigNumber(amount.toString()).div(_community.vars._maxClaim);
             setClaimedAmount(humanifyNumber(amount.toString()));
             setClaimedProgress(progress.toNumber());
             setCommunity(_community);
@@ -123,14 +123,14 @@ function BeneficiaryView(props: Props) {
                     More about your community
                 </Button>
                 <Claim
-                    claimAmount={community.vars._amountByClaim}
+                    claimAmount={community.vars._claimAmount}
                     updateClaimedAmount={updateClaimedAmount}
                 />
                 <View>
                     <Text
                         onPress={() => navigation.navigate('ClaimExplainedScreen')}
                         style={styles.haveClaimed}
-                    >You have claimed ${claimedAmount} out of ${humanifyNumber(community.vars._claimHardCap)}</Text>
+                    >You have claimed ${claimedAmount} out of ${humanifyNumber(community.vars._maxClaim)}</Text>
                     <ProgressBar
                         key="claimedbybeneficiary"
                         style={{

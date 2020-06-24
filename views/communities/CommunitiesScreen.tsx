@@ -113,8 +113,8 @@ function CommunitiesScreen(props: Props) {
                                     <Text style={styles.cellDescription}>Beneficiaries</Text>
                                 </View>
                                 <View>
-                                    <Text style={styles.cellHeader}>${humanifyNumber(community.vars._amountByClaim)}</Text>
-                                    <Text style={styles.cellDescription}>{claimFrequencyToText(community.vars._baseIntervalTime)}</Text>
+                                    <Text style={styles.cellHeader}>${humanifyNumber(community.vars._claimAmount)}</Text>
+                                    <Text style={styles.cellDescription}>{claimFrequencyToText(community.vars._baseInterval)}</Text>
                                 </View>
                                 <View>
                                     <Text style={styles.cellHeader}>{community.backers.length}</Text>

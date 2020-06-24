@@ -124,8 +124,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         <Card.Content>
                             <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                                 <View>
-                                    <Headline>${humanifyNumber(community.vars._amountByClaim)} / {claimFrequencyToText(community.vars._baseIntervalTime)}</Headline>
-                                    <Paragraph style={{ color: '#b0b0b0' }}>Up to ${humanifyNumber(community.vars._claimHardCap)} / beneficiary</Paragraph>
+                                    <Headline>${humanifyNumber(community.vars._claimAmount)} / {claimFrequencyToText(community.vars._baseInterval)}</Headline>
+                                    <Paragraph style={{ color: '#b0b0b0' }}>Up to ${humanifyNumber(community.vars._maxClaim)} / beneficiary</Paragraph>
                                 </View>
                             </View>
                             <Divider />
