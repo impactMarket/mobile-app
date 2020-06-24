@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_firstCoordinator",
+        "name": "_firstManager",
         "type": "address"
       },
       {
@@ -179,7 +179,7 @@
         "type": "address"
       }
     ],
-    "name": "CoordinatorAdded",
+    "name": "ManagerAdded",
     "type": "event"
   },
   {
@@ -192,7 +192,7 @@
         "type": "address"
       }
     ],
-    "name": "CoordinatorRemoved",
+    "name": "ManagerRemoved",
     "type": "event"
   },
   {
@@ -247,7 +247,7 @@
   },
   {
     "inputs": [],
-    "name": "COORDINATOR_ROLE",
+    "name": "MANAGER_ROLE",
     "outputs": [
       {
         "internalType": "bytes32",
@@ -573,7 +573,7 @@
         "type": "address"
       }
     ],
-    "name": "isCoordinator",
+    "name": "isManager",
     "outputs": [
       {
         "internalType": "bool",
@@ -592,7 +592,7 @@
         "type": "address"
       }
     ],
-    "name": "addCoordinator",
+    "name": "addManager",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -605,7 +605,7 @@
         "type": "address"
       }
     ],
-    "name": "removeCoordinator",
+    "name": "removeManager",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

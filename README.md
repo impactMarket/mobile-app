@@ -27,7 +27,7 @@ If you have an android, you can try our demo [here](https://expo.io/@impactmarke
 - [x] Integrate mobile app with base smart contract in testnet
 - [x] Update mobile app, use new smart contracts
 - [x] Explore and create new communities
-- [x] Community coordinator page manager
+- [x] Community manager page manager
 - [x] Admin webui (to use until end of phase 2)
 - [ ] Transaction history and pay option (WIP)
 - [ ] Create UI according to design planing (WIP)

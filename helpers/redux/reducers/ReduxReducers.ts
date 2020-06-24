@@ -10,7 +10,7 @@ import {
     NetworkActionTypes,
     SET_USER_WALLET_BALANCE,
     SET_USER_IS_BENEFICIARY,
-    SET_USER_IS_COMMUNITY_COORDINATOR,
+    SET_USER_IS_COMMUNITY_MANAGER,
     RESET_USER_APP,
     RESET_NETWORK_APP,
     SET_USER_INFO,
@@ -31,7 +31,7 @@ const INITIAL_STATE_USER: IUserState = {
     },
     community: {
         isBeneficiary: false,
-        isCoordinator: false,
+        isManager: false,
     },
 };
 
@@ -63,7 +63,7 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
                 },
                 community: {
                     isBeneficiary: false,
-                    isCoordinator: false,
+                    isManager: false,
                 },
             };
         case SET_USER_CELO_INFO:
@@ -77,8 +77,8 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
         case SET_USER_IS_BENEFICIARY:
             community.isBeneficiary = action.payload
             return { ...state, community };
-        case SET_USER_IS_COMMUNITY_COORDINATOR:
-            community.isCoordinator = action.payload
+        case SET_USER_IS_COMMUNITY_MANAGER:
+            community.isManager = action.payload
             return { ...state, community };
         default:
             return state

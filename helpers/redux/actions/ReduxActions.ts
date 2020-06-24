@@ -7,7 +7,7 @@ import {
     SET_IMPACTMARKET_CONTRACT,
     NetworkActionTypes,
     SET_USER_WALLET_BALANCE,
-    SET_USER_IS_COMMUNITY_COORDINATOR,
+    SET_USER_IS_COMMUNITY_MANAGER,
     SET_USER_IS_BENEFICIARY,
     RESET_USER_APP,
     RESET_NETWORK_APP,
@@ -49,7 +49,7 @@ export function setUserIsBeneficiary(isBeneficiary: boolean): UserActionTypes {
 
 export function setUserIsCommunityManager(isCommunityManager: boolean): UserActionTypes {
     return {
-        type: SET_USER_IS_COMMUNITY_COORDINATOR,
+        type: SET_USER_IS_COMMUNITY_MANAGER,
         payload: isCommunityManager,
     }
 }

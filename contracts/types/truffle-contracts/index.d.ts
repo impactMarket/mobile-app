@@ -11,7 +11,7 @@ export interface AccessControlContract
 
 export interface CommunityContract extends Truffle.Contract<CommunityInstance> {
   "new"(
-    _firstCoordinator: string | BigNumber,
+    _firstManager: string | BigNumber,
     _amountByClaim: number | BigNumber | string,
     _baseIntervalTime: number | BigNumber | string,
     _incIntervalTime: number | BigNumber | string,
@@ -150,7 +150,7 @@ export interface AccessControlInstance extends Truffle.ContractInstance {
 }
 
 export interface CommunityInstance extends Truffle.ContractInstance {
-  COORDINATOR_ROLE(txDetails?: Truffle.TransactionDetails): Promise<string>;
+  MANAGER_ROLE(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
   DEFAULT_ADMIN_ROLE(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
@@ -277,12 +277,12 @@ export interface CommunityInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  isCoordinator(
+  isManager(
     _account: string | BigNumber,
     txDetails?: Truffle.TransactionDetails
   ): Promise<boolean>;
 
-  addCoordinator: {
+  addManager: {
     (
       _account: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
@@ -301,7 +301,7 @@ export interface CommunityInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  removeCoordinator: {
+  removeManager: {
     (
       _account: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
@@ -970,7 +970,7 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
 
   addCommunity: {
     (
-      _firstCoordinator: string | BigNumber,
+      _firstManager: string | BigNumber,
       _amountByClaim: number | BigNumber | string,
       _baseIntervalTime: number | BigNumber | string,
       _incIntervalTime: number | BigNumber | string,
@@ -978,7 +978,7 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse>;
     call(
-      _firstCoordinator: string | BigNumber,
+      _firstManager: string | BigNumber,
       _amountByClaim: number | BigNumber | string,
       _baseIntervalTime: number | BigNumber | string,
       _incIntervalTime: number | BigNumber | string,
@@ -986,7 +986,7 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
     sendTransaction(
-      _firstCoordinator: string | BigNumber,
+      _firstManager: string | BigNumber,
       _amountByClaim: number | BigNumber | string,
       _baseIntervalTime: number | BigNumber | string,
       _incIntervalTime: number | BigNumber | string,
@@ -994,7 +994,7 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
-      _firstCoordinator: string | BigNumber,
+      _firstManager: string | BigNumber,
       _amountByClaim: number | BigNumber | string,
       _baseIntervalTime: number | BigNumber | string,
       _incIntervalTime: number | BigNumber | string,

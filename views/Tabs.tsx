@@ -70,7 +70,7 @@ function Tabs(props: Props) {
                     ),
                 }}
             />;
-        } else if (user.community.isCoordinator) {
+        } else if (user.community.isManager) {
             return <Tab.Screen
                 name="Manage"
                 component={CommunityManagerView}

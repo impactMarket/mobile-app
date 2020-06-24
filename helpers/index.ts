@@ -85,10 +85,10 @@ export async function loadContracts(address: string, kit: ContractKit, store: an
         fSetCommunity(isBeneficiary);
         return;
     }
-    const isCoordinator = await findComunityToManager(address);
-    if (isCoordinator !== undefined) {
+    const isManager = await findComunityToManager(address);
+    if (isManager !== undefined) {
         store.dispatch(setUserIsCommunityManager(true));
-        fSetCommunity(isCoordinator);
+        fSetCommunity(isManager);
         return;
     }
 }
@@ -99,9 +99,9 @@ export async function updateCommunityInfo(address: string, store: any) {
         store.dispatch(setCommunity(isBeneficiary));
         return;
     }
-    const isCoordinator = await findComunityToManager(address);
-    if (isCoordinator !== undefined) {
-        store.dispatch(setCommunity(isCoordinator));
+    const isManager = await findComunityToManager(address);
+    if (isManager !== undefined) {
+        store.dispatch(setCommunity(isManager));
         return;
     }
 }

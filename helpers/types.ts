@@ -11,7 +11,7 @@ export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
 export const SET_COMMUNITY = 'SET_COMMUNITY';
 export const SET_IMPACTMARKET_CONTRACT = 'SET_IMPACTMARKET_CONTRACT';
 export const SET_USER_IS_BENEFICIARY = 'SET_USER_IS_BENEFICIARY';
-export const SET_USER_IS_COMMUNITY_COORDINATOR = 'SET_USER_IS_COMMUNITY_COORDINATOR';
+export const SET_USER_IS_COMMUNITY_MANAGER = 'SET_USER_IS_COMMUNITY_MANAGER';
 export const RESET_USER_APP = 'RESET_USER_APP';
 export const RESET_NETWORK_APP = 'RESET_NETWORK_APP';
 
@@ -31,7 +31,7 @@ export interface IUserInfo {
 
 export interface IUserCommunityInfo {
     isBeneficiary: boolean;
-    isCoordinator: boolean;
+    isManager: boolean;
 }
 
 export interface IUserState {
@@ -78,7 +78,7 @@ interface UserSetIsBeneficiaryAction {
 }
 
 interface UserSetIsCommunityManagerAction {
-    type: typeof SET_USER_IS_COMMUNITY_COORDINATOR
+    type: typeof SET_USER_IS_COMMUNITY_MANAGER
     payload: boolean
 }
 
