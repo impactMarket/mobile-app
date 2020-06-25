@@ -72,7 +72,7 @@ function CreateCommunityScreen(props: Props) {
     const [coverImage, setCoverImage] = useState('');
     const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
-    const [incrementalInterval, setIncrementalInterval] = useState('');
+    const [incrementInterval, setIncrementalInterval] = useState('');
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisivility] = useState('public');
 
@@ -151,7 +151,7 @@ function CreateCommunityScreen(props: Props) {
                 if (
                     !new BigNumber(claimAmount).multipliedBy(decimals).eq(_claimAmount) ||
                     baseInterval !== _baseInterval ||
-                    parseInt(incrementalInterval, 10) * 3600 !== parseInt(_incrementInterval, 10) ||
+                    parseInt(incrementInterval, 10) * 3600 !== parseInt(_incrementInterval, 10) ||
                     !new BigNumber(maxClaim).multipliedBy(decimals).eq(_maxClaim)
                 ) {
                     // if one of the fields is changed, sent contract edit!
@@ -162,7 +162,7 @@ function CreateCommunityScreen(props: Props) {
                             new BigNumber(claimAmount).multipliedBy(decimals).toString(),
                             new BigNumber(maxClaim).multipliedBy(decimals).toString(),
                             baseInterval,
-                            (parseInt(incrementalInterval, 10) * 3600).toString(),
+                            (parseInt(incrementInterval, 10) * 3600).toString(),
                         ),
                         'editcommunity',
                         props.network,
@@ -248,7 +248,7 @@ function CreateCommunityScreen(props: Props) {
                     claimAmount: new BigNumber(claimAmount).multipliedBy(decimals).toString(),
                     maxClaim: new BigNumber(maxClaim).multipliedBy(decimals).toString(),
                     baseInterval: baseInterval,
-                    incrementalInterval: (parseInt(incrementalInterval, 10) * 3600).toString(),
+                    incrementInterval: (parseInt(incrementInterval, 10) * 3600).toString(),
                 },
             ).then((success) => {
                 if (success) {
@@ -513,7 +513,7 @@ function CreateCommunityScreen(props: Props) {
                             label="Time increment after each claim (in hours)"
                             marginBox={10}
                             keyboardType="numeric"
-                            value={incrementalInterval}
+                            value={incrementInterval}
                             required={true}
                             setValid={setIsIncrementalIntervalValid}
                             onChangeText={value => setIncrementalInterval(value)}
