@@ -16,7 +16,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "_addr",
+        "name": "_communityAddress",
         "type": "address"
       },
       {
@@ -34,6 +34,12 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "_maxClaim",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "_baseInterval",
         "type": "uint256"
       },
@@ -41,12 +47,6 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "_incrementInterval",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_maxClaim",
         "type": "uint256"
       }
     ],
@@ -59,7 +59,32 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "_addr",
+        "name": "_firstManager",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_communityAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_previousCommunityAddress",
+        "type": "address"
+      }
+    ],
+    "name": "CommunityMigrated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_communityAddress",
         "type": "address"
       }
     ],
@@ -127,8 +152,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [],
@@ -141,8 +165,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -161,8 +184,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -181,8 +203,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -206,8 +227,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -226,8 +246,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -269,8 +288,7 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function",
-    "constant": true
+    "type": "function"
   },
   {
     "inputs": [
@@ -322,6 +340,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "_maxClaim",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_baseInterval",
         "type": "uint256"
       },
@@ -329,14 +352,27 @@
         "internalType": "uint256",
         "name": "_incrementInterval",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_maxClaim",
-        "type": "uint256"
       }
     ],
     "name": "addCommunity",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_firstManager",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_previousCommunityAddress",
+        "type": "address"
+      }
+    ],
+    "name": "migrateCommunity",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -376,6 +412,19 @@
       }
     ],
     "name": "removeAdmin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_communityFactory",
+        "type": "address"
+      }
+    ],
+    "name": "setCommunityFactory",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

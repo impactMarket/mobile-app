@@ -13,6 +13,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "_maxClaim",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_baseInterval",
         "type": "uint256"
       },
@@ -22,9 +27,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "_maxClaim",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_previousCommunityContract",
+        "type": "address"
       },
       {
         "internalType": "address",
@@ -110,15 +115,15 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_cUSD",
-        "type": "address"
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_claimAmount",
+        "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "_claimAmount",
+        "name": "_maxClaim",
         "type": "uint256"
       },
       {
@@ -131,12 +136,6 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "_incrementInterval",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_maxClaim",
         "type": "uint256"
       }
     ],
@@ -247,19 +246,6 @@
   },
   {
     "inputs": [],
-    "name": "MANAGER_ROLE",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "DEFAULT_ADMIN_ROLE",
     "outputs": [
       {
@@ -273,12 +259,12 @@
   },
   {
     "inputs": [],
-    "name": "claimAmount",
+    "name": "MANAGER_ROLE",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bytes32",
         "name": "",
-        "type": "uint256"
+        "type": "bytes32"
       }
     ],
     "stateMutability": "view",
@@ -286,7 +272,7 @@
   },
   {
     "inputs": [],
-    "name": "baseIntervalTime",
+    "name": "baseInterval",
     "outputs": [
       {
         "internalType": "uint256",
@@ -331,7 +317,7 @@
   },
   {
     "inputs": [],
-    "name": "claimHardCap",
+    "name": "claimAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -486,7 +472,7 @@
   },
   {
     "inputs": [],
-    "name": "incIntervalTime",
+    "name": "incrementInterval",
     "outputs": [
       {
         "internalType": "uint256",
@@ -530,6 +516,32 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "maxClaim",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "previousCommunityContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "bytes32",
@@ -563,25 +575,6 @@
     "name": "revokeRole",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_account",
-        "type": "address"
-      }
-    ],
-    "name": "isManager",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -678,6 +671,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "_maxClaim",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_baseInterval",
         "type": "uint256"
       },
@@ -685,16 +683,6 @@
         "internalType": "uint256",
         "name": "_incrementInterval",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_maxClaim",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_cUSDAddress",
-        "type": "address"
       }
     ],
     "name": "edit",

@@ -10,10 +10,18 @@ declare global {
     interface Artifacts {
       require(name: "AccessControl"): TruffleContracts.AccessControlContract;
       require(name: "Community"): TruffleContracts.CommunityContract;
+      require(
+        name: "CommunityFactory"
+      ): TruffleContracts.CommunityFactoryContract;
       require(name: "Context"): TruffleContracts.ContextContract;
       require(name: "cUSD"): TruffleContracts.cUSDContract;
       require(name: "ERC20"): TruffleContracts.ERC20Contract;
+      require(name: "ICommunity"): TruffleContracts.ICommunityContract;
+      require(
+        name: "ICommunityFactory"
+      ): TruffleContracts.ICommunityFactoryContract;
       require(name: "IERC20"): TruffleContracts.IERC20Contract;
+      require(name: "IImpactMarket"): TruffleContracts.IImpactMarketContract;
       require(name: "ImpactMarket"): TruffleContracts.ImpactMarketContract;
       require(name: "Migrations"): TruffleContracts.MigrationsContract;
     }
