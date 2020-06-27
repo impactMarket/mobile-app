@@ -32,12 +32,12 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: 'https://impactmarket-poc-api.herokuapp.com/api',
+        baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
 
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0x52Fb07781152fa57f8CeF1eAeF789e4B5400Ca97',
+        impactMarketContractAddress: '0xc57594675444BeC25f2863B8549c8e485dA290C1',
     }
 }
 
