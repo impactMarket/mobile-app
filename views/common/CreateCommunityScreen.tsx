@@ -111,6 +111,22 @@ function CreateCommunityScreen(props: Props) {
         }
     }, []);
 
+    useEffect(() => {
+        if (props.network.community !== undefined && sending === true) {
+            // wait until community is not undefined!
+            setSending(false);
+            navigation.goBack();
+            Alert.alert(
+                'Success',
+                'Your request to create a new community was placed!',
+                [
+                    { text: 'OK' },
+                ],
+                { cancelable: false }
+            );
+        }
+    }, [props.network.community]);
+
     const submitNewCommunity = async () => {
         if (gpsLocation === undefined) {
             // TODO: show error!
@@ -252,19 +268,8 @@ function CreateCommunityScreen(props: Props) {
                 },
             ).then((success) => {
                 if (success) {
-                    loadContracts(props.user.celoInfo.address, props.network.kit, props)
-                        .then(() => {
-                            setSending(false);
-                            navigation.goBack();
-                            Alert.alert(
-                                'Success',
-                                'Your request to create a new community was placed!',
-                                [
-                                    { text: 'OK' },
-                                ],
-                                { cancelable: false }
-                            );
-                        })
+                    loadContracts(props.user.celoInfo.address, props.network.kit, props);
+                    // the remaining process is done in useEffect
                 } else {
                     Alert.alert(
                         'Failure',

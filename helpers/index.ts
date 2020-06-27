@@ -62,6 +62,7 @@ export var iptcColors = {
 }
 
 export async function loadContracts(address: string, kit: ContractKit, store: any) {
+    console.log('loadContracts');
     const fSetCommunity = (c: ICommunityInfo) => {
         // c.contractAddress can be null if community approval is still pending
         const communityContract = new kit.web3.eth.Contract(
@@ -86,6 +87,7 @@ export async function loadContracts(address: string, kit: ContractKit, store: an
         return;
     }
     const isManager = await findComunityToManager(address);
+    console.log('isManager', isManager);
     if (isManager !== undefined) {
         store.dispatch(setUserIsCommunityManager(true));
         fSetCommunity(isManager);

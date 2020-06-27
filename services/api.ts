@@ -12,6 +12,24 @@ import {
 
 axios.defaults.baseURL = config.baseApiUrl;
 
+async function getRequest<T>(endpoint: string): Promise<T | undefined> {
+    let response: T | undefined;
+    try {
+        const result = await axios.get(endpoint);
+        if (result.data === "") {
+            response = undefined;
+        } else {
+            response = result.data as T;
+        }
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
+
 async function getAllValidCommunities(): Promise<ICommunityInfo[]> {
     let response = [] as ICommunityInfo[];
     try {
@@ -145,40 +163,18 @@ async function requestJoinAsBeneficiary(
 
 async function findComunityToBeneficicary(
     beneficiaryAddress: string,
-): Promise<ICommunityInfo | undefined> {
-    let response: ICommunityInfo | undefined;
-    try {
-        const result = await axios.get(`/transactions/beneficiaryin/${beneficiaryAddress}`);
-        if (result.data === "") {
-            response = undefined;
-        } else {
-            response = result.data;
-        }
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
+) {
+    return getRequest<ICommunityInfo>(
+        `/transactions/beneficiaryin/${beneficiaryAddress}`
+    );
 }
 
 async function findComunityToManager(
     managerAddress: string,
-): Promise<ICommunityInfo | undefined> {
-    let response: ICommunityInfo | undefined;
-    try {
-        const result = await axios.get(`/transactions/managerin/${managerAddress}`);
-        if (result.data === "") {
-            response = undefined;
-        } else {
-            response = result.data;
-        }
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
+) {
+    return getRequest<ICommunityInfo>(
+        `/transactions/managerin/${managerAddress}`
+    );
 }
 
 async function acceptBeneficiaryRequest(
@@ -270,17 +266,10 @@ async function paymentsTx(
 
 async function getUser(
     address: string,
-): Promise<IUser | undefined> {
-    let response = undefined as any;
-    try {
-        const result = await axios.get(`/user/${address}`);
-        response = result.data as IUser;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response;
+) {
+    return getRequest<IUser>(
+        `/user/${address}`
+    );
 }
 
 async function setUsername(

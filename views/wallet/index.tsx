@@ -52,7 +52,7 @@ function WalletScreen(props: Props) {
     useEffect(() => {
         const loadBalance = async () => {
             const user = await getUser(props.user.celoInfo.address)
-            if (user !== undefined && user.currency !== null) {
+            if (user !== undefined && user.currency !== undefined && user.currency !== null) {
                 // props.network.kit.web3.eth.getBalance(props.user.celoInfo.address).then(console.log)
                 // setCurrency(user.currency.toUpperCase());
                 const rate = await getExchangeRate(user.currency.toUpperCase());

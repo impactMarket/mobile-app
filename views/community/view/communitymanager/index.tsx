@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -46,6 +46,13 @@ function CommunityManagerView(props: Props) {
     const [community, setCommunity] = useState<ICommunityInfo>(props.network.community);
     const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+
+    useEffect(() => {
+        // cluncky issue after creating community
+        if (props.network.community !== community) {
+            setCommunity(props.network.community);
+        }
+    }, [props.network.community]);
 
     const onRefresh = () => {
         let contractAddress;
