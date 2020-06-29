@@ -407,7 +407,7 @@ function CreateCommunityScreen(props: Props) {
                                     label="Short Description"
                                     marginBox={16}
                                     value={description}
-                                    maxLength={256}
+                                    maxLength={512}
                                     required={true}
                                     setValid={setIsDescriptionValid}
                                     onChangeText={value => setDescription(value)}

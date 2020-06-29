@@ -11,7 +11,6 @@ import {
 } from 'react-native-chart-kit';
 import {
     ICommunityInfo,
-    IUserState,
 } from '../../helpers/types';
 import { AntDesign } from '@expo/vector-icons';
 import Donate from '../communities/actions/Donate';
@@ -61,14 +60,33 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     const [seeFullDescription, setSeeFullDescription] = useState(false);
 
-    const dummyData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'January', 'February', 'March', 'April', 'May', 'June'],
-        datasets: [
-            {
-                data: [10, 25, 31, 42, 39, 59, 61, 68, 63, 79, 89, 95]
-            }
-        ]
-    };
+
+    const renderChart = () => {
+        if (community.ssi.length === 0) {
+            return <Text>N/A</Text>
+        } else {
+            const dummyData = {
+                labels: Array(community.ssi.length).fill('d'),
+                datasets: [{ data: community.ssi }]
+            };
+            return <LineChart
+                data={dummyData}
+                width={200}
+                height={100}
+                fromZero={true}
+                chartConfig={lineChartConfig}
+                withInnerLines={false}
+                withOuterLines={false}
+                withHorizontalLabels={false}
+                withVerticalLabels={false}
+                withDots={false}
+                bezier={true}
+                style={{
+                    marginLeft: -70,
+                }}
+            />;
+        }
+    }
 
     let description;
     if (seeFullDescription || community.description.indexOf('\n') == -1) {
@@ -130,22 +148,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             </View>
                             <Divider />
                             <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
-                                <LineChart
-                                    data={dummyData}
-                                    width={200}
-                                    height={100}
-                                    fromZero={true}
-                                    chartConfig={lineChartConfig}
-                                    withInnerLines={false}
-                                    withOuterLines={false}
-                                    withHorizontalLabels={false}
-                                    withVerticalLabels={false}
-                                    withDots={false}
-                                    bezier={true}
-                                    style={{
-                                        marginLeft: -70,
-                                    }}
-                                />
+                                {renderChart()}
                                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', marginRight: 0 }}>
                                     <Headline style={{
                                         fontFamily: "Gelion-Regular",
