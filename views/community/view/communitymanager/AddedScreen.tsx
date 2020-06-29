@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet,
     ScrollView,
 } from 'react-native';
 import {
-    Card,
     Button,
-    Paragraph
 } from 'react-native-paper';
 import {
     connect,
     ConnectedProps
 } from 'react-redux';
-import { IRootState, IAddressAndName } from '../../../../helpers/types';
+import { IRootState, ICommunityInfoBeneficiary } from '../../../../helpers/types';
 import ListActionItem from '../../../../components/ListActionItem';
 import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { celoWalletRequest } from '../../../../services';
+import { amountToUserCurrency, getUserCurrencySymbol } from '../../../../helpers';
 
 
 interface IAddedScreenProps {
     route: {
         params: {
-            beneficiaries: IAddressAndName[];
+            beneficiaries: ICommunityInfoBeneficiary[];
         }
     }
 }
@@ -36,7 +34,7 @@ type Props = PropsFromRedux & IAddedScreenProps
 
 function AddedScreen(props: Props) {
     const navigation = useNavigation();
-    const beneficiaries = props.route.params.beneficiaries as IAddressAndName[];
+    const beneficiaries = props.route.params.beneficiaries as ICommunityInfoBeneficiary[];
 
     const [removing, setRemoving] = useState(false);
 
@@ -73,7 +71,7 @@ function AddedScreen(props: Props) {
                 {beneficiaries.map((beneficiary) => <ListActionItem
                     key={beneficiary.address}
                     item={{
-                        description: '',
+                        description: `${getUserCurrencySymbol(props.user.user)} ${amountToUserCurrency(beneficiary.claimed, props.user.user)}`,
                         from: beneficiary.name,
                         key: beneficiary.address,
                         timestamp: 0
@@ -93,8 +91,5 @@ function AddedScreen(props: Props) {
         </>
     );
 }
-
-const styles = StyleSheet.create({
-});
 
 export default connector(AddedScreen);

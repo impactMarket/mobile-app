@@ -155,10 +155,11 @@ export interface ICommunity {
 export interface ICommunityInfo extends ICommunity {
     backers: string[];
     beneficiaries: {
-        added: IAddressAndName[];
-        removed: IAddressAndName[];
+        added: ICommunityInfoBeneficiary[];
+        removed: ICommunityInfoBeneficiary[];
     };
     managers: string[];
+    ssi: number[];
     totalClaimed: string;
     totalRaised: string;
     vars: ICommunityVars;
@@ -169,6 +170,12 @@ export interface ICommunityVars {
     _baseInterval: string;
     _incrementInterval: string;
     _maxClaim: string;
+}
+
+export interface ICommunityInfoBeneficiary {
+    address: string;
+    name: string;
+    claimed: string;
 }
 
 export interface IUser {
@@ -183,19 +190,13 @@ export interface IAddressAndName {
 }
 
 export interface IRecentTxAPI {
-    from: {
-        address: string;
-        name: string;
-    };
+    from: IAddressAndName;
     txs: number;
     timestamp: number;
 }
 
 export interface IPaymentsTxAPI {
-    to: {
-        address: string;
-        name: string;
-    };
+    to: IAddressAndName;
     value: string;
     timestamp: number;
 }
