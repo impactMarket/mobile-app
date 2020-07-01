@@ -21,7 +21,8 @@ import {
 } from 'react-native-paper';
 import {
     resetUserApp,
-    resetNetworkContractsApp
+    resetNetworkContractsApp,
+    setUserInfo
 } from '../../helpers/redux/actions/ReduxActions';
 import {
     ScrollView
@@ -90,7 +91,10 @@ function EditProfile(props: Props) {
                         value={name}
                         maxLength={32}
                         required={true}
-                        onEndEditing={(e) => setUsername(props.user.celoInfo.address, name)}
+                        onEndEditing={(e) => {
+                            setUsername(props.user.celoInfo.address, name);
+                            props.dispatch(setUserInfo({ ...props.user.user, name }));
+                        }}
                         onChangeText={value => setName(value)}
                     />
                     <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
@@ -98,9 +102,10 @@ function EditProfile(props: Props) {
                         <Picker
                             selectedValue={currency}
                             style={styles.picker}
-                            onValueChange={(text) =>{
+                            onValueChange={(text) => {
                                 setCurrency(text);
                                 setUserCurrency(props.user.celoInfo.address, text);
+                                props.dispatch(setUserInfo({ ...props.user.user, currency: text }));
                             }}
                         >
                             <Picker.Item label="Dollar (USD)" value="usd" />
