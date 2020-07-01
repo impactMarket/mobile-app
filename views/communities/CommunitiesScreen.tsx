@@ -5,6 +5,7 @@ import {
     View,
     ImageBackground,
     ScrollView,
+    RefreshControl,
 } from 'react-native';
 import {
     connect,
@@ -45,14 +46,17 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 type Props = PropsFromRedux & ICommunitiesScreenProps
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
+    const [refreshing, setRefreshing] = useState(false);
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 
     useEffect(() => {
-        const loadCommunities = () => {
-            getAllValidCommunities().then(setCommunities);
-        }
-        loadCommunities();
+        getAllValidCommunities().then(setCommunities);
     }, []);
+
+    const onRefresh = () => {
+        getAllValidCommunities().then(setCommunities);
+        setRefreshing(false);
+    }
 
     return (
         <>
@@ -67,7 +71,16 @@ function CommunitiesScreen(props: Props) {
                     Create
                 </Button>
             </Header>
-            <ScrollView style={styles.scrollView}>
+            <ScrollView
+                style={styles.scrollView}
+                refreshControl={
+                    <RefreshControl
+                        //refresh control used for the Pull to Refresh
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 {communities.map((community) => <Card
                     key={community.name}
                     elevation={1}
