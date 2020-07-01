@@ -95,7 +95,7 @@ function CreateCommunityScreen(props: Props) {
                 // cover image
                 setClaimAmount(humanifyNumber(community.vars._claimAmount).toString());
                 setBaseInterval(community.vars._baseInterval);
-                setIncrementalInterval(new BigNumber(community.vars._incrementInterval).div(3600).toString());
+                setIncrementalInterval(new BigNumber(community.vars._incrementInterval).div(60).toString());
                 setMaxClaim(humanifyNumber(community.vars._maxClaim).toString());
                 // currency
 
@@ -178,7 +178,7 @@ function CreateCommunityScreen(props: Props) {
                             new BigNumber(claimAmount).multipliedBy(decimals).toString(),
                             new BigNumber(maxClaim).multipliedBy(decimals).toString(),
                             baseInterval,
-                            (parseInt(incrementInterval, 10) * 3600).toString(),
+                            (parseInt(incrementInterval, 10) * 60).toString(),
                         ),
                         'editcommunity',
                         props.network,
@@ -264,7 +264,7 @@ function CreateCommunityScreen(props: Props) {
                     claimAmount: new BigNumber(claimAmount).multipliedBy(decimals).toString(),
                     maxClaim: new BigNumber(maxClaim).multipliedBy(decimals).toString(),
                     baseInterval: baseInterval,
-                    incrementInterval: (parseInt(incrementInterval, 10) * 3600).toString(),
+                    incrementInterval: (parseInt(incrementInterval, 10) * 60).toString(),
                 },
             ).then((success) => {
                 if (success) {
@@ -542,7 +542,7 @@ function CreateCommunityScreen(props: Props) {
                             </Picker>
                         </View>
                         <ValidatedTextInput
-                            label="Time increment after each claim (in hours)"
+                            label="Time increment after each claim (in minutes)"
                             marginBox={10}
                             keyboardType="numeric"
                             value={incrementInterval}
