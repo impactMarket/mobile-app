@@ -26,7 +26,7 @@ import * as Location from 'expo-location';
 import config from '../../config';
 import BigNumber from 'bignumber.js';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
-import { humanifyNumber, loadContracts, validateEmail } from '../../helpers';
+import { humanifyNumber, loadContracts, validateEmail, getUserCurrencySymbol, amountToUserCurrency } from '../../helpers';
 import Header from '../../components/Header';
 import { editCommunity, uploadImageAsync } from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
@@ -470,7 +470,7 @@ function CreateCommunityScreen(props: Props) {
                             fontSize: 13,
                             fontWeight: "500",
                             fontStyle: "normal",
-                            lineHeight: 12,
+                            lineHeight: 13,
                             letterSpacing: 0.7,
                             marginTop: 20,
                             marginHorizontal: 10
@@ -479,25 +479,55 @@ function CreateCommunityScreen(props: Props) {
                         CONTRACT DETAILS
                     </Headline>
                     <View style={{ marginBottom: 15 }}>
-                        <ValidatedTextInput
-                            label="Claim Amount"
-                            marginBox={10}
-                            keyboardType="numeric"
-                            value={claimAmount}
-                            required={true}
-                            setValid={setIsClaimAmountValid}
-                            onChangeText={value => setClaimAmount(value)}
-                        />
+                        <View>
+                            <ValidatedTextInput
+                                label="Claim Amount"
+                                placeholder="$0"
+                                marginBox={10}
+                                keyboardType="numeric"
+                                value={claimAmount}
+                                required={true}
+                                setValid={setIsClaimAmountValid}
+                                onChangeText={value => setClaimAmount(value)}
+                            />
+                            {
+                                claimAmount.length > 0 && <Text
+                                    style={styles.aroundCurrencyValue}
+                                >
+                                    around {getUserCurrencySymbol(props.user.user)}
+                                    {amountToUserCurrency(
+                                        new BigNumber(claimAmount)
+                                            .multipliedBy(new BigNumber(10).pow(config.cUSDDecimals)),
+                                        props.user.user
+                                    )}
+                                </Text>
+                            }
+                        </View>
                         <Divider />
-                        <ValidatedTextInput
-                            label="Total claim amount per beneficiary"
-                            marginBox={10}
-                            keyboardType="numeric"
-                            value={maxClaim}
-                            required={true}
-                            setValid={setIsMaxClaimValid}
-                            onChangeText={value => setMaxClaim(value)}
-                        />
+                        <View>
+                            <ValidatedTextInput
+                                label="Total claim amount per beneficiary"
+                                placeholder="$0"
+                                marginBox={10}
+                                keyboardType="numeric"
+                                value={maxClaim}
+                                required={true}
+                                setValid={setIsMaxClaimValid}
+                                onChangeText={value => setMaxClaim(value)}
+                            />
+                            {
+                                maxClaim.length > 0 && <Text
+                                    style={styles.aroundCurrencyValue}
+                                >
+                                    around {getUserCurrencySymbol(props.user.user)}
+                                    {amountToUserCurrency(
+                                        new BigNumber(maxClaim)
+                                            .multipliedBy(new BigNumber(10).pow(config.cUSDDecimals)),
+                                        props.user.user
+                                    )}
+                                </Text>
+                            }
+                        </View>
                         <Divider />
                         <Paragraph style={styles.inputTextFieldLabel}>Frequency</Paragraph>
                         <View style={styles.pickerBorder}>
@@ -601,6 +631,19 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 180,
     },
+    aroundCurrencyValue: {
+        position: 'absolute',
+        marginHorizontal: 10,
+        marginVertical: 50,
+        right: 0,
+        fontFamily: "Gelion-Regular",
+        fontSize: 15,
+        fontWeight: "normal",
+        fontStyle: "normal",
+        lineHeight: 15,
+        letterSpacing: 0.25,
+        color: "#7e8da6"
+    }
 });
 
 export default connector(CreateCommunityScreen);

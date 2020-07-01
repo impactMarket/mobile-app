@@ -21,7 +21,10 @@ export function getUserCurrencySymbol(user: IUserInfo) {
 
 export function amountToUserCurrency(amount: BigNumber | string, user: IUserInfo) {
     let exchangeRate = user.exchangeRate;
-    return humanifyNumber(new BigNumber(amount).multipliedBy(exchangeRate));
+    const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
+    const result = humanifyNumber(bgn);
+    console.log('result', amount, exchangeRate, bgn, result);
+    return result;
 }
 
 export function claimFrequencyToText(frequency: BigNumber | string): string {
