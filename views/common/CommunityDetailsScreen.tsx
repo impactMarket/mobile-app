@@ -61,30 +61,47 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const [seeFullDescription, setSeeFullDescription] = useState(false);
 
 
-    const renderChart = () => {
-        if (community.ssi.values.length < 2) {
-            return <Text>N/A</Text>
-        } else {
+    const renderSSI = () => {
+        if (community.ssi.values.length > 1) {
             const lineChartData = {
                 labels: community.ssi.dates.map((date) => date.toString()),
                 datasets: [{ data: community.ssi.values }]
             };
-            return <LineChart
-                data={lineChartData}
-                width={200}
-                height={100}
-                fromZero={true}
-                chartConfig={lineChartConfig}
-                withInnerLines={false}
-                withOuterLines={false}
-                withHorizontalLabels={false}
-                withVerticalLabels={false}
-                withDots={false}
-                bezier={true}
-                style={{
-                    marginLeft: -70,
-                }}
-            />;
+            return <>
+                <Divider />
+                <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
+                    <LineChart
+                        data={lineChartData}
+                        width={200}
+                        height={100}
+                        fromZero={true}
+                        chartConfig={lineChartConfig}
+                        withInnerLines={false}
+                        withOuterLines={false}
+                        withHorizontalLabels={false}
+                        withVerticalLabels={false}
+                        withDots={false}
+                        bezier={true}
+                        style={{
+                            marginLeft: -70,
+                        }}
+                    />
+                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', marginRight: 0 }}>
+                        <Headline style={{
+                            fontFamily: "Gelion-Regular",
+                            fontSize: 36,
+                            fontStyle: "normal",
+                            lineHeight: 36,
+                            letterSpacing: 0,
+                            textAlign: 'right'
+                        }}>{community.ssi.values[community.ssi.values.length - 1]}%</Headline>
+                        <Paragraph>Self-Sustainability Index</Paragraph>
+                    </View>
+                </View>
+                <Paragraph style={styles.ssiExplained}>
+                    SSI indicates how self-sustainable a community is and how it progresses overtime, by measuring their beneficiaries claim urgency
+                </Paragraph>
+            </>
         }
     }
 
@@ -146,24 +163,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     <Paragraph style={{ color: '#b0b0b0' }}>Up to ${humanifyNumber(community.vars._maxClaim)} / beneficiary</Paragraph>
                                 </View>
                             </View>
-                            <Divider />
-                            <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
-                                {renderChart()}
-                                <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', marginRight: 0 }}>
-                                    <Headline style={{
-                                        fontFamily: "Gelion-Regular",
-                                        fontSize: 36,
-                                        fontStyle: "normal",
-                                        lineHeight: 36,
-                                        letterSpacing: 0,
-                                        textAlign: 'right'
-                                    }}>{community.ssi.values[community.ssi.values.length - 1]}%</Headline>
-                                    <Paragraph>Self-Sustainability Index</Paragraph>
-                                </View>
-                            </View>
-                            <Paragraph style={styles.ssiExplained}>
-                                SSI indicates how self-sustainable a community is and how it progresses overtime, by measuring their beneficiaries claim urgency
-                            </Paragraph>
+                            {renderSSI()}
                         </Card.Content>
                     </Card>
                     <CommuntyStatus community={community}>
