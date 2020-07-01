@@ -59,7 +59,7 @@ function CreateCommunityScreen(props: Props) {
     const [isDescriptionValid, setIsDescriptionValid] = useState(false);
     const [isCityValid, setIsCityValid] = useState(false);
     const [isCountryValid, setIsCountryValid] = useState(false);
-    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [isEmailValid, setIsEmailValid] = useState(true); // avoid initial error TODO: fix!
     const [isClaimAmountValid, setIsClaimAmountValid] = useState(false);
     const [isIncrementalIntervalValid, setIsIncrementalIntervalValid] = useState(false);
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(false);
@@ -316,7 +316,7 @@ function CreateCommunityScreen(props: Props) {
         isDescriptionValid &&
         isCityValid &&
         isCountryValid &&
-        isEmailValid &&
+        isEmailValid && email.length > 0 &&
         isClaimAmountValid &&
         isIncrementalIntervalValid &&
         isMaxClaimValid &&
@@ -457,10 +457,7 @@ function CreateCommunityScreen(props: Props) {
                                     required={true}
                                     keyboardType="email-address"
                                     isValid={isEmailValid}
-                                    whenEndEditing={(e) => {
-                                        setIsEmailValid(validateEmail(email));
-                                        console.log(email, validateEmail(email));
-                                    }}
+                                    whenEndEditing={(e) => setIsEmailValid(validateEmail(email))}
                                     onChangeText={value => setEmail(value)}
                                 />
                             </View>
