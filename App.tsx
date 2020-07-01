@@ -53,6 +53,7 @@ import RemovedScreen from './views/community/view/communitymanager/RemovedScreen
 import LoginScreen from './views/common/LoginScreen';
 import { getExchangeRate, getUser } from './services/api';
 import ClaimExplainedScreen from './views/community/view/beneficiary/ClaimExplainedScreen';
+import FAQScreen from './views/common/FAQScreen';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -325,6 +326,13 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                                 name="LoginScreen"
                                 component={LoginScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="FAQScreen"
+                                component={FAQScreen}
                             />
                         </Stack.Navigator>
                     </NavigationContainer>

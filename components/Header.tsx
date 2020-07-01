@@ -39,7 +39,7 @@ export default class Header extends Component<IHeaderProps, {}> {
                 {hasHelp && <Appbar.Action
                     icon="help"
                     style={styles.appbarIcon}
-                    onPress={() => console.log('help')}
+                    onPress={() => navigation.navigate('FAQScreen')}
                 />}
                 {hasQr && <Appbar.Action
                     icon="qrcode"
