@@ -159,7 +159,10 @@ export interface ICommunityInfo extends ICommunity {
         removed: ICommunityInfoBeneficiary[];
     };
     managers: string[];
-    ssi: number[];
+    ssi: {
+        dates: Date[],
+        values: number[],
+    };
     totalClaimed: string;
     totalRaised: string;
     vars: ICommunityVars;

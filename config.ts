@@ -26,7 +26,7 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0xf67A23C86C95bF392bCdDd2e81f2aa6eDb257208',
+        impactMarketContractAddress: process.env.EXPO_DEV_CONTRACT_ADDRESS!,
     },
     prod: {
         /**
@@ -42,7 +42,6 @@ const ENV = {
 }
 
 function getEnvVars() {
-    console.log('Constants.manifest.extra', Constants.manifest.extra, process.env.EXPO_FIGMENT_API_KEY);
     if (Constants.manifest.packagerOpts !== undefined) {
         if (Constants.manifest.packagerOpts.dev !== undefined) {
             return Constants.manifest.packagerOpts.dev ? { ...commonConfig, ...ENV.dev } : { ...commonConfig, ...ENV.prod };

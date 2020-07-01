@@ -62,15 +62,15 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
 
     const renderChart = () => {
-        if (community.ssi.length === 0) {
+        if (community.ssi.values.length < 2) {
             return <Text>N/A</Text>
         } else {
-            const dummyData = {
-                labels: Array(community.ssi.length).fill('d'),
-                datasets: [{ data: community.ssi }]
+            const lineChartData = {
+                labels: community.ssi.dates.map((date) => date.toString()),
+                datasets: [{ data: community.ssi.values }]
             };
             return <LineChart
-                data={dummyData}
+                data={lineChartData}
                 width={200}
                 height={100}
                 fromZero={true}
@@ -157,7 +157,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                         lineHeight: 36,
                                         letterSpacing: 0,
                                         textAlign: 'right'
-                                    }}>35%</Headline>
+                                    }}>{community.ssi.values[community.ssi.values.length - 1]}%</Headline>
                                     <Paragraph>Self-Sustainability Index</Paragraph>
                                 </View>
                             </View>
