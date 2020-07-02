@@ -97,7 +97,6 @@ function PayScreen(props: Props) {
                         <Button
                             mode="outlined"
                             disabled={true}
-                            onPress={() => console.log('oi')}
                         >
                             Pay
                         </Button>

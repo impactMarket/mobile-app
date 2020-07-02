@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     StyleSheet,
     Text,
@@ -28,8 +28,6 @@ import {
 } from '@react-navigation/native';
 import Header from '../../components/Header';
 import RecentTx, { IRecentTxRef } from './RecentTx';
-import { getUser, getExchangeRate } from '../../services/api';
-import BigNumber from 'bignumber.js';
 import { humanifyNumber, amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
 
 
@@ -44,31 +42,7 @@ type Props = PropsFromRedux
 function WalletScreen(props: Props) {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
-    const [currency, setCurrency] = useState('USD');
-    const [exchangeRate, setExchangeRate] = useState(1);
-    const [balance, setBalance] = useState(0);
     const recentPaymentsRef = React.createRef<IRecentTxRef>();
-
-    useEffect(() => {
-        const loadBalance = async () => {
-            const user = await getUser(props.user.celoInfo.address)
-            if (user !== undefined && user.currency !== undefined && user.currency !== null) {
-                // props.network.kit.web3.eth.getBalance(props.user.celoInfo.address).then(console.log)
-                // setCurrency(user.currency.toUpperCase());
-                const rate = await getExchangeRate(user.currency.toUpperCase());
-
-                const stableToken = await props.network.kit.contracts.getStableToken()
-
-                const [cUSDBalanceBig, cUSDDecimals] = await Promise.all(
-                    [stableToken.balanceOf(props.user.celoInfo.address), stableToken.decimals()]
-                )
-                const decimals = new BigNumber(10).pow(cUSDDecimals).toString();
-                let cUSDBalance = cUSDBalanceBig.div(decimals)
-                console.log(cUSDBalanceBig.toString(), rate, cUSDBalanceBig.multipliedBy(rate).div(decimals).toString());
-            }
-        };
-        loadBalance();
-    }, []);
 
     const onRefresh = () => {
         recentPaymentsRef.current?.updateRecentTx();

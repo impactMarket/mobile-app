@@ -49,7 +49,6 @@ export default class Header extends Component<IHeaderProps, {}> {
                 {hasShare && <Appbar.Action
                     icon="share"
                     style={styles.appbarIcon}
-                    onPress={() => console.log('share')}
                 />}
             </>
         } else {

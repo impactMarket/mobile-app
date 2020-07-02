@@ -32,7 +32,6 @@ function RemovedScreen(props: Props) {
     const navigation = useNavigation();
     const beneficiaries = props.route.params.beneficiaries as ICommunityInfoBeneficiary[];
 
-    console.log(beneficiaries);
     return (
         <>
             <Header

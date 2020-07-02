@@ -46,7 +46,6 @@ class CommunityManagers extends React.Component<Props, {}> {
                             mode="outlined"
                             style={{ width: '100%' }}
                             disabled={true}
-                            onPress={() => console.log('Pressed')}
                         >
                             Add Community Leader
                         </Button>

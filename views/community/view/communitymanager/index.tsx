@@ -107,7 +107,6 @@ function CommunityManagerView(props: Props) {
                             mode="outlined"
                             disabled={true}
                             style={{ width: '100%' }}
-                            onPress={() => console.log('Pressed')}
                         >
                             Full Dashboard
                     </Button>

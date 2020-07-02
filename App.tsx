@@ -123,7 +123,6 @@ export default class App extends React.Component<{}, IAppState> {
             const currentLoggedIn = store.getState().user.celoInfo.address.length > 0;
 
             if (previousLoggedIn !== currentLoggedIn) {
-                console.log('entra aqui!', new Date().getTime(), store.getState().user);
                 if (currentLoggedIn) {
                     this._authUser();
                 }

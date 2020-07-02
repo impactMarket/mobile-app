@@ -82,7 +82,7 @@ function LoginScreen(props: Props) {
             }))
         } catch (error) {
             // Error saving data
-            console.log(error);
+            // log(error);
             setConnecting(false);
             navigation.goBack();
         }

@@ -72,7 +72,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
         //                     element.contact,
         //                 );
         //             }
-        //             console.log(mappedContacts);
+        //             // log(mappedContacts);
         //         }
         //     }
         // }

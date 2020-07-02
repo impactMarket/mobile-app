@@ -27,7 +27,6 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
             setLoadingPayments(true);
             paymentsTx(props.user.celoInfo.address)
                 .then((payments) => {
-                    console.log(payments)
                     setActivities(payments.map((p) => ({
                         key: p.to.address,
                         timestamp: p.timestamp,

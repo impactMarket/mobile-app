@@ -231,11 +231,10 @@ function CreateCommunityScreen(props: Props) {
                 if (uploadResponse?.status === 200) {
                     uploadImagePath = uploadResponse.data.location;
                 }
-                // console.log('uploadResponse', uploadResponse);
             } catch (e) {
-                console.log({ uploadResponse });
-                console.log({ uploadImagePath });
-                console.log({ e });
+                // log({ uploadResponse });
+                // log({ uploadImagePath });
+                // log({ e });
                 Alert.alert(
                     'Failure',
                     'An error happened while placing the request to create a community!',
@@ -294,7 +293,6 @@ function CreateCommunityScreen(props: Props) {
 
         let loc = await Location.getCurrentPositionAsync();
         setGpsLocation(loc);
-        console.log('loc', loc);
     }
 
     const pickImage = async () => {
@@ -304,8 +302,6 @@ function CreateCommunityScreen(props: Props) {
             aspect: [1, 1],
             quality: 1,
         });
-
-        console.log(result);
 
         if (!result.cancelled) {
             setCoverImage(result.uri);

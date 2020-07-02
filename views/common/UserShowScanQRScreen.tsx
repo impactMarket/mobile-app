@@ -78,7 +78,6 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                         <Button
                             mode="outlined"
                             disabled={true}
-                            onPress={() => console.log('oi')}
                         >
                             Scan to Pay
                     </Button>
