@@ -14,6 +14,7 @@ export const SET_USER_IS_BENEFICIARY = 'SET_USER_IS_BENEFICIARY';
 export const SET_USER_IS_COMMUNITY_MANAGER = 'SET_USER_IS_COMMUNITY_MANAGER';
 export const RESET_USER_APP = 'RESET_USER_APP';
 export const RESET_NETWORK_APP = 'RESET_NETWORK_APP';
+export const SET_PUSH_NOTIFICATION_TOKEN = 'SET_PUSH_NOTIFICATION_TOKEN';
 
 // state
 export interface IUserCeloInfo {
@@ -51,9 +52,14 @@ export interface INetworkState {
     contracts: IContractsState,
 }
 
+export interface IAuthState {
+    pushNotificationsToken: string;
+}
+
 export interface IRootState {
     user: IUserState,
     network: INetworkState,
+    auth: IAuthState
 }
 
 // action
@@ -112,8 +118,14 @@ interface ResetNetworkAction {
     payload: any;
 }
 
+interface SetTokenPushNotificationsAction {
+    type: typeof SET_PUSH_NOTIFICATION_TOKEN
+    payload: string;
+}
+
 export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction
 export type NetworkActionTypes = CeloKitAction | SetImpactMarketContractAction | SetCommunityContractAction | SetCommunityAction | ResetNetworkAction
+export type AuthActionTypes = SetTokenPushNotificationsAction
 
 export interface ITransaction {
     tx: string;

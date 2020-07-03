@@ -10,6 +10,7 @@ import {
     StatusBar,
 } from 'react-native';
 import * as Font from 'expo-font';
+import * as Notifications from 'expo-notifications';
 
 import {
     AppLoading,
@@ -24,6 +25,7 @@ import {
     setUserCeloInfo,
     setCeloKit,
     setUserInfo,
+    setPushNotificationsToken,
 } from './helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
@@ -54,6 +56,7 @@ import LoginScreen from './views/common/LoginScreen';
 import { getExchangeRate, getUser } from './services/api';
 import ClaimExplainedScreen from './views/community/view/beneficiary/ClaimExplainedScreen';
 import FAQScreen from './views/common/FAQScreen';
+import { registerForPushNotifications } from './services/pushNotifications';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -94,6 +97,13 @@ const navigationTheme = {
 
 YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
 
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+});
 
 interface IAppState {
     isSplashReady: boolean;
@@ -102,6 +112,7 @@ interface IAppState {
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
     testnetWarning: boolean;
+    notification?: Notifications.Notification;
 }
 export default class App extends React.Component<{}, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
@@ -130,12 +141,24 @@ export default class App extends React.Component<{}, IAppState> {
             }
         });
         setTimeout(() => this.setState({ testnetWarning: false }), 10000);
+        registerForPushNotifications().then(token => {
+            if (token) {
+                store.dispatch(setPushNotificationsToken(token));
+            }
+        });
+        Notifications.addNotificationReceivedListener(notification => {
+            this.setState({ notification });
+        });
+        Notifications.addNotificationResponseReceivedListener(response => {
+            console.log(response);
+        });
     }
 
     componentWillUnmount = () => {
         try {
             this.unsubscribeStore();
         } catch (e) { }
+        Notifications.removeAllNotificationListeners();
     }
 
     openExploreCommunities = async () => {

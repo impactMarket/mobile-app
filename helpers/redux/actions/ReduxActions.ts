@@ -15,6 +15,8 @@ import {
     IUserInfo,
     ICommunityInfo,
     SET_COMMUNITY,
+    AuthActionTypes,
+    SET_PUSH_NOTIFICATION_TOKEN,
 } from "../../types";
 import { ContractKit } from "@celo/contractkit";
 
@@ -79,6 +81,13 @@ export function setCommunity(community: ICommunityInfo): NetworkActionTypes {
     return {
         type: SET_COMMUNITY,
         payload: community,
+    }
+}
+
+export function setPushNotificationsToken(token: string): AuthActionTypes {
+    return {
+        type: SET_PUSH_NOTIFICATION_TOKEN,
+        payload: token,
     }
 }
 

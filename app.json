@@ -28,6 +28,7 @@
             "supportsTablet": true
         },
         "android": {
+            "useNextNotificationsApi": true,
             "package": "com.impactmarket.mobile",
             "versionCode": 19
         },

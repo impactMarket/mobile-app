@@ -15,6 +15,9 @@ import {
     RESET_NETWORK_APP,
     SET_USER_INFO,
     SET_COMMUNITY,
+    IAuthState,
+    AuthActionTypes,
+    SET_PUSH_NOTIFICATION_TOKEN,
 } from '../../types';
 
 
@@ -35,7 +38,7 @@ const INITIAL_STATE_USER: IUserState = {
     },
 };
 
-const INITIAL_NETWORK_USER: INetworkState = {
+const INITIAL_STATE_NETWORK: INetworkState = {
     kit: undefined as any,
     // TODO: save community object from database with contract inside
     community: undefined as any,
@@ -43,6 +46,10 @@ const INITIAL_NETWORK_USER: INetworkState = {
         communityContract: undefined as any,
         impactMarketContract: undefined as any,
     }
+}
+
+const INITIAL_STATE_AUTH: IAuthState = {
+    pushNotificationsToken: '',
 }
 
 const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
@@ -85,7 +92,7 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
     }
 };
 
-const networkReducer = (state = INITIAL_NETWORK_USER, action: NetworkActionTypes) => {
+const networkReducer = (state = INITIAL_STATE_NETWORK, action: NetworkActionTypes) => {
     let contracts;
     switch (action.type) {
         case RESET_NETWORK_APP:
@@ -118,8 +125,18 @@ const networkReducer = (state = INITIAL_NETWORK_USER, action: NetworkActionTypes
     }
 };
 
+const authReducer = (state = INITIAL_STATE_AUTH, action: AuthActionTypes) => {
+    switch (action.type) {
+        case SET_PUSH_NOTIFICATION_TOKEN:
+            return { ...state, pushNotificationsToken: action.payload };
+        default:
+            return state
+    }
+};
+
 export default combineReducers({
     user: userReducer,
     network: networkReducer,
+    auth: authReducer,
 })
 
