@@ -5,22 +5,12 @@ import { Platform } from 'react-native';
 
 
 export async function sendPushNotification(expoPushToken: string, title: string, body: string) {
-    const message = {
-        to: expoPushToken,
-        sound: 'default',
-        title,
-        body,
-        data: { data: 'goes here' },
-    };
-
-    await fetch('https://exp.host/--/api/v2/push/send', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Accept-encoding': 'gzip, deflate',
-            'Content-Type': 'application/json',
+    return Notifications.scheduleNotificationAsync({
+        content: {
+            title,
+            body,
         },
-        body: JSON.stringify(message),
+        trigger: null,
     });
 }
 
