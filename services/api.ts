@@ -29,6 +29,26 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
     return response;
 }
 
+async function postRequest<T>(endpoint: string, requestBody: any): Promise<T | undefined> {
+    let response: T | undefined;
+    try {
+        // handle success
+        const requestHeaders = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            }
+        };
+        const result = await axios.post(endpoint, requestBody, requestHeaders);
+        response = result.data as T;
+    } catch (error) {
+        // handle error
+    } finally {
+        // always executed
+    }
+    return response;
+}
+
 
 async function getAllValidCommunities(): Promise<ICommunityInfo[]> {
     let response = [] as ICommunityInfo[];
@@ -370,6 +390,17 @@ async function uploadImageAsync(uri: string) {
     return response;
 }
 
+async function userAuth(
+    address: string,
+    signature: string,
+): Promise<string | undefined> {
+    const requestBody = {
+        address,
+        signature,
+    };
+    return postRequest<string>('/user/auth', requestBody);
+}
+
 export {
     getAllValidCommunities,
     requestCreateCommunity,
@@ -387,4 +418,5 @@ export {
     setUserCurrency,
     getExchangeRate,
     uploadImageAsync,
+    userAuth,
 }

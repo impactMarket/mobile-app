@@ -18,6 +18,7 @@ import {
     IAuthState,
     AuthActionTypes,
     SET_PUSH_NOTIFICATION_TOKEN,
+    SET_AUTH_TOKEN,
 } from '../../types';
 
 
@@ -50,6 +51,7 @@ const INITIAL_STATE_NETWORK: INetworkState = {
 
 const INITIAL_STATE_AUTH: IAuthState = {
     pushNotificationsToken: '',
+    authToken: ''
 }
 
 const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
@@ -129,6 +131,8 @@ const authReducer = (state = INITIAL_STATE_AUTH, action: AuthActionTypes) => {
     switch (action.type) {
         case SET_PUSH_NOTIFICATION_TOKEN:
             return { ...state, pushNotificationsToken: action.payload };
+        case SET_AUTH_TOKEN:
+            return { ...state, authToken: action.payload };
         default:
             return state
     }

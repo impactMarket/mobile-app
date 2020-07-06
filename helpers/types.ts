@@ -3,6 +3,7 @@ import { ContractKit } from "@celo/contractkit";
 export const STORAGE_USER_ADDRESS = '@celoinfo:address'
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
 export const STORAGE_USER_FIRST_TIME = '@status:firstime'
+export const STORAGE_USER_AUTH_TOKEN = '@user:authtoken'
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_USER_WALLET_BALANCE = 'SET_USER_WALLET_BALANCE';
@@ -15,6 +16,7 @@ export const SET_USER_IS_COMMUNITY_MANAGER = 'SET_USER_IS_COMMUNITY_MANAGER';
 export const RESET_USER_APP = 'RESET_USER_APP';
 export const RESET_NETWORK_APP = 'RESET_NETWORK_APP';
 export const SET_PUSH_NOTIFICATION_TOKEN = 'SET_PUSH_NOTIFICATION_TOKEN';
+export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 
 // state
 export interface IUserCeloInfo {
@@ -54,6 +56,7 @@ export interface INetworkState {
 
 export interface IAuthState {
     pushNotificationsToken: string;
+    authToken: string;
 }
 
 export interface IRootState {
@@ -123,9 +126,14 @@ interface SetTokenPushNotificationsAction {
     payload: string;
 }
 
+interface SetAuthTokenAction {
+    type: typeof SET_AUTH_TOKEN
+    payload: string;
+}
+
 export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction
 export type NetworkActionTypes = CeloKitAction | SetImpactMarketContractAction | SetCommunityContractAction | SetCommunityAction | ResetNetworkAction
-export type AuthActionTypes = SetTokenPushNotificationsAction
+export type AuthActionTypes = SetTokenPushNotificationsAction | SetAuthTokenAction
 
 export interface ITransaction {
     tx: string;

@@ -15,14 +15,17 @@ import {
     STORAGE_USER_PHONE_NUMBER,
     STORAGE_USER_FIRST_TIME,
     IRootState,
+    STORAGE_USER_AUTH_TOKEN,
 } from '../../helpers/types';
-import { setUserCeloInfo } from '../../helpers/redux/actions/ReduxActions';
+import { setUserCeloInfo, setPushNotificationsToken } from '../../helpers/redux/actions/ReduxActions';
 import { ConnectedProps, connect, useStore } from 'react-redux';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { loadContracts } from '../../helpers';
+import { userAuth } from '../../services/api';
+import { registerForPushNotifications } from '../../services/pushNotifications';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -60,8 +63,17 @@ function LoginScreen(props: Props) {
         })
 
         const dappkitResponse = await waitForAccountAuth(requestId)
+        const userAddress = ethers.utils.getAddress(dappkitResponse.address);
+        // TODO: sign a message and return the signature
+        const signature = 'asdka';
+        const authToken = await userAuth(userAddress, signature);
+        if (authToken === undefined) {
+            // TODO: present error for invalid signature
+            setConnecting(false);
+            navigation.goBack();
+            return;
+        }
         try {
-            const userAddress = ethers.utils.getAddress(dappkitResponse.address);
             const cUSDBalance = await getCurrentUserBalance(userAddress);
             //
             const unsubscribe = store.subscribe(() => {
@@ -71,6 +83,7 @@ function LoginScreen(props: Props) {
                     unsubscribe();
                 }
             })
+            await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, authToken);
             await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
             await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, dappkitResponse.phoneNumber);
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
@@ -80,6 +93,16 @@ function LoginScreen(props: Props) {
                 phoneNumber: dappkitResponse.phoneNumber,
                 balance: cUSDBalance,
             }))
+            // TODO: ask user for push notification access
+            const pushNotificationsToken = await registerForPushNotifications();
+            if (pushNotificationsToken === undefined) {
+                // TODO: present error for invalid pushNotificationsToken
+                setConnecting(false);
+                navigation.goBack();
+                return;
+            }
+            // TODO: set tokens
+            props.dispatch(setPushNotificationsToken(pushNotificationsToken));
         } catch (error) {
             // Error saving data
             // log(error);
