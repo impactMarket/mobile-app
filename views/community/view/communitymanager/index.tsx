@@ -6,8 +6,8 @@ import {
     ImageBackground,
     RefreshControl,
     Image,
-    Linking,
 } from 'react-native';
+import * as Linking from 'expo-linking'
 import {
     connect,
     ConnectedProps

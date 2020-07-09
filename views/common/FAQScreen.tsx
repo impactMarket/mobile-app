@@ -3,9 +3,9 @@ import {
     StyleSheet,
     ScrollView,
     View,
-    Linking,
     Image,
 } from 'react-native';
+import * as Linking from 'expo-linking';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
 import { List, Text } from 'react-native-paper';

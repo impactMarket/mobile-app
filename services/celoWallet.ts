@@ -1,6 +1,6 @@
 import { requestTxSig, FeeCurrency, waitForSignedTxs } from "@celo/dappkit";
 import { INetworkState } from "../helpers/types";
-import { Linking } from "expo";
+import * as Linking from 'expo-linking';
 import { toTxResult } from "@celo/contractkit/lib/utils/tx-result";
 
 
