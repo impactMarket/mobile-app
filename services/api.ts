@@ -1,9 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 import {
-    ICommunity,
     ICommunityInfo,
-    ITransaction,
     IRecentTxAPI,
     IPaymentsTxAPI,
     IUser
@@ -16,6 +14,9 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
     let response: T | undefined;
     try {
         const result = await axios.get(endpoint);
+        if (result.status >= 400) {
+            return undefined;
+        }
         if (result.data === "") {
             response = undefined;
         } else {
@@ -23,8 +24,7 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
         }
     } catch (error) {
         // handle error
-    } finally {
-        // always executed
+        console.log(error);
     }
     return response;
 }
@@ -40,6 +40,9 @@ async function postRequest<T>(endpoint: string, requestBody: any): Promise<T | u
             }
         };
         const result = await axios.post(endpoint, requestBody, requestHeaders);
+        if (result.status >= 400) {
+            return undefined;
+        }
         response = result.data as T;
     } catch (error) {
         // handle error
