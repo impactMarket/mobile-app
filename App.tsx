@@ -91,11 +91,15 @@ const navigationTheme = {
     colors: {
         ...NavigationDefaultTheme.colors,
         primary: iptcColors.softBlue,
+        background: '#ffffff',
     },
 };
 
 
-YellowBox.ignoreWarnings(['Warning: The provided value \'moz', 'Warning: The provided value \'ms-stream']);
+YellowBox.ignoreWarnings([
+    'The provided value \'moz-chunked-arraybuffer\' is not a valid \'responseType\'.',
+    'The provided value \'ms-stream\' is not a valid \'responseType\'.'
+]);
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({

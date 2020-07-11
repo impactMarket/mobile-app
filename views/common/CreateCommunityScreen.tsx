@@ -579,7 +579,8 @@ const styles = StyleSheet.create({
     inputTextFieldLabel: {
         marginHorizontal: 10,
         color: 'grey',
-        fontFamily: 'Gelion-Thin'
+        fontSize: 15,
+        fontFamily: 'Gelion-Regular'
     },
     inputTextField: {
         padding: 10,

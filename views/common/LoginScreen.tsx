@@ -4,12 +4,13 @@ import {
     Text,
     View,
     AsyncStorage,
+    Alert,
 } from 'react-native';
 import {
     requestAccountAddress,
     waitForAccountAuth,
 } from '@celo/dappkit'
-import { Linking } from 'expo'
+import * as Linking from 'expo-linking'
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
@@ -21,10 +22,10 @@ import { setUserCeloInfo, setPushNotificationsToken } from '../../helpers/redux/
 import { ConnectedProps, connect, useStore } from 'react-redux';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { Button } from 'react-native-paper';
+import { Button, Portal, Dialog, TextInput, Paragraph } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { loadContracts } from '../../helpers';
-import { userAuth } from '../../services/api';
+import { userAuth, setUserPushNotificationToken } from '../../services/api';
 import { registerForPushNotifications } from '../../services/pushNotifications';
 
 
@@ -40,6 +41,8 @@ function LoginScreen(props: Props) {
     const store = useStore();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
+    const [askingPattern, setAskingPattern] = useState(false);
+    const [pin, setPin] = useState<string>('');
 
     const getCurrentUserBalance = async (address: string) => {
         const stableToken = await props.network.kit.contracts.getStableToken()
@@ -61,16 +64,17 @@ function LoginScreen(props: Props) {
             dappName,
             callback,
         })
-
+        
         const dappkitResponse = await waitForAccountAuth(requestId)
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
-        // TODO: sign a message and return the signature
-        const signature = 'asdka';
-        const authToken = await userAuth(userAddress, signature);
+        const authToken = await userAuth(userAddress, pin);
         if (authToken === undefined) {
-            // TODO: present error for invalid signature
+            Alert.alert('Failure',
+                'An error happened, please, try again.',
+                [{ text: 'OK' }], { cancelable: false }
+            );
             setConnecting(false);
-            navigation.goBack();
+            setPin('');
             return;
         }
         try {
@@ -93,21 +97,25 @@ function LoginScreen(props: Props) {
                 phoneNumber: dappkitResponse.phoneNumber,
                 balance: cUSDBalance,
             }))
-            // TODO: ask user for push notification access
             const pushNotificationsToken = await registerForPushNotifications();
             if (pushNotificationsToken === undefined) {
-                // TODO: present error for invalid pushNotificationsToken
+                Alert.alert('Failure',
+                    'An error happened, please, try again.',
+                    [{ text: 'OK' }], { cancelable: false }
+                );
                 setConnecting(false);
-                navigation.goBack();
+                setPin('');
                 return;
             }
-            // TODO: set tokens
+            setUserPushNotificationToken(userAddress, pushNotificationsToken);
             props.dispatch(setPushNotificationsToken(pushNotificationsToken));
         } catch (error) {
-            // Error saving data
-            // log(error);
+            Alert.alert('Failure',
+                'An error happened, please, try again.',
+                [{ text: 'OK' }], { cancelable: false }
+            );
             setConnecting(false);
-            navigation.goBack();
+            setPin('');
         }
     }
 
@@ -152,7 +160,7 @@ function LoginScreen(props: Props) {
             <Text style={styles.stepText}>Final Step</Text>
             <Button
                 mode="contained"
-                onPress={() => login()}
+                onPress={() => setAskingPattern(true)}
                 disabled={connecting}
                 loading={connecting}
                 style={{ width: '80%' }}
@@ -167,6 +175,38 @@ function LoginScreen(props: Props) {
             >
                 Not now
             </Button>
+            <Portal>
+                <Dialog
+                    visible={askingPattern}
+                    dismissable={false}
+                >
+                    <Dialog.Content>
+                        <Paragraph>Before moving any further, please, insert your PIN</Paragraph>
+                        <TextInput
+                            maxLength={4}
+                            label="PIN"
+                            value={pin}
+                            keyboardType="numeric"
+                            secureTextEntry={true}
+                            textContentType="password"
+                            onChangeText={text => setPin(text)}
+                        />
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button
+                            mode="contained"
+                            disabled={pin.length < 4}
+                            style={{ marginRight: 10 }}
+                            onPress={() => {
+                                setAskingPattern(false);
+                                login();
+                            }}
+                        >
+                            Continue
+                        </Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
         </View>
     );
 }
