@@ -1,7 +1,7 @@
 <div align="center">
-    <img src="preview.jpeg" width="250">
+    <img src="preview.jpeg" width="250"><br/><br/>
+    <a href="https://expo.io/@impactmarket/"><img src="https://img.shields.io/badge/Runs%20with%20Expo-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000"></a>
 </div>
-
 
 > A decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries in need or living in extreme poverty.
 
@@ -29,10 +29,10 @@ If you have an android, you can try our demo [here](https://expo.io/@impactmarke
 - [x] Explore and create new communities
 - [x] Community manager page manager
 - [x] Admin webui (to use until end of phase 2)
-- [ ] Transaction history and pay option (WIP)
-- [ ] Create UI according to design planing (WIP)
-- [ ] Do some heavy testing (simulate real world)
+- [x] Transaction history and pay option
+- [x] Create UI according to design planing
 - [ ] Multi-language
+- [ ] First Pilot
 - [ ] ...
 
 ## License
