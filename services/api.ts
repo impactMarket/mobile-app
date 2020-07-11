@@ -4,8 +4,10 @@ import {
     ICommunityInfo,
     IRecentTxAPI,
     IPaymentsTxAPI,
-    IUser
+    IUser,
+    STORAGE_USER_AUTH_TOKEN
 } from '../helpers/types';
+import { AsyncStorage } from 'react-native';
 
 
 axios.defaults.baseURL = config.baseApiUrl;
@@ -29,25 +31,26 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
     return response;
 }
 
-async function postRequest<T>(endpoint: string, requestBody: any): Promise<T | undefined> {
+async function postRequest<T>(endpoint: string, requestBody: any, options?: any): Promise<T | undefined> {
     let response: T | undefined;
     try {
         // handle success
-        const requestHeaders = {
+        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+        const requestOptions = {
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-            }
+            },
+            ...options
         };
-        const result = await axios.post(endpoint, requestBody, requestHeaders);
+        const result = await axios.post(endpoint, requestBody, requestOptions);
         if (result.status >= 400) {
             return undefined;
         }
         response = result.data as T;
     } catch (error) {
         // handle error
-    } finally {
-        // always executed
     }
     return response;
 }
@@ -82,35 +85,19 @@ async function requestCreateCommunity(
     coverImage: string,
     txCreationObj: any,
 ): Promise<boolean> {
-    let response = 500;
-    try {
-        // handle success
-        const requestBody = {
-            requestByAddress,
-            name,
-            description,
-            city,
-            country,
-            gps,
-            email,
-            visibility,
-            coverImage,
-            txCreationObj,
-        };
-        const requestHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        };
-        const result = await axios.post('/community/request', requestBody, requestHeaders);
-        response = result.status;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response === 200 ? true : false;
+    const result = await postRequest<boolean>('/community/request', {
+        requestByAddress,
+        name,
+        description,
+        city,
+        country,
+        gps,
+        email,
+        visibility,
+        coverImage,
+        txCreationObj,
+    });
+    return result ? true : false;
 }
 
 async function editCommunity(
@@ -127,61 +114,18 @@ async function editCommunity(
     visibility: string,
     coverImage: string,
 ): Promise<boolean> {
-    let response = 500;
-    try {
-        // handle success
-        const requestBody = {
-            publicId,
-            name,
-            description,
-            city,
-            country,
-            gps,
-            email,
-            visibility,
-            coverImage,
-        };
-        const requestHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        };
-        const result = await axios.post('/community/edit', requestBody, requestHeaders);
-        response = result.status;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response === 200 ? true : false;
-}
-
-async function requestJoinAsBeneficiary(
-    walletAddress: string,
-    communityPublicId: string,
-): Promise<boolean> {
-    let response = 500;
-    try {
-        // handle success
-        const requestBody = {
-            walletAddress,
-            communityPublicId
-        };
-        const requestHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        };
-        const result = await axios.post('/beneficiary/request', requestBody, requestHeaders);
-        response = result.status;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response === 200 ? true : false;
+    const result = await postRequest('/community/edit', {
+        publicId,
+        name,
+        description,
+        city,
+        country,
+        gps,
+        email,
+        visibility,
+        coverImage,
+    });
+    return result ? true : false;
 }
 
 async function findComunityToBeneficicary(
@@ -198,33 +142,6 @@ async function findComunityToManager(
     return getRequest<ICommunityInfo>(
         `/transactions/managerin/${managerAddress}`
     );
-}
-
-async function acceptBeneficiaryRequest(
-    acceptanceTransaction: string,
-    communityPublicId: string,
-): Promise<boolean> {
-    let response = 500;
-    try {
-        // handle success
-        const requestBody = {
-            acceptanceTransaction,
-            communityPublicId
-        };
-        const requestHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        };
-        const result = await axios.post('/beneficiary/accept', requestBody, requestHeaders);
-        response = result.status;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response === 200 ? true : false;
 }
 
 async function getCommunityByContractAddress(
@@ -299,54 +216,22 @@ async function setUsername(
     address: string,
     username: string,
 ): Promise<boolean> {
-    let response = 500;
-    try {
-        // handle success
-        const requestBody = {
-            address,
-            username
-        };
-        const requestHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        };
-        const result = await axios.post('/user/username', requestBody, requestHeaders);
-        response = result.status;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response === 200 ? true : false;
+    const result = await postRequest('/user/username', {
+        address,
+        username
+    });
+    return result ? true : false;
 }
 
 async function setUserCurrency(
     address: string,
     currency: string,
 ): Promise<boolean> {
-    let response = 500;
-    try {
-        // handle success
-        const requestBody = {
-            address,
-            currency
-        };
-        const requestHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            }
-        };
-        const result = await axios.post('/user/currency', requestBody, requestHeaders);
-        response = result.status;
-    } catch (error) {
-        // handle error
-    } finally {
-        // always executed
-    }
-    return response === 200 ? true : false;
+    const result = await postRequest('/user/currency', {
+        address,
+        currency
+    });
+    return result ? true : false;
 }
 
 async function getExchangeRate(
@@ -377,8 +262,10 @@ async function uploadImageAsync(uri: string) {
             name: `photo.${fileType}`,
             type: `image/${fileType}`,
         } as any);
+        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
         const requestHeaders = {
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json',
                 'Content-Type': 'multipart/form-data',
             }
@@ -395,23 +282,33 @@ async function uploadImageAsync(uri: string) {
 
 async function userAuth(
     address: string,
-    signature: string,
+    pin: string,
 ): Promise<string | undefined> {
     const requestBody = {
         address,
-        signature,
+        pin,
     };
     return postRequest<string>('/user/auth', requestBody);
+}
+
+async function setUserPushNotificationToken(
+    address: string,
+    token: string,
+): Promise<boolean> {
+    const requestBody = {
+        address,
+        token,
+    };
+    const result = await postRequest<boolean>('/user/push-notifications', requestBody);
+    return result ? true : false;
 }
 
 export {
     getAllValidCommunities,
     requestCreateCommunity,
     editCommunity,
-    requestJoinAsBeneficiary,
     findComunityToBeneficicary,
     findComunityToManager,
-    acceptBeneficiaryRequest,
     getCommunityByContractAddress,
     getCommunityNamesFromAddresses,
     tokenTx,
@@ -422,4 +319,5 @@ export {
     getExchangeRate,
     uploadImageAsync,
     userAuth,
+    setUserPushNotificationToken,
 }
