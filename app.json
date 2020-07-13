@@ -7,7 +7,7 @@
             "ios",
             "android"
         ],
-        "version": "0.0.1-alpha.19",
+        "version": "0.0.1-alpha.20",
         "orientation": "portrait",
         "icon": "./assets/logo.png",
         "scheme": "impactmarketmobile",
@@ -31,14 +31,14 @@
         "ios": {
             "googleServicesFile": "./assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
-            "buildNumber": "0.0.1a19",
+            "buildNumber": "0.0.1a20",
             "supportsTablet": true
         },
         "android": {
             "useNextNotificationsApi": true,
             "googleServicesFile": "./assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
-            "versionCode": 19
+            "versionCode": 20
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
         "githubUrl": "https://github.com/impactMarket/mobile-app"
