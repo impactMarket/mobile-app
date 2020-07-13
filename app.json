@@ -29,12 +29,14 @@
             "androidCollapsedTitle": "#{unread_notifications} new interactions"
         },
         "ios": {
+            "googleServicesFile": "./assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
             "buildNumber": "0.0.1a19",
             "supportsTablet": true
         },
         "android": {
             "useNextNotificationsApi": true,
+            "googleServicesFile": "./assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
             "versionCode": 19
         },

@@ -6,7 +6,7 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/"
+        "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*"
     },
     "dependencies": {
         "@celo/contractkit": "0.2.14",
@@ -28,6 +28,8 @@
         "expo-constants": "~9.1.1",
         "expo-contacts": "~8.2.1",
         "expo-file-system": "~9.0.1",
+        "expo-firebase-analytics": "~2.4.1",
+        "expo-firebase-core": "~1.1.1",
         "expo-font": "~8.2.1",
         "expo-image-picker": "~8.3.0",
         "expo-linear-gradient": "~8.2.1",

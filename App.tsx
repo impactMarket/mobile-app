@@ -53,10 +53,11 @@ import EditProfile from './views/wallet/EditProfile';
 import AddedScreen from './views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './views/community/view/communitymanager/RemovedScreen';
 import LoginScreen from './views/common/LoginScreen';
-import { getExchangeRate, getUser } from './services/api';
+import { getExchangeRate, getUser, setUserPushNotificationToken } from './services/api';
 import ClaimExplainedScreen from './views/community/view/beneficiary/ClaimExplainedScreen';
 import FAQScreen from './views/common/FAQScreen';
 import { registerForPushNotifications } from './services/pushNotifications';
+import * as Analytics from 'expo-firebase-analytics';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -140,22 +141,32 @@ export default class App extends React.Component<{}, IAppState> {
             if (previousLoggedIn !== currentLoggedIn) {
                 if (currentLoggedIn) {
                     this._authUser();
+                    registerForPushNotifications().then(token => {
+                        if (token) {
+                            setUserPushNotificationToken(store.getState().user.celoInfo.address, token);
+                            store.dispatch(setPushNotificationsToken(token));
+                        }
+                    });
+                    Notifications.addNotificationReceivedListener(notification => {
+                        this.setState({ notification });
+                    });
+                    Notifications.addNotificationResponseReceivedListener(response => {
+                        console.log(response);
+                    });
+                    Analytics.setUserId('johndoe');
+                    Analytics.setUserProperties({
+                        hero_class: 'B',
+                    });
+                    Analytics.logEvent('share', {
+                        contentType: 'text',
+                        itemId: 'Expo rocks!',
+                        method: 'facebook'
+                    });
                 }
                 this.setState({ loggedIn: currentLoggedIn });
             }
         });
         setTimeout(() => this.setState({ testnetWarning: false }), 10000);
-        registerForPushNotifications().then(token => {
-            if (token) {
-                store.dispatch(setPushNotificationsToken(token));
-            }
-        });
-        Notifications.addNotificationReceivedListener(notification => {
-            this.setState({ notification });
-        });
-        Notifications.addNotificationResponseReceivedListener(response => {
-            console.log(response);
-        });
     }
 
     componentWillUnmount = () => {
