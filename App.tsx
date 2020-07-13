@@ -58,6 +58,7 @@ import ClaimExplainedScreen from './views/community/view/beneficiary/ClaimExplai
 import FAQScreen from './views/common/FAQScreen';
 import { registerForPushNotifications } from './services/pushNotifications';
 import * as Analytics from 'expo-firebase-analytics';
+import * as FirebaseCore from 'expo-firebase-core';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -134,6 +135,7 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     componentDidMount = () => {
+        console.log(FirebaseCore.DEFAULT_APP_OPTIONS);
         this.unsubscribeStore = store.subscribe(() => {
             const previousLoggedIn = this.state.loggedIn;
             const currentLoggedIn = store.getState().user.celoInfo.address.length > 0;
@@ -152,15 +154,6 @@ export default class App extends React.Component<{}, IAppState> {
                     });
                     Notifications.addNotificationResponseReceivedListener(response => {
                         console.log(response);
-                    });
-                    Analytics.setUserId('johndoe');
-                    Analytics.setUserProperties({
-                        hero_class: 'B',
-                    });
-                    Analytics.logEvent('share', {
-                        contentType: 'text',
-                        itemId: 'Expo rocks!',
-                        method: 'facebook'
                     });
                 }
                 this.setState({ loggedIn: currentLoggedIn });
@@ -379,6 +372,15 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     _getCurrentUserBalance = async (address: string) => {
+        await Analytics.setUserId('johndoe');
+        await Analytics.setUserProperties({
+            hero_class: 'B',
+        });
+        await Analytics.logEvent('ButtonTapped', {
+            name: 'settings',
+            screen: 'profile',
+            purpose: 'Opens the internal settings',
+        });
         const stableToken = await kit.contracts.getStableToken()
         const cUSDBalanceBig = await stableToken.balanceOf(address)
         return new BigNumber(cUSDBalanceBig.toString());

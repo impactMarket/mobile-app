@@ -32,7 +32,7 @@ type Props = PropsFromRedux & IBeneficiariesProps
 function Beneficiaries(props: Props) {
     const navigation = useNavigation();
     return (
-        <Card>
+        <Card elevation={8}>
             <Card.Content>
                 <Headline
                     style={{

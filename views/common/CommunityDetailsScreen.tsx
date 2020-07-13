@@ -143,7 +143,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     />
                 </ImageBackground>
                 <View style={styles.container}>
-                    <Card>
+                    <Card elevation={8}>
                         <Card.Content>
                             <Paragraph>{description}</Paragraph>
                             <Button
@@ -155,7 +155,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             </Button>
                         </Card.Content>
                     </Card>
-                    <Card style={{ marginVertical: 25 }}>
+                    <Card elevation={8} style={{ marginVertical: 25 }}>
                         <Card.Content>
                             <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                                 <View>

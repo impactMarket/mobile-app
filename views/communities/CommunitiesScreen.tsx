@@ -83,7 +83,7 @@ function CommunitiesScreen(props: Props) {
             >
                 {communities.map((community) => <Card
                     key={community.name}
-                    elevation={1}
+                    elevation={8}
                     style={styles.card}
                     onPress={() => navigation.navigate('CommunityDetailsScreen', { community: community, user: props.user })}
                 >

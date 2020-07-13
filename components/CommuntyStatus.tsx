@@ -52,7 +52,7 @@ class CommuntyStatus extends Component<Props, {}> {
         );
 
         return (
-            <Card style={{ marginVertical: 15 }}>
+            <Card elevation={8} style={{ marginVertical: 15 }}>
                 <Card.Content>
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5, justifyContent: 'center' }}>
                         <View style={{ width: '50%', alignItems: 'center' }}>

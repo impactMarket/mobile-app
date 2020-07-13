@@ -15,6 +15,7 @@ import {
     Paragraph,
     Portal,
     TextInput,
+    Text,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from '../../../services';
@@ -141,10 +142,8 @@ class Donate extends Component<Props, IDonateState> {
                     >
                         <Dialog.Title>Donate</Dialog.Title>
                         <Dialog.Content>
-                            <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia eros ut tortor rhoncus fringilla.
-                            </Paragraph>
-                            <Paragraph style={{ marginTop: 20 }}>
-                                Donating to {community.name}
+                            <Paragraph style={{ marginBottom: 20 }}>
+                                Donating to <Text style={{ fontWeight: 'bold' }}>{community.name}</Text>
                             </Paragraph>
                             <Button
                                 mode="contained"
@@ -171,8 +170,6 @@ class Donate extends Component<Props, IDonateState> {
                     >
                         <Dialog.Title>Donate</Dialog.Title>
                         <Dialog.Content>
-                            <Paragraph>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla lacinia eros ut tortor rhoncus fringilla.
-                            </Paragraph>
                             <TextInput
                                 label='Amount ($)'
                                 mode="outlined"
