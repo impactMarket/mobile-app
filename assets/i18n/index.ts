@@ -46,6 +46,7 @@ i18n.translations = {
         allowCamera: 'Allow camera',
         moreAboutYourCommunity: 'More about your community',
         howClaimWorks: 'How claim works',
+        upToPerBeneficiary: 'Up to ${{amount}} / beneficiary',
     },
     pt: {
         testnetWarning: 'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
@@ -90,6 +91,7 @@ i18n.translations = {
         allowCamera: 'Permitir camera',
         moreAboutYourCommunity: 'Mais info acerca da sua comunidade',
         howClaimWorks: 'Como funcionam os pedidos',
+        upToPerBeneficiary: 'Até ${{amount}} / beneficiário',
     },
 };
 // Set the locale once at the beginning of your app.

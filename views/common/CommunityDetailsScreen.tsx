@@ -33,6 +33,7 @@ import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
 import config from '../../config';
+import i18n from '../../assets/i18n';
 
 
 const lineChartConfig: ChartConfig = {
@@ -160,7 +161,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
                                 <View>
                                     <Headline>${humanifyNumber(community.vars._claimAmount)} / {claimFrequencyToText(community.vars._baseInterval)}</Headline>
-                                    <Paragraph style={{ color: '#b0b0b0' }}>Up to ${humanifyNumber(community.vars._maxClaim)} / beneficiary</Paragraph>
+                                    <Paragraph style={{ color: '#b0b0b0' }}>{i18n.t('upToPerBeneficiary', { amount: humanifyNumber(community.vars._maxClaim) })}</Paragraph>
                                 </View>
                             </View>
                             {renderSSI()}

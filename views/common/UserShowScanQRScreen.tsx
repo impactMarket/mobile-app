@@ -56,7 +56,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
             <ScrollView style={styles.contentView}>
                 <Headline>Scan to pay</Headline>
                 <Subheading>Show QR to be scanned</Subheading>
-                <Card style={styles.card}>
+                <Card elevation={8} style={styles.card}>
                     <Card.Content>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
                             <View>

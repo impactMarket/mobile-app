@@ -351,7 +351,7 @@ function CreateCommunityScreen(props: Props) {
             </Header>
             <ScrollView>
                 <View style={styles.container}>
-                    <Card>
+                    <Card elevation={8}>
                         <Card.Content style={{ margin: -16 }}>
                             <Headline
                                 style={{

@@ -31,7 +31,7 @@ class CommunityManagers extends React.Component<Props, {}> {
 
         return (
             <>
-                <Card style={{ marginVertical: 15 }}>
+                <Card elevation={8} style={{ marginVertical: 15 }}>
                     <Card.Title
                         title=""
                         style={{ backgroundColor: '#f0f0f0' }}

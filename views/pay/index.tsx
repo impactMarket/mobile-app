@@ -67,7 +67,7 @@ function PayScreen(props: Props) {
                     />
                 }
             >
-                <Card style={styles.card}>
+                <Card elevation={8} style={styles.card}>
                     <Card.Content>
                         <TextInput
                             style={{ padding: 10, textAlign: 'center', fontSize: 35, fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}
