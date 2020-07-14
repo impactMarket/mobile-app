@@ -38,6 +38,7 @@ import {
     configureFonts,
     Text,
     Button,
+    IconButton,
 } from 'react-native-paper';
 import config from './config';
 import BigNumber from 'bignumber.js';
@@ -159,7 +160,8 @@ export default class App extends React.Component<{}, IAppState> {
                 this.setState({ loggedIn: currentLoggedIn });
             }
         });
-        setTimeout(() => this.setState({ testnetWarning: false }), 10000);
+        this.setState({ testnetWarning: true });
+        setTimeout(() => this.setState({ testnetWarning: false }), 5000);
     }
 
     componentWillUnmount = () => {
@@ -281,16 +283,25 @@ export default class App extends React.Component<{}, IAppState> {
                         style={{
                             backgroundColor: '#45c7ff',
                             width: '100%',
-                            paddingTop: 40,
+                            paddingTop: 30,
                             paddingBottom: 10,
                             paddingHorizontal: 20,
                             position: 'absolute',
                             zIndex: testnetWarning ? 1 : -1,
+                            flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center'
                         }}
                     >
-                        <Text style={{ textAlign: 'center' }}>
+                        <Text style={{ textAlign: 'center', width: '80%' }}>
                             A friendly reminder you're using the Alfajores network build - the balances are not real.
                         </Text>
+                        <IconButton
+                            style={{ width: '10%' }}
+                            icon="close-circle-outline"
+                            size={20}
+                            onPress={() => this.setState({ testnetWarning: false })}
+                        />
                     </View>
                     <NavigationContainer theme={navigationTheme}>
                         <Stack.Navigator>
@@ -451,7 +462,6 @@ export default class App extends React.Component<{}, IAppState> {
             this.setState({
                 firstTimeUser: firstTime === null,
                 loggedIn: (address !== null && phoneNumber !== null),
-                testnetWarning: (firstTime !== undefined || firstTime !== 'true')
             });
         } catch (error) {
             // Error retrieving data
