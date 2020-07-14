@@ -186,7 +186,7 @@ function CommunityManagerView(props: Props) {
     return (
         <>
             <Header
-                title="Manager"
+                title={i18n.t('manage')}
                 navigation={navigation}
             >
                 {community.status === 'valid' && <IconButton

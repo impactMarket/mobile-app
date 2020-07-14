@@ -19,7 +19,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
-import { humanifyNumber, amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
+import {
+    amountToUserCurrency,
+    getUserCurrencySymbol
+} from '../../helpers';
+import i18n from '../../assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -48,7 +52,7 @@ function PayScreen(props: Props) {
     return (
         <>
             <Header
-                title="Pay"
+                title={i18n.t('pay')}
                 hasHelp={true}
                 hasQr={true}
                 navigation={navigation}
@@ -83,14 +87,14 @@ function PayScreen(props: Props) {
                         <Divider />
                         <TextInput
                             style={{ padding: 10 }}
-                            placeholder='Name, address or phone number'
+                            placeholder={i18n.t('nameAddressPhone')}
                             value={paymentTo}
                             onChangeText={setPaymentTo}
                         />
                         <Divider />
                         <TextInput
                             style={{ padding: 10 }}
-                            placeholder='Note (optional)'
+                            placeholder={i18n.t('noteOptional')}
                             value={paymentNote}
                             onChangeText={setPaymentNote}
                         />
@@ -98,7 +102,7 @@ function PayScreen(props: Props) {
                             mode="outlined"
                             disabled={true}
                         >
-                            Pay
+                            {i18n.t('pay')}
                         </Button>
                     </Card.Content>
                 </Card>
@@ -115,9 +119,6 @@ const styles = StyleSheet.create({
     card: {
         marginHorizontal: 20,
         marginVertical: 10,
-    },
-    appbar: {
-        backgroundColor: 'transparent',
     },
 });
 

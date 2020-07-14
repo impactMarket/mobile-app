@@ -8,6 +8,7 @@ import {
 } from 'react-native-paper';
 import { tokenTx } from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
+import i18n from '../../assets/i18n';
 
 
 interface IRecentTxProps {
@@ -103,7 +104,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
                     letterSpacing: 0.7,
                 }}
             >
-                RECENT TRANSACTIONS
+                {i18n.t('recentTransactions').toUpperCase()}
             </Headline>
             <ActivityIndicator animating={loadingTxs} />
             {activities.map((activity) => <ListActionItem

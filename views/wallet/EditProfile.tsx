@@ -32,6 +32,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getCountryFromPhoneNumber } from '../../helpers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
 import { getUser, setUsername, setUserCurrency } from '../../services/api';
+import i18n from '../../assets/i18n';
 
 
 interface IEditProfileProps {
@@ -66,7 +67,7 @@ function EditProfile(props: Props) {
     return (
         <>
             <Header
-                title="Edit Profile"
+                title={i18n.t('editProfile')}
                 hasBack={true}
                 navigation={navigation}
             />
@@ -87,7 +88,7 @@ function EditProfile(props: Props) {
                         Change Photo
                     </Button>
                     <ValidatedTextInput
-                        label="Name"
+                        label={i18n.t('name')}
                         value={name}
                         maxLength={32}
                         required={true}
@@ -97,7 +98,7 @@ function EditProfile(props: Props) {
                         }}
                         onChangeText={value => setName(value)}
                     />
-                    <Paragraph style={styles.inputTextFieldLabel}>Currency</Paragraph>
+                    <Paragraph style={styles.inputTextFieldLabel}>{i18n.t('currency')}</Paragraph>
                     <View style={styles.pickerBorder}>
                         <Picker
                             selectedValue={currency}
@@ -113,13 +114,13 @@ function EditProfile(props: Props) {
                         </Picker>
                     </View>
                     <TextInput
-                        label="Country"
+                        label={i18n.t('country')}
                         style={{ marginVertical: 3 }}
                         value={getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}
                         disabled={true}
                     />
                     <TextInput
-                        label="Phone Number"
+                        label={i18n.t('phoneNumber')}
                         style={{ marginVertical: 3 }}
                         value={props.user.celoInfo.phoneNumber}
                         disabled={true}
@@ -129,7 +130,7 @@ function EditProfile(props: Props) {
                         style={{ marginVertical: 20 }}
                         onPress={handleLogout}
                     >
-                        Logout
+                        {i18n.t('logout')}
                     </Button>
                 </View>
             </ScrollView>

@@ -15,6 +15,7 @@ import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { celoWalletRequest } from '../../../../services';
 import { amountToUserCurrency, getUserCurrencySymbol } from '../../../../helpers';
+import i18n from '../../../../assets/i18n';
 
 
 interface IAddedScreenProps {
@@ -51,9 +52,9 @@ function AddedScreen(props: Props) {
             'removebeneficiary',
             network,
         ).then(() => {
-            //
+            // TODO:
         }).catch((e) => {
-            //
+            // TODO:
         }).finally(() => {
             setRemoving(false);
         })
@@ -62,7 +63,7 @@ function AddedScreen(props: Props) {
     return (
         <>
             <Header
-                title="Added"
+                title={i18n.t('added')}
                 hasHelp={true}
                 hasBack={true}
                 navigation={navigation}
@@ -84,8 +85,8 @@ function AddedScreen(props: Props) {
                         style={{ marginVertical: 5 }}
                         onPress={() => handleRemoveBeneficiary(beneficiary.address)}
                     >
-                        Remove
-                </Button>
+                        {i18n.t('remove')}
+                    </Button>
                 </ListActionItem>)}
             </ScrollView>
         </>

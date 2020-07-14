@@ -151,7 +151,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
         if (!useCamera) {
             inputMethod = <>
                 <ValidatedTextInput
-                    label="Beneficiary Address"
+                    label={i18n.t('beneficiaryAddress')}
                     value={newBeneficiaryAddress}
                     required={true}
                     onChangeText={value => this.setState({ newBeneficiaryAddress: value })}
@@ -159,7 +159,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             </>;
         }
         else if (hasPermission === null || hasPermission === false) {
-            inputMethod = <Button mode="contained" onPress={this.handleAskCameraPermission}>Allow camera</Button>;
+            inputMethod = <Button mode="contained" onPress={this.handleAskCameraPermission}>{i18n.t('allowCamera')}</Button>;
         } else {
             inputMethod = <>
                 <View
@@ -174,9 +174,9 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                         style={StyleSheet.absoluteFillObject}
                     />
 
-                    {scanned && <Button onPress={() => this.setState({ scanned: false })}>Tap to Scan Again</Button>}
+                    {scanned && <Button onPress={() => this.setState({ scanned: false })}>{i18n.t('tapToScanAgain')}</Button>}
                 </View>
-                <Paragraph>Current Address:</Paragraph>
+                <Paragraph>{i18n.t('currentAddress')}:</Paragraph>
                 {
                     newBeneficiaryAddress.length > 0 &&
                     <Paragraph style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>
@@ -212,7 +212,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                                 style={{ marginHorizontal: 10 }}
                                 onPress={() => this.setState({ newBeneficiaryAddress: '', useCamera: !useCamera })}
                             >
-                                Use {useCamera ? 'text' : 'camera'}
+                                {useCamera ? i18n.t('useText') : i18n.t('useCamera')}
                             </Button>
                             <Button
                                 mode="contained"

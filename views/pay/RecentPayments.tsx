@@ -9,7 +9,8 @@ import {
 import { paymentsTx } from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 import { amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
-import { IUserState } from '../../helpers/types';
+import { IUserState, IPaymentsTxAPI } from '../../helpers/types';
+import i18n from '../../assets/i18n';
 
 
 interface IRecentPaymentsProps {
@@ -22,18 +23,20 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
     const [activities, setActivities] = useState<IListActionItem[]>([]);
     const [loadingPayments, setLoadingPayments] = useState(true);
 
+    const mapPayments = (p: IPaymentsTxAPI) => ({
+        key: p.to.address,
+        timestamp: p.timestamp,
+        description: '',
+        from: p.to.name,
+        value: amountToUserCurrency(p.value, props.user.user).toString(),
+    })
+
     useImperativeHandle(ref, () => ({
         updateRecentPayments() {
             setLoadingPayments(true);
             paymentsTx(props.user.celoInfo.address)
                 .then((payments) => {
-                    setActivities(payments.map((p) => ({
-                        key: p.to.address,
-                        timestamp: p.timestamp,
-                        description: '',
-                        from: p.to.name,
-                        value: amountToUserCurrency(p.value, props.user.user).toString(),
-                    })))
+                    setActivities(payments.map(mapPayments))
                     setLoadingPayments(false);
                 });
         }
@@ -42,31 +45,15 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
     useEffect(() => {
         paymentsTx(props.user.celoInfo.address)
             .then((payments) => {
-                setActivities(payments.map((p) => ({
-                    key: p.to.address,
-                    timestamp: p.timestamp,
-                    description: '',
-                    from: p.to.name,
-                    value: amountToUserCurrency(p.value, props.user.user).toString(),
-                })));
+                setActivities(payments.map(mapPayments));
                 setLoadingPayments(false);
             });
     }, []);
 
     return (
-        <View style={styles.card}>
-            <Headline
-                style={{
-                    opacity: 0.48,
-                    fontFamily: "Gelion-Bold",
-                    fontSize: 13,
-                    fontWeight: "500",
-                    fontStyle: "normal",
-                    lineHeight: 12,
-                    letterSpacing: 0.7,
-                }}
-            >
-                RECENT
+        <View style={styles.container}>
+            <Headline style={styles.headline}>
+                {i18n.t('recent').toUpperCase()}
             </Headline>
             <ActivityIndicator animating={loadingPayments} />
             {activities.map((activity) => <ListActionItem
@@ -79,10 +66,19 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
 })
 
 const styles = StyleSheet.create({
-    card: {
+    container: {
         marginHorizontal: 20,
         marginVertical: 10,
     },
+    headline: {
+        opacity: 0.48,
+        fontFamily: "Gelion-Bold",
+        fontSize: 13,
+        fontWeight: "500",
+        fontStyle: "normal",
+        lineHeight: 12,
+        letterSpacing: 0.7,
+    }
 });
 
 export default RecentPayments;

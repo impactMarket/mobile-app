@@ -10,6 +10,7 @@ import WalletScreen from './wallet';
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import PayScreen from './pay';
 import CommunityManagerView from './community/view/communitymanager';
+import i18n from '../assets/i18n';
 
 const ActiveClaimIcon = require('../assets/images/tab/active/claim.png');
 const InactiveClaimIcon = require('../assets/images/tab/claim.png');
@@ -59,7 +60,7 @@ function Tabs(props: Props) {
         const user = props.user;
         if (user.community.isBeneficiary) {
             return <Tab.Screen
-                name="Claim"
+                name={i18n.t('claim')}
                 component={BeneficiaryView}
                 options={{
                     tabBarIcon: (props: ITabBarIconProps) => (
@@ -72,7 +73,7 @@ function Tabs(props: Props) {
             />;
         } else if (user.community.isManager) {
             return <Tab.Screen
-                name="Manage"
+                name={i18n.t('manage')}
                 component={CommunityManagerView}
                 options={{
                     tabBarIcon: (props: ITabBarIconProps) => (
@@ -85,7 +86,7 @@ function Tabs(props: Props) {
             />;
         }
         return <Tab.Screen
-            name="Communities"
+            name={i18n.t('communities')}
             component={CommunitiesScreen}
             options={{
                 tabBarIcon: (props: ITabBarIconProps) => (
@@ -102,7 +103,7 @@ function Tabs(props: Props) {
         <Tab.Navigator>
             {tabsToUser()}
             {props.user.celoInfo.address.length > 0 && <Tab.Screen
-                name="Pay"
+                name={i18n.t('pay')}
                 component={PayScreen}
                 options={{
                     tabBarIcon: (props: ITabBarIconProps) => (
@@ -114,7 +115,7 @@ function Tabs(props: Props) {
                 }}
             />}
             <Tab.Screen
-                name="Wallet"
+                name={i18n.t('wallet')}
                 component={WalletScreen}
                 options={{
                     tabBarIcon: (props: ITabBarIconProps) => (

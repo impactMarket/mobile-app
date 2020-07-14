@@ -22,6 +22,7 @@ import { Button, ProgressBar } from 'react-native-paper';
 import { iptcColors, humanifyNumber } from '../../../../helpers';
 import Header from '../../../../components/Header';
 import BigNumber from 'bignumber.js';
+import i18n from '../../../../assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -81,7 +82,7 @@ function BeneficiaryView(props: Props) {
             }}
         >
             <Header
-                title="Claim"
+                title={i18n.t('claim')}
                 navigation={navigation}
                 hasHelp={true}
                 hasShare={true}
@@ -120,7 +121,7 @@ function BeneficiaryView(props: Props) {
                         { community: community, user: props.user }
                     )}
                 >
-                    More about your community
+                    {i18n.t('moreAboutYourCommunity')}
                 </Button>
                 <Claim
                     claimAmount={community.vars._claimAmount}
@@ -144,7 +145,7 @@ function BeneficiaryView(props: Props) {
                     <Text
                         onPress={() => navigation.navigate('ClaimExplainedScreen')}
                         style={styles.howClaimsWork}
-                    >How claim works?</Text>
+                    >{i18n.t('howClaimWorks')}?</Text>
                 </View>
             </View>
         </View>

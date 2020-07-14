@@ -29,6 +29,7 @@ import {
 import Header from '../../components/Header';
 import RecentTx, { IRecentTxRef } from './RecentTx';
 import { humanifyNumber, amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
+import i18n from '../../assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -59,21 +60,21 @@ function WalletScreen(props: Props) {
                 }}
                 onPress={() => navigation.navigate('LoginScreen')}
             >
-                Login now
+                {i18n.t('loginNow')}
             </Button>
         </SafeAreaView>;
     }
     return (
         <>
             <Header
-                title="Wallet"
+                title={i18n.t('wallet')}
                 navigation={navigation}
             >
                 <Button
                     mode="text"
                     onPress={() => navigation.navigate('EditProfile')}
                 >
-                    Edit Profile
+                    {i18n.t('editProfile')}
                 </Button>
             </Header>
             <ScrollView
@@ -86,9 +87,9 @@ function WalletScreen(props: Props) {
                     />
                 }
             >
-                <Card style={styles.card} elevation={5}>
+                <Card elevation={8} style={styles.card}>
                     <Card.Content>
-                        <Text style={{ color: 'grey' }}>BALANCE</Text>
+                        <Text style={{ color: 'grey' }}>{i18n.t('balance').toUpperCase()}</Text>
                         <View style={{ alignItems: 'center' }}>
                             <Headline
                                 style={{

@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
+import i18n from '../../../../assets/i18n';
 
 export default function ClaimExplainedScreen() {
     const navigation = useNavigation();
@@ -13,7 +14,7 @@ export default function ClaimExplainedScreen() {
     return (
         <>
             <Header
-                title="How Claim Works"
+                title={i18n.t('howClaimWorks')}
                 navigation={navigation}
                 hasBack={true}
             />
