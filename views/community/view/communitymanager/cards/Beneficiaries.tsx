@@ -15,6 +15,7 @@ import {
 import AddBeneficiary from '../components/AddBeneficiary';
 import { useNavigation } from '@react-navigation/native';
 import { updateCommunityInfo } from '../../../../../helpers';
+import i18n from '../../../../../assets/i18n';
 
 
 interface IBeneficiariesProps {
@@ -45,7 +46,7 @@ function Beneficiaries(props: Props) {
                         letterSpacing: 0.7,
                     }}
                 >
-                    BENEFICIARIES
+                    {i18n.t('beneficiaries').toUpperCase()}
                 </Headline>
                 <Button
                     mode="outlined"
@@ -53,7 +54,7 @@ function Beneficiaries(props: Props) {
                     style={{ marginVertical: 5 }}
                     onPress={() => navigation.navigate('AddedScreen', { beneficiaries: props.community.beneficiaries.added })}
                     >
-                    Added ({props.community.beneficiaries.added.length})
+                    {i18n.t('added')} ({props.community.beneficiaries.added.length})
                 </Button>
                 <Button
                     mode="outlined"
@@ -61,7 +62,7 @@ function Beneficiaries(props: Props) {
                     style={{ marginVertical: 5 }}
                     onPress={() => navigation.navigate('RemovedScreen', { beneficiaries: props.community.beneficiaries.removed })}
                 >
-                    Removed ({props.community.beneficiaries.removed.length})
+                    {i18n.t('removed')} ({props.community.beneficiaries.removed.length})
                 </Button>
                 <AddBeneficiary
                     addBeneficiaryCallback={() => updateCommunityInfo(props.user.celoInfo.address, props)}

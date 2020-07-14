@@ -60,6 +60,7 @@ import FAQScreen from './views/common/FAQScreen';
 import { registerForPushNotifications } from './services/pushNotifications';
 import * as Analytics from 'expo-firebase-analytics';
 import * as FirebaseCore from 'expo-firebase-core';
+import i18n from './assets/i18n';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -202,7 +203,7 @@ export default class App extends React.Component<{}, IAppState> {
                     justifyContent: 'center',
                 }}>
                     <Image
-                        source={require('./assets/splash.png')}
+                        source={require('./assets/images/splash.png')}
                         onLoad={this._cacheResourcesAsync}
                     />
                 </View>
@@ -224,11 +225,11 @@ export default class App extends React.Component<{}, IAppState> {
                         >
                             <Image
                                 style={{ height: 82, maxWidth: '51%' }}
-                                source={require('./assets/splash/logo.png')}
+                                source={require('./assets/images/splash/logo.png')}
                             />
                             <Image
                                 style={{ height: 136, maxWidth: '100%' }}
-                                source={require('./assets/splash/diversity.png')}
+                                source={require('./assets/images/splash/diversity.png')}
                             />
                             <Text
                                 style={{
@@ -294,7 +295,7 @@ export default class App extends React.Component<{}, IAppState> {
                         }}
                     >
                         <Text style={{ textAlign: 'center', width: '80%' }}>
-                            A friendly reminder you're using the Alfajores network build - the balances are not real.
+                            {i18n.t('testnetWarning')}
                         </Text>
                         <IconButton
                             style={{ width: '10%' }}
@@ -398,7 +399,7 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     _cacheSplashResourcesAsync = async () => {
-        const gif = require('./assets/splash.png');
+        const gif = require('./assets/images/splash.png');
         return Asset.fromModule(gif).downloadAsync();
     };
 

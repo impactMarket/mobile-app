@@ -31,6 +31,7 @@ import CommuntyStatus from '../../../../components/CommuntyStatus';
 import Header from '../../../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { updateCommunityInfo, iptcColors } from '../../../../helpers';
+import i18n from '../../../../assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -108,7 +109,7 @@ function CommunityManagerView(props: Props) {
                             disabled={true}
                             style={{ width: '100%' }}
                         >
-                            Full Dashboard
+                            {i18n.t('fullDashboard')}
                     </Button>
                     </CommuntyStatus>
                 </View>
@@ -156,7 +157,7 @@ function CommunityManagerView(props: Props) {
                         textAlign: "center",
                     }}
                 >
-                    Pending Approval
+                    {i18n.t('pendingApproval')}
                 </Headline>
                 <Text
                     style={{
@@ -170,7 +171,7 @@ function CommunityManagerView(props: Props) {
                         textAlign: "center",
                     }}
                 >
-                    This community has not yet been approved. If you have any question please contact us at <Text style={{ color: iptcColors.softBlue }} onPress={() => Linking.openURL('mailto:hello@impactmarket.com')}>hello@impactmarket.com</Text>
+                    {i18n.t('pendingApprovalMessage')} <Text style={{ color: iptcColors.softBlue }} onPress={() => Linking.openURL('mailto:hello@impactmarket.com')}>hello@impactmarket.com</Text>
                 </Text>
             </View>
         </View>
@@ -211,7 +212,7 @@ function CommunityManagerView(props: Props) {
                                 )
                             }}
                         >
-                            Edit community details
+                            {i18n.t('editCommunityDetails')}
                         </Button>
                         <Button
                             mode="outlined"
@@ -223,14 +224,14 @@ function CommunityManagerView(props: Props) {
                                 )
                             }}
                         >
-                            View as public
+                            {i18n.t('viewAsPublic')}
                         </Button>
                         <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
                             disabled={true}
                         >
-                            Share
+                            {i18n.t('share')}
                         </Button>
                     </Dialog.Content>
                 </Dialog>

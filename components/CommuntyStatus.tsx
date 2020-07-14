@@ -20,6 +20,7 @@ import {
 import { calculateCommunityProgress, humanifyNumber, iptcColors, amountToUserCurrency, getUserCurrencySymbol } from '../helpers';
 import config from '../config';
 import BigNumber from 'bignumber.js';
+import i18n from '../assets/i18n';
 
 
 interface ICommuntyStatusProps {
@@ -57,11 +58,11 @@ class CommuntyStatus extends Component<Props, {}> {
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5, justifyContent: 'center' }}>
                         <View style={{ width: '50%', alignItems: 'center' }}>
                             <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.beneficiaries.added.length}</Title>
-                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>Beneficiaries</Text>
+                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>{i18n.t('beneficiaries')}</Text>
                         </View>
                         <View style={{ width: '50%', alignItems: 'center' }}>
                             <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.backers.length}</Title>
-                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>Backers</Text>
+                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>{i18n.t('backers')}</Text>
                         </View>
                     </View>
                     <View>
@@ -88,13 +89,13 @@ class CommuntyStatus extends Component<Props, {}> {
                     <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
                         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                             <View style={styles.sphereClaimed}></View>
-                            <Text style={{ fontFamily: 'Gelion-Regular' }}>{claimedByRaised}% Claimed</Text>
+                            <Text style={{ fontFamily: 'Gelion-Regular' }}>{claimedByRaised}% {i18n.t('claimed')}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <View style={styles.sphereRaised}></View>
                             <Text style={{ fontFamily: 'Gelion-Regular' }}>
                                 {getUserCurrencySymbol(user.user)}
-                                {amountToUserCurrency(community.totalRaised, user.user)} Raised
+                                {amountToUserCurrency(community.totalRaised, user.user)} {i18n.t('raised')}
                             </Text>
                         </View>
                     </View>

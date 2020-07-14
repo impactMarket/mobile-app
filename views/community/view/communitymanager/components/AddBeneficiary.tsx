@@ -24,6 +24,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { ethers } from 'ethers';
 import ValidatedTextInput from '../../../../../components/ValidatedTextInput';
 import { iptcColors } from '../../../../../helpers';
+import i18n from '../../../../../assets/i18n';
 
 
 interface IAddBeneficiaryProps {
@@ -195,7 +196,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                     }}
                     onPress={this.handleOpenAddBeneficiary}
                 >
-                    Add Beneficiary
+                    {i18n.t('addBeneficiary')}
                 </Button>
                 <Portal>
                     <Dialog
@@ -220,7 +221,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                                 style={{ marginRight: 10 }}
                                 onPress={this.handleAddBeneficiary}
                             >
-                                Add
+                                {i18n.t('add')}
                             </Button>
                             <Button
                                 mode="contained"
@@ -230,7 +231,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                                     newBeneficiaryAddress: ''
                                 })}
                             >
-                                Cancel
+                                {i18n.t('cancel')}
                             </Button>
                         </Dialog.Actions>
                     </Dialog>
