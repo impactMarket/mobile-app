@@ -62,3 +62,4 @@ web-build/
 .env
 .extra
 assets/firebase/
+*.jks
