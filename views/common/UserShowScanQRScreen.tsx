@@ -66,7 +66,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                             <Avatar.Image
                                 style={{ alignSelf: 'center', marginLeft: 'auto' }}
                                 size={58}
-                                source={require('../../assets/hello.png')}
+                                source={require('../../assets/images/hello.png')}
                             />
                         </View>
                         <View style={styles.qrView}>

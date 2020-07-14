@@ -380,7 +380,7 @@ function CreateCommunityScreen(props: Props) {
                                 By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.
                             </Text>
                             <View>
-                                <ImageBackground source={coverImage.length === 0 ? require('../../assets/placeholder.png') : { uri: coverImage }} style={styles.imageCover}>
+                                <ImageBackground source={coverImage.length === 0 ? require('../../assets/images/placeholder.png') : { uri: coverImage }} style={styles.imageCover}>
                                     <Button
                                         mode="contained"
                                         style={{ margin: 16 }}

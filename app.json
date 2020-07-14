@@ -9,10 +9,10 @@
         ],
         "version": "0.0.1-alpha.20",
         "orientation": "portrait",
-        "icon": "./assets/logo.png",
+        "icon": "./assets/images/logo.png",
         "scheme": "impactmarketmobile",
         "splash": {
-            "image": "./assets/splash.png",
+            "image": "./assets/images/splash.png",
             "backgroundColor": "#2362FB"
         },
         "updates": {
@@ -22,7 +22,7 @@
             "**/*"
         ],
         "notification": {
-            "icon": "./assets/notification.png",
+            "icon": "./assets/images/notification.png",
             "color": "#000000",
             "iosDisplayInForeground": true,
             "androidMode": "collapse",

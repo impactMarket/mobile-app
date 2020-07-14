@@ -141,7 +141,7 @@ function CommunityManagerView(props: Props) {
             }}
             >
                 <Image
-                    source={require('../../../../assets/pending.png')}
+                    source={require('../../../../assets/images/pending.png')}
                     style={{ width: 50, height: 50 }}
                 />
                 <Headline

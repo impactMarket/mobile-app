@@ -78,7 +78,7 @@ function EditProfile(props: Props) {
                             marginVertical: 20
                         }}
                         size={121}
-                        source={require('../../assets/hello.png')}
+                        source={require('../../assets/images/hello.png')}
                     />
                     <Button
                         mode="contained"
