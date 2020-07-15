@@ -14,6 +14,8 @@ import {
     StyleSheet,
     View
 } from 'react-native';
+import * as Location from 'expo-location';
+import { addClaimLocation } from '../../../../services/api';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -55,6 +57,7 @@ class Claim extends React.Component<Props, IClaimState> {
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
 
+
         this.setState({ claiming: true });
         celoWalletRequest(
             address,
@@ -62,7 +65,16 @@ class Claim extends React.Component<Props, IClaimState> {
             await communityContract.methods.claim(),
             'beneficiaryclaim',
             network,
-        ).then(() => {
+        ).then(async () => {
+            let loc: Location.LocationData | undefined = undefined;
+            if (Location.hasServicesEnabledAsync()) {
+                if ((await Location.getPermissionsAsync()).granted) {
+                    loc = await Location.getCurrentPositionAsync();
+                }
+            }
+            if (loc !== undefined) {
+                addClaimLocation({ latitude: loc.coords.altitude, longitude: loc.coords.longitude });
+            }
             this._loadAllowance(communityContract).then(() => {
                 this.setState({ claiming: false });
                 this.props.updateClaimedAmount();

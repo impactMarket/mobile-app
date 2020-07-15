@@ -303,6 +303,16 @@ async function setUserPushNotificationToken(
     return result ? true : false;
 }
 
+async function addClaimLocation(
+    gps: any,
+): Promise<boolean> {
+    const requestBody = {
+        gps
+    };
+    const result = await postRequest<boolean>('/claim-location', requestBody);
+    return result ? true : false;
+}
+
 export {
     getAllValidCommunities,
     requestCreateCommunity,
@@ -320,4 +330,5 @@ export {
     uploadImageAsync,
     userAuth,
     setUserPushNotificationToken,
+    addClaimLocation,
 }
