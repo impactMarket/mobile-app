@@ -32,7 +32,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: 'https://impactmarket-api-stag.herokuapp.com/api',
+        baseApiUrl: 'https://impactmarket-api-staging.herokuapp.com/api',
 
         /**
          * Contract Address to use in dev
@@ -53,12 +53,13 @@ const ENV = {
 }
 
 function getEnvVars() {
-    if (Constants.manifest.packagerOpts !== undefined) {
-        if (Constants.manifest.packagerOpts.dev !== undefined) {
-            return Constants.manifest.packagerOpts.dev ? { ...commonConfig, ...ENV.dev } : { ...commonConfig, ...ENV.prod };
-        }
-    }
-    return { ...commonConfig, ...ENV.prod };
+    const { releaseChannel } = Constants.manifest;
+
+    if (releaseChannel === undefined) return { ...commonConfig, ...ENV.dev };
+    if (releaseChannel.indexOf('production') !== -1) return { ...commonConfig, ...ENV.prod };
+    if (releaseChannel.indexOf('staging') !== -1) return { ...commonConfig, ...ENV.stag };
+
+    return { ...commonConfig, ...ENV.dev };
 }
 
 export default getEnvVars()
