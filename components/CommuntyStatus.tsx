@@ -17,8 +17,12 @@ import {
     Title,
     ProgressBar,
 } from 'react-native-paper';
-import { calculateCommunityProgress, humanifyNumber, iptcColors, amountToUserCurrency, getUserCurrencySymbol } from '../helpers';
-import config from '../config';
+import {
+    calculateCommunityProgress,
+    iptcColors,
+    amountToUserCurrency,
+    getUserCurrencySymbol
+} from '../helpers';
 import BigNumber from 'bignumber.js';
 import i18n from '../assets/i18n';
 

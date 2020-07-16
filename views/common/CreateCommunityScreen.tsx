@@ -19,17 +19,34 @@ import {
     connect,
     ConnectedProps
 } from 'react-redux';
-import { IRootState, ICommunityInfo, IUserState } from '../../helpers/types';
-import { requestCreateCommunity, celoWalletRequest } from '../../services';
+import {
+    IRootState,
+    ICommunityInfo,
+    IUserState
+} from '../../helpers/types';
+import {
+    requestCreateCommunity,
+    celoWalletRequest
+} from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import config from '../../config';
 import BigNumber from 'bignumber.js';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
-import { humanifyNumber, loadContracts, validateEmail, getUserCurrencySymbol, amountToUserCurrency } from '../../helpers';
+import {
+    humanifyNumber,
+    loadContracts,
+    validateEmail,
+    getUserCurrencySymbol,
+    amountToUserCurrency
+} from '../../helpers';
 import Header from '../../components/Header';
-import { editCommunity, uploadImageAsync } from '../../services/api';
+import {
+    editCommunity,
+    uploadImageAsync
+} from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
+import i18n from '../../assets/i18n';
 
 
 interface ICreateCommunityScreen {
@@ -88,8 +105,8 @@ function CreateCommunityScreen(props: Props) {
                 setVisivility(community.visibility);
                 setGpsLocation({
                     coords: {
-                        latitude: community.location.latitude,
-                        longitude: community.location.longitude,
+                        latitude: community.gps.latitude,
+                        longitude: community.gps.longitude,
                     }
                 } as Location.LocationData)
                 // cover image
@@ -323,12 +340,14 @@ function CreateCommunityScreen(props: Props) {
     if (props.user.celoInfo.address.length === 0) {
         return <View>
             <Header
-                title={editing ? 'Edit Community' : 'New Community'}
+                title={i18n.t('create')}
                 navigation={navigation}
                 hasBack={true}
             />
             <View style={styles.container}>
-                <Text>You need to login to create communities.</Text>
+                <Text>
+                    {i18n.t('needLoginToCreateCommunity')}
+                </Text>
             </View>
         </View>
     }
@@ -336,7 +355,7 @@ function CreateCommunityScreen(props: Props) {
     return (
         <>
             <Header
-                title={editing ? 'Edit' : 'Create'}
+                title={editing ? i18n.t('edit') : i18n.t('create')}
                 navigation={navigation}
                 hasBack={true}
             >
@@ -346,51 +365,34 @@ function CreateCommunityScreen(props: Props) {
                     disabled={!isSubmitAvailable}
                     onPress={() => submitNewCommunity()}
                 >
-                    Submit
+                    {i18n.t('submit')}
                 </Button>
             </Header>
             <ScrollView>
                 <View style={styles.container}>
                     <Card elevation={8}>
                         <Card.Content style={{ margin: -16 }}>
-                            <Headline
-                                style={{
-                                    opacity: 0.48,
-                                    fontFamily: "Gelion-Regular",
-                                    fontSize: 13,
-                                    fontWeight: "500",
-                                    fontStyle: "normal",
-                                    lineHeight: 12,
-                                    letterSpacing: 0.7,
-                                    paddingHorizontal: 16,
-                                    paddingVertical: 10
-                                }}
-                            >
-                                COMMUNITY DETAILS
+                            <Headline style={styles.communityDetailsHeadline} >
+                                {i18n.t('communityDetails').toUpperCase()}
                             </Headline>
-                            <Text style={{
-                                ...styles.textNote,
-                                backgroundColor: '#f0f0f0',
-                                padding: 16,
-                                borderTopColor: '#d8d8d8',
-                                borderTopWidth: 1,
-                                borderBottomColor: '#d8d8d8',
-                                borderBottomWidth: 1
-                            }}>
-                                By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.
+                            <Text style={styles.createCommunityDescription}>
+                                {i18n.t('createCommunityDescription')}
                             </Text>
                             <View>
-                                <ImageBackground source={coverImage.length === 0 ? require('../../assets/images/placeholder.png') : { uri: coverImage }} style={styles.imageCover}>
+                                <ImageBackground
+                                    source={coverImage.length === 0 ? require('../../assets/images/placeholder.png') : { uri: coverImage }}
+                                    style={styles.imageCover}
+                                >
                                     <Button
                                         mode="contained"
                                         style={{ margin: 16 }}
                                         onPress={pickImage}
                                     >
-                                        {coverImage.length === 0 ? 'Select Cover Image' : 'Change Cover Image'}
+                                        {coverImage.length === 0 ? i18n.t('selectCoverImage') : i18n.t('changeCoverImage')}
                                     </Button>
                                 </ImageBackground>
                                 <ValidatedTextInput
-                                    label="Community Name"
+                                    label={i18n.t('communityName')}
                                     marginBox={16}
                                     value={name}
                                     maxLength={32}
@@ -400,7 +402,7 @@ function CreateCommunityScreen(props: Props) {
                                 />
                                 <Divider />
                                 <ValidatedTextInput
-                                    label="Short Description"
+                                    label={i18n.t('shortDescription')}
                                     marginBox={16}
                                     value={description}
                                     maxLength={512}
@@ -412,7 +414,7 @@ function CreateCommunityScreen(props: Props) {
                                 />
                                 <Divider />
                                 <ValidatedTextInput
-                                    label="City"
+                                    label={i18n.t('city')}
                                     marginBox={16}
                                     value={city}
                                     maxLength={32}
@@ -422,7 +424,7 @@ function CreateCommunityScreen(props: Props) {
                                 />
                                 <Divider />
                                 <ValidatedTextInput
-                                    label="Country"
+                                    label={i18n.t('country')}
                                     marginBox={16}
                                     value={country}
                                     maxLength={32}
@@ -435,7 +437,7 @@ function CreateCommunityScreen(props: Props) {
                                     style={{ marginHorizontal: 16 }}
                                     onPress={() => enableGPSLocation()}
                                 >
-                                    Get GPS Location
+                                    {i18n.t('getGPSLocation')}
                                 </Button>}
                                 {gpsLocation !== undefined && <Button
                                     icon="check"
@@ -443,10 +445,10 @@ function CreateCommunityScreen(props: Props) {
                                     style={{ marginHorizontal: 16 }}
                                     disabled={true}
                                 >
-                                    Valid Coordinates
+                                    {i18n.t('validCoordinates')}
                                 </Button>}
                                 <ValidatedTextInput
-                                    label="Email"
+                                    label={i18n.t('email')}
                                     marginBox={16}
                                     value={email}
                                     maxLength={32}
@@ -459,20 +461,8 @@ function CreateCommunityScreen(props: Props) {
                             </View>
                         </Card.Content>
                     </Card>
-                    <Headline
-                        style={{
-                            opacity: 0.48,
-                            fontFamily: "Gelion-Regular",
-                            fontSize: 13,
-                            fontWeight: "500",
-                            fontStyle: "normal",
-                            lineHeight: 13,
-                            letterSpacing: 0.7,
-                            marginTop: 20,
-                            marginHorizontal: 10
-                        }}
-                    >
-                        CONTRACT DETAILS
+                    <Headline style={styles.contractDetailsHeadline}>
+                        {i18n.t('contractDetails')}
                     </Headline>
                     <View style={{ marginBottom: 15 }}>
                         <View>
@@ -640,6 +630,37 @@ const styles = StyleSheet.create({
         lineHeight: 15,
         letterSpacing: 0.25,
         color: "#7e8da6"
+    },
+    communityDetailsHeadline: {
+        opacity: 0.48,
+        fontFamily: "Gelion-Regular",
+        fontSize: 13,
+        fontWeight: "500",
+        fontStyle: "normal",
+        lineHeight: 12,
+        letterSpacing: 0.7,
+        paddingHorizontal: 16,
+        paddingVertical: 10
+    },
+    contractDetailsHeadline: {
+        opacity: 0.48,
+        fontFamily: "Gelion-Regular",
+        fontSize: 13,
+        fontWeight: "500",
+        fontStyle: "normal",
+        lineHeight: 13,
+        letterSpacing: 0.7,
+        marginTop: 20,
+        marginHorizontal: 10
+    },
+    createCommunityDescription: {
+        fontFamily: 'Gelion-Regular',
+        backgroundColor: '#f0f0f0',
+        padding: 16,
+        borderTopColor: '#d8d8d8',
+        borderTopWidth: 1,
+        borderBottomColor: '#d8d8d8',
+        borderBottomWidth: 1
     }
 });
 

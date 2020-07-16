@@ -70,7 +70,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             };
             return <>
                 <Divider />
-                <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
+                <View style={styles.chartView}>
                     <LineChart
                         data={lineChartData}
                         width={200}
@@ -87,20 +87,15 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             marginLeft: -70,
                         }}
                     />
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', marginRight: 0 }}>
-                        <Headline style={{
-                            fontFamily: "Gelion-Regular",
-                            fontSize: 36,
-                            fontStyle: "normal",
-                            lineHeight: 36,
-                            letterSpacing: 0,
-                            textAlign: 'right'
-                        }}>{community.ssi.values[community.ssi.values.length - 1]}%</Headline>
-                        <Paragraph>Self-Sustainability Index</Paragraph>
+                    <View style={styles.ssiView}>
+                        <Headline style={styles.ssiHeadline}>
+                            {community.ssi.values[community.ssi.values.length - 1]}%
+                        </Headline>
+                        <Paragraph>{i18n.t('ssi')}</Paragraph>
                     </View>
                 </View>
                 <Paragraph style={styles.ssiExplained}>
-                    SSI indicates how self-sustainable a community is and how it progresses overtime, by measuring their beneficiaries claim urgency
+                    {i18n.t('ssiDescription')}
                 </Paragraph>
             </>
         }
@@ -134,13 +129,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     </Text>
                     <LinearGradient
                         colors={['transparent', 'rgba(246,246,246,1)']}
-                        style={{
-                            position: 'absolute',
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            height: 80,
-                        }}
+                        style={styles.linearGradient}
                     />
                 </ImageBackground>
                 <View style={styles.container}>
@@ -152,16 +141,20 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 disabled={community.description.indexOf('\n') === -1}
                                 onPress={() => setSeeFullDescription(!seeFullDescription)}
                             >
-                                See {(seeFullDescription ? 'Less' : 'More')}
+                                {(seeFullDescription ? i18n.t('seeLess') : i18n.t('seeMore'))}
                             </Button>
                         </Card.Content>
                     </Card>
                     <Card elevation={8} style={{ marginVertical: 25 }}>
                         <Card.Content>
-                            <View style={{ flex: 1, flexDirection: 'row', margin: 0 }}>
+                            <View style={styles.cardViewClaimFrequency}>
                                 <View>
-                                    <Headline>${humanifyNumber(community.vars._claimAmount)} / {claimFrequencyToText(community.vars._baseInterval)}</Headline>
-                                    <Paragraph style={{ color: '#b0b0b0' }}>{i18n.t('upToPerBeneficiary', { amount: humanifyNumber(community.vars._maxClaim) })}</Paragraph>
+                                    <Headline>
+                                        ${humanifyNumber(community.vars._claimAmount)} / {claimFrequencyToText(community.vars._baseInterval)}
+                                    </Headline>
+                                    <Paragraph style={{ color: '#b0b0b0' }}>
+                                        {i18n.t('upToPerBeneficiary', { amount: humanifyNumber(community.vars._maxClaim) })}
+                                    </Paragraph>
                                 </View>
                             </View>
                             {renderSSI()}
@@ -173,13 +166,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             style={{ width: '100%' }}
                             onPress={() => WebBrowser.openBrowserAsync(config.blockExplorer + community.contractAddress)}
                         >
-                            Explore Community Contract
-                    </Button>
+                            {i18n.t('exploreCommunityContract')}
+                        </Button>
                     </CommuntyStatus>
                 </View>
-                <Donate
-                    community={community}
-                />
+                <Donate community={community} />
             </ScrollView >
         </>
     );
@@ -215,5 +206,36 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         letterSpacing: 0.25,
         color: '#b0b0b0'
+    },
+    linearGradient: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 80,
+    },
+    ssiHeadline: {
+        fontFamily: "Gelion-Regular",
+        fontSize: 36,
+        fontStyle: "normal",
+        lineHeight: 36,
+        letterSpacing: 0,
+        textAlign: 'right'
+    },
+    ssiView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginRight: 0
+    },
+    cardViewClaimFrequency: {
+        flex: 1,
+        flexDirection: 'row',
+        margin: 0
+    },
+    chartView: {
+        flex: 1,
+        flexDirection: 'row',
+        margin: 0
     }
 });

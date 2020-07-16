@@ -157,17 +157,17 @@ export interface ICommunity {
     contractAddress: string;
     name: string;
     description: string;
-    city: string;
     country: string;
-    location: {
+    city: string;
+    gps: {
         latitude: number;
         longitude: number;
     };
-    email: string;
     visibility: string;
+    email: string;
     coverImage: string;
     status: string;
-    txCreationObj: any;
+    txCreationObj: ICommunityVars;
     createdAt: string;
     updatedAt: string;
 }
