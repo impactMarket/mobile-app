@@ -18,15 +18,32 @@ import {
     IRootState,
     STORAGE_USER_AUTH_TOKEN,
 } from '../../helpers/types';
-import { setUserCeloInfo, setPushNotificationsToken } from '../../helpers/redux/actions/ReduxActions';
-import { ConnectedProps, connect, useStore } from 'react-redux';
+import {
+    setUserCeloInfo,
+    setPushNotificationsToken
+} from '../../helpers/redux/actions/ReduxActions';
+import {
+    ConnectedProps,
+    connect,
+    useStore
+} from 'react-redux';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { Button, Portal, Dialog, TextInput, Paragraph } from 'react-native-paper';
+import {
+    Button,
+    Portal,
+    Dialog,
+    TextInput,
+    Paragraph
+} from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { loadContracts } from '../../helpers';
-import { userAuth, setUserPushNotificationToken } from '../../services/api';
+import {
+    userAuth,
+    setUserPushNotificationToken
+} from '../../services/api';
 import { registerForPushNotifications } from '../../services/pushNotifications';
+import i18n from '../../assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -55,7 +72,7 @@ function LoginScreen(props: Props) {
 
     const login = async () => {
         const requestId = 'login'
-        const dappName = 'Impact Market'
+        const dappName = 'impactMarket'
         const callback = Linking.makeUrl('impactmarketmobile://login')
         setConnecting(true);
 
@@ -64,13 +81,14 @@ function LoginScreen(props: Props) {
             dappName,
             callback,
         })
-        
+
         const dappkitResponse = await waitForAccountAuth(requestId)
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
         const authToken = await userAuth(userAddress, pin);
         if (authToken === undefined) {
-            Alert.alert('Failure',
-                'An error happened, please, try again.',
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('anErroHappenedTryAgain'),
                 [{ text: 'OK' }], { cancelable: false }
             );
             setConnecting(false);
@@ -99,8 +117,9 @@ function LoginScreen(props: Props) {
             }))
             const pushNotificationsToken = await registerForPushNotifications();
             if (pushNotificationsToken === undefined) {
-                Alert.alert('Failure',
-                    'An error happened, please, try again.',
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('anErroHappenedTryAgain'),
                     [{ text: 'OK' }], { cancelable: false }
                 );
                 setConnecting(false);
@@ -110,8 +129,9 @@ function LoginScreen(props: Props) {
             setUserPushNotificationToken(userAddress, pushNotificationsToken);
             props.dispatch(setPushNotificationsToken(pushNotificationsToken));
         } catch (error) {
-            Alert.alert('Failure',
-                'An error happened, please, try again.',
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('anErroHappenedTryAgain'),
                 [{ text: 'OK' }], { cancelable: false }
             );
             setConnecting(false);
@@ -120,21 +140,25 @@ function LoginScreen(props: Props) {
     }
 
     return (
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                margin: 20
-            }}
-        >
-            <Text style={styles.description}>To continue please</Text>
-            <Text style={styles.title}>Connect to your Celo Wallet</Text>
-            <Text style={styles.description}>ImpactMarket operates on top of  Celo Network, financial system that creates conditions for prosperity for everyone.</Text>
-            <Text style={styles.description}>With Celo Wallet you can send money to anyone in the world with just a mobile phone.</Text>
-            <Text style={styles.stepText}>Step 1</Text>
-            <Text style={styles.instructionText}>Download the Celo app</Text>
+        <View style={styles.mainView}>
+            <Text style={styles.description}>
+                {i18n.t('toContinuePlease')}
+            </Text>
+            <Text style={styles.title}>
+                {i18n.t('connectToYourCeloWallet')}
+            </Text>
+            <Text style={styles.description}>
+                {i18n.t('loginDescription1')}
+            </Text>
+            <Text style={styles.description}>
+                {i18n.t('loginDescription2')}
+            </Text>
+            <Text style={styles.stepText}>
+                {i18n.t('step1')}
+            </Text>
+            <Text style={styles.instructionText}>
+                {i18n.t('downloadCeloApp')}
+            </Text>
             <View
                 style={{
                     flexDirection: 'row',
@@ -155,9 +179,15 @@ function LoginScreen(props: Props) {
                     Android
                 </Button>
             </View>
-            <Text style={styles.stepText}>Step 2</Text>
-            <Text style={styles.instructionText}>Install the Celo App and create a Celo account</Text>
-            <Text style={styles.stepText}>Final Step</Text>
+            <Text style={styles.stepText}>
+                {i18n.t('step2')}
+            </Text>
+            <Text style={styles.instructionText}>
+                {i18n.t('installCeloCreateAccount')}
+            </Text>
+            <Text style={styles.stepText}>
+                {i18n.t('finalStep')}
+            </Text>
             <Button
                 mode="contained"
                 onPress={() => setAskingPattern(true)}
@@ -165,7 +195,7 @@ function LoginScreen(props: Props) {
                 loading={connecting}
                 style={{ width: '80%' }}
             >
-                Connect to Celo Wallet
+                {i18n.t('connectCeloWallet')}
             </Button>
             <Button
                 mode="outlined"
@@ -173,7 +203,7 @@ function LoginScreen(props: Props) {
                 disabled={connecting}
                 style={{ width: '80%' }}
             >
-                Not now
+                {i18n.t('notNow')}
             </Button>
             <Portal>
                 <Dialog
@@ -181,7 +211,9 @@ function LoginScreen(props: Props) {
                     dismissable={false}
                 >
                     <Dialog.Content>
-                        <Paragraph>Before moving any further, please, insert your PIN</Paragraph>
+                        <Paragraph>
+                            {i18n.t('beforeMovingInsertPin')}
+                        </Paragraph>
                         <TextInput
                             maxLength={4}
                             label="PIN"
@@ -202,7 +234,7 @@ function LoginScreen(props: Props) {
                                 login();
                             }}
                         >
-                            Continue
+                            {i18n.t('continue')}
                         </Button>
                     </Dialog.Actions>
                 </Dialog>
@@ -212,6 +244,13 @@ function LoginScreen(props: Props) {
 }
 
 const styles = StyleSheet.create({
+    mainView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        margin: 20
+    },
     title: {
         height: 62,
         fontFamily: "Gelion-Bold",

@@ -134,12 +134,9 @@ function CreateCommunityScreen(props: Props) {
             setSending(false);
             navigation.goBack();
             Alert.alert(
-                'Success',
-                'Your request to create a new community was placed!',
-                [
-                    { text: 'OK' },
-                ],
-                { cancelable: false }
+                i18n.t('success'),
+                i18n.t('requestNewCommunityPlaced'),
+                [{ text: 'OK' }], { cancelable: false }
             );
         }
     }, [props.network.community]);
@@ -150,22 +147,25 @@ function CreateCommunityScreen(props: Props) {
             return;
         }
         if (new BigNumber(maxClaim).lt(claimAmount)) {
-            Alert.alert('Failure',
-                'Claim Amount should be bigger that Max Claim!',
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('claimBiggerThanMax'),
                 [{ text: 'OK' }], { cancelable: false }
             );
             return;
         }
         if (new BigNumber(claimAmount).eq(0)) {
-            Alert.alert('Failure',
-                'Claim Amount should not be zero!',
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('claimNotZero'),
                 [{ text: 'OK' }], { cancelable: false }
             );
             return;
         }
         if (new BigNumber(maxClaim).eq(0)) {
-            Alert.alert('Failure',
-                'Max Claim should not be zero!',
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('maxNotZero'),
                 [{ text: 'OK' }], { cancelable: false }
             );
             return;
@@ -221,22 +221,16 @@ function CreateCommunityScreen(props: Props) {
                     await loadContracts(props.user.celoInfo.address, props.network.kit, props);
                     navigation.goBack();
                     Alert.alert(
-                        'Success',
-                        'Your community was updated!',
-                        [
-                            { text: 'OK' },
-                        ],
-                        { cancelable: false }
+                        i18n.t('success'),
+                        i18n.t('communityUpdated'),
+                        [{ text: 'OK' }], { cancelable: false }
                     );
                 }
             } catch (e) {
                 Alert.alert(
-                    'Failure',
-                    'An error happened while updating your community!',
-                    [
-                        { text: 'OK' },
-                    ],
-                    { cancelable: false }
+                    i18n.t('failure'),
+                    i18n.t('errorUpdatingCommunity'),
+                    [{ text: 'OK' }], { cancelable: false }
                 );
             } finally {
                 setSending(false);
@@ -253,12 +247,9 @@ function CreateCommunityScreen(props: Props) {
                 // log({ uploadImagePath });
                 // log({ e });
                 Alert.alert(
-                    'Failure',
-                    'An error happened while placing the request to create a community!',
-                    [
-                        { text: 'OK' },
-                    ],
-                    { cancelable: false }
+                    i18n.t('failure'),
+                    i18n.t('errorCreatingCommunity'),
+                    [{ text: 'OK' }], { cancelable: false }
                 );
                 setSending(false);
                 return;
@@ -288,12 +279,9 @@ function CreateCommunityScreen(props: Props) {
                     // the remaining process is done in useEffect
                 } else {
                     Alert.alert(
-                        'Failure',
-                        'An error happened while placing the request to create a community!',
-                        [
-                            { text: 'OK' },
-                        ],
-                        { cancelable: false }
+                        i18n.t('failure'),
+                        i18n.t('errorCreatingCommunity'),
+                        [{ text: 'OK' }], { cancelable: false }
                     );
                     setSending(false);
                 }
@@ -467,7 +455,7 @@ function CreateCommunityScreen(props: Props) {
                     <View style={{ marginBottom: 15 }}>
                         <View>
                             <ValidatedTextInput
-                                label="Claim Amount"
+                                label={i18n.t('claimAmount')}
                                 placeholder="$0"
                                 marginBox={10}
                                 keyboardType="numeric"
@@ -480,19 +468,21 @@ function CreateCommunityScreen(props: Props) {
                                 claimAmount.length > 0 && <Text
                                     style={styles.aroundCurrencyValue}
                                 >
-                                    around {getUserCurrencySymbol(props.user.user)}
-                                    {amountToUserCurrency(
-                                        new BigNumber(claimAmount)
-                                            .multipliedBy(new BigNumber(10).pow(config.cUSDDecimals)),
-                                        props.user.user
-                                    )}
+                                    {i18n.t('aroundValue', {
+                                        symbol: getUserCurrencySymbol(props.user.user),
+                                        amount: amountToUserCurrency(
+                                            new BigNumber(claimAmount)
+                                                .multipliedBy(new BigNumber(10).pow(config.cUSDDecimals)),
+                                            props.user.user
+                                        )
+                                    })}
                                 </Text>
                             }
                         </View>
                         <Divider />
                         <View>
                             <ValidatedTextInput
-                                label="Total claim amount per beneficiary"
+                                label={i18n.t('totalClaimPerBeneficiary')}
                                 placeholder="$0"
                                 marginBox={10}
                                 keyboardType="numeric"
@@ -505,30 +495,34 @@ function CreateCommunityScreen(props: Props) {
                                 maxClaim.length > 0 && <Text
                                     style={styles.aroundCurrencyValue}
                                 >
-                                    around {getUserCurrencySymbol(props.user.user)}
-                                    {amountToUserCurrency(
-                                        new BigNumber(maxClaim)
-                                            .multipliedBy(new BigNumber(10).pow(config.cUSDDecimals)),
-                                        props.user.user
-                                    )}
+                                    {i18n.t('aroundValue', {
+                                        symbol: getUserCurrencySymbol(props.user.user),
+                                        amount: amountToUserCurrency(
+                                            new BigNumber(maxClaim)
+                                                .multipliedBy(new BigNumber(10).pow(config.cUSDDecimals)),
+                                            props.user.user
+                                        )
+                                    })}
                                 </Text>
                             }
                         </View>
                         <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>Frequency</Paragraph>
+                        <Paragraph style={styles.inputTextFieldLabel}>
+                            {i18n.t('frequency')}
+                        </Paragraph>
                         <View style={styles.pickerBorder}>
                             <Picker
                                 selectedValue={baseInterval}
                                 style={styles.picker}
                                 onValueChange={(value) => setBaseInterval(value)}
                             >
-                                <Picker.Item label="Hourly" value="3601" />
-                                <Picker.Item label="Daily" value="86400" />
-                                <Picker.Item label="Weekly" value="604800" />
+                                <Picker.Item label={i18n.t('hourly')} value="3601" />
+                                <Picker.Item label={i18n.t('daily')} value="86400" />
+                                <Picker.Item label={i18n.t('weekly')} value="604800" />
                             </Picker>
                         </View>
                         <ValidatedTextInput
-                            label="Time increment after each claim (in minutes)"
+                            label={i18n.t('timeIncrementAfterClaim')}
                             marginBox={10}
                             keyboardType="numeric"
                             value={incrementInterval}
@@ -537,23 +531,25 @@ function CreateCommunityScreen(props: Props) {
                             onChangeText={value => setIncrementalInterval(value)}
                         />
                         <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>Visibility</Paragraph>
+                        <Paragraph style={styles.inputTextFieldLabel}>
+                            {i18n.t('visibility')}
+                        </Paragraph>
                         <View style={styles.pickerBorder}>
                             <Picker
                                 selectedValue={visibility}
                                 style={styles.picker}
                                 onValueChange={(text) => setVisivility(text)}
                             >
-                                <Picker.Item label="Public" value="public" />
-                                <Picker.Item label="Private" value="private" />
+                                <Picker.Item label={i18n.t('public')} value="public" />
+                                <Picker.Item label={i18n.t('private')} value="private" />
                             </Picker>
                         </View>
                     </View>
                     <Text style={{ ...styles.textNote, marginVertical: 20 }}>
-                        Note: These values should be a minimum basic income that is sufficient to meet your beneficiaries' basic needs. They can claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.
+                        {i18n.t('createCommunityNote1')}
                     </Text>
                     <Text style={styles.textNote}>
-                        If there is another person or organization among your community you believe is more suitable to drive this initiative, let them know about this possibility and encourage them to create a community.
+                        {i18n.t('createCommunityNote2')}
                     </Text>
                 </View>
             </ScrollView>

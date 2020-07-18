@@ -78,7 +78,7 @@ class Donate extends Component<Props, IDonateState> {
             this.props.network,
         ).then(() => {
             Alert.alert(
-                'Success',
+                i18n.t('success'),
                 'You\'ve donated!',
                 [
                     { text: 'OK' },
@@ -87,7 +87,7 @@ class Donate extends Component<Props, IDonateState> {
             );
         }).catch(() => {
             Alert.alert(
-                'Failure',
+                i18n.t('failure'),
                 'An error happened while donating!',
                 [
                     { text: 'OK' },
