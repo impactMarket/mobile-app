@@ -29,6 +29,7 @@ import {
     humanifyNumber
 } from '../../helpers';
 import Header from '../../components/Header';
+import i18n from '../../assets/i18n';
 
 
 interface ICommunitiesScreenProps {
@@ -40,10 +41,9 @@ const mapStateToProps = (state: IRootState) => {
 };
 
 const connector = connect(mapStateToProps)
-
 type PropsFromRedux = ConnectedProps<typeof connector>
-
 type Props = PropsFromRedux & ICommunitiesScreenProps
+
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
@@ -58,114 +58,129 @@ function CommunitiesScreen(props: Props) {
         setRefreshing(false);
     }
 
+    const communityCard = (community: ICommunityInfo) => <Card
+        key={community.name}
+        elevation={8}
+        style={styles.card}
+        onPress={() => navigation.navigate('CommunityDetailsScreen', { community: community, user: props.user })}
+    >
+        <Card.Content style={{ margin: -16 }}>
+            <ImageBackground
+                source={{ uri: community.coverImage }}
+                resizeMode="cover"
+                style={styles.cardImage}
+            >
+                <Text style={styles.cardCommunityName}>
+                    {community.name}
+                </Text>
+                <Text style={styles.cardLocation}>
+                    <AntDesign name="enviromento" size={20} /> {community.city}, {community.country}
+                </Text>
+            </ImageBackground>
+            <View style={{ margin: 10 }}>
+                <View style={styles.cardInfo}>
+                    <View>
+                        <Text style={styles.cellHeader}>
+                            {community.beneficiaries.added.length}
+                        </Text>
+                        <Text style={styles.cellDescription}>
+                            {i18n.t('beneficiaries')}
+                        </Text>
+                    </View>
+                    <View>
+                        <Text style={styles.cellHeader}>
+                            ${humanifyNumber(community.vars._claimAmount)}
+                        </Text>
+                        <Text style={styles.cellDescription}>
+                            {claimFrequencyToText(community.vars._baseInterval)}
+                        </Text>
+                    </View>
+                    <View>
+                        <Text style={styles.cellHeader}>
+                            {community.backers.length}
+                        </Text>
+                        <Text style={styles.cellDescription}>
+                            {i18n.t('backers')}
+                        </Text>
+                    </View>
+                </View>
+                <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
+                    <ProgressBar
+                        key="raised"
+                        style={{
+                            backgroundColor: '#d6d6d6',
+                            position: 'absolute'
+                        }}
+                        progress={calculateCommunityProgress('raised', community)}
+                        color="#5289ff"
+                    />
+                    <ProgressBar
+                        key="claimed"
+                        style={{
+                            backgroundColor: 'rgba(255,255,255,0)'
+                        }}
+                        progress={calculateCommunityProgress('claimed', community)}
+                        color="#50ad53"
+                    />
+                </View>
+            </View>
+        </Card.Content>
+    </Card>
+
     return (
         <>
             <Header
-                title="Communities"
+                title={i18n.t('communities')}
                 navigation={navigation}
             >
                 <Button
                     mode="text"
                     onPress={() => navigation.navigate('CreateCommunityScreen')}
                 >
-                    Create
+                    {i18n.t('create')}
                 </Button>
             </Header>
             <ScrollView
                 style={styles.scrollView}
                 refreshControl={
                     <RefreshControl
-                        //refresh control used for the Pull to Refresh
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />
                 }
             >
-                {communities.map((community) => <Card
-                    key={community.name}
-                    elevation={8}
-                    style={styles.card}
-                    onPress={() => navigation.navigate('CommunityDetailsScreen', { community: community, user: props.user })}
-                >
-                    {/* <Card.Cover
-                            source={{ uri: community.image }}
-                        /> */}
-                    <Card.Content style={{ margin: -16 }}>
-                        <ImageBackground
-                            source={{ uri: community.coverImage }}
-                            resizeMode={'cover'}
-                            style={{
-                                borderRadius: 40,
-                                width: '100%',
-                                height: 180,
-                                justifyContent: 'center',
-                                alignContent: 'center',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontSize: 25,
-                                    fontWeight: 'bold',
-                                    fontFamily: 'Gelion-Bold',
-                                    color: 'white',
-                                    textAlign: 'center'
-                                }}
-                            >{community.name}</Text>
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    color: 'white'
-                                }}
-                            ><AntDesign name="enviromento" size={20} /> {community.city}, {community.country}</Text>
-                        </ImageBackground>
-                        <View style={{ margin: 10 }}>
-                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-                                <View>
-                                    <Text style={styles.cellHeader}>{community.beneficiaries.added.length}</Text>
-                                    <Text style={styles.cellDescription}>Beneficiaries</Text>
-                                </View>
-                                <View>
-                                    <Text style={styles.cellHeader}>${humanifyNumber(community.vars._claimAmount)}</Text>
-                                    <Text style={styles.cellDescription}>{claimFrequencyToText(community.vars._baseInterval)}</Text>
-                                </View>
-                                <View>
-                                    <Text style={styles.cellHeader}>{community.backers.length}</Text>
-                                    <Text style={styles.cellDescription}>Backers</Text>
-                                </View>
-                            </View>
-                            <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
-                                <ProgressBar
-                                    key="raised"
-                                    style={{
-                                        backgroundColor: '#d6d6d6',
-                                        position: 'absolute'
-                                    }}
-                                    progress={calculateCommunityProgress('raised', community)}
-                                    color="#5289ff"
-                                />
-                                <ProgressBar
-                                    key="claimed"
-                                    style={{
-                                        backgroundColor: 'rgba(255,255,255,0)'
-                                    }}
-                                    progress={calculateCommunityProgress('claimed', community)}
-                                    color="#50ad53"
-                                />
-                            </View>
-                        </View>
-                    </Card.Content>
-                </Card>)}
+                {communities.map(communityCard)}
             </ScrollView>
         </>
     );
 }
 
 const styles = StyleSheet.create({
-    appbar: {
-        backgroundColor: 'transparent',
-    },
     scrollView: {
+    },
+    cardImage: {
+        borderRadius: 40,
+        width: '100%',
+        height: 180,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    cardCommunityName: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        fontFamily: 'Gelion-Bold',
+        color: 'white',
+        textAlign: 'center'
+    },
+    cardLocation: {
+        fontSize: 20,
+        color: 'white'
+    },
+    cardInfo: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     },
     card: {
         margin: 30,

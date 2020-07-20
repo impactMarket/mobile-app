@@ -24,6 +24,7 @@ import { getCountryFromPhoneNumber } from '../../helpers';
 import { getUser } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
+import i18n from '../../assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -49,22 +50,28 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
     return (
         <>
             <Header
-                title="Your QR Code"
+                title={i18n.t('failure')}
                 navigation={navigation}
                 hasBack={true}
             />
             <ScrollView style={styles.contentView}>
-                <Headline>Scan to pay</Headline>
-                <Subheading>Show QR to be scanned</Subheading>
+                <Headline>
+                    {i18n.t('scanToPay')}
+                </Headline>
+                <Subheading>
+                    {i18n.t('showQRToScan')}
+                </Subheading>
                 <Card elevation={8} style={styles.card}>
                     <Card.Content>
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
+                        <View style={styles.cardHeadView}>
                             <View>
                                 <Text>{name}</Text>
-                                <Text style={{ color: 'grey' }}>{getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}</Text>
+                                <Text style={{ color: 'grey' }}>
+                                    {getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}
+                                </Text>
                             </View>
                             <Avatar.Image
-                                style={{ alignSelf: 'center', marginLeft: 'auto' }}
+                                style={styles.avatar}
                                 size={58}
                                 source={require('../../assets/images/hello.png')}
                             />
@@ -79,8 +86,8 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                             mode="outlined"
                             disabled={true}
                         >
-                            Scan to Pay
-                    </Button>
+                            {i18n.t('scanToPay')}
+                        </Button>
                     </Card.Content>
                 </Card>
             </ScrollView>
@@ -94,6 +101,14 @@ const styles = StyleSheet.create({
     },
     card: {
         marginVertical: 10,
+    },
+    cardHeadView: {
+        flex: 1,
+        flexDirection: 'row'
+    },
+    avatar: {
+        alignSelf: 'center',
+        marginLeft: 'auto'
     },
     qrView: {
         alignItems: 'center',

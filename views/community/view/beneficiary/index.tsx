@@ -18,8 +18,14 @@ import {
 } from '../../../../helpers/types';
 import { getCommunityByContractAddress } from '../../../../services';
 import Claim from './Claim';
-import { Button, ProgressBar } from 'react-native-paper';
-import { iptcColors, humanifyNumber } from '../../../../helpers';
+import {
+    Button,
+    ProgressBar
+} from 'react-native-paper';
+import {
+    iptcColors,
+    humanifyNumber
+} from '../../../../helpers';
 import Header from '../../../../components/Header';
 import BigNumber from 'bignumber.js';
 import i18n from '../../../../assets/i18n';
@@ -68,19 +74,12 @@ function BeneficiaryView(props: Props) {
         setClaimedAmount(humanifyNumber(amount.toString()));
     }
 
-    // const { isBeneficiary } = this.props.user.community;
     if (community === undefined) {
-        return <Text>Loading...</Text>;
+        return <Text>{i18n.t('loading')}</Text>;
     }
 
     return (
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-            }}
-        >
+        <View style={styles.container}>
             <Header
                 title={i18n.t('claim')}
                 navigation={navigation}
@@ -98,22 +97,10 @@ function BeneficiaryView(props: Props) {
                 </Text>
                 <LinearGradient
                     colors={['transparent', 'rgba(246,246,246,1)']}
-                    style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        height: 80,
-                    }}
+                    style={styles.linearGradient}
                 />
             </ImageBackground>
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                }}
-            >
+            <View style={styles.contentView}>
                 <Button
                     mode="outlined"
                     style={{ margin: 30, height: 35 }}
@@ -131,14 +118,12 @@ function BeneficiaryView(props: Props) {
                     <Text
                         onPress={() => navigation.navigate('ClaimExplainedScreen')}
                         style={styles.haveClaimed}
-                    >You have claimed ${claimedAmount} out of ${humanifyNumber(community.vars._maxClaim)}</Text>
+                    >
+                        {i18n.t('youHaveClaimedXoutOfY', { claimed: claimedAmount, max: humanifyNumber(community.vars._maxClaim) })}
+                    </Text>
                     <ProgressBar
                         key="claimedbybeneficiary"
-                        style={{
-                            backgroundColor: '#d6d6d6',
-                            marginHorizontal: 30,
-                            marginVertical: 13
-                        }}
+                        style={styles.claimedProgress}
                         progress={claimedProgress}
                         color="#5289ff"
                     />
@@ -153,15 +138,27 @@ function BeneficiaryView(props: Props) {
 }
 
 const styles = StyleSheet.create({
-    mainPageContent: {
-        fontSize: 30,
-        marginVertical: 30,
-        marginHorizontal: '20%',
-        width: '50%',
-        textAlign: 'center',
-    },
     container: {
-        margin: 20
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    linearGradient: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 80,
+    },
+    contentView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    claimedProgress: {
+        backgroundColor: '#d6d6d6',
+        marginHorizontal: 30,
+        marginVertical: 13
     },
     imageBackground: {
         width: '100%',

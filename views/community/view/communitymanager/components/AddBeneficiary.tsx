@@ -159,7 +159,9 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             </>;
         }
         else if (hasPermission === null || hasPermission === false) {
-            inputMethod = <Button mode="contained" onPress={this.handleAskCameraPermission}>{i18n.t('allowCamera')}</Button>;
+            inputMethod = <Button mode="contained" onPress={this.handleAskCameraPermission}>
+                {i18n.t('allowCamera')}
+            </Button>;
         } else {
             inputMethod = <>
                 <View
@@ -174,7 +176,9 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                         style={StyleSheet.absoluteFillObject}
                     />
 
-                    {scanned && <Button onPress={() => this.setState({ scanned: false })}>{i18n.t('tapToScanAgain')}</Button>}
+                    {scanned && <Button onPress={() => this.setState({ scanned: false })}>
+                        {i18n.t('tapToScanAgain')}
+                    </Button>}
                 </View>
                 <Paragraph>{i18n.t('currentAddress')}:</Paragraph>
                 {

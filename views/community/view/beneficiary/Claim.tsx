@@ -1,12 +1,20 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import {
+    connect,
+    ConnectedProps
+} from 'react-redux';
 import { IRootState } from '../../../../helpers/types';
 
 import { Button } from 'react-native-paper';
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 import { ethers } from 'ethers';
 import { celoWalletRequest } from '../../../../services';
-import { humanifyNumber, iptcColors, getUserCurrencySymbol, amountToUserCurrency } from '../../../../helpers';
+import {
+    humanifyNumber,
+    iptcColors,
+    getUserCurrencySymbol,
+    amountToUserCurrency
+} from '../../../../helpers';
 
 import moment from 'moment';
 import { Text } from 'react-native-paper';
@@ -16,6 +24,7 @@ import {
 } from 'react-native';
 import * as Location from 'expo-location';
 import { addClaimLocation } from '../../../../services/api';
+import i18n from '../../../../assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -92,7 +101,7 @@ class Claim extends React.Component<Props, IClaimState> {
         if (claimDisabled) {
             return <View style={{ height: 90 }}>
                 <Text style={styles.mainPageContent}>
-                    You can claim ${humanifyNumber(this.props.claimAmount)} in
+                    {i18n.t('beneficiaries', { symbol: getUserCurrencySymbol(this.props.user.user), amount: humanifyNumber(this.props.claimAmount) })}
                 </Text>
                 <Text style={styles.claimCountDown}>
                     {nextClaim.days()}d {nextClaim.hours()}h {nextClaim.minutes()}m {nextClaim.seconds()}s
@@ -106,26 +115,10 @@ class Claim extends React.Component<Props, IClaimState> {
                 onPress={this.handleClaimPress}
                 disabled={claimDisabled || claiming}
                 loading={claiming}
-                style={{
-                    width: 170,
-                    height: 50,
-                    borderRadius: 8,
-                    alignSelf: 'center'
-                }}
+                style={styles.claimButton}
             >
-                <Text
-                    style={{
-                        fontFamily: "Gelion-Bold",
-                        fontSize: 25,
-                        fontWeight: "bold",
-                        fontStyle: "normal",
-                        letterSpacing: 0.46,
-                        textAlign: "center",
-                        color: 'white'
-                    }}
-                >
-                    Claim {getUserCurrencySymbol(this.props.user.user)}
-                    {amountToUserCurrency(this.props.claimAmount, this.props.user.user)}
+                <Text style={styles.claimText}>
+                    {i18n.t('claimX', { symbol: getUserCurrencySymbol(this.props.user.user), amount: amountToUserCurrency(this.props.claimAmount, this.props.user.user) })}
                 </Text>
             </Button>
         );
@@ -153,29 +146,24 @@ class Claim extends React.Component<Props, IClaimState> {
 }
 
 const styles = StyleSheet.create({
+    claimButton: {
+        width: 170,
+        height: 50,
+        borderRadius: 8,
+        alignSelf: 'center'
+    },
+    claimText: {
+        fontFamily: "Gelion-Bold",
+        fontSize: 25,
+        fontWeight: "bold",
+        fontStyle: "normal",
+        letterSpacing: 0.46,
+        textAlign: "center",
+        color: 'white'
+    },
     mainPageContent: {
         fontSize: 27,
         textAlign: 'center',
-    },
-    container: {
-        margin: 20
-    },
-    imageBackground: {
-        width: '100%',
-        height: 250,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center'
-    },
-    communityName: {
-        fontSize: 25,
-        fontWeight: 'bold',
-        fontFamily: 'Gelion-Bold',
-        color: 'white'
-    },
-    communityLocation: {
-        fontSize: 20,
-        color: 'white'
     },
     claimCountDown: {
         fontFamily: "Gelion-Bold",

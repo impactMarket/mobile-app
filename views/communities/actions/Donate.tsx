@@ -15,12 +15,12 @@ import {
     Paragraph,
     Portal,
     TextInput,
-    Text,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from '../../../services';
 import BigNumber from 'bignumber.js';
 import { iptcColors } from '../../../helpers';
+import i18n from '../../../assets/i18n';
 
 
 interface IExploreScreenProps {
@@ -32,10 +32,9 @@ const mapStateToProps = (state: IRootState) => {
 };
 
 const connector = connect(mapStateToProps)
-
 type PropsFromRedux = ConnectedProps<typeof connector>
-
 type Props = PropsFromRedux & IExploreScreenProps
+
 interface IDonateState {
     openModalDonate: boolean;
     openModalDonateWithCelo: boolean;
@@ -79,20 +78,14 @@ class Donate extends Component<Props, IDonateState> {
         ).then(() => {
             Alert.alert(
                 i18n.t('success'),
-                'You\'ve donated!',
-                [
-                    { text: 'OK' },
-                ],
-                { cancelable: false }
+                i18n.t('youHaveDonated'),
+                [{ text: 'OK' }], { cancelable: false }
             );
         }).catch(() => {
             Alert.alert(
                 i18n.t('failure'),
-                'An error happened while donating!',
-                [
-                    { text: 'OK' },
-                ],
-                { cancelable: false }
+                i18n.t('errorDonating'),
+                [{ text: 'OK' }], { cancelable: false }
             );
         }).finally(() => {
             this.setState({
@@ -107,7 +100,7 @@ class Donate extends Component<Props, IDonateState> {
     handleCopyAddressToClipboard = () => {
         Clipboard.setString(this.props.community.contractAddress)
         if (Platform.OS === 'android') {
-            ToastAndroid.show('Address copied to clipboard!', ToastAndroid.SHORT);
+            ToastAndroid.show(i18n.t('donate'), ToastAndroid.SHORT);
         }
         // TODO: add ios notification
     }
@@ -133,17 +126,17 @@ class Donate extends Component<Props, IDonateState> {
                     }}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
-                    Donate
+                    {i18n.t('donate')}
                 </Button>
                 <Portal>
                     <Dialog
                         visible={openModalDonate}
                         onDismiss={() => this.setState({ openModalDonate: false })}
                     >
-                        <Dialog.Title>Donate</Dialog.Title>
+                        <Dialog.Title>{i18n.t('donate')}</Dialog.Title>
                         <Dialog.Content>
                             <Paragraph style={{ marginBottom: 20 }}>
-                                Donating to <Text style={{ fontWeight: 'bold' }}>{community.name}</Text>
+                                {i18n.t('donatingTo', { communityName: community.name })}
                             </Paragraph>
                             <Button
                                 mode="contained"
@@ -157,21 +150,26 @@ class Donate extends Component<Props, IDonateState> {
                                 style={{ marginTop: 10 }}
                                 onPress={this.handleOpenDonateWithCelo}
                             >
-                                Donate with Celo wallet
+                                {i18n.t('donateWithCelo')}
                             </Button>
                         </Dialog.Content>
                         <Dialog.Actions>
-                            <Button mode="contained" onPress={() => this.setState({ openModalDonate: false })}>Done</Button>
+                            <Button
+                                mode="contained"
+                                onPress={() => this.setState({ openModalDonate: false })}
+                            >
+                                {i18n.t('done')}
+                             </Button>
                         </Dialog.Actions>
                     </Dialog>
                     <Dialog
                         visible={openModalDonateWithCelo}
                         onDismiss={() => this.setState({ openModalDonateWithCelo: false })}
                     >
-                        <Dialog.Title>Donate</Dialog.Title>
+                        <Dialog.Title>{i18n.t('donate')}</Dialog.Title>
                         <Dialog.Content>
                             <TextInput
-                                label='Amount ($)'
+                                label={i18n.t('amountSymbol')}
                                 mode="outlined"
                                 keyboardType="numeric"
                                 value={amountDonate}
@@ -179,8 +177,21 @@ class Donate extends Component<Props, IDonateState> {
                             />
                         </Dialog.Content>
                         <Dialog.Actions>
-                            <Button mode="contained" loading={donating} disabled={donating} style={{ marginRight: 10 }} onPress={this.handleDonateWithCeloWallet}>Donate</Button>
-                            <Button mode="contained" onPress={() => this.setState({ openModalDonateWithCelo: false })}>Close</Button>
+                            <Button
+                                mode="contained"
+                                loading={donating}
+                                disabled={donating}
+                                style={{ marginRight: 10 }}
+                                onPress={this.handleDonateWithCeloWallet}
+                            >
+                                {i18n.t('donate')}
+                            </Button>
+                            <Button
+                                mode="contained"
+                                onPress={() => this.setState({ openModalDonateWithCelo: false })}
+                            >
+                                {i18n.t('close')}
+                            </Button>
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>

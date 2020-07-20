@@ -28,7 +28,11 @@ import {
 } from '@react-navigation/native';
 import Header from '../../components/Header';
 import RecentTx, { IRecentTxRef } from './RecentTx';
-import { humanifyNumber, amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
+import {
+    humanifyNumber,
+    amountToUserCurrency,
+    getUserCurrencySymbol
+} from '../../helpers';
 import i18n from '../../assets/i18n';
 
 
@@ -81,7 +85,6 @@ function WalletScreen(props: Props) {
                 style={styles.scrollView}
                 refreshControl={
                     <RefreshControl
-                        //refresh control used for the Pull to Refresh
                         refreshing={refreshing}
                         onRefresh={onRefresh}
                     />
@@ -89,19 +92,13 @@ function WalletScreen(props: Props) {
             >
                 <Card elevation={8} style={styles.card}>
                     <Card.Content>
-                        <Text style={{ color: 'grey' }}>{i18n.t('balance').toUpperCase()}</Text>
+                        <Text style={{ color: 'grey' }}>
+                            {i18n.t('balance').toUpperCase()}
+                        </Text>
                         <View style={{ alignItems: 'center' }}>
-                            <Headline
-                                style={{
-                                    fontFamily: "Gelion-Bold",
-                                    fontSize: 56,
-                                    fontWeight: "bold",
-                                    lineHeight: 56,
-                                    letterSpacing: 0,
-                                    marginTop: 20
-                                }}
-                            >
-                                {getUserCurrencySymbol(props.user.user)}{amountToUserCurrency(props.user.celoInfo.balance, props.user.user)}
+                            <Headline style={styles.headlineBalance}>
+                                {getUserCurrencySymbol(props.user.user)}
+                                {amountToUserCurrency(props.user.celoInfo.balance, props.user.user)}
                             </Headline>
                             <Text>{humanifyNumber(props.user.celoInfo.balance)} cUSD</Text>
                         </View>
@@ -121,8 +118,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 10,
     },
-    appbar: {
-        backgroundColor: 'transparent',
+    headlineBalance: {
+        fontFamily: "Gelion-Bold",
+        fontSize: 56,
+        fontWeight: "bold",
+        lineHeight: 56,
+        letterSpacing: 0,
+        marginTop: 20
     },
     item: {
         marginBottom: 50,

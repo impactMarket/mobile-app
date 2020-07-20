@@ -53,7 +53,7 @@ function Beneficiaries(props: Props) {
                     disabled={props.community.beneficiaries.added.length === 0}
                     style={{ marginVertical: 5 }}
                     onPress={() => navigation.navigate('AddedScreen', { beneficiaries: props.community.beneficiaries.added })}
-                    >
+                >
                     {i18n.t('added')} ({props.community.beneficiaries.added.length})
                 </Button>
                 <Button

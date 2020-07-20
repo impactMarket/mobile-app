@@ -179,7 +179,7 @@ function CommunityManagerView(props: Props) {
 
     if (community === undefined) {
         return <View>
-            <Paragraph>Loading...</Paragraph>
+            <Paragraph>{i18n.t('loading')}</Paragraph>
         </View>
     }
 

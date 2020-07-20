@@ -31,7 +31,7 @@ import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { getCountryFromPhoneNumber } from '../../helpers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
-import { getUser, setUsername, setUserCurrency } from '../../services/api';
+import { setUsername, setUserCurrency } from '../../services/api';
 import i18n from '../../assets/i18n';
 
 
