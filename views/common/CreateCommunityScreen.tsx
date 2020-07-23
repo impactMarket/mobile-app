@@ -115,6 +115,7 @@ function CreateCommunityScreen(props: Props) {
                 setIncrementalInterval(new BigNumber(community.vars._incrementInterval).div(60).toString());
                 setMaxClaim(humanifyNumber(community.vars._maxClaim).toString());
                 // currency
+                setCoverImage(community.coverImage);
 
                 setIsNameValid(true);
                 setIsDescriptionValid(true);

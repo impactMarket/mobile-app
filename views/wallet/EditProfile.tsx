@@ -95,7 +95,7 @@ function EditProfile(props: Props) {
                         mode="contained"
                         disabled={true}
                     >
-                        Change Photo
+                        {i18n.t('changePhoto')}
                     </Button>
                     <ValidatedTextInput
                         label={i18n.t('name')}
