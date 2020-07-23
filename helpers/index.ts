@@ -8,6 +8,7 @@ import { ethers } from 'ethers';
 import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
 import CommunityContractABI from '../contracts/CommunityABI.json'
 import { ImpactMarketInstance } from '../contracts/types/truffle-contracts';
+import i18n from '../assets/i18n';
 
 
 export function getUserCurrencySymbol(user: IUserInfo) {
@@ -28,9 +29,9 @@ export function amountToUserCurrency(amount: BigNumber | string, user: IUserInfo
 
 export function claimFrequencyToText(frequency: BigNumber | string): string {
     const f = new BigNumber(frequency);
-    if (f.eq(3601)) return 'hour';
-    if (f.eq(86400)) return 'day';
-    if (f.eq(604800)) return 'week';
+    if (f.eq(3601)) return i18n.t('hour');
+    if (f.eq(86400)) return i18n.t('day');
+    if (f.eq(604800)) return i18n.t('week');
     return 'month';
 }
 
