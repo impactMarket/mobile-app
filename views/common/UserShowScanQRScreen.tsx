@@ -50,25 +50,29 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
     return (
         <>
             <Header
-                title={i18n.t('failure')}
+                title={i18n.t('yourQRCode')}
                 navigation={navigation}
                 hasBack={true}
             />
-            <ScrollView style={styles.contentView}>
-                <Headline>
+            <ScrollView>
+                <Headline style={styles.headingSubHeading}>
                     {i18n.t('scanToPay')}
                 </Headline>
-                <Subheading>
+                <Subheading style={styles.headingSubHeading}>
                     {i18n.t('showQRToScan')}
                 </Subheading>
                 <Card elevation={8} style={styles.card}>
                     <Card.Content>
                         <View style={styles.cardHeadView}>
-                            <View>
-                                <Text>{name}</Text>
-                                <Text style={{ color: 'grey' }}>
+                            <View style={{
+                                flex:1,
+                                flexDirection: 'column',
+                                alignItems: 'flex-start'
+                            }}>
+                                <Subheading>{name}</Subheading>
+                                <Subheading style={{ color: 'grey' }}>
                                     {getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}
-                                </Text>
+                                </Subheading>
                             </View>
                             <Avatar.Image
                                 style={styles.avatar}
@@ -96,11 +100,11 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
 }
 
 const styles = StyleSheet.create({
-    contentView: {
-        marginHorizontal: 20,
+    headingSubHeading: {
+        paddingHorizontal: 20,
     },
     card: {
-        marginVertical: 10,
+        margin: 20
     },
     cardHeadView: {
         flex: 1,
