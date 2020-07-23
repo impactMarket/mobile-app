@@ -19,7 +19,11 @@ import {
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from '../../../services';
 import BigNumber from 'bignumber.js';
-import { iptcColors } from '../../../helpers';
+import {
+    iptcColors,
+    getUserCurrencySymbol,
+    amountToUserCurrency
+} from '../../../helpers';
 import i18n from '../../../assets/i18n';
 
 
@@ -114,16 +118,14 @@ class Donate extends Component<Props, IDonateState> {
         } = this.state;
         const {
             community,
+            user,
         } = this.props;
 
         return (
             <>
                 <Button
                     mode="contained"
-                    style={{
-                        borderRadius: 0,
-                        backgroundColor: iptcColors.greenishTeal
-                    }}
+                    style={styles.donate}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
                     {i18n.t('donate')}
@@ -159,7 +161,7 @@ class Donate extends Component<Props, IDonateState> {
                                 onPress={() => this.setState({ openModalDonate: false })}
                             >
                                 {i18n.t('done')}
-                             </Button>
+                            </Button>
                         </Dialog.Actions>
                     </Dialog>
                     <Dialog
@@ -169,11 +171,11 @@ class Donate extends Component<Props, IDonateState> {
                         <Dialog.Title>{i18n.t('donate')}</Dialog.Title>
                         <Dialog.Content>
                             <TextInput
-                                label={i18n.t('amountSymbol')}
+                                label={i18n.t('amountSymbol', { symbol: getUserCurrencySymbol(user.user) })}
                                 mode="outlined"
                                 keyboardType="numeric"
                                 value={amountDonate}
-                                onChangeText={text => this.setState({ amountDonate: text })}
+                                onChangeText={text => this.setState({ amountDonate: amountToUserCurrency(text, user.user).toString() })}
                             />
                         </Dialog.Content>
                         <Dialog.Actions>
@@ -201,6 +203,10 @@ class Donate extends Component<Props, IDonateState> {
 }
 
 const styles = StyleSheet.create({
+    donate: {
+        borderRadius: 0,
+        backgroundColor: iptcColors.greenishTeal
+    }
 });
 
 export default connector(Donate)

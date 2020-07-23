@@ -112,7 +112,7 @@ i18n.translations = {
         donate: 'Donate',
         donatingTo: 'Donating to {{communityName}}',
         donateWithCelo: 'Donate with Celo wallet',
-        amountSymbol: 'Amount ($)',
+        amountSymbol: 'Amount ({{symbol}})',
         close: 'Close',
         done: 'Done',
         youCanClaimXin: 'You can claim {{symbol}}{{amount}} in',
