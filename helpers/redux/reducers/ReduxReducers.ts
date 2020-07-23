@@ -19,6 +19,7 @@ import {
     AuthActionTypes,
     SET_PUSH_NOTIFICATION_TOKEN,
     SET_AUTH_TOKEN,
+    SET_USER_EXCHANGE_RATE,
 } from '../../types';
 
 
@@ -79,6 +80,10 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
             return { ...state, celoInfo: action.payload };
         case SET_USER_INFO:
             return { ...state, user: action.payload };
+        case SET_USER_EXCHANGE_RATE:
+            const user = state.user;
+            user.exchangeRate = action.payload;
+            return { ...state, user };
         case SET_USER_WALLET_BALANCE:
             const celoInfo = state.celoInfo;
             celoInfo.balance = action.payload;

@@ -18,6 +18,7 @@ import {
     AuthActionTypes,
     SET_PUSH_NOTIFICATION_TOKEN,
     SET_AUTH_TOKEN,
+    SET_USER_EXCHANGE_RATE,
 } from "../../types";
 import { ContractKit } from "@celo/contractkit";
 
@@ -33,6 +34,13 @@ export function setUserInfo(userInfo: IUserInfo): UserActionTypes {
     return {
         type: SET_USER_INFO,
         payload: userInfo,
+    }
+}
+
+export function setUserExchangeRate(rate: number): UserActionTypes {
+    return {
+        type: SET_USER_EXCHANGE_RATE,
+        payload: rate,
     }
 }
 

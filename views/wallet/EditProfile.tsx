@@ -22,7 +22,8 @@ import {
 import {
     resetUserApp,
     resetNetworkContractsApp,
-    setUserInfo
+    setUserInfo,
+    setUserExchangeRate
 } from '../../helpers/redux/actions/ReduxActions';
 import {
     ScrollView
@@ -31,7 +32,7 @@ import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { getCountryFromPhoneNumber } from '../../helpers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
-import { setUsername, setUserCurrency } from '../../services/api';
+import { setUsername, setUserCurrency, getExchangeRate } from '../../services/api';
 import i18n from '../../assets/i18n';
 
 
@@ -62,6 +63,15 @@ function EditProfile(props: Props) {
         props.dispatch(resetUserApp());
         props.dispatch(resetNetworkContractsApp());
         navigation.goBack();
+    }
+
+    const handleChangeCurrency = async (text: string) => {
+        setCurrency(text);
+        setUserCurrency(props.user.celoInfo.address, text);
+        props.dispatch(setUserInfo({ ...props.user.user, currency: text }));
+        // update exchange rate!
+        const exchangeRate = await getExchangeRate(props.user.user.currency.toUpperCase());
+        props.dispatch(setUserExchangeRate(exchangeRate))
     }
 
     return (
@@ -103,11 +113,7 @@ function EditProfile(props: Props) {
                         <Picker
                             selectedValue={currency}
                             style={styles.picker}
-                            onValueChange={(text) => {
-                                setCurrency(text);
-                                setUserCurrency(props.user.celoInfo.address, text);
-                                props.dispatch(setUserInfo({ ...props.user.user, currency: text }));
-                            }}
+                            onValueChange={handleChangeCurrency}
                         >
                             <Picker.Item label="Dollar (USD)" value="usd" />
                             <Picker.Item label="Euro (EUR)" value="eur" />

@@ -6,6 +6,7 @@ export const STORAGE_USER_FIRST_TIME = '@status:firstime'
 export const STORAGE_USER_AUTH_TOKEN = '@user:authtoken'
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';
 export const SET_USER_INFO = 'SET_USER_INFO';
+export const SET_USER_EXCHANGE_RATE = 'SET_USER_EXCHANGE_RATE';
 export const SET_USER_WALLET_BALANCE = 'SET_USER_WALLET_BALANCE';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
@@ -76,6 +77,11 @@ interface UserInfoAction {
     payload: IUserInfo
 }
 
+interface UserExchangeRateAction {
+    type: typeof SET_USER_EXCHANGE_RATE
+    payload: number
+}
+
 interface UserSetBalanceAction {
     type: typeof SET_USER_WALLET_BALANCE
     payload: string
@@ -131,7 +137,7 @@ interface SetAuthTokenAction {
     payload: string;
 }
 
-export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction
+export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction | UserExchangeRateAction
 export type NetworkActionTypes = CeloKitAction | SetImpactMarketContractAction | SetCommunityContractAction | SetCommunityAction | ResetNetworkAction
 export type AuthActionTypes = SetTokenPushNotificationsAction | SetAuthTokenAction
 
