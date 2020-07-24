@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
     ScrollView,
-    View
+    View,
+    AsyncStorage
 } from 'react-native';
 import {
     connect,
@@ -16,8 +17,6 @@ import {
     Headline,
     Subheading,
     Card,
-    Button,
-    Text,
     Avatar
 } from 'react-native-paper';
 import { getCountryFromPhoneNumber } from '../../helpers';
@@ -25,6 +24,7 @@ import { getUser } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
 import i18n from '../../assets/i18n';
+import ModalScanQR from './ModalScanQR';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -47,6 +47,12 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
             }
         });
     });
+
+    const handleModalScanQR = async (inputAddress: string) => {
+        await AsyncStorage.setItem('@tmp/inputAddress', inputAddress);
+        navigation.goBack();
+    }
+
     return (
         <>
             <Header
@@ -64,11 +70,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                 <Card elevation={8} style={styles.card}>
                     <Card.Content>
                         <View style={styles.cardHeadView}>
-                            <View style={{
-                                flex:1,
-                                flexDirection: 'column',
-                                alignItems: 'flex-start'
-                            }}>
+                            <View style={styles.nameCountry}>
                                 <Subheading>{name}</Subheading>
                                 <Subheading style={{ color: 'grey' }}>
                                     {getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}
@@ -86,12 +88,10 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                                 size={200}
                             />
                         </View>
-                        <Button
-                            mode="outlined"
-                            disabled={true}
-                        >
-                            {i18n.t('scanToPay')}
-                        </Button>
+                        <ModalScanQR
+                            buttonText={i18n.t('scanToPay')}
+                            callback={handleModalScanQR}
+                        />
                     </Card.Content>
                 </Card>
             </ScrollView>
@@ -100,6 +100,11 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
 }
 
 const styles = StyleSheet.create({
+    nameCountry: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
     headingSubHeading: {
         paddingHorizontal: 20,
     },

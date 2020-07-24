@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     connect,
     ConnectedProps
@@ -12,10 +12,13 @@ import {
     Headline,
     Button,
 } from 'react-native-paper';
-import AddBeneficiary from '../components/AddBeneficiary';
+import ModalScanQR from '../../../../common/ModalScanQR';
 import { useNavigation } from '@react-navigation/native';
-import { updateCommunityInfo } from '../../../../../helpers';
+import { updateCommunityInfo, iptcColors } from '../../../../../helpers';
 import i18n from '../../../../../assets/i18n';
+import { Alert } from 'react-native';
+import { celoWalletRequest } from '../../../../../services/celoWallet';
+import { ethers } from 'ethers';
 
 
 interface IBeneficiariesProps {
@@ -32,6 +35,61 @@ type Props = PropsFromRedux & IBeneficiariesProps
 
 function Beneficiaries(props: Props) {
     const navigation = useNavigation();
+    const [addInProgress, setAddInProgress] = useState(false);
+
+    const handleModalScanQR = async (inputAddress: string) => {
+        const { user, network } = props;
+        const { communityContract } = network.contracts;
+        const { address } = user.celoInfo;
+        let addressToAdd: string;
+
+        if (communityContract === undefined) {
+            // TODO: do something beatiful, la la la
+            return;
+        }
+
+        try {
+            addressToAdd = ethers.utils.getAddress(inputAddress);
+        } catch (e) {
+            Alert.alert(
+                i18n.t('failure'),
+                'You are trying to add an invalid address!',
+                [{ text: 'Close' }],
+                { cancelable: false }
+            );
+            return;
+        }
+
+        setAddInProgress(true);
+        celoWalletRequest(
+            address,
+            communityContract.options.address,
+            await communityContract.methods.addBeneficiary(addressToAdd),
+            'addbeneficiary',
+            network,
+        ).then(() => {
+
+            // TODO: update UI
+            setTimeout(() => updateCommunityInfo(props.user.celoInfo.address, props), 10000);
+
+            Alert.alert(
+                i18n.t('success'),
+                'You\'ve successfully added a new beneficiary!',
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
+        }).catch(() => {
+            Alert.alert(
+                i18n.t('failure'),
+                'An error happened while adding the request!',
+                [{ text: 'Close' }],
+                { cancelable: false }
+            );
+        }).finally(() => {
+            setAddInProgress(false);
+        });
+    }
+
     return (
         <Card elevation={8}>
             <Card.Content>
@@ -64,8 +122,13 @@ function Beneficiaries(props: Props) {
                 >
                     {i18n.t('removed')} ({props.community.beneficiaries.removed.length})
                 </Button>
-                <AddBeneficiary
-                    addBeneficiaryCallback={() => updateCommunityInfo(props.user.celoInfo.address, props)}
+                <ModalScanQR
+                    buttonStyle={{
+                        marginVertical: 5,
+                        backgroundColor: iptcColors.greenishTeal
+                    }}
+                    buttonText={i18n.t('addBeneficiary')}
+                    callback={handleModalScanQR}
                 />
             </Card.Content>
         </Card>
