@@ -384,15 +384,15 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     _getCurrentUserBalance = async (address: string) => {
-        await Analytics.setUserId('johndoe');
-        await Analytics.setUserProperties({
-            hero_class: 'B',
-        });
-        await Analytics.logEvent('ButtonTapped', {
-            name: 'settings',
-            screen: 'profile',
-            purpose: 'Opens the internal settings',
-        });
+        await Analytics.setUserId(address);
+        // await Analytics.setUserProperties({
+        //     hero_class: 'B',
+        // });
+        // await Analytics.logEvent('ButtonTapped', {
+        //     name: 'settings',
+        //     screen: 'profile',
+        //     purpose: 'Opens the internal settings',
+        // });
         const stableToken = await kit.contracts.getStableToken()
         const cUSDBalanceBig = await stableToken.balanceOf(address)
         return new BigNumber(cUSDBalanceBig.toString());
