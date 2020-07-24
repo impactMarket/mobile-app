@@ -2,7 +2,6 @@ import React from 'react';
 import {
     StyleSheet,
     View,
-    Alert,
 } from 'react-native';
 import {
     connect,
@@ -10,34 +9,30 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-} from '../../../../../helpers/types';
+} from '../../helpers/types';
 import {
     Button,
     Portal,
     Dialog,
     Paragraph,
 } from 'react-native-paper';
-import {
-    celoWalletRequest,
-} from '../../../../../services';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { ethers } from 'ethers';
-import ValidatedTextInput from '../../../../../components/ValidatedTextInput';
-import { iptcColors } from '../../../../../helpers';
-import i18n from '../../../../../assets/i18n';
+import ValidatedTextInput from '../../components/ValidatedTextInput';
+import i18n from '../../assets/i18n';
 
 
-interface IAddBeneficiaryProps {
-    addBeneficiaryCallback: () => void;
+interface IModalScanQRProps {
+    buttonStyle?: any;
+    buttonText: string;
+    callback: (inputAddress: string) => void;
 }
-interface IAddBeneficiaryState {
-    newBeneficiaryAddress: string;
-    modalNewBeneficiary: boolean;
-    modalListBeneficiary: boolean;
+interface IModalScanQRState {
+    inputAddress: string;
+    modalScanQR: boolean;
     hasPermission: boolean;
     scanned: boolean;
     useCamera: boolean;
-    addInProgress: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state
@@ -45,76 +40,19 @@ const mapStateToProps = (state: IRootState) => {
 };
 const connector = connect(mapStateToProps)
 type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & IAddBeneficiaryProps
+type Props = PropsFromRedux & IModalScanQRProps
 
-class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
+class ModalScanQR extends React.Component<Props, IModalScanQRState> {
 
     constructor(props: any) {
         super(props);
         this.state = {
-            newBeneficiaryAddress: '',
-            modalNewBeneficiary: false,
-            modalListBeneficiary: false,
+            inputAddress: '',
+            modalScanQR: false,
             hasPermission: false,
             scanned: false,
             useCamera: true,
-            addInProgress: false,
         }
-    }
-
-    handleAddBeneficiary = async () => {
-        const { newBeneficiaryAddress } = this.state;
-        const { user, network } = this.props;
-        const { communityContract } = network.contracts;
-        const { address } = user.celoInfo;
-        let addressToAdd: string;
-
-        if (communityContract === undefined) {
-            // TODO: do something beatiful, la la la
-            return;
-        }
-
-        try {
-            addressToAdd = ethers.utils.getAddress(newBeneficiaryAddress);
-        } catch (e) {
-            Alert.alert(
-                i18n.t('failure'),
-                'You are trying to add an invalid address!',
-                [{ text: 'Close' }],
-                { cancelable: false }
-            );
-            return;
-        }
-
-        this.setState({ addInProgress: true });
-        celoWalletRequest(
-            address,
-            communityContract.options.address,
-            await communityContract.methods.addBeneficiary(addressToAdd),
-            'acceptbeneficiaryrequest',
-            network,
-        ).then(() => {
-
-            // TODO: update UI
-            setTimeout(() => this.props.addBeneficiaryCallback, 10000);
-
-            Alert.alert(
-                i18n.t('success'),
-                'You\'ve successfully added a new beneficiary!',
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-        }).catch(() => {
-            Alert.alert(
-                i18n.t('failure'),
-                'An error happened while adding the request!',
-                [{ text: 'Close' }],
-                { cancelable: false }
-            );
-
-        }).finally(() => {
-            this.setState({ modalNewBeneficiary: false, addInProgress: false, scanned: false })
-        });
     }
 
     handleBarCodeScanned = ({ type, data }: { type: any, data: any }) => {
@@ -125,7 +63,7 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
         } catch (e) {
             scannedAddress = ethers.utils.getAddress(data);
         }
-        this.setState({ scanned: true, newBeneficiaryAddress: scannedAddress });
+        this.setState({ scanned: true, inputAddress: scannedAddress });
     };
 
     handleAskCameraPermission = async () => {
@@ -133,18 +71,17 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
         this.setState({ hasPermission: status === 'granted' });
     }
 
-    handleOpenAddBeneficiary = () => {
-        this.setState({ modalNewBeneficiary: true, newBeneficiaryAddress: '', addInProgress: false, scanned: false });
+    handleOpenModalScanQR = () => {
+        this.setState({ modalScanQR: true, inputAddress: '', scanned: false });
     }
 
     render() {
         const {
-            newBeneficiaryAddress,
-            modalNewBeneficiary,
+            inputAddress,
+            modalScanQR,
             hasPermission,
             scanned,
             useCamera,
-            addInProgress,
         } = this.state;
         let inputMethod;
 
@@ -152,9 +89,9 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             inputMethod = <>
                 <ValidatedTextInput
                     label={i18n.t('beneficiaryAddress')}
-                    value={newBeneficiaryAddress}
+                    value={inputAddress}
                     required={true}
-                    onChangeText={value => this.setState({ newBeneficiaryAddress: value })}
+                    onChangeText={value => this.setState({ inputAddress: value })}
                 />
             </>;
         }
@@ -182,9 +119,9 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                 </View>
                 <Paragraph>{i18n.t('currentAddress')}:</Paragraph>
                 {
-                    newBeneficiaryAddress.length > 0 &&
+                    inputAddress.length > 0 &&
                     <Paragraph style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>
-                        {newBeneficiaryAddress.slice(0, 12)}..{newBeneficiaryAddress.slice(31, 42)}
+                        {inputAddress.slice(0, 12)}..{inputAddress.slice(31, 42)}
                     </Paragraph>
                 }
             </>
@@ -194,18 +131,15 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
             <>
                 <Button
                     mode="contained"
-                    style={{
-                        marginVertical: 5,
-                        backgroundColor: iptcColors.greenishTeal
-                    }}
-                    onPress={this.handleOpenAddBeneficiary}
+                    style={this.props.buttonStyle}
+                    onPress={this.handleOpenModalScanQR}
                 >
-                    {i18n.t('addBeneficiary')}
+                    {this.props.buttonText}
                 </Button>
                 <Portal>
                     <Dialog
-                        visible={modalNewBeneficiary}
-                        onDismiss={() => this.setState({ modalNewBeneficiary: false })}
+                        visible={modalScanQR}
+                        onDismiss={() => this.setState({ modalScanQR: false })}
                     >
                         <Dialog.Content style={{ height: 350, width: '100%' }}>
                             {inputMethod}
@@ -214,25 +148,23 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
                             <Button
                                 mode="outlined"
                                 style={{ marginHorizontal: 10 }}
-                                onPress={() => this.setState({ newBeneficiaryAddress: '', useCamera: !useCamera })}
+                                onPress={() => this.setState({ inputAddress: '', useCamera: !useCamera })}
                             >
                                 {useCamera ? i18n.t('useText') : i18n.t('useCamera')}
                             </Button>
                             <Button
                                 mode="contained"
-                                disabled={newBeneficiaryAddress.length === 0 || addInProgress}
-                                loading={addInProgress}
+                                disabled={inputAddress.length === 0}
                                 style={{ marginRight: 10 }}
-                                onPress={this.handleAddBeneficiary}
+                                onPress={() => this.props.callback(inputAddress)}
                             >
                                 {i18n.t('add')}
                             </Button>
                             <Button
                                 mode="contained"
-                                disabled={addInProgress}
                                 onPress={() => this.setState({
-                                    modalNewBeneficiary: false,
-                                    newBeneficiaryAddress: ''
+                                    modalScanQR: false,
+                                    inputAddress: ''
                                 })}
                             >
                                 {i18n.t('cancel')}
@@ -245,4 +177,4 @@ class AddBeneficiary extends React.Component<Props, IAddBeneficiaryState> {
     }
 }
 
-export default connector(AddBeneficiary);
+export default connector(ModalScanQR);
