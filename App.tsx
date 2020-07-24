@@ -454,7 +454,7 @@ export default class App extends React.Component<{}, IAppState> {
                         currency = user.currency;
                         exchangeRate = await getExchangeRate(user.currency.toUpperCase());
                     }
-                    store.dispatch(setUserInfo({ name, currency, exchangeRate }))
+                    store.dispatch(setUserInfo({ name, currency, exchangeRate, avatar: user.avatar }))
                 }
                 await loadContracts(address, kit, store);
                 // We have data!!

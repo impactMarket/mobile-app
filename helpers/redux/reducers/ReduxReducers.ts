@@ -33,6 +33,7 @@ const INITIAL_STATE_USER: IUserState = {
         name: '',
         currency: 'USD',
         exchangeRate: 1,
+        avatar: '1',
     },
     community: {
         isBeneficiary: false,

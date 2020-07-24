@@ -30,7 +30,7 @@ import {
 } from 'react-native-gesture-handler';
 import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
-import { getCountryFromPhoneNumber } from '../../helpers';
+import { getCountryFromPhoneNumber, systemAvatar } from '../../helpers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
 import { setUsername, setUserCurrency, getExchangeRate } from '../../services/api';
 import i18n from '../../assets/i18n';
@@ -89,7 +89,7 @@ function EditProfile(props: Props) {
                             marginVertical: 20
                         }}
                         size={121}
-                        source={require('../../assets/images/hello.png')}
+                        source={systemAvatar(props.user.user.avatar, true)}
                     />
                     <Button
                         mode="contained"

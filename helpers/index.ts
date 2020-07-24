@@ -10,6 +10,32 @@ import CommunityContractABI from '../contracts/CommunityABI.json'
 import { ImpactMarketInstance } from '../contracts/types/truffle-contracts';
 import i18n from '../assets/i18n';
 
+const userSystemAvatars = [
+    [
+        require('../assets/images/avatar/round/avatar1.png'),
+        require('../assets/images/avatar/round/avatar2.png'),
+        require('../assets/images/avatar/round/avatar3.png'),
+        require('../assets/images/avatar/round/avatar4.png'),
+        require('../assets/images/avatar/round/avatar5.png'),
+        require('../assets/images/avatar/round/avatar6.png'),
+        require('../assets/images/avatar/round/avatar7.png'),
+        require('../assets/images/avatar/round/avatar8.png'),
+    ],
+    [
+        require('../assets/images/avatar/square/avatar1.png'),
+        require('../assets/images/avatar/square/avatar2.png'),
+        require('../assets/images/avatar/square/avatar3.png'),
+        require('../assets/images/avatar/square/avatar4.png'),
+        require('../assets/images/avatar/square/avatar5.png'),
+        require('../assets/images/avatar/square/avatar6.png'),
+        require('../assets/images/avatar/square/avatar7.png'),
+        require('../assets/images/avatar/square/avatar8.png'),
+    ]
+]
+
+export function systemAvatar(n: string, big: boolean = false) {
+    return userSystemAvatars[big ? 0: 1][parseInt(n) - 1];
+}
 
 export function getUserCurrencySymbol(user: IUserInfo) {
     switch (user.currency.toUpperCase()) {

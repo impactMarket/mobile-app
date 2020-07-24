@@ -31,6 +31,7 @@ export interface IUserInfo {
     name: string,
     currency: string,
     exchangeRate: number,
+    avatar: string,
 }
 
 export interface IUserCommunityInfo {
@@ -211,6 +212,7 @@ export interface IUser {
     address: string;
     username: string | null;
     currency: string | null;
+    avatar: string;
 }
 
 export interface IAddressAndName {
