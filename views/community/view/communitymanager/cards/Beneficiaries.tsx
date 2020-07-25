@@ -54,7 +54,7 @@ function Beneficiaries(props: Props) {
             Alert.alert(
                 i18n.t('failure'),
                 'You are trying to add an invalid address!',
-                [{ text: 'Close' }],
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
             return;
@@ -82,7 +82,7 @@ function Beneficiaries(props: Props) {
             Alert.alert(
                 i18n.t('failure'),
                 'An error happened while adding the request!',
-                [{ text: 'Close' }],
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
         }).finally(() => {

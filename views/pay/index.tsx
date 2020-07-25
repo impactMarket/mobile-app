@@ -78,8 +78,8 @@ function PayScreen(props: Props) {
         } catch (e) {
             Alert.alert(
                 i18n.t('failure'),
-                'You are trying to add an invalid address!',
-                [{ text: 'Close' }],
+                i18n.t('tryingToAddInvalidAddress'),
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
             return;
@@ -99,15 +99,15 @@ function PayScreen(props: Props) {
 
             Alert.alert(
                 i18n.t('success'),
-                'Payment sent!',
+                i18n.t('paymentSent'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
         }).catch(() => {
             Alert.alert(
                 i18n.t('failure'),
-                'An error happened while sending the payment!',
-                [{ text: 'Close' }],
+                i18n.t('errorSendingPayment'),
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
         }).finally(() => {

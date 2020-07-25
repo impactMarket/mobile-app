@@ -10,7 +10,7 @@ import CommunityContractABI from '../contracts/CommunityABI.json'
 import { ImpactMarketInstance } from '../contracts/types/truffle-contracts';
 import i18n from '../assets/i18n';
 
-const userSystemAvatars = [
+const usergetUserAvatars = [
     [
         require('../assets/images/avatar/round/avatar1.png'),
         require('../assets/images/avatar/round/avatar2.png'),
@@ -33,8 +33,11 @@ const userSystemAvatars = [
     ]
 ]
 
-export function systemAvatar(n: string, big: boolean = false) {
-    return userSystemAvatars[big ? 0: 1][parseInt(n) - 1];
+export function getUserAvatar(user: IUserInfo, big: boolean = false) {
+    if (user.avatar.length < 3) {
+        return usergetUserAvatars[big ? 0 : 1][parseInt(user.avatar) - 1];
+    }
+    return { uri: user.avatar };
 }
 
 export function getUserCurrencySymbol(user: IUserInfo) {

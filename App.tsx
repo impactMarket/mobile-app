@@ -137,7 +137,6 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     componentDidMount = () => {
-        console.log(FirebaseCore.DEFAULT_APP_OPTIONS);
         this.unsubscribeStore = store.subscribe(() => {
             const previousLoggedIn = this.state.loggedIn;
             const currentLoggedIn = store.getState().user.celoInfo.address.length > 0;

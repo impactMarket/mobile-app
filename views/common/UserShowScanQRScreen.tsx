@@ -19,7 +19,7 @@ import {
     Card,
     Avatar
 } from 'react-native-paper';
-import { getCountryFromPhoneNumber } from '../../helpers';
+import { getCountryFromPhoneNumber, getUserAvatar } from '../../helpers';
 import { getUser } from '../../services/api';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
@@ -80,7 +80,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
                             <Avatar.Image
                                 style={styles.avatar}
                                 size={58}
-                                source={require('../../assets/images/hello.png')}
+                                source={getUserAvatar(props.user.user, true)}
                             />
                         </View>
                         <View style={styles.qrView}>

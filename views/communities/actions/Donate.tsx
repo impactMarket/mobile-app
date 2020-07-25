@@ -160,7 +160,7 @@ class Donate extends Component<Props, IDonateState> {
                                 mode="contained"
                                 onPress={() => this.setState({ openModalDonate: false })}
                             >
-                                {i18n.t('done')}
+                                {i18n.t('close')}
                             </Button>
                         </Dialog.Actions>
                     </Dialog>
