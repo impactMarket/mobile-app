@@ -20,6 +20,9 @@ import {
     SET_PUSH_NOTIFICATION_TOKEN,
     SET_AUTH_TOKEN,
     SET_USER_EXCHANGE_RATE,
+    IAppState,
+    AppActionTypes,
+    SET_APP_PYMENT_TO_ACTION,
 } from '../../types';
 
 
@@ -54,6 +57,10 @@ const INITIAL_STATE_NETWORK: INetworkState = {
 const INITIAL_STATE_AUTH: IAuthState = {
     pushNotificationsToken: '',
     authToken: ''
+}
+
+const INITIAL_STATE_APP: IAppState = {
+    paymentToAddress: ''
 }
 
 const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
@@ -144,9 +151,19 @@ const authReducer = (state = INITIAL_STATE_AUTH, action: AuthActionTypes) => {
     }
 };
 
+const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
+    switch (action.type) {
+        case SET_APP_PYMENT_TO_ACTION:
+            return { ...state, paymentToAddress: action.payload };
+        default:
+            return state
+    }
+};
+
 export default combineReducers({
     user: userReducer,
     network: networkReducer,
     auth: authReducer,
+    app: appReducer,
 })
 

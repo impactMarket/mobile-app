@@ -25,6 +25,7 @@ import { useNavigation } from '@react-navigation/native';
 import Header from '../../components/Header';
 import i18n from '../../assets/i18n';
 import ModalScanQR from './ModalScanQR';
+import { setAppPaymentToAction } from '../../helpers/redux/actions/ReduxActions';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -49,7 +50,7 @@ function UserShowScanQRScreen(props: PropsFromRedux) {
     });
 
     const handleModalScanQR = async (inputAddress: string) => {
-        await AsyncStorage.setItem('@tmp/inputAddress', inputAddress);
+        props.dispatch(setAppPaymentToAction(inputAddress));
         navigation.goBack();
     }
 

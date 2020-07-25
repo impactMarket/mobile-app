@@ -31,8 +31,8 @@ import { celoWalletRequest } from '../../services/celoWallet';
 
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network, app } = state
+    return { user, network, app }
 };
 
 const connector = connect(mapStateToProps)
@@ -56,16 +56,11 @@ function PayScreen(props: Props) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
-            // TODO: improve
-            const inputAddress = await AsyncStorage.getItem('@tmp/inputAddress');
-            if (inputAddress !== null) {
-                await AsyncStorage.removeItem('@tmp/inputAddress');
-                setPaymentTo(inputAddress);
-            }
+            setPaymentTo(props.app.paymentToAddress);
         });
 
         return unsubscribe;
-    }, [navigation]);
+    }, [navigation, props.app.paymentToAddress]);
 
     const handlePay = async () => {
         const { user, network } = props;

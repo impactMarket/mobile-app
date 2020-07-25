@@ -18,6 +18,7 @@ export const RESET_USER_APP = 'RESET_USER_APP';
 export const RESET_NETWORK_APP = 'RESET_NETWORK_APP';
 export const SET_PUSH_NOTIFICATION_TOKEN = 'SET_PUSH_NOTIFICATION_TOKEN';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
+export const SET_APP_PYMENT_TO_ACTION = 'SET_APP_PYMENT_TO_ACTION';
 
 // state
 export interface IUserCeloInfo {
@@ -61,10 +62,15 @@ export interface IAuthState {
     authToken: string;
 }
 
+export interface IAppState {
+    paymentToAddress: string;
+}
+
 export interface IRootState {
     user: IUserState,
     network: INetworkState,
-    auth: IAuthState
+    auth: IAuthState,
+    app: IAppState,
 }
 
 // action
@@ -138,9 +144,15 @@ interface SetAuthTokenAction {
     payload: string;
 }
 
+interface SetAppPaymentToAction {
+    type: typeof SET_APP_PYMENT_TO_ACTION
+    payload: string;
+}
+
 export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction | UserExchangeRateAction
 export type NetworkActionTypes = CeloKitAction | SetImpactMarketContractAction | SetCommunityContractAction | SetCommunityAction | ResetNetworkAction
 export type AuthActionTypes = SetTokenPushNotificationsAction | SetAuthTokenAction
+export type AppActionTypes = SetAppPaymentToAction
 
 export interface ITransaction {
     tx: string;
