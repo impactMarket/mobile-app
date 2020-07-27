@@ -2,6 +2,7 @@ import React from 'react';
 import {
     StyleSheet,
     View,
+    Alert,
 } from 'react-native';
 import {
     connect,
@@ -12,9 +13,6 @@ import {
 } from '../../helpers/types';
 import {
     Button,
-    Portal,
-    Dialog,
-    Paragraph,
     Card,
 } from 'react-native-paper';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -27,6 +25,8 @@ import { BottomSheet } from 'react-native-btr';
 interface IModalScanQRProps {
     buttonStyle?: any;
     buttonText: string;
+    inputText: string;
+    selectButtonText: string;
     callback: (inputAddress: string) => void;
 }
 interface IModalScanQRState {
@@ -58,14 +58,22 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
     }
 
     handleBarCodeScanned = ({ type, data }: { type: any, data: any }) => {
-        let scannedAddress: string;
+        let scannedAddress: string = '';
         try {
             const parsed = JSON.parse(data);
             scannedAddress = ethers.utils.getAddress(parsed.address);
         } catch (e) {
-            scannedAddress = ethers.utils.getAddress(data);
+            try {
+                scannedAddress = ethers.utils.getAddress(data);
+                this.setState({ scanned: true, inputAddress: scannedAddress });
+            } catch (e) {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('scanningInvalidAddress'),
+                    [{ text: 'OK' }], { cancelable: false }
+                );
+            }
         }
-        this.setState({ scanned: true, inputAddress: scannedAddress });
     };
 
     handleAskCameraPermission = async () => {
@@ -85,49 +93,40 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
             scanned,
             useCamera,
         } = this.state;
+        const {
+            buttonText,
+            inputText,
+            selectButtonText,
+            buttonStyle,
+            callback,
+        } = this.props;
         let inputCameraMethod;
 
         if (hasPermission === null || hasPermission === false) {
-            inputCameraMethod = <Button mode="contained" style={styles.optionButtons} onPress={this.handleAskCameraPermission}>
+            inputCameraMethod = <Button
+                mode="contained"
+                style={styles.optionButtons}
+                onPress={this.handleAskCameraPermission}
+            >
                 {i18n.t('allowCamera')}
             </Button>;
         } else {
-            inputCameraMethod = <>
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        justifyContent: 'flex-end',
-                    }}
-                >
-
-                    <BarCodeScanner
-                        onBarCodeScanned={this.handleBarCodeScanned}
-                        style={StyleSheet.absoluteFillObject}
-                    />
-
-                    {/* {scanned && <Button onPress={() => this.setState({ scanned: false })}>
-                        {i18n.t('tapToScanAgain')}
-                    </Button>} */}
-                    <Paragraph style={{ fontSize: 18 }}>{i18n.t('currentAddress')}:</Paragraph>
-                    {
-                        inputAddress.length > 0 &&
-                        <Paragraph style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>
-                            {inputAddress.slice(0, 12)}..{inputAddress.slice(31, 42)}
-                        </Paragraph>
-                    }
-                </View>
-            </>
+            inputCameraMethod = <View style={styles.scannerView}>
+                <BarCodeScanner
+                    onBarCodeScanned={this.handleBarCodeScanned}
+                    style={StyleSheet.absoluteFillObject}
+                />
+            </View>;
         }
 
         return (
             <>
                 <Button
                     mode="contained"
-                    style={this.props.buttonStyle}
+                    style={buttonStyle}
                     onPress={this.handleOpenModalScanQR}
                 >
-                    {this.props.buttonText}
+                    {buttonText}
                 </Button>
                 <BottomSheet
                     visible={modalScanQR}
@@ -137,7 +136,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                     <Card elevation={8}>
                         <Card.Content style={{ marginVertical: -16 }}>
                             <ValidatedTextInput
-                                label={i18n.t('beneficiaryAddress')}
+                                label={inputText}
                                 value={inputAddress}
                                 required={true}
                                 onChangeText={value => this.setState({ inputAddress: value })}
@@ -155,9 +154,9 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                                 mode="contained"
                                 disabled={inputAddress.length === 0}
                                 style={styles.optionButtons}
-                                onPress={() => this.props.callback(inputAddress)}
+                                onPress={() => callback(inputAddress)}
                             >
-                                {i18n.t('add')}
+                                {selectButtonText}
                             </Button>
                             <Button
                                 mode="contained"
@@ -191,6 +190,11 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
 const styles = StyleSheet.create({
     optionButtons: {
         marginHorizontal: 10
+    },
+    scannerView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
     }
 });
 

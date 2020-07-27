@@ -4,15 +4,13 @@ import {
 } from 'react-native';
 import {
     Appbar,
-    Text,
     Card,
     Subheading,
-    Avatar,
     Headline,
 } from 'react-native-paper';
 import { NavigationState, NavigationProp } from '@react-navigation/native';
 import { BottomSheet } from 'react-native-btr';
-import { getUserAvatar, iptcColors } from '../helpers';
+import { iptcColors } from '../helpers';
 import ModalScanQR from '../views/common/ModalScanQR';
 import i18n from '../assets/i18n';
 import SvgQRCode from 'react-native-qrcode-svg';
@@ -35,6 +33,8 @@ interface IHeaderProps {
     hasQr?: boolean;
     hasShare?: boolean;
     navigation: NavigationProp<Record<string, object | undefined>, string, NavigationState, {}, {}>
+    // just a little annoying lint bug because of mapped redux props
+    children?: any;
 }
 interface IHeaderState {
     openQR: boolean;
@@ -128,6 +128,8 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                         </View>
                         <ModalScanQR
                             buttonText={i18n.t('scanToPay')}
+                            inputText={i18n.t('currentAddress')}
+                            selectButtonText={i18n.t('select')}
                             buttonStyle={{ backgroundColor: iptcColors.greenishTeal }}
                             callback={this.handleModalScanQR}
                         />

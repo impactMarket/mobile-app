@@ -21,6 +21,7 @@ export interface IListActionItem {
 }
 interface IListActionItemProps {
     item: IListActionItem;
+    maxTextTitleLength?: number;
     prefix?: {
         top?: string;
         bottom?: string;
@@ -37,6 +38,10 @@ export default class ListActionItem extends Component<IListActionItemProps, {}> 
     }
 
     render() {
+        let titleMaxLength = 15;
+        if (this.props.maxTextTitleLength !== undefined) {
+            titleMaxLength = this.props.maxTextTitleLength;
+        }
         const fromIsAddress = this.props.item.from.slice(0, 2) === '0x';
 
         const avatarSrc = this.props.item.avatar !== undefined ?
@@ -57,14 +62,14 @@ export default class ListActionItem extends Component<IListActionItemProps, {}> 
         </View>;
 
         const from = fromIsAddress ?
-            `${this.props.item.from.slice(0, 5)}..${this.props.item.from.slice(37, 42)}` :
+            `${this.props.item.from.slice(0, (titleMaxLength - 4) / 2)}..${this.props.item.from.slice(42 - ((titleMaxLength - 4) / 2), 42)}` :
             this.props.item.from;
 
         return <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginVertical: 10 }}>
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ marginRight: 5 }}>{avatarSrc}</View>
                 <View style={{ justifyContent: 'center' }}>
-                    <Text style={styles.textTitle}>{from.length > 15 ? from.slice(0, 15) + '...' : from}</Text>
+                    <Text style={styles.textTitle}>{from.length > titleMaxLength ? from.slice(0, titleMaxLength) + '...' : from}</Text>
                     <Text style={styles.textDescription}>{this.props.item.description}</Text>
                 </View>
             </View>

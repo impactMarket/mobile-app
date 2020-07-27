@@ -27,6 +27,7 @@ import {
 import i18n from '../../assets/i18n';
 import { ethers } from 'ethers';
 import { celoWalletRequest } from '../../services/celoWallet';
+import ListActionItem from '../../components/ListActionItem';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -146,12 +147,22 @@ function PayScreen(props: Props) {
                             {amountToUserCurrency(props.user.celoInfo.balance, props.user.user)}
                         </Text>
                         <Divider />
-                        <TextInput
+                        {paymentTo.length === 0 ? <TextInput
                             style={{ padding: 10 }}
                             placeholder={i18n.t('nameAddressPhone')}
                             value={paymentTo}
                             onChangeText={setPaymentTo}
-                        />
+                        /> : <ListActionItem
+                                key={paymentTo}
+                                maxTextTitleLength={24}
+                                item={{
+                                    from: paymentTo,
+                                    description: '',
+                                    key: 'send',
+                                    timestamp: new Date().getDate(),
+                                }}
+                                prefix={{ top: getUserCurrencySymbol(props.user.user) }}
+                            />}
                         <Divider />
                         <TextInput
                             style={{ padding: 10 }}

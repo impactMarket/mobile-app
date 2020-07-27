@@ -125,6 +125,8 @@ i18n.translations = {
         tryingToAddInvalidAddress: 'You are trying to add an invalid address!',
         errorSendingPayment: 'An error happened while sending the payment!',
         paymentSent: 'Payment sent!',
+        scanningInvalidAddress: 'You are trying to scan an invalid address!',
+        select: 'Select',
     },
     pt: {
         testnetWarning: 'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
@@ -245,6 +247,8 @@ i18n.translations = {
         day: 'dia',
         week: 'semana',
         changePhoto: 'Alterar foto',
+        scanningInvalidAddress: 'Você está a tentar scannear um endereço inválido!',
+        select: 'Selecionar',
     },
 };
 // Set the locale once at the beginning of your app.

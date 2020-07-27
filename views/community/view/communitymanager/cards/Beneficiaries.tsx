@@ -128,6 +128,8 @@ function Beneficiaries(props: Props) {
                         backgroundColor: iptcColors.greenishTeal
                     }}
                     buttonText={i18n.t('addBeneficiary')}
+                    inputText={i18n.t('beneficiaryAddress')}
+                    selectButtonText={i18n.t('add')}
                     callback={handleModalScanQR}
                 />
             </Card.Content>
