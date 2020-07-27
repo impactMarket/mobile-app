@@ -15,11 +15,13 @@ import {
     Portal,
     Dialog,
     Paragraph,
+    Card,
 } from 'react-native-paper';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { ethers } from 'ethers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
 import i18n from '../../assets/i18n';
+import { BottomSheet } from 'react-native-btr';
 
 
 interface IModalScanQRProps {
@@ -51,7 +53,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
             modalScanQR: false,
             hasPermission: false,
             scanned: false,
-            useCamera: true,
+            useCamera: false,
         }
     }
 
@@ -72,7 +74,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
     }
 
     handleOpenModalScanQR = () => {
-        this.setState({ modalScanQR: true, inputAddress: '', scanned: false });
+        this.setState({ modalScanQR: true, scanned: false });
     }
 
     render() {
@@ -83,47 +85,38 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
             scanned,
             useCamera,
         } = this.state;
-        let inputMethod;
+        let inputCameraMethod;
 
-        if (!useCamera) {
-            inputMethod = <>
-                <ValidatedTextInput
-                    label={i18n.t('beneficiaryAddress')}
-                    value={inputAddress}
-                    required={true}
-                    onChangeText={value => this.setState({ inputAddress: value })}
-                />
-            </>;
-        }
-        else if (hasPermission === null || hasPermission === false) {
-            inputMethod = <Button mode="contained" onPress={this.handleAskCameraPermission}>
+        if (hasPermission === null || hasPermission === false) {
+            inputCameraMethod = <Button mode="contained" style={styles.optionButtons} onPress={this.handleAskCameraPermission}>
                 {i18n.t('allowCamera')}
             </Button>;
         } else {
-            inputMethod = <>
+            inputCameraMethod = <>
                 <View
                     style={{
                         flex: 1,
                         flexDirection: 'column',
                         justifyContent: 'flex-end',
-                    }}>
+                    }}
+                >
 
                     <BarCodeScanner
                         onBarCodeScanned={this.handleBarCodeScanned}
                         style={StyleSheet.absoluteFillObject}
                     />
 
-                    {scanned && <Button onPress={() => this.setState({ scanned: false })}>
+                    {/* {scanned && <Button onPress={() => this.setState({ scanned: false })}>
                         {i18n.t('tapToScanAgain')}
-                    </Button>}
+                    </Button>} */}
+                    <Paragraph style={{ fontSize: 18 }}>{i18n.t('currentAddress')}:</Paragraph>
+                    {
+                        inputAddress.length > 0 &&
+                        <Paragraph style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>
+                            {inputAddress.slice(0, 12)}..{inputAddress.slice(31, 42)}
+                        </Paragraph>
+                    }
                 </View>
-                <Paragraph>{i18n.t('currentAddress')}:</Paragraph>
-                {
-                    inputAddress.length > 0 &&
-                    <Paragraph style={{ fontWeight: 'bold', fontFamily: 'Gelion-Bold' }}>
-                        {inputAddress.slice(0, 12)}..{inputAddress.slice(31, 42)}
-                    </Paragraph>
-                }
             </>
         }
 
@@ -136,32 +129,39 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                 >
                     {this.props.buttonText}
                 </Button>
-                <Portal>
-                    <Dialog
-                        visible={modalScanQR}
-                        onDismiss={() => this.setState({ modalScanQR: false })}
-                    >
-                        <Dialog.Content style={{ height: 350, width: '100%' }}>
-                            {inputMethod}
-                        </Dialog.Content>
-                        <Dialog.Actions>
+                <BottomSheet
+                    visible={modalScanQR}
+                    onBackButtonPress={() => this.setState({ modalScanQR: false })}
+                    onBackdropPress={() => this.setState({ modalScanQR: false })}
+                >
+                    <Card elevation={8}>
+                        <Card.Content style={{ marginVertical: -16 }}>
+                            <ValidatedTextInput
+                                label={i18n.t('beneficiaryAddress')}
+                                value={inputAddress}
+                                required={true}
+                                onChangeText={value => this.setState({ inputAddress: value })}
+                            />
+                        </Card.Content>
+                        <Card.Actions style={{ justifyContent: 'space-between', marginVertical: 15 }}>
                             <Button
-                                mode="outlined"
-                                style={{ marginHorizontal: 10 }}
-                                onPress={() => this.setState({ inputAddress: '', useCamera: !useCamera })}
+                                mode="contained"
+                                style={styles.optionButtons}
+                                onPress={() => this.setState({ useCamera: true, scanned: false })}
                             >
-                                {useCamera ? i18n.t('useText') : i18n.t('useCamera')}
+                                {i18n.t('useCamera')}
                             </Button>
                             <Button
                                 mode="contained"
                                 disabled={inputAddress.length === 0}
-                                style={{ marginRight: 10 }}
+                                style={styles.optionButtons}
                                 onPress={() => this.props.callback(inputAddress)}
                             >
                                 {i18n.t('add')}
                             </Button>
                             <Button
                                 mode="contained"
+                                style={styles.optionButtons}
                                 onPress={() => this.setState({
                                     modalScanQR: false,
                                     inputAddress: ''
@@ -169,12 +169,29 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                             >
                                 {i18n.t('cancel')}
                             </Button>
-                        </Dialog.Actions>
-                    </Dialog>
-                </Portal>
+                        </Card.Actions>
+                    </Card>
+                </BottomSheet>
+                <BottomSheet
+                    visible={useCamera && !scanned}
+                    onBackButtonPress={() => this.setState({ useCamera: false })}
+                    onBackdropPress={() => this.setState({ useCamera: false })}
+                >
+                    <Card elevation={8}>
+                        <Card.Content style={{ marginVertical: -16, height: 400 }}>
+                            {inputCameraMethod}
+                        </Card.Content>
+                    </Card>
+                </BottomSheet>
             </>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    optionButtons: {
+        marginHorizontal: 10
+    }
+});
 
 export default connector(ModalScanQR);

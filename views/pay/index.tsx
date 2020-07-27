@@ -4,7 +4,6 @@ import {
     Text,
     TextInput,
     RefreshControl,
-    AsyncStorage,
     Alert
 } from 'react-native';
 import {
@@ -55,12 +54,8 @@ function PayScreen(props: Props) {
     }
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', async () => {
-            setPaymentTo(props.app.paymentToAddress);
-        });
-
-        return unsubscribe;
-    }, [navigation, props.app.paymentToAddress]);
+        setPaymentTo(props.app.paymentToAddress);
+    }, [props.app]);
 
     const handlePay = async () => {
         const { user, network } = props;
