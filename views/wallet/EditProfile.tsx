@@ -32,7 +32,7 @@ import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { getCountryFromPhoneNumber, getUserAvatar } from '../../helpers';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
-import { setUsername, setUserCurrency, getExchangeRate } from '../../services/api';
+import Api from '../../services/api';
 import i18n from '../../assets/i18n';
 
 
@@ -67,10 +67,10 @@ function EditProfile(props: Props) {
 
     const handleChangeCurrency = async (text: string) => {
         setCurrency(text);
-        setUserCurrency(props.user.celoInfo.address, text);
+        Api.setUserCurrency(props.user.celoInfo.address, text);
         props.dispatch(setUserInfo({ ...props.user.user, currency: text }));
         // update exchange rate!
-        const exchangeRate = await getExchangeRate(props.user.user.currency.toUpperCase());
+        const exchangeRate = await Api.getExchangeRate(props.user.user.currency.toUpperCase());
         props.dispatch(setUserExchangeRate(exchangeRate))
     }
 
@@ -103,7 +103,7 @@ function EditProfile(props: Props) {
                         maxLength={32}
                         required={true}
                         onEndEditing={(e) => {
-                            setUsername(props.user.celoInfo.address, name);
+                            Api.setUsername(props.user.celoInfo.address, name);
                             props.dispatch(setUserInfo({ ...props.user.user, name }));
                         }}
                         onChangeText={value => setName(value)}

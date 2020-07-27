@@ -23,7 +23,7 @@ import {
     View
 } from 'react-native';
 import * as Location from 'expo-location';
-import { addClaimLocation } from '../../../../services/api';
+import Api from '../../../../services/api';
 import i18n from '../../../../assets/i18n';
 
 
@@ -82,7 +82,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 }
             }
             if (loc !== undefined) {
-                addClaimLocation({ latitude: loc.coords.altitude, longitude: loc.coords.longitude });
+                Api.addClaimLocation({ latitude: loc.coords.altitude, longitude: loc.coords.longitude });
             }
             this._loadAllowance(communityContract).then(() => {
                 this.setState({ claiming: false });

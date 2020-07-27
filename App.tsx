@@ -54,7 +54,7 @@ import EditProfile from './views/wallet/EditProfile';
 import AddedScreen from './views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './views/community/view/communitymanager/RemovedScreen';
 import LoginScreen from './views/common/LoginScreen';
-import { getExchangeRate, getUser, setUserPushNotificationToken } from './services/api';
+import Api from './services/api';
 import ClaimExplainedScreen from './views/community/view/beneficiary/ClaimExplainedScreen';
 import FAQScreen from './views/common/FAQScreen';
 import { registerForPushNotifications } from './services/pushNotifications';
@@ -146,7 +146,7 @@ export default class App extends React.Component<{}, IAppState> {
                     this._authUser();
                     registerForPushNotifications().then(token => {
                         if (token) {
-                            setUserPushNotificationToken(store.getState().user.celoInfo.address, token);
+                            Api.setUserPushNotificationToken(store.getState().user.celoInfo.address, token);
                             store.dispatch(setPushNotificationsToken(token));
                         }
                     });
@@ -440,7 +440,7 @@ export default class App extends React.Component<{}, IAppState> {
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
                 const balance = await this._getCurrentUserBalance(address);
-                const user = await getUser(address);
+                const user = await Api.getUser(address);
                 store.dispatch(setUserCeloInfo({ address, phoneNumber, balance: balance.toString() }))
                 if (user !== undefined) {
                     let name = '';
@@ -451,7 +451,7 @@ export default class App extends React.Component<{}, IAppState> {
                     }
                     if (user.currency !== null) {
                         currency = user.currency;
-                        exchangeRate = await getExchangeRate(user.currency.toUpperCase());
+                        exchangeRate = await Api.getExchangeRate(user.currency.toUpperCase());
                     }
                     store.dispatch(setUserInfo({ name, currency, exchangeRate, avatar: user.avatar }))
                 }

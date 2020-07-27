@@ -6,7 +6,7 @@ import {
 import {
     Headline, ActivityIndicator,
 } from 'react-native-paper';
-import { tokenTx } from '../../services/api';
+import Api from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 import i18n from '../../assets/i18n';
 
@@ -24,7 +24,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
     useImperativeHandle(ref, () => ({
         updateRecentTx() {
             setLoadingTxs(true);
-            tokenTx(props.userAddress)
+            Api.tokenTx(props.userAddress)
                 .then((txs) => {
                     setActivities(txs.map((t) => ({
                         key: t.from.address,
@@ -78,7 +78,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>((props, ref) => 
         //     }
         // }
         // loadContacts();
-        tokenTx(props.userAddress)
+        Api.tokenTx(props.userAddress)
             .then((txs) => {
                 setActivities(txs.map((t) => ({
                     key: t.from.address,

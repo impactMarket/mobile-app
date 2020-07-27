@@ -38,10 +38,7 @@ import {
 } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { loadContracts } from '../../helpers';
-import {
-    userAuth,
-    setUserPushNotificationToken
-} from '../../services/api';
+import Api from '../../services/api';
 import { registerForPushNotifications } from '../../services/pushNotifications';
 import i18n from '../../assets/i18n';
 
@@ -84,7 +81,7 @@ function LoginScreen(props: Props) {
 
         const dappkitResponse = await waitForAccountAuth(requestId)
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
-        const authToken = await userAuth(userAddress, pin);
+        const authToken = await Api.userAuth(userAddress, pin);
         if (authToken === undefined) {
             Alert.alert(
                 i18n.t('failure'),
@@ -126,7 +123,7 @@ function LoginScreen(props: Props) {
                 setPin('');
                 return;
             }
-            setUserPushNotificationToken(userAddress, pushNotificationsToken);
+            Api.setUserPushNotificationToken(userAddress, pushNotificationsToken);
             props.dispatch(setPushNotificationsToken(pushNotificationsToken));
         } catch (error) {
             Alert.alert(

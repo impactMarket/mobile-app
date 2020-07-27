@@ -6,7 +6,7 @@ import {
 import {
     Headline, ActivityIndicator,
 } from 'react-native-paper';
-import { paymentsTx } from '../../services/api';
+import Api from '../../services/api';
 import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
 import { amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
 import { IUserState, IPaymentsTxAPI } from '../../helpers/types';
@@ -34,7 +34,7 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
     useImperativeHandle(ref, () => ({
         updateRecentPayments() {
             setLoadingPayments(true);
-            paymentsTx(props.user.celoInfo.address)
+            Api.paymentsTx(props.user.celoInfo.address)
                 .then((payments) => {
                     setActivities(payments.map(mapPayments))
                     setLoadingPayments(false);
@@ -43,7 +43,7 @@ const RecentPayments = React.forwardRef<IRecentPaymentsRef, IRecentPaymentsProps
     }));
 
     useEffect(() => {
-        paymentsTx(props.user.celoInfo.address)
+        Api.paymentsTx(props.user.celoInfo.address)
             .then((payments) => {
                 setActivities(payments.map(mapPayments));
                 setLoadingPayments(false);

@@ -24,10 +24,6 @@ import {
     ICommunityInfo,
     IUserState
 } from '../../helpers/types';
-import {
-    requestCreateCommunity,
-    celoWalletRequest
-} from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import config from '../../config';
@@ -41,12 +37,10 @@ import {
     amountToUserCurrency
 } from '../../helpers';
 import Header from '../../components/Header';
-import {
-    editCommunity,
-    uploadImageAsync
-} from '../../services/api';
+import Api from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
 import i18n from '../../assets/i18n';
+import { celoWalletRequest } from '../../services/celoWallet';
 
 
 interface ICreateCommunityScreen {
@@ -202,7 +196,7 @@ function CreateCommunityScreen(props: Props) {
                         props.network,
                     )
                 }
-                const success = await editCommunity(
+                const success = await Api.editCommunity(
                     community.publicId,
                     name,
                     description,
@@ -239,7 +233,7 @@ function CreateCommunityScreen(props: Props) {
         } else {
             let uploadResponse, uploadImagePath;
             try {
-                uploadResponse = await uploadImageAsync(coverImage);
+                uploadResponse = await Api.uploadImageAsync(coverImage);
                 if (uploadResponse?.status === 200) {
                     uploadImagePath = uploadResponse.data.location;
                 }
@@ -255,7 +249,7 @@ function CreateCommunityScreen(props: Props) {
                 setSending(false);
                 return;
             }
-            requestCreateCommunity(
+            Api.requestCreateCommunity(
                 props.user.celoInfo.address,
                 name,
                 description,

@@ -2,7 +2,7 @@ import { ICommunityInfo, IUser, IUserState, IUserInfo } from './types';
 import config from '../config';
 import BigNumber from 'bignumber.js';
 import { ContractKit } from '@celo/contractkit';
-import { findComunityToBeneficicary, findComunityToManager } from '../services/api';
+import Api from '../services/api';
 import { setCommunityContract, setUserIsBeneficiary, setUserIsCommunityManager, setImpactMarketContract, setCommunity } from './redux/actions/ReduxActions';
 import { ethers } from 'ethers';
 import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
@@ -111,13 +111,13 @@ export async function loadContracts(address: string, kit: ContractKit, store: an
     ) as ethers.Contract & ImpactMarketInstance;
     store.dispatch(setImpactMarketContract(impactMarketContract));
 
-    const isBeneficiary = await findComunityToBeneficicary(address);
+    const isBeneficiary = await Api.findComunityToBeneficicary(address);
     if (isBeneficiary !== undefined) {
         store.dispatch(setUserIsBeneficiary(true));
         fSetCommunity(isBeneficiary);
         return;
     }
-    const isManager = await findComunityToManager(address);
+    const isManager = await Api.findComunityToManager(address);
     if (isManager !== undefined) {
         store.dispatch(setUserIsCommunityManager(true));
         fSetCommunity(isManager);
@@ -126,12 +126,12 @@ export async function loadContracts(address: string, kit: ContractKit, store: an
 }
 
 export async function updateCommunityInfo(address: string, store: any) {
-    const isBeneficiary = await findComunityToBeneficicary(address);
+    const isBeneficiary = await Api.findComunityToBeneficicary(address);
     if (isBeneficiary !== undefined) {
         store.dispatch(setCommunity(isBeneficiary));
         return;
     }
-    const isManager = await findComunityToManager(address);
+    const isManager = await Api.findComunityToManager(address);
     if (isManager !== undefined) {
         store.dispatch(setCommunity(isManager));
         return;
