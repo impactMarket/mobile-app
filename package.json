@@ -48,6 +48,7 @@
         "react": "16.11.0",
         "react-dom": "16.11.0",
         "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+        "react-native-btr": "^1.1.5",
         "react-native-chart-kit": "5.4.0",
         "react-native-crypto": "2.1.2",
         "react-native-elements": "1.2.7",
