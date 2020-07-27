@@ -225,6 +225,7 @@ export interface IUser {
     username: string | null;
     currency: string | null;
     avatar: string;
+    language: number;
 }
 
 export interface IAddressAndName {

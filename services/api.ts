@@ -234,6 +234,17 @@ async function setUserCurrency(
     return result ? true : false;
 }
 
+async function setLanguage(
+    address: string,
+    language: number,
+): Promise<boolean> {
+    const result = await postRequest('/user/language', {
+        address,
+        language
+    });
+    return result ? true : false;
+}
+
 async function getExchangeRate(
     currency: string,
 ): Promise<number> {
@@ -326,6 +337,7 @@ export {
     getUser,
     setUsername,
     setUserCurrency,
+    setLanguage,
     getExchangeRate,
     uploadImageAsync,
     userAuth,
