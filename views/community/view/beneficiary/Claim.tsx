@@ -8,7 +8,6 @@ import { IRootState } from '../../../../helpers/types';
 import { Button } from 'react-native-paper';
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 import { ethers } from 'ethers';
-import { celoWalletRequest } from '../../../../services';
 import {
     humanifyNumber,
     iptcColors,
@@ -25,6 +24,7 @@ import {
 import * as Location from 'expo-location';
 import Api from '../../../../services/api';
 import i18n from '../../../../assets/i18n';
+import { celoWalletRequest } from '../../../../services/celoWallet';
 
 
 const mapStateToProps = (state: IRootState) => {

@@ -21,7 +21,6 @@ import {
     Button,
 } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
-import { getAllValidCommunities } from '../../services';
 import { useNavigation } from '@react-navigation/native';
 import {
     calculateCommunityProgress,
@@ -30,6 +29,7 @@ import {
 } from '../../helpers';
 import Header from '../../components/Header';
 import i18n from '../../assets/i18n';
+import Api from '../../services/api';
 
 
 interface ICommunitiesScreenProps {
@@ -50,11 +50,11 @@ function CommunitiesScreen(props: Props) {
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 
     useEffect(() => {
-        getAllValidCommunities().then(setCommunities);
+        Api.getAllValidCommunities().then(setCommunities);
     }, []);
 
     const onRefresh = () => {
-        getAllValidCommunities().then(setCommunities);
+        Api.getAllValidCommunities().then(setCommunities);
         setRefreshing(false);
     }
 

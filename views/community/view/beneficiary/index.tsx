@@ -16,7 +16,6 @@ import {
     IRootState,
     ICommunityInfo
 } from '../../../../helpers/types';
-import { getCommunityByContractAddress } from '../../../../services';
 import Claim from './Claim';
 import {
     Button,
@@ -29,6 +28,7 @@ import {
 import Header from '../../../../components/Header';
 import BigNumber from 'bignumber.js';
 import i18n from '../../../../assets/i18n';
+import Api from '../../../../services/api';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -51,7 +51,7 @@ function BeneficiaryView(props: Props) {
                 return;
             }
             const { _address } = props.network.contracts.communityContract;
-            const _community = await getCommunityByContractAddress(_address);
+            const _community = await Api.getCommunityByContractAddress(_address);
             if (_community === undefined) {
                 // TODO: show error
                 return;

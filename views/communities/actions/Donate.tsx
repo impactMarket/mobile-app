@@ -17,7 +17,6 @@ import {
     TextInput,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
-import { celoWalletRequest } from '../../../services';
 import BigNumber from 'bignumber.js';
 import {
     iptcColors,
@@ -25,6 +24,7 @@ import {
     amountToUserCurrency
 } from '../../../helpers';
 import i18n from '../../../assets/i18n';
+import { celoWalletRequest } from '../../../services/celoWallet';
 
 
 interface IExploreScreenProps {
