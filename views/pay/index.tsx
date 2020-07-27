@@ -147,7 +147,7 @@ function PayScreen(props: Props) {
                             textAlign: 'center',
                             marginBottom: 8
                         }}>
-                            Balance: {getUserCurrencySymbol(props.user.user)}
+                            {i18n.t('balance')}: {getUserCurrencySymbol(props.user.user)}
                             {amountToUserCurrency(props.user.celoInfo.balance, props.user.user)}
                         </Text>
                         <Divider />
