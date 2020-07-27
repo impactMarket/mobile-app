@@ -47,7 +47,6 @@ import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-conte
 import { createStackNavigator } from '@react-navigation/stack';
 import Tabs from './views/Tabs';
 
-import UserShowScanQRScreen from './views/common/UserShowScanQRScreen';
 import CommunityDetailsScreen from './views/common/CommunityDetailsScreen';
 import CreateCommunityScreen from './views/common/CreateCommunityScreen';
 import EditProfile from './views/wallet/EditProfile';
@@ -311,13 +310,6 @@ export default class App extends React.Component<{}, IAppState> {
                                 }}
                                 name="Home"
                                 component={Tabs}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="UserShowScanQRScreen"
-                                component={UserShowScanQRScreen}
                             />
                             <Stack.Screen
                                 options={{
