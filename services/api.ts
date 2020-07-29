@@ -216,10 +216,10 @@ class Api {
     static async getExchangeRate(
         currency: string,
     ): Promise<number> {
-        const rates = await getRequest<any>(
+        const result = await getRequest<any>(
             'https://api.exchangeratesapi.io/latest?base=USD'
         );
-        return rates ? rates[currency.toUpperCase()] : 1;
+        return result ? result.rates[currency.toUpperCase()] : 1;
     }
     
     static async uploadImageAsync(uri: string) {

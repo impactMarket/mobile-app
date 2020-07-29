@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     },
     inputTextFieldLabel: {
         color: 'grey',
-        fontFamily: 'Gelion-Thin'
+        fontFamily: 'Gelion-Regular'
     },
 });
 
