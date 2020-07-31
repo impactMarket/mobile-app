@@ -32,7 +32,7 @@ import CommuntyStatus from '../../components/CommuntyStatus';
 import Header from '../../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
-import config from '../../config';
+import config from '../../../config';
 import i18n from '../../assets/i18n';
 
 

@@ -61,5 +61,5 @@ buck-out/
 web-build/
 .env
 .extra
-assets/firebase/
+firebase/
 *.jks

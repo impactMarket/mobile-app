@@ -9,10 +9,10 @@
         ],
         "version": "0.0.1-alpha.21",
         "orientation": "portrait",
-        "icon": "./assets/images/logo.png",
+        "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarketmobile",
         "splash": {
-            "image": "./assets/images/splash.png",
+            "image": "./src/assets/images/splash.png",
             "backgroundColor": "#2362FB"
         },
         "updates": {
@@ -22,21 +22,21 @@
             "**/*"
         ],
         "notification": {
-            "icon": "./assets/images/notification.png",
+            "icon": "./src/assets/images/notification.png",
             "color": "#000000",
             "iosDisplayInForeground": true,
             "androidMode": "collapse",
             "androidCollapsedTitle": "#{unread_notifications} new interactions"
         },
         "ios": {
-            "googleServicesFile": "./assets/firebase/GoogleService-Info.plist",
+            "googleServicesFile": "./src/assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
             "buildNumber": "0.0.1a21",
             "supportsTablet": true
         },
         "android": {
             "useNextNotificationsApi": true,
-            "googleServicesFile": "./assets/firebase/google-services.json",
+            "googleServicesFile": "./src/assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
             "versionCode": 21
         },

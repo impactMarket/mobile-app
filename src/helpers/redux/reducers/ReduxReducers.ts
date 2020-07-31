@@ -63,7 +63,7 @@ const INITIAL_STATE_APP: IAppState = {
     paymentToAddress: ''
 }
 
-const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
+const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes): IUserState => {
     const community = state.community;
     switch (action.type) {
         case RESET_USER_APP:
@@ -78,6 +78,7 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes) => {
                     name: '',
                     currency: 'USD',
                     exchangeRate: 1,
+                    avatar: '1',
                 },
                 community: {
                     isBeneficiary: false,

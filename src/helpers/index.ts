@@ -1,5 +1,5 @@
 import { ICommunityInfo, IUser, IUserState, IUserInfo } from './types';
-import config from '../config';
+import config from '../../config';
 import BigNumber from 'bignumber.js';
 import { ContractKit } from '@celo/contractkit';
 import Api from '../services/api';

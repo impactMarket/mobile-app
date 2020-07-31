@@ -26,7 +26,7 @@ import {
 } from '../../helpers/types';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
-import config from '../../config';
+import config from '../../../config';
 import BigNumber from 'bignumber.js';
 import ValidatedTextInput from '../../components/ValidatedTextInput';
 import {

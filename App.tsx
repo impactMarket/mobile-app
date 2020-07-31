@@ -20,18 +20,18 @@ import { Asset } from 'expo-asset';
 import { NavigationContainer, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
 import { Provider } from 'react-redux';
 import { createStore, Unsubscribe } from 'redux';
-import userReducer from './helpers/redux/reducers/ReduxReducers';
+import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
 import {
     setUserCeloInfo,
     setCeloKit,
     setUserInfo,
     setPushNotificationsToken,
-} from './helpers/redux/actions/ReduxActions';
+} from './src/helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
     STORAGE_USER_FIRST_TIME,
-} from './helpers/types';
+} from './src/helpers/types';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -42,29 +42,29 @@ import {
 } from 'react-native-paper';
 import config from './config';
 import BigNumber from 'bignumber.js';
-import { iptcColors, loadContracts } from './helpers';
+import { iptcColors, loadContracts } from './src/helpers';
 import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
-import Tabs from './views/Tabs';
+import Tabs from './src/views/Tabs';
 
-import CommunityDetailsScreen from './views/common/CommunityDetailsScreen';
-import CreateCommunityScreen from './views/common/CreateCommunityScreen';
-import EditProfile from './views/wallet/EditProfile';
-import AddedScreen from './views/community/view/communitymanager/AddedScreen';
-import RemovedScreen from './views/community/view/communitymanager/RemovedScreen';
-import LoginScreen from './views/common/LoginScreen';
-import Api from './services/api';
-import ClaimExplainedScreen from './views/community/view/beneficiary/ClaimExplainedScreen';
-import FAQScreen from './views/common/FAQScreen';
-import { registerForPushNotifications } from './services/pushNotifications';
+import CommunityDetailsScreen from './src/views/common/CommunityDetailsScreen';
+import CreateCommunityScreen from './src/views/common/CreateCommunityScreen';
+import EditProfile from './src/views/wallet/EditProfile';
+import AddedScreen from './src/views/community/view/communitymanager/AddedScreen';
+import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
+import LoginScreen from './src/views/common/LoginScreen';
+import Api from './src/services/api';
+import ClaimExplainedScreen from './src/views/community/view/beneficiary/ClaimExplainedScreen';
+import FAQScreen from './src/views/common/FAQScreen';
+import { registerForPushNotifications } from './src/services/pushNotifications';
 import * as Analytics from 'expo-firebase-analytics';
 import * as FirebaseCore from 'expo-firebase-core';
-import i18n from './assets/i18n';
+import i18n from './src/assets/i18n';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
 const Stack = createStackNavigator();
-const store = createStore(userReducer);
+const store = createStore(combinedReducer);
 const theme = {
     ...DefaultTheme,
     roundness: 4,
@@ -201,7 +201,7 @@ export default class App extends React.Component<{}, IAppState> {
                     justifyContent: 'center',
                 }}>
                     <Image
-                        source={require('./assets/images/splash.png')}
+                        source={require('./src/assets/images/splash.png')}
                         onLoad={this._cacheResourcesAsync}
                     />
                 </View>
@@ -223,11 +223,11 @@ export default class App extends React.Component<{}, IAppState> {
                         >
                             <Image
                                 style={{ height: 82, maxWidth: '51%' }}
-                                source={require('./assets/images/splash/logo.png')}
+                                source={require('./src/assets/images/splash/logo.png')}
                             />
                             <Image
                                 style={{ height: 136, maxWidth: '100%' }}
-                                source={require('./assets/images/splash/diversity.png')}
+                                source={require('./src/assets/images/splash/diversity.png')}
                             />
                             <Text
                                 style={{
@@ -390,7 +390,7 @@ export default class App extends React.Component<{}, IAppState> {
     }
 
     _cacheSplashResourcesAsync = async () => {
-        const gif = require('./assets/images/splash.png');
+        const gif = require('./src/assets/images/splash.png');
         return Asset.fromModule(gif).downloadAsync();
     };
 
@@ -402,22 +402,22 @@ export default class App extends React.Component<{}, IAppState> {
 
             // Any string can be used as the fontFamily name. Here we use an object to provide more control
             'Gelion-SemiBold': {
-                uri: require('./fonts/FontGelion/Gelion-SemiBold.ttf'),
+                uri: require('./src/assets/fonts/FontGelion/Gelion-SemiBold.ttf'),
             },
             'Gelion-Bold': {
-                uri: require('./fonts/FontGelion/Gelion-Bold.ttf'),
+                uri: require('./src/assets/fonts/FontGelion/Gelion-Bold.ttf'),
             },
             'Gelion-Regular': {
-                uri: require('./fonts/FontGelion/Gelion-Regular.ttf'),
+                uri: require('./src/assets/fonts/FontGelion/Gelion-Regular.ttf'),
             },
             'Gelion-Medium': {
-                uri: require('./fonts/FontGelion/Gelion-Medium.ttf'),
+                uri: require('./src/assets/fonts/FontGelion/Gelion-Medium.ttf'),
             },
             'Gelion-Light': {
-                uri: require('./fonts/FontGelion/Gelion-Light.ttf'),
+                uri: require('./src/assets/fonts/FontGelion/Gelion-Light.ttf'),
             },
             'Gelion-Thin': {
-                uri: require('./fonts/FontGelion/Gelion-Thin.ttf'),
+                uri: require('./src/assets/fonts/FontGelion/Gelion-Thin.ttf'),
             },
         });
         await this._authUser();
