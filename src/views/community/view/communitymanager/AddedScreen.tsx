@@ -9,13 +9,13 @@ import {
     connect,
     ConnectedProps
 } from 'react-redux';
-import { IRootState, ICommunityInfoBeneficiary } from '../../../../helpers/types';
-import ListActionItem from '../../../../components/ListActionItem';
-import Header from '../../../../components/Header';
+import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
+import ListActionItem from 'components/ListActionItem';
+import Header from 'components/Header';
 import { useNavigation } from '@react-navigation/native';
-import { amountToUserCurrency, getUserCurrencySymbol } from '../../../../helpers';
-import i18n from '../../../../assets/i18n';
-import { celoWalletRequest } from '../../../../services/celoWallet';
+import { amountToUserCurrency, getUserCurrencySymbol } from 'helpers/index';
+import i18n from 'assets/i18n';
+import { celoWalletRequest } from 'services/celoWallet';
 
 
 interface IAddedScreenProps {

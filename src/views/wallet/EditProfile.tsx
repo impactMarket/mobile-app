@@ -12,7 +12,7 @@ import {
 import {
     IRootState,
     STORAGE_USER_FIRST_TIME,
-} from '../../helpers/types';
+} from 'helpers/types';
 import {
     Button,
     Avatar,
@@ -24,16 +24,16 @@ import {
     resetNetworkContractsApp,
     setUserInfo,
     setUserExchangeRate
-} from '../../helpers/redux/actions/ReduxActions';
+} from 'helpers/redux/actions/ReduxActions';
 import {
     ScrollView
 } from 'react-native-gesture-handler';
-import Header from '../../components/Header';
+import Header from 'components/Header';
 import { useNavigation } from '@react-navigation/native';
-import { getCountryFromPhoneNumber, getUserAvatar } from '../../helpers';
-import ValidatedTextInput from '../../components/ValidatedTextInput';
-import Api from '../../services/api';
-import i18n from '../../assets/i18n';
+import { getCountryFromPhoneNumber, getUserAvatar } from 'helpers/index';
+import ValidatedTextInput from 'components/ValidatedTextInput';
+import Api from 'services/api';
+import i18n from 'assets/i18n';
 
 
 interface IEditProfileProps {

@@ -398,7 +398,7 @@ export default class App extends React.Component<{}, IAppState> {
         SplashScreen.hide();
         await Font.loadAsync({
             // Load a font `Montserrat` from a static resource
-            // Montserrat: require('./assets/fonts/Montserrat.ttf'),
+            // Montserrat: require('assets/fonts/Montserrat.ttf'),
 
             // Any string can be used as the fontFamily name. Here we use an object to provide more control
             'Gelion-SemiBold': {

@@ -6,11 +6,11 @@ import {
     connect,
     ConnectedProps
 } from 'react-redux';
-import { IRootState, ICommunityInfoBeneficiary } from '../../../../helpers/types';
-import ListActionItem from '../../../../components/ListActionItem';
-import Header from '../../../../components/Header';
+import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
+import ListActionItem from 'components/ListActionItem';
+import Header from 'components/Header';
 import { useNavigation } from '@react-navigation/native';
-import { getUserCurrencySymbol, amountToUserCurrency } from '../../../../helpers';
+import { getUserCurrencySymbol, amountToUserCurrency } from 'helpers/index';
 
 
 interface IRemovedScreenProps {

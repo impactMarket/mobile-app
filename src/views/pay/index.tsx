@@ -10,7 +10,7 @@ import {
     connect,
     ConnectedProps
 } from 'react-redux';
-import { IRootState } from '../../helpers/types';
+import { IRootState } from 'helpers/types';
 import {
     Card,
     Divider,
@@ -18,16 +18,16 @@ import {
 } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import Header from '../../components/Header';
+import Header from 'components/Header';
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
 import {
     amountToUserCurrency,
     getUserCurrencySymbol
-} from '../../helpers';
-import i18n from '../../assets/i18n';
+} from 'helpers/index';
+import i18n from 'assets/i18n';
 import { ethers } from 'ethers';
-import { celoWalletRequest } from '../../services/celoWallet';
-import ListActionItem from '../../components/ListActionItem';
+import { celoWalletRequest } from 'services/celoWallet';
+import ListActionItem from 'components/ListActionItem';
 
 
 const mapStateToProps = (state: IRootState) => {

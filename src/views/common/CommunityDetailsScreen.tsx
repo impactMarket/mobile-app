@@ -11,7 +11,7 @@ import {
 } from 'react-native-chart-kit';
 import {
     ICommunityInfo,
-} from '../../helpers/types';
+} from 'helpers/types';
 import { AntDesign } from '@expo/vector-icons';
 import Donate from '../communities/actions/Donate';
 import {
@@ -27,13 +27,13 @@ import {
 import {
     ScrollView
 } from 'react-native-gesture-handler';
-import { humanifyNumber, claimFrequencyToText } from '../../helpers';
-import CommuntyStatus from '../../components/CommuntyStatus';
-import Header from '../../components/Header';
+import { humanifyNumber, claimFrequencyToText } from 'helpers/index';
+import CommuntyStatus from 'components/CommuntyStatus';
+import Header from 'components/Header';
 import { useNavigation } from '@react-navigation/native';
 import * as WebBrowser from 'expo-web-browser';
 import config from '../../../config';
-import i18n from '../../assets/i18n';
+import i18n from 'assets/i18n';
 
 
 const lineChartConfig: ChartConfig = {

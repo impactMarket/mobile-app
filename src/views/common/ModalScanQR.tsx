@@ -10,15 +10,15 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-} from '../../helpers/types';
+} from 'helpers/types';
 import {
     Button,
     Card,
 } from 'react-native-paper';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { ethers } from 'ethers';
-import ValidatedTextInput from '../../components/ValidatedTextInput';
-import i18n from '../../assets/i18n';
+import ValidatedTextInput from 'components/ValidatedTextInput';
+import i18n from 'assets/i18n';
 import { BottomSheet } from 'react-native-btr';
 
 

@@ -4,9 +4,9 @@ import {
     ScrollView,
     StyleSheet,
 } from 'react-native';
-import Header from '../../../../components/Header';
+import Header from 'components/Header';
 import { useNavigation } from '@react-navigation/native';
-import i18n from '../../../../assets/i18n';
+import i18n from 'assets/i18n';
 
 export default function ClaimExplainedScreen() {
     const navigation = useNavigation();

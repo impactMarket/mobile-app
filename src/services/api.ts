@@ -6,7 +6,7 @@ import {
     IPaymentsTxAPI,
     IUser,
     STORAGE_USER_AUTH_TOKEN
-} from '../helpers/types';
+} from 'helpers/types';
 import { AsyncStorage } from 'react-native';
 
 

@@ -17,11 +17,11 @@ import {
     STORAGE_USER_FIRST_TIME,
     IRootState,
     STORAGE_USER_AUTH_TOKEN,
-} from '../../helpers/types';
+} from 'helpers/types';
 import {
     setUserCeloInfo,
     setPushNotificationsToken
-} from '../../helpers/redux/actions/ReduxActions';
+} from 'helpers/redux/actions/ReduxActions';
 import {
     ConnectedProps,
     connect,
@@ -37,10 +37,10 @@ import {
     Paragraph
 } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { loadContracts } from '../../helpers';
-import Api from '../../services/api';
-import { registerForPushNotifications } from '../../services/pushNotifications';
-import i18n from '../../assets/i18n';
+import { loadContracts } from 'helpers/index';
+import Api from 'services/api';
+import { registerForPushNotifications } from 'services/pushNotifications';
+import i18n from 'assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {

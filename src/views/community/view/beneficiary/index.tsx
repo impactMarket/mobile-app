@@ -15,7 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import {
     IRootState,
     ICommunityInfo
-} from '../../../../helpers/types';
+} from 'helpers/types';
 import Claim from './Claim';
 import {
     Button,
@@ -24,11 +24,11 @@ import {
 import {
     iptcColors,
     humanifyNumber
-} from '../../../../helpers';
-import Header from '../../../../components/Header';
+} from 'helpers/index';
+import Header from 'components/Header';
 import BigNumber from 'bignumber.js';
-import i18n from '../../../../assets/i18n';
-import Api from '../../../../services/api';
+import i18n from 'assets/i18n';
+import Api from 'services/api';
 
 
 const mapStateToProps = (state: IRootState) => {

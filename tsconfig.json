@@ -1,12 +1,30 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react-native",
-    "lib": ["dom", "esnext"],
-    "moduleResolution": "node",
-    "noEmit": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "strict": true
-  }
+    "compilerOptions": {
+        "baseUrl": "src",
+        "paths": {
+            "assets": [
+                "./src/assets"
+            ],
+            "components": [
+                "./src/components"
+            ],
+            "helpers": [
+                "./src/helpers"
+            ],
+            "services": [
+                "./src/services"
+            ],
+        },
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react-native",
+        "lib": [
+            "dom",
+            "esnext"
+        ],
+        "moduleResolution": "node",
+        "noEmit": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "strict": true
+    }
 }

@@ -6,11 +6,11 @@ import {
 import {
     Headline, ActivityIndicator,
 } from 'react-native-paper';
-import Api from '../../services/api';
-import ListActionItem, { IListActionItem } from '../../components/ListActionItem';
-import { amountToUserCurrency, getUserCurrencySymbol } from '../../helpers';
-import { IUserState, IPaymentsTxAPI } from '../../helpers/types';
-import i18n from '../../assets/i18n';
+import Api from 'services/api';
+import ListActionItem, { IListActionItem } from 'components/ListActionItem';
+import { amountToUserCurrency, getUserCurrencySymbol } from 'helpers/index';
+import { IUserState, IPaymentsTxAPI } from 'helpers/types';
+import i18n from 'assets/i18n';
 
 
 interface IRecentPaymentsProps {

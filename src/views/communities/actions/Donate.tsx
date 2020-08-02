@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {
     ICommunityInfo, IRootState,
-} from '../../../helpers/types';
+} from 'helpers/types';
 import {
     Button,
     Dialog,
@@ -22,9 +22,9 @@ import {
     iptcColors,
     getUserCurrencySymbol,
     amountToUserCurrency
-} from '../../../helpers';
-import i18n from '../../../assets/i18n';
-import { celoWalletRequest } from '../../../services/celoWallet';
+} from 'helpers/index';
+import i18n from 'assets/i18n';
+import { celoWalletRequest } from 'services/celoWallet';
 
 
 interface IExploreScreenProps {

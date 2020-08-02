@@ -2,34 +2,34 @@ import { ICommunityInfo, IUser, IUserState, IUserInfo } from './types';
 import config from '../../config';
 import BigNumber from 'bignumber.js';
 import { ContractKit } from '@celo/contractkit';
-import Api from '../services/api';
+import Api from 'services/api';
 import { setCommunityContract, setUserIsBeneficiary, setUserIsCommunityManager, setImpactMarketContract, setCommunity } from './redux/actions/ReduxActions';
 import { ethers } from 'ethers';
 import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json'
 import CommunityContractABI from '../contracts/CommunityABI.json'
 import { ImpactMarketInstance } from '../contracts/types/truffle-contracts';
-import i18n from '../assets/i18n';
+import i18n from 'assets/i18n';
 
 const usergetUserAvatars = [
     [
-        require('../assets/images/avatar/round/avatar1.png'),
-        require('../assets/images/avatar/round/avatar2.png'),
-        require('../assets/images/avatar/round/avatar3.png'),
-        require('../assets/images/avatar/round/avatar4.png'),
-        require('../assets/images/avatar/round/avatar5.png'),
-        require('../assets/images/avatar/round/avatar6.png'),
-        require('../assets/images/avatar/round/avatar7.png'),
-        require('../assets/images/avatar/round/avatar8.png'),
+        require('assets/images/avatar/round/avatar1.png'),
+        require('assets/images/avatar/round/avatar2.png'),
+        require('assets/images/avatar/round/avatar3.png'),
+        require('assets/images/avatar/round/avatar4.png'),
+        require('assets/images/avatar/round/avatar5.png'),
+        require('assets/images/avatar/round/avatar6.png'),
+        require('assets/images/avatar/round/avatar7.png'),
+        require('assets/images/avatar/round/avatar8.png'),
     ],
     [
-        require('../assets/images/avatar/square/avatar1.png'),
-        require('../assets/images/avatar/square/avatar2.png'),
-        require('../assets/images/avatar/square/avatar3.png'),
-        require('../assets/images/avatar/square/avatar4.png'),
-        require('../assets/images/avatar/square/avatar5.png'),
-        require('../assets/images/avatar/square/avatar6.png'),
-        require('../assets/images/avatar/square/avatar7.png'),
-        require('../assets/images/avatar/square/avatar8.png'),
+        require('assets/images/avatar/square/avatar1.png'),
+        require('assets/images/avatar/square/avatar2.png'),
+        require('assets/images/avatar/square/avatar3.png'),
+        require('assets/images/avatar/square/avatar4.png'),
+        require('assets/images/avatar/square/avatar5.png'),
+        require('assets/images/avatar/square/avatar6.png'),
+        require('assets/images/avatar/square/avatar7.png'),
+        require('assets/images/avatar/square/avatar8.png'),
     ]
 ]
 
@@ -118,6 +118,7 @@ export async function loadContracts(address: string, kit: ContractKit, store: an
         return;
     }
     const isManager = await Api.findComunityToManager(address);
+    console.log(isManager, address);
     if (isManager !== undefined) {
         store.dispatch(setUserIsCommunityManager(true));
         fSetCommunity(isManager);

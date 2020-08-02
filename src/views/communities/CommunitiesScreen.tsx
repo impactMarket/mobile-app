@@ -14,7 +14,7 @@ import {
 import {
     IRootState,
     ICommunityInfo,
-} from '../../helpers/types';
+} from 'helpers/types';
 import {
     Card,
     ProgressBar,
@@ -26,10 +26,10 @@ import {
     calculateCommunityProgress,
     claimFrequencyToText,
     humanifyNumber
-} from '../../helpers';
-import Header from '../../components/Header';
-import i18n from '../../assets/i18n';
-import Api from '../../services/api';
+} from 'helpers/index';
+import Header from 'components/Header';
+import i18n from 'assets/i18n';
+import Api from 'services/api';
 
 
 interface ICommunitiesScreenProps {

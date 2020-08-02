@@ -11,7 +11,7 @@ import {
 import {
     IRootState,
     ICommunityInfo,
-} from '../helpers/types';
+} from 'helpers/types';
 import {
     Card,
     Title,
@@ -22,9 +22,9 @@ import {
     iptcColors,
     amountToUserCurrency,
     getUserCurrencySymbol
-} from '../helpers';
+} from 'helpers/index';
 import BigNumber from 'bignumber.js';
-import i18n from '../assets/i18n';
+import i18n from 'assets/i18n';
 
 
 interface ICommuntyStatusProps {

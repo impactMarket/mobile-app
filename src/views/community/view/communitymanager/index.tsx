@@ -15,7 +15,7 @@ import {
 import {
     IRootState,
     ICommunityInfo,
-} from '../../../../helpers/types';
+} from 'helpers/types';
 import {
     Button,
     Paragraph,
@@ -27,11 +27,11 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 import Beneficiaries from './cards/Beneficiaries';
-import CommuntyStatus from '../../../../components/CommuntyStatus';
-import Header from '../../../../components/Header';
+import CommuntyStatus from 'components/CommuntyStatus';
+import Header from 'components/Header';
 import { useNavigation } from '@react-navigation/native';
-import { updateCommunityInfo, iptcColors } from '../../../../helpers';
-import i18n from '../../../../assets/i18n';
+import { updateCommunityInfo, iptcColors } from 'helpers/index';
+import i18n from 'assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {
@@ -142,7 +142,7 @@ function CommunityManagerView(props: Props) {
             }}
             >
                 <Image
-                    source={require('../../../../assets/images/pending.png')}
+                    source={require('assets/images/pending.png')}
                     style={{ width: 50, height: 50 }}
                 />
                 <Headline

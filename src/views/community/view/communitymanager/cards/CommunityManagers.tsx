@@ -5,12 +5,12 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-} from '../../../../../helpers/types';
+} from 'helpers/types';
 import {
     Button,
     Card,
 } from 'react-native-paper';
-import ListCommunityManagers from '../components/ListCommunityManagers';
+import ListCommunityManagers from 'components/ListCommunityManagers';
 
 
 interface ICommunityManagersProps {

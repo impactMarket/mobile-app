@@ -7,9 +7,9 @@ import {
 } from 'react-native';
 import * as Linking from 'expo-linking';
 import { useNavigation } from '@react-navigation/native';
-import Header from '../../components/Header';
+import Header from 'components/Header';
 import { List, Text } from 'react-native-paper';
-import { iptcColors } from '../../helpers';
+import { iptcColors } from 'helpers/index';
 
 
 function FAQScreen() {

@@ -5,7 +5,7 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-} from '../../../../../helpers/types';
+} from 'helpers/types';
 import {
     Button,
     Portal,

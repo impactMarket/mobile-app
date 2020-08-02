@@ -4,24 +4,24 @@ import {
 } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BeneficiaryView from './community/view/beneficiary';
-import { IRootState, ITabBarIconProps } from '../helpers/types';
+import { IRootState, ITabBarIconProps } from 'helpers/types';
 import { connect, ConnectedProps } from 'react-redux';
 import WalletScreen from './wallet';
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import PayScreen from './pay';
 import CommunityManagerView from './community/view/communitymanager';
-import i18n from '../assets/i18n';
+import i18n from 'assets/i18n';
 
-const ActiveClaimIcon = require('../assets/images/tab/active/claim.png');
-const InactiveClaimIcon = require('../assets/images/tab/claim.png');
-const ActiveManageIcon = require('../assets/images/tab/active/manage.png');
-const InactiveManageIcon = require('../assets/images/tab/manage.png');
-const ActiveCommunitiesIcon = require('../assets/images/tab/active/communities.png');
-const InactiveCommunitiesIcon = require('../assets/images/tab/communities.png');
-const ActivePayIcon = require('../assets/images/tab/active/pay.png');
-const InactivePayIcon = require('../assets/images/tab/pay.png');
-const ActiveWalletIcon = require('../assets/images/tab/active/wallet.png');
-const InactiveWalletIcon = require('../assets/images/tab/wallet.png');
+const ActiveClaimIcon = require('assets/images/tab/active/claim.png');
+const InactiveClaimIcon = require('assets/images/tab/claim.png');
+const ActiveManageIcon = require('assets/images/tab/active/manage.png');
+const InactiveManageIcon = require('assets/images/tab/manage.png');
+const ActiveCommunitiesIcon = require('assets/images/tab/active/communities.png');
+const InactiveCommunitiesIcon = require('assets/images/tab/communities.png');
+const ActivePayIcon = require('assets/images/tab/active/pay.png');
+const InactivePayIcon = require('assets/images/tab/pay.png');
+const ActiveWalletIcon = require('assets/images/tab/active/wallet.png');
+const InactiveWalletIcon = require('assets/images/tab/wallet.png');
 
 
 const mapStateToProps = (state: IRootState) => {

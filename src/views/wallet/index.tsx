@@ -11,7 +11,7 @@ import {
 } from 'react-redux';
 import {
     IRootState,
-} from '../../helpers/types';
+} from 'helpers/types';
 import {
     Card,
     Button,
@@ -26,14 +26,14 @@ import {
 import {
     useNavigation
 } from '@react-navigation/native';
-import Header from '../../components/Header';
+import Header from 'components/Header';
 import RecentTx, { IRecentTxRef } from './RecentTx';
 import {
     humanifyNumber,
     amountToUserCurrency,
     getUserCurrencySymbol
-} from '../../helpers';
-import i18n from '../../assets/i18n';
+} from 'helpers/index';
+import i18n from 'assets/i18n';
 
 
 const mapStateToProps = (state: IRootState) => {

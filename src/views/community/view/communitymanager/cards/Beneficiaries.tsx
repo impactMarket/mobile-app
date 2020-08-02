@@ -6,7 +6,7 @@ import {
 import {
     IRootState,
     ICommunityInfo,
-} from '../../../../../helpers/types';
+} from 'helpers/types';
 import {
     Card,
     Headline,
@@ -14,10 +14,10 @@ import {
 } from 'react-native-paper';
 import ModalScanQR from '../../../../common/ModalScanQR';
 import { useNavigation } from '@react-navigation/native';
-import { updateCommunityInfo, iptcColors } from '../../../../../helpers';
-import i18n from '../../../../../assets/i18n';
+import { updateCommunityInfo, iptcColors } from 'helpers/index';
+import i18n from 'assets/i18n';
 import { Alert } from 'react-native';
-import { celoWalletRequest } from '../../../../../services/celoWallet';
+import { celoWalletRequest } from 'services/celoWallet';
 import { ethers } from 'ethers';
 
 

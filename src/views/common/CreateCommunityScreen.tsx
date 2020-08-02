@@ -23,24 +23,24 @@ import {
     IRootState,
     ICommunityInfo,
     IUserState
-} from '../../helpers/types';
+} from 'helpers/types';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 import config from '../../../config';
 import BigNumber from 'bignumber.js';
-import ValidatedTextInput from '../../components/ValidatedTextInput';
+import ValidatedTextInput from 'components/ValidatedTextInput';
 import {
     humanifyNumber,
     loadContracts,
     validateEmail,
     getUserCurrencySymbol,
     amountToUserCurrency
-} from '../../helpers';
-import Header from '../../components/Header';
-import Api from '../../services/api';
+} from 'helpers/index';
+import Header from 'components/Header';
+import Api from 'services/api';
 import * as ImagePicker from 'expo-image-picker';
-import i18n from '../../assets/i18n';
-import { celoWalletRequest } from '../../services/celoWallet';
+import i18n from 'assets/i18n';
+import { celoWalletRequest } from 'services/celoWallet';
 
 
 interface ICreateCommunityScreen {
@@ -363,7 +363,7 @@ function CreateCommunityScreen(props: Props) {
                             </Text>
                             <View>
                                 <ImageBackground
-                                    source={coverImage.length === 0 ? require('../../assets/images/placeholder.png') : { uri: coverImage }}
+                                    source={coverImage.length === 0 ? require('assets/images/placeholder.png') : { uri: coverImage }}
                                     style={styles.imageCover}
                                 >
                                     <Button

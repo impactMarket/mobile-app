@@ -10,13 +10,13 @@ import {
 } from 'react-native-paper';
 import { NavigationState, NavigationProp } from '@react-navigation/native';
 import { BottomSheet } from 'react-native-btr';
-import { iptcColors } from '../helpers';
+import { iptcColors } from 'helpers/index';
 import ModalScanQR from '../views/common/ModalScanQR';
-import i18n from '../assets/i18n';
+import i18n from 'assets/i18n';
 import SvgQRCode from 'react-native-qrcode-svg';
-import { IRootState } from '../helpers/types';
+import { IRootState } from 'helpers/types';
 import { connect, ConnectedProps } from 'react-redux';
-import { setAppPaymentToAction } from '../helpers/redux/actions/ReduxActions';
+import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 
 
 const mapStateToProps = (state: IRootState) => {
