@@ -7,11 +7,6 @@ const commonConfig = {
     blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
 
     /**
-     * JSON RPC url
-     */
-    jsonRpc: 'https://alfajores-forno.celo-testnet.org',
-
-    /**
      * cUSD decimals to use in ui format
      */
     cUSDDecimals: 18
@@ -24,26 +19,41 @@ const ENV = {
         baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
 
         /**
+         * JSON RPC url
+         */
+        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+
+        /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: process.env.EXPO_DEV_CONTRACT_ADDRESS!,
+        impactMarketContractAddress: process.env.EXPO_DEV_IMPACT_MARKET_CONTRACT!,
     },
-    stag: {
+    staging: {
         /**
          * The default API URL
          */
         baseApiUrl: 'https://impactmarket-api-staging.herokuapp.com/api',
 
         /**
+         * JSON RPC url
+         */
+        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+
+        /**
          * Contract Address to use in dev
          */
         impactMarketContractAddress: '0xc57594675444BeC25f2863B8549c8e485dA290C1',
     },
-    prod: {
+    production: {
         /**
          * The default API URL
          */
-        baseApiUrl: 'https://impactmarket-api-prod.herokuapp.com/api',
+        baseApiUrl: 'https://impactmarket-api-production.herokuapp.com/api',
+
+        /**
+         * JSON RPC url
+         */
+        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
 
         /**
          * Contract Address to use in dev
@@ -56,8 +66,8 @@ function getEnvVars() {
     const { releaseChannel } = Constants.manifest;
 
     if (releaseChannel === undefined) return { ...commonConfig, ...ENV.dev };
-    if (releaseChannel.indexOf('production') !== -1) return { ...commonConfig, ...ENV.prod };
-    if (releaseChannel.indexOf('staging') !== -1) return { ...commonConfig, ...ENV.stag };
+    if (releaseChannel.indexOf('production') !== -1) return { ...commonConfig, ...ENV.production };
+    if (releaseChannel.indexOf('staging') !== -1) return { ...commonConfig, ...ENV.staging };
 
     return { ...commonConfig, ...ENV.dev };
 }
