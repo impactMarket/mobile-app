@@ -1,0 +1,10 @@
+os: linux
+dist: xenial
+language: node_js
+node_js: lts/dubnium
+install: yarn
+deploy:
+  provider: script
+  script: scripts/build.sh
+  on:
+    branch: staging
