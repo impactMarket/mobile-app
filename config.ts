@@ -42,7 +42,7 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0xc57594675444BeC25f2863B8549c8e485dA290C1',
+        impactMarketContractAddress: '0x4ebE844858c756498902B6517b20d50e28F8Dd62',
     },
     production: {
         /**
@@ -58,18 +58,17 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0xc70cC218AE84cfDb0De11783082c49E3702092fb',
+        impactMarketContractAddress: '0xa7C3103EC5eE8188A7D20E70d5398F727DBb5A1A',
     }
 }
 
 function getEnvVars() {
-    const { releaseChannel } = Constants.manifest;
-
-    if (releaseChannel === undefined) return { ...commonConfig, ...ENV.dev };
-    if (releaseChannel.indexOf('production') !== -1) return { ...commonConfig, ...ENV.production };
-    if (releaseChannel.indexOf('staging') !== -1) return { ...commonConfig, ...ENV.staging };
-
-    return { ...commonConfig, ...ENV.dev };
+    if (Constants.manifest.packagerOpts?.dev) return { ...commonConfig, ...ENV.dev };
+    else if (Constants.appOwnership === 'standalone') return { ...commonConfig, ...ENV.production };
+    else if (Constants.appOwnership === 'expo') {
+        if (Constants.manifest.releaseChannel?.indexOf('production') !== -1) return { ...commonConfig, ...ENV.production };
+        return { ...commonConfig, ...ENV.staging };
+    }
 }
 
 export default getEnvVars()
