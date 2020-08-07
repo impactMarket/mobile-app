@@ -34,6 +34,8 @@ import { getCountryFromPhoneNumber, getUserAvatar } from 'helpers/index';
 import ValidatedTextInput from 'components/ValidatedTextInput';
 import Api from 'services/api';
 import i18n from 'assets/i18n';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 
 
 interface IEditProfileProps {
@@ -138,6 +140,14 @@ function EditProfile(props: Props) {
                     >
                         {i18n.t('logout')}
                     </Button>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                        <Paragraph>
+                            Build: {Constants.manifest.version}
+                        </Paragraph>
+                        <Paragraph>
+                            OS version: {Device.osVersion}
+                        </Paragraph>
+                    </View>
                 </View>
             </ScrollView>
         </>

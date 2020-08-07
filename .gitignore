@@ -63,3 +63,4 @@ web-build/
 .extra
 firebase/
 *.jks
+*.der

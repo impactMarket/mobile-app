@@ -5191,6 +5191,14 @@ expo-contacts@~8.2.1:
   dependencies:
     uuid "^3.4.0"
 
+expo-device@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/expo-device/-/expo-device-2.2.1.tgz#469fd2a8f5d87793ebda2c49d6ce008460af0078"
+  integrity sha512-WsFA3tV0059DhBZBpAwUmJJJhLb0y7rcTP2nwj1x9Jysr7PjEH9ONF5x5fWSMEzclvurpElwXgA7dPSLhfrDSw==
+  dependencies:
+    fbjs "1.0.0"
+    ua-parser-js "^0.7.19"
+
 expo-error-recovery@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/expo-error-recovery/-/expo-error-recovery-1.0.0.tgz#2ca9d59fcd16c5c881af877993731056f2d46afe"
