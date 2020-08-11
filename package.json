@@ -87,6 +87,7 @@
         "dotenv": "8.2.0",
         "eslint": "6.8.0",
         "jest-expo": "^37.0.0",
+        "prettier": "^2.0.5",
         "typescript": "~3.9.5"
     }
 }
