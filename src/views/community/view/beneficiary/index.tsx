@@ -1,43 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    ImageBackground,
-} from 'react-native';
-import {
-    connect,
-    ConnectedProps
-} from 'react-redux';
 import { AntDesign } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import {
-    IRootState,
-    ICommunityInfo
-} from 'helpers/types';
-import Claim from './Claim';
-import {
-    Button,
-    ProgressBar
-} from 'react-native-paper';
-import {
-    iptcColors,
-    humanifyNumber
-} from 'helpers/index';
-import Header from 'components/Header';
-import BigNumber from 'bignumber.js';
 import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
+import Header from 'components/Header';
+import { LinearGradient } from 'expo-linear-gradient';
+import { iptcColors, humanifyNumber } from 'helpers/index';
+import { IRootState, ICommunityInfo } from 'helpers/types';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import { Button, ProgressBar } from 'react-native-paper';
+import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 
+import Claim from './Claim';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network } = state;
+    return { user, network };
 };
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux;
 
 function BeneficiaryView(props: Props) {
     const navigation = useNavigation();
@@ -51,28 +34,34 @@ function BeneficiaryView(props: Props) {
                 return;
             }
             const { _address } = props.network.contracts.communityContract;
-            const _community = await Api.getCommunityByContractAddress(_address);
+            const _community = await Api.getCommunityByContractAddress(
+                _address
+            );
             if (_community === undefined) {
                 // TODO: show error
                 return;
             }
-            const amount = await props.network.contracts.communityContract
-                .methods.claimed(props.user.celoInfo.address).call();
+            const amount = await props.network.contracts.communityContract.methods
+                .claimed(props.user.celoInfo.address)
+                .call();
 
-            const progress = new BigNumber(amount.toString()).div(_community.vars._maxClaim);
+            const progress = new BigNumber(amount.toString()).div(
+                _community.vars._maxClaim
+            );
             setClaimedAmount(humanifyNumber(amount.toString()));
             setClaimedProgress(progress.toNumber());
             setCommunity(_community);
-        }
+        };
         loadCommunity();
     }, [props.network.contracts.communityContract]);
 
     const updateClaimedAmount = async () => {
-        const amount = await props.network.contracts.communityContract
-            .methods.claimed(props.user.celoInfo.address).call();
+        const amount = await props.network.contracts.communityContract.methods
+            .claimed(props.user.celoInfo.address)
+            .call();
 
         setClaimedAmount(humanifyNumber(amount.toString()));
-    }
+    };
 
     if (community === undefined) {
         return <Text>{i18n.t('loading')}</Text>;
@@ -83,17 +72,18 @@ function BeneficiaryView(props: Props) {
             <Header
                 title={i18n.t('claim')}
                 navigation={navigation}
-                hasHelp={true}
-                hasShare={true}
+                hasHelp
+                hasShare
             />
             <ImageBackground
                 source={{ uri: community.coverImage }}
-                resizeMode={'cover'}
+                resizeMode="cover"
                 style={styles.imageBackground}
             >
                 <Text style={styles.communityName}>{community.name}</Text>
                 <Text style={styles.communityLocation}>
-                    <AntDesign name="enviromento" size={20} /> {community.city}, {community.country}
+                    <AntDesign name="enviromento" size={20} /> {community.city},{' '}
+                    {community.country}
                 </Text>
                 <LinearGradient
                     colors={['transparent', 'rgba(246,246,246,1)']}
@@ -104,9 +94,12 @@ function BeneficiaryView(props: Props) {
                 <Button
                     mode="outlined"
                     style={{ margin: 30, height: 35 }}
-                    onPress={() => navigation.navigate('CommunityDetailsScreen',
-                        { community: community, user: props.user }
-                    )}
+                    onPress={() =>
+                        navigation.navigate('CommunityDetailsScreen', {
+                            community,
+                            user: props.user,
+                        })
+                    }
                 >
                     {i18n.t('moreAboutYourCommunity')}
                 </Button>
@@ -116,10 +109,15 @@ function BeneficiaryView(props: Props) {
                 />
                 <View>
                     <Text
-                        onPress={() => navigation.navigate('ClaimExplainedScreen')}
+                        onPress={() =>
+                            navigation.navigate('ClaimExplainedScreen')
+                        }
                         style={styles.haveClaimed}
                     >
-                        {i18n.t('youHaveClaimedXoutOfY', { claimed: claimedAmount, max: humanifyNumber(community.vars._maxClaim) })}
+                        {i18n.t('youHaveClaimedXoutOfY', {
+                            claimed: claimedAmount,
+                            max: humanifyNumber(community.vars._maxClaim),
+                        })}
                     </Text>
                     <ProgressBar
                         key="claimedbybeneficiary"
@@ -128,9 +126,13 @@ function BeneficiaryView(props: Props) {
                         color="#5289ff"
                     />
                     <Text
-                        onPress={() => navigation.navigate('ClaimExplainedScreen')}
+                        onPress={() =>
+                            navigation.navigate('ClaimExplainedScreen')
+                        }
                         style={styles.howClaimsWork}
-                    >{i18n.t('howClaimWorks')}?</Text>
+                    >
+                        {i18n.t('howClaimWorks')}?
+                    </Text>
                 </View>
             </View>
         </View>
@@ -158,46 +160,46 @@ const styles = StyleSheet.create({
     claimedProgress: {
         backgroundColor: '#d6d6d6',
         marginHorizontal: 30,
-        marginVertical: 13
+        marginVertical: 13,
     },
     imageBackground: {
         width: '100%',
         height: 200,
         justifyContent: 'center',
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     communityName: {
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     communityLocation: {
         fontSize: 20,
-        color: 'white'
+        color: 'white',
     },
     howClaimsWork: {
         fontFamily: 'Gelion-Bold',
         fontSize: 18,
-        fontWeight: "500",
-        fontStyle: "normal",
+        fontWeight: '500',
+        fontStyle: 'normal',
         letterSpacing: 0.3,
-        textAlign: "center",
+        textAlign: 'center',
         color: iptcColors.softBlue,
-        height: 25
+        height: 25,
     },
     haveClaimed: {
-        fontFamily: "Gelion-Regular",
+        fontFamily: 'Gelion-Regular',
         fontSize: 15,
-        fontWeight: "normal",
-        fontStyle: "normal",
+        fontWeight: 'normal',
+        fontStyle: 'normal',
         lineHeight: 14,
         letterSpacing: 0.25,
-        textAlign: "center",
-        color: "#7e8da6"
-    }
+        textAlign: 'center',
+        color: '#7e8da6',
+    },
 });
 
 export default connector(BeneficiaryView);

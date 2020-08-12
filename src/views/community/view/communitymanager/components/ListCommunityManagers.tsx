@@ -1,20 +1,8 @@
+import { IRootState } from 'helpers/types';
 import React from 'react';
-import {
-    connect,
-    ConnectedProps
-} from 'react-redux';
-import {
-    IRootState,
-} from 'helpers/types';
-import {
-    Button,
-    Portal,
-    Dialog,
-    List,
-    Subheading
-} from 'react-native-paper';
 import { View } from 'react-native';
-
+import { Button, Portal, Dialog, List, Subheading } from 'react-native-paper';
+import { connect, ConnectedProps } from 'react-redux';
 
 interface IListCommunityManagersProps {
     managers: string[];
@@ -23,20 +11,22 @@ interface IListCommunityManagersState {
     modalListManagers: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network } = state;
+    return { user, network };
 };
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & IListCommunityManagersProps
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & IListCommunityManagersProps;
 
-class ListCommunityManagers extends React.Component<Props, IListCommunityManagersState> {
-
+class ListCommunityManagers extends React.Component<
+    Props,
+    IListCommunityManagersState
+> {
     constructor(props: any) {
         super(props);
         this.state = {
             modalListManagers: false,
-        }
+        };
     }
 
     render() {
@@ -45,12 +35,16 @@ class ListCommunityManagers extends React.Component<Props, IListCommunityManager
 
         return (
             <>
-                <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
+                <View
+                    style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}
+                >
                     <Subheading>Active</Subheading>
                     <Button
                         mode="contained"
                         style={{ marginLeft: 'auto' }}
-                        onPress={() => this.setState({ modalListManagers: true })}
+                        onPress={() =>
+                            this.setState({ modalListManagers: true })
+                        }
                     >
                         {managers.length}
                     </Button>
@@ -58,22 +52,31 @@ class ListCommunityManagers extends React.Component<Props, IListCommunityManager
                 <Portal>
                     <Dialog
                         visible={modalListManagers}
-                        onDismiss={() => this.setState({ modalListManagers: false })}
+                        onDismiss={() =>
+                            this.setState({ modalListManagers: false })
+                        }
                     >
                         <Dialog.Title>Managers</Dialog.Title>
                         <Dialog.Content>
-                            {managers.map((manager) => <List.Item
-                                key={manager}
-                                title="User Name"
-                                description={`${manager.slice(0, 12)}..${manager.slice(31, 42)}`}
-                            />)}
+                            {managers.map((manager) => (
+                                <List.Item
+                                    key={manager}
+                                    title="User Name"
+                                    description={`${manager.slice(
+                                        0,
+                                        12
+                                    )}..${manager.slice(31, 42)}`}
+                                />
+                            ))}
                         </Dialog.Content>
                         <Dialog.Actions>
                             <Button
                                 mode="contained"
-                                onPress={() => this.setState({
-                                    modalListManagers: false
-                                })}
+                                onPress={() =>
+                                    this.setState({
+                                        modalListManagers: false,
+                                    })
+                                }
                             >
                                 Close
                             </Button>

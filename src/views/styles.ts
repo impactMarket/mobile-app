@@ -1,26 +1,24 @@
-import {
-    StyleSheet,
-} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
-        margin: 20
+        margin: 20,
     },
     imageBackground: {
         width: '100%',
         height: 180,
         justifyContent: 'center',
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     communityName: {
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
-        color: 'white'
+        color: 'white',
     },
     communityLocation: {
         fontSize: 20,
-        color: 'white'
+        color: 'white',
     },
 });

@@ -1,10 +1,13 @@
-import * as Permissions from 'expo-permissions';
-import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
 import { Platform } from 'react-native';
 
-
-export async function sendPushNotification(expoPushToken: string, title: string, body: string) {
+export async function sendPushNotification(
+    expoPushToken: string,
+    title: string,
+    body: string
+) {
     return Notifications.scheduleNotificationAsync({
         content: {
             title,
@@ -17,10 +20,14 @@ export async function sendPushNotification(expoPushToken: string, title: string,
 export async function registerForPushNotifications() {
     let token;
     if (Constants.isDevice) {
-        const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
-            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            const { status } = await Permissions.askAsync(
+                Permissions.NOTIFICATIONS
+            );
             finalStatus = status;
         }
         if (finalStatus !== 'granted') {

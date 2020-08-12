@@ -1,14 +1,14 @@
 import axios from 'axios';
-import config from '../../config';
 import {
     ICommunityInfo,
     IRecentTxAPI,
     IPaymentsTxAPI,
     IUser,
-    STORAGE_USER_AUTH_TOKEN
+    STORAGE_USER_AUTH_TOKEN,
 } from 'helpers/types';
 import { AsyncStorage } from 'react-native';
 
+import config from '../../config';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -19,7 +19,7 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
         if (result.status >= 400) {
             return undefined;
         }
-        if (result.data === "") {
+        if (result.data === '') {
             response = undefined;
         } else {
             response = result.data as T;
@@ -31,18 +31,22 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
     return response;
 }
 
-async function postRequest<T>(endpoint: string, requestBody: any, options?: any): Promise<T | undefined> {
+async function postRequest<T>(
+    endpoint: string,
+    requestBody: any,
+    options?: any
+): Promise<T | undefined> {
     let response: T | undefined;
     try {
         // handle success
         const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
         const requestOptions = {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                Accept: 'application/json',
             },
-            ...options
+            ...options,
         };
         const result = await axios.post(endpoint, requestBody, requestOptions);
         if (result.status >= 400) {
@@ -70,13 +74,13 @@ class Api {
         city: string,
         country: string,
         gps: {
-            latitude: number,
-            longitude: number,
+            latitude: number;
+            longitude: number;
         },
         email: string,
         visibility: string,
         coverImage: string,
-        txCreationObj: any,
+        txCreationObj: any
     ): Promise<boolean> {
         const result = await postRequest<boolean>('/community/request', {
             requestByAddress,
@@ -90,9 +94,9 @@ class Api {
             coverImage,
             txCreationObj,
         });
-        return result ? true : false;
+        return !!result;
     }
-    
+
     static async editCommunity(
         publicId: string,
         name: string,
@@ -100,12 +104,12 @@ class Api {
         city: string,
         country: string,
         gps: {
-            latitude: number,
-            longitude: number,
+            latitude: number;
+            longitude: number;
         },
         email: string,
         visibility: string,
-        coverImage: string,
+        coverImage: string
     ): Promise<boolean> {
         const result = await postRequest('/community/edit', {
             publicId,
@@ -118,118 +122,104 @@ class Api {
             visibility,
             coverImage,
         });
-        return result ? true : false;
+        return !!result;
     }
-    
-    static async findComunityToBeneficicary(
-        beneficiaryAddress: string,
-    ) {
+
+    static async findComunityToBeneficicary(beneficiaryAddress: string) {
         return getRequest<ICommunityInfo>(
             `/transactions/beneficiaryin/${beneficiaryAddress}`
         );
     }
-    
-    static async findComunityToManager(
-        managerAddress: string,
-    ) {
+
+    static async findComunityToManager(managerAddress: string) {
         return getRequest<ICommunityInfo>(
             `/transactions/managerin/${managerAddress}`
         );
     }
-    
+
     static async getCommunityByContractAddress(
-        communityContractAddress: string,
+        communityContractAddress: string
     ): Promise<ICommunityInfo | undefined> {
         return getRequest<ICommunityInfo>(
             `/community/address/${communityContractAddress}`
         );
     }
-    
+
     static async getCommunityNamesFromAddresses(
-        communitiesContractAddresses: string,
-    ): Promise<{ contractAddress: string; name: string; }[]> {
-        const result = await getRequest<{ contractAddress: string; name: string; }[]>(
-            `/community/getnames/${communitiesContractAddresses}`
-        );
+        communitiesContractAddresses: string
+    ): Promise<{ contractAddress: string; name: string }[]> {
+        const result = await getRequest<
+            { contractAddress: string; name: string }[]
+        >(`/community/getnames/${communitiesContractAddresses}`);
         return result ? result : [];
     }
-    
-    static async tokenTx(
-        accountAddress: string,
-    ): Promise<IRecentTxAPI[]> {
+
+    static async tokenTx(accountAddress: string): Promise<IRecentTxAPI[]> {
         const result = await getRequest<IRecentTxAPI[]>(
             `/transactions/tokentx/${accountAddress}`
         );
         return result ? result : [];
     }
-    
-    static async paymentsTx(
-        accountAddress: string,
-    ): Promise<IPaymentsTxAPI[]> {
+
+    static async paymentsTx(accountAddress: string): Promise<IPaymentsTxAPI[]> {
         const result = await getRequest<IPaymentsTxAPI[]>(
             `/transactions/paymentstx/${accountAddress}`
         );
         return result ? result : [];
     }
-    
-    static async getUser(
-        address: string,
-    ) {
-        return getRequest<IUser>(
-            `/user/${address}`
-        );
+
+    static async getUser(address: string) {
+        return getRequest<IUser>(`/user/${address}`);
     }
-    
+
     static async setUsername(
         address: string,
-        username: string,
+        username: string
     ): Promise<boolean> {
         const result = await postRequest('/user/username', {
             address,
-            username
+            username,
         });
-        return result ? true : false;
+        return !!result;
     }
-    
+
     static async setUserCurrency(
         address: string,
-        currency: string,
+        currency: string
     ): Promise<boolean> {
         const result = await postRequest('/user/currency', {
             address,
-            currency
+            currency,
         });
-        return result ? true : false;
+        return !!result;
     }
-    
+
     static async setLanguage(
         address: string,
-        language: number,
+        language: number
     ): Promise<boolean> {
         const result = await postRequest('/user/language', {
             address,
-            language
+            language,
         });
-        return result ? true : false;
+        return !!result;
     }
-    
-    static async getExchangeRate(
-        currency: string,
-    ): Promise<number> {
+
+    static async getExchangeRate(currency: string): Promise<number> {
         const result = await getRequest<any>(
             'https://api.exchangeratesapi.io/latest?base=USD'
         );
         return result ? result.rates[currency.toUpperCase()] : 1;
     }
-    
+
     static async uploadImageAsync(uri: string) {
         let response;
         try {
             // handle success
-            let uriParts = uri.split('.');
-            let fileType = uriParts[uriParts.length - 1];
-    
-            let formData = new FormData();
+            const uriParts = uri.split('.');
+            const fileType = uriParts[uriParts.length - 1];
+
+            const formData = new FormData();
             formData.append('photo', {
                 uri,
                 name: `photo.${fileType}`,
@@ -238,12 +228,16 @@ class Api {
             const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
             const requestHeaders = {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json',
                     'Content-Type': 'multipart/form-data',
-                }
+                },
             };
-            const result = await axios.post('/s3/upload', formData, requestHeaders);
+            const result = await axios.post(
+                '/s3/upload',
+                formData,
+                requestHeaders
+            );
             response = result;
         } catch (error) {
             // handle error
@@ -252,10 +246,10 @@ class Api {
         }
         return response;
     }
-    
+
     static async userAuth(
         address: string,
-        pin: string,
+        pin: string
     ): Promise<string | undefined> {
         const requestBody = {
             address,
@@ -263,27 +257,31 @@ class Api {
         };
         return postRequest<string>('/user/auth', requestBody);
     }
-    
+
     static async setUserPushNotificationToken(
         address: string,
-        token: string,
+        token: string
     ): Promise<boolean> {
         const requestBody = {
             address,
             token,
         };
-        const result = await postRequest<boolean>('/user/push-notifications', requestBody);
-        return result ? true : false;
+        const result = await postRequest<boolean>(
+            '/user/push-notifications',
+            requestBody
+        );
+        return !!result;
     }
-    
-    static async addClaimLocation(
-        gps: any,
-    ): Promise<boolean> {
+
+    static async addClaimLocation(gps: any): Promise<boolean> {
         const requestBody = {
-            gps
+            gps,
         };
-        const result = await postRequest<boolean>('/claim-location', requestBody);
-        return result ? true : false;
+        const result = await postRequest<boolean>(
+            '/claim-location',
+            requestBody
+        );
+        return !!result;
     }
 }
 

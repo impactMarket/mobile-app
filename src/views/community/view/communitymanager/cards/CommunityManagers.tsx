@@ -1,31 +1,21 @@
-import React from 'react';
-import {
-    connect,
-    ConnectedProps
-} from 'react-redux';
-import {
-    IRootState,
-} from 'helpers/types';
-import {
-    Button,
-    Card,
-} from 'react-native-paper';
 import ListCommunityManagers from 'components/ListCommunityManagers';
-
+import { IRootState } from 'helpers/types';
+import React from 'react';
+import { Button, Card } from 'react-native-paper';
+import { connect, ConnectedProps } from 'react-redux';
 
 interface ICommunityManagersProps {
     managers: string[];
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network } = state;
+    return { user, network };
 };
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & ICommunityManagersProps
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & ICommunityManagersProps;
 
-class CommunityManagers extends React.Component<Props, {}> {
-
+class CommunityManagers extends React.Component<Props, object> {
     render() {
         const { managers } = this.props;
 
@@ -39,13 +29,11 @@ class CommunityManagers extends React.Component<Props, {}> {
                         subtitle="COMMUNITY LEADERS"
                     />
                     <Card.Content>
-                        <ListCommunityManagers
-                            managers={managers}
-                        />
+                        <ListCommunityManagers managers={managers} />
                         <Button
                             mode="outlined"
                             style={{ width: '100%' }}
-                            disabled={true}
+                            disabled
                         >
                             Add Community Leader
                         </Button>

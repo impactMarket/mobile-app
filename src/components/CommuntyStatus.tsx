@@ -1,51 +1,32 @@
-import React, { Component } from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-} from 'react-native';
-import {
-    connect,
-    ConnectedProps
-} from 'react-redux';
-import {
-    IRootState,
-    ICommunityInfo,
-} from 'helpers/types';
-import {
-    Card,
-    Title,
-    ProgressBar,
-} from 'react-native-paper';
+import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
 import {
     calculateCommunityProgress,
     iptcColors,
     amountToUserCurrency,
-    getUserCurrencySymbol
+    getUserCurrencySymbol,
 } from 'helpers/index';
-import BigNumber from 'bignumber.js';
-import i18n from 'assets/i18n';
-
+import { IRootState, ICommunityInfo } from 'helpers/types';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Card, Title, ProgressBar } from 'react-native-paper';
+import { connect, ConnectedProps } from 'react-redux';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
     community: ICommunityInfo;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network } = state;
+    return { user, network };
 };
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & ICommuntyStatusProps
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & ICommuntyStatusProps;
 
-class CommuntyStatus extends Component<Props, {}> {
-
+class CommuntyStatus extends Component<Props, object> {
     render() {
-        const {
-            community,
-            user,
-        } = this.props;
+        const { community, user } = this.props;
 
         // in theory, it's the total claimed is relative to the total raised.
         // But to draw the progress bar, it's relative to the progress bar size.
@@ -59,14 +40,51 @@ class CommuntyStatus extends Component<Props, {}> {
         return (
             <Card elevation={8} style={{ marginVertical: 15 }}>
                 <Card.Content>
-                    <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5, justifyContent: 'center' }}>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            marginVertical: 5,
+                            justifyContent: 'center',
+                        }}
+                    >
                         <View style={{ width: '50%', alignItems: 'center' }}>
-                            <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.beneficiaries.added.length}</Title>
-                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>{i18n.t('beneficiaries')}</Text>
+                            <Title
+                                style={{
+                                    fontSize: 40,
+                                    fontFamily: 'Gelion-Regular',
+                                    paddingVertical: 10,
+                                }}
+                            >
+                                {community.beneficiaries.added.length}
+                            </Title>
+                            <Text
+                                style={{
+                                    color: 'grey',
+                                    fontFamily: 'Gelion-Regular',
+                                }}
+                            >
+                                {i18n.t('beneficiaries')}
+                            </Text>
                         </View>
                         <View style={{ width: '50%', alignItems: 'center' }}>
-                            <Title style={{ fontSize: 40, fontFamily: 'Gelion-Regular', paddingVertical: 10 }}>{community.backers.length}</Title>
-                            <Text style={{ color: 'grey', fontFamily: 'Gelion-Regular' }}>{i18n.t('backers')}</Text>
+                            <Title
+                                style={{
+                                    fontSize: 40,
+                                    fontFamily: 'Gelion-Regular',
+                                    paddingVertical: 10,
+                                }}
+                            >
+                                {community.backers.length}
+                            </Title>
+                            <Text
+                                style={{
+                                    color: 'grey',
+                                    fontFamily: 'Gelion-Regular',
+                                }}
+                            >
+                                {i18n.t('backers')}
+                            </Text>
                         </View>
                     </View>
                     <View>
@@ -75,31 +93,60 @@ class CommuntyStatus extends Component<Props, {}> {
                             style={{
                                 marginTop: 10,
                                 backgroundColor: '#d6d6d6',
-                                position: 'absolute'
+                                position: 'absolute',
                             }}
-                            progress={calculateCommunityProgress('raised', community)}
+                            progress={calculateCommunityProgress(
+                                'raised',
+                                community
+                            )}
                             color="#5289ff"
                         />
                         <ProgressBar
                             key="claimed"
                             style={{
                                 marginTop: 10,
-                                backgroundColor: 'rgba(255,255,255,0)'
+                                backgroundColor: 'rgba(255,255,255,0)',
                             }}
-                            progress={calculateCommunityProgress('claimed', community)}
+                            progress={calculateCommunityProgress(
+                                'claimed',
+                                community
+                            )}
                             color={iptcColors.greenishTeal}
                         />
                     </View>
-                    <View style={{ flex: 1, flexDirection: 'row', marginVertical: 5 }}>
-                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                            <View style={styles.sphereClaimed}></View>
-                            <Text style={{ fontFamily: 'Gelion-Regular' }}>{claimedByRaised}% {i18n.t('claimed')}</Text>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            marginVertical: 5,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <View style={styles.sphereClaimed} />
+                            <Text style={{ fontFamily: 'Gelion-Regular' }}>
+                                {claimedByRaised}% {i18n.t('claimed')}
+                            </Text>
                         </View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <View style={styles.sphereRaised}></View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <View style={styles.sphereRaised} />
                             <Text style={{ fontFamily: 'Gelion-Regular' }}>
                                 {getUserCurrencySymbol(user.user)}
-                                {amountToUserCurrency(community.totalRaised, user.user)} {i18n.t('raised')}
+                                {amountToUserCurrency(
+                                    community.totalRaised,
+                                    user.user
+                                )}{' '}
+                                {i18n.t('raised')}
                             </Text>
                         </View>
                     </View>
@@ -116,14 +163,14 @@ const styles = StyleSheet.create({
         height: 8,
         borderRadius: 4,
         backgroundColor: iptcColors.greenishTeal,
-        marginRight: 5
+        marginRight: 5,
     },
     sphereRaised: {
         width: 8,
         height: 8,
         borderRadius: 4,
         backgroundColor: iptcColors.softBlue,
-        marginRight: 5
+        marginRight: 5,
     },
 });
 

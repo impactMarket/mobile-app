@@ -4,8 +4,10 @@ import i18n from 'i18n-js';
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
     en: {
-        testnetWarning: 'A friendly reminder you\'re using the Alfajores network build - the balances are not real.',
-        pendingApprovalMessage: 'This community has not yet been approved. If you have any question please contact us at',
+        testnetWarning:
+            "A friendly reminder you're using the Alfajores network build - the balances are not real.",
+        pendingApprovalMessage:
+            'This community has not yet been approved. If you have any question please contact us at',
         pendingApproval: 'Pending Approval',
         fullDashboard: 'Full Dashboard',
         editCommunityDetails: 'Edit community details',
@@ -48,7 +50,8 @@ i18n.translations = {
         howClaimWorks: 'How claim works',
         upToPerBeneficiary: 'Up to ${{amount}} / beneficiary',
         ssi: 'Self-Sustainability Index',
-        ssiDescription: 'SSI indicates how self-sustainable a community is and how it progresses over time, by measuring their beneficiaries claim urgency',
+        ssiDescription:
+            'SSI indicates how self-sustainable a community is and how it progresses over time, by measuring their beneficiaries claim urgency',
         seeMore: 'See More',
         seeLess: 'See Less',
         exploreCommunityContract: 'Explore Community Contract',
@@ -57,7 +60,8 @@ i18n.translations = {
         submit: 'Submit',
         needLoginToCreateCommunity: 'You need to login to create communities.',
         communityDetails: 'Community Details',
-        createCommunityDescription: 'By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.',
+        createCommunityDescription:
+            'By creating a community, you are creating a contract where all beneficiaries added to that community by you, have equal access to the funds raised to that contract, based on a few parameters.',
         selectCoverImage: 'Select Cover Image',
         changeCoverImage: 'Change Cover Image',
         communityName: 'Community Name',
@@ -78,35 +82,44 @@ i18n.translations = {
         visibility: 'Visibility',
         public: 'Public',
         private: 'Private',
-        createCommunityNote1: 'Note: These values should be a minimum basic income that is sufficient to meet your beneficiaries\' basic needs. They can claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.',
-        createCommunityNote2: 'If there is another person or organization among your community you believe is more suitable to drive this initiative, let them know about this possibility and encourage them to create a community.',
+        createCommunityNote1:
+            "Note: These values should be a minimum basic income that is sufficient to meet your beneficiaries' basic needs. They can claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.",
+        createCommunityNote2:
+            'If there is another person or organization among your community you believe is more suitable to drive this initiative, let them know about this possibility and encourage them to create a community.',
         failure: 'Failure',
         success: 'Success',
-        requestNewCommunityPlaced: 'Your request to create a new community was placed!',
+        requestNewCommunityPlaced:
+            'Your request to create a new community was placed!',
         claimBiggerThanMax: 'Claim Amount should be bigger than Max Claim!',
         claimNotZero: 'Claim Amount should not be zero!',
         maxNotZero: 'Max Claim should not be zero!',
         communityUpdated: 'Your community was updated!',
-        errorUpdatingCommunity: 'An error happened while updating your community!',
-        errorCreatingCommunity: 'An error happened while placing the request to create a community!',
+        errorUpdatingCommunity:
+            'An error happened while updating your community!',
+        errorCreatingCommunity:
+            'An error happened while placing the request to create a community!',
         anErroHappenedTryAgain: 'An error happened, please, try again.',
         toContinuePlease: 'To continue please',
         connectToYourCeloWallet: 'Connect to your Celo Wallet',
-        loginDescription1: 'ImpactMarket operates on top of  Celo Network, financial system that creates conditions for prosperity for everyone.',
-        loginDescription2: 'With Celo Wallet you can send money to anyone in the world with just a mobile phone.',
+        loginDescription1:
+            'ImpactMarket operates on top of  Celo Network, financial system that creates conditions for prosperity for everyone.',
+        loginDescription2:
+            'With Celo Wallet you can send money to anyone in the world with just a mobile phone.',
         step1: 'Step 1',
         downloadCeloApp: 'Download the Celo app',
         step2: 'Step 2',
-        installCeloCreateAccount: 'Install the Celo App and create a Celo account',
+        installCeloCreateAccount:
+            'Install the Celo App and create a Celo account',
         finalStep: 'Final Step',
         connectCeloWallet: 'Connect to Celo Wallet',
         notNow: 'Not now',
-        beforeMovingInsertPin: 'Before moving any further, please, insert your PIN', // pin is for moving dude!
+        beforeMovingInsertPin:
+            'Before moving any further, please, insert your PIN', // pin is for moving dude!
         continue: 'Continue',
         yourQRCode: 'Your QR Code',
         scanToPay: 'Scan to Pay',
         showQRToScan: 'Show QR to be scanned',
-        youHaveDonated: 'You\'ve donated!',
+        youHaveDonated: "You've donated!",
         errorDonating: 'An error happened while donating!',
         addressCopiedClipboard: 'Address copied to clipboard!',
         donate: 'Donate',
@@ -129,8 +142,10 @@ i18n.translations = {
         select: 'Select',
     },
     pt: {
-        testnetWarning: 'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
-        pendingApprovalMessage: 'Esta comunidade ainda não foi aprovada. Se você tem alguma questão, contacte-nos através de',
+        testnetWarning:
+            'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
+        pendingApprovalMessage:
+            'Esta comunidade ainda não foi aprovada. Se você tem alguma questão, contacte-nos através de',
         pendingApproval: 'Pedido Pendente',
         fullDashboard: 'Painel Completo',
         editCommunityDetails: 'Editar detalhes da comunidade',
@@ -173,16 +188,19 @@ i18n.translations = {
         howClaimWorks: 'Como funcionam os pedidos',
         upToPerBeneficiary: 'Até ${{amount}} / beneficiário',
         ssi: 'Indice de Auto Sustentabilidade',
-        ssiDescription: 'O SSI indica o quão auto-sustentável é uma comunidade e como ela progride ao longo do tempo, medindo a urgência dos seus beneficiários',
+        ssiDescription:
+            'O SSI indica o quão auto-sustentável é uma comunidade e como ela progride ao longo do tempo, medindo a urgência dos seus beneficiários',
         seeMore: 'Ver Mais',
         seeLess: 'Ver Menos',
         exploreCommunityContract: 'Explorar o Contrato da Comunidade',
         edit: 'Editar',
         create: 'Criar',
         submit: 'Enviar',
-        needLoginToCreateCommunity: 'Você necessita estar autenticado para criar uma comunidade.',
+        needLoginToCreateCommunity:
+            'Você necessita estar autenticado para criar uma comunidade.',
         communityDetails: 'Detalhes da Comunidades',
-        createCommunityDescription: 'Ao criar uma comunidade, você está a criar um contrato em que todos os beneficiários adicionados por você têm acesso igual aos fundos arrecadados para esse contrato, com base em alguns parâmetros.',
+        createCommunityDescription:
+            'Ao criar uma comunidade, você está a criar um contrato em que todos os beneficiários adicionados por você têm acesso igual aos fundos arrecadados para esse contrato, com base em alguns parâmetros.',
         selectCoverImage: 'Selecione Imagem de Capa',
         changeCoverImage: 'Altere a Imagem de Capa',
         communityName: 'Nome da Comunidade',
@@ -199,30 +217,40 @@ i18n.translations = {
         hourly: 'Por Hora',
         daily: 'Diariamente',
         weekly: 'Semanalmente',
-        timeIncrementAfterClaim: 'Incremento de tempo após cada pedido (em minutos)',
+        timeIncrementAfterClaim:
+            'Incremento de tempo após cada pedido (em minutos)',
         visibility: 'Visibilidade',
         public: 'Publico',
         private: 'Privado',
-        createCommunityNote1: 'Nota: Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas dos seus beneficiários. Eles podem pedir enquanto houver fundos disponíveis no contrato. Você terá a responsabilidade de promover a comunidade e arrecadar fundos.',
-        createCommunityNote2: 'Se houver outra pessoa ou organização na sua comunidade que você considere mais adequada para impulsionar essa iniciativa, informe-os sobre essa possibilidade e incentive-os a criar uma comunidade.',
+        createCommunityNote1:
+            'Nota: Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas dos seus beneficiários. Eles podem pedir enquanto houver fundos disponíveis no contrato. Você terá a responsabilidade de promover a comunidade e arrecadar fundos.',
+        createCommunityNote2:
+            'Se houver outra pessoa ou organização na sua comunidade que você considere mais adequada para impulsionar essa iniciativa, informe-os sobre essa possibilidade e incentive-os a criar uma comunidade.',
         failure: 'Falhou',
         success: 'Sucesso',
-        requestNewCommunityPlaced: 'O seu pedido para criar uma nova comunidade foi registado!',
-        claimBiggerThanMax: 'O valor a pedir deve ser maior que o máximo pedido!',
+        requestNewCommunityPlaced:
+            'O seu pedido para criar uma nova comunidade foi registado!',
+        claimBiggerThanMax:
+            'O valor a pedir deve ser maior que o máximo pedido!',
         claimNotZero: 'Quantidade a pedir deve ser superior a zero!',
         maxNotZero: 'Quantidade máxima a pedir deve ser superior a zero!',
         communityUpdated: 'Os dados da comunidade foram atualizados!',
-        errorUpdatingCommunity: 'Ocorreu um erro enquanto atualizava os dados da comunidade!',
-        errorCreatingCommunity: 'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
+        errorUpdatingCommunity:
+            'Ocorreu um erro enquanto atualizava os dados da comunidade!',
+        errorCreatingCommunity:
+            'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
         anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',
         toContinuePlease: 'Para continuar, por favor',
         connectToYourCeloWallet: 'Conecte-se á sua Carteira Celo',
-        loginDescription1: 'O ImpactMarket opera na rede Celo, um sistema financeiro que cria condições de prosperidade para todos.',
-        loginDescription2: 'Com a carteira Celo, você pode enviar dinheiro para qualquer pessoa no mundo apenas com um telemóvel.',
+        loginDescription1:
+            'O ImpactMarket opera na rede Celo, um sistema financeiro que cria condições de prosperidade para todos.',
+        loginDescription2:
+            'Com a carteira Celo, você pode enviar dinheiro para qualquer pessoa no mundo apenas com um telemóvel.',
         step1: 'Passo 1',
         downloadCeloApp: 'Descarregue a aplicação Celo',
         step2: 'Passo 2',
-        installCeloCreateAccount: 'Instale a aplicação Celo e crie uma conta Celo',
+        installCeloCreateAccount:
+            'Instale a aplicação Celo e crie uma conta Celo',
         finalStep: 'Último Passo',
         connectCeloWallet: 'Conecte-se á carteira Celo',
         notNow: 'Agora não',
@@ -233,7 +261,8 @@ i18n.translations = {
         showQRToScan: 'Mostrar código QR para scannear',
         youHaveDonated: 'Você fez um donativo!',
         errorDonating: 'Um erro ocorreu durante o donativo!',
-        addressCopiedClipboard: 'Endereço copiado para a área de transferência!',
+        addressCopiedClipboard:
+            'Endereço copiado para a área de transferência!',
         donate: 'Doar',
         donatingTo: 'A fazer um donativo para {{communityName}}',
         donateWithCelo: 'Doar com a carteira Celo',
@@ -247,7 +276,8 @@ i18n.translations = {
         day: 'dia',
         week: 'semana',
         changePhoto: 'Alterar foto',
-        scanningInvalidAddress: 'Você está a tentar scannear um endereço inválido!',
+        scanningInvalidAddress:
+            'Você está a tentar scannear um endereço inválido!',
         select: 'Selecionar',
     },
 };

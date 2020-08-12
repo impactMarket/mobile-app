@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+
 import {
     UserActionTypes,
     SET_USER_CELO_INFO,
@@ -25,7 +26,6 @@ import {
     SET_APP_PYMENT_TO_ACTION,
 } from '../../types';
 
-
 const INITIAL_STATE_USER: IUserState = {
     celoInfo: {
         address: '',
@@ -51,19 +51,22 @@ const INITIAL_STATE_NETWORK: INetworkState = {
     contracts: {
         communityContract: undefined as any,
         impactMarketContract: undefined as any,
-    }
-}
+    },
+};
 
 const INITIAL_STATE_AUTH: IAuthState = {
     pushNotificationsToken: '',
-    authToken: ''
-}
+    authToken: '',
+};
 
 const INITIAL_STATE_APP: IAppState = {
-    paymentToAddress: ''
-}
+    paymentToAddress: '',
+};
 
-const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes): IUserState => {
+const userReducer = (
+    state = INITIAL_STATE_USER,
+    action: UserActionTypes
+): IUserState => {
     const community = state.community;
     switch (action.type) {
         case RESET_USER_APP:
@@ -98,17 +101,20 @@ const userReducer = (state = INITIAL_STATE_USER, action: UserActionTypes): IUser
             celoInfo.balance = action.payload;
             return { ...state, celoInfo };
         case SET_USER_IS_BENEFICIARY:
-            community.isBeneficiary = action.payload
+            community.isBeneficiary = action.payload;
             return { ...state, community };
         case SET_USER_IS_COMMUNITY_MANAGER:
-            community.isManager = action.payload
+            community.isManager = action.payload;
             return { ...state, community };
         default:
-            return state
+            return state;
     }
 };
 
-const networkReducer = (state = INITIAL_STATE_NETWORK, action: NetworkActionTypes) => {
+const networkReducer = (
+    state = INITIAL_STATE_NETWORK,
+    action: NetworkActionTypes
+) => {
     let contracts;
     switch (action.type) {
         case RESET_NETWORK_APP:
@@ -117,8 +123,8 @@ const networkReducer = (state = INITIAL_STATE_NETWORK, action: NetworkActionType
                 ...state,
                 contracts: {
                     communityContract: undefined,
-                    impactMarketContract: undefined
-                }
+                    impactMarketContract: undefined,
+                },
             };
         case SET_CELO_KIT:
             return { ...state, kit: action.payload };
@@ -137,7 +143,7 @@ const networkReducer = (state = INITIAL_STATE_NETWORK, action: NetworkActionType
             contracts.impactMarketContract = action.payload;
             return { ...state, kit: action.payload };
         default:
-            return state
+            return state;
     }
 };
 
@@ -148,7 +154,7 @@ const authReducer = (state = INITIAL_STATE_AUTH, action: AuthActionTypes) => {
         case SET_AUTH_TOKEN:
             return { ...state, authToken: action.payload };
         default:
-            return state
+            return state;
     }
 };
 
@@ -157,7 +163,7 @@ const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
         case SET_APP_PYMENT_TO_ACTION:
             return { ...state, paymentToAddress: action.payload };
         default:
-            return state
+            return state;
     }
 };
 
@@ -166,5 +172,4 @@ export default combineReducers({
     network: networkReducer,
     auth: authReducer,
     app: appReducer,
-})
-
+});

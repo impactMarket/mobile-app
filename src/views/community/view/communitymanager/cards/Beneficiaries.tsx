@@ -1,37 +1,27 @@
-import React, { useState } from 'react';
-import {
-    connect,
-    ConnectedProps
-} from 'react-redux';
-import {
-    IRootState,
-    ICommunityInfo,
-} from 'helpers/types';
-import {
-    Card,
-    Headline,
-    Button,
-} from 'react-native-paper';
-import ModalScanQR from '../../../../common/ModalScanQR';
 import { useNavigation } from '@react-navigation/native';
-import { updateCommunityInfo, iptcColors } from 'helpers/index';
 import i18n from 'assets/i18n';
-import { Alert } from 'react-native';
-import { celoWalletRequest } from 'services/celoWallet';
 import { ethers } from 'ethers';
+import { updateCommunityInfo, iptcColors } from 'helpers/index';
+import { IRootState, ICommunityInfo } from 'helpers/types';
+import React, { useState } from 'react';
+import { Alert } from 'react-native';
+import { Card, Headline, Button } from 'react-native-paper';
+import { connect, ConnectedProps } from 'react-redux';
+import { celoWalletRequest } from 'services/celoWallet';
 
+import ModalScanQR from '../../../../common/ModalScanQR';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;
     updateCommunity: (community: ICommunityInfo) => void;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network } = state;
+    return { user, network };
 };
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & IBeneficiariesProps
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & IBeneficiariesProps;
 
 function Beneficiaries(props: Props) {
     const navigation = useNavigation();
@@ -66,29 +56,35 @@ function Beneficiaries(props: Props) {
             communityContract.options.address,
             await communityContract.methods.addBeneficiary(addressToAdd),
             'addbeneficiary',
-            network,
-        ).then(() => {
+            network
+        )
+            .then(() => {
+                // TODO: update UI
+                setTimeout(
+                    () =>
+                        updateCommunityInfo(props.user.celoInfo.address, props),
+                    10000
+                );
 
-            // TODO: update UI
-            setTimeout(() => updateCommunityInfo(props.user.celoInfo.address, props), 10000);
-
-            Alert.alert(
-                i18n.t('success'),
-                'You\'ve successfully added a new beneficiary!',
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-        }).catch(() => {
-            Alert.alert(
-                i18n.t('failure'),
-                'An error happened while adding the request!',
-                [{ text: i18n.t('close') }],
-                { cancelable: false }
-            );
-        }).finally(() => {
-            setAddInProgress(false);
-        });
-    }
+                Alert.alert(
+                    i18n.t('success'),
+                    "You've successfully added a new beneficiary!",
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+            })
+            .catch(() => {
+                Alert.alert(
+                    i18n.t('failure'),
+                    'An error happened while adding the request!',
+                    [{ text: i18n.t('close') }],
+                    { cancelable: false }
+                );
+            })
+            .finally(() => {
+                setAddInProgress(false);
+            });
+    };
 
     return (
         <Card elevation={8}>
@@ -96,10 +92,10 @@ function Beneficiaries(props: Props) {
                 <Headline
                     style={{
                         opacity: 0.48,
-                        fontFamily: "Gelion-Bold",
+                        fontFamily: 'Gelion-Bold',
                         fontSize: 13,
-                        fontWeight: "500",
-                        fontStyle: "normal",
+                        fontWeight: '500',
+                        fontStyle: 'normal',
                         lineHeight: 12,
                         letterSpacing: 0.7,
                     }}
@@ -110,22 +106,35 @@ function Beneficiaries(props: Props) {
                     mode="outlined"
                     disabled={props.community.beneficiaries.added.length === 0}
                     style={{ marginVertical: 5 }}
-                    onPress={() => navigation.navigate('AddedScreen', { beneficiaries: props.community.beneficiaries.added })}
+                    onPress={() =>
+                        navigation.navigate('AddedScreen', {
+                            beneficiaries: props.community.beneficiaries.added,
+                        })
+                    }
                 >
-                    {i18n.t('added')} ({props.community.beneficiaries.added.length})
+                    {i18n.t('added')} (
+                    {props.community.beneficiaries.added.length})
                 </Button>
                 <Button
                     mode="outlined"
-                    disabled={props.community.beneficiaries.removed.length === 0}
+                    disabled={
+                        props.community.beneficiaries.removed.length === 0
+                    }
                     style={{ marginVertical: 5 }}
-                    onPress={() => navigation.navigate('RemovedScreen', { beneficiaries: props.community.beneficiaries.removed })}
+                    onPress={() =>
+                        navigation.navigate('RemovedScreen', {
+                            beneficiaries:
+                                props.community.beneficiaries.removed,
+                        })
+                    }
                 >
-                    {i18n.t('removed')} ({props.community.beneficiaries.removed.length})
+                    {i18n.t('removed')} (
+                    {props.community.beneficiaries.removed.length})
                 </Button>
                 <ModalScanQR
                     buttonStyle={{
                         marginVertical: 5,
-                        backgroundColor: iptcColors.greenishTeal
+                        backgroundColor: iptcColors.greenishTeal,
                     }}
                     buttonText={i18n.t('addBeneficiary')}
                     inputText={i18n.t('beneficiaryAddress')}

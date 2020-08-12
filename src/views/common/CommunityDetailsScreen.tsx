@@ -1,40 +1,20 @@
-import React, { useState } from 'react';
-import {
-    Text,
-    View,
-    StyleSheet,
-    ImageBackground,
-} from 'react-native';
-import {
-    LineChart,
-    ChartConfig,
-} from 'react-native-chart-kit';
-import {
-    ICommunityInfo,
-} from 'helpers/types';
 import { AntDesign } from '@expo/vector-icons';
-import Donate from '../communities/actions/Donate';
-import {
-    LinearGradient
-} from 'expo-linear-gradient';
-import {
-    Paragraph,
-    Button,
-    Card,
-    Divider,
-    Headline,
-} from 'react-native-paper';
-import {
-    ScrollView
-} from 'react-native-gesture-handler';
-import { humanifyNumber, claimFrequencyToText } from 'helpers/index';
+import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
-import { useNavigation } from '@react-navigation/native';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
-import config from '../../../config';
-import i18n from 'assets/i18n';
+import { humanifyNumber, claimFrequencyToText } from 'helpers/index';
+import { ICommunityInfo } from 'helpers/types';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, ImageBackground } from 'react-native';
+import { LineChart, ChartConfig } from 'react-native-chart-kit';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Paragraph, Button, Card, Divider, Headline } from 'react-native-paper';
 
+import config from '../../../config';
+import Donate from '../communities/actions/Donate';
 
 const lineChartConfig: ChartConfig = {
     backgroundGradientFromOpacity: 0,
@@ -46,14 +26,14 @@ const lineChartConfig: ChartConfig = {
     style: {
         // borderRadius: 6
     },
-    fillShadowGradientOpacity: 0
+    fillShadowGradientOpacity: 0,
 };
 interface ICommunityDetailsScreen {
     route: {
         params: {
-            community: ICommunityInfo,
-        }
-    }
+            community: ICommunityInfo;
+        };
+    };
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const navigation = useNavigation();
@@ -61,71 +41,75 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     const [seeFullDescription, setSeeFullDescription] = useState(false);
 
-
     const renderSSI = () => {
         if (community.ssi.values.length > 1) {
             const lineChartData = {
                 labels: community.ssi.dates.map((date) => date.toString()),
-                datasets: [{ data: community.ssi.values }]
+                datasets: [{ data: community.ssi.values }],
             };
-            return <>
-                <Divider />
-                <View style={styles.chartView}>
-                    <LineChart
-                        data={lineChartData}
-                        width={200}
-                        height={100}
-                        fromZero={true}
-                        chartConfig={lineChartConfig}
-                        withInnerLines={false}
-                        withOuterLines={false}
-                        withHorizontalLabels={false}
-                        withVerticalLabels={false}
-                        withDots={false}
-                        bezier={true}
-                        style={{
-                            marginLeft: -70,
-                        }}
-                    />
-                    <View style={styles.ssiView}>
-                        <Headline style={styles.ssiHeadline}>
-                            {community.ssi.values[community.ssi.values.length - 1]}%
-                        </Headline>
-                        <Paragraph>{i18n.t('ssi')}</Paragraph>
+            return (
+                <>
+                    <Divider />
+                    <View style={styles.chartView}>
+                        <LineChart
+                            data={lineChartData}
+                            width={200}
+                            height={100}
+                            fromZero
+                            chartConfig={lineChartConfig}
+                            withInnerLines={false}
+                            withOuterLines={false}
+                            withHorizontalLabels={false}
+                            withVerticalLabels={false}
+                            withDots={false}
+                            bezier
+                            style={{
+                                marginLeft: -70,
+                            }}
+                        />
+                        <View style={styles.ssiView}>
+                            <Headline style={styles.ssiHeadline}>
+                                {
+                                    community.ssi.values[
+                                        community.ssi.values.length - 1
+                                    ]
+                                }
+                                %
+                            </Headline>
+                            <Paragraph>{i18n.t('ssi')}</Paragraph>
+                        </View>
                     </View>
-                </View>
-                <Paragraph style={styles.ssiExplained}>
-                    {i18n.t('ssiDescription')}
-                </Paragraph>
-            </>
+                    <Paragraph style={styles.ssiExplained}>
+                        {i18n.t('ssiDescription')}
+                    </Paragraph>
+                </>
+            );
         }
-    }
+    };
 
     let description;
     if (seeFullDescription || community.description.indexOf('\n') == -1) {
         description = community.description;
     } else {
-        description = community.description.slice(0, community.description.indexOf('\n'));
+        description = community.description.slice(
+            0,
+            community.description.indexOf('\n')
+        );
     }
 
     return (
         <>
-            <Header
-                title=""
-                hasBack={true}
-                hasShare={true}
-                hasHelp={true}
-                navigation={navigation}
-            />
+            <Header title="" hasBack hasShare hasHelp navigation={navigation} />
             <ScrollView>
                 <ImageBackground
                     source={{ uri: community.coverImage }}
-                    resizeMode={'cover'}
+                    resizeMode="cover"
                     style={styles.imageBackground}
                 >
                     <Text style={styles.communityName}>{community.name}</Text>
                     <Text style={styles.communityLocation}>
-                        <AntDesign name="enviromento" size={20} /> {community.city}, {community.country}
+                        <AntDesign name="enviromento" size={20} />{' '}
+                        {community.city}, {community.country}
                     </Text>
                     <LinearGradient
                         colors={['transparent', 'rgba(246,246,246,1)']}
@@ -138,10 +122,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             <Paragraph>{description}</Paragraph>
                             <Button
                                 mode="contained"
-                                disabled={community.description.indexOf('\n') === -1}
-                                onPress={() => setSeeFullDescription(!seeFullDescription)}
+                                disabled={
+                                    community.description.indexOf('\n') === -1
+                                }
+                                onPress={() =>
+                                    setSeeFullDescription(!seeFullDescription)
+                                }
                             >
-                                {(seeFullDescription ? i18n.t('seeLess') : i18n.t('seeMore'))}
+                                {seeFullDescription
+                                    ? i18n.t('seeLess')
+                                    : i18n.t('seeMore')}
                             </Button>
                         </Card.Content>
                     </Card>
@@ -150,10 +140,21 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             <View style={styles.cardViewClaimFrequency}>
                                 <View>
                                     <Headline>
-                                        ${humanifyNumber(community.vars._claimAmount)} / {claimFrequencyToText(community.vars._baseInterval)}
+                                        $
+                                        {humanifyNumber(
+                                            community.vars._claimAmount
+                                        )}{' '}
+                                        /{' '}
+                                        {claimFrequencyToText(
+                                            community.vars._baseInterval
+                                        )}
                                     </Headline>
                                     <Paragraph style={{ color: '#b0b0b0' }}>
-                                        {i18n.t('upToPerBeneficiary', { amount: humanifyNumber(community.vars._maxClaim) })}
+                                        {i18n.t('upToPerBeneficiary', {
+                                            amount: humanifyNumber(
+                                                community.vars._maxClaim
+                                            ),
+                                        })}
                                     </Paragraph>
                                 </View>
                             </View>
@@ -164,14 +165,19 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         <Button
                             mode="outlined"
                             style={{ width: '100%' }}
-                            onPress={() => WebBrowser.openBrowserAsync(config.blockExplorer + community.contractAddress)}
+                            onPress={() =>
+                                WebBrowser.openBrowserAsync(
+                                    config.blockExplorer +
+                                        community.contractAddress
+                                )
+                            }
                         >
                             {i18n.t('exploreCommunityContract')}
                         </Button>
                     </CommuntyStatus>
                 </View>
                 <Donate community={community} />
-            </ScrollView >
+            </ScrollView>
         </>
     );
 }
@@ -179,33 +185,33 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 const styles = StyleSheet.create({
     container: {
         marginTop: -40,
-        margin: 20
+        margin: 20,
     },
     imageBackground: {
         width: '100%',
         height: 180,
         justifyContent: 'center',
         alignContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     communityName: {
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     communityLocation: {
         fontSize: 20,
-        color: 'white'
+        color: 'white',
     },
     ssiExplained: {
         fontSize: 15,
-        fontWeight: "normal",
-        fontStyle: "normal",
+        fontWeight: 'normal',
+        fontStyle: 'normal',
         lineHeight: 18,
         letterSpacing: 0.25,
-        color: '#b0b0b0'
+        color: '#b0b0b0',
     },
     linearGradient: {
         position: 'absolute',
@@ -215,27 +221,27 @@ const styles = StyleSheet.create({
         height: 80,
     },
     ssiHeadline: {
-        fontFamily: "Gelion-Regular",
+        fontFamily: 'Gelion-Regular',
         fontSize: 36,
-        fontStyle: "normal",
+        fontStyle: 'normal',
         lineHeight: 36,
         letterSpacing: 0,
-        textAlign: 'right'
+        textAlign: 'right',
     },
     ssiView: {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        marginRight: 0
+        marginRight: 0,
     },
     cardViewClaimFrequency: {
         flex: 1,
         flexDirection: 'row',
-        margin: 0
+        margin: 0,
     },
     chartView: {
         flex: 1,
         flexDirection: 'row',
-        margin: 0
-    }
+        margin: 0,
+    },
 });

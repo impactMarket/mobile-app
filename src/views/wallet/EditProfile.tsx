@@ -1,53 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import {
-    AsyncStorage,
-    StyleSheet,
-    View,
-    Picker,
-} from 'react-native';
-import {
-    connect,
-    ConnectedProps
-} from 'react-redux';
-import {
-    IRootState,
-    STORAGE_USER_FIRST_TIME,
-} from 'helpers/types';
-import {
-    Button,
-    Avatar,
-    TextInput,
-    Paragraph
-} from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
+import Header from 'components/Header';
+import ValidatedTextInput from 'components/ValidatedTextInput';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import { getCountryFromPhoneNumber, getUserAvatar } from 'helpers/index';
 import {
     resetUserApp,
     resetNetworkContractsApp,
     setUserInfo,
-    setUserExchangeRate
+    setUserExchangeRate,
 } from 'helpers/redux/actions/ReduxActions';
-import {
-    ScrollView
-} from 'react-native-gesture-handler';
-import Header from 'components/Header';
-import { useNavigation } from '@react-navigation/native';
-import { getCountryFromPhoneNumber, getUserAvatar } from 'helpers/index';
-import ValidatedTextInput from 'components/ValidatedTextInput';
+import { IRootState, STORAGE_USER_FIRST_TIME } from 'helpers/types';
+import React, { useState, useEffect } from 'react';
+import { AsyncStorage, StyleSheet, View, Picker } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Button, Avatar, TextInput, Paragraph } from 'react-native-paper';
+import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
-import i18n from 'assets/i18n';
-import Constants from 'expo-constants';
-import * as Device from 'expo-device';
-
 
 interface IEditProfileProps {
     EditProfileCallback: () => void;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network } = state;
+    return { user, network };
 };
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux & IEditProfileProps
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & IEditProfileProps;
 
 function EditProfile(props: Props) {
     const navigation = useNavigation();
@@ -65,22 +46,24 @@ function EditProfile(props: Props) {
         props.dispatch(resetUserApp());
         props.dispatch(resetNetworkContractsApp());
         navigation.goBack();
-    }
+    };
 
     const handleChangeCurrency = async (text: string) => {
         setCurrency(text);
         Api.setUserCurrency(props.user.celoInfo.address, text);
         props.dispatch(setUserInfo({ ...props.user.user, currency: text }));
         // update exchange rate!
-        const exchangeRate = await Api.getExchangeRate(props.user.user.currency.toUpperCase());
-        props.dispatch(setUserExchangeRate(exchangeRate))
-    }
+        const exchangeRate = await Api.getExchangeRate(
+            props.user.user.currency.toUpperCase()
+        );
+        props.dispatch(setUserExchangeRate(exchangeRate));
+    };
 
     return (
         <>
             <Header
                 title={i18n.t('editProfile')}
-                hasBack={true}
+                hasBack
                 navigation={navigation}
             />
             <ScrollView style={styles.scrollView}>
@@ -88,29 +71,30 @@ function EditProfile(props: Props) {
                     <Avatar.Image
                         style={{
                             alignSelf: 'center',
-                            marginVertical: 20
+                            marginVertical: 20,
                         }}
                         size={121}
                         source={getUserAvatar(props.user.user, true)}
                     />
-                    <Button
-                        mode="contained"
-                        disabled={true}
-                    >
+                    <Button mode="contained" disabled>
                         {i18n.t('changePhoto')}
                     </Button>
                     <ValidatedTextInput
                         label={i18n.t('name')}
                         value={name}
                         maxLength={32}
-                        required={true}
+                        required
                         onEndEditing={(e) => {
                             Api.setUsername(props.user.celoInfo.address, name);
-                            props.dispatch(setUserInfo({ ...props.user.user, name }));
+                            props.dispatch(
+                                setUserInfo({ ...props.user.user, name })
+                            );
                         }}
-                        onChangeText={value => setName(value)}
+                        onChangeText={(value) => setName(value)}
                     />
-                    <Paragraph style={styles.inputTextFieldLabel}>{i18n.t('currency')}</Paragraph>
+                    <Paragraph style={styles.inputTextFieldLabel}>
+                        {i18n.t('currency')}
+                    </Paragraph>
                     <View style={styles.pickerBorder}>
                         <Picker
                             selectedValue={currency}
@@ -124,14 +108,16 @@ function EditProfile(props: Props) {
                     <TextInput
                         label={i18n.t('country')}
                         style={{ marginVertical: 3 }}
-                        value={getCountryFromPhoneNumber(props.user.celoInfo.phoneNumber)}
-                        disabled={true}
+                        value={getCountryFromPhoneNumber(
+                            props.user.celoInfo.phoneNumber
+                        )}
+                        disabled
                     />
                     <TextInput
                         label={i18n.t('phoneNumber')}
                         style={{ marginVertical: 3 }}
                         value={props.user.celoInfo.phoneNumber}
-                        disabled={true}
+                        disabled
                     />
                     <Button
                         mode="contained"
@@ -140,13 +126,17 @@ function EditProfile(props: Props) {
                     >
                         {i18n.t('logout')}
                     </Button>
-                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                        }}
+                    >
                         <Paragraph>
                             Build: {Constants.manifest.version}
                         </Paragraph>
-                        <Paragraph>
-                            OS version: {Device.osVersion}
-                        </Paragraph>
+                        <Paragraph>OS version: {Device.osVersion}</Paragraph>
                     </View>
                 </View>
             </ScrollView>
@@ -155,10 +145,9 @@ function EditProfile(props: Props) {
 }
 
 const styles = StyleSheet.create({
-    scrollView: {
-    },
+    scrollView: {},
     container: {
-        marginHorizontal: 20
+        marginHorizontal: 20,
     },
     picker: {
         height: 50,
@@ -170,13 +159,12 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
         borderColor: 'grey',
         borderWidth: 1,
-        borderRadius: 5
+        borderRadius: 5,
     },
     inputTextFieldLabel: {
         color: 'grey',
-        fontFamily: 'Gelion-Regular'
+        fontFamily: 'Gelion-Regular',
     },
 });
-
 
 export default connector(EditProfile);

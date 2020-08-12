@@ -1,9 +1,9 @@
-import { ContractKit } from "@celo/contractkit";
+import { ContractKit } from '@celo/contractkit';
 
-export const STORAGE_USER_ADDRESS = '@celoinfo:address'
-export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber'
-export const STORAGE_USER_FIRST_TIME = '@status:firstime'
-export const STORAGE_USER_AUTH_TOKEN = '@user:authtoken'
+export const STORAGE_USER_ADDRESS = '@celoinfo:address';
+export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber';
+export const STORAGE_USER_FIRST_TIME = '@status:firstime';
+export const STORAGE_USER_AUTH_TOKEN = '@user:authtoken';
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_USER_EXCHANGE_RATE = 'SET_USER_EXCHANGE_RATE';
@@ -29,10 +29,10 @@ export interface IUserCeloInfo {
 }
 
 export interface IUserInfo {
-    name: string,
-    currency: string,
-    exchangeRate: number,
-    avatar: string,
+    name: string;
+    currency: string;
+    exchangeRate: number;
+    avatar: string;
 }
 
 export interface IUserCommunityInfo {
@@ -41,20 +41,20 @@ export interface IUserCommunityInfo {
 }
 
 export interface IUserState {
-    celoInfo: IUserCeloInfo,
-    user: IUserInfo,
-    community: IUserCommunityInfo,
+    celoInfo: IUserCeloInfo;
+    user: IUserInfo;
+    community: IUserCommunityInfo;
 }
 
 export interface IContractsState {
-    impactMarketContract: any,
-    communityContract: any
+    impactMarketContract: any;
+    communityContract: any;
 }
 
 export interface INetworkState {
-    kit: ContractKit,
-    community: ICommunityInfo,
-    contracts: IContractsState,
+    kit: ContractKit;
+    community: ICommunityInfo;
+    contracts: IContractsState;
 }
 
 export interface IAuthState {
@@ -67,92 +67,106 @@ export interface IAppState {
 }
 
 export interface IRootState {
-    user: IUserState,
-    network: INetworkState,
-    auth: IAuthState,
-    app: IAppState,
+    user: IUserState;
+    network: INetworkState;
+    auth: IAuthState;
+    app: IAppState;
 }
 
 // action
 interface UserCeloInfoAction {
-    type: typeof SET_USER_CELO_INFO
-    payload: IUserCeloInfo
+    type: typeof SET_USER_CELO_INFO;
+    payload: IUserCeloInfo;
 }
 
 interface UserInfoAction {
-    type: typeof SET_USER_INFO
-    payload: IUserInfo
+    type: typeof SET_USER_INFO;
+    payload: IUserInfo;
 }
 
 interface UserExchangeRateAction {
-    type: typeof SET_USER_EXCHANGE_RATE
-    payload: number
+    type: typeof SET_USER_EXCHANGE_RATE;
+    payload: number;
 }
 
 interface UserSetBalanceAction {
-    type: typeof SET_USER_WALLET_BALANCE
-    payload: string
+    type: typeof SET_USER_WALLET_BALANCE;
+    payload: string;
 }
 
 interface UserSetIsBeneficiaryAction {
-    type: typeof SET_USER_IS_BENEFICIARY
-    payload: boolean
+    type: typeof SET_USER_IS_BENEFICIARY;
+    payload: boolean;
 }
 
 interface UserSetIsCommunityManagerAction {
-    type: typeof SET_USER_IS_COMMUNITY_MANAGER
-    payload: boolean
+    type: typeof SET_USER_IS_COMMUNITY_MANAGER;
+    payload: boolean;
 }
 
 interface CeloKitAction {
-    type: typeof SET_CELO_KIT
+    type: typeof SET_CELO_KIT;
     payload: ContractKit;
 }
 
 interface SetImpactMarketContractAction {
-    type: typeof SET_IMPACTMARKET_CONTRACT
+    type: typeof SET_IMPACTMARKET_CONTRACT;
     payload: any;
 }
 
 interface SetCommunityContractAction {
-    type: typeof SET_COMMUNITY_CONTRACT
+    type: typeof SET_COMMUNITY_CONTRACT;
     payload: any;
 }
 
 interface SetCommunityAction {
-    type: typeof SET_COMMUNITY
+    type: typeof SET_COMMUNITY;
     payload: ICommunityInfo;
 }
 
 interface ResetUserAction {
-    type: typeof RESET_USER_APP
+    type: typeof RESET_USER_APP;
     payload: any;
 }
 
 interface ResetNetworkAction {
-    type: typeof RESET_NETWORK_APP
+    type: typeof RESET_NETWORK_APP;
     payload: any;
 }
 
 interface SetTokenPushNotificationsAction {
-    type: typeof SET_PUSH_NOTIFICATION_TOKEN
+    type: typeof SET_PUSH_NOTIFICATION_TOKEN;
     payload: string;
 }
 
 interface SetAuthTokenAction {
-    type: typeof SET_AUTH_TOKEN
+    type: typeof SET_AUTH_TOKEN;
     payload: string;
 }
 
 interface SetAppPaymentToAction {
-    type: typeof SET_APP_PYMENT_TO_ACTION
+    type: typeof SET_APP_PYMENT_TO_ACTION;
     payload: string;
 }
 
-export type UserActionTypes = UserCeloInfoAction | UserSetBalanceAction | UserSetIsBeneficiaryAction | UserSetIsCommunityManagerAction | ResetUserAction | UserInfoAction | UserExchangeRateAction
-export type NetworkActionTypes = CeloKitAction | SetImpactMarketContractAction | SetCommunityContractAction | SetCommunityAction | ResetNetworkAction
-export type AuthActionTypes = SetTokenPushNotificationsAction | SetAuthTokenAction
-export type AppActionTypes = SetAppPaymentToAction
+export type UserActionTypes =
+    | UserCeloInfoAction
+    | UserSetBalanceAction
+    | UserSetIsBeneficiaryAction
+    | UserSetIsCommunityManagerAction
+    | ResetUserAction
+    | UserInfoAction
+    | UserExchangeRateAction;
+export type NetworkActionTypes =
+    | CeloKitAction
+    | SetImpactMarketContractAction
+    | SetCommunityContractAction
+    | SetCommunityAction
+    | ResetNetworkAction;
+export type AuthActionTypes =
+    | SetTokenPushNotificationsAction
+    | SetAuthTokenAction;
+export type AppActionTypes = SetAppPaymentToAction;
 
 export interface ITransaction {
     tx: string;
@@ -163,9 +177,9 @@ export interface ITransaction {
 }
 
 export interface ITabBarIconProps {
-    focused: boolean,
-    color: string,
-    size: number
+    focused: boolean;
+    color: string;
+    size: number;
 }
 
 // **API and app**
@@ -199,8 +213,8 @@ export interface ICommunityInfo extends ICommunity {
     };
     managers: string[];
     ssi: {
-        dates: Date[],
-        values: number[],
+        dates: Date[];
+        values: number[];
     };
     totalClaimed: string;
     totalRaised: string;

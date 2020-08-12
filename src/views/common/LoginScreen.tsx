@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
+import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
+import * as Linking from 'expo-linking';
+import { loadContracts } from 'helpers/index';
 import {
-    StyleSheet,
-    Text,
-    View,
-    AsyncStorage,
-    Alert,
-} from 'react-native';
-import {
-    requestAccountAddress,
-    waitForAccountAuth,
-} from '@celo/dappkit'
-import * as Linking from 'expo-linking'
+    setUserCeloInfo,
+    setPushNotificationsToken,
+} from 'helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
@@ -18,38 +16,26 @@ import {
     IRootState,
     STORAGE_USER_AUTH_TOKEN,
 } from 'helpers/types';
-import {
-    setUserCeloInfo,
-    setPushNotificationsToken
-} from 'helpers/redux/actions/ReduxActions';
-import {
-    ConnectedProps,
-    connect,
-    useStore
-} from 'react-redux';
-import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, AsyncStorage, Alert } from 'react-native';
 import {
     Button,
     Portal,
     Dialog,
     TextInput,
-    Paragraph
+    Paragraph,
 } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { loadContracts } from 'helpers/index';
+import { ConnectedProps, connect, useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';
-import i18n from 'assets/i18n';
-
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state
-    return { user, network }
+    const { user, network } = state;
+    return { user, network };
 };
-const connector = connect(mapStateToProps)
-type PropsFromRedux = ConnectedProps<typeof connector>
-type Props = PropsFromRedux
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux;
 
 function LoginScreen(props: Props) {
     const store = useStore();
@@ -59,34 +45,38 @@ function LoginScreen(props: Props) {
     const [pin, setPin] = useState<string>('');
 
     const getCurrentUserBalance = async (address: string) => {
-        const stableToken = await props.network.kit.contracts.getStableToken()
+        const stableToken = await props.network.kit.contracts.getStableToken();
 
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([stableToken.balanceOf(address), stableToken.decimals()])
+        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([
+            stableToken.balanceOf(address),
+            stableToken.decimals(),
+        ]);
         const decimals = new BigNumber(10).pow(cUSDDecimals).toString();
-        let cUSDBalance = cUSDBalanceBig.div(decimals).toFixed(2)
+        const cUSDBalance = cUSDBalanceBig.div(decimals).toFixed(2);
         return cUSDBalance;
-    }
+    };
 
     const login = async () => {
-        const requestId = 'login'
-        const dappName = 'impactMarket'
-        const callback = Linking.makeUrl('impactmarketmobile://login')
+        const requestId = 'login';
+        const dappName = 'impactMarket';
+        const callback = Linking.makeUrl('impactmarketmobile://login');
         setConnecting(true);
 
         requestAccountAddress({
             requestId,
             dappName,
             callback,
-        })
+        });
 
-        const dappkitResponse = await waitForAccountAuth(requestId)
+        const dappkitResponse = await waitForAccountAuth(requestId);
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
         const authToken = await Api.userAuth(userAddress, pin);
         if (authToken === undefined) {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
-                [{ text: 'OK' }], { cancelable: false }
+                [{ text: 'OK' }],
+                { cancelable: false }
             );
             setConnecting(false);
             setPin('');
@@ -101,46 +91,54 @@ function LoginScreen(props: Props) {
                     navigation.goBack();
                     unsubscribe();
                 }
-            })
+            });
             await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, authToken);
             await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
-            await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, dappkitResponse.phoneNumber);
+            await AsyncStorage.setItem(
+                STORAGE_USER_PHONE_NUMBER,
+                dappkitResponse.phoneNumber
+            );
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
             await loadContracts(userAddress, props.network.kit, props);
-            props.dispatch(setUserCeloInfo({
-                address: userAddress,
-                phoneNumber: dappkitResponse.phoneNumber,
-                balance: cUSDBalance,
-            }))
+            props.dispatch(
+                setUserCeloInfo({
+                    address: userAddress,
+                    phoneNumber: dappkitResponse.phoneNumber,
+                    balance: cUSDBalance,
+                })
+            );
             const pushNotificationsToken = await registerForPushNotifications();
             if (pushNotificationsToken === undefined) {
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('anErroHappenedTryAgain'),
-                    [{ text: 'OK' }], { cancelable: false }
+                    [{ text: 'OK' }],
+                    { cancelable: false }
                 );
                 setConnecting(false);
                 setPin('');
                 return;
             }
-            Api.setUserPushNotificationToken(userAddress, pushNotificationsToken);
+            Api.setUserPushNotificationToken(
+                userAddress,
+                pushNotificationsToken
+            );
             props.dispatch(setPushNotificationsToken(pushNotificationsToken));
         } catch (error) {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
-                [{ text: 'OK' }], { cancelable: false }
+                [{ text: 'OK' }],
+                { cancelable: false }
             );
             setConnecting(false);
             setPin('');
         }
-    }
+    };
 
     return (
         <View style={styles.mainView}>
-            <Text style={styles.description}>
-                {i18n.t('toContinuePlease')}
-            </Text>
+            <Text style={styles.description}>{i18n.t('toContinuePlease')}</Text>
             <Text style={styles.title}>
                 {i18n.t('connectToYourCeloWallet')}
             </Text>
@@ -150,9 +148,7 @@ function LoginScreen(props: Props) {
             <Text style={styles.description}>
                 {i18n.t('loginDescription2')}
             </Text>
-            <Text style={styles.stepText}>
-                {i18n.t('step1')}
-            </Text>
+            <Text style={styles.stepText}>{i18n.t('step1')}</Text>
             <Text style={styles.instructionText}>
                 {i18n.t('downloadCeloApp')}
             </Text>
@@ -163,28 +159,24 @@ function LoginScreen(props: Props) {
             >
                 <Button
                     mode="contained"
-                    disabled={true}
+                    disabled
                     style={{ marginHorizontal: 10, width: '40%' }}
                 >
                     iOS
                 </Button>
                 <Button
                     mode="contained"
-                    disabled={true}
+                    disabled
                     style={{ marginHorizontal: 10, width: '40%' }}
                 >
                     Android
                 </Button>
             </View>
-            <Text style={styles.stepText}>
-                {i18n.t('step2')}
-            </Text>
+            <Text style={styles.stepText}>{i18n.t('step2')}</Text>
             <Text style={styles.instructionText}>
                 {i18n.t('installCeloCreateAccount')}
             </Text>
-            <Text style={styles.stepText}>
-                {i18n.t('finalStep')}
-            </Text>
+            <Text style={styles.stepText}>{i18n.t('finalStep')}</Text>
             <Button
                 mode="contained"
                 onPress={() => setAskingPattern(true)}
@@ -203,22 +195,17 @@ function LoginScreen(props: Props) {
                 {i18n.t('notNow')}
             </Button>
             <Portal>
-                <Dialog
-                    visible={askingPattern}
-                    dismissable={false}
-                >
+                <Dialog visible={askingPattern} dismissable={false}>
                     <Dialog.Content>
-                        <Paragraph>
-                            {i18n.t('beforeMovingInsertPin')}
-                        </Paragraph>
+                        <Paragraph>{i18n.t('beforeMovingInsertPin')}</Paragraph>
                         <TextInput
                             maxLength={4}
                             label="PIN"
                             value={pin}
                             keyboardType="numeric"
-                            secureTextEntry={true}
+                            secureTextEntry
                             textContentType="password"
-                            onChangeText={text => setPin(text)}
+                            onChangeText={(text) => setPin(text)}
                         />
                     </Dialog.Content>
                     <Dialog.Actions>
@@ -246,47 +233,47 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        margin: 20
+        margin: 20,
     },
     title: {
         height: 62,
-        fontFamily: "Gelion-Bold",
+        fontFamily: 'Gelion-Bold',
         fontSize: 30,
-        fontWeight: "bold",
-        fontStyle: "normal",
+        fontWeight: 'bold',
+        fontStyle: 'normal',
         lineHeight: 31,
         letterSpacing: 0.7,
-        textAlign: "center",
-        color: "#1e3252"
+        textAlign: 'center',
+        color: '#1e3252',
     },
     description: {
-        fontFamily: "Gelion-Regular",
+        fontFamily: 'Gelion-Regular',
         fontSize: 19,
-        fontWeight: "normal",
-        fontStyle: "normal",
+        fontWeight: 'normal',
+        fontStyle: 'normal',
         letterSpacing: 0,
-        textAlign: "center",
-        color: "#8898aa"
+        textAlign: 'center',
+        color: '#8898aa',
     },
     stepText: {
-        fontFamily: "Gelion-Bold",
+        fontFamily: 'Gelion-Bold',
         fontSize: 19,
-        fontWeight: "bold",
-        fontStyle: "normal",
+        fontWeight: 'bold',
+        fontStyle: 'normal',
         letterSpacing: 0,
-        textAlign: "center",
-        color: "#172b4d"
+        textAlign: 'center',
+        color: '#172b4d',
     },
     instructionText: {
         height: 23,
-        fontFamily: "Gelion-Regular",
+        fontFamily: 'Gelion-Regular',
         fontSize: 19,
-        fontWeight: "normal",
-        fontStyle: "normal",
+        fontWeight: 'normal',
+        fontStyle: 'normal',
         letterSpacing: 0,
-        textAlign: "center",
-        color: "#172b4d"
-    }
+        textAlign: 'center',
+        color: '#172b4d',
+    },
 });
 
 export default connector(LoginScreen);
