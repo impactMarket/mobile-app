@@ -6,7 +6,9 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*"
+        "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*",
+        "prettier": "prettier --write src/**/*.{ts,tsx}",
+        "eslint": "eslint --fix src/**/*.{ts,tsx}"
     },
     "dependencies": {
         "@celo/contractkit": "0.2.14",
