@@ -255,7 +255,30 @@ class Api {
             address,
             pin,
         };
-        return postRequest<string>('/user/auth', requestBody);
+        const endpoint = '/user/auth';
+
+        let response: string | undefined;
+        try {
+            // handle success
+            const requestOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+            };
+            const result = await axios.post(
+                endpoint,
+                requestBody,
+                requestOptions
+            );
+            if (result.status >= 400) {
+                return undefined;
+            }
+            response = result.data as string;
+        } catch (error) {
+            // handle error
+        }
+        return response;
     }
 
     static async setUserPushNotificationToken(
