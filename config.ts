@@ -69,6 +69,7 @@ function getEnvVars() {
         if (Constants.manifest.releaseChannel?.indexOf('production') !== -1) return { ...commonConfig, ...ENV.production };
         return { ...commonConfig, ...ENV.staging };
     }
+    return { ...commonConfig, ...ENV.dev };
 }
 
 export default getEnvVars()
