@@ -115,6 +115,7 @@ i18n.translations = {
         notNow: 'Not now',
         beforeMovingInsertPin:
             'Before moving any further, please, insert your PIN', // pin is for moving dude!
+        pin4Digits: 'PIN (4 digits)',
         continue: 'Continue',
         yourQRCode: 'Your QR Code',
         scanToPay: 'Scan to Pay',
@@ -255,6 +256,7 @@ i18n.translations = {
         connectCeloWallet: 'Conecte-se á carteira Celo',
         notNow: 'Agora não',
         beforeMovingInsertPin: 'Antes de continuar, por favor, introduza o PIN',
+        pin4Digits: 'PIN (4 digitos)',
         continue: 'Continuar',
         yourQRCode: 'Seu código QR',
         scanToPay: 'Scan para Pagar',

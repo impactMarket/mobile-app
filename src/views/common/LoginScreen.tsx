@@ -200,7 +200,7 @@ function LoginScreen(props: Props) {
                         <Paragraph>{i18n.t('beforeMovingInsertPin')}</Paragraph>
                         <TextInput
                             maxLength={4}
-                            label="PIN"
+                            label={i18n.t('pin4Digits')}
                             value={pin}
                             keyboardType="numeric"
                             secureTextEntry
