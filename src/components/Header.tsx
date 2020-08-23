@@ -30,7 +30,7 @@ interface IHeaderProps {
         string,
         NavigationState,
         object,
-        object
+        Record<string, { data?: any; canPreventDefault?: boolean | undefined; }>
     >;
     // just a little annoying lint bug because of mapped redux props
     children?: any;

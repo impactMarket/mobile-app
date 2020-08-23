@@ -139,6 +139,7 @@ function Beneficiaries(props: Props) {
                     buttonText={i18n.t('addBeneficiary')}
                     inputText={i18n.t('beneficiaryAddress')}
                     selectButtonText={i18n.t('add')}
+                    selectButtonInProgress={addInProgress}
                     callback={handleModalScanQR}
                 />
             </Card.Content>

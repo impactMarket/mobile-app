@@ -14,6 +14,7 @@ interface IModalScanQRProps {
     buttonText: string;
     inputText: string;
     selectButtonText: string;
+    selectButtonInProgress?: boolean;
     callback: (inputAddress: string) => void;
 }
 interface IModalScanQRState {
@@ -84,6 +85,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
             buttonText,
             inputText,
             selectButtonText,
+            selectButtonInProgress,
             buttonStyle,
             callback,
         } = this.props;
@@ -148,6 +150,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                             <Button
                                 mode="contained"
                                 style={styles.optionButtons}
+                                disabled={selectButtonInProgress !== undefined && selectButtonInProgress === true}
                                 onPress={() =>
                                     this.setState({
                                         useCamera: true,
@@ -159,7 +162,8 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                             </Button>
                             <Button
                                 mode="contained"
-                                disabled={inputAddress.length === 0}
+                                disabled={inputAddress.length === 0 || (selectButtonInProgress !== undefined && selectButtonInProgress === true)}
+                                loading={selectButtonInProgress !== undefined && selectButtonInProgress === true}
                                 style={styles.optionButtons}
                                 onPress={() => callback(inputAddress)}
                             >
@@ -168,6 +172,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                             <Button
                                 mode="contained"
                                 style={styles.optionButtons}
+                                disabled={selectButtonInProgress !== undefined && selectButtonInProgress === true}
                                 onPress={() =>
                                     this.setState({
                                         modalScanQR: false,
