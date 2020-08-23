@@ -35,6 +35,11 @@
         "internalType": "address",
         "name": "_cUSDAddress",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_impactMarketAddress",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -192,6 +197,25 @@
       }
     ],
     "name": "ManagerRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "MigratedFunds",
     "type": "event"
   },
   {
@@ -472,6 +496,19 @@
   },
   {
     "inputs": [],
+    "name": "impactMarketAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "incrementInterval",
     "outputs": [
       {
@@ -709,6 +746,11 @@
       {
         "internalType": "address",
         "name": "_newCommunity",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_newCommunityManager",
         "type": "address"
       }
     ],
