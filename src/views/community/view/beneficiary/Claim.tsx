@@ -66,10 +66,12 @@ class Claim extends React.Component<Props, IClaimState> {
             network
         ).then(async () => {
             let loc: Location.LocationData | undefined = undefined;
-            if (Location.hasServicesEnabledAsync()) {
-                if ((await Location.getPermissionsAsync()).granted) {
-                    loc = await Location.getCurrentPositionAsync();
-                }
+            const availableGPSToRequest =
+                (await Location.hasServicesEnabledAsync()) &&
+                (await Location.getPermissionsAsync()).granted &&
+                (await Location.getProviderStatusAsync()).gpsAvailable;
+            if (availableGPSToRequest) {
+                loc = await Location.getCurrentPositionAsync();
             }
             if (loc !== undefined) {
                 Api.addClaimLocation({
