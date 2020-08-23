@@ -71,11 +71,14 @@ function AddedScreen(props: Props) {
                         item={{
                             description: `${getUserCurrencySymbol(
                                 props.user.user
-                            )} ${amountToUserCurrency(
+                            )}${beneficiary.claimed === undefined ? '0' : amountToUserCurrency(
                                 beneficiary.claimed,
                                 props.user.user
                             )}`,
-                            from: beneficiary.name,
+                            from:
+                                beneficiary.name === null
+                                    ? beneficiary.address
+                                    : beneficiary.name,
                             key: beneficiary.address,
                             timestamp: 0,
                         }}
