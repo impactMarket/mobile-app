@@ -193,12 +193,7 @@ class Donate extends Component<Props, IDonateState> {
                                 keyboardType="numeric"
                                 value={amountDonate}
                                 onChangeText={(text) =>
-                                    this.setState({
-                                        amountDonate: amountToUserCurrency(
-                                            text,
-                                            user.user
-                                        ).toString(),
-                                    })
+                                    this.setState({ amountDonate: text })
                                 }
                             />
                         </Dialog.Content>
