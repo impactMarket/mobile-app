@@ -59,6 +59,7 @@ function CreateCommunityScreen(props: Props) {
     const [isCountryValid, setIsCountryValid] = useState(false);
     const [isEmailValid, setIsEmailValid] = useState(true); // avoid initial error TODO: fix!
     const [isClaimAmountValid, setIsClaimAmountValid] = useState(false);
+    const [isEnablingGPS, setIsEnablingGPS] = useState(false);
     const [
         isIncrementalIntervalValid,
         setIsIncrementalIntervalValid,
@@ -136,10 +137,6 @@ function CreateCommunityScreen(props: Props) {
     }, [props.network.community]);
 
     const submitNewCommunity = async () => {
-        if (gpsLocation === undefined) {
-            // TODO: show error!
-            return;
-        }
         if (new BigNumber(maxClaim).lt(claimAmount)) {
             Alert.alert(
                 i18n.t('failure'),
@@ -314,9 +311,16 @@ function CreateCommunityScreen(props: Props) {
     };
 
     const enableGPSLocation = async () => {
+        setIsEnablingGPS(true);
         const { status } = await Location.requestPermissionsAsync();
+        setIsEnablingGPS(false);
         if (status !== 'granted') {
-            // TODO: do some stuff
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('errorGettingGPSLocation'),
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
             return;
         }
 
@@ -459,6 +463,7 @@ function CreateCommunityScreen(props: Props) {
                                         mode="outlined"
                                         style={{ marginHorizontal: 16 }}
                                         onPress={() => enableGPSLocation()}
+                                        loading={isEnablingGPS}
                                     >
                                         {i18n.t('getGPSLocation')}
                                     </Button>
