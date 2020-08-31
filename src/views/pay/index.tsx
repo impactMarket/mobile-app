@@ -19,6 +19,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
+import BigNumber from 'bignumber.js';
+import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -52,7 +54,7 @@ function PayScreen(props: Props) {
         const { user, network } = props;
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
-        let addressToAdd: string;
+        let addressToSend: string;
 
         if (communityContract === undefined) {
             // TODO: do something beatiful, la la la
@@ -60,7 +62,7 @@ function PayScreen(props: Props) {
         }
 
         try {
-            addressToAdd = ethers.utils.getAddress(paymentTo);
+            addressToSend = ethers.utils.getAddress(paymentTo);
         } catch (e) {
             Alert.alert(
                 i18n.t('failure'),
@@ -76,7 +78,7 @@ function PayScreen(props: Props) {
         celoWalletRequest(
             address,
             stableToken.address,
-            await stableToken.transfer(addressToAdd, paymentAmount),
+            stableToken.transfer(addressToSend, new BigNumber(paymentAmount.replace(',','.')).multipliedBy(10**18).toString()).txo,
             'stabletokentransfer',
             network
         )
@@ -89,6 +91,10 @@ function PayScreen(props: Props) {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
+                setAppPaymentToAction('');
+                setPaymentAmount('');
+                setPaymentTo('');
+                setPaymentNote('');
             })
             .catch(() => {
                 Alert.alert(

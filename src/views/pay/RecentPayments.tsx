@@ -24,7 +24,7 @@ const RecentPayments = React.forwardRef<
         key: p.to.address,
         timestamp: p.timestamp,
         description: '',
-        from: p.to.name,
+        from: p.to.name === null ? p.to.address : p.to.name,
         value: amountToUserCurrency(p.value, props.user.user).toString(),
     });
 
