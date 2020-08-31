@@ -2,6 +2,8 @@ import { ContractKit } from '@celo/contractkit';
 import { PhoneNumberUtils } from '@celo/utils';
 import * as Contacts from 'expo-contacts';
 import * as SQLite from 'expo-sqlite';
+import { fetchContacts } from '@celo/dappkit';
+import * as Permissions from 'expo-permissions';
 
 export const getCacheContactsAddress = async () => {
     const db = SQLite.openDatabase('impactMarket', '0.1');
@@ -34,55 +36,65 @@ export const getCacheContactsAddress = async () => {
 };
 
 export const crossContactsAddress = async (kit: ContractKit) => {
-    // TODO: simplify
-    const { status } = await Contacts.requestPermissionsAsync();
-    const mappedContacts = new Map<string, string>();
-    if (status === 'granted') {
-        const { data } = await Contacts.getContactsAsync();
-        if (data.length > 0) {
-            const result = data
-                .filter(
-                    (contact) =>
-                        contact.phoneNumbers !== undefined &&
-                        contact.phoneNumbers[0].number !== undefined
-                )
-                .map((contact) =>
-                    contact.phoneNumbers![0].number!.replace(/[ ]+/g, '')
-                );
+    const { status } = await Permissions.askAsync(Permissions.CONTACTS);
 
-            const contactsPhoneHash: { contact: string; hash: string }[] = [];
-            result.forEach((contact) => {
-                // catch non valid numbers
-                try {
-                    contactsPhoneHash.push({
-                        contact,
-                        hash: PhoneNumberUtils.getPhoneHash(contact),
-                    });
-                } catch (e) {}
-            });
-            const attestations = await kit.contracts.getAttestations();
-            const lookupResult = await attestations.lookupPhoneNumbers(
-                contactsPhoneHash.map((c) => c.hash)
-            );
-
-            // TODO: get names instead of just numbers
-            const mapped = contactsPhoneHash
-                .map((contact) => ({
-                    contact: contact.contact,
-                    lookup: lookupResult[contact.hash],
-                }))
-                .filter((matching) => matching.lookup !== undefined);
-
-            for (let index = 0; index < mapped.length; index++) {
-                const element = mapped[index];
-                mappedContacts.set(
-                    Object.keys(element.lookup).filter(
-                        (address) => element.lookup[address]
-                    )[0],
-                    element.contact
-                );
-            }
-            // log(mappedContacts);
-        }
+    if (status != Permissions.PermissionStatus.GRANTED) {
+        return;
     }
+
+    const { phoneNumbersByAddress } = await fetchContacts(kit);
+
+    console.log(phoneNumbersByAddress);
+
+    // TODO: simplify
+    // const { status } = await Contacts.requestPermissionsAsync();
+    // const mappedContacts = new Map<string, string>();
+    // if (status === 'granted') {
+    //     const { data } = await Contacts.getContactsAsync();
+    //     if (data.length > 0) {
+    //         const result = data
+    //             .filter(
+    //                 (contact) =>
+    //                     contact.phoneNumbers !== undefined &&
+    //                     contact.phoneNumbers[0].number !== undefined
+    //             )
+    //             .map((contact) =>
+    //                 contact.phoneNumbers![0].number!.replace(/[ ]+/g, '')
+    //             );
+
+    //         const contactsPhoneHash: { contact: string; hash: string }[] = [];
+    //         result.forEach((contact) => {
+    //             // catch non valid numbers
+    //             try {
+    //                 contactsPhoneHash.push({
+    //                     contact,
+    //                     hash: PhoneNumberUtils.getPhoneHash(contact),
+    //                 });
+    //             } catch (e) {}
+    //         });
+    //         const attestations = await kit.contracts.getAttestations();
+    //         const lookupResult = await attestations.lookupPhoneNumbers(
+    //             contactsPhoneHash.map((c) => c.hash)
+    //         );
+
+    //         // TODO: get names instead of just numbers
+    //         const mapped = contactsPhoneHash
+    //             .map((contact) => ({
+    //                 contact: contact.contact,
+    //                 lookup: lookupResult[contact.hash],
+    //             }))
+    //             .filter((matching) => matching.lookup !== undefined);
+
+    //         for (let index = 0; index < mapped.length; index++) {
+    //             const element = mapped[index];
+    //             mappedContacts.set(
+    //                 Object.keys(element.lookup).filter(
+    //                     (address) => element.lookup[address]
+    //                 )[0],
+    //                 element.contact
+    //             );
+    //         }
+    //         // log(mappedContacts);
+    //     }
+    // }
 };

@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import {
     iptcColors,
     getUserCurrencySymbol,
-    amountToUserCurrency,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
@@ -85,6 +84,7 @@ class Donate extends Component<Props, IDonateState> {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
+                // TODO: update donated values
             })
             .catch(() => {
                 Alert.alert(
