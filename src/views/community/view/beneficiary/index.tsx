@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { iptcColors, humanifyNumber } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Alert } from 'react-native';
 import { Button, ProgressBar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
@@ -38,7 +38,12 @@ function BeneficiaryView(props: Props) {
                 _address
             );
             if (_community === undefined) {
-                // TODO: show error
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorWhileLoadingRestart'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
                 return;
             }
             const amount = await props.network.contracts.communityContract.methods

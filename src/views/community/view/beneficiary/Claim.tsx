@@ -17,6 +17,7 @@ import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
+import BigNumber from 'bignumber.js';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -35,6 +36,7 @@ interface IClaimState {
     nextClaim: moment.Duration;
     claimDisabled: boolean;
     claiming: boolean;
+    enoughToClaimOnContract: boolean;
 }
 class Claim extends React.Component<Props, IClaimState> {
     constructor(props: any) {
@@ -43,6 +45,7 @@ class Claim extends React.Component<Props, IClaimState> {
             nextClaim: moment.duration(0),
             claimDisabled: true,
             claiming: false,
+            enoughToClaimOnContract: false,
         };
     }
 
@@ -50,6 +53,16 @@ class Claim extends React.Component<Props, IClaimState> {
         const communityContract = this.props.network.contracts
             .communityContract;
         await this._loadAllowance(communityContract);
+        // check if there's enough funds to enable/disable claim button
+        const {
+            totalClaimed,
+            totalRaised,
+            vars,
+        } = this.props.network.community;
+        const enoughToClaimOnContract = new BigNumber(totalRaised)
+            .minus(totalClaimed)
+            .lt(vars._claimAmount);
+        this.setState({ enoughToClaimOnContract });
     };
 
     handleClaimPress = async () => {
@@ -87,7 +100,12 @@ class Claim extends React.Component<Props, IClaimState> {
     };
 
     render() {
-        const { claimDisabled, nextClaim, claiming } = this.state;
+        const {
+            claimDisabled,
+            nextClaim,
+            claiming,
+            enoughToClaimOnContract,
+        } = this.state;
 
         if (claimDisabled) {
             return (
@@ -110,7 +128,7 @@ class Claim extends React.Component<Props, IClaimState> {
             <Button
                 mode="contained"
                 onPress={this.handleClaimPress}
-                disabled={claimDisabled || claiming}
+                disabled={claimDisabled || claiming || enoughToClaimOnContract}
                 loading={claiming}
                 style={styles.claimButton}
             >
