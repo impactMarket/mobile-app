@@ -2,10 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
-import { amountToUserCurrency, getUserCurrencySymbol } from 'helpers/index';
+import { amountToUserCurrency, getUserCurrencySymbol, updateCommunityInfo } from 'helpers/index';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -46,10 +46,23 @@ function AddedScreen(props: Props) {
             network
         )
             .then(() => {
-                // TODO:
+                Alert.alert(
+                    i18n.t('success'),
+                    i18n.t('beneficiaryWasRemoved', { beneficiary }),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                navigation.goBack();
+                // TODO: update after going back
+                updateCommunityInfo(props.user.celoInfo.address, props);
             })
             .catch((e) => {
-                // TODO:
+                Alert.alert(
+                    i18n.t('success'),
+                    i18n.t('errorRemovingBeneficiary'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
             })
             .finally(() => {
                 setRemoving(false);

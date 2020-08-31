@@ -43,7 +43,7 @@ function Beneficiaries(props: Props) {
         } catch (e) {
             Alert.alert(
                 i18n.t('failure'),
-                'You are trying to add an invalid address!',
+                i18n.t('addingInvalidAddress'),
                 [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
@@ -59,7 +59,6 @@ function Beneficiaries(props: Props) {
             network
         )
             .then(() => {
-                // TODO: update UI
                 setTimeout(
                     () =>
                         updateCommunityInfo(props.user.celoInfo.address, props),
@@ -68,7 +67,7 @@ function Beneficiaries(props: Props) {
 
                 Alert.alert(
                     i18n.t('success'),
-                    "You've successfully added a new beneficiary!",
+                    i18n.t('addedNewBeneficiary'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -76,7 +75,7 @@ function Beneficiaries(props: Props) {
             .catch(() => {
                 Alert.alert(
                     i18n.t('failure'),
-                    'An error happened while adding the request!',
+                    i18n.t('errorAddingBeneficiary'),
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
