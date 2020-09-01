@@ -1,6 +1,7 @@
 <div align="center">
     <img src="feature.jpeg" style="max-width: 800px"><br/><br/>
-    <a href="https://expo.io/@impactmarket/"><img src="https://img.shields.io/badge/Runs%20with%20Expo-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000"></a>
+    <a href="https://expo.io/@impactmarket/"><img src="https://img.shields.io/badge/Runs%20with%20Expo-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000"/></a>
+    <a href="https://github.com/impactMarket/mobile-app/workflows"><img src="https://github.com/impactMarket/mobile-app/workflows/CodeQL/badge.svg"/></a>
 </div>
 
 > A decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries in need or living in extreme poverty.
