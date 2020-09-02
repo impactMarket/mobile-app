@@ -49,8 +49,8 @@
                 {
                     "file": "sentry-expo/upload-sourcemaps",
                     "config": {
-                        "organization": "impactMarket",
-                        "project": "mobile-app"
+                        "organization": "impactmarket",
+                        "project": "impactmarket"
                     }
                 }
             ]
