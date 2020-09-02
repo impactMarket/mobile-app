@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
 import { ethers } from 'ethers';
 import { amountToUserCurrency, getUserCurrencySymbol } from 'helpers/index';
+import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 import { IRootState } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import {
@@ -19,8 +21,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
-import BigNumber from 'bignumber.js';
-import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -78,7 +78,12 @@ function PayScreen(props: Props) {
         celoWalletRequest(
             address,
             stableToken.address,
-            stableToken.transfer(addressToSend, new BigNumber(paymentAmount.replace(',','.')).multipliedBy(10**18).toString()).txo,
+            stableToken.transfer(
+                addressToSend,
+                new BigNumber(paymentAmount.replace(',', '.'))
+                    .multipliedBy(10 ** 18)
+                    .toString()
+            ).txo,
             'stabletokentransfer',
             network
         )

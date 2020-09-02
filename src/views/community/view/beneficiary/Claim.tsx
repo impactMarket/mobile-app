@@ -1,4 +1,5 @@
 import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import * as Location from 'expo-location';
 import {
@@ -17,7 +18,6 @@ import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
-import BigNumber from 'bignumber.js';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;

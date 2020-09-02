@@ -88,7 +88,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     };
 
     let description;
-    if (seeFullDescription || community.description.indexOf('\n') == -1) {
+    if (seeFullDescription || community.description.indexOf('\n') === -1) {
         description = community.description;
     } else {
         description = community.description.slice(

@@ -487,6 +487,7 @@ function CreateCommunityScreen(props: Props) {
                                     keyboardType="email-address"
                                     isValid={isEmailValid}
                                     whenEndEditing={(e) =>
+                                        // TODO: register error to log system
                                         setIsEmailValid(validateEmail(email))
                                     }
                                     onChangeText={(value) => setEmail(value)}

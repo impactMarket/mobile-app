@@ -1,37 +1,6 @@
 import React from 'react';
 import './global';
-import Web3 from 'web3'
-import { newKitFromWeb3 } from "@celo/contractkit";
-import {
-    Image,
-    View,
-    YellowBox,
-    AsyncStorage,
-    StatusBar,
-} from 'react-native';
-import * as Font from 'expo-font';
-import * as Notifications from 'expo-notifications';
-
-import {
-    AppLoading,
-    SplashScreen,
-} from 'expo';
-import { Asset } from 'expo-asset';
-import { NavigationContainer, DefaultTheme as NavigationDefaultTheme } from '@react-navigation/native';
-import { Provider } from 'react-redux';
-import { createStore, Unsubscribe } from 'redux';
-import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
-import {
-    setUserCeloInfo,
-    setCeloKit,
-    setUserInfo,
-    setPushNotificationsToken,
-} from './src/helpers/redux/actions/ReduxActions';
-import {
-    STORAGE_USER_ADDRESS,
-    STORAGE_USER_PHONE_NUMBER,
-    STORAGE_USER_FIRST_TIME,
-} from './src/helpers/types';
+import { Image, View, YellowBox, AsyncStorage, StatusBar } from 'react-native';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -40,28 +9,57 @@ import {
     Button,
     IconButton,
 } from 'react-native-paper';
-import config from './config';
-import BigNumber from 'bignumber.js';
-import { iptcColors, loadContracts } from './src/helpers';
-import { SafeAreaProvider, SafeAreaConsumer } from 'react-native-safe-area-context';
-import { createStackNavigator } from '@react-navigation/stack';
-import Tabs from './src/views/Tabs';
+import {
+    SafeAreaProvider,
+    SafeAreaConsumer,
+} from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import { createStore, Unsubscribe } from 'redux';
+import * as Sentry from 'sentry-expo';
+import Web3 from 'web3';
+import { newKitFromWeb3 } from '@celo/contractkit';
+import * as Font from 'expo-font';
+import * as Notifications from 'expo-notifications';
+import { AppLoading, SplashScreen } from 'expo';
+import { Asset } from 'expo-asset';
+import {
+    NavigationContainer,
+    DefaultTheme as NavigationDefaultTheme,
+} from '@react-navigation/native';
 
+import config from './config';
+import i18n from './src/assets/i18n';
+import { iptcColors, loadContracts } from './src/helpers';
+import {
+    setUserCeloInfo,
+    setCeloKit,
+    setUserInfo,
+    setPushNotificationsToken,
+} from './src/helpers/redux/actions/ReduxActions';
+import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
+import {
+    STORAGE_USER_ADDRESS,
+    STORAGE_USER_PHONE_NUMBER,
+    STORAGE_USER_FIRST_TIME,
+} from './src/helpers/types';
+
+import BigNumber from 'bignumber.js';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import Api from './src/services/api';
+import { registerForPushNotifications } from './src/services/pushNotifications';
+import Tabs from './src/views/Tabs';
 import CommunityDetailsScreen from './src/views/common/CommunityDetailsScreen';
 import CreateCommunityScreen from './src/views/common/CreateCommunityScreen';
-import EditProfile from './src/views/wallet/EditProfile';
+import FAQScreen from './src/views/common/FAQScreen';
+import LoginScreen from './src/views/common/LoginScreen';
+import ClaimExplainedScreen from './src/views/community/view/beneficiary/ClaimExplainedScreen';
 import AddedScreen from './src/views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
-import LoginScreen from './src/views/common/LoginScreen';
-import Api from './src/services/api';
-import ClaimExplainedScreen from './src/views/community/view/beneficiary/ClaimExplainedScreen';
-import FAQScreen from './src/views/common/FAQScreen';
-import { registerForPushNotifications } from './src/services/pushNotifications';
+import EditProfile from './src/views/wallet/EditProfile';
+
 import * as Analytics from 'expo-firebase-analytics';
 import * as FirebaseCore from 'expo-firebase-core';
-import i18n from './src/assets/i18n';
-import * as Sentry from 'sentry-expo';
-
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
 const Stack = createStackNavigator();
@@ -87,8 +85,8 @@ const theme = {
             thin: {
                 fontFamily: 'Gelion-Thin',
             },
-        }
-    })
+        },
+    }),
 };
 const navigationTheme = {
     ...NavigationDefaultTheme,
@@ -99,10 +97,9 @@ const navigationTheme = {
     },
 };
 
-
 YellowBox.ignoreWarnings([
-    'The provided value \'moz-chunked-arraybuffer\' is not a valid \'responseType\'.',
-    'The provided value \'ms-stream\' is not a valid \'responseType\'.'
+    "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
+    "The provided value 'ms-stream' is not a valid 'responseType'.",
 ]);
 
 Notifications.setNotificationHandler({
@@ -128,7 +125,7 @@ interface IAppState {
     testnetWarning: boolean;
     notification?: Notifications.Notification;
 }
-export default class App extends React.Component<{}, IAppState> {
+export default class App extends React.Component<object, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
 
     constructor(props: any) {
@@ -139,48 +136,56 @@ export default class App extends React.Component<{}, IAppState> {
             firstTimeUser: true,
             loggedIn: false,
             testnetWarning: false,
-        }
+        };
     }
 
     componentDidMount = () => {
         this.unsubscribeStore = store.subscribe(() => {
             const previousLoggedIn = this.state.loggedIn;
-            const currentLoggedIn = store.getState().user.celoInfo.address.length > 0;
+            const currentLoggedIn =
+                store.getState().user.celoInfo.address.length > 0;
 
             if (previousLoggedIn !== currentLoggedIn) {
                 if (currentLoggedIn) {
                     this._authUser();
-                    registerForPushNotifications().then(token => {
+                    registerForPushNotifications().then((token) => {
                         if (token) {
-                            Api.setUserPushNotificationToken(store.getState().user.celoInfo.address, token);
+                            Api.setUserPushNotificationToken(
+                                store.getState().user.celoInfo.address,
+                                token
+                            );
                             store.dispatch(setPushNotificationsToken(token));
                         }
                     });
-                    Notifications.addNotificationReceivedListener(notification => {
-                        this.setState({ notification });
-                    });
-                    Notifications.addNotificationResponseReceivedListener(response => {
-                        console.log(response);
-                    });
+                    Notifications.addNotificationReceivedListener(
+                        (notification) => {
+                            this.setState({ notification });
+                        }
+                    );
+                    Notifications.addNotificationResponseReceivedListener(
+                        (response) => {
+                            console.log(response);
+                        }
+                    );
                 }
                 this.setState({ loggedIn: currentLoggedIn });
             }
         });
         this.setState({ testnetWarning: true });
         setTimeout(() => this.setState({ testnetWarning: false }), 5000);
-    }
+    };
 
     componentWillUnmount = () => {
         try {
             this.unsubscribeStore();
-        } catch (e) { }
+        } catch (e) {}
         Notifications.removeAllNotificationListeners();
-    }
+    };
 
     openExploreCommunities = async () => {
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
         this.setState({ firstTimeUser: false });
-    }
+    };
 
     render() {
         const {
@@ -202,11 +207,13 @@ export default class App extends React.Component<{}, IAppState> {
 
         if (!isAppReady) {
             return (
-                <View style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
                     <Image
                         source={require('./src/assets/images/splash.png')}
                         onLoad={this._cacheResourcesAsync}
@@ -216,75 +223,96 @@ export default class App extends React.Component<{}, IAppState> {
         }
 
         if (firstTimeUser) {
-            return <SafeAreaProvider>
-                <SafeAreaConsumer>{insets =>
-                    <PaperProvider theme={theme}>
-                        <View
-                            style={{
-                                paddingTop: insets?.top,
-                                flex: 1,
-                                flexDirection: 'column',
-                                justifyContent: 'space-around',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <Image
-                                style={{ height: 82, maxWidth: '51%' }}
-                                source={require('./src/assets/images/splash/logo.png')}
-                            />
-                            <Image
-                                style={{ height: 136, maxWidth: '100%' }}
-                                source={require('./src/assets/images/splash/diversity.png')}
-                            />
-                            <Text
-                                style={{
-                                    fontFamily: "Gelion-Regular",
-                                    fontSize: 19,
-                                    fontWeight: "normal",
-                                    fontStyle: "normal",
-                                    lineHeight: 26,
-                                    letterSpacing: 0,
-                                    textAlign: "center",
-                                    color: "#172b4d",
-                                    marginHorizontal: 40
-                                }}
-                            >
-                                impactMarket enables any vulnerable community to create its own unconditional basic income system for their beneficiaries, where each member can claim a fixed amount on a regular basis and make payments for free
-                            </Text>
-                            <View>
-                                <Text
+            return (
+                <SafeAreaProvider>
+                    <SafeAreaConsumer>
+                        {(insets) => (
+                            <PaperProvider theme={theme}>
+                                <View
                                     style={{
-                                        fontFamily: "Gelion-Regular",
-                                        fontSize: 19,
-                                        fontWeight: "normal",
-                                        fontStyle: "normal",
-                                        lineHeight: 26,
-                                        letterSpacing: 0,
-                                        textAlign: "center",
-                                        color: "#172b4d",
-                                        marginHorizontal: 40
+                                        paddingTop: insets?.top,
+                                        flex: 1,
+                                        flexDirection: 'column',
+                                        justifyContent: 'space-around',
+                                        alignItems: 'center',
                                     }}
                                 >
-                                    Back those beneficiaries by donating to their communities.
-                                </Text>
-                                <Button
-                                    mode="contained"
-                                    style={{ width: '100%', alignSelf: 'center' }}
-                                    onPress={() => this.openExploreCommunities()}
-                                >
-                                    Explore Communities
-                                </Button>
-                            </View>
-                        </View>
-                    </PaperProvider>
-                }</SafeAreaConsumer>
-            </SafeAreaProvider>
+                                    <Image
+                                        style={{ height: 82, maxWidth: '51%' }}
+                                        source={require('./src/assets/images/splash/logo.png')}
+                                    />
+                                    <Image
+                                        style={{
+                                            height: 136,
+                                            maxWidth: '100%',
+                                        }}
+                                        source={require('./src/assets/images/splash/diversity.png')}
+                                    />
+                                    <Text
+                                        style={{
+                                            fontFamily: 'Gelion-Regular',
+                                            fontSize: 19,
+                                            fontWeight: 'normal',
+                                            fontStyle: 'normal',
+                                            lineHeight: 26,
+                                            letterSpacing: 0,
+                                            textAlign: 'center',
+                                            color: '#172b4d',
+                                            marginHorizontal: 40,
+                                        }}
+                                    >
+                                        impactMarket enables any vulnerable
+                                        community to create its own
+                                        unconditional basic income system for
+                                        their beneficiaries, where each member
+                                        can claim a fixed amount on a regular
+                                        basis and make payments for free
+                                    </Text>
+                                    <View>
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Gelion-Regular',
+                                                fontSize: 19,
+                                                fontWeight: 'normal',
+                                                fontStyle: 'normal',
+                                                lineHeight: 26,
+                                                letterSpacing: 0,
+                                                textAlign: 'center',
+                                                color: '#172b4d',
+                                                marginHorizontal: 40,
+                                            }}
+                                        >
+                                            Back those beneficiaries by donating
+                                            to their communities.
+                                        </Text>
+                                        <Button
+                                            mode="contained"
+                                            style={{
+                                                width: '100%',
+                                                alignSelf: 'center',
+                                            }}
+                                            onPress={() =>
+                                                this.openExploreCommunities()
+                                            }
+                                        >
+                                            Explore Communities
+                                        </Button>
+                                    </View>
+                                </View>
+                            </PaperProvider>
+                        )}
+                    </SafeAreaConsumer>
+                </SafeAreaProvider>
+            );
         }
 
         return (
             <PaperProvider theme={theme}>
                 <Provider store={store}>
-                    <StatusBar backgroundColor="rgba(0, 0, 0, 0.2)" translucent />
+                    <StatusBar
+                        backgroundColor="rgba(0, 0, 0, 0.2)"
+                        translucent
+                    />
                     <View
                         style={{
                             backgroundColor: '#45c7ff',
@@ -296,7 +324,7 @@ export default class App extends React.Component<{}, IAppState> {
                             zIndex: testnetWarning ? 1 : -1,
                             flex: 1,
                             flexDirection: 'row',
-                            alignItems: 'center'
+                            alignItems: 'center',
                         }}
                     >
                         <Text style={{ textAlign: 'center', width: '80%' }}>
@@ -306,7 +334,9 @@ export default class App extends React.Component<{}, IAppState> {
                             style={{ width: '10%' }}
                             icon="close-circle-outline"
                             size={20}
-                            onPress={() => this.setState({ testnetWarning: false })}
+                            onPress={() =>
+                                this.setState({ testnetWarning: false })
+                            }
                         />
                     </View>
                     <NavigationContainer theme={navigationTheme}>
@@ -391,10 +421,10 @@ export default class App extends React.Component<{}, IAppState> {
         //     screen: 'profile',
         //     purpose: 'Opens the internal settings',
         // });
-        const stableToken = await kit.contracts.getStableToken()
-        const cUSDBalanceBig = await stableToken.balanceOf(address)
+        const stableToken = await kit.contracts.getStableToken();
+        const cUSDBalanceBig = await stableToken.balanceOf(address);
         return new BigNumber(cUSDBalanceBig.toString());
-    }
+    };
 
     _cacheSplashResourcesAsync = async () => {
         const gif = require('./src/assets/images/splash.png');
@@ -440,7 +470,13 @@ export default class App extends React.Component<{}, IAppState> {
             if (address !== null && phoneNumber !== null) {
                 const balance = await this._getCurrentUserBalance(address);
                 const user = await Api.getUser(address);
-                store.dispatch(setUserCeloInfo({ address, phoneNumber, balance: balance.toString() }))
+                store.dispatch(
+                    setUserCeloInfo({
+                        address,
+                        phoneNumber,
+                        balance: balance.toString(),
+                    })
+                );
                 if (user !== undefined) {
                     let name = '';
                     let currency = 'USD';
@@ -450,21 +486,32 @@ export default class App extends React.Component<{}, IAppState> {
                     }
                     if (user.currency !== null) {
                         currency = user.currency;
-                        exchangeRate = await Api.getExchangeRate(user.currency.toUpperCase());
+                        exchangeRate = await Api.getExchangeRate(
+                            user.currency.toUpperCase()
+                        );
                     }
-                    store.dispatch(setUserInfo({ name, currency, exchangeRate, avatar: user.avatar }))
+                    store.dispatch(
+                        setUserInfo({
+                            name,
+                            currency,
+                            exchangeRate,
+                            avatar: user.avatar,
+                        })
+                    );
                 }
                 await loadContracts(address, kit, store);
                 // We have data!!
             }
-            const firstTime = await AsyncStorage.getItem(STORAGE_USER_FIRST_TIME);
+            const firstTime = await AsyncStorage.getItem(
+                STORAGE_USER_FIRST_TIME
+            );
             this.setState({
                 firstTimeUser: firstTime === null,
-                loggedIn: (address !== null && phoneNumber !== null),
+                loggedIn: address !== null && phoneNumber !== null,
             });
         } catch (error) {
             // Error retrieving data
         }
-        store.dispatch(setCeloKit(kit))
-    }
+        store.dispatch(setCeloKit(kit));
+    };
 }

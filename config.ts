@@ -9,8 +9,8 @@ const commonConfig = {
     /**
      * cUSD decimals to use in ui format
      */
-    cUSDDecimals: 18
-}
+    cUSDDecimals: 18,
+};
 const ENV = {
     dev: {
         /**
@@ -26,7 +26,8 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: process.env.EXPO_DEV_IMPACT_MARKET_CONTRACT!,
+        impactMarketContractAddress: process.env
+            .EXPO_DEV_IMPACT_MARKET_CONTRACT!,
     },
     staging: {
         /**
@@ -42,7 +43,8 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0x4ebE844858c756498902B6517b20d50e28F8Dd62',
+        impactMarketContractAddress:
+            '0x4ebE844858c756498902B6517b20d50e28F8Dd62',
     },
     production: {
         /**
@@ -58,18 +60,22 @@ const ENV = {
         /**
          * Contract Address to use in dev
          */
-        impactMarketContractAddress: '0xa7C3103EC5eE8188A7D20E70d5398F727DBb5A1A',
-    }
-}
+        impactMarketContractAddress:
+            '0xa7C3103EC5eE8188A7D20E70d5398F727DBb5A1A',
+    },
+};
 
 function getEnvVars() {
-    if (Constants.manifest.packagerOpts?.dev) return { ...commonConfig, ...ENV.dev };
-    else if (Constants.appOwnership === 'standalone') return { ...commonConfig, ...ENV.production };
+    if (Constants.manifest.packagerOpts?.dev)
+        return { ...commonConfig, ...ENV.dev };
+    else if (Constants.appOwnership === 'standalone')
+        return { ...commonConfig, ...ENV.production };
     else if (Constants.appOwnership === 'expo') {
-        if (Constants.manifest.releaseChannel?.indexOf('production') !== -1) return { ...commonConfig, ...ENV.production };
+        if (Constants.manifest.releaseChannel?.indexOf('production') !== -1)
+            return { ...commonConfig, ...ENV.production };
         return { ...commonConfig, ...ENV.staging };
     }
     return { ...commonConfig, ...ENV.dev };
 }
 
-export default getEnvVars()
+export default getEnvVars();

@@ -141,13 +141,17 @@ i18n.translations = {
         paymentSent: 'Payment sent!',
         scanningInvalidAddress: 'You are trying to scan an invalid address!',
         select: 'Select',
-        errorGettingGPSLocation: 'An error happened while getting the GPS location.',
-        errorWhileLoadingRestart: 'An error happened while loading. Please restart the app.',
+        errorGettingGPSLocation:
+            'An error happened while getting the GPS location.',
+        errorWhileLoadingRestart:
+            'An error happened while loading. Please restart the app.',
         beneficiaryWasRemoved: '{{beneficiary}} was successfully removed!',
-        errorRemovingBeneficiary: 'An error happened while removing the beneficiary.',
-        addedNewBeneficiary: 'You\'ve successfully added a new beneficiary!',
+        errorRemovingBeneficiary:
+            'An error happened while removing the beneficiary.',
+        addedNewBeneficiary: "You've successfully added a new beneficiary!",
         addingInvalidAddress: 'You are trying to add an invalid address!',
-        errorAddingBeneficiary: 'An error happened while adding the beneficiary.',
+        errorAddingBeneficiary:
+            'An error happened while adding the beneficiary.',
     },
     pt: {
         testnetWarning:

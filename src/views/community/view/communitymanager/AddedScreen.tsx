@@ -2,7 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
-import { amountToUserCurrency, getUserCurrencySymbol, updateCommunityInfo } from 'helpers/index';
+import {
+    amountToUserCurrency,
+    getUserCurrencySymbol,
+    updateCommunityInfo,
+} from 'helpers/index';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import React, { useState } from 'react';
 import { ScrollView, Alert } from 'react-native';
@@ -57,6 +61,7 @@ function AddedScreen(props: Props) {
                 updateCommunityInfo(props.user.celoInfo.address, props);
             })
             .catch((e) => {
+                // TODO: register error to log system
                 Alert.alert(
                     i18n.t('success'),
                     i18n.t('errorRemovingBeneficiary'),
@@ -84,10 +89,14 @@ function AddedScreen(props: Props) {
                         item={{
                             description: `${getUserCurrencySymbol(
                                 props.user.user
-                            )}${beneficiary.claimed === undefined ? '0' : amountToUserCurrency(
-                                beneficiary.claimed,
-                                props.user.user
-                            )}`,
+                            )}${
+                                beneficiary.claimed === undefined
+                                    ? '0'
+                                    : amountToUserCurrency(
+                                          beneficiary.claimed,
+                                          props.user.user
+                                      )
+                            }`,
                             from:
                                 beneficiary.name === null
                                     ? beneficiary.address

@@ -1,1 +1,3 @@
 src/contracts/types/truffle-contracts
+global.ts
+index.d.ts

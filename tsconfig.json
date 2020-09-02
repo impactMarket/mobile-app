@@ -25,6 +25,9 @@
         "noEmit": true,
         "skipLibCheck": true,
         "resolveJsonModule": true,
-        "strict": true
+        "strict": true,
+        "sourceMap": true,
+        "inlineSources": true,
+        "sourceRoot": "/"
     }
 }

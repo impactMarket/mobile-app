@@ -1,9 +1,9 @@
 import { ContractKit } from '@celo/contractkit';
+import { fetchContacts } from '@celo/dappkit';
 import { PhoneNumberUtils } from '@celo/utils';
 import * as Contacts from 'expo-contacts';
-import * as SQLite from 'expo-sqlite';
-import { fetchContacts } from '@celo/dappkit';
 import * as Permissions from 'expo-permissions';
+import * as SQLite from 'expo-sqlite';
 
 export const getCacheContactsAddress = async () => {
     const db = SQLite.openDatabase('impactMarket', '0.1');
@@ -38,7 +38,7 @@ export const getCacheContactsAddress = async () => {
 export const crossContactsAddress = async (kit: ContractKit) => {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS);
 
-    if (status != Permissions.PermissionStatus.GRANTED) {
+    if (status !== Permissions.PermissionStatus.GRANTED) {
         return;
     }
 
