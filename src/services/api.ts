@@ -5,8 +5,9 @@ import {
     IPaymentsTxAPI,
     IUser,
     STORAGE_USER_AUTH_TOKEN,
+    STORAGE_USER_FIRST_TIME,
 } from 'helpers/types';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, DevSettings } from 'react-native';
 
 import config from '../../config';
 
@@ -49,6 +50,12 @@ async function postRequest<T>(
             ...options,
         };
         const result = await axios.post(endpoint, requestBody, requestOptions);
+        if (result.status === 401) {
+            await AsyncStorage.clear();
+            await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
+            DevSettings.reload();
+            return undefined;
+        }
         if (result.status >= 400) {
             return undefined;
         }
