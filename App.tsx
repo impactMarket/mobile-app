@@ -60,6 +60,7 @@ import { registerForPushNotifications } from './src/services/pushNotifications';
 import * as Analytics from 'expo-firebase-analytics';
 import * as FirebaseCore from 'expo-firebase-core';
 import i18n from './src/assets/i18n';
+import * as Sentry from 'sentry-expo';
 
 
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -110,6 +111,12 @@ Notifications.setNotificationHandler({
         shouldPlaySound: false,
         shouldSetBadge: false,
     }),
+});
+
+Sentry.init({
+    dsn: process.env.EXPO_SENTRY_DNS,
+    enableInExpoDevelopment: true,
+    debug: true,
 });
 
 interface IAppState {

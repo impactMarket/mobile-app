@@ -43,6 +43,17 @@
             "permissions": [ "CAMERA", "ACCESS_FINE_LOCATION", "READ_CONTACTS", "VIBRATE" ]
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
-        "githubUrl": "https://github.com/impactMarket/mobile-app"
+        "githubUrl": "https://github.com/impactMarket/mobile-app",
+        "hooks": {
+            "postPublish": [
+                {
+                    "file": "sentry-expo/upload-sourcemaps",
+                    "config": {
+                        "organization": "impactMarket",
+                        "project": "mobile-app"
+                    }
+                }
+            ]
+        }
     }
 }
