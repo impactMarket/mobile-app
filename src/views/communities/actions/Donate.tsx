@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import {
     iptcColors,
     getUserCurrencySymbol,
+    updateCommunityInfo,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
@@ -78,13 +79,22 @@ class Donate extends Component<Props, IDonateState> {
             this.props.network
         )
             .then(() => {
+                // update donated values
+                setTimeout(
+                    () =>
+                        updateCommunityInfo(
+                            this.props.user.celoInfo.address,
+                            this.props
+                        ),
+                    10000
+                );
+
                 Alert.alert(
                     i18n.t('success'),
                     i18n.t('youHaveDonated'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
-                // TODO: update donated values
             })
             .catch(() => {
                 Alert.alert(
