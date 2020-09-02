@@ -7,7 +7,7 @@
             "ios",
             "android"
         ],
-        "version": "0.0.1-alpha.21",
+        "version": "0.0.1-beta.0",
         "orientation": "portrait",
         "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarketmobile",
@@ -29,14 +29,14 @@
         "ios": {
             "googleServicesFile": "./src/assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
-            "buildNumber": "0.0.1a21",
+            "buildNumber": "0.0.1b0",
             "supportsTablet": true
         },
         "android": {
             "useNextNotificationsApi": true,
             "googleServicesFile": "./src/assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
-            "versionCode": 21,
+            "versionCode": 22,
             "adaptiveIcon": {
                 "foregroundImage": "./src/assets/images/logo.png"
             },
