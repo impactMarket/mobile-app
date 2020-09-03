@@ -176,8 +176,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         </Button>
                     </CommuntyStatus>
                 </View>
-                <Donate community={community} />
             </ScrollView>
+            <Donate community={community} />
         </>
     );
 }
