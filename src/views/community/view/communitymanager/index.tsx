@@ -104,15 +104,7 @@ function CommunityManagerView(props: Props) {
                                 setCommunity(_communityUpdate)
                             }
                         />
-                        <CommuntyStatus community={_community}>
-                            <Button
-                                mode="outlined"
-                                disabled
-                                style={{ width: '100%' }}
-                            >
-                                {i18n.t('fullDashboard')}
-                            </Button>
-                        </CommuntyStatus>
+                        <CommuntyStatus community={_community} />
                     </View>
                 </ScrollView>
             );

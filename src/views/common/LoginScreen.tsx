@@ -4,7 +4,7 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
-import { loadContracts } from 'helpers/index';
+import { loadContracts, iptcColors } from 'helpers/index';
 import {
     setUserCeloInfo,
     setPushNotificationsToken,
@@ -166,10 +166,14 @@ function LoginScreen(props: Props) {
                 </Button>
                 <Button
                     mode="contained"
-                    disabled
-                    style={{ marginHorizontal: 10, width: '40%' }}
+                    style={{
+                        marginHorizontal: 10,
+                        width: '40%',
+                        backgroundColor: '#e9e9e9',
+                    }}
+                    onPress={() => Linking.openURL('https://impactmarket.com/')}
                 >
-                    Android
+                    <Text style={{ color: 'black' }}>Android</Text>
                 </Button>
             </View>
             <Text style={styles.stepText}>{i18n.t('step2')}</Text>
@@ -182,17 +186,20 @@ function LoginScreen(props: Props) {
                 onPress={() => setAskingPattern(true)}
                 disabled={connecting}
                 loading={connecting}
-                style={{ width: '80%' }}
+                style={{
+                    width: '80%',
+                    backgroundColor: iptcColors.greenishTeal,
+                }}
             >
                 {i18n.t('connectCeloWallet')}
             </Button>
             <Button
-                mode="outlined"
+                mode="contained"
                 onPress={() => navigation.goBack()}
                 disabled={connecting}
-                style={{ width: '80%' }}
+                style={{ width: '80%', backgroundColor: '#e9e9e9' }}
             >
-                {i18n.t('notNow')}
+                <Text style={{ color: 'black' }}>{i18n.t('notNow')}</Text>
             </Button>
             <Portal>
                 <Dialog visible={askingPattern} dismissable={false}>
