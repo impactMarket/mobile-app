@@ -1,5 +1,7 @@
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
+import moment from 'moment';
+import 'moment/locale/pt';
 
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
@@ -292,10 +294,21 @@ i18n.translations = {
         scanningInvalidAddress:
             'Você está a tentar scannear um endereço inválido!',
         select: 'Selecionar',
+        errorGettingGPSLocation: 'Ocorreu um erro ao obter a localização GPS.',
+        errorWhileLoadingRestart:
+            'Ocorreu eu erro ao iniciar. Por favor reinicie.',
+        beneficiaryWasRemoved: '{{beneficiary}} foi removido com sucesso!',
+        errorRemovingBeneficiary:
+            'Ocorreu um erro enquanto removia o beneficiário.',
+        addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
+        addingInvalidAddress:
+            'Você está a tentar adicionar um endereço inválido!',
+        errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.',
     },
 };
 // Set the locale once at the beginning of your app.
 i18n.locale = Localization.locale;
+moment.locale(Localization.locale);
 // When a value is missing from a language it'll fallback to another language with the key present.
 i18n.fallbacks = true;
 
