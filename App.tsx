@@ -122,7 +122,7 @@ interface IAppState {
     firstTimeUser: boolean;
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
-    testnetWarning: boolean;
+    testnetWarningOpen: boolean;
     notification?: Notifications.Notification;
 }
 export default class App extends React.Component<object, IAppState> {
@@ -135,7 +135,7 @@ export default class App extends React.Component<object, IAppState> {
             isAppReady: false,
             firstTimeUser: true,
             loggedIn: false,
-            testnetWarning: false,
+            testnetWarningOpen: false,
         };
     }
 
@@ -171,8 +171,8 @@ export default class App extends React.Component<object, IAppState> {
                 this.setState({ loggedIn: currentLoggedIn });
             }
         });
-        this.setState({ testnetWarning: true });
-        setTimeout(() => this.setState({ testnetWarning: false }), 5000);
+        this.setState({ testnetWarningOpen: true });
+        setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
     };
 
     componentWillUnmount = () => {
@@ -192,7 +192,7 @@ export default class App extends React.Component<object, IAppState> {
             isAppReady,
             isSplashReady,
             firstTimeUser,
-            testnetWarning,
+            testnetWarningOpen,
         } = this.state;
         if (!isSplashReady) {
             return (
@@ -306,6 +306,33 @@ export default class App extends React.Component<object, IAppState> {
             );
         }
 
+        const testnetWarningView = (
+            <View
+                style={{
+                    backgroundColor: '#45c7ff',
+                    width: '100%',
+                    paddingTop: 30,
+                    paddingBottom: 10,
+                    paddingHorizontal: 20,
+                    position: 'absolute',
+                    zIndex: testnetWarningOpen ? 1 : -1,
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}
+            >
+                <Text style={{ textAlign: 'center', width: '80%' }}>
+                    {i18n.t('testnetWarningOpen')}
+                </Text>
+                <IconButton
+                    style={{ width: '10%' }}
+                    icon="close-circle-outline"
+                    size={20}
+                    onPress={() => this.setState({ testnetWarningOpen: false })}
+                />
+            </View>
+        );
+
         return (
             <PaperProvider theme={theme}>
                 <Provider store={store}>
@@ -313,32 +340,7 @@ export default class App extends React.Component<object, IAppState> {
                         backgroundColor="rgba(0, 0, 0, 0.2)"
                         translucent
                     />
-                    <View
-                        style={{
-                            backgroundColor: '#45c7ff',
-                            width: '100%',
-                            paddingTop: 30,
-                            paddingBottom: 10,
-                            paddingHorizontal: 20,
-                            position: 'absolute',
-                            zIndex: testnetWarning ? 1 : -1,
-                            flex: 1,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Text style={{ textAlign: 'center', width: '80%' }}>
-                            {i18n.t('testnetWarning')}
-                        </Text>
-                        <IconButton
-                            style={{ width: '10%' }}
-                            icon="close-circle-outline"
-                            size={20}
-                            onPress={() =>
-                                this.setState({ testnetWarning: false })
-                            }
-                        />
-                    </View>
+                    {config.testnet && testnetWarningView}
                     <NavigationContainer theme={navigationTheme}>
                         <Stack.Navigator>
                             <Stack.Screen

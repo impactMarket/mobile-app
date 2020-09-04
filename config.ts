@@ -28,6 +28,11 @@ const ENV = {
          */
         impactMarketContractAddress: process.env
             .EXPO_DEV_IMPACT_MARKET_CONTRACT!,
+
+        /**
+         * Is it in testnet?
+         */
+        testnet: true,
     },
     staging: {
         /**
@@ -50,6 +55,11 @@ const ENV = {
          */
         impactMarketContractAddress:
             '0x4ebE844858c756498902B6517b20d50e28F8Dd62',
+
+        /**
+         * Is it in testnet?
+         */
+        testnet: true,
     },
     production: {
         /**
@@ -72,6 +82,11 @@ const ENV = {
          */
         impactMarketContractAddress:
             '0x37c61A17139a5aC55fB2ce2FB28edA017403eb8c',
+
+        /**
+         * Is it in testnet?
+         */
+        testnet: false,
     },
 };
 
