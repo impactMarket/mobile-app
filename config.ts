@@ -2,17 +2,17 @@ import Constants from 'expo-constants';
 
 const commonConfig = {
     /**
-     * Block explorer base URL. Contract address is added at the end.
-     */
-    blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
-
-    /**
      * cUSD decimals to use in ui format
      */
     cUSDDecimals: 18,
 };
 const ENV = {
     dev: {
+        /**
+         * Block explorer base URL. Contract address is added at the end.
+         */
+        blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
+
         /**
          * The default API URL
          */
@@ -31,6 +31,11 @@ const ENV = {
     },
     staging: {
         /**
+         * Block explorer base URL. Contract address is added at the end.
+         */
+        blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
+
+        /**
          * The default API URL
          */
         baseApiUrl: 'https://impactmarket-api-staging.herokuapp.com/api',
@@ -48,6 +53,11 @@ const ENV = {
     },
     production: {
         /**
+         * Block explorer base URL. Contract address is added at the end.
+         */
+        blockExplorer: 'https://explorer.celo.org/address/',
+
+        /**
          * The default API URL
          */
         baseApiUrl: 'https://impactmarket-api-production.herokuapp.com/api',
@@ -55,24 +65,25 @@ const ENV = {
         /**
          * JSON RPC url
          */
-        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+        jsonRpc: 'https://rc1-forno.celo-testnet.org',
 
         /**
          * Contract Address to use in dev
          */
         impactMarketContractAddress:
-            '0xa7C3103EC5eE8188A7D20E70d5398F727DBb5A1A',
+            '0x37c61A17139a5aC55fB2ce2FB28edA017403eb8c',
     },
 };
 
 function getEnvVars() {
-    if (Constants.manifest.packagerOpts?.dev)
+    if (Constants.manifest.packagerOpts?.dev) {
         return { ...commonConfig, ...ENV.dev };
-    else if (Constants.appOwnership === 'standalone')
+    } else if (Constants.appOwnership === 'standalone') {
         return { ...commonConfig, ...ENV.production };
-    else if (Constants.appOwnership === 'expo') {
-        if (Constants.manifest.releaseChannel?.indexOf('production') !== -1)
+    } else if (Constants.appOwnership === 'expo') {
+        if (Constants.manifest.releaseChannel?.indexOf('production') !== -1) {
             return { ...commonConfig, ...ENV.production };
+        }
         return { ...commonConfig, ...ENV.staging };
     }
     return { ...commonConfig, ...ENV.dev };
