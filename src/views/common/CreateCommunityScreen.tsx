@@ -574,10 +574,10 @@ function CreateCommunityScreen(props: Props) {
                                     setBaseInterval(value)
                                 }
                             >
-                                <Picker.Item
+                                {/* <Picker.Item
                                     label={i18n.t('hourly')}
                                     value="3601"
-                                />
+                                /> */}
                                 <Picker.Item
                                     label={i18n.t('daily')}
                                     value="86400"
