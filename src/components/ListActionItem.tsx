@@ -1,7 +1,12 @@
 import moment from 'moment';
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { List, Avatar, Text } from 'react-native-paper';
+import {
+    StyleSheet,
+    View,
+    TouchableOpacity,
+    GestureResponderEvent,
+} from 'react-native';
+import { List, Avatar, Text, IconButton } from 'react-native-paper';
 
 export interface IListActionItem {
     key: string;
@@ -13,6 +18,13 @@ export interface IListActionItem {
 }
 interface IListActionItemProps {
     item: IListActionItem;
+    onPress?: (event: GestureResponderEvent) => void;
+    action?: {
+        click: ((event: GestureResponderEvent) => void) &
+            (() => void | null) &
+            ((e: GestureResponderEvent) => void);
+        icon: string;
+    };
     maxTextTitleLength?: number;
     prefix?: {
         top?: string;
@@ -54,20 +66,34 @@ export default class ListActionItem extends Component<
                 />
             );
 
-        const renderRight = (
-            <View>
-                <Text style={styles.rightTextTop}>
-                    {this.props.prefix?.top}
-                    {this.props.item.value}
-                    {this.props.suffix?.top}
-                </Text>
-                <Text style={styles.rightTextBottom}>
-                    {this.props.prefix?.bottom}
-                    {moment(this.props.item.timestamp * 1000).fromNow()}
-                    {this.props.suffix?.bottom}
-                </Text>
-            </View>
-        );
+        let renderRight;
+        let renderAction;
+        if (this.props.item.value !== undefined) {
+            renderRight = (
+                <View>
+                    <Text style={styles.rightTextTop}>
+                        {this.props.prefix?.top}
+                        {this.props.item.value}
+                        {this.props.suffix?.top}
+                    </Text>
+                    <Text style={styles.rightTextBottom}>
+                        {this.props.prefix?.bottom}
+                        {moment(this.props.item.timestamp * 1000).fromNow()}
+                        {this.props.suffix?.bottom}
+                    </Text>
+                </View>
+            );
+        } else if (this.props.action) {
+            renderAction = (
+                <View>
+                    <IconButton
+                        icon={this.props.action?.icon}
+                        size={20}
+                        onPress={this.props.action?.click}
+                    />
+                </View>
+            );
+        }
 
         const from = fromIsAddress
             ? `${this.props.item.from.slice(
@@ -80,32 +106,35 @@ export default class ListActionItem extends Component<
             : this.props.item.from;
 
         return (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginVertical: 10,
-                }}
-            >
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ marginRight: 5 }}>{avatarSrc}</View>
-                    <View style={{ justifyContent: 'center' }}>
-                        <Text style={styles.textTitle}>
-                            {from.length > titleMaxLength
-                                ? from.slice(0, titleMaxLength) + '...'
-                                : from}
-                        </Text>
-                        <Text style={styles.textDescription}>
-                            {this.props.item.description}
-                        </Text>
+            <TouchableOpacity onPress={this.props.onPress}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginVertical: 10,
+                    }}
+                >
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ marginRight: 5 }}>{avatarSrc}</View>
+                        <View style={{ justifyContent: 'center' }}>
+                            <Text style={styles.textTitle}>
+                                {from.length > titleMaxLength
+                                    ? from.slice(0, titleMaxLength) + '...'
+                                    : from}
+                            </Text>
+                            <Text style={styles.textDescription}>
+                                {this.props.item.description}
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={{ marginLeft: 'auto' }}>
+                        {this.props.children}
+                        {renderRight}
+                        {renderAction}
                     </View>
                 </View>
-                <View style={{ marginLeft: 'auto' }}>
-                    {this.props.children}
-                    {this.props.item.value !== undefined && renderRight}
-                </View>
-            </View>
+            </TouchableOpacity>
         );
     }
 }
