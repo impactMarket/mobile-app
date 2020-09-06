@@ -18,6 +18,7 @@ export interface CommunityContract extends Truffle.Contract<CommunityInstance> {
     _incrementInterval: number | BigNumber | string,
     _previousCommunityContract: string | BigNumber,
     _cUSDAddress: string | BigNumber,
+    _impactMarketAddress: string | BigNumber,
     meta?: Truffle.TransactionDetails
   ): Promise<CommunityInstance>;
 }
@@ -70,6 +71,7 @@ export interface ImpactMarketContract
   extends Truffle.Contract<ImpactMarketInstance> {
   "new"(
     _cUSDAddress: string | BigNumber,
+    _signatures: (string | BigNumber)[],
     meta?: Truffle.TransactionDetails
   ): Promise<ImpactMarketInstance>;
 }
@@ -244,6 +246,8 @@ export interface CommunityInstance extends Truffle.ContractInstance {
     account: string | BigNumber,
     txDetails?: Truffle.TransactionDetails
   ): Promise<boolean>;
+
+  impactMarketAddress(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
   incrementInterval(txDetails?: Truffle.TransactionDetails): Promise<BigNumber>;
 
@@ -481,24 +485,32 @@ export interface CommunityInstance extends Truffle.ContractInstance {
   migrateFunds: {
     (
       _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<Truffle.TransactionResponse>;
     call(
       _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<void>;
     sendTransaction(
       _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<string>;
     estimateGas(
       _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
 }
 
 export interface CommunityFactoryInstance extends Truffle.ContractInstance {
+  cUSDAddress(txDetails?: Truffle.TransactionDetails): Promise<string>;
+
+  impactMarketAddress(txDetails?: Truffle.TransactionDetails): Promise<string>;
+
   deployCommunity: {
     (
       _firstManager: string | BigNumber,
@@ -848,6 +860,39 @@ export interface ICommunityInstance extends Truffle.ContractInstance {
   incrementInterval(txDetails?: Truffle.TransactionDetails): Promise<BigNumber>;
 
   maxClaim(txDetails?: Truffle.TransactionDetails): Promise<BigNumber>;
+
+  previousCommunityContract(
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<string>;
+
+  hasRole(
+    role: string | BigNumber,
+    account: string | BigNumber,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<boolean>;
+
+  migrateFunds: {
+    (
+      _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _newCommunity: string | BigNumber,
+      _newCommunityManager: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
 }
 
 export interface ICommunityFactoryInstance extends Truffle.ContractInstance {
@@ -889,6 +934,8 @@ export interface ICommunityFactoryInstance extends Truffle.ContractInstance {
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
+
+  impactMarketAddress(txDetails?: Truffle.TransactionDetails): Promise<string>;
 }
 
 export interface IERC20Instance extends Truffle.ContractInstance {
@@ -992,10 +1039,14 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
 
   DEFAULT_ADMIN_ROLE(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
+  cUSDAddress(txDetails?: Truffle.TransactionDetails): Promise<string>;
+
   communities(
     arg0: string | BigNumber,
     txDetails?: Truffle.TransactionDetails
   ): Promise<boolean>;
+
+  communityFactory(txDetails?: Truffle.TransactionDetails): Promise<string>;
 
   getRoleAdmin(
     role: string | BigNumber,
@@ -1013,80 +1064,21 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
     txDetails?: Truffle.TransactionDetails
   ): Promise<BigNumber>;
 
-  grantRole: {
-    (
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse>;
-    call(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
-
   hasRole(
     role: string | BigNumber,
     account: string | BigNumber,
     txDetails?: Truffle.TransactionDetails
   ): Promise<boolean>;
 
-  renounceRole: {
-    (
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse>;
-    call(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
+  pendingValidations(
+    arg0: string | BigNumber,
+    arg1: number | BigNumber | string,
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<string>;
 
-  revokeRole: {
-    (
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse>;
-    call(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      role: string | BigNumber,
-      account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
+  signaturesThreshold(
+    txDetails?: Truffle.TransactionDetails
+  ): Promise<BigNumber>;
 
   addCommunity: {
     (
@@ -1165,44 +1157,6 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
     ): Promise<number>;
   };
 
-  addAdmin: {
-    (
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse>;
-    call(
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
-
-  removeAdmin: {
-    (
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<Truffle.TransactionResponse>;
-    call(
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<void>;
-    sendTransaction(
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<string>;
-    estimateGas(
-      _account: string | BigNumber,
-      txDetails?: Truffle.TransactionDetails
-    ): Promise<number>;
-  };
-
   setCommunityFactory: {
     (
       _communityFactory: string | BigNumber,
@@ -1218,6 +1172,94 @@ export interface ImpactMarketInstance extends Truffle.ContractInstance {
     ): Promise<string>;
     estimateGas(
       _communityFactory: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  initCommunityFactory: {
+    (
+      _communityFactory: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      _communityFactory: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      _communityFactory: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      _communityFactory: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  grantRole: {
+    (
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  revokeRole: {
+    (
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<number>;
+  };
+
+  renounceRole: {
+    (
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<Truffle.TransactionResponse>;
+    call(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<void>;
+    sendTransaction(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
+      txDetails?: Truffle.TransactionDetails
+    ): Promise<string>;
+    estimateGas(
+      arg0: string | BigNumber,
+      arg1: string | BigNumber,
       txDetails?: Truffle.TransactionDetails
     ): Promise<number>;
   };
