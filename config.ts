@@ -81,7 +81,7 @@ const ENV = {
          * Contract Address to use in dev
          */
         impactMarketContractAddress:
-            '0x37c61A17139a5aC55fB2ce2FB28edA017403eb8c',
+            '0x2a6d9CD3c9CfEa08E08394E8179CDd21A3eA4370',
 
         /**
          * Is it in testnet?
