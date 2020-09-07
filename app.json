@@ -9,7 +9,7 @@
         ],
         "version": "0.0.1-beta.0",
         "orientation": "portrait",
-        "icon": "./src/assets/images/logo.png",
+        "icon": "./src/assets/images/logo/ios.png",
         "scheme": "impactmarketmobile",
         "splash": {
             "image": "./src/assets/images/splash.png",
@@ -38,7 +38,7 @@
             "package": "com.impactmarket.mobile",
             "versionCode": 22,
             "adaptiveIcon": {
-                "foregroundImage": "./src/assets/images/logo.png"
+                "foregroundImage": "./src/assets/images/logo/android.png"
             },
             "permissions": [ "CAMERA", "ACCESS_FINE_LOCATION", "READ_CONTACTS", "VIBRATE" ]
         },
