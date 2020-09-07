@@ -10,6 +10,7 @@ import { Button, Card } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 
 interface IModalScanQRProps {
+    opened?: boolean;
     buttonStyle?: any;
     buttonText: string;
     inputText: string;
@@ -37,12 +38,22 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
         super(props);
         this.state = {
             inputAddress: '',
-            modalScanQR: false,
+            modalScanQR:
+                this.props.opened !== undefined ? this.props.opened : false,
             hasPermission: false,
             scanned: false,
             useCamera: false,
         };
     }
+
+    componentWillReceiveProps = (
+        nextProps: Readonly<Props>,
+        nextContext: any
+    ) => {
+        if (this.state.modalScanQR !== nextProps.opened && nextProps.opened) {
+            this.setState({ modalScanQR: nextProps.opened });
+        }
+    };
 
     handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
         let scannedAddress: string = '';
@@ -114,13 +125,16 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
 
         return (
             <>
-                <Button
-                    mode="contained"
-                    style={buttonStyle}
-                    onPress={this.handleOpenModalScanQR}
-                >
-                    {buttonText}
-                </Button>
+                {(this.props.buttonText.length > 0 &&
+                    this.props.opened !== false) && (
+                    <Button
+                        mode="contained"
+                        style={buttonStyle}
+                        onPress={this.handleOpenModalScanQR}
+                    >
+                        {buttonText}
+                    </Button>
+                )}
                 <BottomSheet
                     visible={modalScanQR}
                     onBackButtonPress={() =>

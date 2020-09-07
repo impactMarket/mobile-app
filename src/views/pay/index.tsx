@@ -4,7 +4,11 @@ import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
 import { ethers } from 'ethers';
-import { amountToUserCurrency, getUserCurrencySymbol } from 'helpers/index';
+import {
+    amountToUserCurrency,
+    getUserCurrencySymbol,
+    iptcColors,
+} from 'helpers/index';
 import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 import { IRootState } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
@@ -16,11 +20,19 @@ import {
     Alert,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, Divider, Button } from 'react-native-paper';
+import {
+    Card,
+    Divider,
+    Button,
+    Portal,
+    Dialog,
+    Paragraph,
+} from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
+import ModalScanQR from '../common/ModalScanQR';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -36,6 +48,7 @@ function PayScreen(props: Props) {
 
     const [paymentAmount, setPaymentAmount] = useState<string>('');
     const [paymentTo, setPaymentTo] = useState<string>('');
+    const [editPaymentTo, setEditPaymentTo] = useState(false);
     const [paymentNote, setPaymentNote] = useState<string>('');
     const [refreshing, setRefreshing] = useState(false);
     const [payInProgress, setPayInProgress] = useState(false);
@@ -114,6 +127,11 @@ function PayScreen(props: Props) {
             });
     };
 
+    const handleModalScanQR = async (inputAddress: string) => {
+        props.dispatch(setAppPaymentToAction(inputAddress));
+        setEditPaymentTo(false);
+    };
+
     return (
         <>
             <Header
@@ -174,6 +192,14 @@ function PayScreen(props: Props) {
                         ) : (
                             <ListActionItem
                                 key={paymentTo}
+                                onPress={() => setEditPaymentTo(true)}
+                                action={{
+                                    icon: 'close-circle-outline',
+                                    click: () => {
+                                        setAppPaymentToAction('');
+                                        setPaymentTo('');
+                                    },
+                                }}
                                 maxTextTitleLength={24}
                                 item={{
                                     from: paymentTo,
@@ -207,6 +233,16 @@ function PayScreen(props: Props) {
                         </Button>
                     </Card.Content>
                 </Card>
+                <ModalScanQR
+                    opened={editPaymentTo}
+                    buttonText=""
+                    inputText={i18n.t('currentAddress')}
+                    selectButtonText={i18n.t('select')}
+                    buttonStyle={{
+                        backgroundColor: iptcColors.greenishTeal,
+                    }}
+                    callback={handleModalScanQR}
+                />
                 <RecentPayments user={props.user} ref={recentPaymentsRef} />
             </ScrollView>
         </>
