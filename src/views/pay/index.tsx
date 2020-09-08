@@ -49,6 +49,7 @@ function PayScreen(props: Props) {
     const [paymentAmount, setPaymentAmount] = useState<string>('');
     const [paymentTo, setPaymentTo] = useState<string>('');
     const [editPaymentTo, setEditPaymentTo] = useState(false);
+    const [editingPaymentTo, setEditingPaymentTo] = useState(false);
     const [paymentNote, setPaymentNote] = useState<string>('');
     const [refreshing, setRefreshing] = useState(false);
     const [payInProgress, setPayInProgress] = useState(false);
@@ -182,12 +183,14 @@ function PayScreen(props: Props) {
                             )}
                         </Text>
                         <Divider />
-                        {paymentTo.length === 0 ? (
+                        {(editingPaymentTo || paymentTo.length === 0) ? (
                             <TextInput
                                 style={{ padding: 10 }}
                                 placeholder={i18n.t('nameAddressPhone')}
                                 value={paymentTo}
                                 onChangeText={setPaymentTo}
+                                onEndEditing={() => setEditingPaymentTo(false)}
+                                onFocus={() => setEditingPaymentTo(true)}
                             />
                         ) : (
                             <ListActionItem

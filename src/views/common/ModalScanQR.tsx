@@ -46,6 +46,12 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
         };
     }
 
+    componentDidMount = async () => {
+        const { status } = await BarCodeScanner.getPermissionsAsync();
+        this.setState({ hasPermission: status === 'granted' });
+    };
+
+    // TODO: stop using this method
     componentWillReceiveProps = (
         nextProps: Readonly<Props>,
         nextContext: any
@@ -117,6 +123,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                 <View style={styles.scannerView}>
                     <BarCodeScanner
                         onBarCodeScanned={this.handleBarCodeScanned}
+                        barCodeTypes={['qr']}
                         style={StyleSheet.absoluteFillObject}
                     />
                 </View>
@@ -125,16 +132,16 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
 
         return (
             <>
-                {(this.props.buttonText.length > 0 &&
-                    this.props.opened !== false) && (
-                    <Button
-                        mode="contained"
-                        style={buttonStyle}
-                        onPress={this.handleOpenModalScanQR}
-                    >
-                        {buttonText}
-                    </Button>
-                )}
+                {this.props.buttonText.length > 0 &&
+                    this.props.opened !== false && (
+                        <Button
+                            mode="contained"
+                            style={buttonStyle}
+                            onPress={this.handleOpenModalScanQR}
+                        >
+                            {buttonText}
+                        </Button>
+                    )}
                 <BottomSheet
                     visible={modalScanQR}
                     onBackButtonPress={() =>
