@@ -7,12 +7,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { iptcColors, humanifyNumber } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ImageBackground, Alert } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    ImageBackground,
+    Alert,
+    RefreshControl,
+} from 'react-native';
 import { Button, ProgressBar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 
 import Claim from './Claim';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -27,6 +35,7 @@ function BeneficiaryView(props: Props) {
     const [community, setCommunity] = useState<ICommunityInfo>();
     const [claimedAmount, setClaimedAmount] = useState(0);
     const [claimedProgress, setClaimedProgress] = useState(0.1);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         const loadCommunity = async () => {
@@ -60,6 +69,13 @@ function BeneficiaryView(props: Props) {
         loadCommunity();
     }, [props.network.contracts.communityContract]);
 
+    const onRefresh = () => {
+        Api.getCommunityByContractAddress(
+            community!.contractAddress
+        ).then((c) => setCommunity(c!));
+        setRefreshing(false);
+    };
+
     const updateClaimedAmount = async () => {
         const amount = await props.network.contracts.communityContract.methods
             .claimed(props.user.celoInfo.address)
@@ -73,7 +89,11 @@ function BeneficiaryView(props: Props) {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        >
             <Header
                 title={i18n.t('claim')}
                 navigation={navigation}
@@ -98,7 +118,7 @@ function BeneficiaryView(props: Props) {
             <View style={styles.contentView}>
                 <Button
                     mode="outlined"
-                    style={{ margin: 30, height: 35 }}
+                    style={{ margin: 30 }}
                     onPress={() =>
                         navigation.navigate('CommunityDetailsScreen', {
                             community,
@@ -112,7 +132,7 @@ function BeneficiaryView(props: Props) {
                     claimAmount={community.vars._claimAmount}
                     updateClaimedAmount={updateClaimedAmount}
                 />
-                <View>
+                <View style={{ marginTop: '8%' }}>
                     <Text
                         onPress={() =>
                             navigation.navigate('ClaimExplainedScreen')
@@ -140,16 +160,16 @@ function BeneficiaryView(props: Props) {
                     </Text>
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-    },
+    // container: {
+    //     flex: 1,
+    //     flexDirection: 'column',
+    //     justifyContent: 'space-between',
+    // },
     linearGradient: {
         position: 'absolute',
         left: 0,

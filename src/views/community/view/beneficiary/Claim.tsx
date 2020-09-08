@@ -177,7 +177,7 @@ class Claim extends React.Component<Props, IClaimState> {
 
 const styles = StyleSheet.create({
     claimButton: {
-        width: 170,
+        width: 200,
         height: 50,
         borderRadius: 8,
         alignSelf: 'center',

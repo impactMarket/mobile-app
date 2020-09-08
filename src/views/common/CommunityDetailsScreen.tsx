@@ -8,13 +8,20 @@ import * as WebBrowser from 'expo-web-browser';
 import { humanifyNumber, claimFrequencyToText } from 'helpers/index';
 import { ICommunityInfo } from 'helpers/types';
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, ImageBackground } from 'react-native';
+import {
+    Text,
+    View,
+    StyleSheet,
+    ImageBackground,
+    RefreshControl,
+} from 'react-native';
 import { LineChart, ChartConfig } from 'react-native-chart-kit';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Paragraph, Button, Card, Divider, Headline } from 'react-native-paper';
 
 import config from '../../../config';
 import Donate from '../communities/actions/Donate';
+import Api from 'services/api';
 
 const lineChartConfig: ChartConfig = {
     backgroundGradientFromOpacity: 0,
@@ -37,9 +44,19 @@ interface ICommunityDetailsScreen {
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const navigation = useNavigation();
-    const community = props.route.params.community as ICommunityInfo;
 
+    const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
+    const [community, setCommunity] = useState<ICommunityInfo>(
+        props.route.params.community
+    );
+
+    const onRefresh = () => {
+        Api.getCommunityByContractAddress(community.contractAddress).then((c) =>
+            setCommunity(c!)
+        );
+        setRefreshing(false);
+    };
 
     const renderSSI = () => {
         if (community.ssi.values.length > 1) {
@@ -100,7 +117,14 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     return (
         <>
             <Header title="" hasBack hasShare hasHelp navigation={navigation} />
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <ImageBackground
                     source={{ uri: community.coverImage }}
                     resizeMode="cover"
