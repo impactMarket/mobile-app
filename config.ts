@@ -75,13 +75,13 @@ const ENV = {
         /**
          * JSON RPC url
          */
-        jsonRpc: 'https://rc1-forno.celo-testnet.org',
+        jsonRpc: 'https://celo-mainnet--rpc.datahub.figment.io/apikey/b883d48310aa603380b19750aae4f9f4/',
 
         /**
          * Contract Address to use in dev
          */
         impactMarketContractAddress:
-            '0x2a6d9CD3c9CfEa08E08394E8179CDd21A3eA4370',
+            '0x2437F9ca0ac21bD2377734800918c2FBE0E566Ca',
 
         /**
          * Is it in testnet?
