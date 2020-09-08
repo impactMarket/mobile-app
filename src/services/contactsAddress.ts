@@ -6,33 +6,33 @@ import * as Permissions from 'expo-permissions';
 import * as SQLite from 'expo-sqlite';
 
 export const getCacheContactsAddress = async () => {
-    const db = SQLite.openDatabase('impactMarket', '0.1');
+    // const db = SQLite.openDatabase('impactMarket', '0.1');
 
-    db.transaction((tx) => {
-        tx.executeSql(
-            'create table if not exists contactsAddress (id integer primary key not null, accountaddress text, phonenumber text, name text);'
-        );
-    });
+    // db.transaction((tx) => {
+    //     tx.executeSql(
+    //         'create table if not exists contactsAddress (id integer primary key not null, accountaddress text, phonenumber text, name text);'
+    //     );
+    // });
 
-    db.transaction(
-        (tx) => {
-            tx.executeSql(
-                'insert into contactsAddress (accountaddress, phonenumber, name) values (?, ?, ?)',
-                ['0xo83u45v3u5', '892349283', 'John Doe']
-            );
-            tx.executeSql('select * from contactsAddress;', [], (_, { rows }) =>
-                console.log(JSON.stringify(rows))
-            );
-        },
-        undefined,
-        () => {}
-    );
+    // db.transaction(
+    //     (tx) => {
+    //         tx.executeSql(
+    //             'insert into contactsAddress (accountaddress, phonenumber, name) values (?, ?, ?)',
+    //             ['0xo83u45v3u5', '892349283', 'John Doe']
+    //         );
+    //         tx.executeSql('select * from contactsAddress;', [], (_, { rows }) =>
+    //             // console.log(JSON.stringify(rows))
+    //         );
+    //     },
+    //     undefined,
+    //     () => {}
+    // );
 
-    db.transaction((tx) => {
-        tx.executeSql(`select * from contactsAddress;`, [], (_, resultSet) =>
-            console.log(resultSet)
-        );
-    });
+    // db.transaction((tx) => {
+    //     tx.executeSql(`select * from contactsAddress;`, [], (_, resultSet) =>
+    //         // console.log(resultSet)
+    //     );
+    // });
 };
 
 export const crossContactsAddress = async (kit: ContractKit) => {
@@ -44,7 +44,7 @@ export const crossContactsAddress = async (kit: ContractKit) => {
 
     const { phoneNumbersByAddress } = await fetchContacts(kit);
 
-    console.log(phoneNumbersByAddress);
+    // console.log(phoneNumbersByAddress);
 
     // TODO: simplify
     // const { status } = await Contacts.requestPermissionsAsync();

@@ -28,6 +28,7 @@ import {
 import { ConnectedProps, connect, useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';
+import * as Device from 'expo-device';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -136,6 +137,56 @@ function LoginScreen(props: Props) {
         }
     };
 
+    const buttonStoreLink = () => {
+        if (Device.osName === 'Android') {
+            return (
+                <Button
+                    mode="contained"
+                    style={{
+                        marginHorizontal: 10,
+                        width: '40%',
+                        backgroundColor: '#e9e9e9',
+                    }}
+                    onPress={() => Linking.openURL('https://impactmarket.com/')}
+                >
+                    <Text style={{ color: 'black' }}>Android</Text>
+                </Button>
+            );
+        } else if (Device.osName === 'iOS') {
+            return (
+                <Button
+                    mode="contained"
+                    disabled
+                    style={{ marginHorizontal: 10, width: '40%' }}
+                >
+                    iOS
+                </Button>
+            );
+        }
+        return (
+            <>
+                <Button
+                    mode="contained"
+                    disabled
+                    style={{ marginHorizontal: 10, width: '40%' }}
+                >
+                    iOS
+                </Button>
+                <Button
+                    mode="contained"
+                    style={{
+                        marginHorizontal: 10,
+                        width: '40%',
+                        backgroundColor: '#e9e9e9',
+                    }}
+                    onPress={() => Linking.openURL('https://impactmarket.com/')}
+                >
+                    <Text style={{ color: 'black' }}>Android</Text>
+                </Button>
+            </>
+        );
+    };
+
     return (
         <View style={styles.mainView}>
             <Text style={styles.description}>{i18n.t('toContinuePlease')}</Text>
@@ -157,24 +208,7 @@ function LoginScreen(props: Props) {
                     flexDirection: 'row',
                 }}
             >
-                <Button
-                    mode="contained"
-                    disabled
-                    style={{ marginHorizontal: 10, width: '40%' }}
-                >
-                    iOS
-                </Button>
-                <Button
-                    mode="contained"
-                    style={{
-                        marginHorizontal: 10,
-                        width: '40%',
-                        backgroundColor: '#e9e9e9',
-                    }}
-                    onPress={() => Linking.openURL('https://impactmarket.com/')}
-                >
-                    <Text style={{ color: 'black' }}>Android</Text>
-                </Button>
+                {buttonStoreLink()}
             </View>
             <Text style={styles.stepText}>{i18n.t('step2')}</Text>
             <Text style={styles.instructionText}>
@@ -240,7 +274,8 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        margin: 20,
+        marginHorizontal: 10,
+        marginVertical: 20,
     },
     title: {
         height: 62,

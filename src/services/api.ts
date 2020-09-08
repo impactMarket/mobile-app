@@ -26,8 +26,8 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
             response = result.data as T;
         }
     } catch (error) {
-        // handle error
-        console.log(error);
+        // TODO: handle error
+        // console.log(error);
     }
     return response;
 }

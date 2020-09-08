@@ -164,7 +164,7 @@ export default class App extends React.Component<object, IAppState> {
                     );
                     Notifications.addNotificationResponseReceivedListener(
                         (response) => {
-                            console.log(response);
+                            // console.log(response);
                         }
                     );
                 }
@@ -322,7 +322,7 @@ export default class App extends React.Component<object, IAppState> {
                 }}
             >
                 <Text style={{ textAlign: 'center', width: '80%' }}>
-                    {i18n.t('testnetWarningOpen')}
+                    {i18n.t('testnetWarning')}
                 </Text>
                 <IconButton
                     style={{ width: '10%' }}

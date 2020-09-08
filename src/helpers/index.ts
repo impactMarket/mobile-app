@@ -136,7 +136,6 @@ export async function loadContracts(
         return;
     }
     const isManager = await Api.findComunityToManager(address);
-    console.log(isManager, address);
     if (isManager !== undefined) {
         store.dispatch(setUserIsCommunityManager(true));
         fSetCommunity(isManager);
