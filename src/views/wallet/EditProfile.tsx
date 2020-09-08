@@ -95,16 +95,14 @@ function EditProfile(props: Props) {
                     <Paragraph style={styles.inputTextFieldLabel}>
                         {i18n.t('currency')}
                     </Paragraph>
-                    <View style={styles.pickerBorder}>
-                        <Picker
-                            selectedValue={currency}
-                            style={styles.picker}
-                            onValueChange={handleChangeCurrency}
-                        >
-                            <Picker.Item label="Dollar (USD)" value="usd" />
-                            <Picker.Item label="Euro (EUR)" value="eur" />
-                        </Picker>
-                    </View>
+                    <Picker
+                        selectedValue={currency}
+                        style={styles.picker}
+                        onValueChange={handleChangeCurrency}
+                    >
+                        <Picker.Item label="Dollar (USD)" value="usd" />
+                        <Picker.Item label="Euro (EUR)" value="eur" />
+                    </Picker>
                     <TextInput
                         label={i18n.t('country')}
                         style={{ marginVertical: 3 }}

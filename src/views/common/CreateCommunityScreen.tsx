@@ -113,6 +113,7 @@ function CreateCommunityScreen(props: Props) {
                 setIsNameValid(true);
                 setIsDescriptionValid(true);
                 setIsCityValid(true);
+                setIsCountryValid(true);
                 setIsClaimAmountValid(true);
                 setIsIncrementalIntervalValid(true);
                 setIsMaxClaimValid(true);
