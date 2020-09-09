@@ -24,6 +24,7 @@ interface IModalScanQRState {
     hasPermission: boolean;
     scanned: boolean;
     useCamera: boolean;
+    invalidAddressWarningOpen: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -43,6 +44,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
             hasPermission: false,
             scanned: false,
             useCamera: false,
+            invalidAddressWarningOpen: false,
         };
     }
 
@@ -63,20 +65,37 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
 
     handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
         let scannedAddress: string = '';
-        try {
-            const parsed = JSON.parse(data);
-            scannedAddress = ethers.utils.getAddress(parsed.address);
-        } catch (e) {
+        if (!this.state.invalidAddressWarningOpen) {
             try {
-                scannedAddress = ethers.utils.getAddress(data);
-                this.setState({ scanned: true, inputAddress: scannedAddress });
+                const isCeloLink = (data as string).indexOf('celo://');
+                if (isCeloLink !== -1) {
+                    scannedAddress = data.match(/address=([0-9a-zA-Z]+)/)[1];
+                    this.setState({ scanned: true, inputAddress: scannedAddress });
+                }
             } catch (e) {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('scanningInvalidAddress'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
+                try {
+                    scannedAddress = ethers.utils.getAddress(data);
+                    this.setState({
+                        scanned: true,
+                        inputAddress: scannedAddress,
+                    });
+                } catch (e) {
+                    this.setState({ invalidAddressWarningOpen: true });
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('scanningInvalidAddress'),
+                        [
+                            {
+                                text: 'OK',
+                                onPress: () =>
+                                    this.setState({
+                                        invalidAddressWarningOpen: false,
+                                    }),
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                }
             }
         }
     };
