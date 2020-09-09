@@ -14,7 +14,7 @@ import Api from 'services/api';
 interface IPaymentTo {
     name: string;
     address: string;
-    picture: string;
+    picture?: string;
 }
 interface IRecentPaymentsProps {
     user: IUserState;
@@ -30,11 +30,11 @@ const RecentPayments = React.forwardRef<
     const [activities, setActivities] = useState<IListActionItem[]>([]);
     const [loadingPayments, setLoadingPayments] = useState(true);
 
-    const mapPayments = (p: IPaymentsTxAPI) => ({
+    const mapPayments = (p: IPaymentsTxAPI): IListActionItem => ({
         key: p.to.address,
         timestamp: p.timestamp,
         description: '',
-        from: p.to.name === null ? p.to.address : p.to.name,
+        from: p.to,
         value: amountToUserCurrency(p.value, props.user.user).toString(),
         avatar: p.picture
             ? p.picture.length > 3
@@ -68,13 +68,13 @@ const RecentPayments = React.forwardRef<
             <ActivityIndicator animating={loadingPayments} />
             {activities.map((activity) => (
                 <ListActionItem
-                    key={activity.from}
+                    key={activity.from.address}
                     item={activity}
                     onPress={() =>
                         props.setPaymentTo({
-                            name: '',
-                            picture: '',
-                            address: activity.from,
+                            name: activity.from.name,
+                            picture: activity.avatar,
+                            address: activity.from.address,
                         })
                     }
                     prefix={{ top: getUserCurrencySymbol(props.user.user) }}

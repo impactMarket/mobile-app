@@ -7,13 +7,14 @@ import {
     GestureResponderEvent,
 } from 'react-native';
 import { List, Avatar, Text, IconButton } from 'react-native-paper';
+import { IAddressAndName } from 'helpers/types';
 
 export interface IListActionItem {
     key: string;
     avatar?: string;
     timestamp: number;
     description: string;
-    from: string;
+    from: IAddressAndName;
     value?: string;
 }
 interface IListActionItemProps {
@@ -49,7 +50,7 @@ export default class ListActionItem extends Component<
         if (this.props.maxTextTitleLength !== undefined) {
             titleMaxLength = this.props.maxTextTitleLength;
         }
-        const fromIsAddress = this.props.item.from.slice(0, 2) === '0x';
+        const fromHasName = this.props.item.from.name.length > 0;
 
         const avatarSrc =
             this.props.item.avatar !== undefined ? (
@@ -61,7 +62,7 @@ export default class ListActionItem extends Component<
                 <Avatar.Text
                     size={46}
                     label={
-                        fromIsAddress ? '?' : this.props.item.from.slice(0, 1)
+                        fromHasName ? this.props.item.from.name.slice(0, 1) : '?'
                     }
                 />
             );
@@ -95,15 +96,15 @@ export default class ListActionItem extends Component<
             );
         }
 
-        const from = fromIsAddress
-            ? `${this.props.item.from.slice(
+        const from = !fromHasName
+            ? `${this.props.item.from.address.slice(
                   0,
                   (titleMaxLength - 4) / 2
-              )}..${this.props.item.from.slice(
+              )}..${this.props.item.from.address.slice(
                   42 - (titleMaxLength - 4) / 2,
                   42
               )}`
-            : this.props.item.from;
+            : this.props.item.from.name;
 
         return (
             <TouchableOpacity onPress={this.props.onPress}>

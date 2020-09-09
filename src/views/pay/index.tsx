@@ -39,7 +39,7 @@ type Props = PropsFromRedux;
 interface IPaymentTo {
     name: string;
     address: string;
-    picture: string;
+    picture?: string;
 }
 function PayScreen(props: Props) {
     const navigation = useNavigation();
@@ -218,8 +218,12 @@ function PayScreen(props: Props) {
                                 }}
                                 maxTextTitleLength={24}
                                 item={{
-                                    from: paymentTo.name,
-                                    description: paymentTo.address,
+                                    from: paymentTo,
+                                    avatar: paymentTo.picture,
+                                    description: `${paymentTo.address.slice(
+                                        0,
+                                        8
+                                    )}..${paymentTo.address.slice(32, 42)}`,
                                     key: 'send',
                                     timestamp: new Date().getDate(),
                                 }}
@@ -228,13 +232,13 @@ function PayScreen(props: Props) {
                                 }}
                             />
                         )}
-                        <Divider />
-                        <TextInput
+                        {/* <Divider /> */}
+                        {/* <TextInput
                             style={{ padding: 10 }}
                             placeholder={i18n.t('noteOptional')}
                             value={paymentNote}
                             onChangeText={setPaymentNote}
-                        />
+                        /> */}
                         <Button
                             mode="outlined"
                             disabled={

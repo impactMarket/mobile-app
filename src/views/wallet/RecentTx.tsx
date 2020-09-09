@@ -26,10 +26,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                             key: t.timestamp.toString(),
                             timestamp: t.timestamp,
                             description: '',
-                            from:
-                                t.from.name === null
-                                    ? t.from.address
-                                    : t.from.name,
+                            from: t.from,
                             value: '',
                             avatar: t.picture
                                 ? t.picture.length > 3
@@ -50,8 +47,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                         key: t.timestamp.toString(),
                         timestamp: t.timestamp,
                         description: '',
-                        from:
-                            t.from.name === null ? t.from.address : t.from.name,
+                        from: t.from,
                         value: '',
                         avatar: t.picture
                             ? t.picture.length > 3
