@@ -10,9 +10,7 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     Clipboard,
-    ToastAndroid,
     Alert,
-    Platform,
 } from 'react-native';
 import {
     Button,
@@ -20,6 +18,7 @@ import {
     Paragraph,
     Portal,
     TextInput,
+    Snackbar,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -41,6 +40,7 @@ interface IDonateState {
     openModalDonateWithCelo: boolean;
     donating: boolean;
     amountDonate: string;
+    showCopiedToClipboard: boolean;
 }
 class Donate extends Component<Props, IDonateState> {
     constructor(props: any) {
@@ -50,6 +50,7 @@ class Donate extends Component<Props, IDonateState> {
             openModalDonateWithCelo: false,
             donating: false,
             amountDonate: '',
+            showCopiedToClipboard: false,
         };
     }
 
@@ -116,10 +117,12 @@ class Donate extends Component<Props, IDonateState> {
 
     handleCopyAddressToClipboard = () => {
         Clipboard.setString(this.props.community.contractAddress);
-        if (Platform.OS === 'android') {
-            ToastAndroid.show(i18n.t('donate'), ToastAndroid.SHORT);
-        }
-        // TODO: add ios notification
+        this.setState({ showCopiedToClipboard: true });
+        setTimeout(
+            () => this.setState({ showCopiedToClipboard: false }),
+            5000
+        );
+        this.setState({ openModalDonate: false });
     };
 
     render() {
@@ -128,6 +131,7 @@ class Donate extends Component<Props, IDonateState> {
             openModalDonateWithCelo,
             donating,
             amountDonate,
+            showCopiedToClipboard,
         } = this.state;
         const { community, user } = this.props;
 
@@ -140,6 +144,18 @@ class Donate extends Component<Props, IDonateState> {
                 >
                     {i18n.t('donate')}
                 </Button>
+                <Snackbar
+                    visible={showCopiedToClipboard}
+                    onDismiss={() => {}}
+                    action={{
+                        label: '',
+                        onPress: () => {
+                            // Do something
+                        },
+                    }}
+                >
+                    {i18n.t('addressCopiedClipboard')}
+                </Snackbar>
                 <Portal>
                     <Dialog
                         visible={openModalDonate}
