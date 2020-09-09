@@ -15,7 +15,16 @@ import { IRootState, STORAGE_USER_FIRST_TIME } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage, StyleSheet, View, Picker } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Avatar, TextInput, Paragraph } from 'react-native-paper';
+import {
+    Button,
+    Avatar,
+    TextInput,
+    Paragraph,
+    Portal,
+    Dialog,
+    RadioButton,
+    Text,
+} from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 
@@ -34,6 +43,7 @@ function EditProfile(props: Props) {
     const navigation = useNavigation();
     const [name, setName] = useState('');
     const [currency, setCurrency] = useState('usd');
+    const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
 
     useEffect(() => {
         setName(props.user.user.name);
@@ -95,14 +105,18 @@ function EditProfile(props: Props) {
                     <Paragraph style={styles.inputTextFieldLabel}>
                         {i18n.t('currency')}
                     </Paragraph>
-                    <Picker
-                        selectedValue={currency}
-                        style={styles.picker}
-                        onValueChange={handleChangeCurrency}
+                    <Button
+                        mode="contained"
+                        style={{
+                            marginVertical: 3,
+                            backgroundColor: 'rgba(206,212,218,0.27)',
+                        }}
+                        onPress={() => setIsDialogCurrencyOpen(true)}
                     >
-                        <Picker.Item label="Dollar (USD)" value="usd" />
-                        <Picker.Item label="Euro (EUR)" value="eur" />
-                    </Picker>
+                        <Text style={{ color: 'black', opacity: 1 }}>
+                            {currency === 'usd' ? 'Dollar (USD)' : 'Euro (EUR)'}
+                        </Text>
+                    </Button>
                     <TextInput
                         label={i18n.t('country')}
                         style={{ marginVertical: 3 }}
@@ -138,6 +152,28 @@ function EditProfile(props: Props) {
                     </View>
                 </View>
             </ScrollView>
+            <Portal>
+                <Dialog
+                    visible={isDialogCurrencyOpen}
+                    onDismiss={() => setIsDialogCurrencyOpen(false)}
+                >
+                    <Dialog.Content>
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                setIsDialogCurrencyOpen(false);
+                                handleChangeCurrency(value);
+                            }}
+                            value={currency}
+                        >
+                            <RadioButton.Item
+                                label="Dollar (USD)"
+                                value="usd"
+                            />
+                            <RadioButton.Item label="Euro (EUR)" value="eur" />
+                        </RadioButton.Group>
+                    </Dialog.Content>
+                </Dialog>
+            </Portal>
         </>
     );
 }

@@ -23,7 +23,16 @@ import {
     Picker,
     ImageBackground,
 } from 'react-native';
-import { Card, Button, Paragraph, Headline, Divider } from 'react-native-paper';
+import {
+    Card,
+    Button,
+    Paragraph,
+    Headline,
+    Divider,
+    Portal,
+    Dialog,
+    RadioButton,
+} from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -53,6 +62,7 @@ function CreateCommunityScreen(props: Props) {
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
     //
+    const [isDialogFrequencyOpen, setIsDialogFrequencyOpen] = useState(false);
     const [isNameValid, setIsNameValid] = useState(false);
     const [isDescriptionValid, setIsDescriptionValid] = useState(false);
     const [isCityValid, setIsCityValid] = useState(false);
@@ -509,7 +519,9 @@ function CreateCommunityScreen(props: Props) {
                                 value={claimAmount}
                                 required
                                 setValid={setIsClaimAmountValid}
-                                onChangeText={(value) => setClaimAmount(value)}
+                                onChangeText={(value) =>
+                                    setClaimAmount(value.replace(',', '.'))
+                                }
                             />
                             {claimAmount.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
@@ -541,7 +553,9 @@ function CreateCommunityScreen(props: Props) {
                                 value={maxClaim}
                                 required
                                 setValid={setIsMaxClaimValid}
-                                onChangeText={(value) => setMaxClaim(value)}
+                                onChangeText={(value) =>
+                                    setMaxClaim(value.replace(',', '.'))
+                                }
                             />
                             {maxClaim.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
@@ -567,7 +581,20 @@ function CreateCommunityScreen(props: Props) {
                         <Paragraph style={styles.inputTextFieldLabel}>
                             {i18n.t('frequency')}
                         </Paragraph>
-                        <View style={styles.pickerBorder}>
+                        <Button
+                            mode="contained"
+                            style={{
+                                borderRadius: 6,
+                                margin: 10,
+                                backgroundColor: 'rgba(206,212,218,0.27)',
+                            }}
+                            onPress={() => setIsDialogFrequencyOpen(true)}
+                        >
+                            <Text style={{ color: 'black', opacity: 1 }}>
+                                {baseInterval === '86400' ? i18n.t('daily') : i18n.t('weekly')}
+                            </Text>
+                        </Button>
+                        {/* <View style={styles.pickerBorder}>
                             <Picker
                                 selectedValue={baseInterval}
                                 style={styles.picker}
@@ -575,10 +602,6 @@ function CreateCommunityScreen(props: Props) {
                                     setBaseInterval(value)
                                 }
                             >
-                                {/* <Picker.Item
-                                    label={i18n.t('hourly')}
-                                    value="3601"
-                                /> */}
                                 <Picker.Item
                                     label={i18n.t('daily')}
                                     value="86400"
@@ -588,7 +611,7 @@ function CreateCommunityScreen(props: Props) {
                                     value="604800"
                                 />
                             </Picker>
-                        </View>
+                        </View> */}
                         <ValidatedTextInput
                             label={i18n.t('timeIncrementAfterClaim')}
                             marginBox={10}
@@ -629,6 +652,25 @@ function CreateCommunityScreen(props: Props) {
                     </Text>
                 </View>
             </ScrollView>
+            <Portal>
+                <Dialog
+                    visible={isDialogFrequencyOpen}
+                    onDismiss={() => setIsDialogFrequencyOpen(false)}
+                >
+                    <Dialog.Content>
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                setBaseInterval(value);
+                                setIsDialogFrequencyOpen(false);
+                            }}
+                            value={baseInterval}
+                        >
+                            <RadioButton.Item label={i18n.t('daily')} value="86400" />
+                            <RadioButton.Item label={i18n.t('weekly')} value="604800" />
+                        </RadioButton.Group>
+                    </Dialog.Content>
+                </Dialog>
+            </Portal>
         </>
     );
 }
