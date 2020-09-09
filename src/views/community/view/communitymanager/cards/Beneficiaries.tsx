@@ -3,13 +3,14 @@ import i18n from 'assets/i18n';
 import { ethers } from 'ethers';
 import { updateCommunityInfo, iptcColors } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
-import React, { useState } from 'react';
-import { Alert } from 'react-native';
-import { Card, Headline, Button } from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { Alert, View } from 'react-native';
+import { Card, Headline, Button, IconButton, Colors } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import ModalScanQR from '../../../../common/ModalScanQR';
+import { BigNumber } from 'bignumber.js';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;
@@ -26,6 +27,25 @@ type Props = PropsFromRedux & IBeneficiariesProps;
 function Beneficiaries(props: Props) {
     const navigation = useNavigation();
     const [addInProgress, setAddInProgress] = useState(false);
+    const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
+        true
+    );
+
+    useEffect(() => {
+        const loadCommunityBalance = async () => {
+            const stableToken = await props.network.kit.contracts.getStableToken();
+            const cUSDBalanceBig = await stableToken.balanceOf(
+                props.network.contracts.communityContract._address
+            );
+            // at least five cents
+            setHasFundsToNewBeneficiary(
+                new BigNumber(cUSDBalanceBig.toString()).gte(
+                    '50000000000000000'
+                )
+            );
+        };
+        loadCommunityBalance();
+    });
 
     const handleModalScanQR = async (inputAddress: string) => {
         const { user, network } = props;
@@ -130,17 +150,41 @@ function Beneficiaries(props: Props) {
                     {i18n.t('removed')} (
                     {props.community.beneficiaries.removed.length})
                 </Button>
-                <ModalScanQR
-                    buttonStyle={{
-                        marginVertical: 5,
-                        backgroundColor: iptcColors.greenishTeal,
-                    }}
-                    buttonText={i18n.t('addBeneficiary')}
-                    inputText={i18n.t('beneficiaryAddress')}
-                    selectButtonText={i18n.t('add')}
-                    selectButtonInProgress={addInProgress}
-                    callback={handleModalScanQR}
-                />
+                <View>
+                    {hasFundsToNewBeneficiary ? (
+                        <ModalScanQR
+                            buttonStyle={{
+                                marginVertical: 5,
+                                backgroundColor: iptcColors.greenishTeal,
+                                position: 'relative',
+                            }}
+                            buttonText={i18n.t('addBeneficiary')}
+                            inputText={i18n.t('beneficiaryAddress')}
+                            selectButtonText={i18n.t('add')}
+                            selectButtonInProgress={addInProgress}
+                            callback={handleModalScanQR}
+                        />
+                    ) : (
+                        <Button
+                            icon="alert"
+                            mode="contained"
+                            style={{
+                                marginVertical: 5,
+                                backgroundColor: '#f0ad4e',
+                            }}
+                            onPress={() => {
+                                Alert.alert(
+                                    i18n.t('noFunds'),
+                                    i18n.t('notFundsToAddBeneficiary'),
+                                    [{ text: i18n.t('close') }],
+                                    { cancelable: false }
+                                );
+                            }}
+                        >
+                            {i18n.t('addBeneficiary')}
+                        </Button>
+                    )}
+                </View>
             </Card.Content>
         </Card>
     );

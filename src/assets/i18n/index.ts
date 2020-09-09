@@ -159,6 +159,9 @@ i18n.translations = {
         oneTimeWelcomeMessage2:
             'Back those beneficiaries by donating to their communities.',
         exploreCommunities: 'Explore Communities',
+        noFunds: 'No Funds',
+        notFundsToAddBeneficiary:
+            'Your community does not has enough funds! You need at least 5 cents that will be sent to the beneficiary when added.',
     },
     pt: {
         testnetWarning:
@@ -313,6 +316,9 @@ i18n.translations = {
         oneTimeWelcomeMessage2:
             'Apoie esses beneficiários doando para suas comunidades.',
         exploreCommunities: 'Explorar Comunidades',
+        noFunds: 'Fundos Insuficientes',
+        notFundsToAddBeneficiary:
+            'A comunidade não tem fundos suficientes! Você precisa de pelo menos 5 cêntimos que serão enviados ao beneficiário quando adicionado.',
     },
 };
 // Set the locale once at the beginning of your app.
