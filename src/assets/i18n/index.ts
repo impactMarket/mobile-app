@@ -154,6 +154,11 @@ i18n.translations = {
         addingInvalidAddress: 'You are trying to add an invalid address!',
         errorAddingBeneficiary:
             'An error happened while adding the beneficiary.',
+        oneTimeWelcomeMessage1:
+            'impactMarket enables any vulnerable community to create its own unconditional basic income system for their beneficiaries, where each member can claim a fixed amount on a regular basis and make payments for free',
+        oneTimeWelcomeMessage2:
+            'Back those beneficiaries by donating to their communities.',
+        exploreCommunities: 'Explore Communities',
     },
     pt: {
         testnetWarning:
@@ -263,8 +268,7 @@ i18n.translations = {
         step1: 'Passo 1',
         downloadCeloApp: 'Descarregue a aplicação Valora',
         step2: 'Passo 2',
-        installCeloCreateAccount:
-            'Instale a aplicação Valora e crie uma conta',
+        installCeloCreateAccount: 'Instale a aplicação Valora e crie uma conta',
         finalStep: 'Último Passo',
         connectCeloWallet: 'Conectar com Valora',
         notNow: 'Agora não',
@@ -304,6 +308,11 @@ i18n.translations = {
         addingInvalidAddress:
             'Você está a tentar adicionar um endereço inválido!',
         errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.',
+        oneTimeWelcomeMessage1:
+            'impactMarket permite que qualquer comunidade vulnerável crie o seu próprio sistema de renda básica incondicional para os seus beneficiários, onde cada membro pode pedir um valor fixo numa base regular e fazer pagamentos gratuitamente',
+        oneTimeWelcomeMessage2:
+            'Apoie esses beneficiários doando para suas comunidades.',
+        exploreCommunities: 'Explorar Comunidades',
     },
 };
 // Set the locale once at the beginning of your app.

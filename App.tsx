@@ -261,12 +261,7 @@ export default class App extends React.Component<object, IAppState> {
                                             marginHorizontal: 40,
                                         }}
                                     >
-                                        impactMarket enables any vulnerable
-                                        community to create its own
-                                        unconditional basic income system for
-                                        their beneficiaries, where each member
-                                        can claim a fixed amount on a regular
-                                        basis and make payments for free
+                                        {i18n.t('oneTimeWelcomeMessage1')}
                                     </Text>
                                     <View>
                                         <Text
@@ -282,8 +277,7 @@ export default class App extends React.Component<object, IAppState> {
                                                 marginHorizontal: 40,
                                             }}
                                         >
-                                            Back those beneficiaries by donating
-                                            to their communities.
+                                            {i18n.t('oneTimeWelcomeMessage2')}
                                         </Text>
                                         <Button
                                             mode="contained"
@@ -295,7 +289,7 @@ export default class App extends React.Component<object, IAppState> {
                                                 this.openExploreCommunities()
                                             }
                                         >
-                                            Explore Communities
+                                            {i18n.t('exploreCommunities')}
                                         </Button>
                                     </View>
                                 </View>
