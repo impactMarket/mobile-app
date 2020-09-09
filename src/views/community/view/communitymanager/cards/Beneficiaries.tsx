@@ -33,19 +33,21 @@ function Beneficiaries(props: Props) {
 
     useEffect(() => {
         const loadCommunityBalance = async () => {
-            const stableToken = await props.network.kit.contracts.getStableToken();
-            const cUSDBalanceBig = await stableToken.balanceOf(
-                props.network.contracts.communityContract._address
-            );
-            // at least five cents
-            setHasFundsToNewBeneficiary(
-                new BigNumber(cUSDBalanceBig.toString()).gte(
-                    '50000000000000000'
-                )
-            );
+            if (props.network.kit.contracts !== undefined) {
+                const stableToken = await props.network.kit.contracts.getStableToken();
+                const cUSDBalanceBig = await stableToken.balanceOf(
+                    props.network.contracts.communityContract._address
+                );
+                // at least five cents
+                setHasFundsToNewBeneficiary(
+                    new BigNumber(cUSDBalanceBig.toString()).gte(
+                        '50000000000000000'
+                    )
+                );
+            }
         };
         loadCommunityBalance();
-    });
+    }, [props.network.kit]);
 
     const handleModalScanQR = async (inputAddress: string) => {
         const { user, network } = props;

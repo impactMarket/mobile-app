@@ -100,6 +100,7 @@ const navigationTheme = {
 YellowBox.ignoreWarnings([
     "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
     "The provided value 'ms-stream' is not a valid 'responseType'.",
+    "Firebase Analytics is not available in the Expo client.",
 ]);
 
 Notifications.setNotificationHandler({
