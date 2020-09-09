@@ -248,12 +248,14 @@ export interface IAddressAndName {
 }
 
 export interface IRecentTxAPI {
+    picture: string;
     from: IAddressAndName;
-    txs: number;
+    // txs: number;
     timestamp: number;
 }
 
 export interface IPaymentsTxAPI {
+    picture: string;
     to: IAddressAndName;
     value: string;
     timestamp: number;

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useImperativeHandle } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Headline, ActivityIndicator } from 'react-native-paper';
 import Api from 'services/api';
+import { getAvatarFromId } from 'helpers/index';
 
 interface IRecentTxProps {
     userAddress: string;
@@ -22,14 +23,19 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                 Api.tokenTx(props.userAddress).then((txs) => {
                     setActivities(
                         txs.map((t) => ({
-                            key: t.from.address,
+                            key: t.timestamp.toString(),
                             timestamp: t.timestamp,
                             description: '',
                             from:
                                 t.from.name === null
                                     ? t.from.address
                                     : t.from.name,
-                            value: t.txs.toString(),
+                            value: '',
+                            avatar: t.picture
+                                ? t.picture.length > 3
+                                    ? t.picture
+                                    : getAvatarFromId(parseInt(t.picture))
+                                : undefined,
                         }))
                     );
                     setLoadingTxs(false);
@@ -41,12 +47,17 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
             Api.tokenTx(props.userAddress).then((txs) => {
                 setActivities(
                     txs.map((t) => ({
-                        key: t.from.address,
+                        key: t.timestamp.toString(),
                         timestamp: t.timestamp,
                         description: '',
                         from:
                             t.from.name === null ? t.from.address : t.from.name,
-                        value: t.txs.toString(),
+                        value: '',
+                        avatar: t.picture
+                            ? t.picture.length > 3
+                                ? t.picture
+                                : getAvatarFromId(parseInt(t.picture))
+                            : undefined,
                     }))
                 );
                 setLoadingTxs(false);
@@ -70,11 +81,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                 </Headline>
                 <ActivityIndicator animating={loadingTxs} />
                 {activities.map((activity) => (
-                    <ListActionItem
-                        key={activity.from}
-                        item={activity}
-                        suffix={{ top: ' txs' }}
-                    />
+                    <ListActionItem key={activity.key} item={activity} />
                 ))}
             </View>
         );

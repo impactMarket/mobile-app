@@ -20,14 +20,7 @@ import {
     Alert,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import {
-    Card,
-    Divider,
-    Button,
-    Portal,
-    Dialog,
-    Paragraph,
-} from 'react-native-paper';
+import { Card, Divider, Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 
@@ -43,11 +36,21 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
+interface IPaymentTo {
+    name: string;
+    address: string;
+    picture: string;
+}
 function PayScreen(props: Props) {
     const navigation = useNavigation();
+    const clearPaymentTo = {
+        name: '',
+        picture: '',
+        address: '',
+    };
 
     const [paymentAmount, setPaymentAmount] = useState<string>('');
-    const [paymentTo, setPaymentTo] = useState<string>('');
+    const [paymentTo, setPaymentTo] = useState<IPaymentTo>(clearPaymentTo);
     const [editPaymentTo, setEditPaymentTo] = useState(false);
     const [editingPaymentTo, setEditingPaymentTo] = useState(false);
     const [paymentNote, setPaymentNote] = useState<string>('');
@@ -61,7 +64,11 @@ function PayScreen(props: Props) {
     };
 
     useEffect(() => {
-        setPaymentTo(props.app.paymentToAddress);
+        setPaymentTo({
+            name: '',
+            picture: '',
+            address: props.app.paymentToAddress,
+        });
     }, [props.app]);
 
     const handlePay = async () => {
@@ -76,7 +83,7 @@ function PayScreen(props: Props) {
         }
 
         try {
-            addressToSend = ethers.utils.getAddress(paymentTo);
+            addressToSend = ethers.utils.getAddress(paymentTo.address);
         } catch (e) {
             Alert.alert(
                 i18n.t('failure'),
@@ -112,7 +119,7 @@ function PayScreen(props: Props) {
                 );
                 setAppPaymentToAction('');
                 setPaymentAmount('');
-                setPaymentTo('');
+                setPaymentTo(clearPaymentTo);
                 setPaymentNote('');
             })
             .catch(() => {
@@ -183,30 +190,36 @@ function PayScreen(props: Props) {
                             )}
                         </Text>
                         <Divider />
-                        {(editingPaymentTo || paymentTo.length === 0) ? (
+                        {editingPaymentTo || paymentTo.address.length === 0 ? (
                             <TextInput
                                 style={{ padding: 10 }}
                                 placeholder={i18n.t('nameAddressPhone')}
-                                value={paymentTo}
-                                onChangeText={setPaymentTo}
+                                value={paymentTo.address}
+                                onChangeText={(text) =>
+                                    setPaymentTo({
+                                        name: '',
+                                        picture: '',
+                                        address: text,
+                                    })
+                                }
                                 onEndEditing={() => setEditingPaymentTo(false)}
                                 onFocus={() => setEditingPaymentTo(true)}
                             />
                         ) : (
                             <ListActionItem
-                                key={paymentTo}
+                                key={paymentTo.address}
                                 onPress={() => setEditPaymentTo(true)}
                                 action={{
                                     icon: 'close-circle-outline',
                                     click: () => {
                                         setAppPaymentToAction('');
-                                        setPaymentTo('');
+                                        setPaymentTo(clearPaymentTo);
                                     },
                                 }}
                                 maxTextTitleLength={24}
                                 item={{
-                                    from: paymentTo,
-                                    description: '',
+                                    from: paymentTo.name,
+                                    description: paymentTo.address,
                                     key: 'send',
                                     timestamp: new Date().getDate(),
                                 }}
@@ -227,7 +240,7 @@ function PayScreen(props: Props) {
                             disabled={
                                 payInProgress ||
                                 paymentAmount.length === 0 ||
-                                paymentTo.length === 0
+                                paymentTo.address.length === 0
                             }
                             loading={payInProgress}
                             onPress={handlePay}
@@ -246,7 +259,11 @@ function PayScreen(props: Props) {
                     }}
                     callback={handleModalScanQR}
                 />
-                <RecentPayments user={props.user} ref={recentPaymentsRef} />
+                <RecentPayments
+                    user={props.user}
+                    ref={recentPaymentsRef}
+                    setPaymentTo={setPaymentTo}
+                />
             </ScrollView>
         </>
     );

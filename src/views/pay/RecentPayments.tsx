@@ -1,14 +1,24 @@
 import i18n from 'assets/i18n';
 import ListActionItem, { IListActionItem } from 'components/ListActionItem';
-import { amountToUserCurrency, getUserCurrencySymbol } from 'helpers/index';
+import {
+    amountToUserCurrency,
+    getUserCurrencySymbol,
+    getAvatarFromId,
+} from 'helpers/index';
 import { IUserState, IPaymentsTxAPI } from 'helpers/types';
 import React, { useState, useEffect, useImperativeHandle } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Headline, ActivityIndicator } from 'react-native-paper';
 import Api from 'services/api';
 
+interface IPaymentTo {
+    name: string;
+    address: string;
+    picture: string;
+}
 interface IRecentPaymentsProps {
     user: IUserState;
+    setPaymentTo: React.Dispatch<React.SetStateAction<IPaymentTo>>;
 }
 export interface IRecentPaymentsRef {
     updateRecentPayments: () => void;
@@ -26,6 +36,11 @@ const RecentPayments = React.forwardRef<
         description: '',
         from: p.to.name === null ? p.to.address : p.to.name,
         value: amountToUserCurrency(p.value, props.user.user).toString(),
+        avatar: p.picture
+            ? p.picture.length > 3
+                ? p.picture
+                : getAvatarFromId(parseInt(p.picture))
+            : undefined,
     });
 
     useImperativeHandle(ref, () => ({
@@ -55,6 +70,13 @@ const RecentPayments = React.forwardRef<
                 <ListActionItem
                     key={activity.from}
                     item={activity}
+                    onPress={() =>
+                        props.setPaymentTo({
+                            name: '',
+                            picture: '',
+                            address: activity.from,
+                        })
+                    }
                     prefix={{ top: getUserCurrencySymbol(props.user.user) }}
                 />
             ))}

@@ -40,6 +40,10 @@ const usergetUserAvatars = [
     ],
 ];
 
+export function getAvatarFromId(avatarId: number, big: boolean = false) {
+    return usergetUserAvatars[big ? 0 : 1][avatarId];
+}
+
 export function getUserAvatar(user: IUserInfo, big: boolean = false) {
     if (user.avatar.length < 3) {
         return usergetUserAvatars[big ? 0 : 1][parseInt(user.avatar) - 1];
