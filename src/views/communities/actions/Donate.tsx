@@ -27,8 +27,8 @@ interface IExploreScreenProps {
     community: ICommunityInfo;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, app } = state;
+    return { user, app };
 };
 
 const connector = connect(mapStateToProps);
@@ -63,7 +63,7 @@ class Donate extends Component<Props, IDonateState> {
 
     handleDonateWithCeloWallet = async () => {
         this.setState({ donating: true });
-        const stableToken = await this.props.network.kit.contracts.getStableToken();
+        const stableToken = await this.props.app.kit.contracts.getStableToken();
         const cUSDDecimals = await stableToken.decimals();
         const txObject = stableToken.transfer(
             this.props.community.contractAddress,
@@ -77,7 +77,7 @@ class Donate extends Component<Props, IDonateState> {
             stableToken.address,
             txObject,
             requestId,
-            this.props.network
+            this.props.app.kit
         )
             .then(() => {
                 // update donated values

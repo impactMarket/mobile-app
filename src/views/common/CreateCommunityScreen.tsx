@@ -48,8 +48,8 @@ interface ICreateCommunityScreen {
     };
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -212,7 +212,7 @@ function CreateCommunityScreen(props: Props) {
                             (parseInt(incrementInterval, 10) * 60).toString()
                         ),
                         'editcommunity',
-                        props.network
+                        props.app.kit
                     );
                 }
                 const success = await Api.editCommunity(
@@ -234,7 +234,7 @@ function CreateCommunityScreen(props: Props) {
                 } else {
                     await loadContracts(
                         props.user.celoInfo.address,
-                        props.network.kit,
+                        props.app.kit,
                         props
                     );
                     navigation.goBack();
@@ -304,7 +304,7 @@ function CreateCommunityScreen(props: Props) {
                 if (success) {
                     loadContracts(
                         props.user.celoInfo.address,
-                        props.network.kit,
+                        props.app.kit,
                         props
                     );
                     // the remaining process is done in useEffect

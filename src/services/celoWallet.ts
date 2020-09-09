@@ -1,20 +1,20 @@
 import { toTxResult } from '@celo/contractkit/lib/utils/tx-result';
 import { requestTxSig, FeeCurrency, waitForSignedTxs } from '@celo/dappkit';
 import * as Linking from 'expo-linking';
-import { INetworkState } from 'helpers/types';
+import { ContractKit } from '@celo/contractkit';
 
 async function celoWalletRequest(
     from: string,
     to: string,
     txObject: any,
     requestId: string,
-    network: INetworkState
+    kit: ContractKit
 ): Promise<any> {
     const dappName = 'impactMarket';
     const callback = Linking.makeUrl(`${requestId}/`);
 
     requestTxSig(
-        network.kit,
+        kit,
         [
             {
                 from,
@@ -29,7 +29,7 @@ async function celoWalletRequest(
     const dappkitResponse = await waitForSignedTxs(requestId);
     const tx = dappkitResponse.rawTxs[0];
     return toTxResult(
-        network.kit.web3.eth.sendSignedTransaction(tx)
+        kit.web3.eth.sendSignedTransaction(tx)
     ).waitReceipt();
 }
 

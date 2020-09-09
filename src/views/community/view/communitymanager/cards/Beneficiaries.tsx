@@ -17,8 +17,8 @@ interface IBeneficiariesProps {
     updateCommunity: (community: ICommunityInfo) => void;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -33,8 +33,8 @@ function Beneficiaries(props: Props) {
 
     useEffect(() => {
         const loadCommunityBalance = async () => {
-            if (props.network.kit.contracts !== undefined) {
-                const stableToken = await props.network.kit.contracts.getStableToken();
+            if (props.app.kit.contracts !== undefined) {
+                const stableToken = await props.app.kit.contracts.getStableToken();
                 const cUSDBalanceBig = await stableToken.balanceOf(
                     props.network.contracts.communityContract._address
                 );
@@ -47,7 +47,7 @@ function Beneficiaries(props: Props) {
             }
         };
         loadCommunityBalance();
-    }, [props.network.kit]);
+    }, [props.app.kit]);
 
     const handleModalScanQR = async (inputAddress: string) => {
         const { user, network } = props;
@@ -78,7 +78,7 @@ function Beneficiaries(props: Props) {
             communityContract.options.address,
             await communityContract.methods.addBeneficiary(addressToAdd),
             'addbeneficiary',
-            network
+            props.app.kit
         )
             .then(() => {
                 setTimeout(

@@ -20,10 +20,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, AsyncStorage, Alert } from 'react-native';
 import {
     Button,
-    Portal,
-    Dialog,
-    TextInput,
-    Paragraph,
 } from 'react-native-paper';
 import { ConnectedProps, connect, useStore } from 'react-redux';
 import Api from 'services/api';
@@ -31,8 +27,8 @@ import { registerForPushNotifications } from 'services/pushNotifications';
 import * as Device from 'expo-device';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, app } = state;
+    return { user, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -42,11 +38,9 @@ function LoginScreen(props: Props) {
     const store = useStore();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
-    const [askingPattern, setAskingPattern] = useState(false);
-    const [pin, setPin] = useState<string>('');
 
     const getCurrentUserBalance = async (address: string) => {
-        const stableToken = await props.network.kit.contracts.getStableToken();
+        const stableToken = await props.app.kit.contracts.getStableToken();
 
         const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([
             stableToken.balanceOf(address),
@@ -71,7 +65,7 @@ function LoginScreen(props: Props) {
 
         const dappkitResponse = await waitForAccountAuth(requestId);
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
-        const authToken = await Api.userAuth(userAddress, pin);
+        const authToken = await Api.userAuth(userAddress, Device.osInternalBuildId!);
         if (authToken === undefined) {
             Alert.alert(
                 i18n.t('failure'),
@@ -80,7 +74,6 @@ function LoginScreen(props: Props) {
                 { cancelable: false }
             );
             setConnecting(false);
-            setPin('');
             return;
         }
         try {
@@ -100,7 +93,7 @@ function LoginScreen(props: Props) {
                 dappkitResponse.phoneNumber
             );
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-            await loadContracts(userAddress, props.network.kit, props);
+            await loadContracts(userAddress, props.app.kit, props);
             props.dispatch(
                 setUserCeloInfo({
                     address: userAddress,
@@ -117,7 +110,6 @@ function LoginScreen(props: Props) {
                     { cancelable: false }
                 );
                 setConnecting(false);
-                setPin('');
                 return;
             }
             Api.setUserPushNotificationToken(
@@ -133,7 +125,6 @@ function LoginScreen(props: Props) {
                 { cancelable: false }
             );
             setConnecting(false);
-            setPin('');
         }
     };
 
@@ -217,7 +208,7 @@ function LoginScreen(props: Props) {
             <Text style={styles.stepText}>{i18n.t('finalStep')}</Text>
             <Button
                 mode="contained"
-                onPress={() => setAskingPattern(true)}
+                onPress={() => login()}
                 disabled={connecting}
                 loading={connecting}
                 style={{
@@ -235,35 +226,6 @@ function LoginScreen(props: Props) {
             >
                 <Text style={{ color: 'black' }}>{i18n.t('notNow')}</Text>
             </Button>
-            <Portal>
-                <Dialog visible={askingPattern} dismissable={false}>
-                    <Dialog.Content>
-                        <Paragraph>{i18n.t('beforeMovingInsertPin')}</Paragraph>
-                        <TextInput
-                            maxLength={4}
-                            label={i18n.t('pin4Digits')}
-                            value={pin}
-                            keyboardType="numeric"
-                            secureTextEntry
-                            textContentType="password"
-                            onChangeText={(text) => setPin(text)}
-                        />
-                    </Dialog.Content>
-                    <Dialog.Actions>
-                        <Button
-                            mode="contained"
-                            disabled={pin.length < 4}
-                            style={{ marginRight: 10 }}
-                            onPress={() => {
-                                setAskingPattern(false);
-                                login();
-                            }}
-                        >
-                            {i18n.t('continue')}
-                        </Button>
-                    </Dialog.Actions>
-                </Dialog>
-            </Portal>
         </View>
     );
 }

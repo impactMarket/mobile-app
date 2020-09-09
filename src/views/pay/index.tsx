@@ -97,7 +97,7 @@ function PayScreen(props: Props) {
         }
 
         setPayInProgress(true);
-        const stableToken = await props.network.kit.contracts.getStableToken();
+        const stableToken = await props.app.kit.contracts.getStableToken();
         celoWalletRequest(
             address,
             stableToken.address,
@@ -108,7 +108,7 @@ function PayScreen(props: Props) {
                     .toString()
             ).txo,
             'stabletokentransfer',
-            network
+            props.app.kit
         )
             .then(() => {
                 // TODO: update UI
