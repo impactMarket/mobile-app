@@ -18,6 +18,8 @@ import {
     TextInput,
     RefreshControl,
     Alert,
+    NativeSyntheticEvent,
+    TextInputEndEditingEventData,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Card, Divider, Button } from 'react-native-paper';
@@ -140,6 +142,30 @@ function PayScreen(props: Props) {
         setEditPaymentTo(false);
     };
 
+    const endEditingPaymentTo = (
+        e: NativeSyntheticEvent<TextInputEndEditingEventData>
+    ) => {
+        try {
+            const checksumedAddress = ethers.utils.getAddress(
+                paymentTo.address
+            );
+            setPaymentTo({
+                name: '',
+                picture: '',
+                address: checksumedAddress,
+            });
+        } catch (e) {
+            setPaymentTo(clearPaymentTo);
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('nameAddressPhoneNotFound'),
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
+        }
+        setEditingPaymentTo(false);
+    };
+
     return (
         <>
             <Header
@@ -202,7 +228,7 @@ function PayScreen(props: Props) {
                                         address: text,
                                     })
                                 }
-                                onEndEditing={() => setEditingPaymentTo(false)}
+                                onEndEditing={endEditingPaymentTo}
                                 onFocus={() => setEditingPaymentTo(true)}
                             />
                         ) : (
