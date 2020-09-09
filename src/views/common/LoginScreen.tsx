@@ -60,7 +60,7 @@ function LoginScreen(props: Props) {
     const login = async () => {
         const requestId = 'login';
         const dappName = 'impactMarket';
-        const callback = Linking.makeUrl('impactmarketmobile://login');
+        const callback = Linking.makeUrl('login/');
         setConnecting(true);
 
         requestAccountAddress({

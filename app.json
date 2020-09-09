@@ -10,7 +10,7 @@
         "version": "0.0.2",
         "orientation": "portrait",
         "icon": "./src/assets/images/logo/ios.png",
-        "scheme": "impactmarketmobile",
+        "scheme": "impactmarket",
         "splash": {
             "image": "./src/assets/images/splash.png",
             "backgroundColor": "#2362FB"
