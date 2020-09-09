@@ -52,7 +52,6 @@ export interface IContractsState {
 }
 
 export interface INetworkState {
-    kit: ContractKit;
     community: ICommunityInfo;
     contracts: IContractsState;
 }
@@ -63,6 +62,7 @@ export interface IAuthState {
 }
 
 export interface IAppState {
+    kit: ContractKit;
     paymentToAddress: string;
 }
 
@@ -158,7 +158,6 @@ export type UserActionTypes =
     | UserInfoAction
     | UserExchangeRateAction;
 export type NetworkActionTypes =
-    | CeloKitAction
     | SetImpactMarketContractAction
     | SetCommunityContractAction
     | SetCommunityAction
@@ -166,7 +165,7 @@ export type NetworkActionTypes =
 export type AuthActionTypes =
     | SetTokenPushNotificationsAction
     | SetAuthTokenAction;
-export type AppActionTypes = SetAppPaymentToAction;
+export type AppActionTypes = CeloKitAction | SetAppPaymentToAction;
 
 export interface ITransaction {
     tx: string;

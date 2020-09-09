@@ -45,7 +45,6 @@ const INITIAL_STATE_USER: IUserState = {
 };
 
 const INITIAL_STATE_NETWORK: INetworkState = {
-    kit: undefined as any,
     // TODO: save community object from database with contract inside
     community: undefined as any,
     contracts: {
@@ -60,6 +59,7 @@ const INITIAL_STATE_AUTH: IAuthState = {
 };
 
 const INITIAL_STATE_APP: IAppState = {
+    kit: undefined as any,
     paymentToAddress: '',
 };
 
@@ -70,24 +70,7 @@ const userReducer = (
     const community = state.community;
     switch (action.type) {
         case RESET_USER_APP:
-            // DO NOT RETURN INITIAL_STATE_USER
-            return {
-                celoInfo: {
-                    address: '',
-                    phoneNumber: '',
-                    balance: '0',
-                },
-                user: {
-                    name: '',
-                    currency: 'USD',
-                    exchangeRate: 1,
-                    avatar: '1',
-                },
-                community: {
-                    isBeneficiary: false,
-                    isManager: false,
-                },
-            };
+            return INITIAL_STATE_USER;
         case SET_USER_CELO_INFO:
             return { ...state, celoInfo: action.payload };
         case SET_USER_INFO:
@@ -118,16 +101,7 @@ const networkReducer = (
     let contracts;
     switch (action.type) {
         case RESET_NETWORK_APP:
-            // ERASE ONLY THE CONTRACTS
-            return {
-                ...state,
-                contracts: {
-                    communityContract: undefined,
-                    impactMarketContract: undefined,
-                },
-            };
-        case SET_CELO_KIT:
-            return { ...state, kit: action.payload };
+            return INITIAL_STATE_NETWORK;
         case SET_COMMUNITY:
             return { ...state, community: action.payload };
         case SET_COMMUNITY_CONTRACT:
@@ -137,11 +111,11 @@ const networkReducer = (
             contracts = state.contracts;
             contracts.communityContract = action.payload;
             // Finally, update our redux state
-            return { ...state, kit: action.payload };
+            return { ...state, contracts };
         case SET_IMPACTMARKET_CONTRACT:
             contracts = state.contracts;
             contracts.impactMarketContract = action.payload;
-            return { ...state, kit: action.payload };
+            return { ...state, contracts };
         default:
             return state;
     }
@@ -160,6 +134,8 @@ const authReducer = (state = INITIAL_STATE_AUTH, action: AuthActionTypes) => {
 
 const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
     switch (action.type) {
+        case SET_CELO_KIT:
+            return { ...state, kit: action.payload };
         case SET_APP_PYMENT_TO_ACTION:
             return { ...state, paymentToAddress: action.payload };
         default:
