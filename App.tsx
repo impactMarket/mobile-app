@@ -61,6 +61,7 @@ import EditProfile from './src/views/wallet/EditProfile';
 import * as Analytics from 'expo-firebase-analytics';
 import * as FirebaseCore from 'expo-firebase-core';
 
+BigNumber.config({ DECIMAL_PLACES: 55 })
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
 const Stack = createStackNavigator();
 const store = createStore(combinedReducer);
