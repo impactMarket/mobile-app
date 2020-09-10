@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
-import ValidatedTextInput from 'components/ValidatedTextInput';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import {
@@ -32,6 +31,9 @@ import {
     Portal,
     Dialog,
     RadioButton,
+    HelperText,
+    TextInput,
+    IconButton,
 } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
@@ -63,18 +65,20 @@ function CreateCommunityScreen(props: Props) {
     const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
     //
     const [isDialogFrequencyOpen, setIsDialogFrequencyOpen] = useState(false);
-    const [isNameValid, setIsNameValid] = useState(false);
-    const [isDescriptionValid, setIsDescriptionValid] = useState(false);
-    const [isCityValid, setIsCityValid] = useState(false);
-    const [isCountryValid, setIsCountryValid] = useState(false);
+    const [isNameValid, setIsNameValid] = useState(true);
+    const [isCoverImageValid, setIsCoverImageValid] = useState(true);
+    const [isDescriptionValid, setIsDescriptionValid] = useState(true);
+    const [isCityValid, setIsCityValid] = useState(true);
+    const [isCountryValid, setIsCountryValid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true); // avoid initial error TODO: fix!
-    const [isClaimAmountValid, setIsClaimAmountValid] = useState(false);
+    const [isClaimAmountValid, setIsClaimAmountValid] = useState(true);
     const [isEnablingGPS, setIsEnablingGPS] = useState(false);
+    const [isEnabledGPS, setIsEnabledGPS] = useState(true);
     const [
         isIncrementalIntervalValid,
         setIsIncrementalIntervalValid,
-    ] = useState(false);
-    const [isMaxClaimValid, setIsMaxClaimValid] = useState(false);
+    ] = useState(true);
+    const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -148,6 +152,62 @@ function CreateCommunityScreen(props: Props) {
     }, [props.network.community]);
 
     const submitNewCommunity = async () => {
+        const _isCoverImageValid = coverImage.length > 0;
+        if (!_isCoverImageValid) {
+            setIsCoverImageValid(false);
+        }
+        const _isNameValid = name.length > 0;
+        if (!_isNameValid) {
+            setIsNameValid(false);
+        }
+        const _isDescriptionValid = description.length > 0;
+        if (!_isDescriptionValid) {
+            setIsDescriptionValid(false);
+        }
+        const _isCityValid = city.length > 0;
+        if (!_isCityValid) {
+            setIsCityValid(false);
+        }
+        const _isCountryValid = country.length > 0;
+        if (!_isCountryValid) {
+            setIsCountryValid(false);
+        }
+        const _isEmailValid = validateEmail(email);
+        if (!_isEmailValid) {
+            setIsEmailValid(false);
+        }
+        const _isEnabledGPS = gpsLocation !== undefined;
+        if (!_isEnabledGPS) {
+            setIsEnabledGPS(false);
+        }
+        const _isClaimAmountValid = claimAmount.length > 0;
+        if (!_isClaimAmountValid) {
+            setIsClaimAmountValid(false);
+        }
+        const _isIncrementalIntervalValid = incrementInterval.length > 0;
+        if (!_isIncrementalIntervalValid) {
+            setIsIncrementalIntervalValid(false);
+        }
+        const _isMaxClaimValid = maxClaim.length > 0;
+        if (!_isMaxClaimValid) {
+            setIsMaxClaimValid(false);
+        }
+
+        const isSubmitAvailable =
+            _isNameValid &&
+            _isDescriptionValid &&
+            _isCityValid &&
+            _isCountryValid &&
+            _isEmailValid &&
+            _isClaimAmountValid &&
+            _isIncrementalIntervalValid &&
+            _isMaxClaimValid &&
+            _isCoverImageValid &&
+            !sending;
+
+        if (!isSubmitAvailable) {
+            return;
+        }
         if (new BigNumber(maxClaim).lt(claimAmount)) {
             Alert.alert(
                 i18n.t('failure'),
@@ -337,6 +397,7 @@ function CreateCommunityScreen(props: Props) {
 
         const loc = await Location.getCurrentPositionAsync();
         setGpsLocation(loc);
+        setIsEnabledGPS(true);
     };
 
     const pickImage = async () => {
@@ -349,22 +410,39 @@ function CreateCommunityScreen(props: Props) {
 
         if (!result.cancelled) {
             setCoverImage(result.uri);
+            setIsCoverImageValid(true);
         }
     };
 
-    const isSubmitAvailable =
-        isNameValid &&
-        isDescriptionValid &&
-        isCityValid &&
-        isCountryValid &&
-        isEmailValid &&
-        email.length > 0 &&
-        isClaimAmountValid &&
-        isIncrementalIntervalValid &&
-        isMaxClaimValid &&
-        gpsLocation !== undefined &&
-        coverImage.length > 0 &&
-        !sending;
+    const openHelp = (help: string) => {
+        let contentHelp: string = '';
+
+        switch (help) {
+            case 'claimAmount': {
+                contentHelp =
+                    'This is the UBI amount, is cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.';
+                break;
+            }
+            case 'totalClaimPerBeneficiary': {
+                contentHelp =
+                    'Each beneficiary will be able to access a basic income on a regular basis, that can be daily or weekly. For example, if daily, each beneficiary will have to wait at least 1 day (24h) before being able to claim again (more $2).';
+                break;
+            }
+            case 'frequency': {
+                contentHelp =
+                    'This value is the limit each beneficiary can get in total after several claims. For example, each beneficiary can claim $2/day until it reaches a total of $1,000, meaning that each beneficiary will have access to a UBI ($2/day) for at least 16 months. This time can increase if minutes are added to the Time increment.';
+                break;
+            }
+            case 'timeIncrementAfterClaim': {
+                contentHelp =
+                    'It is possible to add a time increment each time a beneficiary claims. For example, in a community where each beneficiary can claim $2/day, 20 minutes can be added to the time that that beneficiary will have to wait before being able to claim again (in this case, 24h20m after claiming for the 2nd time, 24h40m after the 3rd time, and so on). This benefits those who claimed less and incentivizes self-sustainability progress.';
+                break;
+            }
+        }
+        Alert.alert(i18n.t(help), contentHelp, [{ text: i18n.t('close') }], {
+            cancelable: false,
+        });
+    };
 
     if (props.user.celoInfo.address.length === 0) {
         return (
@@ -391,7 +469,6 @@ function CreateCommunityScreen(props: Props) {
                 <Button
                     mode="text"
                     loading={sending}
-                    disabled={!isSubmitAvailable}
                     onPress={() => submitNewCommunity()}
                 >
                     {i18n.t('submit')}
@@ -426,58 +503,119 @@ function CreateCommunityScreen(props: Props) {
                                             : i18n.t('changeCoverImage')}
                                     </Button>
                                 </ImageBackground>
-                                <ValidatedTextInput
-                                    label={i18n.t('communityName')}
-                                    marginBox={16}
-                                    value={name}
-                                    maxLength={32}
-                                    required
-                                    setValid={setIsNameValid}
-                                    onChangeText={(value) => setName(value)}
-                                />
+                                {!isCoverImageValid && (
+                                    <HelperText type="error" visible={true}>
+                                        Cover image is required!
+                                    </HelperText>
+                                )}
+                                <View style={{ margin: 16 }}>
+                                    <TextInput
+                                        mode="flat"
+                                        underlineColor="transparent"
+                                        style={styles.inputTextField}
+                                        label={i18n.t('communityName')}
+                                        value={name}
+                                        maxLength={32}
+                                        onChangeText={(value) => setName(value)}
+                                        onEndEditing={() =>
+                                            setIsNameValid(name.length > 0)
+                                        }
+                                    />
+                                    {!isNameValid && (
+                                        <HelperText type="error" visible={true}>
+                                            Comunity name is required!
+                                        </HelperText>
+                                    )}
+                                </View>
                                 <Divider />
-                                <ValidatedTextInput
-                                    label={i18n.t('shortDescription')}
-                                    marginBox={16}
-                                    value={description}
-                                    maxLength={512}
-                                    required
-                                    setValid={setIsDescriptionValid}
-                                    onChangeText={(value) =>
-                                        setDescription(value)
-                                    }
-                                    multiline
-                                    numberOfLines={6}
-                                />
+                                <View style={{ margin: 16 }}>
+                                    <TextInput
+                                        mode="flat"
+                                        underlineColor="transparent"
+                                        style={styles.inputTextField}
+                                        label={i18n.t('shortDescription')}
+                                        value={description}
+                                        maxLength={512}
+                                        onChangeText={(value) =>
+                                            setDescription(value)
+                                        }
+                                        onEndEditing={() =>
+                                            setIsDescriptionValid(
+                                                description.length > 0
+                                            )
+                                        }
+                                        multiline
+                                        numberOfLines={6}
+                                    />
+                                    {!isDescriptionValid && (
+                                        <HelperText type="error" visible={true}>
+                                            Comunity description is required!
+                                        </HelperText>
+                                    )}
+                                </View>
                                 <Divider />
-                                <ValidatedTextInput
-                                    label={i18n.t('city')}
-                                    marginBox={16}
-                                    value={city}
-                                    maxLength={32}
-                                    required
-                                    setValid={setIsCityValid}
-                                    onChangeText={(value) => setCity(value)}
-                                />
+                                <View style={{ margin: 16 }}>
+                                    <TextInput
+                                        mode="flat"
+                                        underlineColor="transparent"
+                                        style={styles.inputTextField}
+                                        label={i18n.t('city')}
+                                        value={city}
+                                        maxLength={32}
+                                        onChangeText={(value) => setCity(value)}
+                                        onEndEditing={() =>
+                                            setIsCityValid(city.length > 0)
+                                        }
+                                    />
+                                    {!isCityValid && (
+                                        <HelperText type="error" visible={true}>
+                                            City is required!
+                                        </HelperText>
+                                    )}
+                                </View>
                                 <Divider />
-                                <ValidatedTextInput
-                                    label={i18n.t('country')}
-                                    marginBox={16}
-                                    value={country}
-                                    maxLength={32}
-                                    required
-                                    setValid={setIsCountryValid}
-                                    onChangeText={(value) => setCountry(value)}
-                                />
+                                <View style={{ margin: 16 }}>
+                                    <TextInput
+                                        mode="flat"
+                                        underlineColor="transparent"
+                                        style={styles.inputTextField}
+                                        label={i18n.t('country')}
+                                        value={country}
+                                        maxLength={32}
+                                        onChangeText={(value) =>
+                                            setCountry(value)
+                                        }
+                                        onEndEditing={() =>
+                                            setIsCountryValid(
+                                                country.length > 0
+                                            )
+                                        }
+                                    />
+                                    {!isCountryValid && (
+                                        <HelperText type="error" visible={true}>
+                                            City is required!
+                                        </HelperText>
+                                    )}
+                                </View>
                                 {gpsLocation === undefined && (
-                                    <Button
-                                        mode="outlined"
-                                        style={{ marginHorizontal: 16 }}
-                                        onPress={() => enableGPSLocation()}
-                                        loading={isEnablingGPS}
-                                    >
-                                        {i18n.t('getGPSLocation')}
-                                    </Button>
+                                    <View>
+                                        <Button
+                                            mode="outlined"
+                                            style={{ marginHorizontal: 16 }}
+                                            onPress={() => enableGPSLocation()}
+                                            loading={isEnablingGPS}
+                                        >
+                                            {i18n.t('getGPSLocation')}
+                                        </Button>
+                                        {!isEnabledGPS && (
+                                            <HelperText
+                                                type="error"
+                                                visible={true}
+                                            >
+                                                Enabling GPS is required!
+                                            </HelperText>
+                                        )}
+                                    </View>
                                 )}
                                 {gpsLocation !== undefined && (
                                     <Button
@@ -489,20 +627,30 @@ function CreateCommunityScreen(props: Props) {
                                         {i18n.t('validCoordinates')}
                                     </Button>
                                 )}
-                                <ValidatedTextInput
-                                    label={i18n.t('email')}
-                                    marginBox={16}
-                                    value={email}
-                                    maxLength={32}
-                                    required
-                                    keyboardType="email-address"
-                                    isValid={isEmailValid}
-                                    whenEndEditing={(e) =>
-                                        // TODO: register error to log system
-                                        setIsEmailValid(validateEmail(email))
-                                    }
-                                    onChangeText={(value) => setEmail(value)}
-                                />
+                                <View style={{ margin: 16 }}>
+                                    <TextInput
+                                        mode="flat"
+                                        underlineColor="transparent"
+                                        style={styles.inputTextField}
+                                        label={i18n.t('email')}
+                                        value={email}
+                                        maxLength={64}
+                                        keyboardType="email-address"
+                                        onChangeText={(value) =>
+                                            setEmail(value)
+                                        }
+                                        onEndEditing={() =>
+                                            setIsEmailValid(
+                                                validateEmail(email)
+                                            )
+                                        }
+                                    />
+                                    {!isEmailValid && (
+                                        <HelperText type="error" visible={true}>
+                                            Email address is invalid!
+                                        </HelperText>
+                                    )}
+                                </View>
                             </View>
                         </Card.Content>
                     </Card>
@@ -511,18 +659,42 @@ function CreateCommunityScreen(props: Props) {
                     </Headline>
                     <View style={{ marginBottom: 15 }}>
                         <View>
-                            <ValidatedTextInput
-                                label={i18n.t('claimAmount')}
-                                placeholder="$0"
-                                marginBox={10}
-                                keyboardType="numeric"
-                                value={claimAmount}
-                                required
-                                setValid={setIsClaimAmountValid}
-                                onChangeText={(value) =>
-                                    setClaimAmount(value.replace(',', '.'))
-                                }
-                            />
+                            <View style={{ margin: 10 }}>
+                                <TextInput
+                                    mode="flat"
+                                    underlineColor="transparent"
+                                    style={styles.inputTextField}
+                                    label={i18n.t('claimAmount')}
+                                    placeholder="$0"
+                                    value={claimAmount}
+                                    keyboardType="numeric"
+                                    onChangeText={(value) =>
+                                        setClaimAmount(value.replace(',', '.'))
+                                    }
+                                    onEndEditing={() =>
+                                        setIsClaimAmountValid(
+                                            claimAmount.length > 0
+                                        )
+                                    }
+                                />
+                                {!isClaimAmountValid && (
+                                    <HelperText type="error" visible={true}>
+                                        Claim amount is required!
+                                    </HelperText>
+                                )}
+                            </View>
+                            {claimAmount.length === 0 && (
+                                <IconButton
+                                    style={{
+                                        position: 'absolute',
+                                        top: 30,
+                                        right: 0,
+                                    }}
+                                    icon="help-circle-outline"
+                                    size={20}
+                                    onPress={() => openHelp('claimAmount')}
+                                />
+                            )}
                             {claimAmount.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
@@ -545,18 +717,42 @@ function CreateCommunityScreen(props: Props) {
                         </View>
                         <Divider />
                         <View>
-                            <ValidatedTextInput
-                                label={i18n.t('totalClaimPerBeneficiary')}
-                                placeholder="$0"
-                                marginBox={10}
-                                keyboardType="numeric"
-                                value={maxClaim}
-                                required
-                                setValid={setIsMaxClaimValid}
-                                onChangeText={(value) =>
-                                    setMaxClaim(value.replace(',', '.'))
-                                }
-                            />
+                            <View style={{ margin: 10 }}>
+                                <TextInput
+                                    mode="flat"
+                                    underlineColor="transparent"
+                                    style={styles.inputTextField}
+                                    label={i18n.t('totalClaimPerBeneficiary')}
+                                    placeholder="$0"
+                                    value={maxClaim}
+                                    keyboardType="numeric"
+                                    onChangeText={(value) =>
+                                        setMaxClaim(value.replace(',', '.'))
+                                    }
+                                    onEndEditing={() =>
+                                        setIsMaxClaimValid(maxClaim.length > 0)
+                                    }
+                                />
+                                {!isMaxClaimValid && (
+                                    <HelperText type="error" visible={true}>
+                                        Max claim amount is required!
+                                    </HelperText>
+                                )}
+                            </View>
+                            {maxClaim.length === 0 && (
+                                <IconButton
+                                    style={{
+                                        position: 'absolute',
+                                        top: 30,
+                                        right: 0,
+                                    }}
+                                    icon="help-circle-outline"
+                                    size={20}
+                                    onPress={() =>
+                                        openHelp('totalClaimPerBeneficiary')
+                                    }
+                                />
+                            )}
                             {maxClaim.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
@@ -581,48 +777,76 @@ function CreateCommunityScreen(props: Props) {
                         <Paragraph style={styles.inputTextFieldLabel}>
                             {i18n.t('frequency')}
                         </Paragraph>
-                        <Button
-                            mode="contained"
+                        <View
                             style={{
-                                borderRadius: 6,
-                                margin: 10,
-                                backgroundColor: 'rgba(206,212,218,0.27)',
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignSelf: 'center',
                             }}
-                            onPress={() => setIsDialogFrequencyOpen(true)}
                         >
-                            <Text style={{ color: 'black', opacity: 1 }}>
-                                {baseInterval === '86400' ? i18n.t('daily') : i18n.t('weekly')}
-                            </Text>
-                        </Button>
-                        {/* <View style={styles.pickerBorder}>
-                            <Picker
-                                selectedValue={baseInterval}
-                                style={styles.picker}
-                                onValueChange={(value) =>
-                                    setBaseInterval(value)
-                                }
+                            <Button
+                                mode="contained"
+                                style={{
+                                    width: '80%',
+                                    borderRadius: 6,
+                                    margin: 10,
+                                    backgroundColor: 'rgba(206,212,218,0.27)',
+                                }}
+                                onPress={() => setIsDialogFrequencyOpen(true)}
                             >
-                                <Picker.Item
-                                    label={i18n.t('daily')}
-                                    value="86400"
+                                <Text style={{ color: 'black', opacity: 1 }}>
+                                    {baseInterval === '86400'
+                                        ? i18n.t('daily')
+                                        : i18n.t('weekly')}
+                                </Text>
+                            </Button>
+                            <IconButton
+                                style={{ marginTop: 10 }}
+                                icon="help-circle-outline"
+                                size={20}
+                                onPress={() => openHelp('frequency')}
+                            />
+                        </View>
+                        <View>
+                            <View style={{ margin: 10 }}>
+                                <TextInput
+                                    mode="flat"
+                                    underlineColor="transparent"
+                                    style={styles.inputTextField}
+                                    label={i18n.t('timeIncrementAfterClaim')}
+                                    placeholder="$0"
+                                    value={incrementInterval}
+                                    keyboardType="numeric"
+                                    onChangeText={(value) =>
+                                        setIncrementalInterval(value)
+                                    }
+                                    onEndEditing={() =>
+                                        setIsIncrementalIntervalValid(
+                                            incrementInterval.length > 0
+                                        )
+                                    }
                                 />
-                                <Picker.Item
-                                    label={i18n.t('weekly')}
-                                    value="604800"
+                                {!isIncrementalIntervalValid && (
+                                    <HelperText type="error" visible={true}>
+                                        Incremental interval is required!
+                                    </HelperText>
+                                )}
+                            </View>
+                            {incrementInterval.length === 0 && (
+                                <IconButton
+                                    style={{
+                                        position: 'absolute',
+                                        top: 30,
+                                        right: 0,
+                                    }}
+                                    icon="help-circle-outline"
+                                    size={20}
+                                    onPress={() =>
+                                        openHelp('timeIncrementAfterClaim')
+                                    }
                                 />
-                            </Picker>
-                        </View> */}
-                        <ValidatedTextInput
-                            label={i18n.t('timeIncrementAfterClaim')}
-                            marginBox={10}
-                            keyboardType="numeric"
-                            value={incrementInterval}
-                            required
-                            setValid={setIsIncrementalIntervalValid}
-                            onChangeText={(value) =>
-                                setIncrementalInterval(value)
-                            }
-                        />
+                            )}
+                        </View>
                         <Divider />
                         {/* <Paragraph style={styles.inputTextFieldLabel}>
                             {i18n.t('visibility')}
@@ -665,8 +889,14 @@ function CreateCommunityScreen(props: Props) {
                             }}
                             value={baseInterval}
                         >
-                            <RadioButton.Item label={i18n.t('daily')} value="86400" />
-                            <RadioButton.Item label={i18n.t('weekly')} value="604800" />
+                            <RadioButton.Item
+                                label={i18n.t('daily')}
+                                value="86400"
+                            />
+                            <RadioButton.Item
+                                label={i18n.t('weekly')}
+                                value="604800"
+                            />
                         </RadioButton.Group>
                     </Dialog.Content>
                 </Dialog>
@@ -687,12 +917,9 @@ const styles = StyleSheet.create({
         fontFamily: 'Gelion-Regular',
     },
     inputTextField: {
-        padding: 10,
-        marginVertical: 5,
-        borderStyle: 'solid',
-        borderColor: 'grey',
-        borderWidth: 1,
-        borderRadius: 5,
+        fontFamily: 'Gelion-Regular',
+        backgroundColor: 'transparent',
+        paddingHorizontal: 0,
     },
     container: {
         margin: 20,
