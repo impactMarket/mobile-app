@@ -10,6 +10,8 @@ import {
     resetNetworkContractsApp,
     setUserInfo,
     setUserExchangeRate,
+    setUserIsBeneficiary,
+    setUserIsCommunityManager,
 } from 'helpers/redux/actions/ReduxActions';
 import { IRootState, STORAGE_USER_FIRST_TIME } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
@@ -25,7 +27,7 @@ import {
     RadioButton,
     Text,
 } from 'react-native-paper';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
 
 interface IEditProfileProps {
@@ -40,8 +42,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & IEditProfileProps;
 
 function EditProfile(props: Props) {
+    const store = useStore();
     const navigation = useNavigation();
     const [name, setName] = useState('');
+    const [logingOut, setLogingOut] = useState(false);
     const [currency, setCurrency] = useState('usd');
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
 
@@ -51,11 +55,26 @@ function EditProfile(props: Props) {
     }, []);
 
     const handleLogout = async () => {
+        setLogingOut(true);
         await AsyncStorage.clear();
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-        props.dispatch(resetUserApp());
-        props.dispatch(resetNetworkContractsApp());
-        navigation.goBack();
+        const unsubscribe = store.subscribe(() => {
+            const state = store.getState();
+            if (
+                state.user.celoInfo.address.length > 0 &&
+                !state.user.community.isBeneficiary &&
+                !state.user.community.isManager
+            ) {
+                unsubscribe();
+                setLogingOut(false);
+                navigation.goBack();
+                navigation.navigate(i18n.t('communities'));
+            }
+        });
+        store.dispatch(setUserIsBeneficiary(false));
+        store.dispatch(setUserIsCommunityManager(false));
+        store.dispatch(resetUserApp());
+        store.dispatch(resetNetworkContractsApp());
     };
 
     const handleChangeCurrency = async (text: string) => {
@@ -135,6 +154,8 @@ function EditProfile(props: Props) {
                         mode="contained"
                         style={{ marginVertical: 20 }}
                         onPress={handleLogout}
+                        loading={logingOut}
+                        disabled={logingOut}
                     >
                         {i18n.t('logout')}
                     </Button>

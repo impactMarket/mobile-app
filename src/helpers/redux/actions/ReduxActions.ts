@@ -69,7 +69,7 @@ export function setUserIsCommunityManager(
     };
 }
 
-export function setCeloKit(kit: ContractKit): NetworkActionTypes {
+export function setCeloKit(kit: ContractKit): AppActionTypes {
     return {
         type: SET_CELO_KIT,
         payload: kit,

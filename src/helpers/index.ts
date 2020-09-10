@@ -137,13 +137,15 @@ export async function loadContracts(
     if (isBeneficiary !== undefined) {
         store.dispatch(setUserIsBeneficiary(true));
         fSetCommunity(isBeneficiary);
-        return;
+        return 1;
     }
     const isManager = await Api.findComunityToManager(address);
     if (isManager !== undefined) {
         store.dispatch(setUserIsCommunityManager(true));
         fSetCommunity(isManager);
+        return 0;
     }
+    return 1;
 }
 
 export async function updateCommunityInfo(address: string, store: any) {

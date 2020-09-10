@@ -55,6 +55,7 @@ function Tabs(props: Props) {
 
     const tabsToUser = () => {
         const user = props.user;
+        // console.log('user.community', user.community)
         if (user.community.isBeneficiary) {
             return (
                 <Tab.Screen

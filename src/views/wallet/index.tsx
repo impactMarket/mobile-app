@@ -15,10 +15,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect, ConnectedProps } from 'react-redux';
 
 import RecentTx, { IRecentTxRef } from './RecentTx';
+import BigNumber from 'bignumber.js';
+import { setUserWalletBalance } from 'helpers/redux/actions/ReduxActions';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -30,6 +32,15 @@ function WalletScreen(props: Props) {
     const recentPaymentsRef = React.createRef<IRecentTxRef>();
 
     const onRefresh = () => {
+        const updateBalance = async () => {
+            const stableToken = await props.app.kit.contracts.getStableToken();
+            const cUSDBalanceBig = await stableToken.balanceOf(
+                props.user.celoInfo.address
+            );
+            const balance = new BigNumber(cUSDBalanceBig.toString());
+            props.dispatch(setUserWalletBalance(balance.toString()));
+        };
+        updateBalance();
         recentPaymentsRef.current?.updateRecentTx();
         setRefreshing(false);
     };

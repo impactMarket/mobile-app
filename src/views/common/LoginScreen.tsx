@@ -18,9 +18,7 @@ import {
 } from 'helpers/types';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, AsyncStorage, Alert } from 'react-native';
-import {
-    Button,
-} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { ConnectedProps, connect, useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';
@@ -65,7 +63,10 @@ function LoginScreen(props: Props) {
 
         const dappkitResponse = await waitForAccountAuth(requestId);
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
-        const authToken = await Api.userAuth(userAddress, Device.osInternalBuildId!);
+        const authToken = await Api.userAuth(
+            userAddress,
+            Device.osInternalBuildId!
+        );
         if (authToken === undefined) {
             Alert.alert(
                 i18n.t('failure'),
@@ -79,13 +80,6 @@ function LoginScreen(props: Props) {
         try {
             const cUSDBalance = await getCurrentUserBalance(userAddress);
             //
-            const unsubscribe = store.subscribe(() => {
-                if (store.getState().user.celoInfo.address.length > 0) {
-                    setConnecting(false);
-                    navigation.goBack();
-                    unsubscribe();
-                }
-            });
             await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, authToken);
             await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
             await AsyncStorage.setItem(
@@ -93,7 +87,22 @@ function LoginScreen(props: Props) {
                 dappkitResponse.phoneNumber
             );
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-            await loadContracts(userAddress, props.app.kit, props);
+            const is = await loadContracts(userAddress, props.app.kit, props);
+            const unsubscribe = store.subscribe(() => {
+                const state = store.getState();
+                if (state.user.celoInfo.address.length > 0) {
+                    unsubscribe();
+                    setConnecting(false);
+                    navigation.goBack();
+                    if(is === 1) {
+                        navigation.navigate(i18n.t('claim'));
+                    } else if(is === 0) {
+                        navigation.navigate(i18n.t('manage'));
+                    } else {
+                        navigation.navigate(i18n.t('communities'));
+                    }
+                }
+            });
             props.dispatch(
                 setUserCeloInfo({
                     address: userAddress,
