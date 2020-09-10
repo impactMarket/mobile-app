@@ -39,35 +39,33 @@ function BeneficiaryView(props: Props) {
 
     useEffect(() => {
         const loadCommunity = async () => {
-            if (props.network.contracts.communityContract === undefined) {
-                return;
-            }
-            const { _address } = props.network.contracts.communityContract;
-            const _community = await Api.getCommunityByContractAddress(
-                _address
-            );
-            if (_community === undefined) {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorWhileLoadingRestart'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
+            if (props.network.contracts.communityContract !== undefined && props.user.celoInfo.address.length > 0) {
+                const { _address } = props.network.contracts.communityContract;
+                const _community = await Api.getCommunityByContractAddress(
+                    _address
                 );
-                return;
+                if (_community === undefined) {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('errorWhileLoadingRestart'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                } else {
+                    const amount = await props.network.contracts.communityContract.methods
+                        .claimed(props.user.celoInfo.address)
+                        .call();
+                    const progress = new BigNumber(amount.toString()).div(
+                        _community.vars._maxClaim
+                    );
+                    setClaimedAmount(humanifyNumber(amount.toString()));
+                    setClaimedProgress(progress.toNumber());
+                    setCommunity(_community);
+                }
             }
-            const amount = await props.network.contracts.communityContract.methods
-                .claimed(props.user.celoInfo.address)
-                .call();
-
-            const progress = new BigNumber(amount.toString()).div(
-                _community.vars._maxClaim
-            );
-            setClaimedAmount(humanifyNumber(amount.toString()));
-            setClaimedProgress(progress.toNumber());
-            setCommunity(_community);
         };
         loadCommunity();
-    }, [props.network.contracts.communityContract]);
+    }, [props.network.contracts.communityContract, props.user.celoInfo.address]);
 
     const onRefresh = () => {
         Api.getCommunityByContractAddress(

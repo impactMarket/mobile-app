@@ -20,8 +20,8 @@ import { celoWalletRequest } from 'services/celoWallet';
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 
 const connector = connect(mapStateToProps);
@@ -66,7 +66,7 @@ class Claim extends React.Component<Props, IClaimState> {
     };
 
     handleClaimPress = async () => {
-        const { user, network } = this.props;
+        const { user, network, app } = this.props;
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
 
@@ -76,7 +76,7 @@ class Claim extends React.Component<Props, IClaimState> {
             communityContract.options.address,
             await communityContract.methods.claim(),
             'beneficiaryclaim',
-            network
+            app.kit
         ).then(async () => {
             let loc: Location.LocationData | undefined = undefined;
             const availableGPSToRequest =
