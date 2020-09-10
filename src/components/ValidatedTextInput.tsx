@@ -7,12 +7,14 @@ import {
     TextInputEndEditingEventData,
     View,
 } from 'react-native';
-import { Paragraph, TextInput } from 'react-native-paper';
+import { Paragraph, TextInput, HelperText } from 'react-native-paper';
 
 interface IStyledTextInputProps extends TextInputProperties {
     label: string;
     required?: boolean;
     isValid?: boolean;
+    errorMessage?: string;
+    validation?: () => boolean;
     setValid?: (valid: boolean) => void;
     whenEndEditing?: (
         e: NativeSyntheticEvent<TextInputEndEditingEventData>
@@ -66,9 +68,9 @@ export default class ValidatedTextInput extends Component<
                     ((this.props.isValid !== undefined
                         ? !this.props.isValid
                         : false) && (
-                        <Paragraph style={styles.inputTextNotValid}>
-                            Not Valid!
-                        </Paragraph>
+                        <HelperText type="error" visible={this.props.validation}>
+                            {this.props.errorMessage}
+                        </HelperText>
                     ))}
             </View>
         );
