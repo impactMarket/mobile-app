@@ -144,11 +144,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <Card elevation={8}>
                         <Card.Content>
                             <Paragraph>{description}</Paragraph>
-                            <Button
+                            {community.description.indexOf('\n') !== -1 && <Button
                                 mode="contained"
-                                disabled={
-                                    community.description.indexOf('\n') === -1
-                                }
                                 onPress={() =>
                                     setSeeFullDescription(!seeFullDescription)
                                 }
@@ -156,7 +153,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 {seeFullDescription
                                     ? i18n.t('seeLess')
                                     : i18n.t('seeMore')}
-                            </Button>
+                            </Button>}
                         </Card.Content>
                     </Card>
                     <Card elevation={8} style={{ marginVertical: 25 }}>

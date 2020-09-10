@@ -7,11 +7,7 @@ import {
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    Clipboard,
-    Alert,
-} from 'react-native';
+import { StyleSheet, Clipboard, Alert } from 'react-native';
 import {
     Button,
     Dialog,
@@ -19,6 +15,7 @@ import {
     Portal,
     TextInput,
     Snackbar,
+    Text,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -118,10 +115,7 @@ class Donate extends Component<Props, IDonateState> {
     handleCopyAddressToClipboard = () => {
         Clipboard.setString(this.props.community.contractAddress);
         this.setState({ showCopiedToClipboard: true });
-        setTimeout(
-            () => this.setState({ showCopiedToClipboard: false }),
-            5000
-        );
+        setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);
         this.setState({ openModalDonate: false });
     };
 
@@ -142,7 +136,7 @@ class Donate extends Component<Props, IDonateState> {
                     style={styles.donate}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
-                    {i18n.t('donate')}
+                    <Text style={{ fontSize: 20, color: 'white' }}>{i18n.t('donate')}</Text>
                 </Button>
                 <Snackbar
                     visible={showCopiedToClipboard}
@@ -255,6 +249,7 @@ const styles = StyleSheet.create({
     donate: {
         borderRadius: 0,
         backgroundColor: iptcColors.greenishTeal,
+        height: '7%',
     },
 });
 

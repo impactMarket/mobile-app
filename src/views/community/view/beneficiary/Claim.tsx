@@ -113,7 +113,10 @@ class Claim extends React.Component<Props, IClaimState> {
                     <Text style={styles.mainPageContent}>
                         {i18n.t('youCanClaimXin', {
                             symbol: getUserCurrencySymbol(this.props.user.user),
-                            amount: humanifyNumber(this.props.claimAmount),
+                            amount: amountToUserCurrency(
+                                this.props.claimAmount,
+                                this.props.user.user
+                            ),
                         })}
                     </Text>
                     <Text style={styles.claimCountDown}>
