@@ -242,7 +242,7 @@ i18n.translations = {
         daily: 'Diariamente',
         weekly: 'Semanalmente',
         timeIncrementAfterClaim:
-            'Incremento de tempo após cada pedido (em minutos)',
+            'Tempo adicional após cada pedido (em minutos)',
         visibility: 'Visibilidade',
         public: 'Publico',
         private: 'Privado',

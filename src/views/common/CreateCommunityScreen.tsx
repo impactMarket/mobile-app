@@ -623,8 +623,8 @@ function CreateCommunityScreen(props: Props) {
                                 setIncrementalInterval(value)
                             }
                         />
-                        {/* <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>
+                        <Divider />
+                        {/* <Paragraph style={styles.inputTextFieldLabel}>
                             {i18n.t('visibility')}
                         </Paragraph>
                         <View style={styles.pickerBorder}>
