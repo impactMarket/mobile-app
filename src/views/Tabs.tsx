@@ -53,15 +53,17 @@ function Tabs(props: Props) {
         }
     };
 
+    const iconExtraSize = 8;
     const tabsToUser = () => {
         const user = props.user;
         // console.log('user.community', user.community)
         if (user.community.isBeneficiary) {
             return (
                 <Tab.Screen
-                    name={i18n.t('claim')}
+                    name="claim"
                     component={BeneficiaryView}
                     options={{
+                        title: i18n.t('claim'),
                         tabBarIcon: (props: ITabBarIconProps) => (
                             <Image
                                 source={selectTabBarIcon(
@@ -69,8 +71,8 @@ function Tabs(props: Props) {
                                     'claim'
                                 )}
                                 style={{
-                                    width: props.size + 2,
-                                    height: props.size - 5,
+                                    width: props.size + 2 + iconExtraSize,
+                                    height: props.size - 5 + iconExtraSize,
                                 }}
                             />
                         ),
@@ -80,9 +82,10 @@ function Tabs(props: Props) {
         } else if (user.community.isManager) {
             return (
                 <Tab.Screen
-                    name={i18n.t('manage')}
+                    name="manage"
                     component={CommunityManagerView}
                     options={{
+                        title: i18n.t('manage'),
                         tabBarIcon: (props: ITabBarIconProps) => (
                             <Image
                                 source={selectTabBarIcon(
@@ -90,8 +93,8 @@ function Tabs(props: Props) {
                                     'manage'
                                 )}
                                 style={{
-                                    width: props.size,
-                                    height: props.size - 5,
+                                    width: props.size + iconExtraSize,
+                                    height: props.size - 5 + iconExtraSize,
                                 }}
                             />
                         ),
@@ -101,9 +104,10 @@ function Tabs(props: Props) {
         }
         return (
             <Tab.Screen
-                name={i18n.t('communities')}
+                name="communities"
                 component={CommunitiesScreen}
                 options={{
+                    title: i18n.t('communities'),
                     tabBarIcon: (props: ITabBarIconProps) => (
                         <Image
                             source={selectTabBarIcon(
@@ -111,8 +115,8 @@ function Tabs(props: Props) {
                                 'communities'
                             )}
                             style={{
-                                width: props.size,
-                                height: props.size - 3,
+                                width: props.size + iconExtraSize,
+                                height: props.size - 3 + iconExtraSize,
                             }}
                         />
                     ),
@@ -122,19 +126,22 @@ function Tabs(props: Props) {
     };
 
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
+        >
             {tabsToUser()}
             {props.user.celoInfo.address.length > 0 && (
                 <Tab.Screen
-                    name={i18n.t('pay')}
+                    name="pay"
                     component={PayScreen}
                     options={{
+                        title: i18n.t('pay'),
                         tabBarIcon: (props: ITabBarIconProps) => (
                             <Image
                                 source={selectTabBarIcon(props.focused, 'pay')}
                                 style={{
-                                    width: props.size + 3,
-                                    height: props.size + 3,
+                                    width: props.size + 7 + iconExtraSize,
+                                    height: props.size + 7 + iconExtraSize,
                                 }}
                             />
                         ),
@@ -142,15 +149,16 @@ function Tabs(props: Props) {
                 />
             )}
             <Tab.Screen
-                name={i18n.t('wallet')}
+                name="wallet"
                 component={WalletScreen}
                 options={{
+                    title: i18n.t('wallet'),
                     tabBarIcon: (props: ITabBarIconProps) => (
                         <Image
                             source={selectTabBarIcon(props.focused, 'wallet')}
                             style={{
-                                width: props.size - 5,
-                                height: props.size - 5,
+                                width: props.size - 5 + iconExtraSize,
+                                height: props.size - 5 + iconExtraSize,
                             }}
                         />
                     ),
