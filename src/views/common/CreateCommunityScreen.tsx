@@ -197,7 +197,7 @@ function CreateCommunityScreen(props: Props) {
         if (!isSubmitAvailable) {
             return;
         }
-        if (new BigNumber(maxClaim).lt(claimAmount)) {
+        if (new BigNumber(maxClaim).lte(claimAmount)) {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('claimBiggerThanMax'),
