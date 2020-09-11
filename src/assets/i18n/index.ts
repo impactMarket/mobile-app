@@ -93,7 +93,8 @@ i18n.translations = {
         success: 'Success',
         requestNewCommunityPlaced:
             'Your request to create a new community was placed!',
-        claimBiggerThanMax: 'Claim Amount should not be bigger than Total claim amount per beneficiary!',
+        claimBiggerThanMax:
+            'Claim Amount should not be bigger than Total claim amount per beneficiary!',
         claimNotZero: 'Claim Amount should not be zero!',
         maxNotZero: 'Total claim amount should not be zero!',
         communityUpdated: 'Your community was updated!',
@@ -111,8 +112,7 @@ i18n.translations = {
         step1: 'Step 1',
         downloadCeloApp: 'Download Valora app',
         step2: 'Step 2',
-        installCeloCreateAccount:
-            'Install Valora and create an account',
+        installCeloCreateAccount: 'Install Valora and create an account',
         finalStep: 'Final Step',
         connectCeloWallet: 'Connect with Valora',
         notNow: 'Not now',
@@ -123,7 +123,7 @@ i18n.translations = {
         yourQRCode: 'Your QR Code',
         scanToPay: 'Scan to Pay',
         showQRToScan: 'Show QR to be scanned',
-        youHaveDonated: "Thank you for your donation!",
+        youHaveDonated: 'Thank you for your donation!',
         errorDonating: 'An error happened while donating!',
         addressCopiedClipboard: 'Community address copied to clipboard!',
         donate: 'Donate $cUSD',
@@ -264,7 +264,8 @@ i18n.translations = {
         hourly: 'Por Hora',
         daily: 'Diariamente',
         weekly: 'Semanalmente',
-        timeIncrementAfterClaim: 'Tempo adicional após cada pedido (minutos)',
+        timeIncrementAfterClaim:
+            'Incremento de tempo após cada pedido (em minutos)',
         visibility: 'Visibilidade',
         public: 'Publico',
         private: 'Privado',
@@ -307,8 +308,7 @@ i18n.translations = {
         showQRToScan: 'Mostrar código QR',
         youHaveDonated: 'Obrigado pelo seu donativo!',
         errorDonating: 'Um erro ocorreu durante o donativo!',
-        addressCopiedClipboard:
-            'Endereço da comunidade copiado!',
+        addressCopiedClipboard: 'Endereço da comunidade copiado!',
         donate: 'Doar $cUSD',
         donatingTo: 'A fazer um donativo para {{communityName}}',
         donateWithCelo: 'Doar com Valora',
@@ -322,8 +322,7 @@ i18n.translations = {
         day: 'dia',
         week: 'semana',
         changePhoto: 'Alterar foto',
-        scanningInvalidAddress:
-            'Esse endereço parece inválido!',
+        scanningInvalidAddress: 'Esse endereço parece inválido!',
         select: 'Selecionar',
         errorGettingGPSLocation: 'Ocorreu um erro ao obter a localização GPS.',
         errorWhileLoadingRestart:
@@ -332,8 +331,7 @@ i18n.translations = {
         errorRemovingBeneficiary:
             'Ocorreu um erro enquanto removia o beneficiário.',
         addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
-        addingInvalidAddress:
-            'Está a tentar adicionar um endereço inválido!',
+        addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
         errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.',
         oneTimeWelcomeMessage1:
             'impactMarket é um sistema de renda básica, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
