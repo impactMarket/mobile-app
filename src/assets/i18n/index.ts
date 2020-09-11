@@ -9,7 +9,7 @@ i18n.translations = {
         testnetWarning:
             "A friendly reminder you're using the Alfajores network build - the balances are not real.",
         pendingApprovalMessage:
-            'This community has not yet been approved. If you have any question please contact us at',
+            'This community is being reviewed. If you have any question please contact us at',
         pendingApproval: 'Pending Approval',
         fullDashboard: 'Full Dashboard',
         editCommunityDetails: 'Edit community details',
@@ -29,7 +29,7 @@ i18n.translations = {
         communities: 'Communities',
         pay: 'Pay',
         wallet: 'Wallet',
-        loginNow: 'Login Now',
+        loginNow: 'Connect with Valora',
         editProfile: 'Edit Profile',
         balance: 'Balance',
         name: 'Name',
@@ -61,10 +61,10 @@ i18n.translations = {
         edit: 'Edit',
         create: 'Create',
         submit: 'Submit',
-        needLoginToCreateCommunity: 'You need to login to create a community.',
+        needLoginToCreateCommunity: 'You need to connect with Valora to create a community.',
         communityDetails: 'Community Details',
         createCommunityDescription:
-            'By creating a new community, you are initiating a mechanism that enables any beneficiary you add to that community to get equal access to a basic income defined by you in this form.',
+            'By creating a new community, you are initiating a new basic income mechanism for your community that enables any its beneficiary to get equal access to claim a recurring amount pre-defined by you in this form.',
         selectCoverImage: 'Select Cover Image',
         changeCoverImage: 'Change Cover Image',
         communityName: 'Community Name',
@@ -104,7 +104,7 @@ i18n.translations = {
             'An error happened while placing the request to create a community!',
         anErroHappenedTryAgain: 'An error happened, please, try again.',
         toContinuePlease: 'To continue please',
-        connectToYourCeloWallet: 'Connect with your Valora app',
+        connectToYourCeloWallet: 'Connect with Valora',
         loginDescription1:
             'impactMarket operates on top of Celo network, an open and global financial platform.',
         loginDescription2:
@@ -126,8 +126,8 @@ i18n.translations = {
         youHaveDonated: 'Thank you for your donation!',
         errorDonating: 'An error happened while donating!',
         addressCopiedClipboard: 'Community address copied to clipboard!',
-        donate: 'Donate $cUSD',
-        donatingTo: 'Donating to {{communityName}}',
+        donate: 'Donate',
+        donatingTo: 'To support {{communityName}}, send only $cUSD (Celo Dollar) to this community contract address.',
         donateWithCelo: 'Donate with Valora',
         amountSymbol: 'Amount ({{symbol}})',
         close: 'Close',
@@ -164,9 +164,9 @@ i18n.translations = {
         notFundsToAddBeneficiary:
             'Your community does not has enough funds! You need at least 5 cents that will be sent to the beneficiary when added.',
         claimExplained1:
-            'Each community has, in a smart contract, a list of beneficiaries addresses that can access UBI and a set of rules decided/governed by their leaders/local charities. These rules could include something like a transaction fee for the contract creator.',
+            'Each community has a group of beneficiaries, added by the coommunity managers, that can access a basic income under a set of rules defined at its creation.',
         claimExplained2:
-            'An initial approach would be, for example, any beneficiary/user in that list can claim $1 cUSD from that smart contract on a recurring basis with an interval of at least 24h before being able to claim another $1 cUSD, up to a cumulative total of $500 cUSD. Every time a beneficiary claims $1 cUSD, 1 hour is added to the interval time of that user, meaning that will have to wait at least 25h after claiming its second $1 cUSD. Local’s user currency should be used/displayed as main currency, based on its value against cUSD.',
+            'For example, any beneficiary in a specific community can claim $1 cUSD from that community contract on a recurring basis with an interval of at least 24h before being able to claim another $1 cUSD, up to a cumulative total of $500 cUSD. Every time a beneficiary claims, the time interval to claim again can increase.',
         claimAmountHelp:
             'This is the UBI amount, is cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
         totalClaimPerBeneficiaryHelp:
@@ -257,9 +257,9 @@ i18n.translations = {
         validCoordinates: 'Coordenadas Validas',
         email: 'Email',
         contractDetails: 'Detalhes do Contrato',
-        claimAmount: 'Valor por Pedido',
+        claimAmount: 'Montante por Pedido',
         aroundValue: '~ {{symbol}}{{amount}}',
-        totalClaimPerBeneficiary: 'Valor total por beneficiário',
+        totalClaimPerBeneficiary: 'Montante total por beneficiário',
         frequency: 'Frequência',
         hourly: 'Por Hora',
         daily: 'Diariamente',
@@ -279,8 +279,8 @@ i18n.translations = {
             'O seu pedido para criar uma nova comunidade foi registado! Validação a decorrer.',
         claimBiggerThanMax:
             'O valor por pedido deve ser inferior ao valor total!',
-        claimNotZero: 'Valor por Pedido deve ser superior a zero!',
-        maxNotZero: 'Valor total por beneficiário deve ser superior a zero!',
+        claimNotZero: 'Montante por Pedido deve ser superior a zero!',
+        maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
         communityUpdated: 'Os dados da comunidade foram atualizados!',
         errorUpdatingCommunity:
             'Ocorreu um erro enquanto atualizava os dados da comunidade!',
@@ -309,8 +309,8 @@ i18n.translations = {
         youHaveDonated: 'Obrigado pelo seu donativo!',
         errorDonating: 'Um erro ocorreu durante o donativo!',
         addressCopiedClipboard: 'Endereço da comunidade copiado!',
-        donate: 'Doar $cUSD',
-        donatingTo: 'A fazer um donativo para {{communityName}}',
+        donate: 'Contribuir',
+        donatingTo: 'Para apoiar a comunidade {{communityName}}, envie apenas $cUSD (Celo Dollar) para este endereço do contrato da comunidade.',
         donateWithCelo: 'Doar com Valora',
         amountSymbol: 'Montante em {{symbol}}',
         close: 'Fechar',
@@ -342,17 +342,17 @@ i18n.translations = {
         notFundsToAddBeneficiary:
             'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
         claimExplained1:
-            'Each community has, in a smart contract, a list of beneficiaries addresses that can access UBI and a set of rules decided/governed by their leaders/local charities. These rules could include something like a transaction fee for the contract creator.',
+            'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras definidas quando criada.',
         claimExplained2:
-            'An initial approach would be, for example, any beneficiary/user in that list can claim $1 cUSD from that smart contract on a recurring basis with an interval of at least 24h before being able to claim another $1 cUSD, up to a cumulative total of $500 cUSD. Every time a beneficiary claims $1 cUSD, 1 hour is added to the interval time of that user, meaning that will have to wait at least 25h after claiming its second $1 cUSD. Local’s user currency should be used/displayed as main currency, based on its value against cUSD.',
+            'Por exemplo, qualquer beneficiário em uma comunidade específica pode reivindicar/pedir $1 cUSD desse contrato comunitário, de forma recorrente, com um intervalo de pelo menos 24 horas antes de poder pedir outro $1 cUSD, até um total acumulado de $500 cUSD. Cada vez que um beneficiário pede $1 cUSD, o intervalo de tempo para pedir novamente pode aumentar.',
         claimAmountHelp:
-            'This is the UBI amount, is cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
+            'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
         totalClaimPerBeneficiaryHelp:
-            'This value is the limit each beneficiary can get in total after several claims. For example, each beneficiary can claim $2/day until it reaches a total of $1,000, meaning that each beneficiary will have access to a UBI ($2/day) for at least 16 months. This time can increase if minutes are added to the Time increment.',
+            'Este montante é o limite que cada beneficiário pode obter no total após várias pedidos. Por exemplo, cada beneficiário pode pedir $2 por dia até atingir um total de $1000, o que significa que cada beneficiário terá acesso a um rendimento mínimo de $2/dia durante pelo menos 16 meses. Este tempo pode aumentar se a opção de incremento de tempo dessa comunidade for superior a zero.',
         frequencyHelp:
-            'Each beneficiary will be able to access a basic income on a regular basis, that can be daily or weekly. For example, if daily, each beneficiary will have to wait at least 1 day (24h) before being able to claim again (more $2).',
+            'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pedir novamente (mais $2).',
         timeIncrementAfterClaimHelp:
-            'It is possible to add a time increment each time a beneficiary claims. For example, in a community where each beneficiary can claim $2/day, 20 minutes can be added to the time that that beneficiary will have to wait before being able to claim again (in this case, 24h20m after claiming for the 2nd time, 24h40m after the 3rd time, and so on). This benefits those who claimed less and incentivizes self-sustainability progress.',
+            'É possível adicionar um incremento de tempo cada vez que um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pedir $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pedir novamente (neste caso, 24h20m após pedir pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
         coverImageRequired: 'Cover image is required!',
         communityNameRequired: 'Comunity name is required!',
         communityDescriptionRequired: 'Comunity description is required!',
