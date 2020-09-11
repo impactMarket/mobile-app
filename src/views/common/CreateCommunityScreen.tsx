@@ -19,7 +19,6 @@ import {
     Alert,
     Text,
     View,
-    Picker,
     ImageBackground,
 } from 'react-native';
 import {
@@ -35,7 +34,7 @@ import {
     TextInput,
     IconButton,
 } from 'react-native-paper';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 
@@ -58,6 +57,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & ICreateCommunityScreen;
 
 function CreateCommunityScreen(props: Props) {
+    const store = useStore();
     const navigation = useNavigation();
 
     const [editing, setEditing] = useState(false);
@@ -136,20 +136,6 @@ function CreateCommunityScreen(props: Props) {
             }
         }
     }, []);
-
-    useEffect(() => {
-        if (props.network.community !== undefined && sending === true) {
-            // wait until community is not undefined!
-            setSending(false);
-            navigation.goBack();
-            Alert.alert(
-                i18n.t('success'),
-                i18n.t('requestNewCommunityPlaced'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-        }
-    }, [props.network.community]);
 
     const submitNewCommunity = async () => {
         const _isCoverImageValid = coverImage.length > 0;
@@ -290,19 +276,33 @@ function CreateCommunityScreen(props: Props) {
                     coverImage
                 );
                 if (!success) {
-                    throw new Error('Some error!');
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('errorCreatingCommunity'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                    return;
                 } else {
+                    const previousCommunity = store.getState().network
+                        .community;
+                    const unsubscribe = store.subscribe(() => {
+                        const newCommunity = store.getState().network.community;
+                        if (previousCommunity !== newCommunity) {
+                            unsubscribe();
+                            navigation.goBack();
+                            Alert.alert(
+                                i18n.t('success'),
+                                i18n.t('communityUpdated'),
+                                [{ text: 'OK' }],
+                                { cancelable: false }
+                            );
+                        }
+                    });
                     await loadContracts(
                         props.user.celoInfo.address,
                         props.app.kit,
                         props
-                    );
-                    navigation.goBack();
-                    Alert.alert(
-                        i18n.t('success'),
-                        i18n.t('communityUpdated'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
                     );
                 }
             } catch (e) {
@@ -362,12 +362,25 @@ function CreateCommunityScreen(props: Props) {
                 }
             ).then((success) => {
                 if (success) {
+                    const unsubscribe = store.subscribe(() => {
+                        const state = store.getState();
+                        if (state.user.community.isManager) {
+                            unsubscribe();
+                            setSending(false);
+                            navigation.goBack();
+                            Alert.alert(
+                                i18n.t('success'),
+                                i18n.t('requestNewCommunityPlaced'),
+                                [{ text: 'OK' }],
+                                { cancelable: false }
+                            );
+                        }
+                    });
                     loadContracts(
                         props.user.celoInfo.address,
                         props.app.kit,
                         props
                     );
-                    // the remaining process is done in useEffect
                 } else {
                     Alert.alert(
                         i18n.t('failure'),
@@ -415,33 +428,12 @@ function CreateCommunityScreen(props: Props) {
     };
 
     const openHelp = (help: string) => {
-        let contentHelp: string = '';
-
-        switch (help) {
-            case 'claimAmount': {
-                contentHelp =
-                    'This is the UBI amount, is cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.';
-                break;
-            }
-            case 'totalClaimPerBeneficiary': {
-                contentHelp =
-                    'Each beneficiary will be able to access a basic income on a regular basis, that can be daily or weekly. For example, if daily, each beneficiary will have to wait at least 1 day (24h) before being able to claim again (more $2).';
-                break;
-            }
-            case 'frequency': {
-                contentHelp =
-                    'This value is the limit each beneficiary can get in total after several claims. For example, each beneficiary can claim $2/day until it reaches a total of $1,000, meaning that each beneficiary will have access to a UBI ($2/day) for at least 16 months. This time can increase if minutes are added to the Time increment.';
-                break;
-            }
-            case 'timeIncrementAfterClaim': {
-                contentHelp =
-                    'It is possible to add a time increment each time a beneficiary claims. For example, in a community where each beneficiary can claim $2/day, 20 minutes can be added to the time that that beneficiary will have to wait before being able to claim again (in this case, 24h20m after claiming for the 2nd time, 24h40m after the 3rd time, and so on). This benefits those who claimed less and incentivizes self-sustainability progress.';
-                break;
-            }
-        }
-        Alert.alert(i18n.t(help), contentHelp, [{ text: i18n.t('close') }], {
-            cancelable: false,
-        });
+        Alert.alert(
+            i18n.t(help),
+            i18n.t(`${help}Help`),
+            [{ text: i18n.t('close') }],
+            { cancelable: false }
+        );
     };
 
     if (props.user.celoInfo.address.length === 0) {
@@ -505,7 +497,7 @@ function CreateCommunityScreen(props: Props) {
                                 </ImageBackground>
                                 {!isCoverImageValid && (
                                     <HelperText type="error" visible={true}>
-                                        Cover image is required!
+                                        {i18n.t('coverImageRequired')}
                                     </HelperText>
                                 )}
                                 <View style={{ margin: 16 }}>
@@ -523,7 +515,7 @@ function CreateCommunityScreen(props: Props) {
                                     />
                                     {!isNameValid && (
                                         <HelperText type="error" visible={true}>
-                                            Comunity name is required!
+                                            {i18n.t('communityNameRequired')}
                                         </HelperText>
                                     )}
                                 </View>
@@ -549,7 +541,9 @@ function CreateCommunityScreen(props: Props) {
                                     />
                                     {!isDescriptionValid && (
                                         <HelperText type="error" visible={true}>
-                                            Comunity description is required!
+                                            {i18n.t(
+                                                'communityDescriptionRequired'
+                                            )}
                                         </HelperText>
                                     )}
                                 </View>
@@ -569,7 +563,7 @@ function CreateCommunityScreen(props: Props) {
                                     />
                                     {!isCityValid && (
                                         <HelperText type="error" visible={true}>
-                                            City is required!
+                                            {i18n.t('cityRequired')}
                                         </HelperText>
                                     )}
                                 </View>
@@ -593,7 +587,7 @@ function CreateCommunityScreen(props: Props) {
                                     />
                                     {!isCountryValid && (
                                         <HelperText type="error" visible={true}>
-                                            City is required!
+                                            {i18n.t('countryRequired')}
                                         </HelperText>
                                     )}
                                 </View>
@@ -612,7 +606,7 @@ function CreateCommunityScreen(props: Props) {
                                                 type="error"
                                                 visible={true}
                                             >
-                                                Enabling GPS is required!
+                                                {i18n.t('enablingGPSRequired')}
                                             </HelperText>
                                         )}
                                     </View>
@@ -647,7 +641,7 @@ function CreateCommunityScreen(props: Props) {
                                     />
                                     {!isEmailValid && (
                                         <HelperText type="error" visible={true}>
-                                            Email address is invalid!
+                                            {i18n.t('emailRequired')}
                                         </HelperText>
                                     )}
                                 </View>
@@ -679,7 +673,7 @@ function CreateCommunityScreen(props: Props) {
                                 />
                                 {!isClaimAmountValid && (
                                     <HelperText type="error" visible={true}>
-                                        Claim amount is required!
+                                        {i18n.t('claimAmountRequired')}
                                     </HelperText>
                                 )}
                             </View>
@@ -735,7 +729,7 @@ function CreateCommunityScreen(props: Props) {
                                 />
                                 {!isMaxClaimValid && (
                                     <HelperText type="error" visible={true}>
-                                        Max claim amount is required!
+                                        {i18n.t('maxClaimAmountRequired')}
                                     </HelperText>
                                 )}
                             </View>
@@ -814,7 +808,6 @@ function CreateCommunityScreen(props: Props) {
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('timeIncrementAfterClaim')}
-                                    placeholder="$0"
                                     value={incrementInterval}
                                     keyboardType="numeric"
                                     onChangeText={(value) =>
@@ -828,7 +821,7 @@ function CreateCommunityScreen(props: Props) {
                                 />
                                 {!isIncrementalIntervalValid && (
                                     <HelperText type="error" visible={true}>
-                                        Incremental interval is required!
+                                        {i18n.t('incrementalIntervalRequired')}
                                     </HelperText>
                                 )}
                             </View>

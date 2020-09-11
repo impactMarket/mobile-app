@@ -163,6 +163,28 @@ i18n.translations = {
         noFunds: 'No Funds',
         notFundsToAddBeneficiary:
             'Your community does not has enough funds! You need at least 5 cents that will be sent to the beneficiary when added.',
+        claimExplained1:
+            'Each community has, in a smart contract, a list of beneficiaries addresses that can access UBI and a set of rules decided/governed by their leaders/local charities. These rules could include something like a transaction fee for the contract creator.',
+        claimExplained2:
+            'An initial approach would be, for example, any beneficiary/user in that list can claim $1 cUSD from that smart contract on a recurring basis with an interval of at least 24h before being able to claim another $1 cUSD, up to a cumulative total of $500 cUSD. Every time a beneficiary claims $1 cUSD, 1 hour is added to the interval time of that user, meaning that will have to wait at least 25h after claiming its second $1 cUSD. Local’s user currency should be used/displayed as main currency, based on its value against cUSD.',
+        claimAmountHelp:
+            'This is the UBI amount, is cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
+        totalClaimPerBeneficiaryHelp:
+            'This value is the limit each beneficiary can get in total after several claims. For example, each beneficiary can claim $2/day until it reaches a total of $1,000, meaning that each beneficiary will have access to a UBI ($2/day) for at least 16 months. This time can increase if minutes are added to the Time increment.',
+        frequencyHelp:
+            'Each beneficiary will be able to access a basic income on a regular basis, that can be daily or weekly. For example, if daily, each beneficiary will have to wait at least 1 day (24h) before being able to claim again (more $2).',
+        timeIncrementAfterClaimHelp:
+            'It is possible to add a time increment each time a beneficiary claims. For example, in a community where each beneficiary can claim $2/day, 20 minutes can be added to the time that that beneficiary will have to wait before being able to claim again (in this case, 24h20m after claiming for the 2nd time, 24h40m after the 3rd time, and so on). This benefits those who claimed less and incentivizes self-sustainability progress.',
+        coverImageRequired: 'Cover image is required!',
+        communityNameRequired: 'Comunity name is required!',
+        communityDescriptionRequired: 'Comunity description is required!',
+        cityRequired: 'City is required!',
+        countryRequired: 'Country is required!',
+        enablingGPSRequired: 'Enabling GPS is required!',
+        emailRequired: 'Email address is invalid!',
+        claimAmountRequired: 'Claim amount is required!',
+        maxClaimAmountRequired: 'Max claim amount is required!',
+        incrementalIntervalRequired: 'Incremental interval is required!',
     },
     pt: {
         testnetWarning:
@@ -198,7 +220,8 @@ i18n.translations = {
         logout: 'Sair',
         recentTransactions: 'Transações Recentes',
         nameAddressPhone: 'Nome, endereço ou número de telemóvel',
-        nameAddressPhoneNotFound: 'Nome, endereço ou número de telemóvel não encontrado.',
+        nameAddressPhoneNotFound:
+            'Nome, endereço ou número de telemóvel não encontrado.',
         noteOptional: 'Nota (opcional)',
         recent: 'Recente',
         remove: 'Remover',
@@ -241,8 +264,7 @@ i18n.translations = {
         hourly: 'Por Hora',
         daily: 'Diariamente',
         weekly: 'Semanalmente',
-        timeIncrementAfterClaim:
-            'Tempo adicional após cada pedido (minutos)',
+        timeIncrementAfterClaim: 'Tempo adicional após cada pedido (minutos)',
         visibility: 'Visibilidade',
         public: 'Publico',
         private: 'Privado',
