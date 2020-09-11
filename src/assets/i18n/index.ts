@@ -29,7 +29,7 @@ i18n.translations = {
         communities: 'Communities',
         pay: 'Pay',
         wallet: 'Wallet',
-        loginNow: 'Login Now',
+        loginNow: 'Connect with Valora',
         editProfile: 'Edit Profile',
         balance: 'Balance',
         name: 'Name',
@@ -61,7 +61,7 @@ i18n.translations = {
         edit: 'Edit',
         create: 'Create',
         submit: 'Submit',
-        needLoginToCreateCommunity: 'You need to login to create a community.',
+        needLoginToCreateCommunity: 'You need to connect with Valora to create a community.',
         communityDetails: 'Community Details',
         createCommunityDescription:
             'By creating a new community, you are initiating a mechanism that enables any beneficiary you add to that community to get equal access to a basic income defined by you in this form.',
@@ -104,7 +104,7 @@ i18n.translations = {
             'An error happened while placing the request to create a community!',
         anErroHappenedTryAgain: 'An error happened, please, try again.',
         toContinuePlease: 'To continue please',
-        connectToYourCeloWallet: 'Connect with your Valora app',
+        connectToYourCeloWallet: 'Connect with Valora',
         loginDescription1:
             'impactMarket operates on top of Celo network, an open and global financial platform.',
         loginDescription2:
@@ -257,9 +257,9 @@ i18n.translations = {
         validCoordinates: 'Coordenadas Validas',
         email: 'Email',
         contractDetails: 'Detalhes do Contrato',
-        claimAmount: 'Valor por Pedido',
+        claimAmount: 'Montante por Pedido',
         aroundValue: '~ {{symbol}}{{amount}}',
-        totalClaimPerBeneficiary: 'Valor total por beneficiário',
+        totalClaimPerBeneficiary: 'Montante total por beneficiário',
         frequency: 'Frequência',
         hourly: 'Por Hora',
         daily: 'Diariamente',
@@ -279,8 +279,8 @@ i18n.translations = {
             'O seu pedido para criar uma nova comunidade foi registado! Validação a decorrer.',
         claimBiggerThanMax:
             'O valor por pedido deve ser inferior ao valor total!',
-        claimNotZero: 'Valor por Pedido deve ser superior a zero!',
-        maxNotZero: 'Valor total por beneficiário deve ser superior a zero!',
+        claimNotZero: 'Montante por Pedido deve ser superior a zero!',
+        maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
         communityUpdated: 'Os dados da comunidade foram atualizados!',
         errorUpdatingCommunity:
             'Ocorreu um erro enquanto atualizava os dados da comunidade!',
