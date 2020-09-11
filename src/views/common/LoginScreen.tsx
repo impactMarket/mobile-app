@@ -95,11 +95,11 @@ function LoginScreen(props: Props) {
                     setConnecting(false);
                     navigation.goBack();
                     if (is === 1) {
-                        navigation.navigate(i18n.t('claim'));
+                        navigation.navigate('claim');
                     } else if (is === 0) {
-                        navigation.navigate(i18n.t('manage'));
+                        navigation.navigate('manage');
                     } else {
-                        navigation.navigate(i18n.t('communities'));
+                        navigation.navigate('communities');
                     }
                 }
             });

@@ -158,7 +158,7 @@ export async function loadContracts(
         fSetCommunity(isManager);
         return 0;
     }
-    return 1;
+    return -1;
 }
 
 export async function updateCommunityInfo(address: string, store: any) {

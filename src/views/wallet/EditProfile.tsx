@@ -68,7 +68,7 @@ function EditProfile(props: Props) {
                 unsubscribe();
                 setLogingOut(false);
                 navigation.goBack();
-                navigation.navigate(i18n.t('communities'));
+                navigation.navigate('communities');
             }
         });
         store.dispatch(setUserIsBeneficiary(false));
