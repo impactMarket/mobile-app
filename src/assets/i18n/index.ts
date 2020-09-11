@@ -9,7 +9,7 @@ i18n.translations = {
         testnetWarning:
             "A friendly reminder you're using the Alfajores network build - the balances are not real.",
         pendingApprovalMessage:
-            'This community has not yet been approved. If you have any question please contact us at',
+            'This community is being reviewed. If you have any question please contact us at',
         pendingApproval: 'Pending Approval',
         fullDashboard: 'Full Dashboard',
         editCommunityDetails: 'Edit community details',
@@ -64,7 +64,7 @@ i18n.translations = {
         needLoginToCreateCommunity: 'You need to connect with Valora to create a community.',
         communityDetails: 'Community Details',
         createCommunityDescription:
-            'By creating a new community, you are initiating a mechanism that enables any beneficiary you add to that community to get equal access to a basic income defined by you in this form.',
+            'By creating a new community, you are initiating a new basic income mechanism for your community that enables any its beneficiary to get equal access to claim a recurring amount pre-defined by you in this form.',
         selectCoverImage: 'Select Cover Image',
         changeCoverImage: 'Change Cover Image',
         communityName: 'Community Name',
@@ -126,7 +126,7 @@ i18n.translations = {
         youHaveDonated: 'Thank you for your donation!',
         errorDonating: 'An error happened while donating!',
         addressCopiedClipboard: 'Community address copied to clipboard!',
-        donate: 'Donate $cUSD',
+        donate: 'Donate',
         donatingTo: 'To support {{communityName}}, send only $cUSD (Celo Dollar) to this community contract address.',
         donateWithCelo: 'Donate with Valora',
         amountSymbol: 'Amount ({{symbol}})',
@@ -309,7 +309,7 @@ i18n.translations = {
         youHaveDonated: 'Obrigado pelo seu donativo!',
         errorDonating: 'Um erro ocorreu durante o donativo!',
         addressCopiedClipboard: 'Endereço da comunidade copiado!',
-        donate: 'Doar $cUSD',
+        donate: 'Contribuir',
         donatingTo: 'Para apoiar a comunidade {{communityName}}, envie apenas $cUSD (Celo Dollar) para este endereço do contrato da comunidade.',
         donateWithCelo: 'Doar com Valora',
         amountSymbol: 'Montante em {{symbol}}',
