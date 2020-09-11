@@ -22,8 +22,8 @@ interface IAddedScreenProps {
     };
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -47,7 +47,7 @@ function AddedScreen(props: Props) {
             communityContract.options.address,
             await communityContract.methods.removeBeneficiary(beneficiary),
             'removebeneficiary',
-            network
+            props.app.kit
         )
             .then(() => {
                 Alert.alert(
@@ -97,10 +97,7 @@ function AddedScreen(props: Props) {
                                           props.user.user
                                       )
                             }`,
-                            from:
-                                beneficiary.name === null
-                                    ? beneficiary.address
-                                    : beneficiary.name,
+                            from: beneficiary,
                             key: beneficiary.address,
                             timestamp: 0,
                         }}

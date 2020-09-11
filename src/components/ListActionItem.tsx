@@ -50,9 +50,7 @@ export default class ListActionItem extends Component<
         if (this.props.maxTextTitleLength !== undefined) {
             titleMaxLength = this.props.maxTextTitleLength;
         }
-        const fromHasName =
-            this.props.item.from !== null &&
-            this.props.item.from.name.length > 0;
+        const fromHasName = this.props.item.from.name.length > 0;
 
         const avatarSrc =
             this.props.item.avatar !== undefined ? (

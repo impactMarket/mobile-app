@@ -41,10 +41,7 @@ function RemovedScreen(props: Props) {
                                 beneficiary.claimed,
                                 props.user.user
                             )}`,
-                            from:
-                                beneficiary.name === null
-                                    ? beneficiary.address
-                                    : beneficiary.name,
+                            from: beneficiary,
                             key: beneficiary.address,
                             timestamp: 0,
                         }}
