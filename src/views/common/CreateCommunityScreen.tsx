@@ -10,6 +10,7 @@ import {
     validateEmail,
     getUserCurrencySymbol,
     amountToUserCurrency,
+    formatInputAmountToTransfer,
 } from 'helpers/index';
 import { IRootState, ICommunityInfo, IUserState } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
@@ -36,7 +37,7 @@ import {
 } from 'react-native-paper';
 import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
-import { celoWalletRequest } from 'services/celoWallet';
+// import { celoWalletRequest } from 'services/celoWallet';
 
 import config from '../../../config';
 
@@ -70,7 +71,7 @@ function CreateCommunityScreen(props: Props) {
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
     const [isCountryValid, setIsCountryValid] = useState(true);
-    const [isEmailValid, setIsEmailValid] = useState(true); // avoid initial error TODO: fix!
+    const [isEmailValid, setIsEmailValid] = useState(true);
     const [isClaimAmountValid, setIsClaimAmountValid] = useState(true);
     const [isEnablingGPS, setIsEnablingGPS] = useState(false);
     const [isEnabledGPS, setIsEnabledGPS] = useState(true);
@@ -166,7 +167,8 @@ function CreateCommunityScreen(props: Props) {
         if (!_isEnabledGPS) {
             setIsEnabledGPS(false);
         }
-        const _isClaimAmountValid = claimAmount.length > 0;
+        const _isClaimAmountValid =
+            claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
         if (!_isClaimAmountValid) {
             setIsClaimAmountValid(false);
         }
@@ -174,7 +176,8 @@ function CreateCommunityScreen(props: Props) {
         if (!_isIncrementalIntervalValid) {
             setIsIncrementalIntervalValid(false);
         }
-        const _isMaxClaimValid = maxClaim.length > 0;
+        const _isMaxClaimValid =
+            maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
         if (!_isMaxClaimValid) {
             setIsMaxClaimValid(false);
         }
@@ -225,42 +228,42 @@ function CreateCommunityScreen(props: Props) {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         if (editing) {
             const community = props.route.params.community as ICommunityInfo;
-            const {
-                _claimAmount,
-                _baseInterval,
-                _maxClaim,
-                _incrementInterval,
-            } = props.route.params.community.vars;
+            // const {
+            //     _claimAmount,
+            //     _baseInterval,
+            //     _maxClaim,
+            //     _incrementInterval,
+            // } = props.route.params.community.vars;
             try {
-                if (
-                    !new BigNumber(claimAmount)
-                        .multipliedBy(decimals)
-                        .eq(_claimAmount) ||
-                    baseInterval !== _baseInterval ||
-                    parseInt(incrementInterval, 10) * 3600 !==
-                        parseInt(_incrementInterval, 10) ||
-                    !new BigNumber(maxClaim)
-                        .multipliedBy(decimals)
-                        .eq(_maxClaim)
-                ) {
-                    // if one of the fields is changed, sent contract edit!
-                    await celoWalletRequest(
-                        props.user.celoInfo.address,
-                        community.contractAddress,
-                        await props.network.contracts.communityContract.methods.edit(
-                            new BigNumber(claimAmount)
-                                .multipliedBy(decimals)
-                                .toString(),
-                            new BigNumber(maxClaim)
-                                .multipliedBy(decimals)
-                                .toString(),
-                            baseInterval,
-                            (parseInt(incrementInterval, 10) * 60).toString()
-                        ),
-                        'editcommunity',
-                        props.app.kit
-                    );
-                }
+                // if (
+                //     !new BigNumber(claimAmount)
+                //         .multipliedBy(decimals)
+                //         .eq(_claimAmount) ||
+                //     baseInterval !== _baseInterval ||
+                //     parseInt(incrementInterval, 10) * 3600 !==
+                //         parseInt(_incrementInterval, 10) ||
+                //     !new BigNumber(maxClaim)
+                //         .multipliedBy(decimals)
+                //         .eq(_maxClaim)
+                // ) {
+                //     // if one of the fields is changed, sent contract edit!
+                //     await celoWalletRequest(
+                //         props.user.celoInfo.address,
+                //         community.contractAddress,
+                //         await props.network.contracts.communityContract.methods.edit(
+                //             new BigNumber(claimAmount)
+                //                 .multipliedBy(decimals)
+                //                 .toString(),
+                //             new BigNumber(maxClaim)
+                //                 .multipliedBy(decimals)
+                //                 .toString(),
+                //             baseInterval,
+                //             (parseInt(incrementInterval, 10) * 60).toString()
+                //         ),
+                //         'editcommunity',
+                //         props.app.kit
+                //     );
+                // }
                 const success = await Api.editCommunity(
                     community.publicId,
                     name,
@@ -349,10 +352,14 @@ function CreateCommunityScreen(props: Props) {
                 visibility,
                 uploadImagePath,
                 {
-                    claimAmount: new BigNumber(claimAmount)
+                    claimAmount: new BigNumber(
+                        formatInputAmountToTransfer(claimAmount)
+                    )
                         .multipliedBy(decimals)
                         .toString(),
-                    maxClaim: new BigNumber(maxClaim)
+                    maxClaim: new BigNumber(
+                        formatInputAmountToTransfer(maxClaim)
+                    )
                         .multipliedBy(decimals)
                         .toString(),
                     baseInterval,
@@ -656,6 +663,7 @@ function CreateCommunityScreen(props: Props) {
                             <View style={{ margin: 10 }}>
                                 <TextInput
                                     mode="flat"
+                                    disabled={editing}
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('claimAmount')}
@@ -663,11 +671,14 @@ function CreateCommunityScreen(props: Props) {
                                     value={claimAmount}
                                     keyboardType="numeric"
                                     onChangeText={(value) =>
-                                        setClaimAmount(value.replace(',', '.'))
+                                        setClaimAmount(value)
                                     }
                                     onEndEditing={() =>
                                         setIsClaimAmountValid(
-                                            claimAmount.length > 0
+                                            claimAmount.length > 0 &&
+                                                /^\d*[\.\,]?\d*$/.test(
+                                                    claimAmount
+                                                )
                                         )
                                     }
                                 />
@@ -714,17 +725,19 @@ function CreateCommunityScreen(props: Props) {
                             <View style={{ margin: 10 }}>
                                 <TextInput
                                     mode="flat"
+                                    disabled={editing}
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('totalClaimPerBeneficiary')}
                                     placeholder="$0"
                                     value={maxClaim}
                                     keyboardType="numeric"
-                                    onChangeText={(value) =>
-                                        setMaxClaim(value.replace(',', '.'))
-                                    }
+                                    onChangeText={(value) => setMaxClaim(value)}
                                     onEndEditing={() =>
-                                        setIsMaxClaimValid(maxClaim.length > 0)
+                                        setIsMaxClaimValid(
+                                            maxClaim.length > 0 &&
+                                                /^\d*[\.\,]?\d*$/.test(maxClaim)
+                                        )
                                     }
                                 />
                                 {!isMaxClaimValid && (
@@ -780,6 +793,7 @@ function CreateCommunityScreen(props: Props) {
                         >
                             <Button
                                 mode="contained"
+                                disabled={editing}
                                 style={{
                                     width: '80%',
                                     borderRadius: 6,
@@ -805,6 +819,7 @@ function CreateCommunityScreen(props: Props) {
                             <View style={{ margin: 10 }}>
                                 <TextInput
                                     mode="flat"
+                                    disabled={editing}
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('timeIncrementAfterClaim')}

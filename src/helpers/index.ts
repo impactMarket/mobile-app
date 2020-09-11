@@ -15,7 +15,7 @@ import {
     setImpactMarketContract,
     setCommunity,
 } from './redux/actions/ReduxActions';
-import { ICommunityInfo, IUser, IUserState, IUserInfo } from './types';
+import { ICommunityInfo, IUserInfo } from './types';
 
 const usergetUserAvatars = [
     [
@@ -39,6 +39,14 @@ const usergetUserAvatars = [
         require('assets/images/avatar/square/avatar8.png'),
     ],
 ];
+
+export function formatInputAmountToTransfer(inputAmount: string) {
+    if (inputAmount.indexOf(',') === 0) {
+        inputAmount = `0${inputAmount}`;
+    }
+    inputAmount = inputAmount.replace(',', '.');
+    return inputAmount;
+}
 
 export function getAvatarFromId(avatarId: number, big: boolean = false) {
     return usergetUserAvatars[big ? 0 : 1][avatarId];
@@ -101,7 +109,12 @@ export function calculateCommunityProgress(
 export function getCountryFromPhoneNumber(phoneNumber: string) {
     if (phoneNumber.slice(0, 4) === '+351') {
         return '🇵🇹 Portugal';
+    } else if (phoneNumber.slice(0, 3) === '+55') {
+        return '🇧🇷 Brazil';
+    } else if (phoneNumber.slice(0, 4) === '+233') {
+        return '🇬🇭 Ghana';
     }
+    return '';
 }
 
 export var iptcColors = {

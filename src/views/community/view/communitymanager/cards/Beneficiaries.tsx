@@ -31,6 +31,8 @@ function Beneficiaries(props: Props) {
         true
     );
 
+    // TODO: add here a method to be called when page is refreshed
+
     useEffect(() => {
         const loadCommunityBalance = async () => {
             if (props.app.kit.contracts !== undefined) {

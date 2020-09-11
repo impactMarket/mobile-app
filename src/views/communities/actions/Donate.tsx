@@ -4,6 +4,7 @@ import {
     iptcColors,
     getUserCurrencySymbol,
     updateCommunityInfo,
+    formatInputAmountToTransfer,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
@@ -64,7 +65,7 @@ class Donate extends Component<Props, IDonateState> {
         const cUSDDecimals = await stableToken.decimals();
         const txObject = stableToken.transfer(
             this.props.community.contractAddress,
-            new BigNumber(this.state.amountDonate)
+            new BigNumber(formatInputAmountToTransfer(this.state.amountDonate))
                 .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
                 .toString()
         ).txo;
@@ -136,7 +137,16 @@ class Donate extends Component<Props, IDonateState> {
                     style={styles.donate}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
-                    <Text style={{ fontSize: 20, color: 'white' }}>{i18n.t('donate')}</Text>
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            color: 'white',
+                            textTransform: 'none',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        {i18n.t('donate')}
+                    </Text>
                 </Button>
                 <Snackbar
                     visible={showCopiedToClipboard}
