@@ -94,9 +94,9 @@ function LoginScreen(props: Props) {
                     unsubscribe();
                     setConnecting(false);
                     navigation.goBack();
-                    if(is === 1) {
+                    if (is === 1) {
                         navigation.navigate(i18n.t('claim'));
-                    } else if(is === 0) {
+                    } else if (is === 0) {
                         navigation.navigate(i18n.t('manage'));
                     } else {
                         navigation.navigate(i18n.t('communities'));
@@ -138,6 +138,9 @@ function LoginScreen(props: Props) {
     };
 
     const buttonStoreLink = () => {
+        const androidURL =
+            'https://play.google.com/store/apps/details?id=co.clabs.valora';
+        const iosURL = 'https://apps.apple.com/app/id1520414263';
         if (Device.osName === 'Android') {
             return (
                 <Button
@@ -147,7 +150,7 @@ function LoginScreen(props: Props) {
                         width: '40%',
                         backgroundColor: '#e9e9e9',
                     }}
-                    onPress={() => Linking.openURL('https://impactmarket.com/')}
+                    onPress={() => Linking.openURL(androidURL)}
                 >
                     <Text style={{ color: 'black' }}>Android</Text>
                 </Button>
@@ -156,8 +159,12 @@ function LoginScreen(props: Props) {
             return (
                 <Button
                     mode="contained"
-                    disabled
-                    style={{ marginHorizontal: 10, width: '40%' }}
+                    style={{
+                        marginHorizontal: 10,
+                        width: '40%',
+                        backgroundColor: '#e9e9e9',
+                    }}
+                    onPress={() => Linking.openURL(iosURL)}
                 >
                     iOS
                 </Button>
@@ -167,8 +174,12 @@ function LoginScreen(props: Props) {
             <>
                 <Button
                     mode="contained"
-                    disabled
-                    style={{ marginHorizontal: 10, width: '40%' }}
+                    style={{
+                        marginHorizontal: 10,
+                        width: '40%',
+                        backgroundColor: '#e9e9e9',
+                    }}
+                    onPress={() => Linking.openURL(iosURL)}
                 >
                     iOS
                 </Button>
@@ -179,7 +190,7 @@ function LoginScreen(props: Props) {
                         width: '40%',
                         backgroundColor: '#e9e9e9',
                     }}
-                    onPress={() => Linking.openURL('https://impactmarket.com/')}
+                    onPress={() => Linking.openURL(androidURL)}
                 >
                     <Text style={{ color: 'black' }}>Android</Text>
                 </Button>
