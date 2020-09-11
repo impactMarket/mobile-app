@@ -35,6 +35,10 @@ import {
     setCeloKit,
     setUserInfo,
     setPushNotificationsToken,
+    setCommunity,
+    setCommunityContract,
+    setUserIsCommunityManager,
+    setUserIsBeneficiary,
 } from './src/helpers/redux/actions/ReduxActions';
 import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
 import {
@@ -57,11 +61,11 @@ import ClaimExplainedScreen from './src/views/community/view/beneficiary/ClaimEx
 import AddedScreen from './src/views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
 import EditProfile from './src/views/wallet/EditProfile';
+import CommunityContractABI from './src/contracts/CommunityABI.json';
 
 import * as Analytics from 'expo-firebase-analytics';
-import * as FirebaseCore from 'expo-firebase-core';
 
-BigNumber.config({ DECIMAL_PLACES: 55 })
+BigNumber.config({ DECIMAL_PLACES: 55 });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
 const Stack = createStackNavigator();
 const store = createStore(combinedReducer);
@@ -101,7 +105,7 @@ const navigationTheme = {
 YellowBox.ignoreWarnings([
     "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
     "The provided value 'ms-stream' is not a valid 'responseType'.",
-    "Firebase Analytics is not available in the Expo client.",
+    'Firebase Analytics is not available in the Expo client.',
 ]);
 
 Notifications.setNotificationHandler({
@@ -161,6 +165,52 @@ export default class App extends React.Component<object, IAppState> {
                     });
                     Notifications.addNotificationReceivedListener(
                         (notification) => {
+                            const {
+                                action,
+                            } = notification.request.content.data;
+                            if (action === 'community-accepted') {
+                                Api.findComunityToManager(
+                                    store.getState().user.celoInfo.address
+                                ).then((isManager) => {
+                                    if (isManager !== undefined) {
+                                        store.dispatch(
+                                            setUserIsCommunityManager(true)
+                                        );
+                                        const communityContract = new kit.web3.eth.Contract(
+                                            CommunityContractABI as any,
+                                            isManager.contractAddress
+                                        );
+                                        store.dispatch(setCommunity(isManager));
+                                        store.dispatch(
+                                            setCommunityContract(
+                                                communityContract
+                                            )
+                                        );
+                                    }
+                                });
+                            } else if (action === 'beneficiary-added') {
+                                Api.findComunityToBeneficicary(
+                                    store.getState().user.celoInfo.address
+                                ).then((isBeneficiary) => {
+                                    if (isBeneficiary !== undefined) {
+                                        store.dispatch(
+                                            setUserIsBeneficiary(true)
+                                        );
+                                        const communityContract = new kit.web3.eth.Contract(
+                                            CommunityContractABI as any,
+                                            isBeneficiary.contractAddress
+                                        );
+                                        store.dispatch(
+                                            setCommunity(isBeneficiary)
+                                        );
+                                        store.dispatch(
+                                            setCommunityContract(
+                                                communityContract
+                                            )
+                                        );
+                                    }
+                                });
+                            }
                             this.setState({ notification });
                         }
                     );
