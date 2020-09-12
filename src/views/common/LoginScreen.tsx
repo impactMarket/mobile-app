@@ -51,7 +51,7 @@ function LoginScreen(props: Props) {
 
     const login = async () => {
         const requestId = 'login';
-        const dappName = 'impactMarket';
+        const dappName = 'impactmarket';
         const callback = Linking.makeUrl('/login');
         setConnecting(true);
 

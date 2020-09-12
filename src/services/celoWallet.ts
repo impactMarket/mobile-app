@@ -10,7 +10,7 @@ async function celoWalletRequest(
     requestId: string,
     kit: ContractKit
 ): Promise<any> {
-    const dappName = 'impactMarket';
+    const dappName = 'impactmarket';
     const callback = Linking.makeUrl(`${requestId}/`);
 
     requestTxSig(
