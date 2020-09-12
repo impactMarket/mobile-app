@@ -126,7 +126,9 @@ function Tabs(props: Props) {
     };
 
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
+        >
             {tabsToUser()}
             {props.user.celoInfo.address.length > 0 && (
                 <Tab.Screen

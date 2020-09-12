@@ -52,14 +52,22 @@ export default class ListActionItem extends Component<
         }
         const fromHasName = this.props.item.from.name.length > 0;
 
-        const avatarSrc = (
-            <Avatar.Text
-                size={46}
-                label={
-                    fromHasName ? this.props.item.from.name.slice(0, 1) : '?'
-                }
-            />
-        );
+        const avatarSrc =
+            this.props.item.avatar !== undefined ? (
+                <Avatar.Image
+                    size={46}
+                    source={{ uri: this.props.item.avatar }}
+                />
+            ) : (
+                <Avatar.Text
+                    size={46}
+                    label={
+                        fromHasName
+                            ? this.props.item.from.name.slice(0, 1)
+                            : '?'
+                    }
+                />
+            );
 
         let renderRight;
         let renderAction;
