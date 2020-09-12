@@ -1,7 +1,7 @@
 {
     "expo": {
         "name": "impactMarket",
-        "slug": "impactmarket",
+        "slug": "impact-market",
         "privacy": "public",
         "platforms": [
             "ios",
