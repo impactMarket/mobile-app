@@ -5,6 +5,7 @@ import {
     getUserCurrencySymbol,
     updateCommunityInfo,
     formatInputAmountToTransfer,
+    amountToUserCurrency,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
@@ -39,6 +40,7 @@ interface IDonateState {
     donating: boolean;
     amountDonate: string;
     showCopiedToClipboard: boolean;
+    modalConfirmSend: boolean;
 }
 class Donate extends Component<Props, IDonateState> {
     constructor(props: any) {
@@ -49,6 +51,7 @@ class Donate extends Component<Props, IDonateState> {
             donating: false,
             amountDonate: '',
             showCopiedToClipboard: false,
+            modalConfirmSend: false,
         };
     }
 
@@ -59,13 +62,40 @@ class Donate extends Component<Props, IDonateState> {
         });
     };
 
-    handleDonateWithCeloWallet = async () => {
+    handleConfirmDonateWithCeloWallet = () => {
+        const { amountDonate } = this.state;
+        const { community, user } = this.props;
+        const inDollars =
+            parseFloat(formatInputAmountToTransfer(amountDonate)) /
+            this.props.user.user.exchangeRate;
+        Alert.alert(
+            'Donating',
+            `By pressing 'Donate', you are donating ${getUserCurrencySymbol(
+                user.user
+            )}${amountDonate} ($${inDollars.toFixed(2)}) to ${community.name}.`,
+            [
+                {
+                    text: 'Donate',
+                    onPress: () => this.donateWithCeloWallet(),
+                },
+                {
+                    text: 'Cancel',
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+
+    donateWithCeloWallet = async () => {
         this.setState({ donating: true });
         const stableToken = await this.props.app.kit.contracts.getStableToken();
         const cUSDDecimals = await stableToken.decimals();
+        const inDollars =
+            parseFloat(formatInputAmountToTransfer(this.state.amountDonate)) /
+            this.props.user.user.exchangeRate;
         const txObject = stableToken.transfer(
             this.props.community.contractAddress,
-            new BigNumber(formatInputAmountToTransfer(this.state.amountDonate))
+            new BigNumber(inDollars)
                 .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
                 .toString()
         ).txo;
@@ -233,7 +263,7 @@ class Donate extends Component<Props, IDonateState> {
                                 loading={donating}
                                 disabled={donating}
                                 style={{ marginRight: 10 }}
-                                onPress={this.handleDonateWithCeloWallet}
+                                onPress={this.handleConfirmDonateWithCeloWallet}
                             >
                                 {i18n.t('donate')}
                             </Button>
