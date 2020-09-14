@@ -6,6 +6,7 @@ import ListActionItem from 'components/ListActionItem';
 import { ethers } from 'ethers';
 import {
     amountToUserCurrency,
+    formatInputAmountToTransfer,
     getUserCurrencySymbol,
     iptcColors,
 } from 'helpers/index';
@@ -103,7 +104,7 @@ function PayScreen(props: Props) {
             stableToken.address,
             stableToken.transfer(
                 addressToSend,
-                new BigNumber(paymentAmount.replace(',', '.'))
+                new BigNumber(formatInputAmountToTransfer(paymentAmount))
                     .multipliedBy(10 ** 18)
                     .toString()
             ).txo,
