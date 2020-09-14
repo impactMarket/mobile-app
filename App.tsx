@@ -534,9 +534,7 @@ export default class App extends React.Component<object, IAppState> {
                     }
                     if (user.currency !== null) {
                         currency = user.currency;
-                        exchangeRate = await Api.getExchangeRate(
-                            user.currency.toUpperCase()
-                        );
+                        exchangeRate = (await Api.getExchangeRate())[user.currency.toUpperCase()];
                     }
                     store.dispatch(
                         setUserInfo({

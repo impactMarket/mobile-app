@@ -63,6 +63,12 @@ export function getUserCurrencySymbol(user: IUserInfo) {
     switch (user.currency.toUpperCase()) {
         case 'EUR':
             return '€';
+        case 'BRL':
+            return 'R$';
+        case 'GHS':
+            return 'GH₵';
+        case 'CVE':
+            return '$';
         default:
             return '$';
     }

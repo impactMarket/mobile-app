@@ -44,6 +44,7 @@ type Props = PropsFromRedux & IEditProfileProps;
 function EditProfile(props: Props) {
     const store = useStore();
     const navigation = useNavigation();
+    const [rates, setRates] = useState({});
     const [name, setName] = useState('');
     const [logingOut, setLogingOut] = useState(false);
     const [currency, setCurrency] = useState('usd');
@@ -52,6 +53,7 @@ function EditProfile(props: Props) {
     useEffect(() => {
         setName(props.user.user.name);
         setCurrency(props.user.user.currency);
+        Api.getExchangeRate().then(setRates);
     }, []);
 
     const handleLogout = async () => {
@@ -82,9 +84,7 @@ function EditProfile(props: Props) {
         Api.setUserCurrency(props.user.celoInfo.address, text);
         props.dispatch(setUserInfo({ ...props.user.user, currency: text }));
         // update exchange rate!
-        const exchangeRate = await Api.getExchangeRate(
-            props.user.user.currency.toUpperCase()
-        );
+        const exchangeRate = (rates as any)[text.toUpperCase()].rate;
         props.dispatch(setUserExchangeRate(exchangeRate));
     };
 
@@ -133,7 +133,7 @@ function EditProfile(props: Props) {
                         onPress={() => setIsDialogCurrencyOpen(true)}
                     >
                         <Text style={{ color: 'black', opacity: 1 }}>
-                            {currency === 'usd' ? 'Dollar (USD)' : 'Euro (EUR)'}
+                            {currency}
                         </Text>
                     </Button>
                     <TextInput
@@ -186,11 +186,11 @@ function EditProfile(props: Props) {
                             }}
                             value={currency}
                         >
-                            <RadioButton.Item
-                                label="Dollar (USD)"
-                                value="usd"
-                            />
-                            <RadioButton.Item label="Euro (EUR)" value="eur" />
+                            {Object.entries(rates).map((rate) => <RadioButton.Item
+                                key={rate[0]}
+                                label={`${(rate[1] as any).name} (${rate[0]})`}
+                                value={rate[0]}
+                            />)}
                         </RadioButton.Group>
                     </Dialog.Content>
                 </Dialog>
