@@ -53,7 +53,7 @@ function Tabs(props: Props) {
         }
     };
 
-    const iconExtraSize = 8;
+    const iconExtraSize = 0;
     const tabsToUser = () => {
         const user = props.user;
         // console.log('user.community', user.community)
@@ -127,7 +127,7 @@ function Tabs(props: Props) {
 
     return (
         <Tab.Navigator
-            tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
+            // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
         >
             {tabsToUser()}
             {props.user.celoInfo.address.length > 0 && (
