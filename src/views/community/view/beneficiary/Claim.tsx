@@ -166,7 +166,7 @@ class Claim extends React.Component<Props, IClaimState> {
                     moment(cooldownTime * 1000).diff(moment())
                 );
                 this.setState({ nextClaim: timeLeft });
-                if (timeLeft.asSeconds() === 0) {
+                if (timeLeft.asSeconds() < 0) {
                     this.setState({ claimDisabled: false });
                     clearInterval(intervalTimer);
                 }
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     claimText: {
+        textTransform: 'none',
         fontFamily: 'Gelion-Bold',
         fontSize: 25,
         fontWeight: 'bold',

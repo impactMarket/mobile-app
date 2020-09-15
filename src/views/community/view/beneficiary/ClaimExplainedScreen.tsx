@@ -23,12 +23,13 @@ export default function ClaimExplainedScreen() {
 }
 const styles = StyleSheet.create({
     contentView: {
-        marginHorizontal: 20,
+        marginHorizontal: 30,
     },
     textInfo: {
         fontFamily: 'Gelion-Regular',
         fontStyle: 'normal',
         textAlign: 'center',
         marginVertical: 20,
+        fontSize: 18
     },
 });

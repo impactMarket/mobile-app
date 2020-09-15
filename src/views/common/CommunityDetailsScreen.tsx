@@ -144,16 +144,20 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <Card elevation={8}>
                         <Card.Content>
                             <Paragraph>{description}</Paragraph>
-                            {community.description.indexOf('\n') !== -1 && <Button
-                                mode="contained"
-                                onPress={() =>
-                                    setSeeFullDescription(!seeFullDescription)
-                                }
-                            >
-                                {seeFullDescription
-                                    ? i18n.t('seeLess')
-                                    : i18n.t('seeMore')}
-                            </Button>}
+                            {community.description.indexOf('\n') !== -1 && (
+                                <Button
+                                    mode="contained"
+                                    onPress={() =>
+                                        setSeeFullDescription(
+                                            !seeFullDescription
+                                        )
+                                    }
+                                >
+                                    {seeFullDescription
+                                        ? i18n.t('seeLess')
+                                        : i18n.t('seeMore')}
+                                </Button>
+                            )}
                         </Card.Content>
                     </Card>
                     <Card elevation={8} style={{ marginVertical: 25 }}>
@@ -189,7 +193,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             onPress={() =>
                                 WebBrowser.openBrowserAsync(
                                     config.blockExplorer +
-                                        community.contractAddress
+                                        community.contractAddress +
+                                        '/token_transfers'
                                 )
                             }
                         >
