@@ -7,7 +7,7 @@
             "ios",
             "android"
         ],
-        "version": "0.0.9",
+        "version": "0.0.10",
         "orientation": "portrait",
         "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarket",
@@ -30,7 +30,7 @@
             "icon": "./src/assets/images/logo/ios.png",
             "googleServicesFile": "./src/assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
-            "buildNumber": "0.0.9",
+            "buildNumber": "0.0.10",
             "supportsTablet": true
         },
         "android": {
@@ -38,7 +38,7 @@
             "icon": "./src/assets/images/logo/android.png",
             "googleServicesFile": "./src/assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
-            "versionCode": 31,
+            "versionCode": 32,
             "adaptiveIcon": {
                 "backgroundImage": "./src/assets/images/logo.png",
                 "backgroundColor": "#2362FB"
