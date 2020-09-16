@@ -63,10 +63,7 @@ function LoginScreen(props: Props) {
 
         const dappkitResponse = await waitForAccountAuth(requestId);
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
-        const authToken = await Api.userAuth(
-            userAddress,
-            Device.osInternalBuildId!
-        );
+        const authToken = await Api.userAuth(userAddress);
         if (authToken === undefined) {
             Alert.alert(
                 i18n.t('failure'),

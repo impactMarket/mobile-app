@@ -183,7 +183,7 @@ class Api {
         address: string,
         username: string
     ): Promise<boolean> {
-        const result = await postRequest('/user/username', {
+        const result = await postRequest<boolean>('/user/username', {
             address,
             username,
         });
@@ -194,7 +194,7 @@ class Api {
         address: string,
         currency: string
     ): Promise<boolean> {
-        const result = await postRequest('/user/currency', {
+        const result = await postRequest<boolean>('/user/currency', {
             address,
             currency,
         });
@@ -205,7 +205,7 @@ class Api {
         address: string,
         language: number
     ): Promise<boolean> {
-        const result = await postRequest('/user/language', {
+        const result = await postRequest<boolean>('/user/language', {
             address,
             language,
         });
@@ -252,38 +252,11 @@ class Api {
         return response;
     }
 
-    static async userAuth(
-        address: string,
-        pin: string
-    ): Promise<string | undefined> {
-        const requestBody = {
+    static async userAuth(address: string): Promise<string | undefined> {
+        const result = await postRequest<string | undefined>('/user/auth', {
             address,
-            pin,
-        };
-        const endpoint = '/user/auth';
-
-        let response: string | undefined;
-        try {
-            // handle success
-            const requestOptions = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                },
-            };
-            const result = await axios.post(
-                endpoint,
-                requestBody,
-                requestOptions
-            );
-            if (result.status >= 400) {
-                return undefined;
-            }
-            response = result.data as string;
-        } catch (error) {
-            // handle error
-        }
-        return response;
+        });
+        return result;
     }
 
     static async setUserPushNotificationToken(
