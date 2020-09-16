@@ -96,7 +96,7 @@ function BeneficiaryView(props: Props) {
                 title={i18n.t('claim')}
                 navigation={navigation}
                 hasHelp
-                hasShare
+                hasQr
             />
             <ImageBackground
                 source={{ uri: community.coverImage }}
