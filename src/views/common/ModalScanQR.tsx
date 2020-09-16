@@ -73,31 +73,29 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                         scanned: true,
                         inputAddress: scannedAddress,
                     });
-                }
-            } catch (e) {
-                try {
+                } else {
                     scannedAddress = ethers.utils.getAddress(data);
                     this.setState({
                         scanned: true,
                         inputAddress: scannedAddress,
                     });
-                } catch (e) {
-                    this.setState({ invalidAddressWarningOpen: true });
-                    Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('scanningInvalidAddress'),
-                        [
-                            {
-                                text: 'OK',
-                                onPress: () =>
-                                    this.setState({
-                                        invalidAddressWarningOpen: false,
-                                    }),
-                            },
-                        ],
-                        { cancelable: false }
-                    );
                 }
+            } catch (e) {
+                this.setState({ invalidAddressWarningOpen: true });
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('scanningInvalidAddress'),
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () =>
+                                this.setState({
+                                    invalidAddressWarningOpen: false,
+                                }),
+                        },
+                    ],
+                    { cancelable: false }
+                );
             }
         }
     };
