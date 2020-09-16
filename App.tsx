@@ -155,6 +155,45 @@ export default class App extends React.Component<object, IAppState> {
                 store.getState().user.celoInfo.address.length > 0;
 
             if (previousLoggedIn !== currentLoggedIn) {
+                const notificationListener = (
+                    notification: Notifications.Notification
+                ) => {
+                    const { action } = notification.request.content.data;
+                    if (action === 'community-accepted') {
+                        Api.findComunityToManager(
+                            store.getState().user.celoInfo.address
+                        ).then((isManager) => {
+                            if (isManager !== undefined) {
+                                store.dispatch(setUserIsCommunityManager(true));
+                                const communityContract = new kit.web3.eth.Contract(
+                                    CommunityContractABI as any,
+                                    isManager.contractAddress
+                                );
+                                store.dispatch(setCommunity(isManager));
+                                store.dispatch(
+                                    setCommunityContract(communityContract)
+                                );
+                            }
+                        });
+                    } else if (action === 'beneficiary-added') {
+                        Api.findComunityToBeneficicary(
+                            store.getState().user.celoInfo.address
+                        ).then((isBeneficiary) => {
+                            if (isBeneficiary !== undefined) {
+                                store.dispatch(setUserIsBeneficiary(true));
+                                const communityContract = new kit.web3.eth.Contract(
+                                    CommunityContractABI as any,
+                                    isBeneficiary.contractAddress
+                                );
+                                store.dispatch(setCommunity(isBeneficiary));
+                                store.dispatch(
+                                    setCommunityContract(communityContract)
+                                );
+                            }
+                        });
+                    }
+                };
+
                 if (currentLoggedIn) {
                     this._authUser();
                     registerForPushNotifications().then((token) => {
@@ -167,59 +206,11 @@ export default class App extends React.Component<object, IAppState> {
                         }
                     });
                     Notifications.addNotificationReceivedListener(
-                        (notification) => {
-                            const {
-                                action,
-                            } = notification.request.content.data;
-                            if (action === 'community-accepted') {
-                                Api.findComunityToManager(
-                                    store.getState().user.celoInfo.address
-                                ).then((isManager) => {
-                                    if (isManager !== undefined) {
-                                        store.dispatch(
-                                            setUserIsCommunityManager(true)
-                                        );
-                                        const communityContract = new kit.web3.eth.Contract(
-                                            CommunityContractABI as any,
-                                            isManager.contractAddress
-                                        );
-                                        store.dispatch(setCommunity(isManager));
-                                        store.dispatch(
-                                            setCommunityContract(
-                                                communityContract
-                                            )
-                                        );
-                                    }
-                                });
-                            } else if (action === 'beneficiary-added') {
-                                Api.findComunityToBeneficicary(
-                                    store.getState().user.celoInfo.address
-                                ).then((isBeneficiary) => {
-                                    if (isBeneficiary !== undefined) {
-                                        store.dispatch(
-                                            setUserIsBeneficiary(true)
-                                        );
-                                        const communityContract = new kit.web3.eth.Contract(
-                                            CommunityContractABI as any,
-                                            isBeneficiary.contractAddress
-                                        );
-                                        store.dispatch(
-                                            setCommunity(isBeneficiary)
-                                        );
-                                        store.dispatch(
-                                            setCommunityContract(
-                                                communityContract
-                                            )
-                                        );
-                                    }
-                                });
-                            }
-                        }
+                        notificationListener
                     );
                     Notifications.addNotificationResponseReceivedListener(
-                        (response) => {
-                            console.log(response);
-                        }
+                        (response) =>
+                            notificationListener(response.notification)
                     );
                 }
                 this.setState({ loggedIn: currentLoggedIn });
@@ -480,7 +471,7 @@ export default class App extends React.Component<object, IAppState> {
                             },
                         }}
                     >
-                        Turn on your location for a better experience.
+                        {i18n.t('turnOnLocationHint')}
                     </Snackbar>
                 </Provider>
             </PaperProvider>
