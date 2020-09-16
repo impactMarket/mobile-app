@@ -61,7 +61,8 @@ i18n.translations = {
         edit: 'Edit',
         create: 'Create',
         submit: 'Submit',
-        needLoginToCreateCommunity: 'You need to connect with Valora to create a community.',
+        needLoginToCreateCommunity:
+            'You need to connect with Valora to create a community.',
         communityDetails: 'Community Details',
         createCommunityDescription:
             'By creating a new community, you are initiating a new basic income mechanism for your community that enables any its beneficiary to get equal access to claim a recurring amount pre-defined by you in this form.',
@@ -127,7 +128,8 @@ i18n.translations = {
         errorDonating: 'An error happened while donating!',
         addressCopiedClipboard: 'Community address copied to clipboard!',
         donate: 'Donate',
-        donatingTo: 'To support {{communityName}}, send only $cUSD (Celo Dollar) to this community contract address.',
+        donatingTo:
+            'To support {{communityName}}, send only $cUSD (Celo Dollar) to this community contract address.',
         donateWithCelo: 'Donate with Valora',
         amountSymbol: 'Amount ({{symbol}})',
         close: 'Close',
@@ -185,6 +187,8 @@ i18n.translations = {
         claimAmountRequired: 'Claim amount is required!',
         maxClaimAmountRequired: 'Max claim amount is required!',
         incrementalIntervalRequired: 'Incremental interval is required!',
+        turnOn: 'Turn On',
+        turnOnLocationHint: 'Turn on your location for a better experience',
     },
     pt: {
         testnetWarning:
@@ -310,7 +314,8 @@ i18n.translations = {
         errorDonating: 'Um erro ocorreu durante o donativo!',
         addressCopiedClipboard: 'Endereço da comunidade copiado!',
         donate: 'Contribuir',
-        donatingTo: 'Para apoiar a comunidade {{communityName}}, envie apenas $cUSD (Celo Dollar) para este endereço do contrato da comunidade.',
+        donatingTo:
+            'Para apoiar a comunidade {{communityName}}, envie apenas $cUSD (Celo Dollar) para este endereço do contrato da comunidade.',
         donateWithCelo: 'Doar com Valora',
         amountSymbol: 'Montante em {{symbol}}',
         close: 'Fechar',
@@ -353,16 +358,18 @@ i18n.translations = {
             'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pedir novamente (mais $2).',
         timeIncrementAfterClaimHelp:
             'É possível adicionar um incremento de tempo cada vez que um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pedir $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pedir novamente (neste caso, 24h20m após pedir pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
-        coverImageRequired: 'Cover image is required!',
-        communityNameRequired: 'Comunity name is required!',
-        communityDescriptionRequired: 'Comunity description is required!',
-        cityRequired: 'City is required!',
-        countryRequired: 'Country is required!',
-        enablingGPSRequired: 'Enabling GPS is required!',
-        emailRequired: 'Email address is invalid!',
-        claimAmountRequired: 'Claim amount is required!',
-        maxClaimAmountRequired: 'Max claim amount is required!',
-        incrementalIntervalRequired: 'Incremental interval is required!',
+        coverImageRequired: 'Imagem de capa é obrigatório!',
+        communityNameRequired: 'Nome da comunidade é obrigatório!',
+        communityDescriptionRequired: 'Descrição da comunidade é obrigatório!',
+        cityRequired: 'Cidade é obrigatório!',
+        countryRequired: 'País é obrigatório!',
+        enablingGPSRequired: 'Ativar o GPS é obrigatório!',
+        emailRequired: 'Endereço de e-mail é obrigatório!',
+        claimAmountRequired: 'Quantidade a pedir é obrigatório!',
+        maxClaimAmountRequired: 'Quantidade máxima a pedir é obrigatório!',
+        incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
+        turnOn: 'Ativar',
+        turnOnLocationHint: 'Ative a sua localização para uma melhor experiência.',
     },
 };
 // Set the locale once at the beginning of your app.

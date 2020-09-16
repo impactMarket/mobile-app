@@ -16,6 +16,7 @@ import { Button, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
+import config from '../../../../../config';
 
 import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 
@@ -84,12 +85,14 @@ class Claim extends React.Component<Props, IClaimState> {
                 (await Location.getPermissionsAsync()).granted &&
                 (await Location.getProviderStatusAsync()).gpsAvailable;
             if (availableGPSToRequest) {
-                loc = await Location.getCurrentPositionAsync();
+                loc = await Location.getCurrentPositionAsync({
+                    accuracy: Location.Accuracy.Low,
+                });
             }
             if (loc !== undefined) {
                 Api.addClaimLocation({
-                    latitude: loc.coords.altitude,
-                    longitude: loc.coords.longitude,
+                    latitude: loc.coords.altitude + config.locationErrorMargin,
+                    longitude: loc.coords.longitude + config.locationErrorMargin,
                 });
             }
             this._loadAllowance(communityContract).then(() => {

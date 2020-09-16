@@ -1,6 +1,7 @@
 import React from 'react';
 import './global';
 import { Image, View, YellowBox, AsyncStorage, StatusBar } from 'react-native';
+import * as Location from 'expo-location';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -8,6 +9,7 @@ import {
     Text,
     Button,
     IconButton,
+    Snackbar,
 } from 'react-native-paper';
 import {
     SafeAreaProvider,
@@ -129,7 +131,7 @@ interface IAppState {
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
     testnetWarningOpen: boolean;
-    notification?: Notifications.Notification;
+    askLocationOnOpen: boolean;
 }
 export default class App extends React.Component<object, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
@@ -142,6 +144,7 @@ export default class App extends React.Component<object, IAppState> {
             firstTimeUser: true,
             loggedIn: false,
             testnetWarningOpen: false,
+            askLocationOnOpen: false,
         };
     }
 
@@ -211,12 +214,11 @@ export default class App extends React.Component<object, IAppState> {
                                     }
                                 });
                             }
-                            this.setState({ notification });
                         }
                     );
                     Notifications.addNotificationResponseReceivedListener(
                         (response) => {
-                            // console.log(response);
+                            console.log(response);
                         }
                     );
                 }
@@ -225,6 +227,14 @@ export default class App extends React.Component<object, IAppState> {
         });
         this.setState({ testnetWarningOpen: true });
         setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
+        const isLocationAvailable = async () => {
+            const availableGPSToRequest =
+                (await Location.hasServicesEnabledAsync()) &&
+                (await Location.getPermissionsAsync()).granted &&
+                (await Location.getProviderStatusAsync()).gpsAvailable;
+            this.setState({ askLocationOnOpen: !availableGPSToRequest });
+        };
+        isLocationAvailable();
     };
 
     componentWillUnmount = () => {
@@ -454,6 +464,24 @@ export default class App extends React.Component<object, IAppState> {
                             />
                         </Stack.Navigator>
                     </NavigationContainer>
+                    <Snackbar
+                        visible={this.state.askLocationOnOpen}
+                        duration={15000}
+                        onDismiss={() =>
+                            this.setState({ askLocationOnOpen: false })
+                        }
+                        action={{
+                            label: i18n.t('turnOn'),
+                            onPress: async () => {
+                                await Location.requestPermissionsAsync();
+                                await Location.getCurrentPositionAsync({
+                                    accuracy: Location.Accuracy.Low,
+                                });
+                            },
+                        }}
+                    >
+                        Turn on your location for a better experience.
+                    </Snackbar>
                 </Provider>
             </PaperProvider>
         );
@@ -534,7 +562,9 @@ export default class App extends React.Component<object, IAppState> {
                     }
                     if (user.currency !== null) {
                         currency = user.currency;
-                        exchangeRate = (await Api.getExchangeRate())[user.currency.toUpperCase()].rate;
+                        exchangeRate = (await Api.getExchangeRate())[
+                            user.currency.toUpperCase()
+                        ].rate;
                     }
                     store.dispatch(
                         setUserInfo({

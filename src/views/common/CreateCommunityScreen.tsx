@@ -345,8 +345,8 @@ function CreateCommunityScreen(props: Props) {
                 city,
                 country,
                 {
-                    latitude: gpsLocation!.coords.latitude,
-                    longitude: gpsLocation!.coords.longitude,
+                    latitude: gpsLocation!.coords.latitude + config.locationErrorMargin,
+                    longitude: gpsLocation!.coords.longitude + config.locationErrorMargin,
                 },
                 email,
                 visibility,
@@ -415,7 +415,9 @@ function CreateCommunityScreen(props: Props) {
             return;
         }
 
-        const loc = await Location.getCurrentPositionAsync();
+        const loc = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Low,
+        });
         setGpsLocation(loc);
         setIsEnabledGPS(true);
     };

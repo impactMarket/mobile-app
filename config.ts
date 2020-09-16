@@ -5,6 +5,8 @@ const commonConfig = {
      * cUSD decimals to use in ui format
      */
     cUSDDecimals: 18,
+
+    locationErrorMargin: 0.003,
 };
 const ENV = {
     dev: {

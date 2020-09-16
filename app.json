@@ -3,10 +3,7 @@
         "name": "impactMarket",
         "slug": "impact-market",
         "privacy": "public",
-        "platforms": [
-            "ios",
-            "android"
-        ],
+        "platforms": ["ios", "android"],
         "version": "0.0.10",
         "orientation": "portrait",
         "icon": "./src/assets/images/logo.png",
@@ -18,9 +15,7 @@
         "updates": {
             "fallbackToCacheTimeout": 0
         },
-        "assetBundlePatterns": [
-            "**/*"
-        ],
+        "assetBundlePatterns": ["**/*"],
         "notification": {
             "icon": "./src/assets/images/notification.png",
             "color": "#2400ff",
@@ -43,7 +38,13 @@
                 "backgroundImage": "./src/assets/images/logo.png",
                 "backgroundColor": "#2362FB"
             },
-            "permissions": [ "CAMERA", "ACCESS_FINE_LOCATION", "READ_CONTACTS", "VIBRATE" ]
+            "permissions": [
+                "CAMERA",
+                "ACCESS_FINE_LOCATION",
+                "ACCESS_COARSE_LOCATION",
+                "READ_CONTACTS",
+                "VIBRATE"
+            ]
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
         "githubUrl": "https://github.com/impactMarket/mobile-app",
