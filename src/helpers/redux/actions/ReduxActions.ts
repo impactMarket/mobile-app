@@ -23,6 +23,7 @@ import {
     SET_USER_EXCHANGE_RATE,
     SET_APP_PYMENT_TO_ACTION,
     AppActionTypes,
+    SET_USER_LANGUAGE,
 } from '../../types';
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
@@ -43,6 +44,13 @@ export function setUserExchangeRate(rate: number): UserActionTypes {
     return {
         type: SET_USER_EXCHANGE_RATE,
         payload: rate,
+    };
+}
+
+export function setUserLanguage(language: string): UserActionTypes {
+    return {
+        type: SET_USER_LANGUAGE,
+        payload: language,
     };
 }
 

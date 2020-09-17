@@ -12,8 +12,10 @@ import {
     setUserExchangeRate,
     setUserIsBeneficiary,
     setUserIsCommunityManager,
+    setUserLanguage,
 } from 'helpers/redux/actions/ReduxActions';
 import { IRootState, STORAGE_USER_FIRST_TIME } from 'helpers/types';
+import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage, StyleSheet, View, Picker } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -48,11 +50,14 @@ function EditProfile(props: Props) {
     const [name, setName] = useState('');
     const [logingOut, setLogingOut] = useState(false);
     const [currency, setCurrency] = useState('usd');
+    const [language, setLanguage] = useState('en');
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
+    const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
 
     useEffect(() => {
         setName(props.user.user.name);
         setCurrency(props.user.user.currency);
+        setLanguage(props.user.user.language);
         Api.getExchangeRate().then(setRates);
     }, []);
 
@@ -86,6 +91,14 @@ function EditProfile(props: Props) {
         // update exchange rate!
         const exchangeRate = (rates as any)[text.toUpperCase()].rate;
         props.dispatch(setUserExchangeRate(exchangeRate));
+    };
+
+    const handleChangeLanguage = async (text: string) => {
+        setLanguage(text);
+        Api.setLanguage(props.user.celoInfo.address, text);
+        props.dispatch(setUserLanguage(text));
+        i18n.locale = text;
+        moment.locale(text);
     };
 
     return (
@@ -134,6 +147,21 @@ function EditProfile(props: Props) {
                     >
                         <Text style={{ color: 'black', opacity: 1 }}>
                             {currency}
+                        </Text>
+                    </Button>
+                    <Paragraph style={styles.inputTextFieldLabel}>
+                        Language
+                    </Paragraph>
+                    <Button
+                        mode="contained"
+                        style={{
+                            marginVertical: 3,
+                            backgroundColor: 'rgba(206,212,218,0.27)',
+                        }}
+                        onPress={() => setIsDialogLanguageOpen(true)}
+                    >
+                        <Text style={{ color: 'black', opacity: 1 }}>
+                            {language === 'en' ? 'English' : ' Portugûes'}
                         </Text>
                     </Button>
                     <TextInput
@@ -186,11 +214,40 @@ function EditProfile(props: Props) {
                             }}
                             value={currency}
                         >
-                            {Object.entries(rates).map((rate) => <RadioButton.Item
-                                key={rate[0]}
-                                label={`${(rate[1] as any).name} (${rate[0]})`}
-                                value={rate[0]}
-                            />)}
+                            {Object.entries(rates).map((rate) => (
+                                <RadioButton.Item
+                                    key={rate[0]}
+                                    label={`${(rate[1] as any).name} (${
+                                        rate[0]
+                                    })`}
+                                    value={rate[0]}
+                                />
+                            ))}
+                        </RadioButton.Group>
+                    </Dialog.Content>
+                </Dialog>
+                <Dialog
+                    visible={isDialogLanguageOpen}
+                    onDismiss={() => setIsDialogLanguageOpen(false)}
+                >
+                    <Dialog.Content>
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                setIsDialogLanguageOpen(false);
+                                handleChangeLanguage(value);
+                            }}
+                            value={language}
+                        >
+                            <RadioButton.Item
+                                key="en"
+                                label="English"
+                                value="en"
+                            />
+                            <RadioButton.Item
+                                key="pt"
+                                label="Português"
+                                value="pt"
+                            />
                         </RadioButton.Group>
                     </Dialog.Content>
                 </Dialog>

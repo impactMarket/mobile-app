@@ -19,6 +19,7 @@ export const RESET_NETWORK_APP = 'RESET_NETWORK_APP';
 export const SET_PUSH_NOTIFICATION_TOKEN = 'SET_PUSH_NOTIFICATION_TOKEN';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_APP_PYMENT_TO_ACTION = 'SET_APP_PYMENT_TO_ACTION';
+export const SET_USER_LANGUAGE = 'SET_USER_LANGUAGE';
 
 // state
 export interface IUserCeloInfo {
@@ -28,11 +29,13 @@ export interface IUserCeloInfo {
     balance: string;
 }
 
+// TODO: same as IUser. Rmove one.
 export interface IUserInfo {
     name: string;
     currency: string;
     exchangeRate: number;
     avatar: string;
+    language: string;
 }
 
 export interface IUserCommunityInfo {
@@ -143,6 +146,10 @@ interface SetAuthTokenAction {
     type: typeof SET_AUTH_TOKEN;
     payload: string;
 }
+interface UserLanguageAction {
+    type: typeof SET_USER_LANGUAGE;
+    payload: string;
+}
 
 interface SetAppPaymentToAction {
     type: typeof SET_APP_PYMENT_TO_ACTION;
@@ -156,6 +163,7 @@ export type UserActionTypes =
     | UserSetIsCommunityManagerAction
     | ResetUserAction
     | UserInfoAction
+    | UserLanguageAction
     | UserExchangeRateAction;
 export type NetworkActionTypes =
     | SetImpactMarketContractAction
@@ -238,7 +246,7 @@ export interface IUser {
     username: string | null;
     currency: string | null;
     avatar: string;
-    language: number;
+    language: string;
 }
 
 export interface IUserWelcome {

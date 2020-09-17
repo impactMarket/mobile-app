@@ -64,6 +64,8 @@ import EditProfile from './src/views/wallet/EditProfile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
 
 import * as Analytics from 'expo-firebase-analytics';
+import * as Localization from 'expo-localization';
+import moment from 'moment';
 
 BigNumber.config({ DECIMAL_PLACES: 55 });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -521,6 +523,7 @@ export default class App extends React.Component<object, IAppState> {
                     let name = '';
                     let currency = 'USD';
                     let exchangeRate = 1;
+                    let language = user.language;
                     if (user.username !== null) {
                         name = user.username;
                     }
@@ -530,14 +533,21 @@ export default class App extends React.Component<object, IAppState> {
                             user.currency.toUpperCase()
                         ].rate;
                     }
+                    // TODO: remove when using default
+                    if (language === null) {
+                        language = Localization.locale;
+                    }
                     store.dispatch(
                         setUserInfo({
                             name,
                             currency,
                             exchangeRate,
                             avatar: user.avatar,
+                            language: language,
                         })
                     );
+                    i18n.locale = language;
+                    moment.locale(language);
                 }
                 await loadContracts(address, kit, store);
                 // We have data!!

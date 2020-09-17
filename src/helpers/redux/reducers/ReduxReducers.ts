@@ -24,6 +24,7 @@ import {
     IAppState,
     AppActionTypes,
     SET_APP_PYMENT_TO_ACTION,
+    SET_USER_LANGUAGE,
 } from '../../types';
 
 const INITIAL_STATE_USER: IUserState = {
@@ -37,6 +38,7 @@ const INITIAL_STATE_USER: IUserState = {
         currency: 'USD',
         exchangeRate: 1,
         avatar: '1',
+        language: 'en',
     },
     community: {
         isBeneficiary: false,
@@ -68,6 +70,7 @@ const userReducer = (
     action: UserActionTypes
 ): IUserState => {
     const community = state.community;
+    const user = state.user;
     switch (action.type) {
         case RESET_USER_APP:
             return INITIAL_STATE_USER;
@@ -76,13 +79,15 @@ const userReducer = (
         case SET_USER_INFO:
             return { ...state, user: action.payload };
         case SET_USER_EXCHANGE_RATE:
-            const user = state.user;
             user.exchangeRate = action.payload;
             return { ...state, user };
         case SET_USER_WALLET_BALANCE:
             const celoInfo = state.celoInfo;
             celoInfo.balance = action.payload;
             return { ...state, celoInfo };
+        case SET_USER_LANGUAGE:
+            user.language = action.payload;
+            return { ...state, user };
         case SET_USER_IS_BENEFICIARY:
             community.isBeneficiary = action.payload;
             return { ...state, community };

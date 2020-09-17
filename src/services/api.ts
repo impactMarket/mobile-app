@@ -220,7 +220,7 @@ class Api {
 
     static async setLanguage(
         address: string,
-        language: number
+        language: string
     ): Promise<boolean> {
         const result = await postRequest<boolean>('/user/language', {
             address,
@@ -229,6 +229,9 @@ class Api {
         return !!result;
     }
 
+    /**
+     * @deprecated Must use values from user storage and update when opening app.
+     */
     static async getExchangeRate(): Promise<any> {
         const result = await getRequest<any>('/exchange-rates/');
         return result;
