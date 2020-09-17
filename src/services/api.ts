@@ -6,6 +6,7 @@ import {
     IUser,
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_FIRST_TIME,
+    IUserWelcome,
 } from 'helpers/types';
 import { AsyncStorage, DevSettings } from 'react-native';
 
@@ -132,12 +133,18 @@ class Api {
         return !!result;
     }
 
+    /**
+     * @deprecated
+     */
     static async findComunityToBeneficicary(beneficiaryAddress: string) {
         return getRequest<ICommunityInfo>(
             `/transactions/beneficiaryin/${beneficiaryAddress}`
         );
     }
 
+    /**
+     * @deprecated
+     */
     static async findComunityToManager(managerAddress: string) {
         return getRequest<ICommunityInfo>(
             `/transactions/managerin/${managerAddress}`
@@ -175,8 +182,18 @@ class Api {
         return result ? result : [];
     }
 
+    /**
+     * @deprecated Use 'welcome' instead.
+     */
     static async getUser(address: string) {
         return getRequest<IUser>(`/user/${address}`);
+    }
+
+    static async welcome(address: string, token: string) {
+        return postRequest<IUserWelcome>(`/user/welcome`, {
+            address,
+            token,
+        });
     }
 
     static async setUsername(
@@ -259,6 +276,9 @@ class Api {
         return result;
     }
 
+    /**
+     * @deprecated
+     */
     static async setUserPushNotificationToken(
         address: string,
         token: string

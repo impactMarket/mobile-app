@@ -241,6 +241,14 @@ export interface IUser {
     language: number;
 }
 
+export interface IUserWelcome {
+    user: IUser; // TODO: remove in the future, as it's intended to be on memory
+    exchangeRates: object; // TODO: this is not really an object
+    isBeneficiary: boolean;
+    isManager: boolean;
+    community?: ICommunityInfo;
+}
+
 export interface IAddressAndName {
     address: string;
     name: string;
