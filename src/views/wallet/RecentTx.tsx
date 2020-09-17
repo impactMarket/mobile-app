@@ -4,7 +4,12 @@ import React, { useState, useEffect, useImperativeHandle } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Headline, ActivityIndicator } from 'react-native-paper';
 import Api from 'services/api';
-import { getAvatarFromId } from 'helpers/index';
+import {
+    amountToUserCurrency,
+    getAvatarFromId,
+    getUserCurrencySymbol,
+} from 'helpers/index';
+import { useStore } from 'react-redux';
 
 interface IRecentTxProps {
     userAddress: string;
@@ -14,6 +19,8 @@ export interface IRecentTxRef {
 }
 const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
     (props, ref) => {
+        const store = useStore();
+        const { user } = store.getState().user;
         const [activities, setActivities] = useState<IListActionItem[]>([]);
         const [loadingTxs, setLoadingTxs] = useState(true);
 
@@ -27,7 +34,10 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                             timestamp: t.timestamp,
                             description: '',
                             from: t.from,
-                            value: '',
+                            value: amountToUserCurrency(
+                                t.value,
+                                user
+                            ).toString(),
                             avatar: t.picture
                                 ? t.picture.length > 3
                                     ? t.picture
@@ -48,7 +58,7 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                         timestamp: t.timestamp,
                         description: '',
                         from: t.from,
-                        value: '',
+                        value: amountToUserCurrency(t.value, user).toString(),
                         avatar: t.picture
                             ? t.picture.length > 3
                                 ? t.picture
@@ -77,7 +87,15 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                 </Headline>
                 <ActivityIndicator animating={loadingTxs} />
                 {activities.map((activity) => (
-                    <ListActionItem key={activity.key} item={activity} />
+                    <ListActionItem
+                        key={activity.key}
+                        item={activity}
+                        prefix={{
+                            top: getUserCurrencySymbol(
+                                store.getState().user.user
+                            ),
+                        }}
+                    />
                 ))}
             </View>
         );

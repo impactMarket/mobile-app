@@ -265,7 +265,7 @@ export interface IAddressAndName {
 export interface IRecentTxAPI {
     picture: string;
     from: IAddressAndName;
-    // txs: number;
+    value: string;
     timestamp: number;
 }
 

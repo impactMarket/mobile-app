@@ -35,7 +35,7 @@ const RecentPayments = React.forwardRef<
         timestamp: p.timestamp,
         description: '',
         from: p.to,
-        value: amountToUserCurrency(p.value, props.user.user).toString(),
+        value: '', //amountToUserCurrency(p.value, props.user.user).toString(),
         avatar: p.picture
             ? p.picture.length > 3
                 ? p.picture
@@ -77,7 +77,7 @@ const RecentPayments = React.forwardRef<
                             address: activity.from.address,
                         })
                     }
-                    prefix={{ top: getUserCurrencySymbol(props.user.user) }}
+                    // prefix={{ top: getUserCurrencySymbol(props.user.user) }}
                 />
             ))}
         </View>
