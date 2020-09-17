@@ -1,7 +1,6 @@
 import React from 'react';
 import './global';
 import { Image, View, YellowBox, AsyncStorage, StatusBar } from 'react-native';
-import * as Location from 'expo-location';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -9,7 +8,6 @@ import {
     Text,
     Button,
     IconButton,
-    Snackbar,
 } from 'react-native-paper';
 import {
     SafeAreaProvider,
@@ -131,7 +129,6 @@ interface IAppState {
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
     testnetWarningOpen: boolean;
-    askLocationOnOpen: boolean;
 }
 export default class App extends React.Component<object, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
@@ -144,7 +141,6 @@ export default class App extends React.Component<object, IAppState> {
             firstTimeUser: true,
             loggedIn: false,
             testnetWarningOpen: false,
-            askLocationOnOpen: false,
         };
     }
 
@@ -158,12 +154,14 @@ export default class App extends React.Component<object, IAppState> {
                 const notificationListener = (
                     notification: Notifications.Notification
                 ) => {
-                    const { action } = notification.request.content.data;
+                    const action = (notification.request.content.data
+                        .body as any).action;
                     if (action === 'community-accepted') {
                         Api.findComunityToManager(
                             store.getState().user.celoInfo.address
                         ).then((isManager) => {
                             if (isManager !== undefined) {
+                                // TODO: add store listener, wait until it's done, go to main page
                                 store.dispatch(setUserIsCommunityManager(true));
                                 const communityContract = new kit.web3.eth.Contract(
                                     CommunityContractABI as any,
@@ -180,6 +178,7 @@ export default class App extends React.Component<object, IAppState> {
                             store.getState().user.celoInfo.address
                         ).then((isBeneficiary) => {
                             if (isBeneficiary !== undefined) {
+                                // TODO: add store listener, wait until it's done, go to main page
                                 store.dispatch(setUserIsBeneficiary(true));
                                 const communityContract = new kit.web3.eth.Contract(
                                     CommunityContractABI as any,
@@ -218,14 +217,6 @@ export default class App extends React.Component<object, IAppState> {
         });
         this.setState({ testnetWarningOpen: true });
         setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
-        const isLocationAvailable = async () => {
-            const availableGPSToRequest =
-                (await Location.hasServicesEnabledAsync()) &&
-                (await Location.getPermissionsAsync()).granted &&
-                (await Location.getProviderStatusAsync()).gpsAvailable;
-            this.setState({ askLocationOnOpen: !availableGPSToRequest });
-        };
-        isLocationAvailable();
     };
 
     componentWillUnmount = () => {
@@ -455,24 +446,6 @@ export default class App extends React.Component<object, IAppState> {
                             />
                         </Stack.Navigator>
                     </NavigationContainer>
-                    <Snackbar
-                        visible={this.state.askLocationOnOpen}
-                        duration={15000}
-                        onDismiss={() =>
-                            this.setState({ askLocationOnOpen: false })
-                        }
-                        action={{
-                            label: i18n.t('turnOn'),
-                            onPress: async () => {
-                                await Location.requestPermissionsAsync();
-                                await Location.getCurrentPositionAsync({
-                                    accuracy: Location.Accuracy.Low,
-                                });
-                            },
-                        }}
-                    >
-                        {i18n.t('turnOnLocationHint')}
-                    </Snackbar>
                 </Provider>
             </PaperProvider>
         );

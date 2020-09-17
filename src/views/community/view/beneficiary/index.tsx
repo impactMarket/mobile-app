@@ -15,9 +15,10 @@ import {
     Alert,
     RefreshControl,
 } from 'react-native';
-import { Button, ProgressBar } from 'react-native-paper';
+import { Button, ProgressBar, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
+import * as Location from 'expo-location';
 
 import Claim from './Claim';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -36,10 +37,14 @@ function BeneficiaryView(props: Props) {
     const [claimedAmount, setClaimedAmount] = useState(0);
     const [claimedProgress, setClaimedProgress] = useState(0.1);
     const [refreshing, setRefreshing] = useState(false);
+    const [askLocationOnOpen, setAskLocationOnOpen] = useState(true);
 
     useEffect(() => {
         const loadCommunity = async () => {
-            if (props.network.contracts.communityContract !== undefined && props.user.celoInfo.address.length > 0) {
+            if (
+                props.network.contracts.communityContract !== undefined &&
+                props.user.celoInfo.address.length > 0
+            ) {
                 const { _address } = props.network.contracts.communityContract;
                 const _community = await Api.getCommunityByContractAddress(
                     _address
@@ -64,8 +69,25 @@ function BeneficiaryView(props: Props) {
                 }
             }
         };
+        const isLocationAvailable = async () => {
+            const availableGPSToRequest =
+                (await Location.hasServicesEnabledAsync()) &&
+                (await Location.getPermissionsAsync()).granted &&
+                (await Location.getProviderStatusAsync()).gpsAvailable;
+            console.log(
+                'location',
+                await Location.hasServicesEnabledAsync(),
+                (await Location.getPermissionsAsync()).granted,
+                (await Location.getProviderStatusAsync()).gpsAvailable
+            );
+            setAskLocationOnOpen(!availableGPSToRequest);
+        };
         loadCommunity();
-    }, [props.network.contracts.communityContract, props.user.celoInfo.address]);
+        isLocationAvailable();
+    }, [
+        props.network.contracts.communityContract,
+        props.user.celoInfo.address,
+    ]);
 
     const onRefresh = () => {
         Api.getCommunityByContractAddress(
@@ -87,78 +109,103 @@ function BeneficiaryView(props: Props) {
     }
 
     return (
-        <ScrollView
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-        >
-            <Header
-                title={i18n.t('claim')}
-                navigation={navigation}
-                hasHelp
-                hasQr
-            />
-            <ImageBackground
-                source={{ uri: community.coverImage }}
-                resizeMode="cover"
-                style={styles.imageBackground}
-            >
-                <Text style={styles.communityName}>{community.name}</Text>
-                <Text style={styles.communityLocation}>
-                    <AntDesign name="enviromento" size={20} /> {community.city},{' '}
-                    {community.country}
-                </Text>
-                <LinearGradient
-                    colors={['transparent', 'rgba(246,246,246,1)']}
-                    style={styles.linearGradient}
-                />
-            </ImageBackground>
-            <View style={styles.contentView}>
-                <Button
-                    mode="outlined"
-                    style={{ margin: 30 }}
-                    onPress={() =>
-                        navigation.navigate('CommunityDetailsScreen', {
-                            community,
-                            user: props.user,
-                        })
-                    }
-                >
-                    {i18n.t('moreAboutYourCommunity')}
-                </Button>
-                <Claim
-                    claimAmount={community.vars._claimAmount}
-                    updateClaimedAmount={updateClaimedAmount}
-                />
-                <View style={{ marginTop: '8%' }}>
-                    <Text
-                        onPress={() =>
-                            navigation.navigate('ClaimExplainedScreen')
-                        }
-                        style={styles.haveClaimed}
-                    >
-                        {i18n.t('youHaveClaimedXoutOfY', {
-                            claimed: claimedAmount,
-                            max: humanifyNumber(community.vars._maxClaim),
-                        })}
-                    </Text>
-                    <ProgressBar
-                        key="claimedbybeneficiary"
-                        style={styles.claimedProgress}
-                        progress={claimedProgress}
-                        color="#5289ff"
+        <>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
                     />
-                    <Text
-                        onPress={() =>
-                            navigation.navigate('ClaimExplainedScreen')
-                        }
-                        style={styles.howClaimsWork}
-                    >
-                        {i18n.t('howClaimWorks')}?
+                }
+            >
+                <Header
+                    title={i18n.t('claim')}
+                    navigation={navigation}
+                    hasHelp
+                    hasQr
+                />
+                <ImageBackground
+                    source={{ uri: community.coverImage }}
+                    resizeMode="cover"
+                    style={styles.imageBackground}
+                >
+                    <Text style={styles.communityName}>{community.name}</Text>
+                    <Text style={styles.communityLocation}>
+                        <AntDesign name="enviromento" size={20} />{' '}
+                        {community.city}, {community.country}
                     </Text>
+                    <LinearGradient
+                        colors={['transparent', 'rgba(246,246,246,1)']}
+                        style={styles.linearGradient}
+                    />
+                </ImageBackground>
+                <View style={styles.contentView}>
+                    <Button
+                        mode="outlined"
+                        style={{ margin: 30 }}
+                        onPress={() =>
+                            navigation.navigate('CommunityDetailsScreen', {
+                                community,
+                                user: props.user,
+                            })
+                        }
+                    >
+                        {i18n.t('moreAboutYourCommunity')}
+                    </Button>
+                    <Claim
+                        claimAmount={community.vars._claimAmount}
+                        updateClaimedAmount={updateClaimedAmount}
+                    />
+                    <View style={{ marginTop: '8%' }}>
+                        <Text
+                            onPress={() =>
+                                navigation.navigate('ClaimExplainedScreen')
+                            }
+                            style={styles.haveClaimed}
+                        >
+                            {i18n.t('youHaveClaimedXoutOfY', {
+                                claimed: claimedAmount,
+                                max: humanifyNumber(community.vars._maxClaim),
+                            })}
+                        </Text>
+                        <ProgressBar
+                            key="claimedbybeneficiary"
+                            style={styles.claimedProgress}
+                            progress={claimedProgress}
+                            color="#5289ff"
+                        />
+                        <Text
+                            onPress={() =>
+                                navigation.navigate('ClaimExplainedScreen')
+                            }
+                            style={styles.howClaimsWork}
+                        >
+                            {i18n.t('howClaimWorks')}?
+                        </Text>
+                    </View>
                 </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+            <Snackbar
+                visible={askLocationOnOpen}
+                duration={10000}
+                onDismiss={() => setAskLocationOnOpen(false)}
+                action={{
+                    label: i18n.t('turnOn'),
+                    onPress: async () => {
+                        try {
+                            await Location.requestPermissionsAsync();
+                            await Location.getCurrentPositionAsync({
+                                accuracy: Location.Accuracy.Low,
+                            });
+                        } catch (e) {
+                            // TODO: insert alert here with error!
+                        }
+                    },
+                }}
+            >
+                {i18n.t('turnOnLocationHint')}
+            </Snackbar>
+        </>
     );
 }
 
