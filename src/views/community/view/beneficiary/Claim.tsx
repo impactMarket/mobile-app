@@ -82,8 +82,9 @@ class Claim extends React.Component<Props, IClaimState> {
             let loc: Location.LocationData | undefined = undefined;
             const availableGPSToRequest =
                 (await Location.hasServicesEnabledAsync()) &&
-                (await Location.getPermissionsAsync()).granted &&
-                (await Location.getProviderStatusAsync()).gpsAvailable;
+                (await Location.getPermissionsAsync()).status === 'granted' &&
+                (await Location.getProviderStatusAsync())
+                    .locationServicesEnabled;
             if (availableGPSToRequest) {
                 loc = await Location.getCurrentPositionAsync({
                     accuracy: Location.Accuracy.Low,
@@ -92,7 +93,8 @@ class Claim extends React.Component<Props, IClaimState> {
             if (loc !== undefined) {
                 Api.addClaimLocation({
                     latitude: loc.coords.altitude + config.locationErrorMargin,
-                    longitude: loc.coords.longitude + config.locationErrorMargin,
+                    longitude:
+                        loc.coords.longitude + config.locationErrorMargin,
                 });
             }
             this._loadAllowance(communityContract).then(() => {

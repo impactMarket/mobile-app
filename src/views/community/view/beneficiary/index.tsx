@@ -72,14 +72,9 @@ function BeneficiaryView(props: Props) {
         const isLocationAvailable = async () => {
             const availableGPSToRequest =
                 (await Location.hasServicesEnabledAsync()) &&
-                (await Location.getPermissionsAsync()).granted &&
-                (await Location.getProviderStatusAsync()).gpsAvailable;
-            console.log(
-                'location',
-                await Location.hasServicesEnabledAsync(),
-                (await Location.getPermissionsAsync()).granted,
-                (await Location.getProviderStatusAsync()).gpsAvailable
-            );
+                (await Location.getPermissionsAsync()).status === 'granted' &&
+                (await Location.getProviderStatusAsync())
+                    .locationServicesEnabled;
             setAskLocationOnOpen(!availableGPSToRequest);
         };
         loadCommunity();
@@ -198,7 +193,28 @@ function BeneficiaryView(props: Props) {
                                 accuracy: Location.Accuracy.Low,
                             });
                         } catch (e) {
-                            // TODO: insert alert here with error!
+                            Alert.alert(
+                                i18n.t('failure'),
+                                i18n.t('errorGettingGPSLocation'),
+                                [
+                                    {
+                                        text: i18n.t('tryAgain'),
+                                        onPress: async () => {
+                                            await Location.requestPermissionsAsync();
+                                            await Location.getCurrentPositionAsync(
+                                                {
+                                                    accuracy:
+                                                        Location.Accuracy.Low,
+                                                }
+                                            );
+                                        },
+                                    },
+                                    {
+                                        text: i18n.t('cancel'),
+                                    },
+                                ],
+                                { cancelable: false }
+                            );
                         }
                     },
                 }}

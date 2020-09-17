@@ -189,6 +189,7 @@ i18n.translations = {
         incrementalIntervalRequired: 'Incremental interval is required!',
         turnOn: 'Turn On',
         turnOnLocationHint: 'Turn on your location for a better experience',
+        tryAgain: 'Try Again',
     },
     pt: {
         testnetWarning:
@@ -370,6 +371,7 @@ i18n.translations = {
         incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
         turnOn: 'Ativar',
         turnOnLocationHint: 'Ative a sua localização para uma melhor experiência.',
+        tryAgain: 'Tentar Novamente',
     },
 };
 // Set the locale once at the beginning of your app.
