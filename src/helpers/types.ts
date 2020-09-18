@@ -262,6 +262,16 @@ export interface IAddressAndName {
     name: string;
 }
 
+export interface IUserTxAPI {
+    picture: string;
+    from: IAddressAndName;
+    value: string;
+    timestamp: number;
+}
+
+/**
+ * @deprecated
+ */
 export interface IRecentTxAPI {
     picture: string;
     from: IAddressAndName;
@@ -269,6 +279,9 @@ export interface IRecentTxAPI {
     timestamp: number;
 }
 
+/**
+ * @deprecated
+ */
 export interface IPaymentsTxAPI {
     picture: string;
     to: IAddressAndName;

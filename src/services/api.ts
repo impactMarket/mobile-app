@@ -7,6 +7,7 @@ import {
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_FIRST_TIME,
     IUserWelcome,
+    IUserTxAPI,
 } from 'helpers/types';
 import { AsyncStorage, DevSettings } from 'react-native';
 
@@ -168,6 +169,16 @@ class Api {
         return result ? result : [];
     }
 
+    static async userTx(accountAddress: string): Promise<IUserTxAPI[]> {
+        const result = await getRequest<IUserTxAPI[]>(
+            `/transactions/usertx/${accountAddress}`
+        );
+        return result ? result : [];
+    }
+
+    /**
+     * @deprecated
+     */
     static async tokenTx(accountAddress: string): Promise<IRecentTxAPI[]> {
         const result = await getRequest<IRecentTxAPI[]>(
             `/transactions/tokentx/${accountAddress}`
@@ -175,6 +186,9 @@ class Api {
         return result ? result : [];
     }
 
+    /**
+     * @deprecated
+     */
     static async paymentsTx(accountAddress: string): Promise<IPaymentsTxAPI[]> {
         const result = await getRequest<IPaymentsTxAPI[]>(
             `/transactions/paymentstx/${accountAddress}`

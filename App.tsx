@@ -65,7 +65,7 @@ import CommunityContractABI from './src/contracts/CommunityABI.json';
 
 import * as Analytics from 'expo-firebase-analytics';
 import * as Localization from 'expo-localization';
-import moment from 'moment';
+import moment, { lang } from 'moment';
 
 BigNumber.config({ DECIMAL_PLACES: 55 });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -536,6 +536,17 @@ export default class App extends React.Component<object, IAppState> {
                     // TODO: remove when using default
                     if (language === null) {
                         language = Localization.locale;
+                        if (language.includes('-')) {
+                            language = language.substr(
+                                0,
+                                language.indexOf('-')
+                            );
+                        } else if (language.includes('_')) {
+                            language = language.substr(
+                                0,
+                                language.indexOf('_')
+                            );
+                        }
                     }
                     store.dispatch(
                         setUserInfo({
