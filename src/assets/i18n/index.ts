@@ -27,7 +27,7 @@ i18n.translations = {
         claim: 'Claim',
         manage: 'Manage',
         communities: 'Communities',
-        pay: 'Pay',
+        pay: 'Send',
         wallet: 'Wallet',
         loginNow: 'Connect with Valora',
         editProfile: 'Edit Profile',
@@ -38,10 +38,10 @@ i18n.translations = {
         phoneNumber: 'Phone Number',
         logout: 'Logout',
         recentTransactions: 'Recent Transactions',
-        nameAddressPhone: 'Name, address or phone number',
-        nameAddressPhoneNotFound: 'Name, address or phone number not found.',
+        nameAddressPhone: 'Destinatary address',
+        nameAddressPhoneNotFound: 'Address not found.',
         noteOptional: 'Note (optional)',
-        recent: 'Recent',
+        recent: 'Recent destinataries',
         remove: 'Remove',
         beneficiaryAddress: 'Beneficiary Address',
         useText: 'Use Text',
@@ -50,11 +50,11 @@ i18n.translations = {
         currentAddress: 'Current Address',
         allowCamera: 'Allow camera',
         moreAboutYourCommunity: 'More about your community',
-        howClaimWorks: 'How claim works',
+        howClaimWorks: 'How it works',
         upToPerBeneficiary: 'Up to ${{amount}} / beneficiary',
         ssi: 'Self-Sustainability Index',
         ssiDescription:
-            'SSI indicates how self-sustainable a community is and how it progresses over time',
+            'SSI measures how self-sustainable a community is, and how it progresses over time',
         seeMore: 'See More',
         seeLess: 'See Less',
         exploreCommunityContract: 'See Community Contract',
@@ -76,7 +76,7 @@ i18n.translations = {
         email: 'Email',
         contractDetails: 'Contract Details',
         claimAmount: 'Claim Amount',
-        aroundValue: 'around {{symbol}}{{amount}}',
+        aroundValue: '~ {{symbol}}{{amount}}',
         totalClaimPerBeneficiary: 'Total claim amount per beneficiary',
         frequency: 'Frequency',
         hourly: 'Hourly',
@@ -109,11 +109,11 @@ i18n.translations = {
         loginDescription1:
             'impactMarket operates on top of Celo network, an open and global financial platform.',
         loginDescription2:
-            'With Valora you can easily send and receive money with just a mobile phone.',
+            'With Valora you can easily send and receive money.',
         step1: 'Step 1',
         downloadCeloApp: 'Download Valora app',
         step2: 'Step 2',
-        installCeloCreateAccount: 'Install Valora and create an account',
+        installCeloCreateAccount: 'Install Valora & create an account',
         finalStep: 'Final Step',
         connectCeloWallet: 'Connect with Valora',
         notNow: 'Not now',
@@ -143,7 +143,7 @@ i18n.translations = {
         changePhoto: 'Change Photo',
         tryingToAddInvalidAddress: 'You are trying to add an invalid address!',
         errorSendingPayment: 'An error happened while sending the payment!',
-        paymentSent: 'Payment sent!',
+        paymentSent: 'Payment done!',
         scanningInvalidAddress: 'You are trying to scan an invalid address!',
         select: 'Select',
         errorGettingGPSLocation:
@@ -158,19 +158,19 @@ i18n.translations = {
         errorAddingBeneficiary:
             'An error happened while adding the beneficiary.',
         oneTimeWelcomeMessage1:
-            'impactMarket enables any vulnerable community to create its own unconditional basic income system for their beneficiaries, where each member can claim a fixed amount on a regular basis and make payments for free',
+            'impactMarket enables any community to create its own unconditional basic income system for their beneficiaries, where each member can claim a fixed amount on a regular basis',
         oneTimeWelcomeMessage2:
-            'Back those beneficiaries by donating to their communities.',
+            'Anyone can back those beneficiaries by donating to their communities.',
         exploreCommunities: 'Explore Communities',
         noFunds: 'No Funds',
         notFundsToAddBeneficiary:
-            'Your community does not has enough funds! You need at least 5 cents that will be sent to the beneficiary when added.',
+            'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
         claimExplained1:
             'Each community has a group of beneficiaries, added by the coommunity managers, that can access a basic income under a set of rules defined at its creation.',
         claimExplained2:
             'For example, any beneficiary in a specific community can claim $1 cUSD from that community contract on a recurring basis with an interval of at least 24h before being able to claim another $1 cUSD, up to a cumulative total of $500 cUSD. Every time a beneficiary claims, the time interval to claim again can increase.',
         claimAmountHelp:
-            'This is the UBI amount, is cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
+            'This is the UBI amount, in $cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
         totalClaimPerBeneficiaryHelp:
             'This value is the limit each beneficiary can get in total after several claims. For example, each beneficiary can claim $2/day until it reaches a total of $1,000, meaning that each beneficiary will have access to a UBI ($2/day) for at least 16 months. This time can increase if minutes are added to the Time increment.',
         frequencyHelp:
@@ -213,7 +213,7 @@ i18n.translations = {
         claim: 'Pedir',
         manage: 'Gerir',
         communities: 'Comunidades',
-        pay: 'Pagar',
+        pay: 'Enviar',
         wallet: 'Carteira',
         loginNow: 'Conectar Agora',
         editProfile: 'Editar Perfil',
@@ -224,11 +224,11 @@ i18n.translations = {
         phoneNumber: 'Número de telemóvel',
         logout: 'Sair',
         recentTransactions: 'Transações Recentes',
-        nameAddressPhone: 'Nome, endereço ou número de telemóvel',
+        nameAddressPhone: 'Endereço do destinatário',
         nameAddressPhoneNotFound:
-            'Nome, endereço ou número de telemóvel não encontrado.',
+            'Não encontrado.',
         noteOptional: 'Nota (opcional)',
-        recent: 'Recente',
+        recent: 'Recentes',
         remove: 'Remover',
         beneficiaryAddress: 'Endereço do Beneficiário',
         useText: 'Usar Texto',
@@ -236,12 +236,12 @@ i18n.translations = {
         tapToScanAgain: 'Clique para tentar de novo',
         currentAddress: 'Endereço Atual',
         allowCamera: 'Permitir camera',
-        moreAboutYourCommunity: 'Mais sobre a sua comunidade',
-        howClaimWorks: 'Como funcionam os pedidos',
+        moreAboutYourCommunity: 'Mais sobre a minha comunidade',
+        howClaimWorks: 'Como funciona',
         upToPerBeneficiary: 'Até ${{amount}} / beneficiário',
-        ssi: 'Indice de Auto Sustentabilidade',
+        ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
-            'O SSI indica o quão auto-sustentável é uma comunidade e como ela progride ao longo do tempo',
+            'Este indicador mede a autossustentabilidade financeira de uma comunidade, e a sua evolução',
         seeMore: 'Ver Mais',
         seeLess: 'Ver Menos',
         exploreCommunityContract: 'Ver Contrato da Comunidade',
@@ -340,9 +340,9 @@ i18n.translations = {
         addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
         errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.',
         oneTimeWelcomeMessage1:
-            'impactMarket é um sistema de renda básica, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
+            'impactMarket é um sistema de rendimento mínimo, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
         oneTimeWelcomeMessage2:
-            'Pode apoiar esses beneficiários doando para suas comunidades.',
+            'Pode apoiar esses beneficiários doando diretamente para suas comunidades.',
         exploreCommunities: 'Explorar Comunidades',
         noFunds: 'Fundos Insuficientes',
         notFundsToAddBeneficiary:
@@ -350,7 +350,7 @@ i18n.translations = {
         claimExplained1:
             'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras definidas quando criada.',
         claimExplained2:
-            'Por exemplo, qualquer beneficiário em uma comunidade específica pode reivindicar/pedir $1 cUSD desse contrato comunitário, de forma recorrente, com um intervalo de pelo menos 24 horas antes de poder pedir outro $1 cUSD, até um total acumulado de $500 cUSD. Cada vez que um beneficiário pede $1 cUSD, o intervalo de tempo para pedir novamente pode aumentar.',
+            'Por exemplo, qualquer beneficiário numa comunidade específica pode reivindicar/pedir $1 cUSD desse contrato comunitário, de forma recorrente, com um intervalo de pelo menos 24 horas antes de poder pedir outro $1 cUSD, até um total acumulado de $500 cUSD. Cada vez que um beneficiário pede $1 cUSD, o intervalo de tempo para pedir novamente pode aumentar.',
         claimAmountHelp:
             'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
         totalClaimPerBeneficiaryHelp:
