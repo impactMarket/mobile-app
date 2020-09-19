@@ -311,8 +311,9 @@ class Api {
         return !!result;
     }
 
-    static async addClaimLocation(gps: any): Promise<boolean> {
+    static async addClaimLocation(communityPublicId: string, gps: any): Promise<boolean> {
         const requestBody = {
+            communityPublicId,
             gps,
         };
         const result = await postRequest<boolean>(

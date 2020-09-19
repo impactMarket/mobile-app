@@ -91,7 +91,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 });
             }
             if (loc !== undefined) {
-                Api.addClaimLocation({
+                Api.addClaimLocation(network.community.publicId, {
                     latitude: loc.coords.altitude + config.locationErrorMargin,
                     longitude:
                         loc.coords.longitude + config.locationErrorMargin,
