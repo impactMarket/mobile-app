@@ -82,7 +82,8 @@ i18n.translations = {
         hourly: 'Hourly',
         daily: 'Daily',
         weekly: 'Weekly',
-        timeIncrementAfterClaim: 'Time increment after each claim (in minutes)',
+        timeIncrementAfterClaim: 'Time increment after each claim',
+        timeInMinutes: 'Time in minutes',
         visibility: 'Visibility',
         public: 'Public',
         private: 'Private',
@@ -108,8 +109,7 @@ i18n.translations = {
         connectToYourCeloWallet: 'Connect with Valora',
         loginDescription1:
             'impactMarket operates on top of Celo network, an open and global financial platform.',
-        loginDescription2:
-            'With Valora you can easily send and receive money.',
+        loginDescription2: 'With Valora you can easily send and receive money.',
         step1: 'Step 1',
         downloadCeloApp: 'Download Valora app',
         step2: 'Step 2',
@@ -190,6 +190,10 @@ i18n.translations = {
         turnOn: 'Turn On',
         turnOnLocationHint: 'Turn on your location for a better experience',
         tryAgain: 'Try Again',
+        payConfirmMessage:
+            "By pressing 'Pay', you are sending {{symbol}}{{amount}} (${{amountInDollars}}) to {{to}}",
+        donateConfirmMessage:
+            "By pressing 'Donate', you are donating {{symbol}}{{amount}} (${{amountInDollars}}) to {{to}}",
     },
     pt: {
         testnetWarning:
@@ -225,8 +229,7 @@ i18n.translations = {
         logout: 'Sair',
         recentTransactions: 'Transações Recentes',
         nameAddressPhone: 'Endereço do destinatário',
-        nameAddressPhoneNotFound:
-            'Não encontrado.',
+        nameAddressPhoneNotFound: 'Não encontrado.',
         noteOptional: 'Nota (opcional)',
         recent: 'Recentes',
         remove: 'Remover',
@@ -269,8 +272,8 @@ i18n.translations = {
         hourly: 'Por Hora',
         daily: 'Diariamente',
         weekly: 'Semanalmente',
-        timeIncrementAfterClaim:
-            'Incremento de tempo após cada pedido (em minutos)',
+        timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
+        timeInMinutes: 'Tempo em minutos',
         visibility: 'Visibilidade',
         public: 'Publico',
         private: 'Privado',
@@ -370,8 +373,13 @@ i18n.translations = {
         maxClaimAmountRequired: 'Quantidade máxima a pedir é obrigatório!',
         incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
         turnOn: 'Ativar',
-        turnOnLocationHint: 'Ative a sua localização para uma melhor experiência.',
+        turnOnLocationHint:
+            'Ative a sua localização para uma melhor experiência.',
         tryAgain: 'Tentar Novamente',
+        payConfirmMessage:
+            "Ao selecionar 'Pagar', você está a enviar {{symbol}}{{amount}} (${{amountInDollars}}) para {{to}}",
+        donateConfirmMessage:
+            "Ao selecionar 'Contribuir', você está a contribuir com {{symbol}}{{amount}} (${{amountInDollars}}) para {{to}}",
     },
 };
 // Set the locale once at the beginning of your app.
