@@ -24,12 +24,21 @@ import {
     SET_APP_PYMENT_TO_ACTION,
     AppActionTypes,
     SET_USER_LANGUAGE,
+    INIT_USER,
+    IInitUser,
 } from '../../types';
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
     return {
         type: SET_USER_CELO_INFO,
         payload: celoInfo,
+    };
+}
+
+export function initUser(user: IInitUser): UserActionTypes {
+    return {
+        type: INIT_USER,
+        payload: user,
     };
 }
 

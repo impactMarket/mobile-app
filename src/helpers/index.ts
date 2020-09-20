@@ -2,6 +2,8 @@ import { ContractKit } from '@celo/contractkit';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
+import moment from 'moment';
+import { Store, CombinedState } from 'redux';
 import Api from 'services/api';
 
 import config from '../../config';
@@ -14,8 +16,21 @@ import {
     setUserIsCommunityManager,
     setImpactMarketContract,
     setCommunity,
+    initUser,
 } from './redux/actions/ReduxActions';
-import { ICommunityInfo, IUserInfo } from './types';
+import {
+    AppActionTypes,
+    AuthActionTypes,
+    IAppState,
+    IAuthState,
+    ICommunityInfo,
+    INetworkState,
+    IUserInfo,
+    IUserState,
+    IUserWelcome,
+    NetworkActionTypes,
+    UserActionTypes,
+} from './types';
 
 const usergetUserAvatars = [
     [
@@ -40,8 +55,54 @@ const usergetUserAvatars = [
     ],
 ];
 
+export async function getUserBalance(kit: ContractKit, address: string) {
+    const stableToken = await kit.contracts.getStableToken();
+    const cUSDBalanceBig = await stableToken.balanceOf(address);
+    return new BigNumber(cUSDBalanceBig.toString());
+}
+
+export async function welcomeUser(
+    address: string,
+    phoneNumber: string,
+    user: IUserWelcome,
+    kit: ContractKit,
+    store: Store<
+        CombinedState<{
+            user: IUserState;
+            network: INetworkState;
+            auth: IAuthState;
+            app: IAppState;
+        }>,
+        UserActionTypes | NetworkActionTypes | AuthActionTypes | AppActionTypes
+    >
+) {
+    const balance = await getUserBalance(kit, address);
+    let language = user.user.language;
+    i18n.locale = language;
+    moment.locale(language);
+    store.dispatch(
+        initUser({
+            ...user,
+            user: {
+                ...user.user,
+                phoneNumber,
+                balance: balance.toString(),
+            },
+        })
+    );
+    if (user.isBeneficiary || user.isManager) {
+        const c = user.community!;
+        const communityContract = new kit.web3.eth.Contract(
+            CommunityContractABI as any,
+            c.contractAddress
+        );
+        store.dispatch(setCommunity(c));
+        store.dispatch(setCommunityContract(communityContract));
+    }
+}
+
 export function formatInputAmountToTransfer(inputAmount: string) {
-    if (inputAmount.indexOf(',') === 0) {
+    if (inputAmount.indexOf(',') === 0 || inputAmount.indexOf('.') === 0) {
         inputAmount = `0${inputAmount}`;
     }
     inputAmount = inputAmount.replace(',', '.');
@@ -128,6 +189,9 @@ export var iptcColors = {
     softBlue: '#5e72e4',
 };
 
+/**
+ * @deprecated
+ */
 export async function loadContracts(
     address: string,
     kit: ContractKit,

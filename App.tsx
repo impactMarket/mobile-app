@@ -29,11 +29,9 @@ import {
 
 import config from './config';
 import i18n from './src/assets/i18n';
-import { iptcColors, loadContracts } from './src/helpers';
+import { iptcColors, welcomeUser } from './src/helpers';
 import {
-    setUserCeloInfo,
     setCeloKit,
-    setUserInfo,
     setPushNotificationsToken,
     setCommunity,
     setCommunityContract,
@@ -62,10 +60,6 @@ import AddedScreen from './src/views/community/view/communitymanager/AddedScreen
 import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
 import EditProfile from './src/views/wallet/EditProfile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
-
-import * as Analytics from 'expo-firebase-analytics';
-import * as Localization from 'expo-localization';
-import moment, { lang } from 'moment';
 
 BigNumber.config({ DECIMAL_PLACES: 55 });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -196,16 +190,6 @@ export default class App extends React.Component<object, IAppState> {
                 };
 
                 if (currentLoggedIn) {
-                    this._authUser();
-                    registerForPushNotifications().then((token) => {
-                        if (token) {
-                            Api.setUserPushNotificationToken(
-                                store.getState().user.celoInfo.address,
-                                token
-                            );
-                            store.dispatch(setPushNotificationsToken(token));
-                        }
-                    });
                     Notifications.addNotificationReceivedListener(
                         notificationListener
                     );
@@ -214,9 +198,9 @@ export default class App extends React.Component<object, IAppState> {
                             notificationListener(response.notification)
                     );
                 }
-                this.setState({ loggedIn: currentLoggedIn });
             }
         });
+        store.dispatch(setCeloKit(kit));
         this.setState({ testnetWarningOpen: true });
         setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
     };
@@ -453,21 +437,6 @@ export default class App extends React.Component<object, IAppState> {
         );
     }
 
-    _getCurrentUserBalance = async (address: string) => {
-        await Analytics.setUserId(address);
-        // await Analytics.setUserProperties({
-        //     hero_class: 'B',
-        // });
-        // await Analytics.logEvent('ButtonTapped', {
-        //     name: 'settings',
-        //     screen: 'profile',
-        //     purpose: 'Opens the internal settings',
-        // });
-        const stableToken = await kit.contracts.getStableToken();
-        const cUSDBalanceBig = await stableToken.balanceOf(address);
-        return new BigNumber(cUSDBalanceBig.toString());
-    };
-
     _cacheSplashResourcesAsync = async () => {
         const gif = require('./src/assets/images/splash.png');
         return Asset.fromModule(gif).downloadAsync();
@@ -504,64 +473,20 @@ export default class App extends React.Component<object, IAppState> {
     };
 
     _authUser = async () => {
+        const pushNotificationsToken = await registerForPushNotifications();
+        store.dispatch(setPushNotificationsToken(pushNotificationsToken));
+
         let address: string | null = '';
         let phoneNumber: string | null = '';
+        // TODO: what happens when it goes to catch?
         try {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
-                const balance = await this._getCurrentUserBalance(address);
-                const user = await Api.getUser(address);
-                store.dispatch(
-                    setUserCeloInfo({
-                        address,
-                        phoneNumber,
-                        balance: balance.toString(),
-                    })
-                );
+                const user = await Api.welcome(address, pushNotificationsToken);
                 if (user !== undefined) {
-                    let name = '';
-                    let currency = 'USD';
-                    let exchangeRate = 1;
-                    let language = user.language;
-                    if (user.username !== null) {
-                        name = user.username;
-                    }
-                    if (user.currency !== null) {
-                        currency = user.currency;
-                        exchangeRate = (await Api.getExchangeRate())[
-                            user.currency.toUpperCase()
-                        ].rate;
-                    }
-                    // TODO: remove when using default
-                    if (language === null) {
-                        language = Localization.locale;
-                        if (language.includes('-')) {
-                            language = language.substr(
-                                0,
-                                language.indexOf('-')
-                            );
-                        } else if (language.includes('_')) {
-                            language = language.substr(
-                                0,
-                                language.indexOf('_')
-                            );
-                        }
-                    }
-                    store.dispatch(
-                        setUserInfo({
-                            name,
-                            currency,
-                            exchangeRate,
-                            avatar: user.avatar,
-                            language: language,
-                        })
-                    );
-                    i18n.locale = language;
-                    moment.locale(language);
+                    await welcomeUser(address, phoneNumber, user, kit, store);
                 }
-                await loadContracts(address, kit, store);
-                // We have data!!
             }
             const firstTime = await AsyncStorage.getItem(
                 STORAGE_USER_FIRST_TIME
@@ -573,6 +498,5 @@ export default class App extends React.Component<object, IAppState> {
         } catch (error) {
             // Error retrieving data
         }
-        store.dispatch(setCeloKit(kit));
     };
 }

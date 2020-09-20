@@ -4,6 +4,7 @@ export const STORAGE_USER_ADDRESS = '@celoinfo:address';
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber';
 export const STORAGE_USER_FIRST_TIME = '@status:firstime';
 export const STORAGE_USER_AUTH_TOKEN = '@user:authtoken';
+export const INIT_USER = 'INIT_USER';
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_USER_EXCHANGE_RATE = 'SET_USER_EXCHANGE_RATE';
@@ -92,6 +93,11 @@ interface UserExchangeRateAction {
     payload: number;
 }
 
+interface InitUserAction {
+    type: typeof INIT_USER;
+    payload: IInitUser;
+}
+
 interface UserSetBalanceAction {
     type: typeof SET_USER_WALLET_BALANCE;
     payload: string;
@@ -164,7 +170,8 @@ export type UserActionTypes =
     | ResetUserAction
     | UserInfoAction
     | UserLanguageAction
-    | UserExchangeRateAction;
+    | UserExchangeRateAction
+    | InitUserAction;
 export type NetworkActionTypes =
     | SetImpactMarketContractAction
     | SetCommunityContractAction
@@ -244,17 +251,29 @@ export interface ICommunityInfoBeneficiary {
 export interface IUser {
     address: string;
     username: string | null;
-    currency: string | null;
+    currency: string;
     avatar: string;
     language: string;
 }
 
 export interface IUserWelcome {
     user: IUser; // TODO: remove in the future, as it's intended to be on memory
-    exchangeRates: object; // TODO: this is not really an object
+    exchangeRates: any; // TODO: this is not really an any
     isBeneficiary: boolean;
     isManager: boolean;
     community?: ICommunityInfo;
+}
+
+export interface IInitUser {
+    user: IUser & IUserCeloInfo; 
+    exchangeRates: any;
+    isBeneficiary: boolean;
+    isManager: boolean;
+    community?: ICommunityInfo;
+}
+
+export interface IUserWelcomeAuth extends IUserWelcome {
+    token: string;
 }
 
 export interface IAddressAndName {

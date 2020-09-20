@@ -1,59 +1,43 @@
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
-import { loadContracts, iptcColors } from 'helpers/index';
+import { iptcColors } from 'helpers/index';
 import {
-    setUserCeloInfo,
     setPushNotificationsToken,
 } from 'helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
     STORAGE_USER_FIRST_TIME,
-    IRootState,
     STORAGE_USER_AUTH_TOKEN,
 } from 'helpers/types';
+import { welcomeUser } from 'helpers/index';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, AsyncStorage, Alert } from 'react-native';
 import { Button } from 'react-native-paper';
-import { ConnectedProps, connect, useStore } from 'react-redux';
+import { useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';
 import * as Device from 'expo-device';
+import * as Localization from 'expo-localization';
+import Web3 from 'web3';
+import { newKitFromWeb3 } from '@celo/contractkit';
+import config from '../../../config';
 
-const mapStateToProps = (state: IRootState) => {
-    const { user, app } = state;
-    return { user, app };
-};
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
-
-function LoginScreen(props: Props) {
+function LoginScreen() {
     const store = useStore();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
-
-    const getCurrentUserBalance = async (address: string) => {
-        const stableToken = await props.app.kit.contracts.getStableToken();
-
-        const [cUSDBalanceBig, cUSDDecimals] = await Promise.all([
-            stableToken.balanceOf(address),
-            stableToken.decimals(),
-        ]);
-        const decimals = new BigNumber(10).pow(cUSDDecimals).toString();
-        const cUSDBalance = cUSDBalanceBig.div(decimals).toFixed(2);
-        return cUSDBalance;
-    };
 
     const login = async () => {
         const requestId = 'login';
         const dappName = 'impactmarket';
         const callback = Linking.makeUrl('/login');
         setConnecting(true);
+
+        const pushNotificationsToken = await registerForPushNotifications();
 
         requestAccountAddress({
             requestId,
@@ -63,8 +47,21 @@ function LoginScreen(props: Props) {
 
         const dappkitResponse = await waitForAccountAuth(requestId);
         const userAddress = ethers.utils.getAddress(dappkitResponse.address);
-        const authToken = await Api.userAuth(userAddress);
-        if (authToken === undefined) {
+
+        let language = Localization.locale;
+        if (language.includes('-')) {
+            language = language.substr(0, language.indexOf('-'));
+        } else if (language.includes('_')) {
+            language = language.substr(0, language.indexOf('_'));
+        }
+
+        const user = await Api.userAuth(
+            userAddress,
+            language,
+            pushNotificationsToken
+        );
+        console.log(user);
+        if (user === undefined) {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
@@ -75,54 +72,37 @@ function LoginScreen(props: Props) {
             return;
         }
         try {
-            const cUSDBalance = await getCurrentUserBalance(userAddress);
-            //
-            await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, authToken);
+            await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, user.token);
             await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
             await AsyncStorage.setItem(
                 STORAGE_USER_PHONE_NUMBER,
                 dappkitResponse.phoneNumber
             );
             await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-            const is = await loadContracts(userAddress, props.app.kit, props);
+
             const unsubscribe = store.subscribe(() => {
                 const state = store.getState();
                 if (state.user.celoInfo.address.length > 0) {
                     unsubscribe();
                     setConnecting(false);
                     navigation.goBack();
-                    if (is === 1) {
+                    if (state.user.community.isBeneficiary) {
                         navigation.navigate('claim');
-                    } else if (is === 0) {
+                    } else if (state.user.community.isManager) {
                         navigation.navigate('manage');
                     } else {
                         navigation.navigate('communities');
                     }
                 }
             });
-            props.dispatch(
-                setUserCeloInfo({
-                    address: userAddress,
-                    phoneNumber: dappkitResponse.phoneNumber,
-                    balance: cUSDBalance,
-                })
-            );
-            const pushNotificationsToken = await registerForPushNotifications();
-            if (pushNotificationsToken === undefined) {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('anErroHappenedTryAgain'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                setConnecting(false);
-                return;
-            }
-            Api.setUserPushNotificationToken(
+            await welcomeUser(
                 userAddress,
-                pushNotificationsToken
+                dappkitResponse.phoneNumber,
+                user,
+                newKitFromWeb3(new Web3(config.jsonRpc)),
+                store as any
             );
-            props.dispatch(setPushNotificationsToken(pushNotificationsToken));
+            store.dispatch(setPushNotificationsToken(pushNotificationsToken));
         } catch (error) {
             Alert.alert(
                 i18n.t('failure'),
@@ -297,4 +277,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(LoginScreen);
+export default LoginScreen;

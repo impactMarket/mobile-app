@@ -8,6 +8,7 @@ import {
     STORAGE_USER_FIRST_TIME,
     IUserWelcome,
     IUserTxAPI,
+    IUserWelcomeAuth,
 } from 'helpers/types';
 import { AsyncStorage, DevSettings } from 'react-native';
 
@@ -286,9 +287,15 @@ class Api {
         return response;
     }
 
-    static async userAuth(address: string): Promise<string | undefined> {
-        const result = await postRequest<string | undefined>('/user/auth', {
+    static async userAuth(
+        address: string,
+        language: string,
+        pushNotificationsToken: string
+    ): Promise<IUserWelcomeAuth | undefined> {
+        const result = await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
             address,
+            language,
+            pushNotificationsToken,
         });
         return result;
     }
@@ -311,7 +318,10 @@ class Api {
         return !!result;
     }
 
-    static async addClaimLocation(communityPublicId: string, gps: any): Promise<boolean> {
+    static async addClaimLocation(
+        communityPublicId: string,
+        gps: any
+    ): Promise<boolean> {
         const requestBody = {
             communityPublicId,
             gps,

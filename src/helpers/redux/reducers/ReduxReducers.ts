@@ -25,6 +25,7 @@ import {
     AppActionTypes,
     SET_APP_PYMENT_TO_ACTION,
     SET_USER_LANGUAGE,
+    INIT_USER,
 } from '../../types';
 
 const INITIAL_STATE_USER: IUserState = {
@@ -61,6 +62,7 @@ const INITIAL_STATE_AUTH: IAuthState = {
 };
 
 const INITIAL_STATE_APP: IAppState = {
+    // TODO: save exhangeRates on load
     kit: undefined as any,
     paymentToAddress: '',
 };
@@ -72,6 +74,31 @@ const userReducer = (
     const community = state.community;
     const user = state.user;
     switch (action.type) {
+        case INIT_USER:
+            return {
+                celoInfo: {
+                    address: action.payload.user.address,
+                    phoneNumber: action.payload.user.phoneNumber,
+                    balance: action.payload.user.balance,
+                },
+                user: {
+                    name:
+                        action.payload.user.username === null
+                            ? ''
+                            : action.payload.user.username,
+                    currency: action.payload.user.currency,
+                    language: action.payload.user.language,
+                    avatar: action.payload.user.avatar,
+                    exchangeRate:
+                        action.payload.exchangeRates[
+                            action.payload.user.currency.toUpperCase()
+                        ].rate,
+                },
+                community: {
+                    isBeneficiary: action.payload.isBeneficiary,
+                    isManager: action.payload.isManager,
+                },
+            };
         case RESET_USER_APP:
             return INITIAL_STATE_USER;
         case SET_USER_CELO_INFO:

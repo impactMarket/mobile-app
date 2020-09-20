@@ -17,7 +17,7 @@ export async function sendPushNotification(
     });
 }
 
-export async function registerForPushNotifications() {
+export async function registerForPushNotifications(): Promise<string> {
     let token;
     if (Constants.isDevice) {
         const { status: existingStatus } = await Permissions.getAsync(
@@ -31,11 +31,11 @@ export async function registerForPushNotifications() {
             finalStatus = status;
         }
         if (finalStatus !== 'granted') {
-            return;
+            return '';
         }
         token = (await Notifications.getExpoPushTokenAsync()).data;
     } else {
-        return;
+        return '';
     }
 
     if (Platform.OS === 'android') {
