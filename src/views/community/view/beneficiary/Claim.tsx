@@ -37,7 +37,7 @@ interface IClaimState {
     nextClaim: moment.Duration;
     claimDisabled: boolean;
     claiming: boolean;
-    enoughToClaimOnContract: boolean;
+    notEnoughToClaimOnContract: boolean;
 }
 class Claim extends React.Component<Props, IClaimState> {
     constructor(props: any) {
@@ -46,7 +46,7 @@ class Claim extends React.Component<Props, IClaimState> {
             nextClaim: moment.duration(0),
             claimDisabled: true,
             claiming: false,
-            enoughToClaimOnContract: false,
+            notEnoughToClaimOnContract: true,
         };
     }
 
@@ -59,11 +59,11 @@ class Claim extends React.Component<Props, IClaimState> {
             totalClaimed,
             totalRaised,
             vars,
-        } = this.props.network.community;
-        const enoughToClaimOnContract = new BigNumber(totalRaised)
+        } = this.props.network.community; // TODO: run api request in postman to see values
+        const notEnoughToClaimOnContract = new BigNumber(totalRaised)
             .minus(totalClaimed)
             .lt(vars._claimAmount);
-        this.setState({ enoughToClaimOnContract });
+        this.setState({ notEnoughToClaimOnContract });
     };
 
     handleClaimPress = async () => {
@@ -109,7 +109,7 @@ class Claim extends React.Component<Props, IClaimState> {
             claimDisabled,
             nextClaim,
             claiming,
-            enoughToClaimOnContract,
+            notEnoughToClaimOnContract,
         } = this.state;
 
         if (claimDisabled) {
@@ -136,7 +136,7 @@ class Claim extends React.Component<Props, IClaimState> {
             <Button
                 mode="contained"
                 onPress={this.handleClaimPress}
-                disabled={claimDisabled || claiming || enoughToClaimOnContract}
+                disabled={claimDisabled || claiming || notEnoughToClaimOnContract}
                 loading={claiming}
                 style={styles.claimButton}
             >
