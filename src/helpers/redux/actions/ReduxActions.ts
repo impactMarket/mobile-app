@@ -6,7 +6,6 @@ import {
     SET_USER_CELO_INFO,
     SET_CELO_KIT,
     SET_COMMUNITY_CONTRACT,
-    SET_IMPACTMARKET_CONTRACT,
     NetworkActionTypes,
     SET_USER_WALLET_BALANCE,
     SET_USER_IS_COMMUNITY_MANAGER,
@@ -90,13 +89,6 @@ export function setCeloKit(kit: ContractKit): AppActionTypes {
     return {
         type: SET_CELO_KIT,
         payload: kit,
-    };
-}
-
-export function setImpactMarketContract(impactMarket: any): NetworkActionTypes {
-    return {
-        type: SET_IMPACTMARKET_CONTRACT,
-        payload: impactMarket,
     };
 }
 

@@ -92,7 +92,7 @@ class Claim extends React.Component<Props, IClaimState> {
             }
             if (loc !== undefined) {
                 Api.addClaimLocation(network.community.publicId, {
-                    latitude: loc.coords.altitude + config.locationErrorMargin,
+                    latitude: loc.coords.latitude + config.locationErrorMargin,
                     longitude:
                         loc.coords.longitude + config.locationErrorMargin,
                 });
@@ -136,7 +136,9 @@ class Claim extends React.Component<Props, IClaimState> {
             <Button
                 mode="contained"
                 onPress={this.handleClaimPress}
-                disabled={claimDisabled || claiming || notEnoughToClaimOnContract}
+                disabled={
+                    claimDisabled || claiming || notEnoughToClaimOnContract
+                }
                 loading={claiming}
                 style={styles.claimButton}
             >

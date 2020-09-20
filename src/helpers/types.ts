@@ -12,7 +12,6 @@ export const SET_USER_WALLET_BALANCE = 'SET_USER_WALLET_BALANCE';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
 export const SET_COMMUNITY = 'SET_COMMUNITY';
-export const SET_IMPACTMARKET_CONTRACT = 'SET_IMPACTMARKET_CONTRACT';
 export const SET_USER_IS_BENEFICIARY = 'SET_USER_IS_BENEFICIARY';
 export const SET_USER_IS_COMMUNITY_MANAGER = 'SET_USER_IS_COMMUNITY_MANAGER';
 export const RESET_USER_APP = 'RESET_USER_APP';
@@ -51,7 +50,6 @@ export interface IUserState {
 }
 
 export interface IContractsState {
-    impactMarketContract: any;
     communityContract: any;
 }
 
@@ -118,11 +116,6 @@ interface CeloKitAction {
     payload: ContractKit;
 }
 
-interface SetImpactMarketContractAction {
-    type: typeof SET_IMPACTMARKET_CONTRACT;
-    payload: any;
-}
-
 interface SetCommunityContractAction {
     type: typeof SET_COMMUNITY_CONTRACT;
     payload: any;
@@ -173,7 +166,6 @@ export type UserActionTypes =
     | UserExchangeRateAction
     | InitUserAction;
 export type NetworkActionTypes =
-    | SetImpactMarketContractAction
     | SetCommunityContractAction
     | SetCommunityAction
     | ResetNetworkAction;
@@ -283,9 +275,10 @@ export interface IAddressAndName {
 
 export interface IUserTxAPI {
     picture: string;
-    from: IAddressAndName;
+    counterParty: IAddressAndName;
     value: string;
     timestamp: number;
+    fromUser: boolean;
 }
 
 /**

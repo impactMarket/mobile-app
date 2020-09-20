@@ -1,20 +1,16 @@
 import { ContractKit } from '@celo/contractkit';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
 import moment from 'moment';
 import { Store, CombinedState } from 'redux';
 import Api from 'services/api';
 
 import config from '../../config';
 import CommunityContractABI from '../contracts/CommunityABI.json';
-import ImpactMarketContractABI from '../contracts/ImpactMarketABI.json';
-import { ImpactMarketInstance } from '../contracts/types/truffle-contracts';
 import {
     setCommunityContract,
     setUserIsBeneficiary,
     setUserIsCommunityManager,
-    setImpactMarketContract,
     setCommunity,
     initUser,
 } from './redux/actions/ReduxActions';
@@ -32,26 +28,29 @@ import {
     UserActionTypes,
 } from './types';
 
+const avatarRound1 = require('assets/images/avatar/round/avatar1.png');
+const avatarSquare1 = require('assets/images/avatar/square/avatar1.png');
+
 const usergetUserAvatars = [
     [
-        require('assets/images/avatar/round/avatar1.png'),
-        require('assets/images/avatar/round/avatar2.png'),
-        require('assets/images/avatar/round/avatar3.png'),
-        require('assets/images/avatar/round/avatar4.png'),
-        require('assets/images/avatar/round/avatar5.png'),
-        require('assets/images/avatar/round/avatar6.png'),
-        require('assets/images/avatar/round/avatar7.png'),
-        require('assets/images/avatar/round/avatar8.png'),
+        avatarRound1,
+        avatarRound1,
+        avatarRound1,
+        avatarRound1,
+        avatarRound1,
+        avatarRound1,
+        avatarRound1,
+        avatarRound1,
     ],
     [
-        require('assets/images/avatar/square/avatar1.png'),
-        require('assets/images/avatar/square/avatar2.png'),
-        require('assets/images/avatar/square/avatar3.png'),
-        require('assets/images/avatar/square/avatar4.png'),
-        require('assets/images/avatar/square/avatar5.png'),
-        require('assets/images/avatar/square/avatar6.png'),
-        require('assets/images/avatar/square/avatar7.png'),
-        require('assets/images/avatar/square/avatar8.png'),
+        avatarSquare1,
+        avatarSquare1,
+        avatarSquare1,
+        avatarSquare1,
+        avatarSquare1,
+        avatarSquare1,
+        avatarSquare1,
+        avatarSquare1,
     ],
 ];
 
@@ -109,13 +108,13 @@ export function formatInputAmountToTransfer(inputAmount: string) {
     return inputAmount;
 }
 
-export function getAvatarFromId(avatarId: number, big: boolean = false) {
-    return usergetUserAvatars[big ? 0 : 1][avatarId];
+export function getAvatarFromId(avatarId: number, round: boolean = true) {
+    return usergetUserAvatars[round ? 0 : 1][avatarId];
 }
 
-export function getUserAvatar(user: IUserInfo, big: boolean = false) {
+export function getUserAvatar(user: IUserInfo, round: boolean = true) {
     if (user.avatar.length < 3) {
-        return usergetUserAvatars[big ? 0 : 1][parseInt(user.avatar) - 1];
+        return usergetUserAvatars[round ? 0 : 1][parseInt(user.avatar) - 1];
     }
     return { uri: user.avatar };
 }
@@ -206,16 +205,6 @@ export async function loadContracts(
         store.dispatch(setCommunity(c));
         store.dispatch(setCommunityContract(communityContract));
     };
-    const provider = new ethers.providers.Web3Provider(
-        kit.web3.currentProvider as any
-    );
-    const impactMarketContract = new ethers.Contract(
-        config.impactMarketContractAddress,
-        ImpactMarketContractABI,
-        provider
-    ) as ethers.Contract & ImpactMarketInstance;
-    store.dispatch(setImpactMarketContract(impactMarketContract));
-
     const isBeneficiary = await Api.findComunityToBeneficicary(address);
     if (isBeneficiary !== undefined) {
         store.dispatch(setUserIsBeneficiary(true));

@@ -143,7 +143,7 @@ function LoginScreen() {
                     }}
                     onPress={() => Linking.openURL(iosURL)}
                 >
-                    iOS
+                    <Text style={{ color: 'black' }}>iOS</Text>
                 </Button>
             );
         }

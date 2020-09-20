@@ -5,7 +5,6 @@ import {
     SET_USER_CELO_INFO,
     SET_CELO_KIT,
     SET_COMMUNITY_CONTRACT,
-    SET_IMPACTMARKET_CONTRACT,
     IUserState,
     INetworkState,
     NetworkActionTypes,
@@ -52,7 +51,6 @@ const INITIAL_STATE_NETWORK: INetworkState = {
     community: undefined as any,
     contracts: {
         communityContract: undefined as any,
-        impactMarketContract: undefined as any,
     },
 };
 
@@ -143,10 +141,6 @@ const networkReducer = (
             contracts = state.contracts;
             contracts.communityContract = action.payload;
             // Finally, update our redux state
-            return { ...state, contracts };
-        case SET_IMPACTMARKET_CONTRACT:
-            contracts = state.contracts;
-            contracts.impactMarketContract = action.payload;
             return { ...state, contracts };
         default:
             return state;

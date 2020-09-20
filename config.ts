@@ -6,6 +6,9 @@ const commonConfig = {
      */
     cUSDDecimals: 18,
 
+    /**
+     * Margin error to be added when adding new community
+     */
     locationErrorMargin: 0.003,
 };
 const ENV = {
@@ -24,13 +27,6 @@ const ENV = {
          * JSON RPC url
          */
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
-
-        /**
-         * Contract Address to use in dev
-         */
-        impactMarketContractAddress: process.env
-            .EXPO_DEV_IMPACT_MARKET_CONTRACT!,
-
         /**
          * Is it in testnet?
          */
@@ -53,12 +49,6 @@ const ENV = {
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
 
         /**
-         * Contract Address to use in dev
-         */
-        impactMarketContractAddress:
-            '0x4ebE844858c756498902B6517b20d50e28F8Dd62',
-
-        /**
          * Is it in testnet?
          */
         testnet: true,
@@ -78,12 +68,6 @@ const ENV = {
          * JSON RPC url
          */
         jsonRpc: 'https://celo-mainnet--rpc.datahub.figment.io/apikey/b883d48310aa603380b19750aae4f9f4/',
-
-        /**
-         * Contract Address to use in dev
-         */
-        impactMarketContractAddress:
-            '0x2437F9ca0ac21bD2377734800918c2FBE0E566Ca',
 
         /**
          * Is it in testnet?
