@@ -17,6 +17,7 @@ export interface IListActionItem {
     description: string;
     from: IAddressAndName;
     value?: string;
+    isValueIn?: boolean;
 }
 interface IListActionItemProps {
     item: IListActionItem;
@@ -82,8 +83,16 @@ export default class ListActionItem extends Component<
         if (this.props.item.value !== undefined) {
             renderRight = (
                 <View>
-                    <Text style={styles.rightTextTop}>
-                        {this.props.prefix?.top}
+                    <Text
+                        style={{
+                            ...styles.rightTextTop,
+                            color: this.props.item.isValueIn
+                                ? 'green'
+                                : 'black',
+                        }}
+                    >
+                        {(this.props.item.isValueIn ? '+' : '') +
+                            this.props.prefix?.top}
                         {this.props.item.value}
                         {this.props.suffix?.top}
                     </Text>
