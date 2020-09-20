@@ -74,7 +74,33 @@ function PayScreen(props: Props) {
         });
     }, [props.app]);
 
-    const handlePay = async () => {
+    const handleConfirmPay = () => {
+        const { user } = props;
+        const inDollars =
+            parseFloat(formatInputAmountToTransfer(paymentAmount)) /
+            user.user.exchangeRate;
+        Alert.alert(
+            i18n.t('pay'),
+            i18n.t('payConfirmMessage', {
+                symbol: getUserCurrencySymbol(user.user),
+                amount: paymentAmount,
+                amountInDollars: inDollars.toFixed(2),
+                to: paymentTo.name.length > 0 ? paymentTo.name : paymentTo.address,
+            }),
+            [
+                {
+                    text: i18n.t('pay'),
+                    onPress: () => pay(),
+                },
+                {
+                    text: i18n.t('cancel'),
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+
+    const pay = async () => {
         const { user, network } = props;
         const { communityContract } = network.contracts;
         const { address } = user.celoInfo;
@@ -274,20 +300,17 @@ function PayScreen(props: Props) {
                                 paymentTo.address.length === 0
                             }
                             loading={payInProgress}
-                            onPress={handlePay}
+                            onPress={handleConfirmPay}
                         >
                             {i18n.t('pay')}
                         </Button>
                     </Card.Content>
                 </Card>
                 <ModalScanQR
-                    opened={editPaymentTo}
-                    buttonText=""
+                    isVisible={editPaymentTo}
+                    onDismiss={() => setEditPaymentTo(false)}
                     inputText={i18n.t('currentAddress')}
                     selectButtonText={i18n.t('select')}
-                    buttonStyle={{
-                        backgroundColor: iptcColors.greenishTeal,
-                    }}
                     callback={handleModalScanQR}
                 />
                 <RecentPayments
