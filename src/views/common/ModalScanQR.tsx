@@ -9,9 +9,8 @@ import { Button, Dialog, Divider, Portal } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 
 interface IModalScanQRProps {
-    opened?: boolean;
-    buttonStyle?: any;
-    buttonText: string;
+    isVisible: boolean;
+    onDismiss: () => void;
     inputText: string;
     selectButtonText: string;
     selectButtonInProgress?: boolean;
@@ -19,7 +18,6 @@ interface IModalScanQRProps {
 }
 interface IModalScanQRState {
     inputAddress: string;
-    modalScanQR: boolean;
     hasPermission: boolean;
     scanned: boolean;
     useCamera: boolean;
@@ -38,8 +36,6 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
         super(props);
         this.state = {
             inputAddress: '',
-            modalScanQR:
-                this.props.opened !== undefined ? this.props.opened : false,
             hasPermission: false,
             scanned: false,
             useCamera: false,
@@ -50,16 +46,6 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
     componentDidMount = async () => {
         const { status } = await BarCodeScanner.getPermissionsAsync();
         this.setState({ hasPermission: status === 'granted' });
-    };
-
-    // TODO: stop using this method
-    componentWillReceiveProps = (
-        nextProps: Readonly<Props>,
-        nextContext: any
-    ) => {
-        if (this.state.modalScanQR !== nextProps.opened && nextProps.opened) {
-            this.setState({ modalScanQR: nextProps.opened });
-        }
     };
 
     handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
@@ -105,24 +91,12 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
         this.setState({ hasPermission: status === 'granted' });
     };
 
-    handleOpenModalScanQR = () => {
-        this.setState({ modalScanQR: true, scanned: false });
-    };
-
     render() {
+        const { inputAddress, hasPermission, scanned, useCamera } = this.state;
         const {
-            inputAddress,
-            modalScanQR,
-            hasPermission,
-            scanned,
-            useCamera,
-        } = this.state;
-        const {
-            buttonText,
             inputText,
             selectButtonText,
             selectButtonInProgress,
-            buttonStyle,
             callback,
         } = this.props;
         let inputCameraMethod;
@@ -149,97 +123,78 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
         }
 
         return (
-            <>
-                {this.props.buttonText.length > 0 &&
-                    this.props.opened !== false && (
+            <Portal>
+                <Dialog
+                    visible={this.props.isVisible}
+                    onDismiss={this.props.onDismiss}
+                >
+                    <Dialog.Content>
+                        <ValidatedTextInput
+                            label={inputText}
+                            value={inputAddress}
+                            required
+                            onChangeText={(value) =>
+                                this.setState({ inputAddress: value })
+                            }
+                        />
+                        <Divider />
+                    </Dialog.Content>
+                    <Dialog.Actions
+                        style={{
+                            justifyContent: 'space-between',
+                        }}
+                    >
                         <Button
                             mode="contained"
-                            style={buttonStyle}
-                            onPress={this.handleOpenModalScanQR}
+                            disabled={
+                                selectButtonInProgress !== undefined &&
+                                selectButtonInProgress === true
+                            }
+                            onPress={() =>
+                                this.setState({
+                                    useCamera: true,
+                                    scanned: false,
+                                })
+                            }
                         >
-                            {buttonText}
+                            {i18n.t('useCamera')}
                         </Button>
-                    )}
-                <Portal>
-                    <Dialog
-                        visible={modalScanQR}
-                        onDismiss={() => this.setState({ modalScanQR: false })}
-                    >
-                        <Dialog.Content>
-                            <ValidatedTextInput
-                                label={inputText}
-                                value={inputAddress}
-                                required
-                                onChangeText={(value) =>
-                                    this.setState({ inputAddress: value })
-                                }
-                            />
-                            <Divider />
-                        </Dialog.Content>
-                        <Dialog.Actions
-                            style={{
-                                justifyContent: 'space-between',
-                            }}
+                        <Button
+                            mode="contained"
+                            disabled={
+                                inputAddress.length === 0 ||
+                                (selectButtonInProgress !== undefined &&
+                                    selectButtonInProgress === true)
+                            }
+                            loading={
+                                selectButtonInProgress !== undefined &&
+                                selectButtonInProgress === true
+                            }
+                            onPress={() => callback(inputAddress)}
                         >
-                            <Button
-                                mode="contained"
-                                disabled={
-                                    selectButtonInProgress !== undefined &&
-                                    selectButtonInProgress === true
-                                }
-                                onPress={() =>
-                                    this.setState({
-                                        useCamera: true,
-                                        scanned: false,
-                                    })
-                                }
-                            >
-                                {i18n.t('useCamera')}
-                            </Button>
-                            <Button
-                                mode="contained"
-                                disabled={
-                                    inputAddress.length === 0 ||
-                                    (selectButtonInProgress !== undefined &&
-                                        selectButtonInProgress === true)
-                                }
-                                loading={
-                                    selectButtonInProgress !== undefined &&
-                                    selectButtonInProgress === true
-                                }
-                                onPress={() => callback(inputAddress)}
-                            >
-                                {selectButtonText}
-                            </Button>
-                            <Button
-                                mode="contained"
-                                disabled={
-                                    selectButtonInProgress !== undefined &&
-                                    selectButtonInProgress === true
-                                }
-                                onPress={() =>
-                                    this.setState({
-                                        modalScanQR: false,
-                                        inputAddress: '',
-                                    })
-                                }
-                            >
-                                {i18n.t('cancel')}
-                            </Button>
-                        </Dialog.Actions>
-                    </Dialog>
-                    <Modal
-                        visible={useCamera && !scanned}
-                        onDismiss={() => this.setState({ useCamera: false })}
-                        transparent
-                        onRequestClose={() =>
-                            this.setState({ useCamera: false })
-                        }
-                    >
-                        {inputCameraMethod}
-                    </Modal>
-                </Portal>
-            </>
+                            {selectButtonText}
+                        </Button>
+                        <Button
+                            mode="contained"
+                            disabled={
+                                selectButtonInProgress !== undefined &&
+                                selectButtonInProgress === true
+                            }
+                            onPress={this.props.onDismiss}
+                        >
+                            {i18n.t('cancel')}
+                        </Button>
+                    </Dialog.Actions>
+                </Dialog>
+                <Modal
+                    visible={useCamera && !scanned}
+                    onDismiss={() => this.setState({ useCamera: false })}
+                    transparent
+                    onRequestClose={() => this.setState({ useCamera: false })}
+                >
+                    {inputCameraMethod}
+                </Modal>
+            </Portal>
         );
     }
 }

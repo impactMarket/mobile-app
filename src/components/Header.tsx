@@ -6,7 +6,7 @@ import { IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
-import { Appbar, Card, Subheading, Headline } from 'react-native-paper';
+import { Appbar, Card, Subheading, Headline, Button } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { connect, ConnectedProps } from 'react-redux';
 
@@ -37,6 +37,7 @@ interface IHeaderProps {
 }
 interface IHeaderState {
     openQR: boolean;
+    openScanQR: boolean;
 }
 
 class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
@@ -44,6 +45,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
         super(props);
         this.state = {
             openQR: false,
+            openScanQR: false,
         };
     }
 
@@ -51,7 +53,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
 
     handleModalScanQR = async (inputAddress: string) => {
         this.props.dispatch(setAppPaymentToAction(inputAddress));
-        this.setState({ openQR: false });
+        this.setState({ openQR: false, openScanQR: false });
     };
 
     render() {
@@ -110,7 +112,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                     onBackButtonPress={this.toggleQR}
                     onBackdropPress={this.toggleQR}
                 >
-                    <Card elevation={8} style={styles.card}>
+                    <Card style={styles.card}>
                         <Card.Content>
                             <View style={styles.cardHeadView}>
                                 <View style={styles.nameCountry}>
@@ -135,18 +137,30 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                                     size={200}
                                 />
                             </View>
-                            <ModalScanQR
-                                buttonText={i18n.t('scanToPay')}
-                                inputText={i18n.t('currentAddress')}
-                                selectButtonText={i18n.t('select')}
-                                buttonStyle={{
+                            <Button
+                                mode="contained"
+                                style={{
                                     backgroundColor: iptcColors.greenishTeal,
                                 }}
-                                callback={this.handleModalScanQR}
-                            />
+                                onPress={() =>
+                                    this.setState({
+                                        openScanQR: true,
+                                        openQR: false,
+                                    })
+                                }
+                            >
+                                {i18n.t('scanToPay')}
+                            </Button>
                         </Card.Content>
                     </Card>
                 </BottomSheet>
+                <ModalScanQR
+                    isVisible={this.state.openScanQR}
+                    onDismiss={() => this.setState({ openScanQR: false })}
+                    inputText={i18n.t('currentAddress')}
+                    selectButtonText={i18n.t('select')}
+                    callback={this.handleModalScanQR}
+                />
             </>
         );
     }

@@ -5,7 +5,6 @@ import {
     getUserCurrencySymbol,
     updateCommunityInfo,
     formatInputAmountToTransfer,
-    amountToUserCurrency,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
@@ -69,17 +68,20 @@ class Donate extends Component<Props, IDonateState> {
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
             this.props.user.user.exchangeRate;
         Alert.alert(
-            'Donating',
-            `By pressing 'Donate', you are donating ${getUserCurrencySymbol(
-                user.user
-            )}${amountDonate} ($${inDollars.toFixed(2)}) to ${community.name}.`,
+            i18n.t('donate'),
+            i18n.t('payConfirmMessage', {
+                symbol: getUserCurrencySymbol(user.user),
+                amount: amountDonate,
+                amountInDollars: inDollars.toFixed(2),
+                to: community.name,
+            }),
             [
                 {
-                    text: 'Donate',
+                    text: i18n.t('donate'),
                     onPress: () => this.donateWithCeloWallet(),
                 },
                 {
-                    text: 'Cancel',
+                    text: i18n.t('cancel'),
                 },
             ],
             { cancelable: true }
