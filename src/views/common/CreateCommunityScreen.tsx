@@ -37,8 +37,6 @@ import {
 } from 'react-native-paper';
 import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
-// import { celoWalletRequest } from 'services/celoWallet';
-
 import config from '../../../config';
 
 interface ICreateCommunityScreen {
@@ -825,6 +823,7 @@ function CreateCommunityScreen(props: Props) {
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('timeIncrementAfterClaim')}
+                                    placeholder={i18n.t('timeInMinutes')}
                                     value={incrementInterval}
                                     keyboardType="numeric"
                                     onChangeText={(value) =>

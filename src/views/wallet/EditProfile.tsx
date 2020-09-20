@@ -161,7 +161,7 @@ function EditProfile(props: Props) {
                         onPress={() => setIsDialogLanguageOpen(true)}
                     >
                         <Text style={{ color: 'black', opacity: 1 }}>
-                            {language === 'en' ? 'English' : ' Portugûes'}
+                            {language === 'en' ? 'English' : ' Português'}
                         </Text>
                     </Button>
                     <TextInput
