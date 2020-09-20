@@ -41,6 +41,7 @@ interface IDonateState {
     showCopiedToClipboard: boolean;
     modalConfirmSend: boolean;
 }
+BigNumber.config({ DECIMAL_PLACES: 55 });
 class Donate extends Component<Props, IDonateState> {
     constructor(props: any) {
         super(props);

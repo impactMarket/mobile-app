@@ -55,6 +55,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & ICreateCommunityScreen;
 
+BigNumber.config({ DECIMAL_PLACES: 55 });
 function CreateCommunityScreen(props: Props) {
     const store = useStore();
     const navigation = useNavigation();
@@ -534,7 +535,7 @@ function CreateCommunityScreen(props: Props) {
                                         style={styles.inputTextField}
                                         label={i18n.t('shortDescription')}
                                         value={description}
-                                        maxLength={512}
+                                        maxLength={1024}
                                         onChangeText={(value) =>
                                             setDescription(value)
                                         }

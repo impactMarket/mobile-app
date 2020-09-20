@@ -27,17 +27,18 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
         useImperativeHandle(ref, () => ({
             updateRecentTx() {
                 setLoadingTxs(true);
-                Api.tokenTx(props.userAddress).then((txs) => {
+                Api.userTx(props.userAddress).then((txs) => {
                     setActivities(
                         txs.map((t) => ({
                             key: t.timestamp.toString(),
                             timestamp: t.timestamp,
                             description: '',
-                            from: t.from,
+                            from: t.counterParty,
                             value: amountToUserCurrency(
                                 t.value,
                                 user
                             ).toString(),
+                            isValueIn: !t.fromUser,
                             avatar: t.picture
                                 ? t.picture.length > 3
                                     ? t.picture
@@ -51,14 +52,15 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
         }));
 
         useEffect(() => {
-            Api.tokenTx(props.userAddress).then((txs) => {
+            Api.userTx(props.userAddress).then((txs) => {
                 setActivities(
                     txs.map((t) => ({
                         key: t.timestamp.toString(),
                         timestamp: t.timestamp,
                         description: '',
-                        from: t.from,
+                        from: t.counterParty,
                         value: amountToUserCurrency(t.value, user).toString(),
+                        isValueIn: !t.fromUser,
                         avatar: t.picture
                             ? t.picture.length > 3
                                 ? t.picture
