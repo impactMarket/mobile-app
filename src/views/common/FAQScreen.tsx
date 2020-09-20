@@ -101,6 +101,7 @@ function FAQScreen() {
                 {ptFAQ.map((faq) => (
                     <List.Accordion
                         title={faq.title}
+                        titleNumberOfLines={4}
                         expanded={expanded.indexOf(faq.title) !== -1}
                         onPress={() => handlePress(faq.title)}
                     >
