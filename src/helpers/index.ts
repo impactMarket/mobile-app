@@ -95,7 +95,7 @@ export function claimFrequencyToText(frequency: BigNumber | string): string {
 // cUSD has 18 zeros!
 export function humanifyNumber(inputNumber: BigNumber | string): number {
     const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-    return parseFloat(new BigNumber(inputNumber).div(decimals).toFixed(2));
+    return parseFloat(new BigNumber(inputNumber).div(decimals).toFixed(2, 1));
 }
 
 export function calculateCommunityProgress(
