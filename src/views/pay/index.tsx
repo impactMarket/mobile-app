@@ -296,7 +296,7 @@ function PayScreen(props: Props) {
                         <Button
                             mode="outlined"
                             disabled={
-                                payInProgress ||
+                                // payInProgress ||
                                 paymentAmount.length === 0 ||
                                 paymentTo.address.length === 0
                             }

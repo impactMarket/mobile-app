@@ -146,10 +146,10 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                     >
                         <Button
                             mode="contained"
-                            disabled={
-                                selectButtonInProgress !== undefined &&
-                                selectButtonInProgress === true
-                            }
+                            // disabled={
+                            //     selectButtonInProgress !== undefined &&
+                            //     selectButtonInProgress === true
+                            // }
                             onPress={() =>
                                 this.setState({
                                     useCamera: true,
@@ -161,11 +161,11 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                         </Button>
                         <Button
                             mode="contained"
-                            disabled={
-                                inputAddress.length === 0 ||
-                                (selectButtonInProgress !== undefined &&
-                                    selectButtonInProgress === true)
-                            }
+                            // disabled={
+                            //     inputAddress.length === 0 ||
+                            //     (selectButtonInProgress !== undefined &&
+                            //         selectButtonInProgress === true)
+                            // }
                             loading={
                                 selectButtonInProgress !== undefined &&
                                 selectButtonInProgress === true
@@ -176,10 +176,10 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                         </Button>
                         <Button
                             mode="contained"
-                            disabled={
-                                selectButtonInProgress !== undefined &&
-                                selectButtonInProgress === true
-                            }
+                            // disabled={
+                            //     selectButtonInProgress !== undefined &&
+                            //     selectButtonInProgress === true
+                            // }
                             onPress={this.props.onDismiss}
                         >
                             {i18n.t('cancel')}

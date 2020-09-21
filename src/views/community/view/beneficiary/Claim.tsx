@@ -137,7 +137,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 mode="contained"
                 onPress={this.handleClaimPress}
                 disabled={
-                    claimDisabled || claiming || notEnoughToClaimOnContract
+                    claimDisabled || /* claiming || */ notEnoughToClaimOnContract
                 }
                 loading={claiming}
                 style={styles.claimButton}
