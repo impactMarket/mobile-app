@@ -98,6 +98,7 @@ function Beneficiaries(props: Props) {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
+                setOpenModalAddBeneficiary(false);
             })
             .catch(() => {
                 Alert.alert(

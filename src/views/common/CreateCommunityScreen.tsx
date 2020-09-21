@@ -55,7 +55,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & ICreateCommunityScreen;
 
-BigNumber.config({ DECIMAL_PLACES: 55 });
+BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen(props: Props) {
     const store = useStore();
     const navigation = useNavigation();

@@ -39,7 +39,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
-BigNumber.config({ DECIMAL_PLACES: 55 });
+BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 interface IPaymentTo {
     name: string;
     address: string;
