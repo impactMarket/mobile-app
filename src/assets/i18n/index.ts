@@ -1,6 +1,6 @@
-import * as Localization from 'expo-localization';
+// import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
-import moment from 'moment';
+// import moment from 'moment';
 import 'moment/locale/pt';
 
 // Set the key-value pairs for the different languages you want to support.
@@ -191,7 +191,7 @@ i18n.translations = {
         turnOnLocationHint: 'Turn on your location for a better experience',
         tryAgain: 'Try Again',
         payConfirmMessage:
-            "By pressing 'Pay', you are sending {{symbol}}{{amount}} (${{amountInDollars}}) to {{to}}",
+            "By pressing 'Send', you are sending {{symbol}}{{amount}} (${{amountInDollars}}) to {{to}}",
         donateConfirmMessage:
             "By pressing 'Donate', you are donating {{symbol}}{{amount}} (${{amountInDollars}}) to {{to}}",
     },
@@ -377,7 +377,7 @@ i18n.translations = {
             'Ative a sua localização para uma melhor experiência.',
         tryAgain: 'Tentar Novamente',
         payConfirmMessage:
-            "Ao selecionar 'Pagar', você está a enviar {{symbol}}{{amount}} (${{amountInDollars}}) para {{to}}",
+            "Ao selecionar 'Enviar', você está a enviar {{symbol}}{{amount}} (${{amountInDollars}}) para {{to}}",
         donateConfirmMessage:
             "Ao selecionar 'Contribuir', você está a contribuir com {{symbol}}{{amount}} (${{amountInDollars}}) para {{to}}",
     },

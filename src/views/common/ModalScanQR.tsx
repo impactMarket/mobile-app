@@ -77,6 +77,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                 }
                 if (this.props.openInCamera) {
                     this.props.callback(scannedAddress);
+                    this.setState({ useCamera: false, scanned: false });
                 }
             } catch (e) {
                 this.setState({ invalidAddressWarningOpen: true });
@@ -132,9 +133,11 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                     />
                     <Button
                         mode="contained"
+                        style={{ bottom: 0 }}
                         onPress={() => {
                             if (this.props.openInCamera) {
                                 this.props.onDismiss();
+                                this.setState({ useCamera: false, scanned: false });
                             } else {
                                 this.setState({ useCamera: false });
                             }
@@ -226,6 +229,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
 const styles = StyleSheet.create({
     scannerView: {
         height: '100%',
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
     },
 });
 

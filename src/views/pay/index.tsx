@@ -102,15 +102,9 @@ function PayScreen(props: Props) {
     };
 
     const pay = async () => {
-        const { user, network } = props;
-        const { communityContract } = network.contracts;
+        const { user } = props;
         const { address } = user.celoInfo;
         let addressToSend: string;
-
-        if (communityContract === undefined) {
-            // TODO: do something beatiful, la la la
-            return;
-        }
 
         try {
             addressToSend = ethers.utils.getAddress(paymentTo.address);
@@ -124,6 +118,9 @@ function PayScreen(props: Props) {
             return;
         }
 
+        const inDollars =
+            parseFloat(formatInputAmountToTransfer(paymentAmount)) /
+            user.user.exchangeRate
         setPayInProgress(true);
         const stableToken = await props.app.kit.contracts.getStableToken();
         celoWalletRequest(
@@ -131,7 +128,7 @@ function PayScreen(props: Props) {
             stableToken.address,
             stableToken.transfer(
                 addressToSend,
-                new BigNumber(formatInputAmountToTransfer(paymentAmount))
+                new BigNumber(formatInputAmountToTransfer(inDollars.toString()))
                     .multipliedBy(10 ** 18)
                     .toString()
             ).txo,
