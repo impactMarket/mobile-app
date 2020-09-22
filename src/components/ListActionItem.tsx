@@ -91,8 +91,10 @@ export default class ListActionItem extends Component<
                                 : 'black',
                         }}
                     >
-                        {(this.props.item.isValueIn ? '+' : '') +
-                            this.props.prefix?.top}
+                        {this.props.prefix
+                            ? (this.props.item.isValueIn ? '+' : '') +
+                              this.props.prefix?.top
+                            : ''}
                         {this.props.item.value}
                         {this.props.suffix?.top}
                     </Text>

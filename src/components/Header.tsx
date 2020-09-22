@@ -156,6 +156,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                 </BottomSheet>
                 <ModalScanQR
                     isVisible={this.state.openScanQR}
+                    openInCamera={true}
                     onDismiss={() => this.setState({ openScanQR: false })}
                     inputText={i18n.t('currentAddress')}
                     selectButtonText={i18n.t('select')}

@@ -200,6 +200,7 @@ function Beneficiaries(props: Props) {
             </Card>
             <ModalScanQR
                 isVisible={openModalAddBeneficiary}
+                openInCamera={false}
                 onDismiss={() => setOpenModalAddBeneficiary(false)}
                 inputText={i18n.t('beneficiaryAddress')}
                 selectButtonText={i18n.t('add')}

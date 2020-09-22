@@ -309,6 +309,7 @@ function PayScreen(props: Props) {
                 </Card>
                 <ModalScanQR
                     isVisible={editPaymentTo}
+                    openInCamera={false}
                     onDismiss={() => setEditPaymentTo(false)}
                     inputText={i18n.t('currentAddress')}
                     selectButtonText={i18n.t('select')}

@@ -10,6 +10,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 interface IModalScanQRProps {
     isVisible: boolean;
+    openInCamera: boolean;
     onDismiss: () => void;
     inputText: string;
     selectButtonText: string;
@@ -48,6 +49,14 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
         this.setState({ hasPermission: status === 'granted' });
     };
 
+    componentWillReceiveProps = (nextProps: IModalScanQRProps) => {
+        if (nextProps.isVisible) {
+            this.setState({ useCamera: nextProps.openInCamera });
+        } else if (this.state.useCamera) {
+            this.setState({ useCamera: false });
+        }
+    };
+
     handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
         let scannedAddress: string = '';
         if (!this.state.invalidAddressWarningOpen) {
@@ -65,6 +74,9 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                         scanned: true,
                         inputAddress: scannedAddress,
                     });
+                }
+                if (this.props.openInCamera) {
+                    this.props.callback(scannedAddress);
                 }
             } catch (e) {
                 this.setState({ invalidAddressWarningOpen: true });
@@ -118,6 +130,18 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                         // barCodeTypes={['qr']}
                         style={StyleSheet.absoluteFillObject}
                     />
+                    <Button
+                        mode="contained"
+                        onPress={() => {
+                            if (this.props.openInCamera) {
+                                this.props.onDismiss();
+                            } else {
+                                this.setState({ useCamera: false });
+                            }
+                        }}
+                    >
+                        {i18n.t('close')}
+                    </Button>
                 </View>
             );
         }
@@ -125,7 +149,7 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
         return (
             <Portal>
                 <Dialog
-                    visible={this.props.isVisible}
+                    visible={this.props.isVisible && !this.props.openInCamera}
                     onDismiss={this.props.onDismiss}
                 >
                     <Dialog.Content>
