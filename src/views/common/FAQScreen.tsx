@@ -8,18 +8,18 @@ const ptFAQ = [
     {
         title: 'O que é a impactMarket?',
         message:
-            'impactMarket é uma plataforma desenhada para facilitar o acesso e distribuição de fundos junto de quem mais precisa, através das suas comunidades.',
+            'impactMarket é uma plataforma aberta e gratuita que permite a criação e distribuição de rendimento básico incondicional entre comunidades e os seus beneficiários, de acordo com as suas necessidades.',
     },
     {
         title:
             'O que é o Rendimento Básico Incondicional (ou Universal Basic Income)?',
         message:
-            'Esta forma de rendimento pressupõe que um conjunto de pessoas, seja do mesmo país, cidade ou mesmo comunidade local, tem acesso, de forma incondicional, a um rendimento recorrente suficiente para sair da pobreza.',
+            'Esta forma de rendimento pressupõe que um conjunto de pessoas, seja do mesmo país, cidade ou mesmo comunidade local, tenha acesso, de forma incondicional, a um rendimento recorrente suficiente para sair da extrema pobreza.',
     },
     {
         title: 'Por que é que a impactMarket usa a tecnologia Blockchain?',
         message:
-            'A tecnologia blockchain permite um conjunto de novos benefícios que são especialmente interessantes para quem mais precisa. Esta tecnologia, permite que qualquer pessoa envie dinheiro para outra pessoa, de forma não censurável, transparente, sem intermediários, instantaneamente e quase gratuitamente, independentemente do país. Apenas é necessário uma ligação à internet e um smartphone para poder ter uma conta, enviar e receber dinheiro.',
+            'A tecnologia blockchain permite um conjunto de novos benefícios e permite que qualquer pessoa envie dinheiro para outra pessoa, de forma não censurável, transparente, sem intermediários, instantaneamente e quase gratuitamente, independentemente do país. Apenas é necessário uma ligação à internet e um smartphone para poder ter uma conta, enviar e receber dinheiro.',
     },
     {
         title: 'O que posso fazer na ImpactMarket?',
@@ -66,18 +66,18 @@ const ptFAQ = [
     {
         title: 'Quanto é a taxa por cada transação?',
         message:
-            'As taxas de transação na rede da Celo são bastante baixas, normalmente a rondar $0.01 por transação.',
+            'As taxas de transação na rede da Celo são bastante baixas, quase nulas, normalmente a rondar $0.001 por transação.',
     },
     {
         title: 'Como adquirir ou converter cUSD para a minha moeda?',
-        message: '',
+        message: 'Na Valora poderá comprar CELO com cartão e depois vender esse CELO por cUSD (Celo Dollar). Existem também várias exchanges como Coinbase onde pode obter CELO e enviar para a sua Valora ou vender CELO para US doláres. No entanto, qualquer pessoa pode trocar cUSD com outra pessoa pela moeda local. Se for um beneficiário, procure o gestor da sua comunidade que lhe poderá ajudar nesse processo. ',
     },
     {
         title:
             'Sou uma empresa, fundação, marca ou celebridade. Como me posso envolver?',
-        message: '',
+        message: 'Contacte-nos para saber mais como envolver os seus colaboradores, clientes ou comunidade em iniciativas sociais, de forma completamente transparente e mensurável',
     },
-    { title: 'Como contactar a impactMarket?', message: '' },
+    { title: 'Como contactar a impactMarket?', message: 'Pode contactar nas redes sociais, ou através de email para hello@impactmarket.com' },
 ];
 
 function FAQScreen() {
