@@ -115,7 +115,7 @@ Notifications.setNotificationHandler({
 
 Sentry.init({
     dsn: process.env.EXPO_SENTRY_DNS,
-    enableInExpoDevelopment: true,
+    // enableInExpoDevelopment: true,
     debug: true,
 });
 
