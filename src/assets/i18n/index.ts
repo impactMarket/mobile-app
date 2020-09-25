@@ -54,7 +54,7 @@ i18n.translations = {
         upToPerBeneficiary: 'Up to ${{amount}} / beneficiary',
         ssi: 'Self-Sustainability Index',
         ssiDescription:
-            'SSI measures how self-sustainable a community is, and how it progresses over time',
+            'SSI measures how self-sustainable a community is, and its progress',
         seeMore: 'See More',
         seeLess: 'See Less',
         exploreCommunityContract: 'See Community Contract',
@@ -244,7 +244,7 @@ i18n.translations = {
         upToPerBeneficiary: 'Até ${{amount}} / beneficiário',
         ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
-            'Este indicador mede a autossustentabilidade financeira de uma comunidade, e a sua evolução',
+            'Este indicador mede a autossustentabilidade financeira de uma comunidade',
         seeMore: 'Ver Mais',
         seeLess: 'Ver Menos',
         exploreCommunityContract: 'Ver Contrato da Comunidade',
