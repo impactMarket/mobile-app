@@ -191,9 +191,9 @@ i18n.translations = {
         turnOnLocationHint: 'Turn on your location for a better experience',
         tryAgain: 'Try Again',
         payConfirmMessage:
-            "By pressing 'Send', you are sending {{symbol}}{{amount}} (${{amountInDollars}}) to {{to}}",
+            "By pressing 'Send', you will send {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
         donateConfirmMessage:
-            "By pressing 'Donate', you are donating {{symbol}}{{amount}} (${{amountInDollars}}) to {{to}}",
+            "By pressing 'Donate', you will donate {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
     },
     pt: {
         testnetWarning:
@@ -211,7 +211,7 @@ i18n.translations = {
         removed: 'Removido',
         addBeneficiary: 'Adicionar Beneficiário',
         add: 'Adicionar',
-        cancel: 'Cancelar',
+        cancel: 'Fechar',
         claimed: 'Distribuído',
         raised: 'Angariado',
         claim: 'Pedir',
@@ -377,9 +377,9 @@ i18n.translations = {
             'Ative a sua localização para uma melhor experiência.',
         tryAgain: 'Tentar Novamente',
         payConfirmMessage:
-            "Ao selecionar 'Enviar', você está a enviar {{symbol}}{{amount}} (${{amountInDollars}}) para {{to}}",
+            "Ao selecionar 'Enviar', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
         donateConfirmMessage:
-            "Ao selecionar 'Contribuir', você está a contribuir com {{symbol}}{{amount}} (${{amountInDollars}}) para {{to}}",
+            "Ao selecionar 'Contribuir', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
     },
 };
 // Set the locale once at the beginning of your app.
