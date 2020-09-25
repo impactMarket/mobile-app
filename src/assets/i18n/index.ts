@@ -65,7 +65,7 @@ i18n.translations = {
             'You need to connect with Valora to create a community.',
         communityDetails: 'Community Details',
         createCommunityDescription:
-            'By creating a new community, you are initiating a new basic income mechanism for your community that enables any its beneficiary to get equal access to claim a recurring amount pre-defined by you in this form.',
+            'By creating a new community, you are initiating a new basic income mechanism for your community where each beneficiary you add will have equal access to claim a recurring amount defined by you in this form.',
         selectCoverImage: 'Select Cover Image',
         changeCoverImage: 'Change Cover Image',
         communityName: 'Community Name',
@@ -160,15 +160,15 @@ i18n.translations = {
         oneTimeWelcomeMessage1:
             'impactMarket enables any community to create its own unconditional basic income system for their beneficiaries, where each member can claim a fixed amount on a regular basis',
         oneTimeWelcomeMessage2:
-            'Anyone can back those beneficiaries by donating to their communities.',
+            'Anyone can back those beneficiaries by donating directly to their communities.',
         exploreCommunities: 'Explore Communities',
         noFunds: 'No Funds',
         notFundsToAddBeneficiary:
             'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
         claimExplained1:
-            'Each community has a group of beneficiaries, added by the coommunity managers, that can access a basic income under a set of rules defined at its creation.',
+            'Each community has a group of beneficiaries, added by the coommunity managers, that can access a basic income under a set of rules. For example, each beneficiary can claim $1/day up to $500.',
         claimExplained2:
-            'For example, any beneficiary in a specific community can claim $1 cUSD from that community contract on a recurring basis with an interval of at least 24h before being able to claim another $1 cUSD, up to a cumulative total of $500 cUSD. Every time a beneficiary claims, the time interval to claim again can increase.',
+            'There is a minimum time you have to wait before being able to claim again, but there is no maximum. You should only claim when you need those funds. The more you claim, the more time you have to wait to claim again.',
         claimAmountHelp:
             'This is the UBI amount, in $cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
         totalClaimPerBeneficiaryHelp:
@@ -343,17 +343,17 @@ i18n.translations = {
         addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
         errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.',
         oneTimeWelcomeMessage1:
-            'impactMarket é um sistema de rendimento mínimo, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
+            'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
         oneTimeWelcomeMessage2:
-            'Pode apoiar esses beneficiários doando diretamente para suas comunidades.',
+            'Pode apoiar esses beneficiários doando diretamente para as suas comunidades.',
         exploreCommunities: 'Explorar Comunidades',
-        noFunds: 'Fundos Insuficientes',
+        noFunds: 'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
         notFundsToAddBeneficiary:
             'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
         claimExplained1:
-            'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras definidas quando criada.',
+            'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pedir $1/dia até $500.',
         claimExplained2:
-            'Por exemplo, qualquer beneficiário numa comunidade específica pode reivindicar/pedir $1 cUSD desse contrato comunitário, de forma recorrente, com um intervalo de pelo menos 24 horas antes de poder pedir outro $1 cUSD, até um total acumulado de $500 cUSD. Cada vez que um beneficiário pede $1 cUSD, o intervalo de tempo para pedir novamente pode aumentar.',
+            'Existe um tempo minimo que terá de esperar antes de poder pedir novamente, mas não tem tempo máximo. Deverá pedir apenas quando precisa. Quanto mais pedir, mais tempo terá de esperar antes de poder pedir novamente.',
         claimAmountHelp:
             'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
         totalClaimPerBeneficiaryHelp:
