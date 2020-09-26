@@ -178,6 +178,7 @@ i18n.translations = {
         timeIncrementAfterClaimHelp:
             'It is possible to add a time increment each time a beneficiary claims. For example, in a community where each beneficiary can claim $2/day, 20 minutes can be added to the time that that beneficiary will have to wait before being able to claim again (in this case, 24h20m after claiming for the 2nd time, 24h40m after the 3rd time, and so on). This benefits those who claimed less and incentivizes self-sustainability progress.',
         visibilityHelp: 'write-here',
+        currencyHelp: 'write-here',
         coverImageRequired: 'Cover image is required!',
         communityNameRequired: 'Comunity name is required!',
         communityDescriptionRequired: 'Comunity description is required!',
@@ -364,6 +365,7 @@ i18n.translations = {
         timeIncrementAfterClaimHelp:
             'É possível adicionar um incremento de tempo cada vez que um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pedir $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pedir novamente (neste caso, 24h20m após pedir pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
         visibilityHelp: 'write-here',
+        currencyHelp: 'write-here',
         coverImageRequired: 'Imagem de capa é obrigatório!',
         communityNameRequired: 'Nome da comunidade é obrigatório!',
         communityDescriptionRequired: 'Descrição da comunidade é obrigatório!',

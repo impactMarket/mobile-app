@@ -60,10 +60,14 @@ function CreateCommunityScreen(props: Props) {
     const store = useStore();
     const navigation = useNavigation();
 
+    const [availableCurrencies, setAvailableCurrencies] = useState<
+        { name: string; symbol: string }[]
+    >([]);
     const [editing, setEditing] = useState(false);
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
     //
+    const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
     const [isDialogFrequencyOpen, setIsDialogFrequencyOpen] = useState(false);
     const [isDialogVisibilityOpen, setIsDialogVisibilityOpen] = useState(false);
     const [isNameValid, setIsNameValid] = useState(true);
@@ -81,6 +85,9 @@ function CreateCommunityScreen(props: Props) {
     ] = useState(true);
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
+    const [currency, setCurrency] = useState<string>(
+        store.getState().user.user.currency
+    );
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [city, setCity] = useState('');
@@ -136,6 +143,18 @@ function CreateCommunityScreen(props: Props) {
                 setEditing(true);
             }
         }
+        const getAvailableCurrencies = async () => {
+            const rates = await Api.getExchangeRate();
+            const currencies: { name: string; symbol: string }[] = [];
+            for (const currency in rates) {
+                currencies.push({
+                    name: rates[currency].name,
+                    symbol: currency,
+                });
+            }
+            setAvailableCurrencies(currencies);
+        };
+        getAvailableCurrencies();
     }, []);
 
     const submitNewCommunity = async () => {
@@ -345,8 +364,12 @@ function CreateCommunityScreen(props: Props) {
                 city,
                 country,
                 {
-                    latitude: gpsLocation!.coords.latitude + config.locationErrorMargin,
-                    longitude: gpsLocation!.coords.longitude + config.locationErrorMargin,
+                    latitude:
+                        gpsLocation!.coords.latitude +
+                        config.locationErrorMargin,
+                    longitude:
+                        gpsLocation!.coords.longitude +
+                        config.locationErrorMargin,
                 },
                 email,
                 visibility,
@@ -654,6 +677,46 @@ function CreateCommunityScreen(props: Props) {
                                         </HelperText>
                                     )}
                                 </View>
+                                <Divider />
+                                <Paragraph style={styles.inputTextFieldLabel}>
+                                    {i18n.t('currency')}
+                                </Paragraph>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        alignSelf: 'center',
+                                    }}
+                                >
+                                    <Button
+                                        mode="contained"
+                                        style={{
+                                            width: '80%',
+                                            borderRadius: 6,
+                                            margin: 10,
+                                            backgroundColor:
+                                                'rgba(206,212,218,0.27)',
+                                        }}
+                                        onPress={() =>
+                                            setIsDialogCurrencyOpen(true)
+                                        }
+                                    >
+                                        <Text
+                                            style={{
+                                                color: 'black',
+                                                opacity: 1,
+                                            }}
+                                        >
+                                            {currency}
+                                        </Text>
+                                    </Button>
+                                    <IconButton
+                                        style={{ marginTop: 10 }}
+                                        icon="help-circle-outline"
+                                        size={20}
+                                        onPress={() => openHelp('currency')}
+                                    />
+                                </View>
                             </View>
                         </Card.Content>
                     </Card>
@@ -903,7 +966,7 @@ function CreateCommunityScreen(props: Props) {
                 </View>
             </ScrollView>
             <Portal>
-            <Dialog
+                <Dialog
                     visible={isDialogFrequencyOpen}
                     onDismiss={() => setIsDialogFrequencyOpen(false)}
                 >
@@ -946,6 +1009,27 @@ function CreateCommunityScreen(props: Props) {
                                 label={i18n.t('private')}
                                 value="private"
                             />
+                        </RadioButton.Group>
+                    </Dialog.Content>
+                </Dialog>
+                <Dialog
+                    visible={isDialogCurrencyOpen}
+                    onDismiss={() => setIsDialogCurrencyOpen(false)}
+                >
+                    <Dialog.Content>
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                setCurrency(value);
+                                setIsDialogCurrencyOpen(false);
+                            }}
+                            value={currency}
+                        >
+                            {availableCurrencies.map((c) => (
+                                <RadioButton.Item
+                                    label={c.name}
+                                    value={c.symbol}
+                                />
+                            ))}
                         </RadioButton.Group>
                     </Dialog.Content>
                 </Dialog>
