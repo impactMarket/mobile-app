@@ -126,7 +126,7 @@ i18n.translations = {
         showQRToScan: 'Show QR to be scanned',
         youHaveDonated: 'Thank you for your donation!',
         errorDonating: 'An error happened while donating!',
-        addressCopiedClipboard: 'Community address copied to clipboard!',
+        addressCopiedClipboard: 'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
         donate: 'Donate',
         donatingTo:
             'To support {{communityName}}, send only $cUSD (Celo Dollar) to this community contract address.',
@@ -318,7 +318,7 @@ i18n.translations = {
         showQRToScan: 'Mostrar código QR',
         youHaveDonated: 'Obrigado pelo seu donativo!',
         errorDonating: 'Um erro ocorreu durante o donativo!',
-        addressCopiedClipboard: 'Endereço da comunidade copiado!',
+        addressCopiedClipboard: 'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
         donate: 'Contribuir',
         donatingTo:
             'Para apoiar a comunidade {{communityName}}, envie apenas $cUSD (Celo Dollar) para este endereço do contrato da comunidade.',
