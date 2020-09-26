@@ -65,6 +65,7 @@ function CreateCommunityScreen(props: Props) {
     const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
     //
     const [isDialogFrequencyOpen, setIsDialogFrequencyOpen] = useState(false);
+    const [isDialogVisibilityOpen, setIsDialogVisibilityOpen] = useState(false);
     const [isNameValid, setIsNameValid] = useState(true);
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
@@ -858,25 +859,40 @@ function CreateCommunityScreen(props: Props) {
                             )}
                         </View>
                         <Divider />
-                        {/* <Paragraph style={styles.inputTextFieldLabel}>
+                        <Paragraph style={styles.inputTextFieldLabel}>
                             {i18n.t('visibility')}
                         </Paragraph>
-                        <View style={styles.pickerBorder}>
-                            <Picker
-                                selectedValue={visibility}
-                                style={styles.picker}
-                                onValueChange={(text) => setVisivility(text)}
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignSelf: 'center',
+                            }}
+                        >
+                            <Button
+                                mode="contained"
+                                disabled={editing}
+                                style={{
+                                    width: '80%',
+                                    borderRadius: 6,
+                                    margin: 10,
+                                    backgroundColor: 'rgba(206,212,218,0.27)',
+                                }}
+                                onPress={() => setIsDialogVisibilityOpen(true)}
                             >
-                                <Picker.Item
-                                    label={i18n.t('public')}
-                                    value="public"
-                                />
-                                <Picker.Item
-                                    label={i18n.t('private')}
-                                    value="private"
-                                />
-                            </Picker>
-                        </View> */}
+                                <Text style={{ color: 'black', opacity: 1 }}>
+                                    {visibility === 'public'
+                                        ? i18n.t('public')
+                                        : i18n.t('private')}
+                                </Text>
+                            </Button>
+                            <IconButton
+                                style={{ marginTop: 10 }}
+                                icon="help-circle-outline"
+                                size={20}
+                                onPress={() => openHelp('visibility')}
+                            />
+                        </View>
                     </View>
                     <Text style={{ ...styles.textNote, marginVertical: 20 }}>
                         {i18n.t('createCommunityNote1')}
@@ -887,7 +903,7 @@ function CreateCommunityScreen(props: Props) {
                 </View>
             </ScrollView>
             <Portal>
-                <Dialog
+            <Dialog
                     visible={isDialogFrequencyOpen}
                     onDismiss={() => setIsDialogFrequencyOpen(false)}
                 >
@@ -906,6 +922,29 @@ function CreateCommunityScreen(props: Props) {
                             <RadioButton.Item
                                 label={i18n.t('weekly')}
                                 value="604800"
+                            />
+                        </RadioButton.Group>
+                    </Dialog.Content>
+                </Dialog>
+                <Dialog
+                    visible={isDialogVisibilityOpen}
+                    onDismiss={() => setIsDialogVisibilityOpen(false)}
+                >
+                    <Dialog.Content>
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                setVisivility(value);
+                                setIsDialogVisibilityOpen(false);
+                            }}
+                            value={visibility}
+                        >
+                            <RadioButton.Item
+                                label={i18n.t('public')}
+                                value="public"
+                            />
+                            <RadioButton.Item
+                                label={i18n.t('private')}
+                                value="private"
                             />
                         </RadioButton.Group>
                     </Dialog.Content>
