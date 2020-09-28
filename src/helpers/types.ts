@@ -174,6 +174,15 @@ export type AuthActionTypes =
     | SetAuthTokenAction;
 export type AppActionTypes = CeloKitAction | SetAppPaymentToAction;
 
+export interface IStoreCombinedState {
+    user: IUserState;
+    network: INetworkState;
+    auth: IAuthState;
+    app: IAppState;
+};
+
+export type IStoreCombinedActionsTypes = UserActionTypes | NetworkActionTypes | AuthActionTypes | AppActionTypes;
+
 export interface ITransaction {
     tx: string;
     from: string;
