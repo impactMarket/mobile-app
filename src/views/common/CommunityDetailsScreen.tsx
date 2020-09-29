@@ -6,7 +6,7 @@ import Header from 'components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import { humanifyNumber, claimFrequencyToText } from 'helpers/index';
-import { ICommunityInfo } from 'helpers/types';
+import { ICommunityInfo, IStoreCombinedActionsTypes, IStoreCombinedState } from 'helpers/types';
 import React, { useState } from 'react';
 import {
     Text,
@@ -22,6 +22,7 @@ import { Paragraph, Button, Card, Divider, Headline } from 'react-native-paper';
 import config from '../../../config';
 import Donate from '../communities/actions/Donate';
 import Api from 'services/api';
+import { useStore } from 'react-redux';
 
 const lineChartConfig: ChartConfig = {
     backgroundGradientFromOpacity: 0,
@@ -43,6 +44,7 @@ interface ICommunityDetailsScreen {
     };
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
+    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
 
     const [refreshing, setRefreshing] = useState(false);
@@ -105,10 +107,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     };
 
     let description;
+    const cDescription = store.getState().user.user.language === community.language ? community.description : community.descriptionEn;
     if (seeFullDescription || community.description.indexOf('\n') === -1) {
-        description = community.description;
+        description = cDescription;
     } else {
-        description = community.description.slice(
+        description = cDescription.slice(
             0,
             community.description.indexOf('\n')
         );
