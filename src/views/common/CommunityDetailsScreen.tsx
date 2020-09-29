@@ -6,7 +6,11 @@ import Header from 'components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
 import { humanifyNumber, claimFrequencyToText } from 'helpers/index';
-import { ICommunityInfo, IStoreCombinedActionsTypes, IStoreCombinedState } from 'helpers/types';
+import {
+    ICommunityInfo,
+    IStoreCombinedActionsTypes,
+    IStoreCombinedState,
+} from 'helpers/types';
 import React, { useState } from 'react';
 import {
     Text,
@@ -107,7 +111,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     };
 
     let description;
-    const cDescription = store.getState().user.user.language === community.language ? community.description : community.descriptionEn;
+    const cDescription =
+        store.getState().user.user.language === community.language
+            ? community.description
+            : community.descriptionEn;
     if (seeFullDescription || community.description.indexOf('\n') === -1) {
         description = cDescription;
     } else {
@@ -165,27 +172,20 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     </Card>
                     <Card elevation={8} style={{ marginVertical: 25 }}>
                         <Card.Content>
-                            <View style={styles.cardViewClaimFrequency}>
-                                <View>
-                                    <Headline>
-                                        $
-                                        {humanifyNumber(
-                                            community.vars._claimAmount
-                                        )}{' '}
-                                        /{' '}
-                                        {claimFrequencyToText(
-                                            community.vars._baseInterval
-                                        )}
-                                    </Headline>
-                                    <Paragraph style={{ color: '#b0b0b0' }}>
-                                        {i18n.t('upToPerBeneficiary', {
-                                            amount: humanifyNumber(
-                                                community.vars._maxClaim
-                                            ),
-                                        })}
-                                    </Paragraph>
-                                </View>
-                            </View>
+                            <Paragraph style={{ color: '#b0b0b0' }}>
+                                {i18n.t('eachBeneficiaryCanClaimXUpToY', {
+                                    claimX: humanifyNumber(
+                                        community.vars._claimAmount
+                                    ),
+                                    upToY: humanifyNumber(
+                                        community.vars._maxClaim
+                                    ),
+                                    minIncrement:
+                                        parseInt(
+                                            community.vars._incrementInterval
+                                        ) / 60,
+                                })}
+                            </Paragraph>
                             {renderSSI()}
                         </Card.Content>
                     </Card>
@@ -262,11 +262,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         marginRight: 0,
-    },
-    cardViewClaimFrequency: {
-        flex: 1,
-        flexDirection: 'row',
-        margin: 0,
     },
     chartView: {
         flex: 1,

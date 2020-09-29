@@ -51,7 +51,6 @@ i18n.translations = {
         allowCamera: 'Allow camera',
         moreAboutYourCommunity: 'More about your community',
         howClaimWorks: 'How it works',
-        upToPerBeneficiary: 'Up to ${{amount}} / beneficiary',
         ssi: 'Self-Sustainability Index',
         ssiDescription:
             'SSI measures how self-sustainable a community is, and its progress',
@@ -201,6 +200,8 @@ i18n.translations = {
             'Your donation will back {{backNBeneficiaries}} beneficiaries.',
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
+        eachBeneficiaryCanClaimXUpToY:
+            'Each beneficiary can claim ${{claimX}} every day, up to a total of ${{upToY}}. {{minIncrement}}min will be added after each claim.',
     },
     pt: {
         testnetWarning:
@@ -248,7 +249,6 @@ i18n.translations = {
         allowCamera: 'Permitir camera',
         moreAboutYourCommunity: 'Mais sobre a minha comunidade',
         howClaimWorks: 'Como funciona',
-        upToPerBeneficiary: 'Até ${{amount}} / beneficiário',
         ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
             'Este indicador mede a autossustentabilidade financeira de uma comunidade',
@@ -395,6 +395,8 @@ i18n.translations = {
             'Your donation will back {{backNBeneficiaries}} beneficiaries.',
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
+        eachBeneficiaryCanClaimXUpToY:
+            'Each beneficiary can claim ${{claimX}} every day, up to a total of ${{upToY}}. {{minIncrement}}min will be added after each claim.',
     },
 };
 // Set the locale once at the beginning of your app.
