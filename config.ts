@@ -27,6 +27,12 @@ const ENV = {
          * JSON RPC url
          */
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+
+        /**
+         * ImpactMarket contract, use to deploy private communities
+         */
+        impactMarketContractAddress: process.env.EXPO_IMPACTMARKET_CONTRACT,
+
         /**
          * Is it in testnet?
          */
@@ -49,6 +55,11 @@ const ENV = {
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
 
         /**
+         * ImpactMarket contract, use to deploy private communities
+         */
+        impactMarketContractAddress: '',
+
+        /**
          * Is it in testnet?
          */
         testnet: true,
@@ -67,7 +78,14 @@ const ENV = {
         /**
          * JSON RPC url
          */
-        jsonRpc: 'https://celo-mainnet--rpc.datahub.figment.io/apikey/b883d48310aa603380b19750aae4f9f4/',
+        jsonRpc:
+            'https://celo-mainnet--rpc.datahub.figment.io/apikey/b883d48310aa603380b19750aae4f9f4/',
+
+        /**
+         * ImpactMarket contract, use to deploy private communities
+         */
+        impactMarketContractAddress:
+            '0xe55C3eb4a04F93c3302A5d8058348157561BF5ca',
 
         /**
          * Is it in testnet?
