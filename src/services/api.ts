@@ -77,10 +77,13 @@ class Api {
         return result ? result : [];
     }
 
-    static async requestCreateCommunity(
+    static async createPrivateCommunity(
         requestByAddress: string,
         name: string,
+        contractAddress: string,
         description: string,
+        language: string,
+        currency: string,
         city: string,
         country: string,
         gps: {
@@ -88,7 +91,37 @@ class Api {
             longitude: number;
         },
         email: string,
-        visibility: string,
+        coverImage: string,
+    ): Promise<boolean> {
+        const result = await postRequest<boolean>('/community/create', {
+            requestByAddress,
+            name,
+            contractAddress,
+            description,
+            language,
+            currency,
+            city,
+            country,
+            gps,
+            email,
+            coverImage,
+        });
+        return !!result;
+    }
+
+    static async requestCreatePublicCommunity(
+        requestByAddress: string,
+        name: string,
+        description: string,
+        language: string,
+        currency: string,
+        city: string,
+        country: string,
+        gps: {
+            latitude: number;
+            longitude: number;
+        },
+        email: string,
         coverImage: string,
         txCreationObj: any
     ): Promise<boolean> {
@@ -96,11 +129,12 @@ class Api {
             requestByAddress,
             name,
             description,
+            language,
+            currency,
             city,
             country,
             gps,
             email,
-            visibility,
             coverImage,
             txCreationObj,
         });

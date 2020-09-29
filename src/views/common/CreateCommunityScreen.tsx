@@ -12,7 +12,13 @@ import {
     amountToUserCurrency,
     formatInputAmountToTransfer,
 } from 'helpers/index';
-import { IRootState, ICommunityInfo, IUserState } from 'helpers/types';
+import {
+    IRootState,
+    ICommunityInfo,
+    IUserState,
+    IStoreCombinedState,
+    IStoreCombinedActionsTypes,
+} from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
@@ -38,6 +44,9 @@ import {
 import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
 import config from '../../../config';
+import ImpactMarketAbi from '../../contracts/ImpactMarketABI.json';
+import { ethers } from 'ethers';
+import { celoWalletRequest } from 'services/celoWallet';
 
 interface ICreateCommunityScreen {
     route: {
@@ -57,7 +66,7 @@ type Props = PropsFromRedux & ICreateCommunityScreen;
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen(props: Props) {
-    const store = useStore();
+    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
 
     const [availableCurrencies, setAvailableCurrencies] = useState<
@@ -156,6 +165,48 @@ function CreateCommunityScreen(props: Props) {
         };
         getAvailableCurrencies();
     }, []);
+
+    const deployPrivateCommunity = async () => {
+        const impactMarketContract = new props.app.kit.web3.eth.Contract(
+            ImpactMarketAbi as any,
+            config.impactMarketContractAddress
+        );
+        const txObject = await impactMarketContract.methods.addCommunity(
+            props.user.celoInfo.address,
+            claimAmount,
+            maxClaim,
+            baseInterval,
+            incrementInterval
+        );
+        const receipt = await celoWalletRequest(
+            props.user.celoInfo.address,
+            config.impactMarketContractAddress,
+            txObject,
+            'createcommunity',
+            props.app.kit
+        );
+        // wait for confirmation
+        const ifaceImpactMarket = new ethers.utils.Interface(ImpactMarketAbi);
+        if (receipt.logs === undefined) {
+            throw new Error('No logs');
+        }
+        const eventsImpactMarket: ethers.utils.LogDescription[] = [];
+        for (let index = 0; index < receipt.logs.length; index++) {
+            try {
+                const parsedLog = ifaceImpactMarket.parseLog(
+                    receipt.logs[index]
+                );
+                eventsImpactMarket.push(parsedLog);
+            } catch (e) {}
+        }
+        const index = eventsImpactMarket.findIndex(
+            (event) => event !== null && event.name === 'CommunityAdded'
+        );
+        if (index !== -1) {
+            return eventsImpactMarket[index].values._communityAddress;
+        }
+        throw new Error('No community address');
+    };
 
     const submitNewCommunity = async () => {
         const _isCoverImageValid = coverImage.length > 0;
@@ -338,7 +389,12 @@ function CreateCommunityScreen(props: Props) {
                 setSending(false);
             }
         } else {
-            let uploadResponse, uploadImagePath;
+            let uploadResponse,
+                uploadImagePath,
+                communityAddress = null;
+            if (visibility === 'private') {
+                communityAddress = await deployPrivateCommunity();
+            }
             try {
                 uploadResponse = await Api.uploadImageAsync(coverImage);
                 if (uploadResponse?.status === 200) {
@@ -357,70 +413,95 @@ function CreateCommunityScreen(props: Props) {
                 setSending(false);
                 return;
             }
-            Api.requestCreateCommunity(
-                props.user.celoInfo.address,
-                name,
-                description,
-                city,
-                country,
-                {
-                    latitude:
-                        gpsLocation!.coords.latitude +
-                        config.locationErrorMargin,
-                    longitude:
-                        gpsLocation!.coords.longitude +
-                        config.locationErrorMargin,
-                },
-                email,
-                visibility,
-                uploadImagePath,
-                {
-                    claimAmount: new BigNumber(
-                        formatInputAmountToTransfer(claimAmount)
-                    )
-                        .multipliedBy(decimals)
-                        .toString(),
-                    maxClaim: new BigNumber(
-                        formatInputAmountToTransfer(maxClaim)
-                    )
-                        .multipliedBy(decimals)
-                        .toString(),
-                    baseInterval,
-                    incrementInterval: (
-                        parseInt(incrementInterval, 10) * 60
-                    ).toString(),
-                }
-            ).then((success) => {
-                if (success) {
-                    const unsubscribe = store.subscribe(() => {
-                        const state = store.getState();
-                        if (state.user.community.isManager) {
-                            unsubscribe();
-                            setSending(false);
-                            navigation.goBack();
-                            Alert.alert(
-                                i18n.t('success'),
-                                i18n.t('requestNewCommunityPlaced'),
-                                [{ text: 'OK' }],
-                                { cancelable: false }
-                            );
-                        }
-                    });
-                    loadContracts(
-                        props.user.celoInfo.address,
-                        props.app.kit,
-                        props
-                    );
-                } else {
-                    Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('errorCreatingCommunity'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                    setSending(false);
-                }
-            });
+            let apiRequestResult = false;
+            if (visibility === 'private') {
+                apiRequestResult = await Api.createPrivateCommunity(
+                    props.user.celoInfo.address,
+                    name,
+                    communityAddress,
+                    description,
+                    store.getState().user.user.language,
+                    currency,
+                    city,
+                    country,
+                    {
+                        latitude:
+                            gpsLocation!.coords.latitude +
+                            config.locationErrorMargin,
+                        longitude:
+                            gpsLocation!.coords.longitude +
+                            config.locationErrorMargin,
+                    },
+                    email,
+                    uploadImagePath
+                );
+            } else {
+                apiRequestResult = await Api.requestCreatePublicCommunity(
+                    props.user.celoInfo.address,
+                    name,
+                    description,
+                    store.getState().user.user.language,
+                    currency,
+                    city,
+                    country,
+                    {
+                        latitude:
+                            gpsLocation!.coords.latitude +
+                            config.locationErrorMargin,
+                        longitude:
+                            gpsLocation!.coords.longitude +
+                            config.locationErrorMargin,
+                    },
+                    email,
+                    uploadImagePath,
+                    {
+                        claimAmount: new BigNumber(
+                            formatInputAmountToTransfer(claimAmount)
+                        )
+                            .multipliedBy(decimals)
+                            .toString(),
+                        maxClaim: new BigNumber(
+                            formatInputAmountToTransfer(maxClaim)
+                        )
+                            .multipliedBy(decimals)
+                            .toString(),
+                        baseInterval,
+                        incrementInterval: (
+                            parseInt(incrementInterval, 10) * 60
+                        ).toString(),
+                    }
+                );
+            }
+
+            if (apiRequestResult) {
+                const unsubscribe = store.subscribe(() => {
+                    const state = store.getState();
+                    if (state.user.community.isManager) {
+                        unsubscribe();
+                        setSending(false);
+                        navigation.goBack();
+                        Alert.alert(
+                            i18n.t('success'),
+                            i18n.t('requestNewCommunityPlaced'),
+                            [{ text: 'OK' }],
+                            { cancelable: false }
+                        );
+                    }
+                });
+                loadContracts(
+                    props.user.celoInfo.address,
+                    props.app.kit,
+                    props
+                );
+            } else {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorCreatingCommunity'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                setSending(false);
+            }
         }
     };
 
