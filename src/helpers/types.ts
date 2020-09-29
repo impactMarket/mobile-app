@@ -205,6 +205,9 @@ export interface ICommunity {
     contractAddress: string;
     name: string;
     description: string;
+    descriptionEn: string;
+    language: string;
+    currency: string;
     country: string;
     city: string;
     gps: {
