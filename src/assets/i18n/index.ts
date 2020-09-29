@@ -50,7 +50,6 @@ i18n.translations = {
         currentAddress: 'Current Address',
         allowCamera: 'Allow camera',
         moreAboutYourCommunity: 'More about your community',
-        howClaimWorks: 'How it works',
         ssi: 'Self-Sustainability Index',
         ssiDescription:
             'SSI measures how self-sustainable a community is, and its progress',
@@ -202,6 +201,9 @@ i18n.translations = {
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
             'Each beneficiary can claim ${{claimX}} every day, up to a total of ${{upToY}}. {{minIncrement}}min will be added after each claim.',
+        nextTimeWillWaitClaim:
+            'Next time you will have to wait at least {{nextWait}}.',
+        knowHowClaimWorks: 'Know more about claims work.',
     },
     pt: {
         testnetWarning:
@@ -248,7 +250,6 @@ i18n.translations = {
         currentAddress: 'Endereço Atual',
         allowCamera: 'Permitir camera',
         moreAboutYourCommunity: 'Mais sobre a minha comunidade',
-        howClaimWorks: 'Como funciona',
         ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
             'Este indicador mede a autossustentabilidade financeira de uma comunidade',
@@ -397,6 +398,9 @@ i18n.translations = {
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
             'Each beneficiary can claim ${{claimX}} every day, up to a total of ${{upToY}}. {{minIncrement}}min will be added after each claim.',
+        nextTimeWillWaitClaim:
+            'Next time you will have to wait at least {{nextWait}}.',
+        knowHowClaimWorks: 'Know more about claims work.',
     },
 };
 // Set the locale once at the beginning of your app.

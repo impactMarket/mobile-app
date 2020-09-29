@@ -133,8 +133,6 @@ function BeneficiaryView(props: Props) {
                         colors={['transparent', 'rgba(246,246,246,1)']}
                         style={styles.linearGradient}
                     />
-                </ImageBackground>
-                <View style={styles.contentView}>
                     <Button
                         mode="outlined"
                         style={{ margin: 30 }}
@@ -147,10 +145,8 @@ function BeneficiaryView(props: Props) {
                     >
                         {i18n.t('moreAboutYourCommunity')}
                     </Button>
-                    <Claim
-                        claimAmount={community.vars._claimAmount}
-                        updateClaimedAmount={updateClaimedAmount}
-                    />
+                </ImageBackground>
+                <View style={styles.contentView}>
                     <View style={{ marginTop: '8%' }}>
                         <Text
                             onPress={() =>
@@ -169,13 +165,32 @@ function BeneficiaryView(props: Props) {
                             progress={claimedProgress}
                             color="#5289ff"
                         />
+                    </View>
+                    <Claim
+                        claimAmount={community.vars._claimAmount}
+                        updateClaimedAmount={updateClaimedAmount}
+                    />
+                    <View style={{ marginTop: '3%' }}>
+                        <Text>
+                            {i18n.t('nextTimeWillWaitClaim', {
+                                nextWait: `${
+                                    parseInt(community.vars._baseInterval) /
+                                    60 /
+                                    60
+                                }h${
+                                    parseInt(
+                                        community.vars._incrementInterval
+                                    ) / 60
+                                }m`,
+                            })}
+                        </Text>
                         <Text
                             onPress={() =>
                                 navigation.navigate('ClaimExplainedScreen')
                             }
                             style={styles.howClaimsWork}
                         >
-                            {i18n.t('howClaimWorks')}?
+                            {i18n.t('knowHowClaimWorks')}
                         </Text>
                     </View>
                 </View>
