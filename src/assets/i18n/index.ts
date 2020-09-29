@@ -216,7 +216,7 @@ i18n.translations = {
         cancel: 'Fechar',
         claimed: 'Distribuído',
         raised: 'Angariado',
-        claim: 'Pedir',
+        claim: 'Pegar',
         manage: 'Gerir',
         communities: 'Comunidades',
         pay: 'Enviar',
@@ -325,8 +325,8 @@ i18n.translations = {
         donateWithCelo: 'Doar com Valora',
         amountSymbol: 'Montante em {{symbol}}',
         close: 'Fechar',
-        youCanClaimXin: 'Poderá pedir {{symbol}}{{amount}} em',
-        claimX: 'Pedir {{symbol}}{{amount}}',
+        youCanClaimXin: 'Poderá pegar {{symbol}}{{amount}} em',
+        claimX: 'Pegar {{symbol}}{{amount}}',
         loading: 'A carregar...',
         youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
         hour: 'hora',
@@ -353,17 +353,17 @@ i18n.translations = {
         notFundsToAddBeneficiary:
             'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
         claimExplained1:
-            'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pedir $1/dia até $500.',
+            'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
         claimExplained2:
-            'Existe um tempo minimo que terá de esperar antes de poder pedir novamente, mas não tem tempo máximo. Deverá pedir apenas quando precisa. Quanto mais pedir, mais tempo terá de esperar antes de poder pedir novamente.',
+            'Existe um tempo minimo que terá de esperar antes de poder pegar novamente, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
         claimAmountHelp:
-            'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
+            'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir/pegar de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
         totalClaimPerBeneficiaryHelp:
-            'Este montante é o limite que cada beneficiário pode obter no total após várias pedidos. Por exemplo, cada beneficiário pode pedir $2 por dia até atingir um total de $1000, o que significa que cada beneficiário terá acesso a um rendimento mínimo de $2/dia durante pelo menos 16 meses. Este tempo pode aumentar se a opção de incremento de tempo dessa comunidade for superior a zero.',
+            'Este montante é o limite que cada beneficiário pode obter no total após várias pedidos. Por exemplo, cada beneficiário pode pegar $2 por dia até atingir um total de $1000, o que significa que cada beneficiário terá acesso a um rendimento mínimo de $2/dia durante pelo menos 16 meses. Este tempo pode aumentar se a opção de incremento de tempo dessa comunidade for superior a zero.',
         frequencyHelp:
-            'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pedir novamente (mais $2).',
+            'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pegar novamente (mais $2).',
         timeIncrementAfterClaimHelp:
-            'É possível adicionar um incremento de tempo cada vez que um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pedir $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pedir novamente (neste caso, 24h20m após pedir pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
+            'É possível adicionar um incremento de tempo cada vez que um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
         visibilityHelp: 'Uma comunidade pode ser publica (necessita da aprovação da equipada impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
         currencyHelp: 'Escolha aqui a moeda usada entre os seus beneficiários.',
         coverImageRequired: 'Imagem de capa é obrigatório!',
@@ -373,8 +373,8 @@ i18n.translations = {
         countryRequired: 'País é obrigatório!',
         enablingGPSRequired: 'Ativar o GPS é obrigatório!',
         emailRequired: 'Endereço de e-mail é obrigatório!',
-        claimAmountRequired: 'Quantidade a pedir é obrigatório!',
-        maxClaimAmountRequired: 'Quantidade máxima a pedir é obrigatório!',
+        claimAmountRequired: 'Quantidade a pegar é obrigatório!',
+        maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
         incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
         turnOn: 'Ativar',
         turnOnLocationHint:
