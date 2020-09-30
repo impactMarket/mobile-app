@@ -200,7 +200,7 @@ i18n.translations = {
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
-            'Each beneficiary can claim ${{claimX}} every day, up to a total of ${{upToY}}. {{minIncrement}}min will be added after each claim.',
+            'Each beneficiary can claim (${{claimX}} cUSD per day), up to a total of ${{upToY}} cUSD. Each claim increases its waiting interval by {{minIncrement}} minutes.',
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}.',
         knowHowClaimWorks: 'Know more about claims work.',
@@ -397,7 +397,7 @@ i18n.translations = {
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
-            'Each beneficiary can claim ${{claimX}} every day, up to a total of ${{upToY}}. {{minIncrement}}min will be added after each claim.',
+            'Cada beneficiário pode pegar ${{claimX}} por dia, até um total de ${{upToY}} cUSD. Cada vez que pega, {{minIncrement}} minutos são adicionados ao tempo de espera.',
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}.',
         knowHowClaimWorks: 'Know more about claims work.',
