@@ -125,17 +125,13 @@ function BeneficiaryView(props: Props) {
                     style={styles.imageBackground}
                 >
                     <Text style={styles.communityName}>{community.name}</Text>
-                    <Text style={styles.communityLocation}>
-                        <AntDesign name="enviromento" size={20} />{' '}
-                        {community.city}, {community.country}
-                    </Text>
                     <LinearGradient
                         colors={['transparent', 'rgba(246,246,246,1)']}
                         style={styles.linearGradient}
                     />
                     <Button
-                        mode="outlined"
-                        style={{ margin: 30 }}
+                        mode="contained"
+                        style={{ margin: 30, backgroundColor: '#E9ECEF' }}
                         onPress={() =>
                             navigation.navigate('CommunityDetailsScreen', {
                                 community,
@@ -143,7 +139,9 @@ function BeneficiaryView(props: Props) {
                             })
                         }
                     >
-                        {i18n.t('moreAboutYourCommunity')}
+                        <Text style={{ color: 'black' }}>
+                            {i18n.t('moreAboutYourCommunity')}
+                        </Text>
                     </Button>
                 </ImageBackground>
                 <View style={styles.contentView}>
@@ -170,8 +168,8 @@ function BeneficiaryView(props: Props) {
                         claimAmount={community.vars._claimAmount}
                         updateClaimedAmount={updateClaimedAmount}
                     />
-                    <View style={{ marginTop: '3%' }}>
-                        <Text>
+                    <View style={{ marginTop: '5%', alignItems: 'center' }}>
+                        <Text style={styles.howClaimsWorks}>
                             {i18n.t('nextTimeWillWaitClaim', {
                                 nextWait: `${
                                     parseInt(community.vars._baseInterval) /
@@ -188,7 +186,7 @@ function BeneficiaryView(props: Props) {
                             onPress={() =>
                                 navigation.navigate('ClaimExplainedScreen')
                             }
-                            style={styles.howClaimsWork}
+                            style={styles.howClaimsWorksLink}
                         >
                             {i18n.t('knowHowClaimWorks')}
                         </Text>
@@ -281,13 +279,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white',
     },
-    howClaimsWork: {
+    howClaimsWorks: {
+        fontFamily: 'Gelion-Regular',
+        fontSize: 18,
+        color: '#7E8DA6',
+        fontStyle: 'normal',
+        letterSpacing: 0.3,
+    },
+    howClaimsWorksLink: {
         fontFamily: 'Gelion-Bold',
         fontSize: 18,
         fontWeight: '500',
         fontStyle: 'normal',
         letterSpacing: 0.3,
-        textAlign: 'center',
         color: iptcColors.softBlue,
         height: 25,
     },

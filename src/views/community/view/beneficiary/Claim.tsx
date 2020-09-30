@@ -11,8 +11,8 @@ import {
 import { IRootState } from 'helpers/types';
 import moment from 'moment';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Button, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -59,7 +59,7 @@ class Claim extends React.Component<Props, IClaimState> {
             totalClaimed,
             totalRaised,
             vars,
-        } = this.props.network.community; // TODO: run api request in postman to see values
+        } = this.props.network.community;
         const notEnoughToClaimOnContract = new BigNumber(totalRaised)
             .minus(totalClaimed)
             .lt(vars._claimAmount);
@@ -78,30 +78,42 @@ class Claim extends React.Component<Props, IClaimState> {
             await communityContract.methods.claim(),
             'beneficiaryclaim',
             app.kit
-        ).then(async () => {
-            let loc: Location.LocationData | undefined = undefined;
-            const availableGPSToRequest =
-                (await Location.hasServicesEnabledAsync()) &&
-                (await Location.getPermissionsAsync()).status === 'granted' &&
-                (await Location.getProviderStatusAsync())
-                    .locationServicesEnabled;
-            if (availableGPSToRequest) {
-                loc = await Location.getCurrentPositionAsync({
-                    accuracy: Location.Accuracy.Low,
+        )
+            .then(async () => {
+                let loc: Location.LocationData | undefined = undefined;
+                const availableGPSToRequest =
+                    (await Location.hasServicesEnabledAsync()) &&
+                    (await Location.getPermissionsAsync()).status ===
+                        'granted' &&
+                    (await Location.getProviderStatusAsync())
+                        .locationServicesEnabled;
+                if (availableGPSToRequest) {
+                    loc = await Location.getCurrentPositionAsync({
+                        accuracy: Location.Accuracy.Low,
+                    });
+                }
+                if (loc !== undefined) {
+                    Api.addClaimLocation(network.community.publicId, {
+                        latitude:
+                            loc.coords.latitude + config.locationErrorMargin,
+                        longitude:
+                            loc.coords.longitude + config.locationErrorMargin,
+                    });
+                }
+                this._loadAllowance(communityContract).then(() => {
+                    this.setState({ claiming: false });
+                    this.props.updateClaimedAmount();
                 });
-            }
-            if (loc !== undefined) {
-                Api.addClaimLocation(network.community.publicId, {
-                    latitude: loc.coords.latitude + config.locationErrorMargin,
-                    longitude:
-                        loc.coords.longitude + config.locationErrorMargin,
-                });
-            }
-            this._loadAllowance(communityContract).then(() => {
+            })
+            .catch((e) => {
                 this.setState({ claiming: false });
-                this.props.updateClaimedAmount();
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorClaiming'),
+                    [{ text: i18n.t('close') }],
+                    { cancelable: false }
+                );
             });
-        });
     };
 
     render() {
@@ -133,25 +145,54 @@ class Claim extends React.Component<Props, IClaimState> {
         }
 
         return (
-            <Button
-                mode="contained"
-                onPress={this.handleClaimPress}
+            <TouchableOpacity
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    backgroundColor:
+                        claimDisabled || notEnoughToClaimOnContract
+                            ? '#E9ECEF'
+                            : iptcColors.softBlue,
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    paddingVertical: 5,
+                    paddingHorizontal: 15,
+                    borderRadius: 8,
+                }}
                 disabled={
-                    claimDisabled || /* claiming || */ notEnoughToClaimOnContract
+                    claimDisabled ||
+                    /* claiming || */ notEnoughToClaimOnContract
                 }
-                loading={claiming}
-                style={styles.claimButton}
+                onPress={this.handleClaimPress}
             >
-                <Text style={styles.claimText}>
-                    {i18n.t('claimX', {
-                        symbol: getUserCurrencySymbol(this.props.user.user),
-                        amount: amountToUserCurrency(
-                            this.props.claimAmount,
-                            this.props.user.user
-                        ),
-                    })}
-                </Text>
-            </Button>
+                {claiming && (
+                    <ActivityIndicator
+                        style={{ marginRight: 13 }}
+                        animating={true}
+                        color="white"
+                    />
+                )}
+                <View
+                    style={{
+                        flexDirection: 'column',
+                        alignSelf: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text style={styles.claimText}>
+                        {i18n.t('claimX', {
+                            symbol: getUserCurrencySymbol(this.props.user.user),
+                            amount: amountToUserCurrency(
+                                this.props.claimAmount,
+                                this.props.user.user
+                            ),
+                        })}
+                    </Text>
+                    <Text style={styles.claimTextCUSD}>
+                        ${humanifyNumber(this.props.claimAmount)} cUSD
+                    </Text>
+                </View>
+            </TouchableOpacity>
         );
     }
 
@@ -187,8 +228,6 @@ class Claim extends React.Component<Props, IClaimState> {
 
 const styles = StyleSheet.create({
     claimButton: {
-        width: 200,
-        height: 50,
         borderRadius: 8,
         alignSelf: 'center',
     },
@@ -199,7 +238,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontStyle: 'normal',
         letterSpacing: 0.46,
-        textAlign: 'center',
+        color: 'white',
+    },
+    claimTextCUSD: {
+        textTransform: 'none',
+        fontFamily: 'Gelion-Regular',
+        fontStyle: 'normal',
         color: 'white',
     },
     mainPageContent: {
