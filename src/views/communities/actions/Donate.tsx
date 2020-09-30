@@ -2,23 +2,26 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import {
     iptcColors,
-    getUserCurrencySymbol,
     updateCommunityInfo,
     formatInputAmountToTransfer,
+    getCurrencySymbol,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
-import { StyleSheet, Clipboard, Alert } from 'react-native';
+import { StyleSheet, Clipboard, Alert, View, TextInput } from 'react-native';
 import {
     Button,
-    Dialog,
     Paragraph,
     Portal,
-    TextInput,
     Snackbar,
     Text,
+    Modal,
+    Headline,
+    IconButton,
+    Card,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
+import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import config from '../../../../config';
 
@@ -40,6 +43,7 @@ interface IDonateState {
     amountDonate: string;
     showCopiedToClipboard: boolean;
     modalConfirmSend: boolean;
+    rates: any;
 }
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 class Donate extends Component<Props, IDonateState> {
@@ -51,19 +55,38 @@ class Donate extends Component<Props, IDonateState> {
             amountDonate: '',
             showCopiedToClipboard: false,
             modalConfirmSend: false,
+            rates: {},
         };
     }
 
+    componentDidMount = () => {
+        Api.getExchangeRate().then((rates) => this.setState({ rates }));
+    };
+
     handleConfirmDonateWithCeloWallet = () => {
         const { amountDonate } = this.state;
-        const { community, user } = this.props;
         const inDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
             this.props.user.user.exchangeRate;
+        if (
+            inDollars >
+            new BigNumber(this.props.user.celoInfo.balance)
+                .dividedBy(10 ** config.cUSDDecimals)
+                .toNumber()
+        ) {
+            Alert.alert(
+                i18n.t('donate'),
+                i18n.t('donationBiggerThanBalance'),
+                [{ text: i18n.t('close') }],
+                { cancelable: true }
+            );
+            return;
+        }
+        const { community, user } = this.props;
         Alert.alert(
             i18n.t('donate'),
             i18n.t('payConfirmMessage', {
-                symbol: getUserCurrencySymbol(user.user),
+                symbol: getCurrencySymbol(user.user.currency),
                 amount: amountDonate,
                 amountInDollars: inDollars.toFixed(2),
                 to: community.name,
@@ -94,12 +117,11 @@ class Donate extends Component<Props, IDonateState> {
                 .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
                 .toString()
         ).txo;
-        const requestId = 'donatetocommunity';
         celoWalletRequest(
             this.props.user.celoInfo.address,
             stableToken.address,
             txObject,
-            requestId,
+            'donatetocommunity',
             this.props.app.kit
         )
             .then(() => {
@@ -150,12 +172,18 @@ class Donate extends Component<Props, IDonateState> {
             donating,
             amountDonate,
             showCopiedToClipboard,
+            rates,
         } = this.state;
         const { community, user } = this.props;
 
-        const amoutToDonateInDollars =
+        const amountInDollars =
             parseFloat(formatInputAmountToTransfer(this.state.amountDonate)) /
             this.props.user.user.exchangeRate;
+        let amountInCommunityCurrency = 0;
+        if (rates[community.currency] !== undefined) {
+            amountInCommunityCurrency =
+                amountInDollars * rates[community.currency].rate;
+        }
 
         return (
             <>
@@ -188,64 +216,140 @@ class Donate extends Component<Props, IDonateState> {
                     {i18n.t('addressCopiedClipboard')}
                 </Snackbar>
                 <Portal>
-                    <Dialog
+                    <Modal
                         visible={openModalDonate}
                         onDismiss={() =>
                             this.setState({ openModalDonate: false })
                         }
                     >
-                        <Dialog.Title>{i18n.t('donate')}</Dialog.Title>
-                        <Dialog.Content>
-                            <TextInput
-                                label={i18n.t('amountSymbol', {
-                                    symbol: getUserCurrencySymbol(user.user),
-                                })}
-                                mode="outlined"
-                                keyboardType="numeric"
-                                value={amountDonate}
-                                onChangeText={(text) =>
-                                    this.setState({ amountDonate: text })
-                                }
-                            />
-                            <Paragraph style={{ marginBottom: 20 }}>
-                                {i18n.t('yourDonationWillBack', {
-                                    backNBeneficiaries: Math.floor(
-                                        amoutToDonateInDollars /
-                                            new BigNumber(
-                                                community.vars._claimAmount
-                                            )
-                                                .dividedBy(
-                                                    10 ** config.cUSDDecimals
-                                                )
-                                                .toNumber()
-                                    ),
-                                })}
-                            </Paragraph>
-                            <Button
-                                mode="contained"
-                                onPress={this.handleCopyAddressToClipboard}
-                            >
-                                {i18n.t('copyToClipboard')}
-                            </Button>
-                            <Button
-                                mode="contained"
-                                loading={donating}
-                                disabled={donating}
-                                style={{ marginRight: 10 }}
-                                onPress={this.handleConfirmDonateWithCeloWallet}
-                            >
-                                {i18n.t('donate')}
-                            </Button>
-                            <Button
-                                mode="contained"
-                                onPress={() =>
-                                    this.setState({ openModalDonate: false })
-                                }
-                            >
-                                {i18n.t('close')}
-                            </Button>
-                        </Dialog.Content>
-                    </Dialog>
+                        <Card style={{ marginHorizontal: 20 }}>
+                            <Card.Content>
+                                <View style={{ height: 40 }}>
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <Headline style={{ marginVertical: 3 }}>
+                                            {i18n.t('donateSymbol', {
+                                                symbol: getCurrencySymbol(
+                                                    user.user.currency
+                                                ),
+                                            })}
+                                        </Headline>
+                                        <IconButton
+                                            icon="close"
+                                            size={20}
+                                            style={{ top: -5 }}
+                                            onPress={() =>
+                                                this.setState({
+                                                    openModalDonate: false,
+                                                })
+                                            }
+                                        />
+                                    </View>
+                                </View>
+                                <View
+                                    style={{
+                                        backgroundColor: '#F6F6F7',
+                                        // opacity: 0.27,
+                                        alignItems: 'center',
+                                        borderRadius: 5,
+                                    }}
+                                >
+                                    <TextInput
+                                        keyboardType="numeric"
+                                        placeholder={i18n.t('amountSymbol', {
+                                            symbol: getCurrencySymbol(
+                                                user.user.currency
+                                            ),
+                                        })}
+                                        style={{
+                                            fontFamily: 'Gelion-Regular',
+                                            fontStyle: 'normal',
+                                            fontWeight: 'normal',
+                                            fontSize: 40,
+                                            lineHeight: 50,
+                                            textAlign: 'center',
+                                        }}
+                                        value={amountDonate}
+                                        onChangeText={(text) =>
+                                            this.setState({
+                                                amountDonate: text,
+                                            })
+                                        }
+                                    />
+                                    {amountDonate.length > 0 && (
+                                        <Paragraph
+                                            style={{ marginVertical: 10 }}
+                                        >
+                                            ~
+                                            {getCurrencySymbol(
+                                                community.currency
+                                            )}
+                                            {amountInCommunityCurrency.toFixed(
+                                                2
+                                            )}
+                                        </Paragraph>
+                                    )}
+                                </View>
+                                {amountDonate.length > 0 && (
+                                    <Paragraph
+                                        style={{
+                                            marginBottom: 20,
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        {i18n.t('yourDonationWillBack', {
+                                            backNBeneficiaries: Math.floor(
+                                                amountInDollars /
+                                                    parseInt(
+                                                        community.vars
+                                                            ._claimAmount
+                                                    )
+                                            ),
+                                        })}
+                                    </Paragraph>
+                                )}
+                                <Button
+                                    style={{
+                                        backgroundColor: '#F2F3F5',
+                                        marginVertical: 10,
+                                    }}
+                                    mode="contained"
+                                    onPress={this.handleCopyAddressToClipboard}
+                                >
+                                    <Text
+                                        style={{
+                                            color: 'black',
+                                            textTransform: 'none',
+                                        }}
+                                    >
+                                        {i18n.t('copyContractAddress')}
+                                    </Text>
+                                </Button>
+                                <Button
+                                    mode="contained"
+                                    loading={donating}
+                                    disabled={donating}
+                                    onPress={
+                                        this.handleConfirmDonateWithCeloWallet
+                                    }
+                                >
+                                    <Text
+                                        style={{
+                                            color: 'white',
+                                            textTransform: 'none',
+                                        }}
+                                    >
+                                        {i18n.t('donateWithValora')}
+                                    </Text>
+                                </Button>
+                            </Card.Content>
+                        </Card>
+                    </Modal>
                 </Portal>
             </>
         );
