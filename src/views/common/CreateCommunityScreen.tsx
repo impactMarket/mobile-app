@@ -171,12 +171,23 @@ function CreateCommunityScreen(props: Props) {
             ImpactMarketAbi as any,
             config.impactMarketContractAddress
         );
+        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         const txObject = await impactMarketContract.methods.addCommunity(
             props.user.celoInfo.address,
-            claimAmount,
-            maxClaim,
+            new BigNumber(
+                formatInputAmountToTransfer(claimAmount)
+            )
+                .multipliedBy(decimals)
+                .toString(),
+            new BigNumber(
+                formatInputAmountToTransfer(maxClaim)
+            )
+                .multipliedBy(decimals)
+                .toString(),
             baseInterval,
-            incrementInterval
+            (
+                parseInt(incrementInterval, 10) * 60
+            ).toString(),
         );
         const receipt = await celoWalletRequest(
             props.user.celoInfo.address,
@@ -261,8 +272,7 @@ function CreateCommunityScreen(props: Props) {
             _isClaimAmountValid &&
             _isIncrementalIntervalValid &&
             _isMaxClaimValid &&
-            _isCoverImageValid &&
-            !sending;
+            _isCoverImageValid;
 
         if (!isSubmitAvailable) {
             return;
@@ -1107,6 +1117,7 @@ function CreateCommunityScreen(props: Props) {
                         >
                             {availableCurrencies.map((c) => (
                                 <RadioButton.Item
+                                    key={c.symbol}
                                     label={c.name}
                                     value={c.symbol}
                                 />
