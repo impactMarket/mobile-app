@@ -119,6 +119,24 @@ export function getUserAvatar(user: IUserInfo, round: boolean = true) {
     return { uri: user.avatar };
 }
 
+export function getCurrencySymbol(currency: string) {
+    switch (currency.toUpperCase()) {
+        case 'EUR':
+            return '€';
+        case 'BRL':
+            return 'R$';
+        case 'GHS':
+            return 'GH₵';
+        case 'CVE':
+            return '$';
+        default:
+            return '$';
+    }
+}
+
+/**
+ * @deprecated Use getCurrencySymbol
+ */
 export function getUserCurrencySymbol(user: IUserInfo) {
     switch (user.currency.toUpperCase()) {
         case 'EUR':

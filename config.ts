@@ -31,7 +31,7 @@ const ENV = {
         /**
          * ImpactMarket contract, use to deploy private communities
          */
-        impactMarketContractAddress: process.env.EXPO_IMPACTMARKET_CONTRACT,
+        impactMarketContractAddress: process.env.EXPO_IMPACTMARKET_CONTRACT!,
 
         /**
          * Is it in testnet?

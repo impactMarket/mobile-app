@@ -174,21 +174,16 @@ function CreateCommunityScreen(props: Props) {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         const txObject = await impactMarketContract.methods.addCommunity(
             props.user.celoInfo.address,
-            new BigNumber(
-                formatInputAmountToTransfer(claimAmount)
-            )
+            new BigNumber(formatInputAmountToTransfer(claimAmount))
                 .multipliedBy(decimals)
                 .toString(),
-            new BigNumber(
-                formatInputAmountToTransfer(maxClaim)
-            )
+            new BigNumber(formatInputAmountToTransfer(maxClaim))
                 .multipliedBy(decimals)
                 .toString(),
             baseInterval,
-            (
-                parseInt(incrementInterval, 10) * 60
-            ).toString(),
+            (parseInt(incrementInterval, 10) * 60).toString()
         );
+        // exception is handled outside
         const receipt = await celoWalletRequest(
             props.user.celoInfo.address,
             config.impactMarketContractAddress,
@@ -402,10 +397,10 @@ function CreateCommunityScreen(props: Props) {
             let uploadResponse,
                 uploadImagePath,
                 communityAddress = null;
-            if (visibility === 'private') {
-                communityAddress = await deployPrivateCommunity();
-            }
             try {
+                if (visibility === 'private') {
+                    communityAddress = await deployPrivateCommunity();
+                }
                 uploadResponse = await Api.uploadImageAsync(coverImage);
                 if (uploadResponse?.status === 200) {
                     uploadImagePath = uploadResponse.data.location;

@@ -34,7 +34,7 @@ function LoginScreen() {
     const login = async () => {
         const requestId = 'login';
         const dappName = 'impactmarket';
-        const callback = Linking.makeUrl('/login');
+        const callback = Linking.makeUrl(requestId);
         setConnecting(true);
 
         const pushNotificationsToken = await registerForPushNotifications();
@@ -60,7 +60,6 @@ function LoginScreen() {
             language,
             pushNotificationsToken
         );
-        console.log(user);
         if (user === undefined) {
             Alert.alert(
                 i18n.t('failure'),

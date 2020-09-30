@@ -127,8 +127,9 @@ i18n.translations = {
         addressCopiedClipboard:
             'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
         donate: 'Donate',
-        donateWithCelo: 'Donate with Valora',
+        donateWithValora: 'Donate with Valora',
         amountSymbol: 'Amount ({{symbol}})',
+        donateSymbol: 'Donate ({{symbol}})',
         close: 'Close',
         youCanClaimXin: 'You can claim {{symbol}}{{amount}} in',
         claimX: 'Claim {{symbol}}{{amount}}',
@@ -194,7 +195,6 @@ i18n.translations = {
             "By pressing 'Send', you will send {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
         donateConfirmMessage:
             "By pressing 'Donate', you will donate {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
-        copyToClipboard: 'Copy to clipboard',
         yourDonationWillBack:
             'Your donation will back {{backNBeneficiaries}} beneficiaries.',
         yourDonationWillBackFor:
@@ -204,6 +204,10 @@ i18n.translations = {
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}.',
         knowHowClaimWorks: 'How claims work.',
+        copyContractAddress: 'Copy Contract Address',
+        donationBiggerThanBalance:
+            'You are trying to donate an amount bigger than your balance.',
+        errorClaiming: 'An error happened while claiming.',
     },
     pt: {
         testnetWarning:
@@ -327,8 +331,9 @@ i18n.translations = {
         addressCopiedClipboard:
             'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
         donate: 'Contribuir',
-        donateWithCelo: 'Doar com Valora',
+        donateWithValora: 'Doar com Valora',
         amountSymbol: 'Montante em {{symbol}}',
+        donateSymbol: 'Contribuir {{symbol}}',
         close: 'Fechar',
         youCanClaimXin: 'Poderá pegar {{symbol}}{{amount}} em',
         claimX: 'Pegar {{symbol}}{{amount}}',
@@ -391,7 +396,6 @@ i18n.translations = {
             "Ao selecionar 'Enviar', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
         donateConfirmMessage:
             "Ao selecionar 'Contribuir', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
-        copyToClipboard: 'Copiar para área de transferência',
         yourDonationWillBack:
             'Your donation will back {{backNBeneficiaries}} beneficiaries.',
         yourDonationWillBackFor:
@@ -401,6 +405,10 @@ i18n.translations = {
         nextTimeWillWaitClaim:
             'Na próxima terá de esperar pelo menos {{nextWait}}.',
         knowHowClaimWorks: 'Como funciona?',
+        copyContractAddress: 'Copy Contract Address',
+        donationBiggerThanBalance:
+            'You are trying to donate an amount bigger than your balance.',
+        errorClaiming: 'An error happened while claiming.',
     },
 };
 // Set the locale once at the beginning of your app.
