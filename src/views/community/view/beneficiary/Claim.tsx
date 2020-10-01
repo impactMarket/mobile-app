@@ -1,24 +1,21 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
 import * as Location from 'expo-location';
 import {
     humanifyNumber,
     iptcColors,
-    getUserCurrencySymbol,
     amountToUserCurrency,
+    getCurrencySymbol,
 } from 'helpers/index';
 import { IRootState } from 'helpers/types';
 import moment from 'moment';
 import React from 'react';
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ActivityIndicator, Button, Text } from 'react-native-paper';
+import { ActivityIndicator, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import config from '../../../../../config';
-
-import { CommunityInstance } from '../../../../contracts/types/truffle-contracts';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -31,6 +28,7 @@ type Props = PropsFromRedux & IClaimProps;
 
 interface IClaimProps {
     claimAmount: string;
+    cooldownTime: number;
     updateClaimedAmount: () => void;
 }
 interface IClaimState {
@@ -51,9 +49,7 @@ class Claim extends React.Component<Props, IClaimState> {
     }
 
     componentDidMount = async () => {
-        const communityContract = this.props.network.contracts
-            .communityContract;
-        await this._loadAllowance(communityContract);
+        await this._loadAllowance();
         // check if there's enough funds to enable/disable claim button
         const {
             totalClaimed,
@@ -100,7 +96,7 @@ class Claim extends React.Component<Props, IClaimState> {
                             loc.coords.longitude + config.locationErrorMargin,
                     });
                 }
-                this._loadAllowance(communityContract).then(() => {
+                this._loadAllowance().then(() => {
                     this.setState({ claiming: false });
                     this.props.updateClaimedAmount();
                 });
@@ -124,12 +120,29 @@ class Claim extends React.Component<Props, IClaimState> {
             notEnoughToClaimOnContract,
         } = this.state;
 
+        const formatedTimeNextClaim = () => {
+            let next = '';
+            if (nextClaim.days() > 0) {
+                next += `${nextClaim.days()}d ${nextClaim.hours()}h ${nextClaim.minutes()}m `;
+            }
+            else if (nextClaim.hours() > 0) {
+                next += `${nextClaim.hours()}h ${nextClaim.minutes()}m `;
+            }
+            else if (nextClaim.minutes() > 0) {
+                next += `${nextClaim.minutes()}m `;
+            }
+            next += `${nextClaim.seconds()}s `;
+            return next;
+        };
+
         if (claimDisabled) {
             return (
-                <View style={{ height: 90 }}>
+                <View style={{ height: 90, marginVertical: '5%' }}>
                     <Text style={styles.mainPageContent}>
                         {i18n.t('youCanClaimXin', {
-                            symbol: getUserCurrencySymbol(this.props.user.user),
+                            symbol: getCurrencySymbol(
+                                this.props.user.user.currency
+                            ),
                             amount: amountToUserCurrency(
                                 this.props.claimAmount,
                                 this.props.user.user
@@ -137,8 +150,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         })}
                     </Text>
                     <Text style={styles.claimCountDown}>
-                        {nextClaim.days()}d {nextClaim.hours()}h{' '}
-                        {nextClaim.minutes()}m {nextClaim.seconds()}s
+                        {formatedTimeNextClaim()}
                     </Text>
                 </View>
             );
@@ -156,6 +168,7 @@ class Claim extends React.Component<Props, IClaimState> {
                     alignSelf: 'center',
                     alignItems: 'center',
                     paddingVertical: 5,
+                    marginVertical: '5%',
                     paddingHorizontal: 15,
                     borderRadius: 8,
                 }}
@@ -181,7 +194,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 >
                     <Text style={styles.claimText}>
                         {i18n.t('claimX', {
-                            symbol: getUserCurrencySymbol(this.props.user.user),
+                            symbol: getCurrencySymbol(this.props.user.user.currency),
                             amount: amountToUserCurrency(
                                 this.props.claimAmount,
                                 this.props.user.user
@@ -196,16 +209,8 @@ class Claim extends React.Component<Props, IClaimState> {
         );
     }
 
-    _loadAllowance = async (
-        communityInstance: ethers.Contract & CommunityInstance
-    ) => {
-        const { address } = this.props.user.celoInfo;
-        const cooldownTime = parseInt(
-            (
-                await communityInstance.methods.cooldown(address).call()
-            ).toString(),
-            10
-        );
+    _loadAllowance = async () => {
+        const { cooldownTime } = this.props;
         const claimDisabled = cooldownTime * 1000 > new Date().getTime();
         if (claimDisabled) {
             const interval = 1000;

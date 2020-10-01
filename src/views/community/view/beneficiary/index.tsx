@@ -14,6 +14,7 @@ import {
     ImageBackground,
     Alert,
     RefreshControl,
+    Dimensions,
 } from 'react-native';
 import { Button, ProgressBar, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
@@ -22,6 +23,7 @@ import * as Location from 'expo-location';
 
 import Claim from './Claim';
 import { ScrollView } from 'react-native-gesture-handler';
+import moment from 'moment';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -33,6 +35,8 @@ type Props = PropsFromRedux;
 
 function BeneficiaryView(props: Props) {
     const navigation = useNavigation();
+    const [lastInterval, setLastInterval] = useState(0);
+    const [cooldownTime, setCooldownTime] = useState(0);
     const [community, setCommunity] = useState<ICommunityInfo>();
     const [claimedAmount, setClaimedAmount] = useState(0);
     const [claimedProgress, setClaimedProgress] = useState(0.1);
@@ -45,28 +49,35 @@ function BeneficiaryView(props: Props) {
                 props.network.contracts.communityContract !== undefined &&
                 props.user.celoInfo.address.length > 0
             ) {
-                const { _address } = props.network.contracts.communityContract;
-                const _community = await Api.getCommunityByContractAddress(
-                    _address
+                const amount = await props.network.contracts.communityContract.methods
+                    .claimed(props.user.celoInfo.address)
+                    .call();
+                const progress = new BigNumber(amount.toString()).div(
+                    props.network.community.vars._maxClaim
                 );
-                if (_community === undefined) {
-                    Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('errorWhileLoadingRestart'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                } else {
-                    const amount = await props.network.contracts.communityContract.methods
-                        .claimed(props.user.celoInfo.address)
-                        .call();
-                    const progress = new BigNumber(amount.toString()).div(
-                        _community.vars._maxClaim
-                    );
-                    setClaimedAmount(humanifyNumber(amount.toString()));
-                    setClaimedProgress(progress.toNumber());
-                    setCommunity(_community);
-                }
+                setClaimedAmount(humanifyNumber(amount.toString()));
+                setClaimedProgress(progress.toNumber());
+                setCommunity(props.network.community);
+                setCooldownTime(
+                    parseInt(
+                        (
+                            await props.network.contracts.communityContract.methods
+                                .cooldown(props.user.celoInfo.address)
+                                .call()
+                        ).toString(),
+                        10
+                    )
+                );
+                setLastInterval(
+                    parseInt(
+                        (
+                            await props.network.contracts.communityContract.methods
+                                .lastInterval(props.user.celoInfo.address)
+                                .call()
+                        ).toString(),
+                        10
+                    )
+                );
             }
         };
         const isLocationAvailable = async () => {
@@ -85,10 +96,12 @@ function BeneficiaryView(props: Props) {
     ]);
 
     const onRefresh = () => {
-        Api.getCommunityByContractAddress(
-            community!.contractAddress
-        ).then((c) => setCommunity(c!));
-        setRefreshing(false);
+        Api.getCommunityByContractAddress(community!.contractAddress).then(
+            (c) => {
+                setCommunity(c!);
+                setRefreshing(false);
+            }
+        );
     };
 
     const updateClaimedAmount = async () => {
@@ -102,6 +115,20 @@ function BeneficiaryView(props: Props) {
     if (community === undefined) {
         return <Text>{i18n.t('loading')}</Text>;
     }
+
+    const formatedTimeNextCooldown = () => {
+        const nextCooldownTime = moment.duration((lastInterval + parseInt(community.vars._incrementInterval)) * 1000);
+        console.log(lastInterval + parseInt(community.vars._incrementInterval), nextCooldownTime);
+        let next = '';
+        if (nextCooldownTime.days() > 0) {
+            next += `${nextCooldownTime.days()}d`;
+        }
+        next += `${nextCooldownTime.hours()}h${nextCooldownTime.minutes()}m`;
+        if (nextCooldownTime.seconds() > 0) {
+            next += `${nextCooldownTime.seconds()}s`;
+        }
+        return next;
+    };
 
     return (
         <>
@@ -167,19 +194,12 @@ function BeneficiaryView(props: Props) {
                     <Claim
                         claimAmount={community.vars._claimAmount}
                         updateClaimedAmount={updateClaimedAmount}
+                        cooldownTime={cooldownTime}
                     />
-                    <View style={{ marginTop: '5%', alignItems: 'center' }}>
+                    <View style={{ alignItems: 'center' }}>
                         <Text style={styles.howClaimsWorks}>
                             {i18n.t('nextTimeWillWaitClaim', {
-                                nextWait: `${
-                                    parseInt(community.vars._baseInterval) /
-                                    60 /
-                                    60
-                                }h${
-                                    parseInt(
-                                        community.vars._incrementInterval
-                                    ) / 60
-                                }m`,
+                                nextWait: formatedTimeNextCooldown(),
                             })}
                         </Text>
                         <Text
@@ -263,7 +283,7 @@ const styles = StyleSheet.create({
     },
     imageBackground: {
         width: '100%',
-        height: 200,
+        height: 180,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
