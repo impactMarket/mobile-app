@@ -118,7 +118,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const cDescription =
         store.getState().user.user.language === community.language
             ? community.description
-            : community.descriptionEn;
+            : (community.descriptionEn === null ? community.description : community.descriptionEn);
     if (seeFullDescription || community.description.indexOf('\n') === -1) {
         description = cDescription;
     } else {
