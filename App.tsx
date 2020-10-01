@@ -37,6 +37,7 @@ import {
     setCommunityContract,
     setUserIsCommunityManager,
     setUserIsBeneficiary,
+    setAppExchangeRatesAction,
 } from './src/helpers/redux/actions/ReduxActions';
 import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
 import {
@@ -60,7 +61,6 @@ import AddedScreen from './src/views/community/view/communitymanager/AddedScreen
 import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
 import EditProfile from './src/views/wallet/EditProfile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
-
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -479,6 +479,7 @@ export default class App extends React.Component<object, IAppState> {
 
         let address: string | null = '';
         let phoneNumber: string | null = '';
+        let loggedIn = false;
         // TODO: what happens when it goes to catch?
         try {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
@@ -487,6 +488,7 @@ export default class App extends React.Component<object, IAppState> {
                 const user = await Api.welcome(address, pushNotificationsToken);
                 if (user !== undefined) {
                     await welcomeUser(address, phoneNumber, user, kit, store);
+                    loggedIn = true;
                 }
             }
             const firstTime = await AsyncStorage.getItem(
@@ -498,6 +500,11 @@ export default class App extends React.Component<object, IAppState> {
             });
         } catch (error) {
             // Error retrieving data
+        }
+        if (!loggedIn) {
+            store.dispatch(
+                setAppExchangeRatesAction(await Api.getExchangeRate())
+            );
         }
     };
 }
