@@ -21,7 +21,6 @@ import {
     Card,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
-import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import config from '../../../../config';
 
@@ -55,21 +54,17 @@ class Donate extends Component<Props, IDonateState> {
             amountDonate: '',
             showCopiedToClipboard: false,
             modalConfirmSend: false,
-            rates: {},
+            rates: this.props.app.exchangeRates,
         };
     }
 
-    componentDidMount = () => {
-        Api.getExchangeRate().then((rates) => this.setState({ rates }));
-    };
-
     handleConfirmDonateWithCeloWallet = () => {
         const { amountDonate } = this.state;
-        const inDollars =
+        const amountInDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
             this.props.user.user.exchangeRate;
         if (
-            inDollars >
+            amountInDollars >
             new BigNumber(this.props.user.celoInfo.balance)
                 .dividedBy(10 ** config.cUSDDecimals)
                 .toNumber()
@@ -88,7 +83,7 @@ class Donate extends Component<Props, IDonateState> {
             i18n.t('donateConfirmMessage', {
                 symbol: getCurrencySymbol(user.user.currency),
                 amount: amountDonate,
-                amountInDollars: inDollars.toFixed(2),
+                amountInDollars: amountInDollars.toFixed(2),
                 to: community.name,
             }),
             [
@@ -108,12 +103,12 @@ class Donate extends Component<Props, IDonateState> {
         this.setState({ donating: true });
         const stableToken = await this.props.app.kit.contracts.getStableToken();
         const cUSDDecimals = await stableToken.decimals();
-        const inDollars =
+        const amountInDollars =
             parseFloat(formatInputAmountToTransfer(this.state.amountDonate)) /
             this.props.user.user.exchangeRate;
         const txObject = stableToken.transfer(
             this.props.community.contractAddress,
-            new BigNumber(inDollars)
+            new BigNumber(amountInDollars)
                 .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
                 .toString()
         ).txo;
@@ -179,11 +174,8 @@ class Donate extends Component<Props, IDonateState> {
         const amountInDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
             this.props.user.user.exchangeRate;
-        let amountInCommunityCurrency = 0;
-        if (rates[community.currency] !== undefined) {
-            amountInCommunityCurrency =
-                amountInDollars * rates[community.currency].rate;
-        }
+        const amountInCommunityCurrency =
+            amountInDollars * rates[community.currency].rate;
 
         let donatingModalString = '';
         const backForDays =
@@ -260,9 +252,7 @@ class Donate extends Component<Props, IDonateState> {
                                     >
                                         <Headline style={{ marginVertical: 3 }}>
                                             {i18n.t('donateSymbol', {
-                                                symbol: getCurrencySymbol(
-                                                    user.user.currency
-                                                ),
+                                                symbol: user.user.currency,
                                             })}
                                         </Headline>
                                         <IconButton
@@ -312,12 +302,11 @@ class Donate extends Component<Props, IDonateState> {
                                             style={{ marginVertical: 10 }}
                                         >
                                             ~
-                                            {getCurrencySymbol(
+                                            {`${getCurrencySymbol(
                                                 community.currency
-                                            )}
-                                            {amountInCommunityCurrency.toFixed(
+                                            )}${amountInCommunityCurrency.toFixed(
                                                 2
-                                            )}
+                                            )}${community.currency}`}
                                         </Paragraph>
                                     )}
                                 </View>

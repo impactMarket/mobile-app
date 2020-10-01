@@ -7,8 +7,8 @@ import { ethers } from 'ethers';
 import {
     amountToUserCurrency,
     formatInputAmountToTransfer,
+    getCurrencySymbol,
     getUserCurrencySymbol,
-    iptcColors,
 } from 'helpers/index';
 import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 import { IRootState } from 'helpers/types';
@@ -29,6 +29,7 @@ import { celoWalletRequest } from 'services/celoWallet';
 
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
 import ModalScanQR from '../common/ModalScanQR';
+import config from '../../../config';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -77,15 +78,15 @@ function PayScreen(props: Props) {
 
     const handleConfirmPay = () => {
         const { user } = props;
-        const inDollars =
+        const amountInDollars =
             parseFloat(formatInputAmountToTransfer(paymentAmount)) /
-            user.user.exchangeRate;
+            props.user.user.exchangeRate;
         Alert.alert(
             i18n.t('pay'),
             i18n.t('payConfirmMessage', {
-                symbol: getUserCurrencySymbol(user.user),
+                symbol: getCurrencySymbol(user.user.currency),
                 amount: paymentAmount,
-                amountInDollars: inDollars.toFixed(2),
+                amountInDollars: amountInDollars.toFixed(2),
                 to: paymentTo.name.length > 0 ? paymentTo.name : paymentTo.address,
             }),
             [
@@ -118,9 +119,9 @@ function PayScreen(props: Props) {
             return;
         }
 
-        const inDollars =
+        const amountInDollars =
             parseFloat(formatInputAmountToTransfer(paymentAmount)) /
-            user.user.exchangeRate
+            props.user.user.exchangeRate;
         setPayInProgress(true);
         const stableToken = await props.app.kit.contracts.getStableToken();
         celoWalletRequest(
@@ -128,8 +129,8 @@ function PayScreen(props: Props) {
             stableToken.address,
             stableToken.transfer(
                 addressToSend,
-                new BigNumber(formatInputAmountToTransfer(inDollars.toString()))
-                    .multipliedBy(10 ** 18)
+                new BigNumber(formatInputAmountToTransfer(amountInDollars.toString()))
+                    .multipliedBy(10 ** config.cUSDDecimals)
                     .toString()
             ).txo,
             'stabletokentransfer',

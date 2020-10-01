@@ -8,14 +8,13 @@ import * as WebBrowser from 'expo-web-browser';
 import {
     humanifyNumber,
     getCurrencySymbol,
-    formatInputAmountToTransfer,
 } from 'helpers/index';
 import {
     ICommunityInfo,
     IStoreCombinedActionsTypes,
     IStoreCombinedState,
 } from 'helpers/types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Text,
     View,
@@ -54,17 +53,13 @@ interface ICommunityDetailsScreen {
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
+    const rates = store.getState().app.exchangeRates;
 
-    const [rates, setRates] = useState<any>(undefined);
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
     const [community, setCommunity] = useState<ICommunityInfo>(
         props.route.params.community
     );
-
-    useEffect(() => {
-        Api.getExchangeRate().then(setRates);
-    });
 
     const onRefresh = () => {
         Api.getCommunityByContractAddress(community.contractAddress).then((c) =>
@@ -132,15 +127,9 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             community.description.indexOf('\n')
         );
     }
-    let amountInCommunityCurrency = 0;
-    if (rates[community.currency] !== undefined) {
-        const amountInDollars =
-            parseFloat(
-                formatInputAmountToTransfer(community.vars._claimAmount)
-            ) / store.getState().user.user.exchangeRate;
-        amountInCommunityCurrency =
-            amountInDollars * rates[community.currency].rate;
-    }
+    const amountInDollars = parseFloat(community.vars._claimAmount);
+    const amountInCommunityCurrency =
+        amountInDollars * rates[community.currency].rate;
 
     return (
         <>
@@ -188,14 +177,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             )}
                         </Card.Content>
                     </Card>
-                    <Card elevation={8} style={{ marginVertical: 25 }}>
+                    <Card elevation={8} style={{ marginTop: 20 }}>
                         <Card.Content>
-                            <Paragraph style={{ color: '#b0b0b0' }}>
+                            <Paragraph>
                                 {i18n.t('eachBeneficiaryCanClaimXUpToY', {
                                     communityCurrency: getCurrencySymbol(
                                         community.currency
                                     ),
-                                    claimXCCUrrency: amountInCommunityCurrency,
+                                    claimXCCurrency: humanifyNumber(
+                                        amountInCommunityCurrency.toString()
+                                    ),
                                     claimX: humanifyNumber(
                                         community.vars._claimAmount
                                     ),

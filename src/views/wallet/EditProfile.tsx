@@ -14,7 +14,7 @@ import {
     setUserIsCommunityManager,
     setUserLanguage,
 } from 'helpers/redux/actions/ReduxActions';
-import { IRootState, STORAGE_USER_FIRST_TIME } from 'helpers/types';
+import { IRootState, IStoreCombinedActionsTypes, IStoreCombinedState, STORAGE_USER_FIRST_TIME } from 'helpers/types';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { AsyncStorage, StyleSheet, View, Picker } from 'react-native';
@@ -44,9 +44,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & IEditProfileProps;
 
 function EditProfile(props: Props) {
-    const store = useStore();
+    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
-    const [rates, setRates] = useState({});
+    const rates = store.getState().app.exchangeRates;
     const [name, setName] = useState('');
     const [logingOut, setLogingOut] = useState(false);
     const [currency, setCurrency] = useState('usd');
@@ -58,7 +58,6 @@ function EditProfile(props: Props) {
         setName(props.user.user.name);
         setCurrency(props.user.user.currency);
         setLanguage(props.user.user.language);
-        Api.getExchangeRate().then(setRates);
     }, []);
 
     const handleLogout = async () => {

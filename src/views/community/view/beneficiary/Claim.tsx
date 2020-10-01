@@ -168,7 +168,7 @@ class Claim extends React.Component<Props, IClaimState> {
                     alignSelf: 'center',
                     alignItems: 'center',
                     paddingVertical: 5,
-                    marginVertical: '5%',
+                    marginVertical: '10%',
                     paddingHorizontal: 15,
                     borderRadius: 8,
                 }}

@@ -112,13 +112,12 @@ function BeneficiaryView(props: Props) {
         setClaimedAmount(humanifyNumber(amount.toString()));
     };
 
-    if (community === undefined) {
+    if (community === undefined || lastInterval === 0 || cooldownTime === 0) {
         return <Text>{i18n.t('loading')}</Text>;
     }
 
     const formatedTimeNextCooldown = () => {
         const nextCooldownTime = moment.duration((lastInterval + parseInt(community.vars._incrementInterval)) * 1000);
-        console.log(lastInterval + parseInt(community.vars._incrementInterval), nextCooldownTime);
         let next = '';
         if (nextCooldownTime.days() > 0) {
             next += `${nextCooldownTime.days()}d`;
