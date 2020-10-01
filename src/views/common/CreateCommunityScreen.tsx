@@ -44,9 +44,9 @@ import {
 import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
 import config from '../../../config';
-import ImpactMarketAbi from '../../contracts/ImpactMarketABI.json';
-import { ethers } from 'ethers';
 import { celoWalletRequest } from 'services/celoWallet';
+import CommunityContractABI from './../../contracts/CommunityABI.json';
+import CommunityBytecode from './../../contracts/CommunityBytecode.json';
 
 interface ICreateCommunityScreen {
     route: {
@@ -167,51 +167,37 @@ function CreateCommunityScreen(props: Props) {
     }, []);
 
     const deployPrivateCommunity = async () => {
-        const impactMarketContract = new props.app.kit.web3.eth.Contract(
-            ImpactMarketAbi as any,
-            config.impactMarketContractAddress
-        );
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        const txObject = await impactMarketContract.methods.addCommunity(
-            props.user.celoInfo.address,
-            new BigNumber(formatInputAmountToTransfer(claimAmount))
-                .multipliedBy(decimals)
-                .toString(),
-            new BigNumber(formatInputAmountToTransfer(maxClaim))
-                .multipliedBy(decimals)
-                .toString(),
-            baseInterval,
-            (parseInt(incrementInterval, 10) * 60).toString()
+        const CommunityContract = new props.app.kit.web3.eth.Contract(
+            CommunityContractABI as any
         );
+        const txObject = await CommunityContract.deploy({
+            data: CommunityBytecode.bytecode,
+            arguments: [
+                props.user.celoInfo.address,
+                new BigNumber(formatInputAmountToTransfer(claimAmount))
+                    .multipliedBy(decimals)
+                    .toString(),
+                new BigNumber(formatInputAmountToTransfer(maxClaim))
+                    .multipliedBy(decimals)
+                    .toString(),
+                baseInterval,
+                (parseInt(incrementInterval, 10) * 60).toString(),
+                '0x0000000000000000000000000000000000000000',
+                config.cUSDContract,
+                props.user.celoInfo.address,
+            ],
+        });
         // exception is handled outside
         const receipt = await celoWalletRequest(
             props.user.celoInfo.address,
-            config.impactMarketContractAddress,
+            '0x0000000000000000000000000000000000000000',
             txObject,
             'createcommunity',
-            props.app.kit
+            props.app.kit,
+            false,
         );
-        // wait for confirmation
-        const ifaceImpactMarket = new ethers.utils.Interface(ImpactMarketAbi);
-        if (receipt.logs === undefined) {
-            throw new Error('No logs');
-        }
-        const eventsImpactMarket: ethers.utils.LogDescription[] = [];
-        for (let index = 0; index < receipt.logs.length; index++) {
-            try {
-                const parsedLog = ifaceImpactMarket.parseLog(
-                    receipt.logs[index]
-                );
-                eventsImpactMarket.push(parsedLog);
-            } catch (e) {}
-        }
-        const index = eventsImpactMarket.findIndex(
-            (event) => event !== null && event.name === 'CommunityAdded'
-        );
-        if (index !== -1) {
-            return eventsImpactMarket[index].values._communityAddress;
-        }
-        throw new Error('No community address');
+        return receipt;
     };
 
     const submitNewCommunity = async () => {
@@ -396,10 +382,12 @@ function CreateCommunityScreen(props: Props) {
         } else {
             let uploadResponse,
                 uploadImagePath,
+                txReceipt = null,
                 communityAddress = null;
             try {
                 if (visibility === 'private') {
-                    communityAddress = await deployPrivateCommunity();
+                    txReceipt = await deployPrivateCommunity();
+                    communityAddress = txReceipt.contractAddress;
                 }
                 uploadResponse = await Api.uploadImageAsync(coverImage);
                 if (uploadResponse?.status === 200) {
@@ -438,7 +426,24 @@ function CreateCommunityScreen(props: Props) {
                             config.locationErrorMargin,
                     },
                     email,
-                    uploadImagePath
+                    uploadImagePath,
+                    txReceipt,
+                    {
+                        _claimAmount: new BigNumber(
+                            formatInputAmountToTransfer(claimAmount)
+                        )
+                            .multipliedBy(decimals)
+                            .toString(),
+                        _maxClaim: new BigNumber(
+                            formatInputAmountToTransfer(maxClaim)
+                        )
+                            .multipliedBy(decimals)
+                            .toString(),
+                        _baseInterval: baseInterval,
+                        _incrementInterval: (
+                            parseInt(incrementInterval, 10) * 60
+                        ).toString(),
+                    }
                 );
             } else {
                 apiRequestResult = await Api.requestCreatePublicCommunity(

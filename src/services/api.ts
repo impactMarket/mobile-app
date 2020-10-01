@@ -92,6 +92,8 @@ class Api {
         },
         email: string,
         coverImage: string,
+        txReceipt: any,
+        txCreationObj: any,
     ): Promise<boolean> {
         const result = await postRequest<boolean>('/community/create', {
             requestByAddress,
@@ -105,6 +107,8 @@ class Api {
             gps,
             email,
             coverImage,
+            txReceipt,
+            txCreationObj,
         });
         return !!result;
     }

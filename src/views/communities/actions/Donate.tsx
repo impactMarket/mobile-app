@@ -85,7 +85,7 @@ class Donate extends Component<Props, IDonateState> {
         const { community, user } = this.props;
         Alert.alert(
             i18n.t('donate'),
-            i18n.t('payConfirmMessage', {
+            i18n.t('donateConfirmMessage', {
                 symbol: getCurrencySymbol(user.user.currency),
                 amount: amountDonate,
                 amountInDollars: inDollars.toFixed(2),
@@ -177,12 +177,38 @@ class Donate extends Component<Props, IDonateState> {
         const { community, user } = this.props;
 
         const amountInDollars =
-            parseFloat(formatInputAmountToTransfer(this.state.amountDonate)) /
+            parseFloat(formatInputAmountToTransfer(amountDonate)) /
             this.props.user.user.exchangeRate;
         let amountInCommunityCurrency = 0;
         if (rates[community.currency] !== undefined) {
             amountInCommunityCurrency =
                 amountInDollars * rates[community.currency].rate;
+        }
+
+        let donatingModalString = '';
+        const backForDays =
+            amountInDollars /
+            new BigNumber(community.vars._claimAmount)
+                .dividedBy(10 ** config.cUSDDecimals)
+                .toNumber() /
+            community.beneficiaries.added.length;
+        if (backForDays < 1) {
+            donatingModalString = i18n.t('yourDonationWillBack', {
+                backNBeneficiaries: Math.max(
+                    1,
+                    Math.floor(
+                        amountInDollars /
+                            new BigNumber(community.vars._claimAmount)
+                                .dividedBy(10 ** config.cUSDDecimals)
+                                .toNumber()
+                    )
+                ),
+            });
+        } else {
+            donatingModalString = i18n.t('yourDonationWillBackFor', {
+                backNBeneficiaries: community.beneficiaries.added.length,
+                backForDays: Math.floor(backForDays),
+            });
         }
 
         return (
@@ -302,15 +328,7 @@ class Donate extends Component<Props, IDonateState> {
                                             textAlign: 'center',
                                         }}
                                     >
-                                        {i18n.t('yourDonationWillBack', {
-                                            backNBeneficiaries: Math.floor(
-                                                amountInDollars /
-                                                    parseInt(
-                                                        community.vars
-                                                            ._claimAmount
-                                                    )
-                                            ),
-                                        })}
+                                        {donatingModalString}
                                     </Paragraph>
                                 )}
                                 <Button

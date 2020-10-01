@@ -31,7 +31,7 @@ const ENV = {
         /**
          * ImpactMarket contract, use to deploy private communities
          */
-        impactMarketContractAddress: process.env.EXPO_IMPACTMARKET_CONTRACT!,
+        cUSDContract: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
 
         /**
          * Is it in testnet?
@@ -57,7 +57,7 @@ const ENV = {
         /**
          * ImpactMarket contract, use to deploy private communities
          */
-        impactMarketContractAddress: '',
+        cUSDContract: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
 
         /**
          * Is it in testnet?
@@ -84,8 +84,8 @@ const ENV = {
         /**
          * ImpactMarket contract, use to deploy private communities
          */
-        impactMarketContractAddress:
-            '0xe55C3eb4a04F93c3302A5d8058348157561BF5ca',
+        cUSDContract:
+            '0x765de816845861e75a25fca122bb6898b8b1282a',
 
         /**
          * Is it in testnet?
