@@ -153,7 +153,7 @@ function CreateCommunityScreen(props: Props) {
             }
         }
         const getAvailableCurrencies = async () => {
-            const rates = await Api.getExchangeRate();
+            const rates = store.getState().app.exchangeRates;
             const currencies: { name: string; symbol: string }[] = [];
             for (const currency in rates) {
                 currencies.push({

@@ -38,7 +38,7 @@ class CommuntyStatus extends Component<Props, object> {
         );
 
         return (
-            <Card elevation={8} style={{ marginVertical: 15 }}>
+            <Card elevation={8} style={{ marginTop: 20 }}>
                 <Card.Content>
                     <View
                         style={{
