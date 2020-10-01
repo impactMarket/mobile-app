@@ -25,6 +25,7 @@ import {
     SET_USER_LANGUAGE,
     INIT_USER,
     IInitUser,
+    SET_EXCHANGE_RATES,
 } from '../../types';
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
@@ -126,6 +127,13 @@ export function setAppPaymentToAction(
     return {
         type: SET_APP_PYMENT_TO_ACTION,
         payload: paymentToAddress,
+    };
+}
+
+export function setAppExchangeRatesAction(exchangeRates: any): AppActionTypes {
+    return {
+        type: SET_EXCHANGE_RATES,
+        payload: exchangeRates,
     };
 }
 

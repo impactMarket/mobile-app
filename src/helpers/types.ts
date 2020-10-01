@@ -20,6 +20,7 @@ export const SET_PUSH_NOTIFICATION_TOKEN = 'SET_PUSH_NOTIFICATION_TOKEN';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_APP_PYMENT_TO_ACTION = 'SET_APP_PYMENT_TO_ACTION';
 export const SET_USER_LANGUAGE = 'SET_USER_LANGUAGE';
+export const SET_EXCHANGE_RATES = 'SET_EXCHANGE_RATES';
 
 // state
 export interface IUserCeloInfo {
@@ -65,9 +66,11 @@ export interface IAuthState {
 
 export interface IAppState {
     kit: ContractKit;
+    exchangeRates: any;
     paymentToAddress: string;
 }
 
+// same as ICombinedState
 export interface IRootState {
     user: IUserState;
     network: INetworkState;
@@ -155,6 +158,11 @@ interface SetAppPaymentToAction {
     payload: string;
 }
 
+interface SetAppEchangeRatesAction {
+    type: typeof SET_EXCHANGE_RATES;
+    payload: any;
+}
+
 export type UserActionTypes =
     | UserCeloInfoAction
     | UserSetBalanceAction
@@ -172,16 +180,23 @@ export type NetworkActionTypes =
 export type AuthActionTypes =
     | SetTokenPushNotificationsAction
     | SetAuthTokenAction;
-export type AppActionTypes = CeloKitAction | SetAppPaymentToAction;
+export type AppActionTypes =
+    | CeloKitAction
+    | SetAppPaymentToAction
+    | SetAppEchangeRatesAction;
 
 export interface IStoreCombinedState {
     user: IUserState;
     network: INetworkState;
     auth: IAuthState;
     app: IAppState;
-};
+}
 
-export type IStoreCombinedActionsTypes = UserActionTypes | NetworkActionTypes | AuthActionTypes | AppActionTypes;
+export type IStoreCombinedActionsTypes =
+    | UserActionTypes
+    | NetworkActionTypes
+    | AuthActionTypes
+    | AppActionTypes;
 
 export interface ITransaction {
     tx: string;
@@ -269,7 +284,7 @@ export interface IUserWelcome {
 }
 
 export interface IInitUser {
-    user: IUser & IUserCeloInfo; 
+    user: IUser & IUserCeloInfo;
     exchangeRates: any;
     isBeneficiary: boolean;
     isManager: boolean;

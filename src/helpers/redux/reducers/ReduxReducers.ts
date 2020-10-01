@@ -25,6 +25,7 @@ import {
     SET_APP_PYMENT_TO_ACTION,
     SET_USER_LANGUAGE,
     INIT_USER,
+    SET_EXCHANGE_RATES,
 } from '../../types';
 
 const INITIAL_STATE_USER: IUserState = {
@@ -62,6 +63,7 @@ const INITIAL_STATE_AUTH: IAuthState = {
 const INITIAL_STATE_APP: IAppState = {
     // TODO: save exhangeRates on load
     kit: undefined as any,
+    exchangeRates: undefined as any,
     paymentToAddress: '',
 };
 
@@ -164,6 +166,8 @@ const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
             return { ...state, kit: action.payload };
         case SET_APP_PYMENT_TO_ACTION:
             return { ...state, paymentToAddress: action.payload };
+        case SET_EXCHANGE_RATES:
+            return { ...state, exchangeRates: action.payload };
         default:
             return state;
     }
