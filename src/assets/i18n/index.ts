@@ -200,13 +200,13 @@ i18n.translations = {
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
-            'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) per day, up to a total of ${{upToY}} cUSD. Each claim increases its waiting interval by {{minIncrement}} minutes.',
+            'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) per day, up till ${{upToY}} cUSD. Each claim increases its waiting interval by {{minIncrement}} minutes.',
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}.',
         knowHowClaimWorks: 'How claims work.',
         copyContractAddress: 'Copy Contract Address',
         donationBiggerThanBalance:
-            'You are trying to donate an amount bigger than your balance.',
+            'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',
         errorClaiming: 'An error happened while claiming.',
     },
     pt: {
@@ -256,7 +256,7 @@ i18n.translations = {
         moreAboutYourCommunity: 'Mais sobre a minha comunidade',
         ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
-            'Este indicador mede a autossustentabilidade financeira de uma comunidade',
+            'SSI mede a autossustentabilidade financeira de uma comunidade',
         seeMore: 'Ver Mais',
         seeLess: 'Ver Menos',
         exploreCommunityContract: 'Ver Contrato da Comunidade',
@@ -397,18 +397,18 @@ i18n.translations = {
         donateConfirmMessage:
             "Ao selecionar 'Contribuir', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
         yourDonationWillBack:
-            'Your donation will back {{backNBeneficiaries}} beneficiaries.',
+            'O seu contributo irá apoiar {{backNBeneficiaries}} beneficiários por 1 dia.',
         yourDonationWillBackFor:
-            'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
+            'O seu contributo irá apoiar {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
         eachBeneficiaryCanClaimXUpToY:
-            'Cada beneficiário pode aceder a ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) por dia, até acumular ${{upToY}} cUSD. Por cada pedido, {{minIncrement}} minutos são adicionados ao tempo de espera.',
+            'Cada beneficiário pode aceder a ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) por dia, até acumular ${{upToY}} cUSD. A cada pedido, {{minIncrement}} minutos são adicionados ao tempo de espera.',
         nextTimeWillWaitClaim:
             'Na próxima terá de esperar pelo menos {{nextWait}}.',
         knowHowClaimWorks: 'Como funciona?',
-        copyContractAddress: 'Copy Contract Address',
+        copyContractAddress: 'Copiar Endereço do Contrato',
         donationBiggerThanBalance:
-            'You are trying to donate an amount bigger than your balance.',
-        errorClaiming: 'An error happened while claiming.',
+            'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
+        errorClaiming: 'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.',
     },
 };
 // Set the locale once at the beginning of your app.
