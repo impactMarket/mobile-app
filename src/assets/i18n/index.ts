@@ -200,7 +200,7 @@ i18n.translations = {
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
-            'Each beneficiary can claim ~R$11.22 (${{claimX}} cUSD) per day, up to a total of ${{upToY}} cUSD. Each claim increases its waiting interval by {{minIncrement}} minutes.',
+            'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCUrrency}} (${{claimX}} cUSD) per day, up to a total of ${{upToY}} cUSD. Each claim increases its waiting interval by {{minIncrement}} minutes.',
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}.',
         knowHowClaimWorks: 'How claims work.',
@@ -401,7 +401,7 @@ i18n.translations = {
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
-            'Cada beneficiário pode aceder a ~R$11.22 (${{claimX}} cUSD) por dia, até acumular ${{upToY}} cUSD. Por cada pedido, {{minIncrement}} minutos são adicionados ao tempo de espera.',
+            'Cada beneficiário pode aceder a ~{{communityCurrency}}{{claimXCCUrrency}} (${{claimX}} cUSD) por dia, até acumular ${{upToY}} cUSD. Por cada pedido, {{minIncrement}} minutos são adicionados ao tempo de espera.',
         nextTimeWillWaitClaim:
             'Na próxima terá de esperar pelo menos {{nextWait}}.',
         knowHowClaimWorks: 'Como funciona?',
