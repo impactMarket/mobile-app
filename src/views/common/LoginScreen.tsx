@@ -25,6 +25,7 @@ import * as Localization from 'expo-localization';
 import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import config from '../../../config';
+import { writeLog } from 'services/logger';
 
 function LoginScreen() {
     const store = useStore();
@@ -67,6 +68,7 @@ function LoginScreen() {
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
+            writeLog({ action: 'login', details: 'undefined user'});
             setConnecting(false);
             return;
         }
@@ -109,6 +111,7 @@ function LoginScreen() {
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
+            writeLog({ action: 'login', details: 'config user'});
             setConnecting(false);
         }
     };

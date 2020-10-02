@@ -22,6 +22,7 @@ import {
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
+import { writeLog } from 'services/logger';
 import config from '../../../../config';
 
 interface IExploreScreenProps {
@@ -137,13 +138,14 @@ class Donate extends Component<Props, IDonateState> {
                     { cancelable: false }
                 );
             })
-            .catch(() => {
+            .catch((e) => {
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorDonating'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
+                writeLog({ action: 'donate', details: e });
             })
             .finally(() => {
                 this.setState({

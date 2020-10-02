@@ -14,10 +14,15 @@ import {
     setUserIsCommunityManager,
     setUserLanguage,
 } from 'helpers/redux/actions/ReduxActions';
-import { IRootState, IStoreCombinedActionsTypes, IStoreCombinedState, STORAGE_USER_FIRST_TIME } from 'helpers/types';
+import {
+    IRootState,
+    IStoreCombinedActionsTypes,
+    IStoreCombinedState,
+    STORAGE_USER_FIRST_TIME,
+} from 'helpers/types';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage, StyleSheet, View, Picker } from 'react-native';
+import { AsyncStorage, StyleSheet, View, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,
@@ -28,9 +33,11 @@ import {
     Dialog,
     RadioButton,
     Text,
+    Switch,
 } from 'react-native-paper';
 import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
+import { uploadLogs } from 'services/logger';
 
 interface IEditProfileProps {
     EditProfileCallback: () => void;
@@ -47,6 +54,8 @@ function EditProfile(props: Props) {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
     const rates = store.getState().app.exchangeRates;
+    const [isConsentAnalytics, setIsConsentAnalytics] = React.useState(true);
+    const [sendingLogs, setSendingLogs] = useState(false);
     const [name, setName] = useState('');
     const [logingOut, setLogingOut] = useState(false);
     const [currency, setCurrency] = useState('usd');
@@ -58,7 +67,15 @@ function EditProfile(props: Props) {
         setName(props.user.user.name);
         setCurrency(props.user.user.currency);
         setLanguage(props.user.user.language);
+        AsyncStorage.getItem('CONSENT_ANALYTICS').then((c) =>
+            setIsConsentAnalytics(c === null || c === 'true' ? true : false)
+        );
     }, []);
+
+    const onToggleSwitch = () => {
+        AsyncStorage.setItem('CONSENT_ANALYTICS', `${!isConsentAnalytics}`);
+        setIsConsentAnalytics(!isConsentAnalytics);
+    };
 
     const handleLogout = async () => {
         setLogingOut(true);
@@ -98,6 +115,37 @@ function EditProfile(props: Props) {
         props.dispatch(setUserLanguage(text));
         i18n.locale = text;
         moment.locale(text);
+    };
+
+    const handleSendLogs = () => {
+        setSendingLogs(true);
+        uploadLogs()
+            .then((uploaded) => {
+                if (uploaded) {
+                    Alert.alert(
+                        i18n.t('success'),
+                        i18n.t('logsSent'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                } else {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('errorSendingLogs'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                }
+            })
+            .catch((e) => {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorSendingLogs'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+            })
+            .finally(() => setSendingLogs(false));
     };
 
     return (
@@ -177,9 +225,35 @@ function EditProfile(props: Props) {
                         value={props.user.celoInfo.phoneNumber}
                         disabled
                     />
+                    <View
+                        style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginVertical: 10
+                        }}
+                    >
+                        <Text style={{
+                            fontSize: 15,
+                            paddingVertical: 5
+                        }}>{i18n.t('consentAnonymousAnalytics')}</Text>
+                        <Switch
+                            value={isConsentAnalytics}
+                            onValueChange={onToggleSwitch}
+                        />
+                    </View>
                     <Button
                         mode="contained"
-                        style={{ marginVertical: 20 }}
+                        style={{ marginVertical: 10 }}
+                        onPress={handleSendLogs}
+                        loading={sendingLogs}
+                        disabled={sendingLogs}
+                    >
+                        {i18n.t('sendLogs')}
+                    </Button>
+                    <Button
+                        mode="contained"
+                        style={{ marginVertical: 10 }}
                         onPress={handleLogout}
                         loading={logingOut}
                         disabled={logingOut}

@@ -370,6 +370,19 @@ class Api {
         );
         return !!result;
     }
+
+    static async uploadLogs(
+        logs: string,
+    ): Promise<boolean> {
+        const requestBody = {
+            logs,
+        };
+        const result = await postRequest<boolean>(
+            '/mobile-logs',
+            requestBody
+        );
+        return !!result;
+    }
 }
 
 export default Api;

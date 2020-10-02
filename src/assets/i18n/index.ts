@@ -208,6 +208,10 @@ i18n.translations = {
         donationBiggerThanBalance:
             'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',
         errorClaiming: 'An error happened while claiming.',
+        sendLogs: 'Send logs',
+        logsSent: 'Logs sent! Thank you!',
+        errorSendingLogs: 'An error happened while sending the logs.',
+        consentAnonymousAnalytics: 'Consent Anonymous Analytics',
     },
     pt: {
         testnetWarning:
@@ -409,6 +413,10 @@ i18n.translations = {
         donationBiggerThanBalance:
             'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
         errorClaiming: 'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.',
+        sendLogs: 'Enviar logs',
+        logsSent: 'Logs enviados! Obrigado!',
+        errorSendingLogs: 'Ocorreu um erro ao enviar os logs.',
+        consentAnonymousAnalytics: 'Aceitar enviar dados anonimos para análises',
     },
 };
 // Set the locale once at the beginning of your app.

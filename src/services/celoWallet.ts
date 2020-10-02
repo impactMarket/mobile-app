@@ -4,6 +4,7 @@ import * as Linking from 'expo-linking';
 import { ContractKit } from '@celo/contractkit';
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
+import { writeLog } from './logger';
 
 async function celoWalletRequest(
     from: string,
@@ -13,8 +14,32 @@ async function celoWalletRequest(
     kit: ContractKit,
     useTo?: boolean
 ): Promise<any> {
+    let currentProvider = '';
+    if (kit.web3.currentProvider !== null) {
+        if (typeof kit.web3.currentProvider === 'string') {
+            currentProvider = kit.web3.currentProvider;
+        } else if (
+            (kit.web3.currentProvider as any).existingProvider !== undefined &&
+            (kit.web3.currentProvider as any).existingProvider !== null
+        ) {
+            currentProvider = (kit.web3.currentProvider as any).existingProvider
+                .host;
+        }
+    }
+    const eventContent = {
+        action: 'walletRequest',
+        details: {
+            fee: FeeCurrency.cUSD,
+            provider: currentProvider,
+            requestId,
+            from,
+            to,
+            method: txObject._method.name,
+        },
+    };
+    writeLog(eventContent);
     const dappName = 'impactmarket';
-    const callback = Linking.makeUrl(requestId);
+    const callback = Linking.makeUrl('/');
     try {
         const reqTxTo = {
             from,
@@ -41,7 +66,12 @@ async function celoWalletRequest(
             !Constants.manifest.packagerOpts?.dev
         ) {
             Sentry.captureMessage(
-                JSON.stringify(txObject._method),
+                JSON.stringify({
+                    from,
+                    to,
+                    method: txObject._method.name,
+                    provider: currentProvider,
+                }),
                 Sentry.Severity.Critical
             );
             Sentry.captureException(e);

@@ -124,7 +124,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     } else {
         description = cDescription.slice(
             0,
-            community.description.indexOf('\n')
+            cDescription.indexOf('\n')
         );
     }
     const amountInDollars = parseFloat(community.vars._claimAmount);
