@@ -52,7 +52,7 @@ i18n.translations = {
         moreAboutYourCommunity: 'More about your community',
         ssi: 'Self-Sustainability Index',
         ssiDescription:
-            'SSI measures how self-sustainable a community is, and its progress',
+            'SSI measures how financially sustainable a community is, and its progress',
         seeMore: 'See More',
         seeLess: 'See Less',
         exploreCommunityContract: 'See Community Contract',
@@ -200,7 +200,7 @@ i18n.translations = {
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
-            'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) per day, up till ${{upToY}} cUSD. Each claim increases its waiting interval by {{minIncrement}} minutes.',
+            'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) per day, up till ${{upToY}} cUSD. Each claim adds {{minIncrement}} min to its waiting interval.',
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}.',
         knowHowClaimWorks: 'How claims work.',
@@ -256,7 +256,7 @@ i18n.translations = {
         moreAboutYourCommunity: 'Mais sobre a minha comunidade',
         ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
-            'SSI mede a autossustentabilidade financeira de uma comunidade',
+            'SSI mede a sustentabilidade financeira de uma comunidade',
         seeMore: 'Ver Mais',
         seeLess: 'Ver Menos',
         exploreCommunityContract: 'Ver Contrato da Comunidade',
