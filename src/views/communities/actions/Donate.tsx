@@ -205,6 +205,50 @@ class Donate extends Component<Props, IDonateState> {
             });
         }
 
+        const donateWithValoraButton =
+            user.celoInfo.address.length > 0 ? (
+                <Button
+                    mode="contained"
+                    loading={donating}
+                    disabled={donating}
+                    onPress={this.handleConfirmDonateWithCeloWallet}
+                >
+                    <Text
+                        style={{
+                            color: 'white',
+                            textTransform: 'none',
+                        }}
+                    >
+                        {i18n.t('donateWithValora')}
+                    </Text>
+                </Button>
+            ) : (
+                <Button
+                    icon="alert"
+                    mode="contained"
+                    style={{
+                        backgroundColor: '#f0ad4e',
+                    }}
+                    onPress={() => {
+                        Alert.alert(
+                            i18n.t('failure'),
+                            i18n.t('youAreNotConnected'),
+                            [{ text: i18n.t('close') }],
+                            { cancelable: false }
+                        );
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: 'white',
+                            textTransform: 'none',
+                        }}
+                    >
+                        {i18n.t('donateWithValora')}
+                    </Text>
+                </Button>
+            );
+
         return (
             <>
                 <Button
@@ -339,23 +383,7 @@ class Donate extends Component<Props, IDonateState> {
                                         {i18n.t('copyContractAddress')}
                                     </Text>
                                 </Button>
-                                <Button
-                                    mode="contained"
-                                    loading={donating}
-                                    disabled={donating}
-                                    onPress={
-                                        this.handleConfirmDonateWithCeloWallet
-                                    }
-                                >
-                                    <Text
-                                        style={{
-                                            color: 'white',
-                                            textTransform: 'none',
-                                        }}
-                                    >
-                                        {i18n.t('donateWithValora')}
-                                    </Text>
-                                </Button>
+                                {donateWithValoraButton}
                             </Card.Content>
                         </Card>
                     </Modal>
