@@ -15,6 +15,7 @@ import {
     setUserLanguage,
 } from 'helpers/redux/actions/ReduxActions';
 import {
+    CONSENT_ANALYTICS,
     IRootState,
     IStoreCombinedActionsTypes,
     IStoreCombinedState,
@@ -67,13 +68,13 @@ function EditProfile(props: Props) {
         setName(props.user.user.name);
         setCurrency(props.user.user.currency);
         setLanguage(props.user.user.language);
-        AsyncStorage.getItem('CONSENT_ANALYTICS').then((c) =>
+        AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
             setIsConsentAnalytics(c === null || c === 'true' ? true : false)
         );
     }, []);
 
     const onToggleSwitch = () => {
-        AsyncStorage.setItem('CONSENT_ANALYTICS', `${!isConsentAnalytics}`);
+        AsyncStorage.setItem(CONSENT_ANALYTICS, `${!isConsentAnalytics}`);
         setIsConsentAnalytics(!isConsentAnalytics);
     };
 

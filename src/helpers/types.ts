@@ -21,6 +21,7 @@ export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_APP_PYMENT_TO_ACTION = 'SET_APP_PYMENT_TO_ACTION';
 export const SET_USER_LANGUAGE = 'SET_USER_LANGUAGE';
 export const SET_EXCHANGE_RATES = 'SET_EXCHANGE_RATES';
+export const CONSENT_ANALYTICS = 'CONSENT_ANALYTICS';
 
 // state
 export interface IUserCeloInfo {
