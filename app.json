@@ -44,7 +44,9 @@
                 "ACCESS_FINE_LOCATION",
                 "ACCESS_COARSE_LOCATION",
                 "READ_CONTACTS",
-                "VIBRATE"
+                "VIBRATE",
+                "READ_EXTERNAL_STORAGE",
+                "WRITE_EXTERNAL_STORAGE"
             ]
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
