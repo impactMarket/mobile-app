@@ -492,7 +492,7 @@ function CreateCommunityScreen(props: Props) {
                         navigation.goBack();
                         Alert.alert(
                             i18n.t('success'),
-                            i18n.t('requestNewCommunityPlaced'),
+                            (visibility === 'private') ? i18n.t('youCreatedPrivateCommunity') : i18n.t('requestNewCommunityPlaced'),
                             [{ text: 'OK' }],
                             { cancelable: false }
                         );

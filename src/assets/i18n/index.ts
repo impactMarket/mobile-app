@@ -212,6 +212,8 @@ i18n.translations = {
         logsSent: 'Logs sent! Thank you!',
         errorSendingLogs: 'An error happened while sending the logs.',
         consentAnonymousAnalytics: 'Consent Anonymous Analytics',
+        youCreatedPrivateCommunity: 'You\'ve created a private community. Welcome!',
+        youAreNotConnected: 'You are not connected to your Valora. Connect to send directly.',
     },
     pt: {
         testnetWarning:
@@ -417,6 +419,8 @@ i18n.translations = {
         logsSent: 'Logs enviados! Obrigado!',
         errorSendingLogs: 'Ocorreu um erro ao enviar os logs.',
         consentAnonymousAnalytics: 'Aceitar enviar dados anonimos para análises',
+        youCreatedPrivateCommunity: 'Você criou uma comunidade privada. Seja bem vindo.',
+        youAreNotConnected: 'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
     },
 };
 // Set the locale once at the beginning of your app.
