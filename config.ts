@@ -10,6 +10,16 @@ const commonConfig = {
      * Margin error to be added when adding new community
      */
     locationErrorMargin: 0.003,
+
+    /**
+     * Encryption key
+     */
+    encryptionKey: process.env.EXPO_ENCRYPTION_KEY!,
+
+    /**
+     * Encryption IV (this should be random in the future)
+     */
+    encryptionIV: process.env.EXPO_ENCRYPTION_IV!,
 };
 const ENV = {
     dev: {
@@ -21,7 +31,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
+        baseApiUrl: process.env.EXPO_API_BASE_URL! + '/api',
 
         /**
          * JSON RPC url
