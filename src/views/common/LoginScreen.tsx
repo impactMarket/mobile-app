@@ -25,6 +25,7 @@ import { newKitFromWeb3 } from '@celo/contractkit';
 import config from '../../../config';
 import { uploadLogs, writeLog } from 'services/logger';
 import * as Sentry from 'sentry-expo';
+import { analytics } from 'services/analytics';
 
 function LoginScreen() {
     const store = useStore();
@@ -62,6 +63,7 @@ function LoginScreen() {
         );
         if (user === undefined) {
             writeLog({ action: 'login', details: 'undefined user' });
+            analytics('login', { device: Device.brand , success: false });
             Sentry.captureMessage(
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
                 Sentry.Severity.Critical
@@ -114,11 +116,13 @@ function LoginScreen() {
             );
             store.dispatch(setPushNotificationsToken(pushNotificationsToken));
             writeLog({ action: 'login', details: 'success' });
+            analytics('login', { device: Device.brand , success: true });
         } catch (error) {
             writeLog({
                 action: 'login',
                 details: `config user - ${error.message}`,
             });
+            analytics('login', { device: Device.brand , success: false });
             Sentry.captureMessage(
                 JSON.stringify({
                     action: 'login',

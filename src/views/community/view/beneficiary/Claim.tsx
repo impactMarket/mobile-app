@@ -16,6 +16,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import config from '../../../../../config';
+import * as Device from 'expo-device';
+import { analytics } from 'services/analytics';
+import { writeLog } from 'services/logger';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -76,32 +79,56 @@ class Claim extends React.Component<Props, IClaimState> {
             app.kit
         )
             .then(async () => {
-                let loc: Location.LocationData | undefined = undefined;
-                const availableGPSToRequest =
-                    (await Location.hasServicesEnabledAsync()) &&
-                    (await Location.getPermissionsAsync()).status ===
-                        'granted' &&
-                    (await Location.getProviderStatusAsync())
-                        .locationServicesEnabled;
-                if (availableGPSToRequest) {
-                    loc = await Location.getCurrentPositionAsync({
-                        accuracy: Location.Accuracy.Low,
+                try {
+                    let loc: Location.LocationData | undefined = undefined;
+                    let apiSuccessAnswer = false;
+                    const availableGPSToRequest =
+                        (await Location.hasServicesEnabledAsync()) &&
+                        (await Location.getPermissionsAsync()).status ===
+                            'granted' &&
+                        (await Location.getProviderStatusAsync())
+                            .locationServicesEnabled;
+                    if (availableGPSToRequest) {
+                        loc = await Location.getCurrentPositionAsync({
+                            accuracy: Location.Accuracy.Low,
+                        });
+                    }
+                    if (loc !== undefined) {
+                        apiSuccessAnswer = await Api.addClaimLocation(
+                            network.community.publicId,
+                            {
+                                latitude:
+                                    loc.coords.latitude +
+                                    config.locationErrorMargin,
+                                longitude:
+                                    loc.coords.longitude +
+                                    config.locationErrorMargin,
+                            }
+                        );
+                    }
+                    analytics('claim_location', {
+                        device: Device.brand,
+                        success:
+                            availableGPSToRequest &&
+                            loc !== undefined &&
+                            apiSuccessAnswer,
                     });
-                }
-                if (loc !== undefined) {
-                    Api.addClaimLocation(network.community.publicId, {
-                        latitude:
-                            loc.coords.latitude + config.locationErrorMargin,
-                        longitude:
-                            loc.coords.longitude + config.locationErrorMargin,
+                } catch (e) {
+                    writeLog({ action: 'claim', details: e.message });
+                    analytics('claim_location', {
+                        device: Device.brand,
+                        success: false,
                     });
                 }
                 this._loadAllowance().then(() => {
                     this.setState({ claiming: false });
                     this.props.updateClaimedAmount();
                 });
+                analytics('claim', { device: Device.brand, success: true });
             })
             .catch((e) => {
+                writeLog({ action: 'claim', details: e.message });
+                analytics('claim', { device: Device.brand, success: false });
                 this.setState({ claiming: false });
                 Alert.alert(
                     i18n.t('failure'),
@@ -124,11 +151,9 @@ class Claim extends React.Component<Props, IClaimState> {
             let next = '';
             if (nextClaim.days() > 0) {
                 next += `${nextClaim.days()}d ${nextClaim.hours()}h ${nextClaim.minutes()}m `;
-            }
-            else if (nextClaim.hours() > 0) {
+            } else if (nextClaim.hours() > 0) {
                 next += `${nextClaim.hours()}h ${nextClaim.minutes()}m `;
-            }
-            else if (nextClaim.minutes() > 0) {
+            } else if (nextClaim.minutes() > 0) {
                 next += `${nextClaim.minutes()}m `;
             }
             next += `${nextClaim.seconds()}s `;
@@ -194,7 +219,9 @@ class Claim extends React.Component<Props, IClaimState> {
                 >
                     <Text style={styles.claimText}>
                         {i18n.t('claimX', {
-                            symbol: getCurrencySymbol(this.props.user.user.currency),
+                            symbol: getCurrencySymbol(
+                                this.props.user.user.currency
+                            ),
                             amount: amountToUserCurrency(
                                 this.props.claimAmount,
                                 this.props.user.user

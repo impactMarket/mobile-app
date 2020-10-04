@@ -21,9 +21,11 @@ import {
     Card,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
+import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
 import { writeLog } from 'services/logger';
 import config from '../../../../config';
+import * as Device from 'expo-device';
 
 interface IExploreScreenProps {
     community: ICommunityInfo;
@@ -137,15 +139,17 @@ class Donate extends Component<Props, IDonateState> {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
+                analytics('donate', { device: Device.brand , success: true });
             })
             .catch((e) => {
+                writeLog({ action: 'donate', details: e.message });
+                analytics('donate', { device: Device.brand , success: false });
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorDonating'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
-                writeLog({ action: 'donate', details: e });
             })
             .finally(() => {
                 this.setState({
