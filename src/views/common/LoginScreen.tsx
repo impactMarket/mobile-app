@@ -4,9 +4,7 @@ import i18n from 'assets/i18n';
 import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
 import { iptcColors } from 'helpers/index';
-import {
-    setPushNotificationsToken,
-} from 'helpers/redux/actions/ReduxActions';
+import { setPushNotificationsToken } from 'helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
@@ -25,7 +23,8 @@ import * as Localization from 'expo-localization';
 import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import config from '../../../config';
-import { writeLog } from 'services/logger';
+import { uploadLogs, writeLog } from 'services/logger';
+import * as Sentry from 'sentry-expo';
 
 function LoginScreen() {
     const store = useStore();
@@ -62,13 +61,23 @@ function LoginScreen() {
             pushNotificationsToken
         );
         if (user === undefined) {
+            writeLog({ action: 'login', details: 'undefined user' });
+            Sentry.captureMessage(
+                JSON.stringify({ action: 'login', details: 'undefined user' }),
+                Sentry.Severity.Critical
+            );
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
-                [{ text: 'OK' }],
+                [
+                    {
+                        text: i18n.t('reportError'),
+                        onPress: () => uploadLogs(),
+                    },
+                    { text: i18n.t('close') },
+                ],
                 { cancelable: false }
             );
-            writeLog({ action: 'login', details: 'undefined user'});
             setConnecting(false);
             return;
         }
@@ -104,14 +113,31 @@ function LoginScreen() {
                 store as any
             );
             store.dispatch(setPushNotificationsToken(pushNotificationsToken));
+            writeLog({ action: 'login', details: 'success' });
         } catch (error) {
+            writeLog({
+                action: 'login',
+                details: `config user - ${error.message}`,
+            });
+            Sentry.captureMessage(
+                JSON.stringify({
+                    action: 'login',
+                    details: `config user - ${error.message}`,
+                }),
+                Sentry.Severity.Critical
+            );
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
-                [{ text: 'OK' }],
+                [
+                    {
+                        text: i18n.t('reportError'),
+                        onPress: () => uploadLogs(),
+                    },
+                    { text: i18n.t('close') },
+                ],
                 { cancelable: false }
             );
-            writeLog({ action: 'login', details: 'config user'});
             setConnecting(false);
         }
     };

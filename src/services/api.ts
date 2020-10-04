@@ -13,6 +13,7 @@ import {
 import { AsyncStorage, DevSettings } from 'react-native';
 
 import config from '../../config';
+import { writeLog } from './logger';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -29,8 +30,7 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
             response = result.data as T;
         }
     } catch (error) {
-        // TODO: handle error
-        // console.log(error);
+        writeLog({ action: 'get_request', details: error.message});
     }
     return response;
 }
@@ -64,7 +64,7 @@ async function postRequest<T>(
         }
         response = result.data as T;
     } catch (error) {
-        // handle error
+        writeLog({ action: 'post_request', details: error.message});
     }
     return response;
 }
@@ -318,9 +318,7 @@ class Api {
             );
             response = result;
         } catch (error) {
-            // handle error
-        } finally {
-            // always executed
+            writeLog({ action: 'upload_image_async', details: error.message});
         }
         return response;
     }

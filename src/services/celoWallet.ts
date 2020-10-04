@@ -27,7 +27,7 @@ async function celoWalletRequest(
         }
     }
     const eventContent = {
-        action: 'walletRequest',
+        action: 'wallet_request',
         details: {
             fee: FeeCurrency.cUSD,
             provider: currentProvider,

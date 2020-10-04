@@ -211,9 +211,13 @@ i18n.translations = {
         sendLogs: 'Send logs',
         logsSent: 'Logs sent! Thank you!',
         errorSendingLogs: 'An error happened while sending the logs.',
+        logsNotFound: 'Logs registry not found.',
         consentAnonymousAnalytics: 'Consent Anonymous Analytics',
-        youCreatedPrivateCommunity: 'You\'ve created a private community. Welcome!',
-        youAreNotConnected: 'You are not connected to your Valora. Connect to send directly.',
+        youCreatedPrivateCommunity:
+            "You've created a private community. Welcome!",
+        youAreNotConnected:
+            'You are not connected to your Valora. Connect to send directly.',
+        reportError: 'Report error',
     },
     pt: {
         testnetWarning:
@@ -414,13 +418,19 @@ i18n.translations = {
         copyContractAddress: 'Copiar Endereço do Contrato',
         donationBiggerThanBalance:
             'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
-        errorClaiming: 'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.',
+        errorClaiming:
+            'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.',
         sendLogs: 'Enviar logs',
         logsSent: 'Logs enviados! Obrigado!',
         errorSendingLogs: 'Ocorreu um erro ao enviar os logs.',
-        consentAnonymousAnalytics: 'Aceitar enviar dados anonimos para análises',
-        youCreatedPrivateCommunity: 'Você criou uma comunidade privada. Seja bem vindo.',
-        youAreNotConnected: 'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
+        logsNotFound: 'Registo de logs não encontrado.',
+        consentAnonymousAnalytics:
+            'Aceitar enviar dados anonimos para análises',
+        youCreatedPrivateCommunity:
+            'Você criou uma comunidade privada. Seja bem vindo.',
+        youAreNotConnected:
+            'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
+        reportError: 'Reportar erro',
     },
 };
 // Set the locale once at the beginning of your app.

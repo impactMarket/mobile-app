@@ -122,17 +122,24 @@ function EditProfile(props: Props) {
         setSendingLogs(true);
         uploadLogs()
             .then((uploaded) => {
-                if (uploaded) {
+                if (uploaded === 0) {
                     Alert.alert(
                         i18n.t('success'),
                         i18n.t('logsSent'),
                         [{ text: 'OK' }],
                         { cancelable: false }
                     );
-                } else {
+                } else if (uploaded === 1) {
                     Alert.alert(
                         i18n.t('failure'),
                         i18n.t('errorSendingLogs'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                } else {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('logsNotFound'),
                         [{ text: 'OK' }],
                         { cancelable: false }
                     );
@@ -231,13 +238,17 @@ function EditProfile(props: Props) {
                             flex: 1,
                             flexDirection: 'row',
                             justifyContent: 'space-between',
-                            marginVertical: 10
+                            marginVertical: 10,
                         }}
                     >
-                        <Text style={{
-                            fontSize: 15,
-                            paddingVertical: 5
-                        }}>{i18n.t('consentAnonymousAnalytics')}</Text>
+                        <Text
+                            style={{
+                                fontSize: 15,
+                                paddingVertical: 5,
+                            }}
+                        >
+                            {i18n.t('consentAnonymousAnalytics')}
+                        </Text>
                         <Switch
                             value={isConsentAnalytics}
                             onValueChange={onToggleSwitch}

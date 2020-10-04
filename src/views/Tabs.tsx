@@ -56,7 +56,6 @@ function Tabs(props: Props) {
     const iconExtraSize = 0;
     const tabsToUser = () => {
         const user = props.user;
-        // console.log('user.community', user.community)
         if (user.community.isBeneficiary) {
             return (
                 <Tab.Screen

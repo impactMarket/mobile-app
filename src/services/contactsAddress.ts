@@ -1,9 +1,9 @@
 import { ContractKit } from '@celo/contractkit';
-import { fetchContacts } from '@celo/dappkit';
-import { PhoneNumberUtils } from '@celo/utils';
-import * as Contacts from 'expo-contacts';
+// import { fetchContacts } from '@celo/dappkit';
+// import { PhoneNumberUtils } from '@celo/utils';
+// import * as Contacts from 'expo-contacts';
 import * as Permissions from 'expo-permissions';
-import * as SQLite from 'expo-sqlite';
+// import * as SQLite from 'expo-sqlite';
 
 export const getCacheContactsAddress = async () => {
     // const db = SQLite.openDatabase('impactMarket', '0.1');
@@ -21,7 +21,6 @@ export const getCacheContactsAddress = async () => {
     //             ['0xo83u45v3u5', '892349283', 'John Doe']
     //         );
     //         tx.executeSql('select * from contactsAddress;', [], (_, { rows }) =>
-    //             // console.log(JSON.stringify(rows))
     //         );
     //     },
     //     undefined,
@@ -30,7 +29,6 @@ export const getCacheContactsAddress = async () => {
 
     // db.transaction((tx) => {
     //     tx.executeSql(`select * from contactsAddress;`, [], (_, resultSet) =>
-    //         // console.log(resultSet)
     //     );
     // });
 };
@@ -42,9 +40,8 @@ export const crossContactsAddress = async (kit: ContractKit) => {
         return;
     }
 
-    const { phoneNumbersByAddress } = await fetchContacts(kit);
+    // const { phoneNumbersByAddress } = await fetchContacts(kit);
 
-    // console.log(phoneNumbersByAddress);
 
     // TODO: simplify
     // const { status } = await Contacts.requestPermissionsAsync();
