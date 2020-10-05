@@ -9,6 +9,7 @@ import {
 import { Avatar, Text, IconButton } from 'react-native-paper';
 import { IAddressAndName } from 'helpers/types';
 import { getAvatarFromId } from 'helpers/index';
+import { decrypt } from 'helpers/encryption';
 
 export interface IListActionItem {
     key: string;
@@ -48,23 +49,29 @@ export default class ListActionItem extends Component<
     }
 
     render() {
-        let titleMaxLength = 15;
-        if (this.props.maxTextTitleLength !== undefined) {
-            titleMaxLength = this.props.maxTextTitleLength;
-        }
-        const fromHasName = this.props.item.from.name.length > 0;
+        const { item, maxTextTitleLength, prefix, suffix, action } = this.props;
+        const { from } = item;
 
-        const { avatar } = this.props.item;
+        let titleMaxLength = 15;
+        if (maxTextTitleLength !== undefined) {
+            titleMaxLength = maxTextTitleLength;
+        }
+        const fromHasName = from.name.length > 0;
+        let name = '';
+        if (fromHasName) {
+            name =
+                from.name.length === 32 && from.name.indexOf(' ') === -1 // this is an encrypted name
+                    ? decrypt(from.name)
+                    : from.name;
+        }
+
+        const { avatar } = item;
         let avatarSrc;
         if (avatar === undefined || avatar.length === 0) {
             avatarSrc = (
                 <Avatar.Text
                     size={46}
-                    label={
-                        fromHasName
-                            ? this.props.item.from.name.slice(0, 1)
-                            : '?'
-                    }
+                    label={fromHasName ? name.slice(0, 1) : '?'}
                 />
             );
         } else if (avatar.length > 3) {
@@ -80,52 +87,46 @@ export default class ListActionItem extends Component<
 
         let renderRight;
         let renderAction;
-        if (this.props.item.value !== undefined) {
+        if (item.value !== undefined) {
             renderRight = (
                 <View>
                     <Text
                         style={{
                             ...styles.rightTextTop,
-                            color: this.props.item.isValueIn
-                                ? 'green'
-                                : 'black',
+                            color: item.isValueIn ? 'green' : 'black',
                         }}
                     >
-                        {this.props.prefix
-                            ? (this.props.item.isValueIn ? '+' : '') +
-                              this.props.prefix?.top
+                        {prefix
+                            ? (item.isValueIn ? '+' : '') + prefix?.top
                             : ''}
-                        {this.props.item.value}
-                        {this.props.suffix?.top}
+                        {item.value}
+                        {suffix?.top}
                     </Text>
                     <Text style={styles.rightTextBottom}>
-                        {this.props.prefix?.bottom}
-                        {moment(this.props.item.timestamp * 1000).fromNow()}
-                        {this.props.suffix?.bottom}
+                        {prefix?.bottom}
+                        {moment(item.timestamp * 1000).fromNow()}
+                        {suffix?.bottom}
                     </Text>
                 </View>
             );
-        } else if (this.props.action) {
+        } else if (action) {
             renderAction = (
                 <View>
                     <IconButton
-                        icon={this.props.action?.icon}
+                        icon={action?.icon}
                         size={20}
-                        onPress={this.props.action?.click}
+                        onPress={action?.click}
                     />
                 </View>
             );
         }
 
-        const from = !fromHasName
-            ? `${this.props.item.from.address.slice(
+        const itemFrom = fromHasName
+            ? name
+            : `${from.address.slice(
                   0,
                   (titleMaxLength - 4) / 2
-              )}..${this.props.item.from.address.slice(
-                  42 - (titleMaxLength - 4) / 2,
-                  42
-              )}`
-            : this.props.item.from.name;
+              )}..${from.address.slice(42 - (titleMaxLength - 4) / 2, 42)}`;
 
         return (
             <TouchableOpacity onPress={this.props.onPress}>
@@ -141,12 +142,12 @@ export default class ListActionItem extends Component<
                         <View style={{ marginRight: 5 }}>{avatarSrc}</View>
                         <View style={{ justifyContent: 'center' }}>
                             <Text style={styles.textTitle}>
-                                {from.length > titleMaxLength
-                                    ? from.slice(0, titleMaxLength) + '...'
-                                    : from}
+                                {itemFrom.length > titleMaxLength
+                                    ? itemFrom.slice(0, titleMaxLength) + '...'
+                                    : itemFrom}
                             </Text>
                             <Text style={styles.textDescription}>
-                                {this.props.item.description}
+                                {item.description}
                             </Text>
                         </View>
                     </View>

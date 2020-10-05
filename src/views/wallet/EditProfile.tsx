@@ -4,6 +4,7 @@ import Header from 'components/Header';
 import ValidatedTextInput from 'components/ValidatedTextInput';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
+import { decrypt, encrypt } from 'helpers/encryption';
 import { getCountryFromPhoneNumber, getUserAvatar } from 'helpers/index';
 import {
     resetUserApp,
@@ -65,7 +66,7 @@ function EditProfile(props: Props) {
     const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
 
     useEffect(() => {
-        setName(props.user.user.name);
+        setName(decrypt(props.user.user.name));
         setCurrency(props.user.user.currency);
         setLanguage(props.user.user.language);
         AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
@@ -182,9 +183,10 @@ function EditProfile(props: Props) {
                         maxLength={32}
                         required
                         onEndEditing={(e) => {
-                            Api.setUsername(props.user.celoInfo.address, name);
+                            const eName = encrypt(name);
+                            Api.setUsername(props.user.celoInfo.address, eName);
                             props.dispatch(
-                                setUserInfo({ ...props.user.user, name })
+                                setUserInfo({ ...props.user.user, name: eName })
                             );
                         }}
                         onChangeText={(value) => setName(value)}

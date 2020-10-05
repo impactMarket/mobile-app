@@ -4,7 +4,7 @@ import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
 import {
     amountToUserCurrency,
-    getUserCurrencySymbol,
+    getCurrencySymbol,
     updateCommunityInfo,
 } from 'helpers/index';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
@@ -63,7 +63,7 @@ function AddedScreen(props: Props) {
             .catch((e) => {
                 // TODO: register error to log system
                 Alert.alert(
-                    i18n.t('success'),
+                    i18n.t('failure'),
                     i18n.t('errorRemovingBeneficiary'),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -87,8 +87,8 @@ function AddedScreen(props: Props) {
                     <ListActionItem
                         key={beneficiary.address}
                         item={{
-                            description: `${getUserCurrencySymbol(
-                                props.user.user
+                            description: `${getCurrencySymbol(
+                                props.user.user.currency
                             )}${
                                 beneficiary.claimed === undefined
                                     ? '0'
