@@ -35,7 +35,7 @@ function LoginScreen() {
     const login = async () => {
         const requestId = 'login';
         const dappName = 'impactmarket';
-        const callback = Linking.makeUrl(requestId);
+        const callback = Linking.makeUrl('/');
         setConnecting(true);
 
         const pushNotificationsToken = await registerForPushNotifications();
