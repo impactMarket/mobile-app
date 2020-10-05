@@ -131,24 +131,8 @@ export function getCurrencySymbol(currency: string) {
             return 'GH₵';
         case 'CVE':
             return '$';
-        default:
-            return '$';
-    }
-}
-
-/**
- * @deprecated Use getCurrencySymbol
- */
-export function getUserCurrencySymbol(user: IUserInfo) {
-    switch (user.currency.toUpperCase()) {
-        case 'EUR':
-            return '€';
-        case 'BRL':
-            return 'R$';
-        case 'GHS':
-            return 'GH₵';
-        case 'CVE':
-            return '$';
+        case 'NGN':
+            return '₦';
         default:
             return '$';
     }

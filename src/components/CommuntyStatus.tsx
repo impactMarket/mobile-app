@@ -4,7 +4,7 @@ import {
     calculateCommunityProgress,
     iptcColors,
     amountToUserCurrency,
-    getUserCurrencySymbol,
+    getCurrencySymbol,
 } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { Component } from 'react';
@@ -141,7 +141,7 @@ class CommuntyStatus extends Component<Props, object> {
                         >
                             <View style={styles.sphereRaised} />
                             <Text style={{ fontFamily: 'Gelion-Regular' }}>
-                                {getUserCurrencySymbol(user.user)}
+                                {getCurrencySymbol(user.user.currency)}
                                 {amountToUserCurrency(
                                     community.totalRaised,
                                     user.user

@@ -8,7 +8,6 @@ import {
     amountToUserCurrency,
     formatInputAmountToTransfer,
     getCurrencySymbol,
-    getUserCurrencySymbol,
 } from 'helpers/index';
 import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 import { IRootState } from 'helpers/types';
@@ -220,8 +219,8 @@ function PayScreen(props: Props) {
                                 fontWeight: 'bold',
                                 fontFamily: 'Gelion-Bold',
                             }}
-                            placeholder={`${getUserCurrencySymbol(
-                                props.user.user
+                            placeholder={`${getCurrencySymbol(
+                                props.user.user.currency
                             )}0`}
                             keyboardType="numeric"
                             value={paymentAmount}
@@ -235,7 +234,7 @@ function PayScreen(props: Props) {
                             }}
                         >
                             {i18n.t('balance')}:{' '}
-                            {getUserCurrencySymbol(props.user.user)}
+                            {getCurrencySymbol(props.user.user.currency)}
                             {amountToUserCurrency(
                                 props.user.celoInfo.balance,
                                 props.user.user
@@ -280,7 +279,7 @@ function PayScreen(props: Props) {
                                     timestamp: new Date().getDate(),
                                 }}
                                 prefix={{
-                                    top: getUserCurrencySymbol(props.user.user),
+                                    top: getCurrencySymbol(props.user.user.currency),
                                 }}
                             />
                         )}

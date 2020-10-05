@@ -7,7 +7,7 @@ import Api from 'services/api';
 import {
     amountToUserCurrency,
     getAvatarFromId,
-    getUserCurrencySymbol,
+    getCurrencySymbol,
 } from 'helpers/index';
 import { useStore } from 'react-redux';
 
@@ -93,8 +93,8 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                         key={activity.key}
                         item={activity}
                         prefix={{
-                            top: getUserCurrencySymbol(
-                                store.getState().user.user
+                            top: getCurrencySymbol(
+                                store.getState().user.user.currency
                             ),
                         }}
                     />

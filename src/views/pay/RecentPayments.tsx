@@ -1,8 +1,6 @@
 import i18n from 'assets/i18n';
 import ListActionItem, { IListActionItem } from 'components/ListActionItem';
 import {
-    amountToUserCurrency,
-    getUserCurrencySymbol,
     getAvatarFromId,
 } from 'helpers/index';
 import { IUserState, IPaymentsTxAPI } from 'helpers/types';
@@ -77,7 +75,6 @@ const RecentPayments = React.forwardRef<
                             address: activity.from.address,
                         })
                     }
-                    // prefix={{ top: getUserCurrencySymbol(props.user.user) }}
                 />
             ))}
         </View>

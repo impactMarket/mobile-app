@@ -8,9 +8,9 @@ import {
     humanifyNumber,
     loadContracts,
     validateEmail,
-    getUserCurrencySymbol,
     amountToUserCurrency,
     formatInputAmountToTransfer,
+    getCurrencySymbol,
 } from 'helpers/index';
 import {
     IRootState,
@@ -195,7 +195,7 @@ function CreateCommunityScreen(props: Props) {
             txObject,
             'createcommunity',
             props.app.kit,
-            false,
+            false
         );
         return receipt;
     };
@@ -492,7 +492,9 @@ function CreateCommunityScreen(props: Props) {
                         navigation.goBack();
                         Alert.alert(
                             i18n.t('success'),
-                            (visibility === 'private') ? i18n.t('youCreatedPrivateCommunity') : i18n.t('requestNewCommunityPlaced'),
+                            visibility === 'private'
+                                ? i18n.t('youCreatedPrivateCommunity')
+                                : i18n.t('requestNewCommunityPlaced'),
                             [{ text: 'OK' }],
                             { cancelable: false }
                         );
@@ -859,8 +861,8 @@ function CreateCommunityScreen(props: Props) {
                             {claimAmount.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
-                                        symbol: getUserCurrencySymbol(
-                                            props.user.user
+                                        symbol: getCurrencySymbol(
+                                            props.user.user.currency
                                         ),
                                         amount: amountToUserCurrency(
                                             new BigNumber(
@@ -919,8 +921,8 @@ function CreateCommunityScreen(props: Props) {
                             {maxClaim.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
-                                        symbol: getUserCurrencySymbol(
-                                            props.user.user
+                                        symbol: getCurrencySymbol(
+                                            props.user.user.currency
                                         ),
                                         amount: amountToUserCurrency(
                                             new BigNumber(

@@ -4,7 +4,7 @@ import Header from 'components/Header';
 import {
     humanifyNumber,
     amountToUserCurrency,
-    getUserCurrencySymbol,
+    getCurrencySymbol,
 } from 'helpers/index';
 import { IRootState } from 'helpers/types';
 import React, { useState } from 'react';
@@ -87,7 +87,7 @@ function WalletScreen(props: Props) {
                         </Text>
                         <View style={{ alignItems: 'center' }}>
                             <Headline style={styles.headlineBalance}>
-                                {getUserCurrencySymbol(props.user.user)}
+                                {getCurrencySymbol(props.user.user.currency)}
                                 {amountToUserCurrency(
                                     props.user.celoInfo.balance,
                                     props.user.user
