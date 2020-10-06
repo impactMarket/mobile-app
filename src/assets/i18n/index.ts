@@ -218,6 +218,7 @@ i18n.translations = {
         youAreNotConnected:
             'You are not connected to your Valora. Connect to send directly.',
         reportError: 'Report error',
+        errorConnectToValora: 'An error happened while connecting to Valora. Please, try again.',
     },
     pt: {
         testnetWarning:
@@ -431,6 +432,7 @@ i18n.translations = {
         youAreNotConnected:
             'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
         reportError: 'Reportar erro',
+        errorConnectToValora: 'Ocorreu um erro enquanto se conectava á Valora. Por favor, tente novamente.',
     },
 };
 // Set the locale once at the beginning of your app.
@@ -440,3 +442,5 @@ i18n.translations = {
 i18n.fallbacks = true;
 
 export default i18n;
+
+export const supportedLanguages = ['en', 'pt'];

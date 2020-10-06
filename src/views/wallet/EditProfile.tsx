@@ -39,7 +39,7 @@ import {
 } from 'react-native-paper';
 import { connect, ConnectedProps, useStore } from 'react-redux';
 import Api from 'services/api';
-import { uploadLogs } from 'services/logger';
+import { uploadLogs } from 'services/logger/upload';
 
 interface IEditProfileProps {
     EditProfileCallback: () => void;

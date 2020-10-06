@@ -1,6 +1,6 @@
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import { useNavigation } from '@react-navigation/native';
-import i18n from 'assets/i18n';
+import i18n, { supportedLanguages } from 'assets/i18n';
 import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
 import { iptcColors } from 'helpers/index';
@@ -23,7 +23,8 @@ import * as Localization from 'expo-localization';
 import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import config from '../../../config';
-import { uploadLogs, writeLog } from 'services/logger';
+import { uploadLogs } from 'services/logger/upload';
+import { writeLog } from 'services/logger/write';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 
@@ -40,20 +41,45 @@ function LoginScreen() {
 
         const pushNotificationsToken = await registerForPushNotifications();
 
-        requestAccountAddress({
-            requestId,
-            dappName,
-            callback,
-        });
-
-        const dappkitResponse = await waitForAccountAuth(requestId);
-        const userAddress = ethers.utils.getAddress(dappkitResponse.address);
+        let userAddress = '';
+        let dappkitResponse: any;
+        try {
+            requestAccountAddress({
+                requestId,
+                dappName,
+                callback,
+            });
+    
+            dappkitResponse = await waitForAccountAuth(requestId);
+            userAddress = ethers.utils.getAddress(dappkitResponse.address);
+        } catch(e) {
+            writeLog({ action: 'login', details: e.message });
+            analytics('login', { device: Device.brand , success: false });
+            Sentry.captureException(e);
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('errorConnectToValora'),
+                [
+                    {
+                        text: i18n.t('reportError'),
+                        onPress: () => uploadLogs(),
+                    },
+                    { text: i18n.t('close') },
+                ],
+                { cancelable: false }
+            );
+            setConnecting(false);
+            return;
+        }
 
         let language = Localization.locale;
         if (language.includes('-')) {
             language = language.substr(0, language.indexOf('-'));
         } else if (language.includes('_')) {
             language = language.substr(0, language.indexOf('_'));
+        }
+        if (!supportedLanguages.includes(language)) {
+            language = 'en';
         }
 
         const user = await Api.userAuth(

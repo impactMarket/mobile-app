@@ -4,7 +4,7 @@ import * as Linking from 'expo-linking';
 import { ContractKit } from '@celo/contractkit';
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
-import { writeLog } from './logger';
+import { writeLog } from './logger/write';
 
 async function celoWalletRequest(
     from: string,

@@ -23,7 +23,7 @@ import {
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
-import { writeLog } from 'services/logger';
+import { writeLog } from 'services/logger/write';
 import config from '../../../../config';
 import * as Device from 'expo-device';
 
@@ -122,7 +122,9 @@ class Donate extends Component<Props, IDonateState> {
             'donatetocommunity',
             this.props.app.kit
         )
-            .then(() => {
+            .then((tx) => {
+                console.log(tx);
+                // TODO: wait for tx confirmation and request UI update
                 // update donated values
                 setTimeout(
                     () =>

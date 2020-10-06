@@ -13,7 +13,7 @@ import {
 import { AsyncStorage, DevSettings } from 'react-native';
 
 import config from '../../config';
-import { writeLog } from './logger';
+import { writeLog } from './logger/write';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -328,12 +328,11 @@ class Api {
         language: string,
         pushNotificationsToken: string
     ): Promise<IUserWelcomeAuth | undefined> {
-        const result = await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
+        return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
             address,
             language,
             pushNotificationsToken,
         });
-        return result;
     }
 
     /**
