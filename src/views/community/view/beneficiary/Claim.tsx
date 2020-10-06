@@ -163,7 +163,7 @@ class Claim extends React.Component<Props, IClaimState> {
 
         if (claimDisabled) {
             return (
-                <View style={{ height: 90, marginVertical: '5%' }}>
+                <View style={{ height: 90 }}>
                     <Text style={styles.mainPageContent}>
                         {i18n.t('youCanClaimXin', {
                             symbol: getCurrencySymbol(
@@ -185,7 +185,7 @@ class Claim extends React.Component<Props, IClaimState> {
         return (
             <TouchableOpacity
                 style={{
-                    flex: 1,
+                    flexGrow: 0,
                     flexDirection: 'row',
                     backgroundColor:
                         claimDisabled || notEnoughToClaimOnContract
@@ -194,9 +194,10 @@ class Claim extends React.Component<Props, IClaimState> {
                     alignSelf: 'center',
                     alignItems: 'center',
                     paddingVertical: 5,
-                    marginVertical: '10%',
+                    // marginVertical: '10%',
                     paddingHorizontal: 15,
                     borderRadius: 8,
+                    // height: 60,
                 }}
                 disabled={
                     claimDisabled ||

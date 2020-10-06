@@ -10,7 +10,7 @@ export default function ClaimExplainedScreen() {
     return (
         <>
             <Header
-                title={i18n.t('howClaimWorks')}
+                title={i18n.t('knowHowClaimWorks')}
                 navigation={navigation}
                 hasBack
             />

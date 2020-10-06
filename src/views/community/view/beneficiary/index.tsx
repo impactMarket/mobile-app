@@ -15,6 +15,7 @@ import {
     Alert,
     RefreshControl,
     Dimensions,
+    Image,
 } from 'react-native';
 import { Button, ProgressBar, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
@@ -162,75 +163,117 @@ function BeneficiaryView(props: Props) {
                     hasHelp
                     hasQr
                 />
-                <ImageBackground
-                    source={{ uri: community.coverImage }}
-                    resizeMode="cover"
-                    style={styles.imageBackground}
+                <View
+                    style={{
+                        flex: 5,
+                        width: '100%',
+                        height: Dimensions.get('window').height - 130, // TODO: ideally, this should be header - navigation
+                        // backgroundColor: 'red',
+                    }}
                 >
-                    <Text style={styles.communityName}>{community.name}</Text>
-                    <LinearGradient
-                        colors={['transparent', 'rgba(246,246,246,1)']}
-                        style={styles.linearGradient}
-                    />
-                    <LinearGradient
-                        colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)', 'transparent']}
-                        style={styles.darkerBackground}
-                    />
-                    <Button
-                        mode="contained"
-                        style={{ margin: 30, backgroundColor: '#E9ECEF', zIndex: 5 }}
-                        onPress={() =>
-                            navigation.navigate('CommunityDetailsScreen', {
-                                community,
-                                user: props.user,
-                            })
-                        }
-                    >
-                        <Text style={{ color: 'black' }}>
-                            {i18n.t('moreAboutYourCommunity')}
-                        </Text>
-                    </Button>
-                </ImageBackground>
-                <View style={styles.contentView}>
-                    <View style={{ marginTop: '8%' }}>
-                        <Text
-                            onPress={() =>
-                                navigation.navigate('ClaimExplainedScreen')
-                            }
-                            style={styles.haveClaimed}
+                    <View style={{ flex: 2 }}>
+                        <Image
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                            }}
+                            source={{ uri: community.coverImage }}
+                        />
+                        <View
+                            style={{
+                                position: 'absolute',
+                                zIndex: 5,
+                                ...styles.foregroundView,
+                            }}
                         >
-                            {i18n.t('youHaveClaimedXoutOfY', {
-                                claimed: claimedAmount,
-                                max: humanifyNumber(community.vars._maxClaim),
-                            })}
-                        </Text>
-                        <ProgressBar
-                            key="claimedbybeneficiary"
-                            style={styles.claimedProgress}
-                            progress={claimedProgress}
-                            color="#5289ff"
+                            <Text style={styles.communityName}>
+                                {community.name}
+                            </Text>
+
+                            <Button
+                                mode="contained"
+                                style={{
+                                    margin: 30,
+                                    backgroundColor: '#E9ECEF',
+                                    zIndex: 5,
+                                }}
+                                onPress={() =>
+                                    navigation.navigate(
+                                        'CommunityDetailsScreen',
+                                        {
+                                            community,
+                                            user: props.user,
+                                        }
+                                    )
+                                }
+                            >
+                                <Text style={{ color: 'black' }}>
+                                    {i18n.t('moreAboutYourCommunity')}
+                                </Text>
+                            </Button>
+                        </View>
+                        <LinearGradient
+                            colors={['transparent', 'rgba(246,246,246,1)']}
+                            style={styles.linearGradient}
+                        />
+                        <LinearGradient
+                            colors={[
+                                'rgba(0,0,0,0.15)',
+                                'rgba(0,0,0,0.15)',
+                                'transparent',
+                            ]}
+                            style={styles.darkerBackground}
                         />
                     </View>
-                    <Claim
-                        claimAmount={community.vars._claimAmount}
-                        updateClaimedAmount={updateClaimedAmount}
-                        cooldownTime={cooldownTime}
-                        updateCooldownTime={getNewCooldownTime}
-                    />
-                    <View style={{ alignItems: 'center' }}>
-                        <Text style={styles.howClaimsWorks}>
-                            {i18n.t('nextTimeWillWaitClaim', {
-                                nextWait: formatedTimeNextCooldown(),
-                            })}
-                        </Text>
-                        <Text
-                            onPress={() =>
-                                navigation.navigate('ClaimExplainedScreen')
-                            }
-                            style={styles.howClaimsWorksLink}
+                    <View style={{ flex: 3, justifyContent: 'space-between' }}>
+                        <View style={{ marginTop: '5%' }}>
+                            <Text
+                                onPress={() =>
+                                    navigation.navigate('ClaimExplainedScreen')
+                                }
+                                style={styles.haveClaimed}
+                            >
+                                {i18n.t('youHaveClaimedXoutOfY', {
+                                    claimed: claimedAmount,
+                                    max: humanifyNumber(
+                                        community.vars._maxClaim
+                                    ),
+                                })}
+                            </Text>
+                            <ProgressBar
+                                key="claimedbybeneficiary"
+                                style={styles.claimedProgress}
+                                progress={claimedProgress}
+                                color="#5289ff"
+                            />
+                        </View>
+                        <Claim
+                            claimAmount={community.vars._claimAmount}
+                            updateClaimedAmount={updateClaimedAmount}
+                            cooldownTime={cooldownTime}
+                            updateCooldownTime={getNewCooldownTime}
+                        />
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                marginBottom: 15,
+                                marginHorizontal: 25,
+                            }}
                         >
-                            {i18n.t('knowHowClaimWorks')}
-                        </Text>
+                            <Text style={styles.howClaimsWorks}>
+                                {i18n.t('nextTimeWillWaitClaim', {
+                                    nextWait: formatedTimeNextCooldown(),
+                                })}
+                            </Text>
+                            <Text
+                                onPress={() =>
+                                    navigation.navigate('ClaimExplainedScreen')
+                                }
+                                style={styles.howClaimsWorksLink}
+                            >
+                                {i18n.t('knowHowClaimWorks')}
+                            </Text>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -297,7 +340,7 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        height: 180,
+        height: '100%',
     },
     contentView: {
         flex: 1,
@@ -309,9 +352,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 30,
         marginVertical: 13,
     },
-    imageBackground: {
+    foregroundView: {
         width: '100%',
-        height: 180,
+        height: '100%',
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
@@ -334,6 +377,7 @@ const styles = StyleSheet.create({
         color: '#7E8DA6',
         fontStyle: 'normal',
         letterSpacing: 0.3,
+        textAlign: 'center',
     },
     howClaimsWorksLink: {
         fontFamily: 'Gelion-Bold',

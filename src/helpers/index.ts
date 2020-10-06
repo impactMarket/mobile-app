@@ -173,7 +173,7 @@ export function calculateCommunityProgress(
     const result = new BigNumber(
         toCalculte === 'raised' ? community.totalRaised : community.totalClaimed
     ).div(m.eq(0) ? 1 : m);
-    return parseFloat(result.toFixed(2));
+    return parseFloat(result.decimalPlaces(2, 1).toString());
 }
 
 export function getCountryFromPhoneNumber(phoneNumber: string) {
@@ -181,8 +181,18 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
         return '🇵🇹 Portugal';
     } else if (phoneNumber.slice(0, 3) === '+55') {
         return '🇧🇷 Brazil';
+    } else if (phoneNumber.slice(0, 2) === '+1') {
+        return '🇺🇸 United States of America';
+    } else if (phoneNumber.slice(0, 3) === '+62') {
+        return '🇮🇩 Indonesia';
+    } else if (phoneNumber.slice(0, 3) === '+91') {
+        return '🇮🇳 India';
     } else if (phoneNumber.slice(0, 4) === '+233') {
         return '🇬🇭 Ghana';
+    } else if (phoneNumber.slice(0, 4) === '+238') {
+        return '🇨🇻 Cabo Verde';
+    } else if (phoneNumber.slice(0, 4) === '+234') {
+        return '🇳🇬 Nigeria';
     }
     return '';
 }
