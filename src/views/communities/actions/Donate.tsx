@@ -141,11 +141,11 @@ class Donate extends Component<Props, IDonateState> {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
-                analytics('donate', { device: Device.brand , success: true });
+                analytics('donate', { device: Device.brand, success: true });
             })
             .catch((e) => {
                 writeLog({ action: 'donate', details: e.message });
-                analytics('donate', { device: Device.brand , success: false });
+                analytics('donate', { device: Device.brand, success: false });
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorDonating'),
@@ -356,9 +356,12 @@ class Donate extends Component<Props, IDonateState> {
                                             ~
                                             {`${getCurrencySymbol(
                                                 community.currency
-                                            )}${amountInCommunityCurrency.toFixed(
-                                                2
-                                            )}${community.currency}`}
+                                            )}${
+                                                Math.floor(
+                                                    amountInCommunityCurrency *
+                                                        100
+                                                ) / 100
+                                            } ${community.currency}`}
                                         </Paragraph>
                                     )}
                                 </View>

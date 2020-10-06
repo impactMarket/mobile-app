@@ -156,6 +156,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         colors={['transparent', 'rgba(246,246,246,1)']}
                         style={styles.linearGradient}
                     />
+                    <LinearGradient
+                        colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)', 'transparent']}
+                        style={styles.darkerBackground}
+                    />
                 </ImageBackground>
                 <View style={styles.container}>
                     <Card elevation={8}>
@@ -237,6 +241,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     communityName: {
+        zIndex: 5,
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
@@ -244,6 +249,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     communityLocation: {
+        zIndex: 5,
         fontSize: 20,
         color: 'white',
     },
@@ -261,6 +267,13 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         height: 80,
+    },
+    darkerBackground: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 180,
     },
     ssiHeadline: {
         fontFamily: 'Gelion-Regular',

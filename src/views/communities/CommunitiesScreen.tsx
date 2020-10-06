@@ -13,12 +13,13 @@ import {
     StyleSheet,
     Text,
     View,
-    ImageBackground,
     ScrollView,
     RefreshControl,
+    Image,
 } from 'react-native';
 import { Card, ProgressBar, Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
 import Api from 'services/api';
 
 interface ICommunitiesScreenProps {
@@ -60,19 +61,25 @@ function CommunitiesScreen(props: Props) {
             }
         >
             <Card.Content style={{ margin: -16 }}>
-                <ImageBackground
-                    source={{ uri: community.coverImage }}
-                    resizeMode="cover"
-                    style={styles.cardImage}
-                >
-                    <Text style={styles.cardCommunityName}>
-                        {community.name}
-                    </Text>
-                    <Text style={styles.cardLocation}>
-                        <AntDesign name="enviromento" size={20} />{' '}
-                        {community.city}, {community.country}
-                    </Text>
-                </ImageBackground>
+                <View style={{position:'relative'}}>
+                    <Image
+                        style={styles.cardImage}
+                        source={{ uri: community.coverImage }}
+                    />
+                    <View style={{ position: 'absolute', zIndex: 5, ...styles.cardImage }}>
+                        <Text style={styles.cardCommunityName}>
+                            {community.name}
+                        </Text>
+                        <Text style={styles.cardLocation}>
+                            <AntDesign name="enviromento" size={20} />{' '}
+                            {community.city}, {community.country}
+                        </Text>
+                    </View>
+                        <LinearGradient
+                            colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)']}
+                            style={styles.darkerBackground}
+                        />
+                </View>
                 <View style={{ margin: 10 }}>
                     <View style={styles.cardInfo}>
                         <View>
@@ -160,14 +167,26 @@ function CommunitiesScreen(props: Props) {
 const styles = StyleSheet.create({
     scrollView: {},
     cardImage: {
-        borderRadius: 40,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
         width: '100%',
         height: 180,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
     },
+    darkerBackground: {
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 180,
+    },
     cardCommunityName: {
+        zIndex: 5,
+        marginHorizontal: 15,
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
@@ -175,6 +194,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     cardLocation: {
+        zIndex: 5,
         fontSize: 20,
         color: 'white',
     },
