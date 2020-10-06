@@ -33,6 +33,7 @@ interface IClaimProps {
     claimAmount: string;
     cooldownTime: number;
     updateClaimedAmount: () => void;
+    updateCooldownTime: () => Promise<number>;
 }
 interface IClaimState {
     nextClaim: moment.Duration;
@@ -52,7 +53,7 @@ class Claim extends React.Component<Props, IClaimState> {
     }
 
     componentDidMount = async () => {
-        await this._loadAllowance();
+        await this._loadAllowance(this.props.cooldownTime);
         // check if there's enough funds to enable/disable claim button
         const {
             totalClaimed,
@@ -118,10 +119,12 @@ class Claim extends React.Component<Props, IClaimState> {
                         });
                     }
                 }
-                this._loadAllowance().then(() => {
-                    this.setState({ claiming: false });
-                    this.props.updateClaimedAmount();
-                });
+                this.props.updateCooldownTime().then((newCooldownTime) => {
+                    this._loadAllowance(newCooldownTime).then(() => {
+                        this.setState({ claiming: false });
+                        this.props.updateClaimedAmount();
+                    });
+                })
                 analytics('claim', { device: Device.brand, success: true });
             })
             .catch((e) => {
@@ -234,8 +237,7 @@ class Claim extends React.Component<Props, IClaimState> {
         );
     }
 
-    _loadAllowance = async () => {
-        const { cooldownTime } = this.props;
+    _loadAllowance = async (cooldownTime: number) => {
         const claimDisabled = cooldownTime * 1000 > new Date().getTime();
         if (claimDisabled) {
             const interval = 1000;

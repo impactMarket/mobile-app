@@ -95,6 +95,17 @@ function BeneficiaryView(props: Props) {
         props.user.celoInfo.address,
     ]);
 
+    const getNewCooldownTime = async () => {
+        return parseInt(
+            (
+                await props.network.contracts.communityContract.methods
+                    .cooldown(props.user.celoInfo.address)
+                    .call()
+            ).toString(),
+            10
+        );
+    };
+
     const onRefresh = () => {
         Api.getCommunityByContractAddress(community!.contractAddress).then(
             (c) => {
@@ -109,6 +120,10 @@ function BeneficiaryView(props: Props) {
             .claimed(props.user.celoInfo.address)
             .call();
 
+        const progress = new BigNumber(amount.toString()).div(
+            props.network.community.vars._maxClaim
+        );
+        setClaimedProgress(progress.toNumber());
         setClaimedAmount(humanifyNumber(amount.toString()));
     };
 
@@ -117,7 +132,9 @@ function BeneficiaryView(props: Props) {
     }
 
     const formatedTimeNextCooldown = () => {
-        const nextCooldownTime = moment.duration((lastInterval + parseInt(community.vars._incrementInterval)) * 1000);
+        const nextCooldownTime = moment.duration(
+            (lastInterval + parseInt(community.vars._incrementInterval)) * 1000
+        );
         let next = '';
         if (nextCooldownTime.days() > 0) {
             next += `${nextCooldownTime.days()}d`;
@@ -155,9 +172,13 @@ function BeneficiaryView(props: Props) {
                         colors={['transparent', 'rgba(246,246,246,1)']}
                         style={styles.linearGradient}
                     />
+                    <LinearGradient
+                        colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)', 'transparent']}
+                        style={styles.darkerBackground}
+                    />
                     <Button
                         mode="contained"
-                        style={{ margin: 30, backgroundColor: '#E9ECEF' }}
+                        style={{ margin: 30, backgroundColor: '#E9ECEF', zIndex: 5 }}
                         onPress={() =>
                             navigation.navigate('CommunityDetailsScreen', {
                                 community,
@@ -194,6 +215,7 @@ function BeneficiaryView(props: Props) {
                         claimAmount={community.vars._claimAmount}
                         updateClaimedAmount={updateClaimedAmount}
                         cooldownTime={cooldownTime}
+                        updateCooldownTime={getNewCooldownTime}
                     />
                     <View style={{ alignItems: 'center' }}>
                         <Text style={styles.howClaimsWorks}>
@@ -270,6 +292,13 @@ const styles = StyleSheet.create({
         bottom: 0,
         height: 80,
     },
+    darkerBackground: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 180,
+    },
     contentView: {
         flex: 1,
         flexDirection: 'column',
@@ -288,6 +317,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     communityName: {
+        zIndex: 5,
         fontSize: 25,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
