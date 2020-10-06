@@ -49,7 +49,7 @@ i18n.translations = {
         tapToScanAgain: 'Tap to Scan Again',
         currentAddress: 'Current Address',
         allowCamera: 'Allow camera',
-        moreAboutYourCommunity: 'More about your community',
+        moreAboutYourCommunity: 'About my community',
         ssi: 'Self-Sustainability Index',
         ssiDescription:
             'SSI measures how financially sustainable a community is, and its progress',
@@ -263,7 +263,7 @@ i18n.translations = {
         tapToScanAgain: 'Clique para tentar de novo',
         currentAddress: 'Endereço Atual',
         allowCamera: 'Permitir camera',
-        moreAboutYourCommunity: 'Mais sobre a minha comunidade',
+        moreAboutYourCommunity: 'Sobre a minha comunidade',
         ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
             'SSI mede a sustentabilidade financeira de uma comunidade',
