@@ -66,7 +66,9 @@ function EditProfile(props: Props) {
     const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
 
     useEffect(() => {
-        setName(decrypt(props.user.user.name));
+        if (props.user.user.name !== null && props.user.user.name.length > 0) {
+            setName(decrypt(props.user.user.name));
+        }
         setCurrency(props.user.user.currency);
         setLanguage(props.user.user.language);
         AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
@@ -183,7 +185,10 @@ function EditProfile(props: Props) {
                         maxLength={32}
                         required
                         onEndEditing={(e) => {
-                            const eName = encrypt(name);
+                            let eName = '';
+                            if (name.length > 0) {
+                                eName = encrypt(name);
+                            }
                             Api.setUsername(props.user.celoInfo.address, eName);
                             props.dispatch(
                                 setUserInfo({ ...props.user.user, name: eName })
