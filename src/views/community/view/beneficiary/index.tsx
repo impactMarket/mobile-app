@@ -48,6 +48,7 @@ function BeneficiaryView(props: Props) {
         const loadCommunity = async () => {
             if (
                 props.network.contracts.communityContract !== undefined &&
+                props.network.community !== undefined &&
                 props.user.celoInfo.address.length > 0
             ) {
                 const amount = await props.network.contracts.communityContract.methods
@@ -93,6 +94,7 @@ function BeneficiaryView(props: Props) {
         isLocationAvailable();
     }, [
         props.network.contracts.communityContract,
+        props.network.community,
         props.user.celoInfo.address,
     ]);
 
