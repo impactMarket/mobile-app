@@ -196,7 +196,7 @@ i18n.translations = {
         donateConfirmMessage:
             "By pressing 'Donate', you will donate {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
         yourDonationWillBack:
-            'Your donation will back {{backNBeneficiaries}} beneficiaries.',
+            'Your donation will back {{backNBeneficiaries}} beneficiaries for 1 day.',
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
