@@ -206,6 +206,8 @@ function Beneficiaries(props: Props) {
                 selectButtonText={i18n.t('add')}
                 selectButtonInProgress={addInProgress}
                 callback={handleModalScanQR}
+                personalAddressWarningMessage={i18n.t('addingYourOwnAddress')}
+                usedAddressWarningMessage={i18n.t('alreadyInCommunity')}
             />
         </View>
     );

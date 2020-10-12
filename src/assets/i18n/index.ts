@@ -218,7 +218,12 @@ i18n.translations = {
         youAreNotConnected:
             'You are not connected to your Valora. Connect to send directly.',
         reportError: 'Report error',
-        errorConnectToValora: 'An error happened while connecting to Valora. Please, try again.',
+        errorConnectToValora:
+            'An error happened while connecting to Valora. Please, try again.',
+        addingYourOwnAddress:
+            'You are trying to add your own address. Are you sure?',
+        alreadyInCommunity:
+            'You are trying to add an address that already is in this community!',
     },
     pt: {
         testnetWarning:
@@ -432,7 +437,12 @@ i18n.translations = {
         youAreNotConnected:
             'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
         reportError: 'Reportar erro',
-        errorConnectToValora: 'Ocorreu um erro enquanto se conectava á Valora. Por favor, tente novamente.',
+        errorConnectToValora:
+            'Ocorreu um erro enquanto se conectava á Valora. Por favor, tente novamente.',
+        addingYourOwnAddress:
+            'Você está a tentar adicionar o seu endereço. Tem certeza?',
+        alreadyInCommunity:
+            'Você está a tentar adicionar um endereço que já está nesta comunidade!',
     },
 };
 // Set the locale once at the beginning of your app.

@@ -54,81 +54,68 @@ function Tabs(props: Props) {
     };
 
     const iconExtraSize = 0;
-    const tabsToUser = () => {
-        const user = props.user;
-        if (user.community.isBeneficiary) {
-            return (
-                <Tab.Screen
-                    name="claim"
-                    component={BeneficiaryView}
-                    options={{
-                        title: i18n.t('claim'),
-                        tabBarIcon: (props: ITabBarIconProps) => (
-                            <Image
-                                source={selectTabBarIcon(
-                                    props.focused,
-                                    'claim'
-                                )}
-                                style={{
-                                    width: props.size + 2 + iconExtraSize,
-                                    height: props.size - 5 + iconExtraSize,
-                                }}
-                            />
-                        ),
-                    }}
-                />
-            );
-        } else if (user.community.isManager) {
-            return (
-                <Tab.Screen
-                    name="manage"
-                    component={CommunityManagerView}
-                    options={{
-                        title: i18n.t('manage'),
-                        tabBarIcon: (props: ITabBarIconProps) => (
-                            <Image
-                                source={selectTabBarIcon(
-                                    props.focused,
-                                    'manage'
-                                )}
-                                style={{
-                                    width: props.size + iconExtraSize,
-                                    height: props.size - 5 + iconExtraSize,
-                                }}
-                            />
-                        ),
-                    }}
-                />
-            );
-        }
-        return (
-            <Tab.Screen
-                name="communities"
-                component={CommunitiesScreen}
-                options={{
-                    title: i18n.t('communities'),
-                    tabBarIcon: (props: ITabBarIconProps) => (
-                        <Image
-                            source={selectTabBarIcon(
-                                props.focused,
-                                'communities'
-                            )}
-                            style={{
-                                width: props.size + iconExtraSize,
-                                height: props.size - 3 + iconExtraSize,
-                            }}
-                        />
-                    ),
-                }}
-            />
-        );
-    };
-
+    const tabBeneficiary = (
+        <Tab.Screen
+            name="claim"
+            component={BeneficiaryView}
+            options={{
+                title: i18n.t('claim'),
+                tabBarIcon: (props: ITabBarIconProps) => (
+                    <Image
+                        source={selectTabBarIcon(props.focused, 'claim')}
+                        style={{
+                            width: props.size + 2 + iconExtraSize,
+                            height: props.size - 5 + iconExtraSize,
+                        }}
+                    />
+                ),
+            }}
+        />
+    );
+    const tabManager = (
+        <Tab.Screen
+            name="manage"
+            component={CommunityManagerView}
+            options={{
+                title: i18n.t('manage'),
+                tabBarIcon: (props: ITabBarIconProps) => (
+                    <Image
+                        source={selectTabBarIcon(props.focused, 'manage')}
+                        style={{
+                            width: props.size + iconExtraSize,
+                            height: props.size - 5 + iconExtraSize,
+                        }}
+                    />
+                ),
+            }}
+        />
+    );
+    const tabCommunities = (
+        <Tab.Screen
+            name="communities"
+            component={CommunitiesScreen}
+            options={{
+                title: i18n.t('communities'),
+                tabBarIcon: (props: ITabBarIconProps) => (
+                    <Image
+                        source={selectTabBarIcon(props.focused, 'communities')}
+                        style={{
+                            width: props.size + iconExtraSize,
+                            height: props.size - 3 + iconExtraSize,
+                        }}
+                    />
+                ),
+            }}
+        />
+    );
+    const { isManager, isBeneficiary } = props.user.community;
     return (
         <Tab.Navigator
-            // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
+        // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
         >
-            {tabsToUser()}
+            {isBeneficiary && tabBeneficiary}
+            {isManager && tabManager}
+            {!isBeneficiary && !isManager && tabCommunities}
             {props.user.celoInfo.address.length > 0 && (
                 <Tab.Screen
                     name="pay"

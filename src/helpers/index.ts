@@ -159,7 +159,7 @@ export function claimFrequencyToText(frequency: BigNumber | string): string {
 // cUSD has 18 zeros!
 export function humanifyNumber(inputNumber: BigNumber | string): number {
     const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-    return parseFloat(new BigNumber(inputNumber).div(decimals).toFixed(2, 1));
+    return parseFloat(new BigNumber(inputNumber).div(decimals).decimalPlaces(2, 1).toString());
 }
 
 export function calculateCommunityProgress(
@@ -167,8 +167,7 @@ export function calculateCommunityProgress(
     community: ICommunityInfo
 ): number {
     const m = new BigNumber(community.vars._maxClaim).multipliedBy(
-        community.beneficiaries.added.length +
-            community.beneficiaries.removed.length
+        community.beneficiaries.added.length // + community.beneficiaries.removed.length
     );
     const result = new BigNumber(
         toCalculte === 'raised' ? community.totalRaised : community.totalClaimed
@@ -193,8 +192,10 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
         return '🇨🇻 Cabo Verde';
     } else if (phoneNumber.slice(0, 4) === '+234') {
         return '🇳🇬 Nigeria';
+    } else if (phoneNumber.slice(0, 3) === '+54') {
+        return '🇦🇷 Argentina';
     }
-    return '';
+    return 'Unknown';
 }
 
 export var iptcColors = {
