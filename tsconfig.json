@@ -14,6 +14,9 @@
             "services": [
                 "./src/services"
             ],
+            "views": [
+                "./src/views"
+            ],
         },
         "allowSyntheticDefaultImports": true,
         "jsx": "react-native",
