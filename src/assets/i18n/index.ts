@@ -224,6 +224,9 @@ i18n.translations = {
             'You are trying to add your own address. Are you sure?',
         alreadyInCommunity:
             'You are trying to add an address that already is in this community!',
+        requestingPermission: 'Questing Permission',
+        requestCameraPermission:
+            'impactMarket requires permission to use your camera in order to scan the QR code.',
     },
     pt: {
         testnetWarning:
@@ -443,6 +446,9 @@ i18n.translations = {
             'Você está a tentar adicionar o seu endereço. Tem certeza?',
         alreadyInCommunity:
             'Você está a tentar adicionar um endereço que já está nesta comunidade!',
+        requestingPermission: 'Perdido de permissão',
+        requestCameraPermission:
+            'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
     },
 };
 // Set the locale once at the beginning of your app.

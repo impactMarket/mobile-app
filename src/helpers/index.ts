@@ -201,6 +201,8 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
 export var iptcColors = {
     greenishTeal: '#2dce89',
     softBlue: '#5e72e4',
+    softGray: '#E9ECEF',
+    textGray: '#7E8DA6',
 };
 
 /**

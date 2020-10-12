@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     // TextInput,
-    TextInputProperties,
+    TextInputProps,
     NativeSyntheticEvent,
     TextInputEndEditingEventData,
     View,
 } from 'react-native';
 import { Paragraph, TextInput, HelperText } from 'react-native-paper';
 
-interface IStyledTextInputProps extends TextInputProperties {
+interface IStyledTextInputProps extends TextInputProps {
     label: string;
     required?: boolean;
     isValid?: boolean;

@@ -14,6 +14,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
+    noElevation?: boolean;
     community: ICommunityInfo;
 }
 const mapStateToProps = (state: IRootState) => {
@@ -26,7 +27,7 @@ type Props = PropsFromRedux & ICommuntyStatusProps;
 
 class CommuntyStatus extends Component<Props, object> {
     render() {
-        const { community, user } = this.props;
+        const { community, user, noElevation } = this.props;
 
         // in theory, it's the total claimed is relative to the total raised.
         // But to draw the progress bar, it's relative to the progress bar size.
@@ -34,11 +35,12 @@ class CommuntyStatus extends Component<Props, object> {
             new BigNumber(community.totalClaimed)
                 .div(community.totalRaised === '0' ? 1 : community.totalRaised)
                 .multipliedBy(100)
-                .toFixed(2)
+                .decimalPlaces(2, 1)
+                .toString()
         );
 
         return (
-            <Card elevation={8} style={{ marginTop: 20 }}>
+            <Card elevation={noElevation ? 0 : 8} style={{ marginTop: 20 }}>
                 <Card.Content>
                     <View
                         style={{
@@ -51,17 +53,21 @@ class CommuntyStatus extends Component<Props, object> {
                         <View style={{ width: '50%', alignItems: 'center' }}>
                             <Title
                                 style={{
-                                    fontSize: 40,
                                     fontFamily: 'Gelion-Regular',
-                                    paddingVertical: 10,
+                                    fontStyle: 'normal',
+                                    fontWeight: 'bold',
+                                    fontSize: 42,
+                                    lineHeight: 42,
                                 }}
                             >
                                 {community.beneficiaries.added.length}
                             </Title>
                             <Text
                                 style={{
-                                    color: 'grey',
+                                    color: iptcColors.textGray,
                                     fontFamily: 'Gelion-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 15,
                                 }}
                             >
                                 {i18n.t('beneficiaries')}
@@ -70,17 +76,21 @@ class CommuntyStatus extends Component<Props, object> {
                         <View style={{ width: '50%', alignItems: 'center' }}>
                             <Title
                                 style={{
-                                    fontSize: 40,
                                     fontFamily: 'Gelion-Regular',
-                                    paddingVertical: 10,
+                                    fontStyle: 'normal',
+                                    fontWeight: 'bold',
+                                    fontSize: 42,
+                                    lineHeight: 42,
                                 }}
                             >
                                 {community.backers.length}
                             </Title>
                             <Text
                                 style={{
-                                    color: 'grey',
+                                    color: iptcColors.textGray,
                                     fontFamily: 'Gelion-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 15,
                                 }}
                             >
                                 {i18n.t('backers')}
@@ -129,8 +139,26 @@ class CommuntyStatus extends Component<Props, object> {
                             }}
                         >
                             <View style={styles.sphereClaimed} />
-                            <Text style={{ fontFamily: 'Gelion-Regular' }}>
-                                {claimedByRaised}% {i18n.t('claimed')}
+                            <Text
+                                style={{
+                                    fontFamily: 'Gelion-Regular',
+                                    fontSize: 15,
+                                    lineHeight: 14,
+                                    letterSpacing: 0.245455,
+                                }}
+                            >
+                                {claimedByRaised}%{' '}
+                            </Text>
+                            <Text
+                                style={{
+                                    fontFamily: 'Gelion-Regular',
+                                    color: iptcColors.textGray,
+                                    fontSize: 15,
+                                    lineHeight: 14,
+                                    letterSpacing: 0.245455,
+                                }}
+                            >
+                                {i18n.t('claimed')}
                             </Text>
                         </View>
                         <View
@@ -140,12 +168,29 @@ class CommuntyStatus extends Component<Props, object> {
                             }}
                         >
                             <View style={styles.sphereRaised} />
-                            <Text style={{ fontFamily: 'Gelion-Regular' }}>
+                            <Text
+                                style={{
+                                    fontFamily: 'Gelion-Regular',
+                                    fontSize: 15,
+                                    lineHeight: 14,
+                                    letterSpacing: 0.245455,
+                                }}
+                            >
                                 {getCurrencySymbol(user.user.currency)}
                                 {amountToUserCurrency(
                                     community.totalRaised,
                                     user.user
                                 )}{' '}
+                            </Text>
+                            <Text
+                                style={{
+                                    fontFamily: 'Gelion-Regular',
+                                    color: iptcColors.textGray,
+                                    fontSize: 15,
+                                    lineHeight: 14,
+                                    letterSpacing: 0.245455,
+                                }}
+                            >
                                 {i18n.t('raised')}
                             </Text>
                         </View>
