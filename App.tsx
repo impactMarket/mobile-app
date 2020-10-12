@@ -61,6 +61,7 @@ import AddedScreen from './src/views/community/view/communitymanager/AddedScreen
 import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
 import EditProfile from './src/views/wallet/EditProfile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
+import AddBeneficiaryScreen from './src/views/community/view/communitymanager/AddBeneficiaryScreen';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -430,6 +431,13 @@ export default class App extends React.Component<object, IAppState> {
                                 }}
                                 name="FAQScreen"
                                 component={FAQScreen}
+                            />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="AddBeneficiaryScreen"
+                                component={AddBeneficiaryScreen}
                             />
                         </Stack.Navigator>
                     </NavigationContainer>
