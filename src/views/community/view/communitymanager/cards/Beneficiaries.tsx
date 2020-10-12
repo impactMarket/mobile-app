@@ -5,12 +5,13 @@ import { updateCommunityInfo, iptcColors } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import { Alert, View } from 'react-native';
-import { Card, Headline, Button } from 'react-native-paper';
+import { Card, Headline } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import ModalScanQR from '../../../../common/ModalScanQR';
 import { BigNumber } from 'bignumber.js';
+import Button from 'components/Button';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;
@@ -131,7 +132,7 @@ function Beneficiaries(props: Props) {
                         {i18n.t('beneficiaries').toUpperCase()}
                     </Headline>
                     <Button
-                        mode="outlined"
+                        modeType="gray"
                         disabled={
                             props.community.beneficiaries.added.length === 0
                         }
@@ -147,7 +148,7 @@ function Beneficiaries(props: Props) {
                         {props.community.beneficiaries.added.length})
                     </Button>
                     <Button
-                        mode="outlined"
+                        modeType="gray"
                         disabled={
                             props.community.beneficiaries.removed.length === 0
                         }
@@ -165,20 +166,20 @@ function Beneficiaries(props: Props) {
                     <View>
                         {hasFundsToNewBeneficiary ? (
                             <Button
-                                mode="contained"
+                                modeType="green"
                                 style={{
                                     marginVertical: 5,
-                                    backgroundColor: iptcColors.greenishTeal,
-                                    position: 'relative',
                                 }}
-                                onPress={() => setOpenModalAddBeneficiary(true)}
+                                onPress={() =>
+                                    navigation.navigate('AddBeneficiaryScreen')
+                                }
                             >
                                 {i18n.t('addBeneficiary')}
                             </Button>
                         ) : (
                             <Button
+                                modeType="default"
                                 icon="alert"
-                                mode="contained"
                                 style={{
                                     marginVertical: 5,
                                     backgroundColor: '#f0ad4e',

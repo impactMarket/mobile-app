@@ -104,7 +104,10 @@ function CommunityManagerView(props: Props) {
                                 setCommunity(_communityUpdate)
                             }
                         />
-                        <CommuntyStatus community={_community} />
+                        <CommuntyStatus
+                            community={_community}
+                            noElevation={true}
+                        />
                     </View>
                 </ScrollView>
             );
@@ -251,7 +254,7 @@ const styles = StyleSheet.create({
     container: {
         marginTop: -40,
         marginHorizontal: 20,
-        marginBottom: 20
+        marginBottom: 20,
     },
     imageBackground: {
         width: '100%',
