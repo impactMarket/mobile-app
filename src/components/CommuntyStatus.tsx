@@ -40,7 +40,7 @@ class CommuntyStatus extends Component<Props, object> {
         );
 
         return (
-            <Card elevation={noElevation ? 0 : 8} style={{ marginTop: 20 }}>
+            <Card elevation={noElevation ? 0 : 8} style={{ marginTop: 16 }}>
                 <Card.Content>
                     <View
                         style={{
@@ -102,20 +102,24 @@ class CommuntyStatus extends Component<Props, object> {
                             key="raised"
                             style={{
                                 marginTop: 10,
-                                backgroundColor: '#d6d6d6',
+                                backgroundColor: '#d6d6d6', // gray
                                 position: 'absolute',
+                                borderRadius: 6.5,
+                                height: 8.12,
                             }}
                             progress={calculateCommunityProgress(
                                 'raised',
                                 community
                             )}
-                            color="#5289ff"
+                            color={iptcColors.softBlue}
                         />
                         <ProgressBar
                             key="claimed"
                             style={{
                                 marginTop: 10,
-                                backgroundColor: 'rgba(255,255,255,0)',
+                                backgroundColor: 'rgba(255,255,255,0)', // transparent
+                                borderRadius: 6.5,
+                                height: 8.12,
                             }}
                             progress={calculateCommunityProgress(
                                 'claimed',
@@ -142,6 +146,7 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     fontFamily: 'Gelion-Regular',
+                                    color: iptcColors.almostBlack,
                                     fontSize: 15,
                                     lineHeight: 14,
                                     letterSpacing: 0.245455,
@@ -171,6 +176,7 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     fontFamily: 'Gelion-Regular',
+                                    color: iptcColors.almostBlack,
                                     fontSize: 15,
                                     lineHeight: 14,
                                     letterSpacing: 0.245455,

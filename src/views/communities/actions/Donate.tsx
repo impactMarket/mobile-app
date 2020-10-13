@@ -259,14 +259,15 @@ class Donate extends Component<Props, IDonateState> {
             <>
                 <Button
                     mode="contained"
+                    uppercase={false}
                     style={styles.donate}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
                     <Text
                         style={{
                             fontSize: 20,
+                            lineHeight: 54,
                             color: 'white',
-                            textTransform: 'none',
                             fontWeight: 'bold',
                         }}
                     >
@@ -406,7 +407,7 @@ const styles = StyleSheet.create({
     donate: {
         borderRadius: 0,
         backgroundColor: iptcColors.greenishTeal,
-        height: '7%',
+        height: 69,
     },
 });
 

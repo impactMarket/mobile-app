@@ -1,14 +1,11 @@
-import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
-import {
-    humanifyNumber,
-    getCurrencySymbol,
-} from 'helpers/index';
+import { humanifyNumber, getCurrencySymbol, iptcColors } from 'helpers/index';
 import {
     ICommunityInfo,
     IStoreCombinedActionsTypes,
@@ -22,27 +19,18 @@ import {
     ImageBackground,
     RefreshControl,
 } from 'react-native';
-import { LineChart, ChartConfig } from 'react-native-chart-kit';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Paragraph, Button, Card, Divider, Headline } from 'react-native-paper';
+import { Paragraph, Card, Divider, Headline } from 'react-native-paper';
 
 import config from '../../../config';
 import Donate from '../communities/actions/Donate';
 import Api from 'services/api';
 import { useStore } from 'react-redux';
+import Button from 'components/Button';
 
-const lineChartConfig: ChartConfig = {
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientToOpacity: 0,
-    strokeWidth: 2,
-    barPercentage: 0.5,
-    color: (opacity = 1) => `rgba(45,206,137,1)`,
-    labelColor: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
-    style: {
-        // borderRadius: 6
-    },
-    fillShadowGradientOpacity: 0,
-};
+import { LineChart } from 'react-native-svg-charts';
+import * as shape from 'd3-shape';
+
 interface ICommunityDetailsScreen {
     route: {
         params: {
@@ -70,30 +58,20 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     const renderSSI = () => {
         if (community.ssi.values.length > 1) {
-            const lineChartData = {
-                labels: community.ssi.dates.map((date) => date.toString()),
-                datasets: [{ data: community.ssi.values }],
-            };
             return (
                 <>
-                    <Divider />
+                    <Divider style={{ marginLeft: -16, marginRight: -16 }} />
                     <View style={styles.chartView}>
                         <LineChart
-                            data={lineChartData}
-                            width={200}
-                            height={100}
-                            fromZero
-                            chartConfig={lineChartConfig}
-                            withInnerLines={false}
-                            withOuterLines={false}
-                            withHorizontalLabels={false}
-                            withVerticalLabels={false}
-                            withDots={false}
-                            bezier
-                            style={{
-                                marginLeft: -70,
+                            style={{ flex: 2, height: 100, width: 200 }}
+                            data={community.ssi.values}
+                            contentInset={{ top: 20, bottom: 20 }}
+                            curve={shape.curveMonotoneX}
+                            svg={{
+                                strokeWidth: 2,
+                                stroke: 'rgba(45,206,137,1)',
                             }}
-                        />
+                        ></LineChart>
                         <View style={styles.ssiView}>
                             <Headline style={styles.ssiHeadline}>
                                 {
@@ -103,7 +81,9 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 }
                                 %
                             </Headline>
-                            <Paragraph>{i18n.t('ssi')}</Paragraph>
+                            <Paragraph style={{ textAlign: 'right' }}>
+                                {i18n.t('ssi')}
+                            </Paragraph>
                         </View>
                     </View>
                     <Paragraph style={styles.ssiExplained}>
@@ -118,14 +98,13 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const cDescription =
         store.getState().user.user.language === community.language
             ? community.description
-            : (community.descriptionEn === null ? community.description : community.descriptionEn);
+            : community.descriptionEn === null
+            ? community.description
+            : community.descriptionEn;
     if (seeFullDescription || community.description.indexOf('\n') === -1) {
         description = cDescription;
     } else {
-        description = cDescription.slice(
-            0,
-            cDescription.indexOf('\n')
-        );
+        description = cDescription.slice(0, cDescription.indexOf('\n'));
     }
     const amountInDollars = parseFloat(community.vars._claimAmount);
     const amountInCommunityCurrency =
@@ -149,7 +128,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 >
                     <Text style={styles.communityName}>{community.name}</Text>
                     <Text style={styles.communityLocation}>
-                        <AntDesign name="enviromento" size={20} />{' '}
+                        <Entypo name="location-pin" size={14} />{' '}
                         {community.city}, {community.country}
                     </Text>
                     <LinearGradient
@@ -157,7 +136,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         style={styles.linearGradient}
                     />
                     <LinearGradient
-                        colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)', 'transparent']}
+                        colors={[
+                            'rgba(0,0,0,0.15)',
+                            'rgba(0,0,0,0.15)',
+                            'transparent',
+                        ]}
                         style={styles.darkerBackground}
                     />
                 </ImageBackground>
@@ -167,7 +150,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             <Paragraph>{description}</Paragraph>
                             {community.description.indexOf('\n') !== -1 && (
                                 <Button
-                                    mode="contained"
+                                    modeType="gray"
                                     onPress={() =>
                                         setSeeFullDescription(
                                             !seeFullDescription
@@ -181,7 +164,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             )}
                         </Card.Content>
                     </Card>
-                    <Card elevation={8} style={{ marginTop: 20 }}>
+                    <Card elevation={8} style={{ marginTop: 16 }}>
                         <Card.Content>
                             <Paragraph>
                                 {i18n.t('eachBeneficiaryCanClaimXUpToY', {
@@ -208,8 +191,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     </Card>
                     <CommuntyStatus community={community}>
                         <Button
-                            mode="outlined"
-                            style={{ width: '100%' }}
+                            modeType="gray"
+                            style={{ marginTop: '5%' }}
                             onPress={() =>
                                 WebBrowser.openBrowserAsync(
                                     config.blockExplorer +
@@ -231,7 +214,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 const styles = StyleSheet.create({
     container: {
         marginTop: -40,
-        margin: 20,
+        margin: 16,
     },
     imageBackground: {
         width: '100%',
@@ -242,7 +225,8 @@ const styles = StyleSheet.create({
     },
     communityName: {
         zIndex: 5,
-        fontSize: 25,
+        fontSize: 30,
+        lineHeight: 36,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
@@ -250,16 +234,18 @@ const styles = StyleSheet.create({
     },
     communityLocation: {
         zIndex: 5,
-        fontSize: 20,
+        fontSize: 15,
+        lineHeight: 15,
+        letterSpacing: 0.245455,
         color: 'white',
     },
     ssiExplained: {
-        fontSize: 15,
         fontWeight: 'normal',
         fontStyle: 'normal',
+        fontSize: 15,
         lineHeight: 18,
-        letterSpacing: 0.25,
-        color: '#b0b0b0',
+        letterSpacing: 0.245455,
+        color: iptcColors.textGray,
     },
     linearGradient: {
         position: 'absolute',
@@ -284,13 +270,13 @@ const styles = StyleSheet.create({
         textAlign: 'right',
     },
     ssiView: {
-        flex: 1,
+        flex: 2,
         flexDirection: 'column',
         justifyContent: 'center',
         marginRight: 0,
     },
     chartView: {
-        flex: 1,
+        flex: 3,
         flexDirection: 'row',
         margin: 0,
     },

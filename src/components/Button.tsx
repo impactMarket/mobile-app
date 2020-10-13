@@ -1,5 +1,6 @@
 import { iptcColors } from 'helpers/index';
 import React, { Component } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import { Button as RNPButton, Text } from 'react-native-paper';
 
 interface IButtonProps {
@@ -9,7 +10,7 @@ interface IButtonProps {
     loading?: boolean;
     disabled?: boolean;
     onPress?: () => void;
-    style?: any; // StyleProp<ViewStyle>;
+    style?: StyleProp<ViewStyle>;
 }
 interface IButtonState {}
 
@@ -20,24 +21,30 @@ export default class Button extends Component<IButtonProps, IButtonState> {
 
     render() {
         const { style, disabled, children, modeType } = this.props;
-        let buttonStyle = {};
+        let buttonStyle: StyleProp<ViewStyle> = {
+            elevation: 0,
+            borderRadius: 4,
+        };
         if (!disabled) {
             if (modeType === 'green') {
                 buttonStyle = {
+                    ...buttonStyle,
                     backgroundColor: iptcColors.greenishTeal,
                 };
             } else if (modeType === 'gray') {
                 buttonStyle = {
+                    ...buttonStyle,
                     backgroundColor: iptcColors.softGray,
                 };
             } else {
                 buttonStyle = {
+                    ...buttonStyle,
                     backgroundColor: iptcColors.softBlue,
                 };
             }
         }
         if (this.props.style) {
-            buttonStyle = { ...buttonStyle, ...style };
+            buttonStyle = { ...buttonStyle, ...(style as any) };
         }
         return (
             <RNPButton

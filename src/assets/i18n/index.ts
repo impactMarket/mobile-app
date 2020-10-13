@@ -52,7 +52,7 @@ i18n.translations = {
         moreAboutYourCommunity: 'About my community',
         ssi: 'Self-Sustainability Index',
         ssiDescription:
-            'SSI measures how financially sustainable a community is, and its progress',
+            'SSI measures how financially sustainable a community is, and its progress.',
         seeMore: 'See More',
         seeLess: 'See Less',
         exploreCommunityContract: 'See Community Contract',
@@ -275,7 +275,7 @@ i18n.translations = {
         moreAboutYourCommunity: 'Sobre a minha comunidade',
         ssi: 'Índice de Autossustentabilidade',
         ssiDescription:
-            'SSI mede a sustentabilidade financeira de uma comunidade',
+            'SSI mede a sustentabilidade financeira de uma comunidade.',
         seeMore: 'Ver Mais',
         seeLess: 'Ver Menos',
         exploreCommunityContract: 'Ver Contrato da Comunidade',

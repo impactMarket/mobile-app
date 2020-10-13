@@ -1,4 +1,4 @@
-import { AntDesign } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Header from 'components/Header';
@@ -61,24 +61,30 @@ function CommunitiesScreen(props: Props) {
             }
         >
             <Card.Content style={{ margin: -16 }}>
-                <View style={{position:'relative'}}>
+                <View style={{ position: 'relative' }}>
                     <Image
                         style={styles.cardImage}
                         source={{ uri: community.coverImage }}
                     />
-                    <View style={{ position: 'absolute', zIndex: 5, ...styles.cardImage }}>
+                    <View
+                        style={{
+                            position: 'absolute',
+                            zIndex: 5,
+                            ...styles.cardImage,
+                        }}
+                    >
                         <Text style={styles.cardCommunityName}>
                             {community.name}
                         </Text>
                         <Text style={styles.cardLocation}>
-                            <AntDesign name="enviromento" size={20} />{' '}
+                            <Entypo name="location-pin" size={15} />{' '}
                             {community.city}, {community.country}
                         </Text>
                     </View>
-                        <LinearGradient
-                            colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)']}
-                            style={styles.darkerBackground}
-                        />
+                    <LinearGradient
+                        colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)']}
+                        style={styles.darkerBackground}
+                    />
                 </View>
                 <View style={{ margin: 10 }}>
                     <View style={styles.cardInfo}>
@@ -109,23 +115,27 @@ function CommunitiesScreen(props: Props) {
                             </Text>
                         </View>
                     </View>
-                    <View style={{ marginHorizontal: 15, marginVertical: 10 }}>
+                    <View style={{ marginTop: 15, marginBottom: 5, marginHorizontal: 15 }}>
                         <ProgressBar
                             key="raised"
                             style={{
                                 backgroundColor: '#d6d6d6',
                                 position: 'absolute',
+                                borderRadius: 6.5,
+                                height: 8.12,
                             }}
                             progress={calculateCommunityProgress(
                                 'raised',
                                 community
-                            )}
-                            color="#5289ff"
-                        />
+                                )}
+                                color="#5289ff"
+                                />
                         <ProgressBar
                             key="claimed"
                             style={{
                                 backgroundColor: 'rgba(255,255,255,0)',
+                                borderRadius: 6.5,
+                                height: 8.12,
                             }}
                             progress={calculateCommunityProgress(
                                 'claimed',
@@ -170,7 +180,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         width: '100%',
-        height: 180,
+        height: 147,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
@@ -182,12 +192,13 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        height: 180,
+        height: 147,
     },
     cardCommunityName: {
         zIndex: 5,
         marginHorizontal: 15,
-        fontSize: 25,
+        fontSize: 28,
+        lineHeight: 34,
         fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
@@ -195,7 +206,8 @@ const styles = StyleSheet.create({
     },
     cardLocation: {
         zIndex: 5,
-        fontSize: 20,
+        fontSize: 16,
+        lineHeight: 19,
         color: 'white',
     },
     cardInfo: {
@@ -204,7 +216,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     card: {
-        margin: 30,
+        marginHorizontal: 16,
+        marginBottom: 21,
         padding: 0,
     },
     cellHeader: {

@@ -67,28 +67,32 @@ BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
 const Stack = createStackNavigator();
 const store = createStore(combinedReducer);
+const fonts = {
+    regular: {
+        fontFamily: 'Gelion-Regular',
+    },
+    medium: {
+        fontFamily: 'Gelion-Regular',
+    },
+    light: {
+        fontFamily: 'Gelion-Light',
+    },
+    thin: {
+        fontFamily: 'Gelion-Thin',
+    },
+};
 const theme = {
     ...DefaultTheme,
-    roundness: 4,
+    roundness: 8,
     colors: {
         ...DefaultTheme.colors,
         primary: iptcColors.softBlue,
+        text: iptcColors.almostBlack,
     },
     fonts: configureFonts({
-        default: {
-            regular: {
-                fontFamily: 'Gelion-Regular',
-            },
-            medium: {
-                fontFamily: 'Gelion-Regular',
-            },
-            light: {
-                fontFamily: 'Gelion-Light',
-            },
-            thin: {
-                fontFamily: 'Gelion-Thin',
-            },
-        },
+        default: fonts,
+        ios: fonts,
+        android: fonts,
     }),
 };
 const navigationTheme = {

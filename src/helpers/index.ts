@@ -203,6 +203,7 @@ export var iptcColors = {
     softBlue: '#5e72e4',
     softGray: '#E9ECEF',
     textGray: '#7E8DA6',
+    almostBlack: '#1E3252',
 };
 
 /**
