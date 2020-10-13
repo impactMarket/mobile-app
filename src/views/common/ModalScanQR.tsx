@@ -9,8 +9,6 @@ import {
     Button,
     Dialog,
     Divider,
-    IconButton,
-    Paragraph,
     Portal,
 } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
@@ -23,8 +21,6 @@ interface IModalScanQRProps {
     selectButtonText: string;
     selectButtonInProgress?: boolean;
     callback: (inputAddress: string) => void;
-    personalAddressWarningMessage?: string;
-    usedAddressWarningMessage?: string;
 }
 interface IModalScanQRState {
     inputAddress: string;
@@ -121,12 +117,8 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
             selectButtonInProgress,
             callback,
             isVisible,
-            personalAddressWarningMessage,
             openInCamera,
             onDismiss,
-            usedAddressWarningMessage,
-            user,
-            network,
         } = this.props;
         let inputCameraMethod;
 
@@ -168,13 +160,6 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
             );
         }
 
-        const personalAddressWarningMessageCondition =
-            inputAddress.toLowerCase() === user.celoInfo.address.toLowerCase();
-        const usedAddressWarningMessageCondition =
-            network.community.beneficiaries.added.find(
-                (b) => b.address.toLowerCase() === inputAddress.toLowerCase()
-            ) !== undefined;
-
         return (
             <Portal>
                 <Dialog
@@ -182,42 +167,6 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                     onDismiss={onDismiss}
                 >
                     <Dialog.Content>
-                        {personalAddressWarningMessage !== undefined &&
-                            personalAddressWarningMessageCondition && (
-                                <View style={{ alignItems: 'center' }}>
-                                    <IconButton
-                                        icon="alert"
-                                        color="#f0ad4e"
-                                        size={20}
-                                    />
-                                    <Paragraph
-                                        style={{
-                                            marginHorizontal: 10,
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {personalAddressWarningMessage}
-                                    </Paragraph>
-                                </View>
-                            )}
-                        {usedAddressWarningMessage !== undefined &&
-                            usedAddressWarningMessageCondition && (
-                                <View style={{ alignItems: 'center' }}>
-                                    <IconButton
-                                        icon="alert"
-                                        color="#f0ad4e"
-                                        size={20}
-                                    />
-                                    <Paragraph
-                                        style={{
-                                            marginHorizontal: 10,
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {usedAddressWarningMessage}
-                                    </Paragraph>
-                                </View>
-                            )}
                         <ValidatedTextInput
                             label={inputText}
                             value={inputAddress}
@@ -250,12 +199,11 @@ class ModalScanQR extends React.Component<Props, IModalScanQRState> {
                         </Button>
                         <Button
                             mode="contained"
-                            disabled={
-                                usedAddressWarningMessageCondition
-                                // inputAddress.length === 0 ||
-                                // (selectButtonInProgress !== undefined &&
-                                //     selectButtonInProgress === true)
-                            }
+                            // disabled={
+                            //     inputAddress.length === 0 ||
+                            //     (selectButtonInProgress !== undefined &&
+                            //         selectButtonInProgress === true)
+                            // }
                             loading={
                                 selectButtonInProgress !== undefined &&
                                 selectButtonInProgress === true
