@@ -138,6 +138,19 @@ export function getCurrencySymbol(currency: string) {
     }
 }
 
+export function amountToCurrency(
+    amount: BigNumber | string,
+    currency: string,
+    exchangeRates: any,
+) {
+    const exchangeRate = exchangeRates[currency].rate;
+    const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
+    return humanifyNumber(bgn);
+}
+
+/**
+ * @deprecated
+ */
 export function amountToUserCurrency(
     amount: BigNumber | string,
     user: IUserInfo
@@ -150,10 +163,9 @@ export function amountToUserCurrency(
 
 export function claimFrequencyToText(frequency: BigNumber | string): string {
     const f = new BigNumber(frequency);
-    if (f.eq(3601)) return i18n.t('hour');
-    if (f.eq(86400)) return i18n.t('day');
-    if (f.eq(604800)) return i18n.t('week');
-    return 'month';
+    if (f.eq(86400)) return i18n.t('daily');
+    if (f.eq(604800)) return i18n.t('weekly');
+    return 'unknown';
 }
 
 // cUSD has 18 zeros!

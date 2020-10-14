@@ -100,9 +100,9 @@ function CommunityManagerView(props: Props) {
                     <View style={styles.container}>
                         <Beneficiaries
                             community={_community}
-                            updateCommunity={(_communityUpdate) =>
-                                setCommunity(_communityUpdate)
-                            }
+                            // updateCommunity={(_communityUpdate) =>
+                            //     setCommunity(_communityUpdate)
+                            // }
                         />
                         <CommuntyStatus
                             community={_community}

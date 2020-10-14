@@ -12,13 +12,7 @@ import {
     IStoreCombinedState,
 } from 'helpers/types';
 import React, { useState } from 'react';
-import {
-    Text,
-    View,
-    StyleSheet,
-    ImageBackground,
-    RefreshControl,
-} from 'react-native';
+import { Text, View, StyleSheet, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Paragraph, Card, Divider, Headline } from 'react-native-paper';
 
@@ -60,7 +54,13 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         if (community.ssi.values.length > 1) {
             return (
                 <>
-                    <Divider style={{ marginLeft: -16, marginRight: -16 }} />
+                    <Divider
+                        style={{
+                            marginLeft: -16,
+                            marginRight: -16,
+                            marginTop: 16,
+                        }}
+                    />
                     <View style={styles.chartView}>
                         <LineChart
                             style={{ flex: 2, height: 100, width: 200 }}
@@ -68,20 +68,49 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             contentInset={{ top: 20, bottom: 20 }}
                             curve={shape.curveMonotoneX}
                             svg={{
-                                strokeWidth: 2,
+                                strokeWidth: 4,
                                 stroke: 'rgba(45,206,137,1)',
                             }}
                         ></LineChart>
-                        <View style={styles.ssiView}>
-                            <Headline style={styles.ssiHeadline}>
-                                {
-                                    community.ssi.values[
-                                        community.ssi.values.length - 1
-                                    ]
-                                }
-                                %
-                            </Headline>
-                            <Paragraph style={{ textAlign: 'right' }}>
+                        <View
+                            style={{
+                                ...styles.ssiView,
+                                // backgroundColor: 'blue',
+                            }}
+                        >
+                            <View
+                                style={{
+                                    // backgroundColor: 'red',
+                                    // flex: 1,
+                                    flexDirection: 'row',
+                                    justifyContent: 'flex-end',
+                                }}
+                            >
+                                <Headline style={styles.ssiHeadline}>
+                                    {
+                                        community.ssi.values[
+                                            community.ssi.values.length - 1
+                                        ]
+                                    }
+                                </Headline>
+                                <Text
+                                    style={{
+                                        textAlignVertical: 'center',
+                                        fontSize: 18,
+                                        lineHeight: 18,
+                                        padding: 3,
+                                    }}
+                                >
+                                    %
+                                </Text>
+                            </View>
+                            <Paragraph
+                                style={{
+                                    textAlign: 'right',
+                                    fontSize: 14,
+                                    lineHeight: 17,
+                                }}
+                            >
                                 {i18n.t('ssi')}
                             </Paragraph>
                         </View>
@@ -112,7 +141,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     return (
         <>
-            <Header title="" hasBack hasShare hasHelp navigation={navigation} />
+            <Header title="" hasBack hasHelp navigation={navigation} />
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -121,19 +150,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     />
                 }
             >
-                <ImageBackground
-                    source={{ uri: community.coverImage }}
-                    resizeMode="cover"
-                    style={styles.imageBackground}
+                <View
+                    style={{
+                        width: '100%',
+                        height: 500,
+                        position: 'absolute',
+                    }}
                 >
-                    <Text style={styles.communityName}>{community.name}</Text>
-                    <Text style={styles.communityLocation}>
-                        <Entypo name="location-pin" size={14} />{' '}
-                        {community.city}, {community.country}
-                    </Text>
-                    <LinearGradient
-                        colors={['transparent', 'rgba(246,246,246,1)']}
-                        style={styles.linearGradient}
+                    <Image
+                        style={styles.imageBackground}
+                        source={{ uri: community.coverImage }}
                     />
                     <LinearGradient
                         colors={[
@@ -143,11 +169,36 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         ]}
                         style={styles.darkerBackground}
                     />
-                </ImageBackground>
+                    <LinearGradient
+                        colors={['transparent', 'rgba(246,246,246,1)']}
+                        style={styles.linearGradient}
+                    />
+                </View>
+                <View
+                    style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        width: '100%',
+                        height: 202,
+                    }}
+                >
+                    <Text style={styles.communityName}>{community.name}</Text>
+                    <Text style={styles.communityLocation}>
+                        <Entypo name="location-pin" size={14} />{' '}
+                        {community.city}, {community.country}
+                    </Text>
+                </View>
                 <View style={styles.container}>
-                    <Card elevation={8}>
+                    <Card elevation={3}>
                         <Card.Content>
-                            <Paragraph>{description}</Paragraph>
+                            <Paragraph
+                                style={{
+                                    fontSize: 17,
+                                    lineHeight: 22,
+                                }}
+                            >
+                                {description}
+                            </Paragraph>
                             {community.description.indexOf('\n') !== -1 && (
                                 <Button
                                     modeType="gray"
@@ -164,9 +215,14 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             )}
                         </Card.Content>
                     </Card>
-                    <Card elevation={8} style={{ marginTop: 16 }}>
+                    <Card elevation={3} style={{ marginTop: 16 }}>
                         <Card.Content>
-                            <Paragraph>
+                            <Paragraph
+                                style={{
+                                    fontSize: 17,
+                                    lineHeight: 22,
+                                }}
+                            >
                                 {i18n.t('eachBeneficiaryCanClaimXUpToY', {
                                     communityCurrency: getCurrencySymbol(
                                         community.currency
@@ -192,6 +248,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <CommuntyStatus community={community}>
                         <Button
                             modeType="gray"
+                            bold={true}
                             style={{ marginTop: '5%' }}
                             onPress={() =>
                                 WebBrowser.openBrowserAsync(
@@ -213,15 +270,28 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: -40,
         margin: 16,
     },
     imageBackground: {
         width: '100%',
-        height: 180,
+        height: 500,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
+    },
+    linearGradient: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 155,
+    },
+    darkerBackground: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 500,
     },
     communityName: {
         zIndex: 5,
@@ -236,37 +306,23 @@ const styles = StyleSheet.create({
         zIndex: 5,
         fontSize: 15,
         lineHeight: 15,
-        letterSpacing: 0.245455,
+        letterSpacing: 0.25,
         color: 'white',
+        textAlign: 'center',
     },
     ssiExplained: {
         fontWeight: 'normal',
         fontStyle: 'normal',
         fontSize: 15,
         lineHeight: 18,
-        letterSpacing: 0.245455,
+        letterSpacing: 0.25,
         color: iptcColors.textGray,
     },
-    linearGradient: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 80,
-    },
-    darkerBackground: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 180,
-    },
     ssiHeadline: {
-        fontFamily: 'Gelion-Regular',
+        fontFamily: 'Gelion-Bold',
+        fontWeight: 'bold',
         fontSize: 36,
-        fontStyle: 'normal',
         lineHeight: 36,
-        letterSpacing: 0,
         textAlign: 'right',
     },
     ssiView: {

@@ -53,11 +53,11 @@ class CommuntyStatus extends Component<Props, object> {
                         <View style={{ width: '50%', alignItems: 'center' }}>
                             <Title
                                 style={{
-                                    fontFamily: 'Gelion-Regular',
-                                    fontStyle: 'normal',
+                                    fontFamily: 'Gelion-Bold',
                                     fontWeight: 'bold',
                                     fontSize: 42,
                                     lineHeight: 42,
+                                    marginVertical: 4,
                                 }}
                             >
                                 {community.beneficiaries.added.length}
@@ -76,11 +76,11 @@ class CommuntyStatus extends Component<Props, object> {
                         <View style={{ width: '50%', alignItems: 'center' }}>
                             <Title
                                 style={{
-                                    fontFamily: 'Gelion-Regular',
-                                    fontStyle: 'normal',
+                                    fontFamily: 'Gelion-Bold',
                                     fontWeight: 'bold',
                                     fontSize: 42,
                                     lineHeight: 42,
+                                    marginVertical: 4,
                                 }}
                             >
                                 {community.backers.length}
@@ -97,11 +97,10 @@ class CommuntyStatus extends Component<Props, object> {
                             </Text>
                         </View>
                     </View>
-                    <View>
+                    <View style={{ marginTop: 21 }}>
                         <ProgressBar
                             key="raised"
                             style={{
-                                marginTop: 10,
                                 backgroundColor: '#d6d6d6', // gray
                                 position: 'absolute',
                                 borderRadius: 6.5,
@@ -116,7 +115,6 @@ class CommuntyStatus extends Component<Props, object> {
                         <ProgressBar
                             key="claimed"
                             style={{
-                                marginTop: 10,
                                 backgroundColor: 'rgba(255,255,255,0)', // transparent
                                 borderRadius: 6.5,
                                 height: 8.12,
@@ -132,7 +130,7 @@ class CommuntyStatus extends Component<Props, object> {
                         style={{
                             flex: 1,
                             flexDirection: 'row',
-                            marginVertical: 5,
+                            paddingVertical: 10,
                         }}
                     >
                         <View
@@ -145,10 +143,11 @@ class CommuntyStatus extends Component<Props, object> {
                             <View style={styles.sphereClaimed} />
                             <Text
                                 style={{
-                                    fontFamily: 'Gelion-Regular',
+                                    fontFamily: 'Gelion-Bold',
+                                    fontWeight: 'bold',
                                     color: iptcColors.almostBlack,
                                     fontSize: 15,
-                                    lineHeight: 14,
+                                    lineHeight: 15,
                                     letterSpacing: 0.245455,
                                 }}
                             >
@@ -159,7 +158,7 @@ class CommuntyStatus extends Component<Props, object> {
                                     fontFamily: 'Gelion-Regular',
                                     color: iptcColors.textGray,
                                     fontSize: 15,
-                                    lineHeight: 14,
+                                    lineHeight: 15,
                                     letterSpacing: 0.245455,
                                 }}
                             >
@@ -175,10 +174,11 @@ class CommuntyStatus extends Component<Props, object> {
                             <View style={styles.sphereRaised} />
                             <Text
                                 style={{
-                                    fontFamily: 'Gelion-Regular',
+                                    fontFamily: 'Gelion-Bold',
+                                    fontWeight: 'bold',
                                     color: iptcColors.almostBlack,
                                     fontSize: 15,
-                                    lineHeight: 14,
+                                    lineHeight: 15,
                                     letterSpacing: 0.245455,
                                 }}
                             >
@@ -193,7 +193,7 @@ class CommuntyStatus extends Component<Props, object> {
                                     fontFamily: 'Gelion-Regular',
                                     color: iptcColors.textGray,
                                     fontSize: 15,
-                                    lineHeight: 14,
+                                    lineHeight: 15,
                                     letterSpacing: 0.245455,
                                 }}
                             >

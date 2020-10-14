@@ -1,36 +1,26 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import { ethers } from 'ethers';
-import { updateCommunityInfo, iptcColors } from 'helpers/index';
-import { IRootState, ICommunityInfo } from 'helpers/types';
+import {
+    ICommunityInfo,
+    IStoreCombinedActionsTypes,
+    IStoreCombinedState,
+} from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import { Alert, View } from 'react-native';
 import { Card, Headline } from 'react-native-paper';
-import { connect, ConnectedProps } from 'react-redux';
-import { celoWalletRequest } from 'services/celoWallet';
+import { useStore } from 'react-redux';
 
-import ModalScanQR from '../../../../common/ModalScanQR';
 import { BigNumber } from 'bignumber.js';
 import Button from 'components/Button';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;
-    updateCommunity: (community: ICommunityInfo) => void;
 }
-const mapStateToProps = (state: IRootState) => {
-    const { user, network, app } = state;
-    return { user, network, app };
-};
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & IBeneficiariesProps;
 
-function Beneficiaries(props: Props) {
+function Beneficiaries(props: IBeneficiariesProps) {
     const navigation = useNavigation();
-    const [openModalAddBeneficiary, setOpenModalAddBeneficiary] = useState(
-        false
-    );
-    const [addInProgress, setAddInProgress] = useState(false);
+    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
+    const { app, network } = store.getState();
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
     );
@@ -39,10 +29,10 @@ function Beneficiaries(props: Props) {
 
     useEffect(() => {
         const loadCommunityBalance = async () => {
-            if (props.app.kit.contracts !== undefined) {
-                const stableToken = await props.app.kit.contracts.getStableToken();
+            if (app.kit.contracts !== undefined) {
+                const stableToken = await app.kit.contracts.getStableToken();
                 const cUSDBalanceBig = await stableToken.balanceOf(
-                    props.network.contracts.communityContract._address
+                    network.contracts.communityContract._address
                 );
                 // at least five cents
                 setHasFundsToNewBeneficiary(
@@ -53,66 +43,7 @@ function Beneficiaries(props: Props) {
             }
         };
         loadCommunityBalance();
-    }, [props.app.kit]);
-
-    const handleModalScanQR = async (inputAddress: string) => {
-        const { user, network } = props;
-        const { communityContract } = network.contracts;
-        const { address } = user.celoInfo;
-        let addressToAdd: string;
-
-        if (communityContract === undefined) {
-            // TODO: do something beatiful, la la la
-            return;
-        }
-
-        try {
-            addressToAdd = ethers.utils.getAddress(inputAddress);
-        } catch (e) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('addingInvalidAddress'),
-                [{ text: i18n.t('close') }],
-                { cancelable: false }
-            );
-            return;
-        }
-
-        setAddInProgress(true);
-        celoWalletRequest(
-            address,
-            communityContract.options.address,
-            await communityContract.methods.addBeneficiary(addressToAdd),
-            'addbeneficiary',
-            props.app.kit
-        )
-            .then(() => {
-                setTimeout(
-                    () =>
-                        updateCommunityInfo(props.user.celoInfo.address, props),
-                    10000
-                );
-
-                Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('addedNewBeneficiary'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                setOpenModalAddBeneficiary(false);
-            })
-            .catch(() => {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorAddingBeneficiary'),
-                    [{ text: i18n.t('close') }],
-                    { cancelable: false }
-                );
-            })
-            .finally(() => {
-                setAddInProgress(false);
-            });
-    };
+    }, [app.kit]);
 
     return (
         <View>
@@ -199,19 +130,8 @@ function Beneficiaries(props: Props) {
                     </View>
                 </Card.Content>
             </Card>
-            <ModalScanQR
-                isVisible={openModalAddBeneficiary}
-                openInCamera={false}
-                onDismiss={() => setOpenModalAddBeneficiary(false)}
-                inputText={i18n.t('beneficiaryAddress')}
-                selectButtonText={i18n.t('add')}
-                selectButtonInProgress={addInProgress}
-                callback={handleModalScanQR}
-                personalAddressWarningMessage={i18n.t('addingYourOwnAddress')}
-                usedAddressWarningMessage={i18n.t('alreadyInCommunity')}
-            />
         </View>
     );
 }
 
-export default connector(Beneficiaries);
+export default Beneficiaries;

@@ -5,6 +5,7 @@ import { Button as RNPButton, Text } from 'react-native-paper';
 
 interface IButtonProps {
     modeType: 'green' | 'gray' | 'default';
+    bold?: boolean;
     icon?: string;
     children?: any;
     loading?: boolean;
@@ -20,7 +21,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
     }
 
     render() {
-        const { style, disabled, children, modeType } = this.props;
+        const { style, disabled, children, modeType, bold } = this.props;
         let buttonStyle: StyleProp<ViewStyle> = {
             elevation: 0,
             borderRadius: 4,
@@ -55,8 +56,10 @@ export default class Button extends Component<IButtonProps, IButtonState> {
             >
                 <Text
                     style={{
-                        color: modeType === 'gray' ? 'black' : 'white',
-                        fontWeight: 'normal',
+                        color: modeType === 'gray' ? '#32325D' : 'white',
+                        fontWeight: bold ? 'bold' : 'normal',
+                        fontSize: 15,
+                        lineHeight: 18,
                     }}
                 >
                     {children}
