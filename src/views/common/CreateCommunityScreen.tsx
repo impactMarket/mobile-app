@@ -13,7 +13,6 @@ import {
     getCurrencySymbol,
 } from 'helpers/index';
 import {
-    IRootState,
     ICommunityInfo,
     IUserState,
     IStoreCombinedState,
@@ -41,7 +40,7 @@ import {
     TextInput,
     IconButton,
 } from 'react-native-paper';
-import { connect, ConnectedProps, useStore } from 'react-redux';
+import { useStore } from 'react-redux';
 import Api from 'services/api';
 import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -56,17 +55,11 @@ interface ICreateCommunityScreen {
         };
     };
 }
-const mapStateToProps = (state: IRootState) => {
-    const { user, network, app } = state;
-    return { user, network, app };
-};
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & ICreateCommunityScreen;
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
-function CreateCommunityScreen(props: Props) {
+function CreateCommunityScreen(props: ICreateCommunityScreen) {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
+    const { user, network, app } = store.getState();
     const navigation = useNavigation();
 
     const [availableCurrencies, setAvailableCurrencies] = useState<
@@ -94,9 +87,7 @@ function CreateCommunityScreen(props: Props) {
     ] = useState(true);
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
-    const [currency, setCurrency] = useState<string>(
-        store.getState().user.user.currency
-    );
+    const [currency, setCurrency] = useState<string>(user.user.currency);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [city, setCity] = useState('');
@@ -153,7 +144,7 @@ function CreateCommunityScreen(props: Props) {
             }
         }
         const getAvailableCurrencies = async () => {
-            const rates = store.getState().app.exchangeRates;
+            const rates = app.exchangeRates;
             const currencies: { name: string; symbol: string }[] = [];
             for (const currency in rates) {
                 currencies.push({
@@ -168,13 +159,13 @@ function CreateCommunityScreen(props: Props) {
 
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        const CommunityContract = new props.app.kit.web3.eth.Contract(
+        const CommunityContract = new app.kit.web3.eth.Contract(
             CommunityContractABI as any
         );
         const txObject = await CommunityContract.deploy({
             data: CommunityBytecode.bytecode,
             arguments: [
-                props.user.celoInfo.address,
+                user.celoInfo.address,
                 new BigNumber(formatInputAmountToTransfer(claimAmount))
                     .multipliedBy(decimals)
                     .toString(),
@@ -185,16 +176,16 @@ function CreateCommunityScreen(props: Props) {
                 (parseInt(incrementInterval, 10) * 60).toString(),
                 '0x0000000000000000000000000000000000000000',
                 config.cUSDContract,
-                props.user.celoInfo.address,
+                user.celoInfo.address,
             ],
         });
         // exception is handled outside
         const receipt = await celoWalletRequest(
-            props.user.celoInfo.address,
+            user.celoInfo.address,
             '0x0000000000000000000000000000000000000000',
             txObject,
             'createcommunity',
-            props.app.kit,
+            app.kit,
             false
         );
         return receipt;
@@ -307,9 +298,9 @@ function CreateCommunityScreen(props: Props) {
                 //         .multipliedBy(decimals)
                 //         .eq(_maxClaim)
                 // ) {
-                //     // if one of the fields is changed, sent contract edit!
+                //     // if one of the fields is changed, send contract edit!
                 //     await celoWalletRequest(
-                //         props.user.celoInfo.address,
+                //         user.celoInfo.address,
                 //         community.contractAddress,
                 //         await props.network.contracts.communityContract.methods.edit(
                 //             new BigNumber(claimAmount)
@@ -322,11 +313,12 @@ function CreateCommunityScreen(props: Props) {
                 //             (parseInt(incrementInterval, 10) * 60).toString()
                 //         ),
                 //         'editcommunity',
-                //         props.app.kit
+                //         app.kit
                 //     );
                 // }
                 const success = await Api.editCommunity(
                     community.publicId,
+                    user.celoInfo.address,
                     name,
                     description,
                     city,
@@ -348,10 +340,9 @@ function CreateCommunityScreen(props: Props) {
                     );
                     return;
                 } else {
-                    const previousCommunity = store.getState().network
-                        .community;
+                    const previousCommunity = network.community;
                     const unsubscribe = store.subscribe(() => {
-                        const newCommunity = store.getState().network.community;
+                        const newCommunity = network.community;
                         if (previousCommunity !== newCommunity) {
                             unsubscribe();
                             navigation.goBack();
@@ -363,11 +354,7 @@ function CreateCommunityScreen(props: Props) {
                             );
                         }
                     });
-                    await loadContracts(
-                        props.user.celoInfo.address,
-                        props.app.kit,
-                        props
-                    );
+                    await loadContracts(user.celoInfo.address, app.kit, props);
                 }
             } catch (e) {
                 Alert.alert(
@@ -409,11 +396,11 @@ function CreateCommunityScreen(props: Props) {
             let apiRequestResult = false;
             if (visibility === 'private') {
                 apiRequestResult = await Api.createPrivateCommunity(
-                    props.user.celoInfo.address,
+                    user.celoInfo.address,
                     name,
                     communityAddress,
                     description,
-                    store.getState().user.user.language,
+                    user.user.language,
                     currency,
                     city,
                     country,
@@ -447,10 +434,10 @@ function CreateCommunityScreen(props: Props) {
                 );
             } else {
                 apiRequestResult = await Api.requestCreatePublicCommunity(
-                    props.user.celoInfo.address,
+                    user.celoInfo.address,
                     name,
                     description,
-                    store.getState().user.user.language,
+                    user.user.language,
                     currency,
                     city,
                     country,
@@ -485,8 +472,7 @@ function CreateCommunityScreen(props: Props) {
 
             if (apiRequestResult) {
                 const unsubscribe = store.subscribe(() => {
-                    const state = store.getState();
-                    if (state.user.community.isManager) {
+                    if (user.community.isManager) {
                         unsubscribe();
                         setSending(false);
                         navigation.goBack();
@@ -500,11 +486,7 @@ function CreateCommunityScreen(props: Props) {
                         );
                     }
                 });
-                loadContracts(
-                    props.user.celoInfo.address,
-                    props.app.kit,
-                    props
-                );
+                loadContracts(user.celoInfo.address, app.kit, props);
             } else {
                 Alert.alert(
                     i18n.t('failure'),
@@ -561,7 +543,7 @@ function CreateCommunityScreen(props: Props) {
         );
     };
 
-    if (props.user.celoInfo.address.length === 0) {
+    if (user.celoInfo.address.length === 0) {
         return (
             <View>
                 <Header
@@ -862,7 +844,7 @@ function CreateCommunityScreen(props: Props) {
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
                                         symbol: getCurrencySymbol(
-                                            props.user.user.currency
+                                            user.user.currency
                                         ),
                                         amount: amountToUserCurrency(
                                             new BigNumber(
@@ -872,7 +854,7 @@ function CreateCommunityScreen(props: Props) {
                                                     config.cUSDDecimals
                                                 )
                                             ),
-                                            props.user.user
+                                            user.user
                                         ),
                                     })}
                                 </Text>
@@ -922,7 +904,7 @@ function CreateCommunityScreen(props: Props) {
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
                                         symbol: getCurrencySymbol(
-                                            props.user.user.currency
+                                            user.user.currency
                                         ),
                                         amount: amountToUserCurrency(
                                             new BigNumber(
@@ -932,7 +914,7 @@ function CreateCommunityScreen(props: Props) {
                                                     config.cUSDDecimals
                                                 )
                                             ),
-                                            props.user.user
+                                            user.user
                                         ),
                                     })}
                                 </Text>
@@ -1232,4 +1214,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(CreateCommunityScreen);
+export default CreateCommunityScreen;

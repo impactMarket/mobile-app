@@ -147,6 +147,7 @@ class Api {
 
     static async editCommunity(
         publicId: string,
+        userAddress: string,
         name: string,
         description: string,
         city: string,
@@ -161,6 +162,7 @@ class Api {
     ): Promise<boolean> {
         const result = await postRequest('/community/edit', {
             publicId,
+            userAddress,
             name,
             description,
             city,
