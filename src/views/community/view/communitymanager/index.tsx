@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -29,8 +30,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import Beneficiaries from './cards/Beneficiaries';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -43,12 +44,30 @@ function CommunityManagerView(props: Props) {
     );
     const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
+        true
+    );
 
     useEffect(() => {
         // cluncky issue after creating community
         if (props.network.community !== community) {
             setCommunity(props.network.community);
         }
+        const loadCommunityBalance = async () => {
+            if (props.app.kit.contracts !== undefined) {
+                const stableToken = await props.app.kit.contracts.getStableToken();
+                const cUSDBalanceBig = await stableToken.balanceOf(
+                    props.network.contracts.communityContract._address
+                );
+                // at least five cents
+                setHasFundsToNewBeneficiary(
+                    new BigNumber(cUSDBalanceBig.toString()).gte(
+                        '50000000000000000'
+                    )
+                );
+            }
+        };
+        loadCommunityBalance();
     }, [props.network.community]);
 
     const onRefresh = () => {
@@ -60,7 +79,17 @@ function CommunityManagerView(props: Props) {
             contractAddress = props.network.community.contractAddress;
         }
         if (contractAddress !== undefined && contractAddress !== null) {
-            updateCommunityInfo(props.user.celoInfo.address, props).then(() => {
+            updateCommunityInfo(props.user.celoInfo.address, props).then(async () => {
+                const stableToken = await props.app.kit.contracts.getStableToken();
+                const cUSDBalanceBig = await stableToken.balanceOf(
+                    props.network.contracts.communityContract._address
+                );
+                // at least five cents
+                setHasFundsToNewBeneficiary(
+                    new BigNumber(cUSDBalanceBig.toString()).gte(
+                        '50000000000000000'
+                    )
+                );
                 setRefreshing(false);
             });
         }
@@ -100,14 +129,12 @@ function CommunityManagerView(props: Props) {
                     <View style={styles.container}>
                         <Beneficiaries
                             community={_community}
+                            hasFundsToNewBeneficiary={hasFundsToNewBeneficiary}
                             // updateCommunity={(_communityUpdate) =>
                             //     setCommunity(_communityUpdate)
                             // }
                         />
-                        <CommuntyStatus
-                            community={_community}
-                            noElevation={true}
-                        />
+                        <CommuntyStatus community={_community} />
                     </View>
                 </ScrollView>
             );

@@ -2,48 +2,20 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import {
     ICommunityInfo,
-    IStoreCombinedActionsTypes,
-    IStoreCombinedState,
 } from 'helpers/types';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Alert, View } from 'react-native';
 import { Card, Headline } from 'react-native-paper';
-import { useStore } from 'react-redux';
 
-import { BigNumber } from 'bignumber.js';
 import Button from 'components/Button';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;
+    hasFundsToNewBeneficiary: boolean;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
     const navigation = useNavigation();
-    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
-    const { app, network } = store.getState();
-    const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
-        true
-    );
-
-    // TODO: add here a method to be called when page is refreshed
-
-    useEffect(() => {
-        const loadCommunityBalance = async () => {
-            if (app.kit.contracts !== undefined) {
-                const stableToken = await app.kit.contracts.getStableToken();
-                const cUSDBalanceBig = await stableToken.balanceOf(
-                    network.contracts.communityContract._address
-                );
-                // at least five cents
-                setHasFundsToNewBeneficiary(
-                    new BigNumber(cUSDBalanceBig.toString()).gte(
-                        '50000000000000000'
-                    )
-                );
-            }
-        };
-        loadCommunityBalance();
-    }, [app.kit]);
 
     return (
         <View>
@@ -95,7 +67,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         {props.community.beneficiaries.removed.length})
                     </Button>
                     <View>
-                        {hasFundsToNewBeneficiary ? (
+                        {props.hasFundsToNewBeneficiary ? (
                             <Button
                                 modeType="green"
                                 style={{
