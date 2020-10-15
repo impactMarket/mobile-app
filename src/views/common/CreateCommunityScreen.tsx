@@ -8,9 +8,10 @@ import {
     humanifyNumber,
     loadContracts,
     validateEmail,
-    amountToUserCurrency,
+    // amountToUserCurrency,
     formatInputAmountToTransfer,
     getCurrencySymbol,
+    amountToCurrency,
 } from 'helpers/index';
 import {
     ICommunityInfo,
@@ -40,12 +41,13 @@ import {
     TextInput,
     IconButton,
 } from 'react-native-paper';
-import { useStore } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import Api from 'services/api';
 import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
 import CommunityContractABI from './../../contracts/CommunityABI.json';
 import CommunityBytecode from './../../contracts/CommunityBytecode.json';
+import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
 
 interface ICreateCommunityScreen {
     route: {
@@ -58,6 +60,7 @@ interface ICreateCommunityScreen {
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen(props: ICreateCommunityScreen) {
+    const dispatch = useDispatch();
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const { user, network, app } = store.getState();
     const navigation = useNavigation();
@@ -354,7 +357,8 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             );
                         }
                     });
-                    await loadContracts(user.celoInfo.address, app.kit, props);
+                    // TODO: replace with updateCommunityInfo
+                    await loadContracts(user.celoInfo.address, app.kit, dispatch);
                 }
             } catch (e) {
                 Alert.alert(
@@ -486,7 +490,12 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                         );
                     }
                 });
-                loadContracts(user.celoInfo.address, app.kit, props);
+                if (visibility === 'private') {
+                    // TODO: replace with updateCommunityInfo
+                    loadContracts(user.celoInfo.address, app.kit, dispatch);
+                } else {
+                    dispatch(setUserIsCommunityManager(true));
+                }
             } else {
                 Alert.alert(
                     i18n.t('failure'),
@@ -844,9 +853,9 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
                                         symbol: getCurrencySymbol(
-                                            user.user.currency
+                                            currency
                                         ),
-                                        amount: amountToUserCurrency(
+                                        amount: amountToCurrency(
                                             new BigNumber(
                                                 claimAmount
                                             ).multipliedBy(
@@ -854,7 +863,8 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                                     config.cUSDDecimals
                                                 )
                                             ),
-                                            user.user
+                                            currency,
+                                            app.exchangeRates
                                         ),
                                     })}
                                 </Text>
@@ -904,9 +914,9 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
                                         symbol: getCurrencySymbol(
-                                            user.user.currency
+                                            currency
                                         ),
-                                        amount: amountToUserCurrency(
+                                        amount: amountToCurrency(
                                             new BigNumber(
                                                 maxClaim
                                             ).multipliedBy(
@@ -914,7 +924,8 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                                     config.cUSDDecimals
                                                 )
                                             ),
-                                            user.user
+                                            currency,
+                                            app.exchangeRates,
                                         ),
                                     })}
                                 </Text>

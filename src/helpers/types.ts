@@ -265,6 +265,7 @@ export interface ICommunityVars {
 export interface ICommunityInfoBeneficiary {
     address: string;
     name: string;
+    timestamp: number;
     claimed: string;
 }
 

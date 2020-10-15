@@ -224,7 +224,7 @@ export var iptcColors = {
 export async function loadContracts(
     address: string,
     kit: ContractKit,
-    store: any
+    dispatch: any,
 ) {
     const fSetCommunity = (c: ICommunityInfo) => {
         // c.contractAddress can be null if community approval is still pending
@@ -232,18 +232,18 @@ export async function loadContracts(
             CommunityContractABI as any,
             c.contractAddress
         );
-        store.dispatch(setCommunity(c));
-        store.dispatch(setCommunityContract(communityContract));
+        dispatch(setCommunity(c));
+        dispatch(setCommunityContract(communityContract));
     };
     const isBeneficiary = await Api.findComunityToBeneficicary(address);
     if (isBeneficiary !== undefined) {
-        store.dispatch(setUserIsBeneficiary(true));
+        dispatch(setUserIsBeneficiary(true));
         fSetCommunity(isBeneficiary);
         return 1;
     }
     const isManager = await Api.findComunityToManager(address);
     if (isManager !== undefined) {
-        store.dispatch(setUserIsCommunityManager(true));
+        dispatch(setUserIsCommunityManager(true));
         fSetCommunity(isManager);
         return 0;
     }

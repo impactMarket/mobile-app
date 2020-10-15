@@ -3,8 +3,8 @@ import BigNumber from 'bignumber.js';
 import {
     calculateCommunityProgress,
     iptcColors,
-    amountToUserCurrency,
     getCurrencySymbol,
+    amountToCurrency,
 } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { Component } from 'react';
@@ -14,12 +14,11 @@ import { connect, ConnectedProps } from 'react-redux';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
-    noElevation?: boolean;
     community: ICommunityInfo;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -27,7 +26,7 @@ type Props = PropsFromRedux & ICommuntyStatusProps;
 
 class CommuntyStatus extends Component<Props, object> {
     render() {
-        const { community, user, noElevation } = this.props;
+        const { community, user, app } = this.props;
 
         // in theory, it's the total claimed is relative to the total raised.
         // But to draw the progress bar, it's relative to the progress bar size.
@@ -40,7 +39,7 @@ class CommuntyStatus extends Component<Props, object> {
         );
 
         return (
-            <Card elevation={noElevation ? 0 : 8} style={{ marginTop: 16 }}>
+            <Card elevation={8} style={{ marginTop: 16 }}>
                 <Card.Content>
                     <View
                         style={{
@@ -183,9 +182,10 @@ class CommuntyStatus extends Component<Props, object> {
                                 }}
                             >
                                 {getCurrencySymbol(user.user.currency)}
-                                {amountToUserCurrency(
+                                {amountToCurrency(
                                     community.totalRaised,
-                                    user.user
+                                    user.user.currency,
+                                    app.exchangeRates
                                 )}{' '}
                             </Text>
                             <Text
