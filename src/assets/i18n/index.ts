@@ -1,4 +1,4 @@
-// import * as Localization from 'expo-localization';
+import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 // import moment from 'moment';
 import 'moment/locale/pt';
@@ -227,6 +227,8 @@ i18n.translations = {
         requestingPermission: 'Questing Permission',
         requestCameraPermission:
             'impactMarket requires permission to use your camera in order to scan the QR code.',
+        claimedSince: '{{symbol}}{{amount}} claimed since {{date}}',
+        language: 'Language',
     },
     pt: {
         testnetWarning:
@@ -449,10 +451,12 @@ i18n.translations = {
         requestingPermission: 'Perdido de permissão',
         requestCameraPermission:
             'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
+        claimedSince: '{{symbol}}{{amount}} pedidos desde {{date}}',
+        language: 'Idioma',
     },
 };
 // Set the locale once at the beginning of your app.
-// i18n.locale = Localization.locale;
+i18n.locale = Localization.locale;
 // moment.locale(Localization.locale);
 // When a value is missing from a language it'll fallback to another language with the key present.
 i18n.fallbacks = true;

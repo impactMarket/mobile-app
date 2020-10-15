@@ -115,7 +115,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         writeLog({ action: 'claim', details: e.message });
                         analytics('claim_location', {
                             device: Device.brand,
-                            success: false,
+                            success: 'false',
                         });
                     }
                 }
@@ -129,7 +129,7 @@ class Claim extends React.Component<Props, IClaimState> {
             })
             .catch((e) => {
                 writeLog({ action: 'claim', details: e.message });
-                analytics('claim', { device: Device.brand, success: false });
+                analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
                 Alert.alert(
                     i18n.t('failure'),

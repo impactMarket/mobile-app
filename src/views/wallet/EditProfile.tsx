@@ -212,7 +212,7 @@ function EditProfile(props: Props) {
                         </Text>
                     </Button>
                     <Paragraph style={styles.inputTextFieldLabel}>
-                        Language
+                        {i18n.t('language')}
                     </Paragraph>
                     <Button
                         mode="contained"

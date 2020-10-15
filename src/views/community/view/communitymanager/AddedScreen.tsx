@@ -1,18 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import Button from 'components/Button';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
 import {
-    amountToUserCurrency,
+    amountToCurrency,
     getCurrencySymbol,
     updateCommunityInfo,
 } from 'helpers/index';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { ScrollView, Alert } from 'react-native';
-import { Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
+import { writeLog } from 'services/logger/write';
 
 interface IAddedScreenProps {
     route: {
@@ -61,7 +63,10 @@ function AddedScreen(props: Props) {
                 updateCommunityInfo(props.user.celoInfo.address, props);
             })
             .catch((e) => {
-                // TODO: register error to log system
+                writeLog({
+                    action: 'remove_beneficiary',
+                    details: JSON.stringify(e),
+                });
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorRemovingBeneficiary'),
@@ -76,34 +81,36 @@ function AddedScreen(props: Props) {
 
     return (
         <>
-            <Header
-                title={i18n.t('added')}
-                hasHelp
-                hasBack
-                navigation={navigation}
-            />
+            <Header title={i18n.t('added')} hasBack navigation={navigation} />
             <ScrollView style={{ marginHorizontal: 15 }}>
                 {beneficiaries.map((beneficiary) => (
                     <ListActionItem
                         key={beneficiary.address}
                         item={{
-                            description: `${getCurrencySymbol(
-                                props.user.user.currency
-                            )}${
-                                beneficiary.claimed === undefined
-                                    ? '0'
-                                    : amountToUserCurrency(
-                                          beneficiary.claimed,
-                                          props.user.user
-                                      )
-                            }`,
+                            description: i18n.t('claimedSince', {
+                                symbol: getCurrencySymbol(
+                                    props.user.user.currency
+                                ),
+                                amount:
+                                    beneficiary.claimed === undefined
+                                        ? '0'
+                                        : amountToCurrency(
+                                              beneficiary.claimed,
+                                              props.user.user.currency,
+                                              props.app.exchangeRates
+                                          ),
+                                date: moment(beneficiary.timestamp).format(
+                                    'MM/YYYY'
+                                ),
+                            }),
                             from: beneficiary,
                             key: beneficiary.address,
                             timestamp: 0,
                         }}
                     >
                         <Button
-                            mode="outlined"
+                            modeType="gray"
+                            bold={true}
                             disabled={removing}
                             loading={removing}
                             style={{ marginVertical: 5 }}

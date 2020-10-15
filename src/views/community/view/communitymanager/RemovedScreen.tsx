@@ -29,7 +29,7 @@ function RemovedScreen(props: Props) {
 
     return (
         <>
-            <Header title="Removed" hasHelp hasBack navigation={navigation} />
+            <Header title="Removed" hasBack navigation={navigation} />
             <ScrollView style={{ marginHorizontal: 15 }}>
                 {beneficiaries.map((beneficiary) => (
                     <ListActionItem
