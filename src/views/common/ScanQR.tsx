@@ -39,11 +39,6 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
         };
     }
 
-    componentDidMount = async () => {
-        const { status } = await BarCodeScanner.getPermissionsAsync();
-        this.setState({ hasPermission: status === 'granted' });
-    };
-
     componentWillReceiveProps = (nextProps: IModalScanQRProps) => {
         this.setState({ isVisible: nextProps.isVisible });
     };
@@ -81,8 +76,13 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
     };
 
     handleAskCameraPermission = async () => {
-        const { status } = await BarCodeScanner.requestPermissionsAsync();
-        this.setState({ hasPermission: status === 'granted' });
+        const hasPermission = await BarCodeScanner.getPermissionsAsync();
+        if (hasPermission.status === 'granted') {
+            this.setState({ hasPermission: true });
+        } else {
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            this.setState({ hasPermission: status === 'granted' });
+        }
     };
 
     render() {

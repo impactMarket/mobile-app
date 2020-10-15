@@ -14,7 +14,7 @@ import {
 import { welcomeUser } from 'helpers/index';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, AsyncStorage, Alert } from 'react-native';
-import { Button } from 'react-native-paper';
+// import { Button } from 'react-native-paper';
 import { useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';
@@ -27,6 +27,7 @@ import { uploadLogs } from 'services/logger/upload';
 import { writeLog } from 'services/logger/write';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
+import Button from 'components/Button';
 
 function LoginScreen() {
     const store = useStore();
@@ -49,12 +50,12 @@ function LoginScreen() {
                 dappName,
                 callback,
             });
-    
+
             dappkitResponse = await waitForAccountAuth(requestId);
             userAddress = ethers.utils.getAddress(dappkitResponse.address);
-        } catch(e) {
+        } catch (e) {
             writeLog({ action: 'login', details: e.message });
-            analytics('login', { device: Device.brand , success: false });
+            analytics('login', { device: Device.brand, success: false });
             Sentry.captureException(e);
             Alert.alert(
                 i18n.t('failure'),
@@ -89,7 +90,7 @@ function LoginScreen() {
         );
         if (user === undefined) {
             writeLog({ action: 'login', details: 'undefined user' });
-            analytics('login', { device: Device.brand , success: false });
+            analytics('login', { device: Device.brand, success: false });
             Sentry.captureMessage(
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
                 Sentry.Severity.Critical
@@ -142,13 +143,13 @@ function LoginScreen() {
             );
             store.dispatch(setPushNotificationsToken(pushNotificationsToken));
             writeLog({ action: 'login', details: 'success' });
-            analytics('login', { device: Device.brand , success: true });
+            analytics('login', { device: Device.brand, success: true });
         } catch (error) {
             writeLog({
                 action: 'login',
                 details: `config user - ${error.message}`,
             });
-            analytics('login', { device: Device.brand , success: false });
+            analytics('login', { device: Device.brand, success: false });
             Sentry.captureMessage(
                 JSON.stringify({
                     action: 'login',
@@ -179,7 +180,8 @@ function LoginScreen() {
         if (Device.osName === 'Android') {
             return (
                 <Button
-                    mode="contained"
+                    modeType="gray"
+                    bold={true}
                     style={{
                         marginHorizontal: 10,
                         width: '40%',
@@ -193,7 +195,8 @@ function LoginScreen() {
         } else if (Device.osName === 'iOS') {
             return (
                 <Button
-                    mode="contained"
+                    modeType="gray"
+                    bold={true}
                     style={{
                         marginHorizontal: 10,
                         width: '40%',
@@ -208,7 +211,8 @@ function LoginScreen() {
         return (
             <>
                 <Button
-                    mode="contained"
+                    modeType="gray"
+                    bold={true}
                     style={{
                         marginHorizontal: 10,
                         width: '40%',
@@ -219,7 +223,8 @@ function LoginScreen() {
                     iOS
                 </Button>
                 <Button
-                    mode="contained"
+                    modeType="gray"
+                    bold={true}
                     style={{
                         marginHorizontal: 10,
                         width: '40%',
@@ -262,7 +267,8 @@ function LoginScreen() {
             </Text>
             <Text style={styles.stepText}>{i18n.t('finalStep')}</Text>
             <Button
-                mode="contained"
+                modeType="green"
+                bold={true}
                 onPress={() => login()}
                 disabled={connecting}
                 loading={connecting}
@@ -274,7 +280,8 @@ function LoginScreen() {
                 {i18n.t('connectCeloWallet')}
             </Button>
             <Button
-                mode="contained"
+                modeType="gray"
+                bold={true}
                 onPress={() => navigation.goBack()}
                 disabled={connecting}
                 style={{ width: '80%', backgroundColor: '#e9e9e9' }}

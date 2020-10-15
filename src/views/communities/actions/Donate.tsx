@@ -10,7 +10,7 @@ import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import { StyleSheet, Clipboard, Alert, View, TextInput } from 'react-native';
 import {
-    Button,
+    // Button,
     Paragraph,
     Portal,
     Snackbar,
@@ -26,6 +26,7 @@ import { celoWalletRequest } from 'services/celoWallet';
 import { writeLog } from 'services/logger/write';
 import config from '../../../../config';
 import * as Device from 'expo-device';
+import Button from 'components/Button';
 
 interface IExploreScreenProps {
     community: ICommunityInfo;
@@ -214,24 +215,19 @@ class Donate extends Component<Props, IDonateState> {
         const donateWithValoraButton =
             user.celoInfo.address.length > 0 ? (
                 <Button
-                    mode="contained"
+                    modeType="default"
+                    bold={true}
                     loading={donating}
                     disabled={donating}
                     onPress={this.handleConfirmDonateWithCeloWallet}
                 >
-                    <Text
-                        style={{
-                            color: 'white',
-                            textTransform: 'none',
-                        }}
-                    >
-                        {i18n.t('donateWithValora')}
-                    </Text>
+                    {i18n.t('donateWithValora')}
                 </Button>
             ) : (
                 <Button
                     icon="alert"
-                    mode="contained"
+                    modeType="default"
+                    bold={true}
                     style={{
                         backgroundColor: '#f0ad4e',
                     }}
@@ -244,29 +240,22 @@ class Donate extends Component<Props, IDonateState> {
                         );
                     }}
                 >
-                    <Text
-                        style={{
-                            color: 'white',
-                            textTransform: 'none',
-                        }}
-                    >
-                        {i18n.t('donateWithValora')}
-                    </Text>
+                    {i18n.t('donateWithValora')}
                 </Button>
             );
 
         return (
             <>
                 <Button
-                    mode="contained"
-                    uppercase={false}
+                    modeType="green"
+                    bold={true}
                     style={styles.donate}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
                     <Text
                         style={{
                             fontSize: 20,
-                            lineHeight: 54,
+                            lineHeight: 60,
                             color: 'white',
                             fontWeight: 'bold',
                         }}
@@ -377,21 +366,15 @@ class Donate extends Component<Props, IDonateState> {
                                     </Paragraph>
                                 )}
                                 <Button
+                                    modeType="gray"
+                                    bold={true}
                                     style={{
-                                        backgroundColor: '#F2F3F5',
+                                        // backgroundColor: '#F2F3F5',
                                         marginVertical: 10,
                                     }}
-                                    mode="contained"
                                     onPress={this.handleCopyAddressToClipboard}
                                 >
-                                    <Text
-                                        style={{
-                                            color: 'black',
-                                            textTransform: 'none',
-                                        }}
-                                    >
-                                        {i18n.t('copyContractAddress')}
-                                    </Text>
+                                    {i18n.t('copyContractAddress')}
                                 </Button>
                                 {donateWithValoraButton}
                             </Card.Content>
@@ -406,7 +389,7 @@ class Donate extends Component<Props, IDonateState> {
 const styles = StyleSheet.create({
     donate: {
         borderRadius: 0,
-        backgroundColor: iptcColors.greenishTeal,
+        // backgroundColor: iptcColors.greenishTeal,
         height: 69,
     },
 });

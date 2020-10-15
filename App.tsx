@@ -6,7 +6,7 @@ import {
     Provider as PaperProvider,
     configureFonts,
     Text,
-    Button,
+    // Button,
     IconButton,
 } from 'react-native-paper';
 import {
@@ -62,6 +62,7 @@ import RemovedScreen from './src/views/community/view/communitymanager/RemovedSc
 import EditProfile from './src/views/wallet/EditProfile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
 import AddBeneficiaryScreen from './src/views/community/view/communitymanager/AddBeneficiaryScreen';
+import Button from 'components/Button';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -83,7 +84,7 @@ const fonts = {
 };
 const theme = {
     ...DefaultTheme,
-    roundness: 8,
+    roundness: 4,
     colors: {
         ...DefaultTheme.colors,
         primary: iptcColors.softBlue,
@@ -156,6 +157,7 @@ export default class App extends React.Component<object, IAppState> {
                 const notificationListener = (
                     notification: Notifications.Notification
                 ) => {
+                    console.log(new Date().getTime(), notification)
                     const action = (notification.request.content.data
                         .body as any).action;
                     if (action === 'community-accepted') {
@@ -316,16 +318,27 @@ export default class App extends React.Component<object, IAppState> {
                                             {i18n.t('oneTimeWelcomeMessage2')}
                                         </Text>
                                         <Button
-                                            mode="contained"
+                                            modeType="default"
+                                            bold={true}
                                             style={{
-                                                width: '100%',
+                                                // width: '100%',
+                                                marginVertical: 16,
                                                 alignSelf: 'center',
                                             }}
                                             onPress={() =>
                                                 this.openExploreCommunities()
                                             }
                                         >
-                                            {i18n.t('exploreCommunities')}
+                                            {/* <Text
+                                                style={{
+                                                    fontWeight: 'bold',
+                                                    fontSize: 20,
+                                                    lineHeight: 24,
+                                                    color: 'white'
+                                                }}
+                                            >
+                                            </Text> */}
+                                                {i18n.t('exploreCommunities')}
                                         </Button>
                                     </View>
                                 </View>

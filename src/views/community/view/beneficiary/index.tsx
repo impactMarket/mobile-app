@@ -1,4 +1,3 @@
-import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
@@ -11,7 +10,6 @@ import {
     StyleSheet,
     Text,
     View,
-    ImageBackground,
     Alert,
     RefreshControl,
     Dimensions,
@@ -353,6 +351,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#d6d6d6',
         marginHorizontal: 30,
         marginVertical: 13,
+        height: 8,
+        borderRadius: 6.5,
     },
     foregroundView: {
         width: '100%',
