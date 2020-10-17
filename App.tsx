@@ -8,6 +8,10 @@ import {
     Text,
     // Button,
     IconButton,
+    Modal,
+    Portal,
+    Card,
+    Paragraph,
 } from 'react-native-paper';
 import {
     SafeAreaProvider,
@@ -63,6 +67,8 @@ import EditProfile from './src/views/wallet/EditProfile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
 import AddBeneficiaryScreen from './src/views/community/view/communitymanager/AddBeneficiaryScreen';
 import Button from 'components/Button';
+import { writeLog } from 'services/logger/write';
+import CacheStore from 'services/cacheStore';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -132,6 +138,8 @@ interface IAppState {
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
     testnetWarningOpen: boolean;
+    warnUserUpdateApp: boolean;
+    blockUserToUpdateApp: boolean;
 }
 export default class App extends React.Component<object, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
@@ -144,6 +152,8 @@ export default class App extends React.Component<object, IAppState> {
             firstTimeUser: true,
             loggedIn: false,
             testnetWarningOpen: false,
+            warnUserUpdateApp: false,
+            blockUserToUpdateApp: false,
         };
     }
 
@@ -157,7 +167,7 @@ export default class App extends React.Component<object, IAppState> {
                 const notificationListener = (
                     notification: Notifications.Notification
                 ) => {
-                    console.log(new Date().getTime(), notification)
+                    console.log(new Date().getTime(), notification);
                     const action = (notification.request.content.data
                         .body as any).action;
                     if (action === 'community-accepted') {
@@ -225,12 +235,19 @@ export default class App extends React.Component<object, IAppState> {
         this.setState({ firstTimeUser: false });
     };
 
+    handleUpdateClick = () => {
+        // TODO:
+        console.log('update');
+    };
+
     render() {
         const {
             isAppReady,
             isSplashReady,
             firstTimeUser,
             testnetWarningOpen,
+            warnUserUpdateApp,
+            blockUserToUpdateApp,
         } = this.state;
         if (!isSplashReady) {
             return (
@@ -240,6 +257,114 @@ export default class App extends React.Component<object, IAppState> {
                     onError={console.warn}
                     autoHideSplash={false}
                 />
+            );
+        }
+
+        if (blockUserToUpdateApp) {
+            return (
+                <PaperProvider theme={theme}>
+                    <Portal>
+                        <Modal visible={true} dismissable={false}>
+                            <Card style={{ marginHorizontal: 20 }}>
+                                <Card.Content>
+                                    <View
+                                        style={{
+                                            alignItems: 'center',
+                                            paddingHorizontal: '20%',
+                                        }}
+                                    >
+                                        <IconButton
+                                            icon="alert-circle"
+                                            color="#bf2c2c"
+                                            size={20}
+                                        />
+                                        <Paragraph
+                                            style={{
+                                                marginHorizontal: 10,
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            {i18n.t('appVersionTooOld')}
+                                        </Paragraph>
+                                    </View>
+                                    <Button
+                                        modeType="green"
+                                        style={{
+                                            marginTop: 20,
+                                        }}
+                                        onPress={this.handleUpdateClick}
+                                    >
+                                        {i18n.t('update')}
+                                    </Button>
+                                </Card.Content>
+                            </Card>
+                        </Modal>
+                    </Portal>
+                </PaperProvider>
+            );
+        }
+
+        if (warnUserUpdateApp) {
+            return (
+                <PaperProvider theme={theme}>
+                    <Portal>
+                        <Modal visible={true} dismissable={false}>
+                            <Card style={{ marginHorizontal: 20 }}>
+                                <Card.Content>
+                                    <View
+                                        style={{
+                                            alignItems: 'center',
+                                            paddingHorizontal: '20%',
+                                        }}
+                                    >
+                                        <IconButton
+                                            icon="alert"
+                                            color="#f0ad4e"
+                                            size={20}
+                                        />
+                                        <Paragraph
+                                            style={{
+                                                marginHorizontal: 10,
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            {i18n.t('appVersionIsOld')}
+                                        </Paragraph>
+                                    </View>
+                                </Card.Content>
+                                <Card.Actions
+                                    style={{
+                                        justifyContent: 'center',
+                                        marginTop: 20,
+                                    }}
+                                >
+                                    <Button
+                                        modeType="green"
+                                        style={{
+                                            marginHorizontal: 5,
+                                        }}
+                                        onPress={this.handleUpdateClick}
+                                    >
+                                        {i18n.t('update')}
+                                    </Button>
+                                    <Button
+                                        modeType="gray"
+                                        style={{
+                                            marginHorizontal: 5,
+                                        }}
+                                        onPress={() =>
+                                            this.setState({
+                                                warnUserUpdateApp: false,
+                                            })
+                                        }
+                                    >
+                                        {i18n.t('later')}
+                                    </Button>
+                                </Card.Actions>
+                            </Card>
+                        </Modal>
+                    </Portal>
+                </PaperProvider>
             );
         }
 
@@ -338,7 +463,7 @@ export default class App extends React.Component<object, IAppState> {
                                                 }}
                                             >
                                             </Text> */}
-                                                {i18n.t('exploreCommunities')}
+                                            {i18n.t('exploreCommunities')}
                                         </Button>
                                     </View>
                                 </View>
@@ -494,6 +619,8 @@ export default class App extends React.Component<object, IAppState> {
                 uri: require('./src/assets/fonts/FontGelion/Gelion-Thin.ttf'),
             },
         });
+        // TODO: verify version
+        // this.setState({ warnUserUpdateApp: true });
         await this._authUser();
         this.setState({ isAppReady: true });
     };
@@ -505,14 +632,24 @@ export default class App extends React.Component<object, IAppState> {
         let address: string | null = '';
         let phoneNumber: string | null = '';
         let loggedIn = false;
-        // TODO: what happens when it goes to catch?
         try {
+            // TODO: changed in version 0.0.22, to be refactored in 0.0.24
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
-                const user = await Api.welcome(address, pushNotificationsToken);
-                if (user !== undefined) {
-                    await welcomeUser(address, phoneNumber, user, kit, store);
+                const userWelcome = await Api.welcome(
+                    address,
+                    pushNotificationsToken
+                );
+                if (userWelcome !== undefined) {
+                    CacheStore.cacheUser(userWelcome.user);
+                    await welcomeUser(
+                        address,
+                        phoneNumber,
+                        userWelcome,
+                        kit,
+                        store
+                    );
                     loggedIn = true;
                 }
             }
@@ -524,12 +661,24 @@ export default class App extends React.Component<object, IAppState> {
                 loggedIn: address !== null && phoneNumber !== null,
             });
         } catch (error) {
-            // Error retrieving data
+            writeLog({
+                action: 'auth_user',
+                details: JSON.stringify(error),
+            });
         }
         if (!loggedIn) {
-            store.dispatch(
-                setAppExchangeRatesAction(await Api.getExchangeRate())
-            );
+            const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
+            if (new Date().getTime() - lastUpdate > 86400000) {
+                const exchangeRates = await Api.getExchangeRate();
+                store.dispatch(setAppExchangeRatesAction(exchangeRates));
+                CacheStore.cacheExchangeRates(exchangeRates);
+            } else {
+                store.dispatch(
+                    setAppExchangeRatesAction(
+                        await CacheStore.getExchangeRates()
+                    )
+                );
+            }
         }
     };
 }

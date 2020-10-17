@@ -285,7 +285,7 @@ class Api {
     }
 
     /**
-     * @deprecated Must use values from user storage and update when opening app.
+     * Must use values from user storage and update when opening app.
      */
     static async getExchangeRate(): Promise<any> {
         const result = await getRequest<any>('/exchange-rates/');

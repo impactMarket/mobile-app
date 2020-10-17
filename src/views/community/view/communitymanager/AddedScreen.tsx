@@ -100,7 +100,7 @@ function AddedScreen(props: Props) {
                                               props.app.exchangeRates
                                           ),
                                 date: moment(beneficiary.timestamp).format(
-                                    'MM/YYYY'
+                                    'MMM, YYYY'
                                 ),
                             }),
                             from: beneficiary,

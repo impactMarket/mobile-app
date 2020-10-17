@@ -229,6 +229,8 @@ i18n.translations = {
             'impactMarket requires permission to use your camera in order to scan the QR code.',
         claimedSince: '{{symbol}}{{amount}} claimed since {{date}}',
         language: 'Language',
+        update: 'Update',
+        later: 'Mais Tarde',
     },
     pt: {
         testnetWarning:
@@ -451,8 +453,10 @@ i18n.translations = {
         requestingPermission: 'Perdido de permissão',
         requestCameraPermission:
             'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
-        claimedSince: '{{symbol}}{{amount}} pedidos desde {{date}}',
+        claimedSince: 'Recebeu {{symbol}}{{amount}} desde {{date}}',
         language: 'Idioma',
+        update: 'Atualizar',
+        later: 'Mais Tarde',
     },
 };
 // Set the locale once at the beginning of your app.
