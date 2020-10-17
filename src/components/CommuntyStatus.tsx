@@ -9,8 +9,9 @@ import {
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Card, Title, ProgressBar } from 'react-native-paper';
+import { Title, ProgressBar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
+import Card from './Card';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes

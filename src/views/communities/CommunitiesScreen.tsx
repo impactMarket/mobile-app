@@ -17,10 +17,11 @@ import {
     RefreshControl,
     Image,
 } from 'react-native';
-import { Card, ProgressBar, Button } from 'react-native-paper';
+import { ProgressBar, Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { LinearGradient } from 'expo-linear-gradient';
 import Api from 'services/api';
+import Card from 'components/Card';
 
 interface ICommunitiesScreenProps {
     navigation: any;
@@ -217,7 +218,8 @@ const styles = StyleSheet.create({
     },
     card: {
         marginHorizontal: 16,
-        marginBottom: 21,
+        marginBottom: 13,
+        marginTop: 8,
         padding: 0,
     },
     cellHeader: {

@@ -14,13 +14,14 @@ import {
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Paragraph, Card, Divider, Headline } from 'react-native-paper';
+import { Paragraph, Divider, Headline } from 'react-native-paper';
 
 import config from '../../../config';
 import Donate from '../communities/actions/Donate';
 import Api from 'services/api';
 import { useStore } from 'react-redux';
 import Button from 'components/Button';
+import Card from 'components/Card';
 
 import { LineChart } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';

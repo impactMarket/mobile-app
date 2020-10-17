@@ -5,9 +5,9 @@ import {
 } from 'helpers/types';
 import React from 'react';
 import { Alert, View } from 'react-native';
-import { Card, Headline } from 'react-native-paper';
-
+import { Headline } from 'react-native-paper';
 import Button from 'components/Button';
+import Card from 'components/Card';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;
