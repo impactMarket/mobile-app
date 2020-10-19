@@ -12,6 +12,7 @@ import {
     Portal,
     // Card,
     Paragraph,
+    Headline,
 } from 'react-native-paper';
 import {
     SafeAreaProvider,
@@ -53,7 +54,6 @@ import {
 
 import BigNumber from 'bignumber.js';
 import { createStackNavigator } from '@react-navigation/stack';
-import { withNavigation } from 'react-navigation';
 
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
@@ -73,6 +73,9 @@ import { writeLog } from 'services/logger/write';
 import CacheStore from 'services/cacheStore';
 import NetInfo from '@react-native-community/netinfo';
 import Card from 'components/Card';
+import Svg, { Path, SvgXml } from 'react-native-svg';
+import NoConnectionSvg from 'components/NoConnectionSvg';
+import DownloadSvg from 'components/DownloadSvg';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -271,7 +274,7 @@ export default class App extends React.Component<any, IAppState> {
             testnetWarningOpen,
             warnUserUpdateApp,
             blockUserToUpdateApp,
-            netAvailable
+            netAvailable,
         } = this.state;
         if (!isSplashReady) {
             return (
@@ -289,9 +292,31 @@ export default class App extends React.Component<any, IAppState> {
                 <PaperProvider theme={theme}>
                     <Portal>
                         <Modal visible={true} dismissable={false}>
-                            <Card style={{ marginHorizontal: 20 }}>
-                                <Card.Content>
-                                    <Paragraph>No internet connection available!</Paragraph>
+                            <Card
+                                style={{
+                                    marginHorizontal: 20,
+                                    paddingVertical: 43,
+                                }}
+                            >
+                                <Card.Content
+                                    style={{
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <NoConnectionSvg />
+                                    <Paragraph
+                                        style={{
+                                            fontFamily: 'Gelion-Regular',
+                                            fontSize: 21,
+                                            lineHeight: 25,
+                                            color: iptcColors.almostBlack,
+                                            width: '70%',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        The Internet connection appears to be
+                                        offline
+                                    </Paragraph>
                                 </Card.Content>
                             </Card>
                         </Modal>
@@ -310,28 +335,42 @@ export default class App extends React.Component<any, IAppState> {
                                     <View
                                         style={{
                                             alignItems: 'center',
-                                            paddingHorizontal: '20%',
                                         }}
                                     >
-                                        <IconButton
-                                            icon="alert-circle"
-                                            color="#bf2c2c"
-                                            size={20}
-                                        />
+                                        <DownloadSvg />
+                                        <Headline
+                                            style={{
+                                                fontFamily: 'Gelion-Regular',
+                                                fontWeight: 'bold',
+                                                fontSize: 24,
+                                                lineHeight: 22,
+                                                textAlign: 'center',
+                                                color: iptcColors.almostBlack,
+                                                marginVertical: 16,
+                                            }}
+                                        >
+                                            New version available
+                                        </Headline>
                                         <Paragraph
                                             style={{
-                                                marginHorizontal: 10,
+                                                fontFamily: 'Gelion-Regular',
+                                                fontSize: 16,
+                                                lineHeight: 19,
+                                                color: iptcColors.almostBlack,
                                                 textAlign: 'center',
                                             }}
                                         >
-                                            {i18n.t('appVersionTooOld')}
+                                            To get the latest improvements and
+                                            features we need you to update to
+                                            the latest version.
                                         </Paragraph>
                                     </View>
                                     <Button
-                                        modeType="green"
+                                        modeType="default"
                                         style={{
                                             marginTop: 20,
                                         }}
+                                        bold={true}
                                         onPress={this.handleUpdateClick}
                                     >
                                         {i18n.t('update')}
@@ -668,7 +707,7 @@ export default class App extends React.Component<any, IAppState> {
             return;
         }
         // TODO: verify version
-        // this.setState({ warnUserUpdateApp: true });
+        // this.setState({ blockUserToUpdateApp: true });
         await this._authUser();
         this.setState({ isAppReady: true });
     };
