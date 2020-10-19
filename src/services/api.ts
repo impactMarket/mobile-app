@@ -30,7 +30,7 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
             response = result.data as T;
         }
     } catch (error) {
-        writeLog({ action: 'get_request', details: error.message});
+        writeLog({ action: 'get_request', details: error.message });
     }
     return response;
 }
@@ -64,7 +64,7 @@ async function postRequest<T>(
         }
         response = result.data as T;
     } catch (error) {
-        writeLog({ action: 'post_request', details: error.message});
+        writeLog({ action: 'post_request', details: error.message });
     }
     return response;
 }
@@ -93,7 +93,7 @@ class Api {
         email: string,
         coverImage: string,
         txReceipt: any,
-        txCreationObj: any,
+        txCreationObj: any
     ): Promise<boolean> {
         const result = await postRequest<boolean>('/community/create', {
             requestByAddress,
@@ -246,6 +246,7 @@ class Api {
 
     static async welcome(address: string, token: string) {
         return postRequest<IUserWelcome>(`/user/welcome`, {
+            authKey: process.env.EXPO_AUTH_KEY,
             address,
             token,
         });
@@ -320,7 +321,7 @@ class Api {
             );
             response = result;
         } catch (error) {
-            writeLog({ action: 'upload_image_async', details: error.message});
+            writeLog({ action: 'upload_image_async', details: error.message });
         }
         return response;
     }
@@ -331,6 +332,7 @@ class Api {
         pushNotificationsToken: string
     ): Promise<IUserWelcomeAuth | undefined> {
         return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
+            authKey: process.env.EXPO_AUTH_KEY,
             address,
             language,
             pushNotificationsToken,
@@ -370,17 +372,22 @@ class Api {
         return !!result;
     }
 
-    static async uploadLogs(
-        logs: string,
-    ): Promise<boolean> {
+    static async uploadLogs(logs: string): Promise<boolean> {
         const requestBody = {
             logs,
         };
-        const result = await postRequest<boolean>(
-            '/mobile-logs',
-            requestBody
-        );
+        const result = await postRequest<boolean>('/mobile/logs', requestBody);
         return !!result;
+    }
+
+    /**
+     * if undefined here happens, it means there's a connection problem
+     */
+    static async getMobileVersion(): Promise<{
+        latest: string;
+        minimal: string;
+    } | undefined> {
+        return await getRequest<any>('/mobile/version');
     }
 }
 

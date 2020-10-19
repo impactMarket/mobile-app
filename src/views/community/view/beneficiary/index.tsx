@@ -202,7 +202,6 @@ function BeneficiaryView(props: Props) {
                                         'CommunityDetailsScreen',
                                         {
                                             community,
-                                            user: props.user,
                                         }
                                     )
                                 }

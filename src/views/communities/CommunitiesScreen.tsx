@@ -57,7 +57,6 @@ function CommunitiesScreen(props: Props) {
             onPress={() =>
                 navigation.navigate('CommunityDetailsScreen', {
                     community,
-                    user: props.user,
                 })
             }
         >

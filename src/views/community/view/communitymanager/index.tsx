@@ -257,7 +257,6 @@ function CommunityManagerView(props: Props) {
                                 setOpenModalMore(false);
                                 navigation.navigate('CommunityDetailsScreen', {
                                     community,
-                                    user: props.user,
                                 });
                             }}
                         >
