@@ -65,7 +65,7 @@ function AddedScreen(props: Props) {
             .catch((e) => {
                 writeLog({
                     action: 'remove_beneficiary',
-                    details: JSON.stringify(e),
+                    details: e.message,
                 });
                 Alert.alert(
                     i18n.t('failure'),

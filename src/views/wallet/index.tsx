@@ -10,13 +10,14 @@ import { IRootState } from 'helpers/types';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, Button, Headline } from 'react-native-paper';
+import { Button, Headline } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect, ConnectedProps } from 'react-redux';
 
 import RecentTx, { IRecentTxRef } from './RecentTx';
 import BigNumber from 'bignumber.js';
 import { setUserWalletBalance } from 'helpers/redux/actions/ReduxActions';
+import Card from 'components/Card';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;

@@ -18,7 +18,7 @@ import {
     Modal,
     Headline,
     IconButton,
-    Card,
+    // Card,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
@@ -27,6 +27,7 @@ import { writeLog } from 'services/logger/write';
 import config from '../../../../config';
 import * as Device from 'expo-device';
 import Button from 'components/Button';
+import Card from 'components/Card';
 
 interface IExploreScreenProps {
     community: ICommunityInfo;

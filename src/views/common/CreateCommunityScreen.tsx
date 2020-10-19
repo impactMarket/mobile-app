@@ -29,7 +29,7 @@ import {
     ImageBackground,
 } from 'react-native';
 import {
-    Card,
+    // Card,
     Button,
     Paragraph,
     Headline,
@@ -48,6 +48,7 @@ import { celoWalletRequest } from 'services/celoWallet';
 import CommunityContractABI from './../../contracts/CommunityABI.json';
 import CommunityBytecode from './../../contracts/CommunityBytecode.json';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
+import Card from 'components/Card';
 
 interface ICreateCommunityScreen {
     route: {

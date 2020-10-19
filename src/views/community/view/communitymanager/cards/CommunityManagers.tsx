@@ -1,7 +1,8 @@
-import ListCommunityManagers from 'components/ListCommunityManagers';
+import Card from 'components/Card';
+// import ListCommunityManagers from 'components/ListCommunityManagers';
 import { IRootState } from 'helpers/types';
 import React from 'react';
-import { Button, Card } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 
 interface ICommunityManagersProps {
@@ -29,7 +30,7 @@ class CommunityManagers extends React.Component<Props, object> {
                         subtitle="COMMUNITY LEADERS"
                     />
                     <Card.Content>
-                        <ListCommunityManagers managers={managers} />
+                        {/* <ListCommunityManagers managers={managers} /> */}
                         <Button
                             mode="outlined"
                             style={{ width: '100%' }}

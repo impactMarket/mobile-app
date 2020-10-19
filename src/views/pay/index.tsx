@@ -22,13 +22,14 @@ import {
     TextInputEndEditingEventData,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, Divider, Button } from 'react-native-paper';
+import { Divider, Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import RecentPayments, { IRecentPaymentsRef } from './RecentPayments';
 import ModalScanQR from '../common/ModalScanQR';
 import config from '../../../config';
+import Card from 'components/Card';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;

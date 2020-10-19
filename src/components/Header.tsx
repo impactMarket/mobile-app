@@ -6,11 +6,12 @@ import { IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
-import { Appbar, Card, Subheading, Headline, Button } from 'react-native-paper';
+import { Appbar, Subheading, Headline, Button } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { connect, ConnectedProps } from 'react-redux';
 
 import ModalScanQR from '../views/common/ModalScanQR';
+import Card from './Card';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
