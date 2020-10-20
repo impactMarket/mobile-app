@@ -24,6 +24,7 @@ import {
     Dialog,
     Portal,
     Headline,
+    ActivityIndicator,
 } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 
@@ -79,19 +80,21 @@ function CommunityManagerView(props: Props) {
             contractAddress = props.network.community.contractAddress;
         }
         if (contractAddress !== undefined && contractAddress !== null) {
-            updateCommunityInfo(props.user.celoInfo.address, props).then(async () => {
-                const stableToken = await props.app.kit.contracts.getStableToken();
-                const cUSDBalanceBig = await stableToken.balanceOf(
-                    props.network.contracts.communityContract._address
-                );
-                // at least five cents
-                setHasFundsToNewBeneficiary(
-                    new BigNumber(cUSDBalanceBig.toString()).gte(
-                        '50000000000000000'
-                    )
-                );
-                setRefreshing(false);
-            });
+            updateCommunityInfo(props.user.celoInfo.address, props).then(
+                async () => {
+                    const stableToken = await props.app.kit.contracts.getStableToken();
+                    const cUSDBalanceBig = await stableToken.balanceOf(
+                        props.network.contracts.communityContract._address
+                    );
+                    // at least five cents
+                    setHasFundsToNewBeneficiary(
+                        new BigNumber(cUSDBalanceBig.toString()).gte(
+                            '50000000000000000'
+                        )
+                    );
+                    setRefreshing(false);
+                }
+            );
         }
     };
 
@@ -214,8 +217,18 @@ function CommunityManagerView(props: Props) {
 
     if (community === undefined) {
         return (
-            <View>
-                <Paragraph>{i18n.t('loading')}</Paragraph>
+            <View
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                }}
+            >
+                <ActivityIndicator
+                    animating={true}
+                    size="large"
+                    color={iptcColors.softBlue}
+                />
             </View>
         );
     }

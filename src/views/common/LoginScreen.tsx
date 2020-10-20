@@ -14,7 +14,6 @@ import {
 import { welcomeUser } from 'helpers/index';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, AsyncStorage, Alert } from 'react-native';
-// import { Button } from 'react-native-paper';
 import { useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';

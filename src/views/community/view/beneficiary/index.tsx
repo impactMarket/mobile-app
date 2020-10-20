@@ -15,7 +15,12 @@ import {
     Dimensions,
     Image,
 } from 'react-native';
-import { Button, ProgressBar, Snackbar } from 'react-native-paper';
+import {
+    ActivityIndicator,
+    Button,
+    ProgressBar,
+    Snackbar,
+} from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import * as Location from 'expo-location';
@@ -129,7 +134,21 @@ function BeneficiaryView(props: Props) {
     };
 
     if (community === undefined || lastInterval === 0 || cooldownTime === 0) {
-        return <Text>{i18n.t('loading')}</Text>;
+        return (
+            <View
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                }}
+            >
+                <ActivityIndicator
+                    animating={true}
+                    size="large"
+                    color={iptcColors.softBlue}
+                />
+            </View>
+        );
     }
 
     const formatedTimeNextCooldown = () => {

@@ -6,11 +6,9 @@ import {
     Provider as PaperProvider,
     configureFonts,
     Text,
-    // Button,
     IconButton,
     Modal,
     Portal,
-    // Card,
     Paragraph,
     Headline,
 } from 'react-native-paper';
@@ -25,6 +23,7 @@ import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import * as Font from 'expo-font';
 import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 import { AppLoading, SplashScreen } from 'expo';
 import { Asset } from 'expo-asset';
 import {
@@ -49,7 +48,6 @@ import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
     STORAGE_USER_FIRST_TIME,
-    ICommunityInfo,
 } from './src/helpers/types';
 
 import BigNumber from 'bignumber.js';
@@ -73,9 +71,11 @@ import { writeLog } from 'services/logger/write';
 import CacheStore from 'services/cacheStore';
 import NetInfo from '@react-native-community/netinfo';
 import Card from 'components/Card';
-import Svg, { Path, SvgXml } from 'react-native-svg';
 import NoConnectionSvg from 'components/NoConnectionSvg';
 import DownloadSvg from 'components/DownloadSvg';
+import { gt as semverGt, gte as semverGte } from 'semver';
+import * as Linking from 'expo-linking';
+import * as Device from 'expo-device';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -86,7 +86,7 @@ const fonts = {
         fontFamily: 'Gelion-Regular',
     },
     medium: {
-        fontFamily: 'Gelion-Regular',
+        fontFamily: 'Gelion-Medium',
     },
     light: {
         fontFamily: 'Gelion-Light',
@@ -145,7 +145,7 @@ interface IAppState {
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
     testnetWarningOpen: boolean;
-    warnUserUpdateApp: boolean;
+    infoUserNewAppVersion: boolean;
     blockUserToUpdateApp: boolean;
     netAvailable: boolean;
 }
@@ -161,7 +161,7 @@ export default class App extends React.Component<any, IAppState> {
             firstTimeUser: true,
             loggedIn: false,
             testnetWarningOpen: false,
-            warnUserUpdateApp: false,
+            infoUserNewAppVersion: false,
             blockUserToUpdateApp: false,
             netAvailable: true,
         };
@@ -262,8 +262,14 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     handleUpdateClick = () => {
-        // TODO:
-        console.log('update');
+        const androidURL =
+            'https://play.google.com/store/apps/details?id=com.impactmarket.mobile';
+        const iosURL = 'https://testflight.apple.com/join/o19f5StV';
+        if (Device.osName === 'iOS') {
+            Linking.openURL(iosURL);
+        } else {
+            Linking.openURL(androidURL);
+        }
     };
 
     render() {
@@ -272,7 +278,7 @@ export default class App extends React.Component<any, IAppState> {
             isSplashReady,
             firstTimeUser,
             testnetWarningOpen,
-            warnUserUpdateApp,
+            infoUserNewAppVersion,
             blockUserToUpdateApp,
             netAvailable,
         } = this.state;
@@ -325,7 +331,7 @@ export default class App extends React.Component<any, IAppState> {
             );
         }
 
-        if (blockUserToUpdateApp) {
+        if (infoUserNewAppVersion) {
             return (
                 <PaperProvider theme={theme}>
                     <Portal>
@@ -343,13 +349,13 @@ export default class App extends React.Component<any, IAppState> {
                                                 fontFamily: 'Gelion-Regular',
                                                 fontWeight: 'bold',
                                                 fontSize: 24,
-                                                lineHeight: 22,
+                                                lineHeight: 24,
                                                 textAlign: 'center',
                                                 color: iptcColors.almostBlack,
                                                 marginVertical: 16,
                                             }}
                                         >
-                                            New version available
+                                            {i18n.t('newVersionAvailable')}
                                         </Headline>
                                         <Paragraph
                                             style={{
@@ -360,86 +366,39 @@ export default class App extends React.Component<any, IAppState> {
                                                 textAlign: 'center',
                                             }}
                                         >
-                                            To get the latest improvements and
-                                            features we need you to update to
-                                            the latest version.
+                                            {i18n.t(
+                                                'newVersionAvailableMessage'
+                                            )}
                                         </Paragraph>
                                     </View>
                                     <Button
                                         modeType="default"
                                         style={{
                                             marginTop: 20,
+                                            marginHorizontal: 5,
                                         }}
                                         bold={true}
                                         onPress={this.handleUpdateClick}
                                     >
                                         {i18n.t('update')}
                                     </Button>
-                                </Card.Content>
-                            </Card>
-                        </Modal>
-                    </Portal>
-                </PaperProvider>
-            );
-        }
-
-        if (warnUserUpdateApp) {
-            return (
-                <PaperProvider theme={theme}>
-                    <Portal>
-                        <Modal visible={true} dismissable={false}>
-                            <Card style={{ marginHorizontal: 20 }}>
-                                <Card.Content>
-                                    <View
-                                        style={{
-                                            alignItems: 'center',
-                                            paddingHorizontal: '20%',
-                                        }}
-                                    >
-                                        <IconButton
-                                            icon="alert"
-                                            color="#f0ad4e"
-                                            size={20}
-                                        />
-                                        <Paragraph
+                                    {!blockUserToUpdateApp && (
+                                        <Button
+                                            modeType="gray"
                                             style={{
-                                                marginHorizontal: 10,
-                                                textAlign: 'center',
+                                                marginTop: 11,
+                                                marginHorizontal: 5,
                                             }}
+                                            onPress={() =>
+                                                this.setState({
+                                                    infoUserNewAppVersion: false,
+                                                })
+                                            }
                                         >
-                                            {i18n.t('appVersionIsOld')}
-                                        </Paragraph>
-                                    </View>
+                                            {i18n.t('skip')}
+                                        </Button>
+                                    )}
                                 </Card.Content>
-                                <Card.Actions
-                                    style={{
-                                        justifyContent: 'center',
-                                        marginTop: 20,
-                                    }}
-                                >
-                                    <Button
-                                        modeType="green"
-                                        style={{
-                                            marginHorizontal: 5,
-                                        }}
-                                        onPress={this.handleUpdateClick}
-                                    >
-                                        {i18n.t('update')}
-                                    </Button>
-                                    <Button
-                                        modeType="gray"
-                                        style={{
-                                            marginHorizontal: 5,
-                                        }}
-                                        onPress={() =>
-                                            this.setState({
-                                                warnUserUpdateApp: false,
-                                            })
-                                        }
-                                    >
-                                        {i18n.t('later')}
-                                    </Button>
-                                </Card.Actions>
                             </Card>
                         </Modal>
                     </Portal>
@@ -706,10 +665,32 @@ export default class App extends React.Component<any, IAppState> {
             this.setState({ netAvailable: false });
             return;
         }
-        // TODO: verify version
-        // this.setState({ blockUserToUpdateApp: true });
+        await this._checkForNewVersion();
         await this._authUser();
         this.setState({ isAppReady: true });
+    };
+
+    _checkForNewVersion = async () => {
+        const version = await Api.getMobileVersion();
+        if (version === undefined) {
+            // TODO: error loading app, reload
+            return;
+        }
+        let lastVersionFromCache = await CacheStore.getLastVersion();
+        if (lastVersionFromCache === null) {
+            lastVersionFromCache = version.latest;
+        }
+        const currentVersion = Constants.manifest.version;
+        if (semverGt(version.latest, lastVersionFromCache)) {
+            await CacheStore.cacheLastVersion(version.latest);
+            this.setState({ infoUserNewAppVersion: true });
+        }
+        if (
+            currentVersion !== undefined &&
+            !semverGte(currentVersion, version.minimal)
+        ) {
+            this.setState({ blockUserToUpdateApp: true });
+        }
     };
 
     _authUser = async () => {

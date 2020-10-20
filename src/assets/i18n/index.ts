@@ -230,7 +230,9 @@ i18n.translations = {
         claimedSince: '{{symbol}}{{amount}} claimed since {{date}}',
         language: 'Language',
         update: 'Update',
-        later: 'Mais Tarde',
+        skip: 'Skip',
+        newVersionAvailable: 'New version available',
+        newVersionAvailableMessage: 'To get the latest improvements and features we need you to update to the latest version.'
     },
     pt: {
         testnetWarning:
@@ -456,7 +458,9 @@ i18n.translations = {
         claimedSince: 'Recebeu {{symbol}}{{amount}} desde {{date}}',
         language: 'Idioma',
         update: 'Atualizar',
-        later: 'Mais Tarde',
+        skip: 'Mais Tarde',
+        newVersionAvailable: 'Nova versão disponível',
+        newVersionAvailableMessage: 'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.'
     },
 };
 // Set the locale once at the beginning of your app.
