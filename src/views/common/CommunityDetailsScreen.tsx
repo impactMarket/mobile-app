@@ -25,6 +25,7 @@ import Card from 'components/Card';
 
 import { LineChart } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
+import BaseCommunity from 'components/BaseCommunity';
 
 interface ICommunityDetailsScreen {
     route: {
@@ -151,118 +152,83 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     />
                 }
             >
-                <View
-                    style={{
-                        width: '100%',
-                        height: 152,
-                        position: 'absolute',
-                    }}
-                >
-                    <Image
-                        style={styles.imageBackground}
-                        source={{ uri: community.coverImage }}
-                    />
-                    <LinearGradient
-                        colors={[
-                            'rgba(0,0,0,0.15)',
-                            'rgba(0,0,0,0.15)',
-                            'transparent',
-                        ]}
-                        style={styles.darkerBackground}
-                    />
-                    {/* <LinearGradient
-                        colors={['transparent', 'rgba(246,246,246,1)']}
-                        style={styles.linearGradient}
-                    /> */}
-                </View>
-                <View
-                    style={{
-                        flex: 1,
-                        justifyContent: 'center',
-                        width: '100%',
-                        // height: 112,
-                    }}
-                >
-                    <Text style={styles.communityName}>{community.name}</Text>
-                    <Text style={styles.communityLocation}>
-                        <Entypo name="location-pin" size={14} />{' '}
-                        {community.city}, {community.country}
-                    </Text>
-                </View>
-                <View style={styles.container}>
-                    <Card elevation={3}>
-                        <Card.Content>
-                            <Paragraph
-                                style={{
-                                    fontSize: 17,
-                                    lineHeight: 22,
-                                }}
-                            >
-                                {description}
-                            </Paragraph>
-                            {community.description.indexOf('\n') !== -1 && (
-                                <Button
-                                    modeType="gray"
-                                    onPress={() =>
-                                        setSeeFullDescription(
-                                            !seeFullDescription
-                                        )
-                                    }
+                <BaseCommunity community={community}>
+                    <View style={styles.container}>
+                        <Card elevation={3}>
+                            <Card.Content>
+                                <Paragraph
+                                    style={{
+                                        fontSize: 17,
+                                        lineHeight: 22,
+                                    }}
                                 >
-                                    {seeFullDescription
-                                        ? i18n.t('seeLess')
-                                        : i18n.t('seeMore')}
-                                </Button>
-                            )}
-                        </Card.Content>
-                    </Card>
-                    <Card elevation={3} style={{ marginTop: 16 }}>
-                        <Card.Content>
-                            <Paragraph
-                                style={{
-                                    fontSize: 17,
-                                    lineHeight: 22,
-                                }}
+                                    {description}
+                                </Paragraph>
+                                {community.description.indexOf('\n') !== -1 && (
+                                    <Button
+                                        modeType="gray"
+                                        onPress={() =>
+                                            setSeeFullDescription(
+                                                !seeFullDescription
+                                            )
+                                        }
+                                    >
+                                        {seeFullDescription
+                                            ? i18n.t('seeLess')
+                                            : i18n.t('seeMore')}
+                                    </Button>
+                                )}
+                            </Card.Content>
+                        </Card>
+                        <Card elevation={3} style={{ marginTop: 16 }}>
+                            <Card.Content>
+                                <Paragraph
+                                    style={{
+                                        fontSize: 17,
+                                        lineHeight: 22,
+                                    }}
+                                >
+                                    {i18n.t('eachBeneficiaryCanClaimXUpToY', {
+                                        communityCurrency: getCurrencySymbol(
+                                            community.currency
+                                        ),
+                                        claimXCCurrency: humanifyNumber(
+                                            amountInCommunityCurrency.toString()
+                                        ),
+                                        claimX: humanifyNumber(
+                                            community.vars._claimAmount
+                                        ),
+                                        upToY: humanifyNumber(
+                                            community.vars._maxClaim
+                                        ),
+                                        minIncrement:
+                                            parseInt(
+                                                community.vars
+                                                    ._incrementInterval
+                                            ) / 60,
+                                    })}
+                                </Paragraph>
+                                {renderSSI()}
+                            </Card.Content>
+                        </Card>
+                        <CommuntyStatus community={community}>
+                            <Button
+                                modeType="gray"
+                                bold={true}
+                                style={{ marginTop: '5%' }}
+                                onPress={() =>
+                                    WebBrowser.openBrowserAsync(
+                                        config.blockExplorer +
+                                            community.contractAddress +
+                                            '/token_transfers'
+                                    )
+                                }
                             >
-                                {i18n.t('eachBeneficiaryCanClaimXUpToY', {
-                                    communityCurrency: getCurrencySymbol(
-                                        community.currency
-                                    ),
-                                    claimXCCurrency: humanifyNumber(
-                                        amountInCommunityCurrency.toString()
-                                    ),
-                                    claimX: humanifyNumber(
-                                        community.vars._claimAmount
-                                    ),
-                                    upToY: humanifyNumber(
-                                        community.vars._maxClaim
-                                    ),
-                                    minIncrement:
-                                        parseInt(
-                                            community.vars._incrementInterval
-                                        ) / 60,
-                                })}
-                            </Paragraph>
-                            {renderSSI()}
-                        </Card.Content>
-                    </Card>
-                    <CommuntyStatus community={community}>
-                        <Button
-                            modeType="gray"
-                            bold={true}
-                            style={{ marginTop: '5%' }}
-                            onPress={() =>
-                                WebBrowser.openBrowserAsync(
-                                    config.blockExplorer +
-                                        community.contractAddress +
-                                        '/token_transfers'
-                                )
-                            }
-                        >
-                            {i18n.t('exploreCommunityContract')}
-                        </Button>
-                    </CommuntyStatus>
-                </View>
+                                {i18n.t('exploreCommunityContract')}
+                            </Button>
+                        </CommuntyStatus>
+                    </View>
+                </BaseCommunity>
             </ScrollView>
             <Donate community={community} />
         </>

@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
-import { LinearGradient } from 'expo-linear-gradient';
 import { iptcColors, humanifyNumber } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
@@ -13,11 +12,9 @@ import {
     Alert,
     RefreshControl,
     Dimensions,
-    Image,
 } from 'react-native';
 import {
     ActivityIndicator,
-    Button,
     ProgressBar,
     Snackbar,
 } from 'react-native-paper';
@@ -28,6 +25,8 @@ import * as Location from 'expo-location';
 import Claim from './Claim';
 import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
+import BaseCommunity from 'components/BaseCommunity';
+import Button from 'components/Button';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -168,6 +167,12 @@ function BeneficiaryView(props: Props) {
 
     return (
         <>
+            <Header
+                title={i18n.t('claim')}
+                navigation={navigation}
+                hasHelp
+                hasQr
+            />
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -176,74 +181,35 @@ function BeneficiaryView(props: Props) {
                     />
                 }
             >
-                <Header
-                    title={i18n.t('claim')}
-                    navigation={navigation}
-                    hasHelp
-                    hasQr
-                />
-                <View
-                    style={{
-                        flex: 5,
-                        width: '100%',
-                        height: Dimensions.get('window').height - 130, // TODO: ideally, this should be header - navigation
-                        // backgroundColor: 'red',
-                    }}
-                >
-                    <View style={{ flex: 2 }}>
-                        <Image
+                <BaseCommunity
+                    community={community}
+                    full={true}
+                    action={
+                        <Button
+                            modeType="gray"
+                            bold={true}
                             style={{
-                                width: '100%',
-                                height: '100%',
+                                marginVertical: 19,
+                                alignSelf: 'center',
                             }}
-                            source={{ uri: community.coverImage }}
-                        />
-                        <View
-                            style={{
-                                position: 'absolute',
-                                zIndex: 5,
-                                ...styles.foregroundView,
-                            }}
+                            labelStyle={{ textAlign: 'center' }}
+                            onPress={() =>
+                                navigation.navigate('CommunityDetailsScreen', {
+                                    community,
+                                })
+                            }
                         >
-                            <Text style={styles.communityName}>
-                                {community.name}
-                            </Text>
-
-                            <Button
-                                mode="contained"
-                                style={{
-                                    margin: 30,
-                                    backgroundColor: '#E9ECEF',
-                                    zIndex: 5,
-                                }}
-                                onPress={() =>
-                                    navigation.navigate(
-                                        'CommunityDetailsScreen',
-                                        {
-                                            community,
-                                        }
-                                    )
-                                }
-                            >
-                                <Text style={{ color: 'black' }}>
-                                    {i18n.t('moreAboutYourCommunity')}
-                                </Text>
-                            </Button>
-                        </View>
-                        <LinearGradient
-                            colors={['transparent', 'rgba(246,246,246,1)']}
-                            style={styles.linearGradient}
-                        />
-                        <LinearGradient
-                            colors={[
-                                'rgba(0,0,0,0.15)',
-                                'rgba(0,0,0,0.15)',
-                                'transparent',
-                            ]}
-                            style={styles.darkerBackground}
-                        />
-                    </View>
-                    <View style={{ flex: 3, justifyContent: 'space-between' }}>
+                            {i18n.t('moreAboutYourCommunity')}
+                        </Button>
+                    }
+                >
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'space-around',
+                            height: Dimensions.get('window').height - 130 - 152, // TODO: ideally, this should be header - navigation
+                        }}
+                    >
                         <View style={{ marginTop: '5%' }}>
                             <Text
                                 onPress={() =>
@@ -293,7 +259,7 @@ function BeneficiaryView(props: Props) {
                             </Text>
                         </View>
                     </View>
-                </View>
+                </BaseCommunity>
             </ScrollView>
             <Snackbar
                 visible={askLocationOnOpen}

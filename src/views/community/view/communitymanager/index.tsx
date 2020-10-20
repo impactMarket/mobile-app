@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import BaseCommunity from 'components/BaseCommunity';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,7 +20,6 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,
-    Paragraph,
     IconButton,
     Dialog,
     Portal,
@@ -110,35 +110,20 @@ function CommunityManagerView(props: Props) {
                         />
                     }
                 >
-                    <ImageBackground
-                        source={{ uri: community.coverImage }}
-                        resizeMode="cover"
-                        style={styles.imageBackground}
-                    >
-                        <Text style={styles.communityName}>
-                            {community.name}
-                        </Text>
-                        {/* <LinearGradient
-                            colors={['transparent', 'rgba(246,246,246,1)']}
-                            style={{
-                                position: 'absolute',
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                                height: 80,
-                            }}
-                        /> */}
-                    </ImageBackground>
-                    <View style={styles.container}>
-                        <Beneficiaries
-                            community={_community}
-                            hasFundsToNewBeneficiary={hasFundsToNewBeneficiary}
-                            // updateCommunity={(_communityUpdate) =>
-                            //     setCommunity(_communityUpdate)
-                            // }
-                        />
-                        <CommuntyStatus community={_community} />
-                    </View>
+                    <BaseCommunity community={community}>
+                        <View style={styles.container}>
+                            <Beneficiaries
+                                community={_community}
+                                hasFundsToNewBeneficiary={
+                                    hasFundsToNewBeneficiary
+                                }
+                                // updateCommunity={(_communityUpdate) =>
+                                //     setCommunity(_communityUpdate)
+                                // }
+                            />
+                            <CommuntyStatus community={_community} />
+                        </View>
+                    </BaseCommunity>
                 </ScrollView>
             );
         }
@@ -291,9 +276,8 @@ function CommunityManagerView(props: Props) {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: -40,
-        marginHorizontal: 20,
-        marginBottom: 20,
+        marginHorizontal: 16,
+        marginBottom: 30,
     },
     imageBackground: {
         width: '100%',
