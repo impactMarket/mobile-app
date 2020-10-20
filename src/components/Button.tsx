@@ -1,6 +1,6 @@
 import { iptcColors } from 'helpers/index';
 import React, { Component } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
+import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 import { Button as RNPButton, Text } from 'react-native-paper';
 
 interface IButtonProps {
@@ -12,6 +12,8 @@ interface IButtonProps {
     disabled?: boolean;
     onPress?: () => void;
     style?: StyleProp<ViewStyle>;
+    contentStyle?: StyleProp<ViewStyle>;
+    labelStyle?: StyleProp<TextStyle>;
 }
 interface IButtonState {}
 
@@ -24,6 +26,8 @@ export default class Button extends Component<IButtonProps, IButtonState> {
         const { style, disabled, children, modeType, bold } = this.props;
         let buttonStyle: StyleProp<ViewStyle> = {
             elevation: 0,
+            height: 39,
+            justifyContent: 'center'
             // borderRadius: 4,
         };
         if (!disabled) {
@@ -53,17 +57,15 @@ export default class Button extends Component<IButtonProps, IButtonState> {
                 uppercase={false}
                 {...this.props}
                 style={buttonStyle}
+                labelStyle={{
+                    color: modeType === 'gray' ? '#32325D' : 'white',
+                    fontWeight: bold ? 'bold' : 'normal',
+                    fontSize: 15,
+                    lineHeight: 17.58,
+                    ...(this.props.labelStyle as any),
+                }}
             >
-                <Text
-                    style={{
-                        color: modeType === 'gray' ? '#32325D' : 'white',
-                        fontWeight: bold ? 'bold' : 'normal',
-                        fontSize: 15,
-                        lineHeight: 18,
-                    }}
-                >
-                    {children}
-                </Text>
+                {children}
             </RNPButton>
         );
     }
