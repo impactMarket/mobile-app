@@ -154,7 +154,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 <View
                     style={{
                         width: '100%',
-                        height: 500,
+                        height: 152,
                         position: 'absolute',
                     }}
                 >
@@ -170,17 +170,17 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         ]}
                         style={styles.darkerBackground}
                     />
-                    <LinearGradient
+                    {/* <LinearGradient
                         colors={['transparent', 'rgba(246,246,246,1)']}
                         style={styles.linearGradient}
-                    />
+                    /> */}
                 </View>
                 <View
                     style={{
                         flex: 1,
                         justifyContent: 'center',
                         width: '100%',
-                        height: 202,
+                        // height: 112,
                     }}
                 >
                     <Text style={styles.communityName}>{community.name}</Text>
@@ -271,11 +271,12 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 16,
+        marginHorizontal: 16,
+        marginBottom: 30,
     },
     imageBackground: {
         width: '100%',
-        height: 500,
+        height: 152,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
@@ -285,17 +286,19 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        height: 155,
+        height: 25,
     },
     darkerBackground: {
         position: 'absolute',
         left: 0,
         right: 0,
         bottom: 0,
-        height: 500,
+        height: 152,
     },
     communityName: {
         zIndex: 5,
+        marginTop: 22,
+        marginBottom: 2,
         fontSize: 30,
         lineHeight: 36,
         fontWeight: 'bold',
@@ -305,6 +308,7 @@ const styles = StyleSheet.create({
     },
     communityLocation: {
         zIndex: 5,
+        marginBottom: 32.41,
         fontSize: 15,
         lineHeight: 15,
         letterSpacing: 0.25,

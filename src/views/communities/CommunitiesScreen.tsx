@@ -122,7 +122,7 @@ function CommunitiesScreen(props: Props) {
                                 backgroundColor: '#d6d6d6',
                                 position: 'absolute',
                                 borderRadius: 6.5,
-                                height: 8.12,
+                                height: 6.32,
                             }}
                             progress={calculateCommunityProgress(
                                 'raised',
@@ -135,7 +135,7 @@ function CommunitiesScreen(props: Props) {
                             style={{
                                 backgroundColor: 'rgba(255,255,255,0)',
                                 borderRadius: 6.5,
-                                height: 8.12,
+                                height: 6.32,
                             }}
                             progress={calculateCommunityProgress(
                                 'claimed',

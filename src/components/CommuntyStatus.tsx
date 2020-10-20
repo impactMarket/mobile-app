@@ -46,11 +46,11 @@ class CommuntyStatus extends Component<Props, object> {
                         style={{
                             flex: 1,
                             flexDirection: 'row',
-                            marginVertical: 5,
-                            justifyContent: 'center',
+                            marginTop: 7,
+                            justifyContent: 'center'
                         }}
                     >
-                        <View style={{ width: '50%', alignItems: 'center' }}>
+                        <View style={{ alignItems: 'center', marginRight: 53 }}>
                             <Title
                                 style={{
                                     fontFamily: 'Gelion-Bold',
@@ -73,7 +73,7 @@ class CommuntyStatus extends Component<Props, object> {
                                 {i18n.t('beneficiaries')}
                             </Text>
                         </View>
-                        <View style={{ width: '50%', alignItems: 'center' }}>
+                        <View style={{ alignItems: 'center' }}>
                             <Title
                                 style={{
                                     fontFamily: 'Gelion-Bold',
@@ -104,7 +104,7 @@ class CommuntyStatus extends Component<Props, object> {
                                 backgroundColor: '#d6d6d6', // gray
                                 position: 'absolute',
                                 borderRadius: 6.5,
-                                height: 8.12,
+                                height: 6.32,
                             }}
                             progress={calculateCommunityProgress(
                                 'raised',
@@ -117,7 +117,7 @@ class CommuntyStatus extends Component<Props, object> {
                             style={{
                                 backgroundColor: 'rgba(255,255,255,0)', // transparent
                                 borderRadius: 6.5,
-                                height: 8.12,
+                                height: 6.32,
                             }}
                             progress={calculateCommunityProgress(
                                 'claimed',

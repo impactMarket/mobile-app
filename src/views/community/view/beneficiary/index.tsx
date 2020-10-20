@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#d6d6d6',
         marginHorizontal: 30,
         marginVertical: 13,
-        height: 8,
+        height: 6.32,
         borderRadius: 6.5,
     },
     foregroundView: {

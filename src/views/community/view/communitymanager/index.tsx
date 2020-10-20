@@ -118,7 +118,7 @@ function CommunityManagerView(props: Props) {
                         <Text style={styles.communityName}>
                             {community.name}
                         </Text>
-                        <LinearGradient
+                        {/* <LinearGradient
                             colors={['transparent', 'rgba(246,246,246,1)']}
                             style={{
                                 position: 'absolute',
@@ -127,7 +127,7 @@ function CommunityManagerView(props: Props) {
                                 bottom: 0,
                                 height: 80,
                             }}
-                        />
+                        /> */}
                     </ImageBackground>
                     <View style={styles.container}>
                         <Beneficiaries
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
     },
     imageBackground: {
         width: '100%',
-        height: 180,
+        height: 147,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',

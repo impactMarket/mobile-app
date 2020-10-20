@@ -36,6 +36,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     </Headline>
                     <Button
                         modeType="gray"
+                        bold={true}
                         disabled={
                             props.community.beneficiaries.added.length === 0
                         }
@@ -52,6 +53,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     </Button>
                     <Button
                         modeType="gray"
+                        bold={true}
                         disabled={
                             props.community.beneficiaries.removed.length === 0
                         }
@@ -70,6 +72,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         {props.hasFundsToNewBeneficiary ? (
                             <Button
                                 modeType="green"
+                                bold={true}
                                 style={{
                                     marginVertical: 5,
                                 }}

@@ -251,18 +251,16 @@ class Donate extends Component<Props, IDonateState> {
                     modeType="green"
                     bold={true}
                     style={styles.donate}
+                    labelStyle={{
+                        fontSize: 20,
+                        lineHeight: 23,
+                        color: 'white',
+                        fontWeight: 'bold',
+                        // backgroundColor: 'red',
+                    }}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
-                    <Text
-                        style={{
-                            fontSize: 20,
-                            lineHeight: 60,
-                            color: 'white',
-                            fontWeight: 'bold',
-                        }}
-                    >
-                        {i18n.t('donate')}
-                    </Text>
+                    {i18n.t('donate')}
                 </Button>
                 <Snackbar
                     visible={showCopiedToClipboard}
@@ -390,7 +388,6 @@ class Donate extends Component<Props, IDonateState> {
 const styles = StyleSheet.create({
     donate: {
         borderRadius: 0,
-        // backgroundColor: iptcColors.greenishTeal,
         height: 69,
     },
 });
