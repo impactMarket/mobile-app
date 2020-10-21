@@ -24,3 +24,5 @@ If you have an android, you can try our demo [here](https://expo.io/@impactmarke
 
 ## License
 [Apache-2.0](LICENSE)
+
+Thanks to [react-svgr](https://react-svgr.com/playground/?native=true&typescript=true) to allow convert xml svg to react native svg.
