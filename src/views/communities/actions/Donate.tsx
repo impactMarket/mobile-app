@@ -87,7 +87,7 @@ class Donate extends Component<Props, IDonateState> {
             i18n.t('donate'),
             i18n.t('donateConfirmMessage', {
                 symbol: getCurrencySymbol(user.user.currency),
-                amount: amountDonate,
+                amount: amountDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
                 amountInDollars: amountInDollars.toFixed(2),
                 to: community.name,
             }),
@@ -346,10 +346,10 @@ class Donate extends Component<Props, IDonateState> {
                                             {`${getCurrencySymbol(
                                                 community.currency
                                             )}${
-                                                Math.floor(
+                                                (Math.floor(
                                                     amountInCommunityCurrency *
                                                         100
-                                                ) / 100
+                                                ) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                                             } ${community.currency}`}
                                         </Paragraph>
                                     )}

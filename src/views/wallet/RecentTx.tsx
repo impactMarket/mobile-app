@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { Headline, ActivityIndicator } from 'react-native-paper';
 import Api from 'services/api';
 import {
-    amountToUserCurrency,
+    amountToCurrency,
     getAvatarFromId,
     getCurrencySymbol,
 } from 'helpers/index';
@@ -20,7 +20,7 @@ export interface IRecentTxRef {
 const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
     (props, ref) => {
         const store = useStore();
-        const { user } = store.getState().user;
+        const { user, app } = store.getState();
         const [activities, setActivities] = useState<IListActionItem[]>([]);
         const [loadingTxs, setLoadingTxs] = useState(true);
 
@@ -34,10 +34,11 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                             timestamp: t.timestamp,
                             description: '',
                             from: t.counterParty,
-                            value: amountToUserCurrency(
+                            value: amountToCurrency(
                                 t.value,
-                                user
-                            ).toString(),
+                                user.user.currency,
+                                app.exchangeRates
+                            ),
                             isValueIn: !t.fromUser,
                             avatar: t.picture
                                 ? t.picture.length > 3
@@ -59,7 +60,11 @@ const RecentTx = React.forwardRef<IRecentTxRef, IRecentTxProps>(
                         timestamp: t.timestamp,
                         description: '',
                         from: t.counterParty,
-                        value: amountToUserCurrency(t.value, user).toString(),
+                        value: amountToCurrency(
+                            t.value,
+                            user.user.currency,
+                            app.exchangeRates
+                        ),
                         isValueIn: !t.fromUser,
                         avatar: t.picture
                             ? t.picture.length > 3

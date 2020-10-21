@@ -4,8 +4,8 @@ import * as Location from 'expo-location';
 import {
     humanifyNumber,
     iptcColors,
-    amountToUserCurrency,
     getCurrencySymbol,
+    amountToCurrency,
 } from 'helpers/index';
 import { IRootState } from 'helpers/types';
 import moment from 'moment';
@@ -169,9 +169,10 @@ class Claim extends React.Component<Props, IClaimState> {
                             symbol: getCurrencySymbol(
                                 this.props.user.user.currency
                             ),
-                            amount: amountToUserCurrency(
+                            amount: amountToCurrency(
                                 this.props.claimAmount,
-                                this.props.user.user
+                                this.props.user.user.currency,
+                                this.props.app.exchangeRates
                             ),
                         })}
                     </Text>
@@ -224,9 +225,10 @@ class Claim extends React.Component<Props, IClaimState> {
                             symbol: getCurrencySymbol(
                                 this.props.user.user.currency
                             ),
-                            amount: amountToUserCurrency(
+                            amount: amountToCurrency(
                                 this.props.claimAmount,
-                                this.props.user.user
+                                this.props.user.user.currency,
+                                this.props.app.exchangeRates
                             ),
                         })}
                     </Text>

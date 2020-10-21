@@ -3,8 +3,8 @@ import i18n from 'assets/i18n';
 import Header from 'components/Header';
 import {
     humanifyNumber,
-    amountToUserCurrency,
     getCurrencySymbol,
+    amountToCurrency,
 } from 'helpers/index';
 import { IRootState } from 'helpers/types';
 import React, { useState } from 'react';
@@ -62,6 +62,11 @@ function WalletScreen(props: Props) {
             </SafeAreaView>
         );
     }
+    const userBalance = amountToCurrency(
+        props.user.celoInfo.balance,
+        props.user.user.currency,
+        props.app.exchangeRates
+    );
     return (
         <>
             <Header title={i18n.t('wallet')} navigation={navigation}>
@@ -87,12 +92,16 @@ function WalletScreen(props: Props) {
                             {i18n.t('balance').toUpperCase()}
                         </Text>
                         <View style={{ alignItems: 'center' }}>
-                            <Headline style={styles.headlineBalance}>
+                            <Headline
+                                style={{
+                                    fontSize: userBalance.length > 6 ? 43 : 56,
+                                    lineHeight:
+                                        userBalance.length > 6 ? 43 : 56,
+                                    ...styles.headlineBalance,
+                                }}
+                            >
                                 {getCurrencySymbol(props.user.user.currency)}
-                                {amountToUserCurrency(
-                                    props.user.celoInfo.balance,
-                                    props.user.user
-                                )}
+                                {userBalance}
                             </Headline>
                             <Text>
                                 {humanifyNumber(props.user.celoInfo.balance)}{' '}
@@ -120,9 +129,7 @@ const styles = StyleSheet.create({
     },
     headlineBalance: {
         fontFamily: 'Gelion-Bold',
-        fontSize: 56,
         fontWeight: 'bold',
-        lineHeight: 56,
         letterSpacing: 0,
         marginTop: 20,
     },

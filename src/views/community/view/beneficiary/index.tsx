@@ -13,11 +13,7 @@ import {
     RefreshControl,
     Dimensions,
 } from 'react-native';
-import {
-    ActivityIndicator,
-    ProgressBar,
-    Snackbar,
-} from 'react-native-paper';
+import { ActivityIndicator, ProgressBar, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import * as Location from 'expo-location';
@@ -156,9 +152,13 @@ function BeneficiaryView(props: Props) {
         );
         let next = '';
         if (nextCooldownTime.days() > 0) {
-            next += `${nextCooldownTime.days()}d`;
+            next += `${nextCooldownTime.days()}d `;
         }
-        next += `${nextCooldownTime.hours()}h${nextCooldownTime.minutes()}m`;
+        next += `${
+            nextCooldownTime.hours() < 10 ? '0' : ''
+        }${nextCooldownTime.hours()}h ${
+            nextCooldownTime.minutes() < 10 ? '0' : ''
+        }${nextCooldownTime.minutes()}m `;
         if (nextCooldownTime.seconds() > 0) {
             next += `${nextCooldownTime.seconds()}s`;
         }
