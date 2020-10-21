@@ -116,7 +116,7 @@ function Tabs(props: Props) {
             {isBeneficiary && tabBeneficiary}
             {isManager && tabManager}
             {!isBeneficiary && !isManager && tabCommunities}
-            {props.user.celoInfo.address.length > 0 && (
+            {/* {props.user.celoInfo.address.length > 0 && (
                 <Tab.Screen
                     name="pay"
                     component={PayScreen}
@@ -133,7 +133,7 @@ function Tabs(props: Props) {
                         ),
                     }}
                 />
-            )}
+            )} */}
             <Tab.Screen
                 name="wallet"
                 component={WalletScreen}
