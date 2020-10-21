@@ -32,7 +32,7 @@ import {
 } from '@react-navigation/native';
 
 import config from './config';
-import i18n from './src/assets/i18n';
+import i18n, { supportedLanguages } from './src/assets/i18n';
 import { iptcColors, welcomeUser } from './src/helpers';
 import {
     setCeloKit,
@@ -42,6 +42,7 @@ import {
     setUserIsCommunityManager,
     setUserIsBeneficiary,
     setAppExchangeRatesAction,
+    setUserLanguage,
 } from './src/helpers/redux/actions/ReduxActions';
 import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
 import {
@@ -76,6 +77,7 @@ import DownloadSvg from 'components/DownloadSvg';
 import { gt as semverGt, gte as semverGte } from 'semver';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
+import * as Localization from 'expo-localization';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -735,6 +737,16 @@ export default class App extends React.Component<any, IAppState> {
             });
         }
         if (!loggedIn) {
+            let language = Localization.locale;
+            if (language.includes('-')) {
+                language = language.substr(0, language.indexOf('-'));
+            } else if (language.includes('_')) {
+                language = language.substr(0, language.indexOf('_'));
+            }
+            if (!supportedLanguages.includes(language)) {
+                language = 'en';
+            }
+            store.dispatch(setUserLanguage(language));
             const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
             if (new Date().getTime() - lastUpdate > 3600000) {
                 // 1h in ms

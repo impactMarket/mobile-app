@@ -189,7 +189,7 @@ function BeneficiaryView(props: Props) {
                             modeType="gray"
                             bold={true}
                             style={{
-                                marginVertical: 19,
+                                marginVertical: 22.5,
                                 alignSelf: 'center',
                             }}
                             labelStyle={{ textAlign: 'center' }}
