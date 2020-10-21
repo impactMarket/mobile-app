@@ -133,6 +133,8 @@ export function getCurrencySymbol(currency: string) {
             return '$';
         case 'NGN':
             return '₦';
+        case 'VES':
+            return 'BsS';
         default:
             return '$';
     }
@@ -141,11 +143,11 @@ export function getCurrencySymbol(currency: string) {
 export function amountToCurrency(
     amount: BigNumber | string,
     currency: string,
-    exchangeRates: any,
-) {
+    exchangeRates: any
+): string {
     const exchangeRate = exchangeRates[currency].rate;
     const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
-    return humanifyNumber(bgn);
+    return humanifyCurrency(bgn);
 }
 
 /**
@@ -171,7 +173,24 @@ export function claimFrequencyToText(frequency: BigNumber | string): string {
 // cUSD has 18 zeros!
 export function humanifyNumber(inputNumber: BigNumber | string): number {
     const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-    return parseFloat(new BigNumber(inputNumber).div(decimals).decimalPlaces(2, 1).toString());
+    return parseFloat(
+        new BigNumber(inputNumber).div(decimals).decimalPlaces(2, 1).toString()
+    );
+}
+
+export function humanifyCurrency(inputNumber: BigNumber | string): string {
+    const decimals = new BigNumber(10).pow(config.cUSDDecimals);
+    const value = new BigNumber(inputNumber).div(decimals);
+    if (value.gte('100000')) {
+        return value
+            .decimalPlaces(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    return value
+        .decimalPlaces(2, 1)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export function calculateCommunityProgress(
@@ -224,7 +243,7 @@ export var iptcColors = {
 export async function loadContracts(
     address: string,
     kit: ContractKit,
-    dispatch: any,
+    dispatch: any
 ) {
     const fSetCommunity = (c: ICommunityInfo) => {
         // c.contractAddress can be null if community approval is still pending
