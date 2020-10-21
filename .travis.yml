@@ -1,10 +1,12 @@
-os: linux
-dist: xenial
+os: osx
+osx_image: xcode11.2
 language: node_js
 node_js: lts/dubnium
 install: yarn
+script:
+    - yarn test
 deploy:
-  provider: script
-  script: scripts/build.sh
-  on:
-    branch: staging
+    provider: script
+    script: scripts/build.sh
+    on:
+        branch: ci
