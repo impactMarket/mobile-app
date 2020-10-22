@@ -30,8 +30,8 @@ jobs:
       install:
         - yarn global add expo-cli
       script:
-        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
-        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+        - openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+        - openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
         - yarn
         - expo publish
@@ -49,12 +49,14 @@ jobs:
         - nvm use $NODE_VERSION
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
         - export PATH="$HOME/.yarn/bin:$PATH"
+        - sudo apt-get update
+        - sudo apt-get -y install libsecret-1-0
       install:
         - pip install --user awscli
         - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
       script:
         - yarn
-        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+        - openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
         - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.aab"
         - turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null || travis_terminate 1
         - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
@@ -70,7 +72,7 @@ jobs:
       os: osx
       osx_image: xcode11.2
       language: node_js
-      node_js: "12.13"
+      node_js: $NODE_VERSION
       env:
         - CACHE_NAME=build-ios-ipa YARN_CACHE_FOLDER="/Users/travis/yarn_cache"
       cache:
@@ -86,7 +88,7 @@ jobs:
         - yarn global add turtle-cli@$TURTLE_VERSION
       script:
         - yarn
-        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+        - openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
         - export ARTIFACT_PATH="/Users/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.ipa"
         - turtle setup:ios --sdk-version $EXPO_SDK_VERSION || travis_terminate 1
         - echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
