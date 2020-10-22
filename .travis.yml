@@ -30,7 +30,7 @@ jobs:
       install:
         - yarn global add expo-cli
       script:
-        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/google-services.json.plist.enc -out ./src/assets/firebase/google-services.json -d
+        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
         - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
         - yarn
@@ -54,7 +54,7 @@ jobs:
         - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
       script:
         - yarn
-        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/google-services.json.plist.enc -out ./src/assets/firebase/google-services.json -d
+        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
         - export ARTIFACT_PATH="/home/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.aab"
         - turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null || travis_terminate 1
         - echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
