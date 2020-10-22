@@ -1,4 +1,5 @@
 language: java
+dist: bionic
 
 branches:
   only:
@@ -24,9 +25,13 @@ jobs:
         - nvm use $NODE_VERSION
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
         - export PATH="$HOME/.yarn/bin:$PATH"
+        - sudo apt-get update
+        - sudo apt-get -y install libsecret-1-0
       install:
         - yarn global add expo-cli
       script:
+        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/google-services.json.plist.enc -out ./src/assets/firebase/google-services.json -d
+        - openssl aes-256-cbc -k "$DECRYPT_GOOGLE_SERVICES_ENC_KEY" -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
         - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
         - yarn
         - expo publish
