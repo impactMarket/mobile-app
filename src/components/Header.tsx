@@ -109,6 +109,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                         title={title}
                         titleStyle={{
                             fontFamily: 'Gelion-Bold',
+                            // alignSelf: 'auto',
                             fontSize: 30,
                             lineHeight: 36,
                             color: '#1E3252',
