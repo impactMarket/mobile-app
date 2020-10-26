@@ -183,12 +183,11 @@ function LoginScreen() {
                     bold={true}
                     style={{
                         marginHorizontal: 10,
-                        width: '40%',
                         backgroundColor: '#e9e9e9',
                     }}
                     onPress={() => Linking.openURL(androidURL)}
                 >
-                    <Text style={{ color: 'black' }}>Android</Text>
+                    <Text style={{ color: 'black' }}>{i18n.t('installValoraApp')}</Text>
                 </Button>
             );
         } else if (Device.osName === 'iOS') {
@@ -198,12 +197,11 @@ function LoginScreen() {
                     bold={true}
                     style={{
                         marginHorizontal: 10,
-                        width: '40%',
                         backgroundColor: '#e9e9e9',
                     }}
                     onPress={() => Linking.openURL(iosURL)}
                 >
-                    <Text style={{ color: 'black' }}>iOS</Text>
+                    <Text style={{ color: 'black' }}>{i18n.t('installValoraApp')}</Text>
                 </Button>
             );
         }
@@ -251,20 +249,16 @@ function LoginScreen() {
             </Text>
             <Text style={styles.stepText}>{i18n.t('step1')}</Text>
             <Text style={styles.instructionText}>
-                {i18n.t('downloadCeloApp')}
+                {i18n.t('createValoraAccount')}
             </Text>
-            <View
-                style={{
-                    flexDirection: 'row',
-                }}
-            >
+            <View>
                 {buttonStoreLink()}
             </View>
             <Text style={styles.stepText}>{i18n.t('step2')}</Text>
-            <Text style={styles.instructionText}>
-                {i18n.t('installCeloCreateAccount')}
-            </Text>
-            <Text style={styles.stepText}>{i18n.t('finalStep')}</Text>
+            {/* <Text style={styles.instructionText}>
+                {i18n.t('createValoraAccount')}
+            </Text> */}
+            {/* <Text style={styles.stepText}>{i18n.t('finalStep')}</Text> */}
             <Button
                 modeType="green"
                 bold={true}
@@ -278,7 +272,7 @@ function LoginScreen() {
             >
                 {i18n.t('connectCeloWallet')}
             </Button>
-            <Button
+            {/* <Button
                 modeType="gray"
                 bold={true}
                 onPress={() => navigation.goBack()}
@@ -286,7 +280,7 @@ function LoginScreen() {
                 style={{ width: '80%', backgroundColor: '#e9e9e9' }}
             >
                 <Text style={{ color: 'black' }}>{i18n.t('notNow')}</Text>
-            </Button>
+            </Button> */}
         </View>
     );
 }
@@ -297,7 +291,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginHorizontal: 10,
+        marginHorizontal: 18,
         marginVertical: 20,
     },
     title: {
@@ -312,14 +306,14 @@ const styles = StyleSheet.create({
     description: {
         fontFamily: 'Gelion-Regular',
         fontSize: 19,
-        letterSpacing: 0,
+        lineHeight: 23,
         textAlign: 'center',
         color: '#8898aa',
     },
     stepText: {
         fontFamily: 'Gelion-Bold',
         fontSize: 19,
-        letterSpacing: 0,
+        lineHeight: 23,
         textAlign: 'center',
         color: '#172b4d',
     },
@@ -327,7 +321,7 @@ const styles = StyleSheet.create({
         height: 23,
         fontFamily: 'Gelion-Regular',
         fontSize: 19,
-        letterSpacing: 0,
+        lineHeight: 23,
         textAlign: 'center',
         color: '#172b4d',
     },
