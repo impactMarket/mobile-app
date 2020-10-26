@@ -1,24 +1,30 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import {
-    iptcColors,
     updateCommunityInfo,
     formatInputAmountToTransfer,
     getCurrencySymbol,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
-import { StyleSheet, Clipboard, Alert, View, TextInput } from 'react-native';
 import {
-    // Button,
+    StyleSheet,
+    Clipboard,
+    Alert,
+    View,
+    TextInput,
+    Dimensions,
+    Keyboard,
+    LayoutAnimation,
+    Platform,
+} from 'react-native';
+import {
     Paragraph,
     Portal,
     Snackbar,
-    Text,
     Modal,
     Headline,
     IconButton,
-    // Card,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
@@ -48,9 +54,14 @@ interface IDonateState {
     showCopiedToClipboard: boolean;
     modalConfirmSend: boolean;
     rates: any;
+    keyboardOpen: boolean;
+    bottom: number;
 }
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 class Donate extends Component<Props, IDonateState> {
+    private keyboardShowListener: any;
+    private keyboardHideListener: any;
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -60,8 +71,36 @@ class Donate extends Component<Props, IDonateState> {
             showCopiedToClipboard: false,
             modalConfirmSend: false,
             rates: this.props.app.exchangeRates,
+            keyboardOpen: false,
+            bottom: 0,
         };
     }
+
+    componentDidMount() {
+        this.keyboardShowListener = Keyboard.addListener(
+            'keyboardWillShow',
+            this.keyboardShow
+        );
+        this.keyboardHideListener = Keyboard.addListener(
+            'keyboardWillHide',
+            this.keyboardHide
+        );
+    }
+
+    componentWillUnmount() {
+        this.keyboardShowListener && this.keyboardShowListener.remove();
+        this.keyboardHideListener && this.keyboardHideListener.remove();
+    }
+
+    keyboardShow = (e: any) => {
+        LayoutAnimation.easeInEaseOut();
+        this.setState({ keyboardOpen: true, bottom: e.endCoordinates.height });
+    };
+
+    keyboardHide = (e: any) => {
+        LayoutAnimation.easeInEaseOut();
+        this.setState({ keyboardOpen: false, bottom: 0 });
+    };
 
     handleConfirmDonateWithCeloWallet = () => {
         const { amountDonate } = this.state;
@@ -178,6 +217,8 @@ class Donate extends Component<Props, IDonateState> {
             amountDonate,
             showCopiedToClipboard,
             rates,
+            keyboardOpen,
+            bottom,
         } = this.state;
         const { community, user } = this.props;
 
@@ -187,7 +228,6 @@ class Donate extends Component<Props, IDonateState> {
         const amountInCommunityCurrency =
             amountInDollars * rates[community.currency].rate;
 
-        let donatingModalString = '';
         const backForDays =
             amountInDollars /
             new BigNumber(community.vars._claimAmount)
@@ -227,6 +267,21 @@ class Donate extends Component<Props, IDonateState> {
                 </Button>
             );
 
+        // yeah, modals on iOS get hidden below the keyboard
+        let cardModalStyle = {};
+        if (Platform.OS === 'ios') {
+            cardModalStyle = {
+                ...cardModalStyle,
+                position: 'absolute',
+                width: Dimensions.get('window').width - 40,
+            };
+            if (keyboardOpen) {
+                cardModalStyle = {
+                    ...cardModalStyle,
+                    bottom: bottom - 255,
+                };
+            }
+        }
         return (
             <>
                 <Button
@@ -262,7 +317,12 @@ class Donate extends Component<Props, IDonateState> {
                             this.setState({ openModalDonate: false })
                         }
                     >
-                        <Card style={{ marginHorizontal: 20 }}>
+                        <Card
+                            style={{
+                                marginHorizontal: 20,
+                                ...cardModalStyle,
+                            }}
+                        >
                             <Card.Content>
                                 <View style={{ height: 40 }}>
                                     <View
@@ -357,7 +417,10 @@ class Donate extends Component<Props, IDonateState> {
                                         backNBeneficiaries:
                                             community.beneficiaries.added
                                                 .length,
-                                        backForDays: Math.floor(backForDays),
+                                        backForDays:
+                                            amountDonate.length > 0
+                                                ? Math.floor(backForDays)
+                                                : 0,
                                     })}
                                 </Paragraph>
                                 <Button
