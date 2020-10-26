@@ -82,10 +82,7 @@ function CommunitiesScreen(props: Props) {
                             {community.city}, {community.country}
                         </Text>
                     </View>
-                    <LinearGradient
-                        colors={['rgba(0,0,0,0.15)', 'rgba(0,0,0,0.15)']}
-                        style={styles.darkerBackground}
-                    />
+                    <View style={styles.darkerBackground} />
                 </View>
                 <View style={{ margin: 10 }}>
                     <View
@@ -214,6 +211,7 @@ const styles = StyleSheet.create({
     darkerBackground: {
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
+        backgroundColor: 'rgba(0,0,0,0.15)',
         position: 'absolute',
         left: 0,
         right: 0,
