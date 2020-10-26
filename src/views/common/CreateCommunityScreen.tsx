@@ -24,7 +24,6 @@ import {
     StyleSheet,
     ScrollView,
     Alert,
-    Text,
     View,
     ImageBackground,
 } from 'react-native';
@@ -40,6 +39,7 @@ import {
     HelperText,
     TextInput,
     IconButton,
+    Text,
 } from 'react-native-paper';
 import { useDispatch, useStore } from 'react-redux';
 import Api from 'services/api';
@@ -359,7 +359,11 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                         }
                     });
                     // TODO: replace with updateCommunityInfo
-                    await loadContracts(user.celoInfo.address, app.kit, dispatch);
+                    await loadContracts(
+                        user.celoInfo.address,
+                        app.kit,
+                        dispatch
+                    );
                 }
             } catch (e) {
                 Alert.alert(
@@ -577,6 +581,15 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
             >
                 <Button
                     mode="text"
+                    uppercase={false}
+                    labelStyle={{
+                        fontFamily: 'Gelion-Bold',
+                        fontSize: 22,
+                        lineHeight: 26,
+                        textAlign: 'center',
+                        letterSpacing: 0.366667,
+                        color: '#2643E9',
+                    }}
                     loading={sending}
                     onPress={() => submitNewCommunity()}
                 >
@@ -853,9 +866,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             {claimAmount.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
-                                        symbol: getCurrencySymbol(
-                                            currency
-                                        ),
+                                        symbol: getCurrencySymbol(currency),
                                         amount: amountToCurrency(
                                             new BigNumber(
                                                 claimAmount
@@ -914,9 +925,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             {maxClaim.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
-                                        symbol: getCurrencySymbol(
-                                            currency
-                                        ),
+                                        symbol: getCurrencySymbol(currency),
                                         amount: amountToCurrency(
                                             new BigNumber(
                                                 maxClaim
@@ -926,7 +935,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                                 )
                                             ),
                                             currency,
-                                            app.exchangeRates,
+                                            app.exchangeRates
                                         ),
                                     })}
                                 </Text>

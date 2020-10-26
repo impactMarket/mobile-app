@@ -203,7 +203,7 @@ export function calculateCommunityProgress(
     const result = new BigNumber(
         toCalculte === 'raised' ? community.totalRaised : community.totalClaimed
     ).div(m.eq(0) ? 1 : m);
-    return parseFloat(result.decimalPlaces(2, 1).toString());
+    return parseFloat(result.decimalPlaces(5, 1).toString());
 }
 
 export function getCountryFromPhoneNumber(phoneNumber: string) {

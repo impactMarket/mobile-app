@@ -30,9 +30,7 @@ export default function BaseCommunity(props: {
             </View>
             <View
                 style={{
-                    // flex: 1,
                     justifyContent: 'center',
-                    // width: '100%',
                     ...ifFull,
                 }}
             >
@@ -81,7 +79,6 @@ const styles = StyleSheet.create({
     },
     communityLocation: {
         zIndex: 5,
-        // marginBottom: 32.41,
         fontSize: 15,
         lineHeight: 15,
         letterSpacing: 0.25,

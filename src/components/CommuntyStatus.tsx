@@ -8,8 +8,8 @@ import {
 } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Title, ProgressBar } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
+import { Title, ProgressBar, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Card from './Card';
 
@@ -64,7 +64,6 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     color: iptcColors.textGray,
-                                    fontFamily: 'Gelion-Regular',
                                     fontSize: 14,
                                     lineHeight: 15,
                                 }}
@@ -86,7 +85,6 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     color: iptcColors.textGray,
-                                    fontFamily: 'Gelion-Regular',
                                     fontSize: 14,
                                     lineHeight: 15,
                                 }}
@@ -152,7 +150,6 @@ class CommuntyStatus extends Component<Props, object> {
                             </Text>
                             <Text
                                 style={{
-                                    fontFamily: 'Gelion-Regular',
                                     color: iptcColors.textGray,
                                     fontSize: 15,
                                     lineHeight: 15,
@@ -187,7 +184,6 @@ class CommuntyStatus extends Component<Props, object> {
                             </Text>
                             <Text
                                 style={{
-                                    fontFamily: 'Gelion-Regular',
                                     color: iptcColors.textGray,
                                     fontSize: 15,
                                     lineHeight: 15,

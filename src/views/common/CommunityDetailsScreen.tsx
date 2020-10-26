@@ -12,9 +12,9 @@ import {
     IStoreCombinedState,
 } from 'helpers/types';
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, RefreshControl, Image } from 'react-native';
+import { View, StyleSheet, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Paragraph, Divider, Headline } from 'react-native-paper';
+import { Paragraph, Divider, Headline, Text } from 'react-native-paper';
 
 import config from '../../../config';
 import Donate from '../communities/actions/Donate';
@@ -185,7 +185,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 <Paragraph
                                     style={{
                                         fontSize: 17,
-                                        lineHeight: 22,
+                                        lineHeight: 21,
                                     }}
                                 >
                                     {i18n.t('eachBeneficiaryCanClaimXUpToY', {
