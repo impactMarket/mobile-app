@@ -63,7 +63,7 @@ import FAQScreen from './src/views/common/FAQScreen';
 import ClaimExplainedScreen from './src/views/community/view/beneficiary/ClaimExplainedScreen';
 import AddedScreen from './src/views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
-import EditProfile from './src/views/wallet/EditProfile';
+import Profile from './src/views/profile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
 import AddBeneficiaryScreen from './src/views/community/view/communitymanager/AddBeneficiaryScreen';
 import Button from 'components/Button';
@@ -558,8 +558,8 @@ export default class App extends React.Component<any, IAppState> {
                                 options={{
                                     headerShown: false,
                                 }}
-                                name="EditProfile"
-                                component={EditProfile}
+                                name="Profile"
+                                component={Profile}
                             />
                             <Stack.Screen
                                 options={{

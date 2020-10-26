@@ -8,8 +8,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import CommunitiesScreen from './communities/CommunitiesScreen';
 import BeneficiaryView from './community/view/beneficiary';
 import CommunityManagerView from './community/view/communitymanager';
-import PayScreen from './pay';
-import WalletScreen from './wallet';
+import ProfileScreen from './profile';
 
 const ActiveClaimIcon = require('assets/images/tab/active/claim.png');
 const ActiveCommunitiesIcon = require('assets/images/tab/active/communities.png');
@@ -135,10 +134,10 @@ function Tabs(props: Props) {
                 />
             )} */}
             <Tab.Screen
-                name="wallet"
-                component={WalletScreen}
+                name="profile"
+                component={ProfileScreen}
                 options={{
-                    title: i18n.t('wallet'),
+                    title: i18n.t('profile'),
                     tabBarIcon: (props: ITabBarIconProps) => (
                         <Image
                             source={selectTabBarIcon(props.focused, 'wallet')}

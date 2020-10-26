@@ -1,11 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import Card from 'components/Card';
 import Header from 'components/Header';
 import ValidatedTextInput from 'components/ValidatedTextInput';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { decrypt, encrypt } from 'helpers/encryption';
-import { getCountryFromPhoneNumber, getUserAvatar } from 'helpers/index';
+import {
+    amountToCurrency,
+    getCountryFromPhoneNumber,
+    getCurrencySymbol,
+    humanifyNumber,
+    iptcColors,
+} from 'helpers/index';
 import {
     resetUserApp,
     resetNetworkContractsApp,
@@ -17,7 +24,6 @@ import {
 } from 'helpers/redux/actions/ReduxActions';
 import {
     CONSENT_ANALYTICS,
-    IRootState,
     IStoreCombinedActionsTypes,
     IStoreCombinedState,
     STORAGE_USER_FIRST_TIME,
@@ -28,7 +34,6 @@ import { AsyncStorage, StyleSheet, View, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,
-    Avatar,
     TextInput,
     Paragraph,
     Portal,
@@ -36,26 +41,20 @@ import {
     RadioButton,
     Text,
     Switch,
+    Headline,
 } from 'react-native-paper';
-import { connect, ConnectedProps, useStore } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import Api from 'services/api';
 import { uploadLogs } from 'services/logger/upload';
 
-interface IEditProfileProps {
-    EditProfileCallback: () => void;
-}
-const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
-};
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & IEditProfileProps;
-
-function EditProfile(props: Props) {
+function WalletScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
-    const rates = store.getState().app.exchangeRates;
+    const dispatch = useDispatch();
+
+    const { user, app } = store.getState();
+    const rates = app.exchangeRates;
+
     const [isConsentAnalytics, setIsConsentAnalytics] = React.useState(true);
     const [sendingLogs, setSendingLogs] = useState(false);
     const [name, setName] = useState('');
@@ -66,11 +65,11 @@ function EditProfile(props: Props) {
     const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
 
     useEffect(() => {
-        if (props.user.user.name !== null && props.user.user.name.length > 0) {
-            setName(decrypt(props.user.user.name));
+        if (user.user.name !== null && user.user.name.length > 0) {
+            setName(decrypt(user.user.name));
         }
-        setCurrency(props.user.user.currency);
-        setLanguage(props.user.user.language);
+        setCurrency(user.user.currency);
+        setLanguage(user.user.language);
         AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
             setIsConsentAnalytics(c === null || c === 'true' ? true : false)
         );
@@ -106,17 +105,17 @@ function EditProfile(props: Props) {
 
     const handleChangeCurrency = async (text: string) => {
         setCurrency(text);
-        Api.setUserCurrency(props.user.celoInfo.address, text);
-        props.dispatch(setUserInfo({ ...props.user.user, currency: text }));
+        Api.setUserCurrency(user.celoInfo.address, text);
+        dispatch(setUserInfo({ ...user.user, currency: text }));
         // update exchange rate!
         const exchangeRate = (rates as any)[text.toUpperCase()].rate;
-        props.dispatch(setUserExchangeRate(exchangeRate));
+        dispatch(setUserExchangeRate(exchangeRate));
     };
 
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
-        Api.setLanguage(props.user.celoInfo.address, text);
-        props.dispatch(setUserLanguage(text));
+        Api.setLanguage(user.celoInfo.address, text);
+        dispatch(setUserLanguage(text));
         i18n.locale = text;
         moment.locale(text);
     };
@@ -159,26 +158,45 @@ function EditProfile(props: Props) {
             .finally(() => setSendingLogs(false));
     };
 
+    const userBalance = amountToCurrency(
+        user.celoInfo.balance,
+        user.user.currency,
+        app.exchangeRates
+    );
     return (
         <>
-            <Header
-                title={i18n.t('editProfile')}
-                hasBack
-                navigation={navigation}
-            />
+            <Header title={i18n.t('profile')} navigation={navigation} />
             <ScrollView style={styles.scrollView}>
                 <View style={styles.container}>
-                    <Avatar.Image
-                        style={{
-                            alignSelf: 'center',
-                            marginVertical: 20,
-                        }}
-                        size={121}
-                        source={getUserAvatar(props.user.user, true)}
-                    />
-                    <Button mode="contained" disabled>
-                        {i18n.t('changePhoto')}
-                    </Button>
+                    <Card elevation={0} style={styles.card}>
+                        <Card.Content>
+                            <Text
+                                style={{
+                                    color: '#FFFFFF',
+                                    textAlign: 'center',
+                                }}
+                            >
+                                {i18n.t('balance').toUpperCase()}
+                            </Text>
+                            <View style={{ alignItems: 'center' }}>
+                                <Headline
+                                    style={{
+                                        fontSize:
+                                            userBalance.length > 6 ? 43 : 56,
+                                        lineHeight:
+                                            userBalance.length > 6 ? 43 : 56,
+                                        ...styles.headlineBalance,
+                                    }}
+                                >
+                                    {getCurrencySymbol(user.user.currency)}
+                                    {userBalance}
+                                </Headline>
+                                <Text style={{ color: '#FFFFFF' }}>
+                                    {humanifyNumber(user.celoInfo.balance)} cUSD
+                                </Text>
+                            </View>
+                        </Card.Content>
+                    </Card>
                     <ValidatedTextInput
                         label={i18n.t('name')}
                         value={name}
@@ -189,9 +207,9 @@ function EditProfile(props: Props) {
                             if (name.length > 0) {
                                 eName = encrypt(name);
                             }
-                            Api.setUsername(props.user.celoInfo.address, eName);
-                            props.dispatch(
-                                setUserInfo({ ...props.user.user, name: eName })
+                            Api.setUsername(user.celoInfo.address, eName);
+                            dispatch(
+                                setUserInfo({ ...user.user, name: eName })
                             );
                         }}
                         onChangeText={(value) => setName(value)}
@@ -230,14 +248,14 @@ function EditProfile(props: Props) {
                         label={i18n.t('country')}
                         style={{ marginVertical: 3 }}
                         value={getCountryFromPhoneNumber(
-                            props.user.celoInfo.phoneNumber
+                            user.celoInfo.phoneNumber
                         )}
                         disabled
                     />
                     <TextInput
                         label={i18n.t('phoneNumber')}
                         style={{ marginVertical: 3 }}
-                        value={props.user.celoInfo.phoneNumber}
+                        value={user.celoInfo.phoneNumber}
                         disabled
                     />
                     <View
@@ -350,6 +368,16 @@ function EditProfile(props: Props) {
 
 const styles = StyleSheet.create({
     scrollView: {},
+    card: {
+        backgroundColor: iptcColors.softBlue,
+        marginVertical: 10,
+    },
+    headlineBalance: {
+        fontFamily: 'Gelion-Bold',
+        color: 'white',
+        letterSpacing: 0,
+        marginTop: 20,
+    },
     container: {
         marginHorizontal: 20,
     },
@@ -371,4 +399,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(EditProfile);
+export default WalletScreen;
