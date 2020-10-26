@@ -6,6 +6,7 @@ import {
     calculateCommunityProgress,
     claimFrequencyToText,
     humanifyNumber,
+    iptcColors,
 } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
@@ -52,7 +53,7 @@ function CommunitiesScreen(props: Props) {
     const communityCard = (community: ICommunityInfo) => (
         <Card
             key={community.name}
-            elevation={8}
+            // elevation={8}
             style={styles.card}
             onPress={() =>
                 navigation.navigate('CommunityDetailsScreen', {
@@ -87,16 +88,24 @@ function CommunitiesScreen(props: Props) {
                     />
                 </View>
                 <View style={{ margin: 10 }}>
-                    <View style={styles.cardInfo}>
-                        <View>
-                            <Text style={styles.cellHeader}>
-                                {community.beneficiaries.added.length}
-                            </Text>
-                            <Text style={styles.cellDescription}>
-                                {i18n.t('beneficiaries')}
-                            </Text>
+                    <View
+                        style={{
+                            flex: 3,
+                            flexDirection: 'row',
+                            marginHorizontal: 15,
+                        }}
+                    >
+                        <View style={{ flex: 1 }}>
+                            <View style={{ position: 'absolute' }}>
+                                <Text style={styles.cellHeader}>
+                                    {community.beneficiaries.added.length}
+                                </Text>
+                                <Text style={styles.cellDescription}>
+                                    {i18n.t('beneficiaries')}
+                                </Text>
+                            </View>
                         </View>
-                        <View>
+                        <View style={{ flex: 1 }}>
                             <Text style={styles.cellHeader}>
                                 ${humanifyNumber(community.vars._claimAmount)}
                             </Text>
@@ -106,16 +115,24 @@ function CommunitiesScreen(props: Props) {
                                 )}
                             </Text>
                         </View>
-                        <View>
-                            <Text style={styles.cellHeader}>
-                                {community.backers.length}
-                            </Text>
-                            <Text style={styles.cellDescription}>
-                                {i18n.t('backers')}
-                            </Text>
+                        <View style={{ flex: 1 }}>
+                            <View style={{ position: 'absolute', right: 0 }}>
+                                <Text style={styles.cellHeader}>
+                                    {community.backers.length}
+                                </Text>
+                                <Text style={styles.cellDescription}>
+                                    {i18n.t('backers')}
+                                </Text>
+                            </View>
                         </View>
                     </View>
-                    <View style={{ marginTop: 15, marginBottom: 5, marginHorizontal: 15 }}>
+                    <View
+                        style={{
+                            marginTop: 15,
+                            // marginBottom: 5,
+                            // marginHorizontal: 15,
+                        }}
+                    >
                         <ProgressBar
                             key="raised"
                             style={{
@@ -127,9 +144,9 @@ function CommunitiesScreen(props: Props) {
                             progress={calculateCommunityProgress(
                                 'raised',
                                 community
-                                )}
-                                color="#5289ff"
-                                />
+                            )}
+                            color="#5289ff"
+                        />
                         <ProgressBar
                             key="claimed"
                             style={{
@@ -154,6 +171,15 @@ function CommunitiesScreen(props: Props) {
             <Header title={i18n.t('communities')} navigation={navigation}>
                 <Button
                     mode="text"
+                    uppercase={false}
+                    labelStyle={{
+                        fontFamily: 'Gelion-Bold',
+                        fontSize: 22,
+                        lineHeight: 26,
+                        textAlign: 'center',
+                        letterSpacing: 0.366667,
+                        color: '#2643E9',
+                    }}
                     onPress={() => navigation.navigate('CreateCommunityScreen')}
                 >
                     {i18n.t('create')}
@@ -199,19 +225,19 @@ const styles = StyleSheet.create({
         marginHorizontal: 15,
         fontSize: 28,
         lineHeight: 34,
-        fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
         textAlign: 'center',
     },
     cardLocation: {
         zIndex: 5,
+        fontFamily: 'Gelion-Regular',
         fontSize: 16,
         lineHeight: 19,
         color: 'white',
     },
     cardInfo: {
-        flex: 1,
+        flex: 3,
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
@@ -224,20 +250,16 @@ const styles = StyleSheet.create({
     cellHeader: {
         fontFamily: 'Gelion-Bold',
         fontSize: 24,
-        fontWeight: 'bold',
-        fontStyle: 'normal',
-        letterSpacing: 0,
         textAlign: 'center',
-        color: '#172b4d',
+        color: iptcColors.almostBlack,
     },
     cellDescription: {
         fontFamily: 'Gelion-Regular',
-        fontSize: 15,
-        fontWeight: 'normal',
-        fontStyle: 'normal',
-        lineHeight: 18,
-        letterSpacing: 0.25,
-        color: '#7e8da6',
+        fontSize: 14,
+        lineHeight: 16,
+        opacity: 0.7,
+        textAlign: 'center',
+        color: iptcColors.textGray,
     },
 });
 

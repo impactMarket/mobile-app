@@ -59,7 +59,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
                 style={buttonStyle}
                 labelStyle={{
                     color: modeType === 'gray' ? '#32325D' : 'white',
-                    fontWeight: bold ? 'bold' : 'normal',
+                    fontFamily: bold ? 'Gelion-Bold' : 'Gelion-Regular',
                     fontSize: 15,
                     lineHeight: 17.58,
                     ...(this.props.labelStyle as any),

@@ -270,15 +270,12 @@ const styles = StyleSheet.create({
         textTransform: 'none',
         fontFamily: 'Gelion-Bold',
         fontSize: 25,
-        fontWeight: 'bold',
-        fontStyle: 'normal',
         letterSpacing: 0.46,
         color: 'white',
     },
     claimTextCUSD: {
         textTransform: 'none',
         fontFamily: 'Gelion-Regular',
-        fontStyle: 'normal',
         color: 'white',
     },
     mainPageContent: {
@@ -288,8 +285,6 @@ const styles = StyleSheet.create({
     claimCountDown: {
         fontFamily: 'Gelion-Bold',
         fontSize: 37,
-        fontWeight: 'bold',
-        fontStyle: 'normal',
         letterSpacing: 0.61,
         textAlign: 'center',
         color: iptcColors.greenishTeal,

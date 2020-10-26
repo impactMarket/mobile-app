@@ -255,7 +255,6 @@ class Donate extends Component<Props, IDonateState> {
                         fontSize: 20,
                         lineHeight: 23,
                         color: 'white',
-                        fontWeight: 'bold',
                         // backgroundColor: 'red',
                     }}
                     onPress={() => this.setState({ openModalDonate: true })}
@@ -325,8 +324,6 @@ class Donate extends Component<Props, IDonateState> {
                                         })}
                                         style={{
                                             fontFamily: 'Gelion-Regular',
-                                            fontStyle: 'normal',
-                                            fontWeight: 'normal',
                                             fontSize: 40,
                                             lineHeight: 50,
                                             textAlign: 'center',

@@ -224,8 +224,6 @@ const styles = StyleSheet.create({
         opacity: 0.84,
         fontFamily: 'Gelion-Regular',
         fontSize: 18,
-        fontWeight: 'normal',
-        fontStyle: 'normal',
         lineHeight: 25,
         letterSpacing: 0,
         color: '#1e3252',

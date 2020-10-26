@@ -27,7 +27,6 @@ function Beneficiaries(props: IBeneficiariesProps) {
                             fontFamily: 'Gelion-Bold',
                             fontSize: 13,
                             fontWeight: '500',
-                            fontStyle: 'normal',
                             lineHeight: 12,
                             letterSpacing: 0.7,
                         }}

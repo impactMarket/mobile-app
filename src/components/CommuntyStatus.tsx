@@ -40,7 +40,7 @@ class CommuntyStatus extends Component<Props, object> {
         );
 
         return (
-            <Card elevation={8} style={{ marginTop: 16 }}>
+            <Card elevation={0} style={{ marginTop: 16 }}>
                 <Card.Content>
                     <View
                         style={{
@@ -54,7 +54,6 @@ class CommuntyStatus extends Component<Props, object> {
                             <Title
                                 style={{
                                     fontFamily: 'Gelion-Bold',
-                                    fontWeight: 'bold',
                                     fontSize: 42,
                                     lineHeight: 42,
                                     marginVertical: 4,
@@ -77,7 +76,6 @@ class CommuntyStatus extends Component<Props, object> {
                             <Title
                                 style={{
                                     fontFamily: 'Gelion-Bold',
-                                    fontWeight: 'bold',
                                     fontSize: 42,
                                     lineHeight: 42,
                                     marginVertical: 4,
@@ -144,7 +142,6 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     fontFamily: 'Gelion-Bold',
-                                    fontWeight: 'bold',
                                     color: iptcColors.almostBlack,
                                     fontSize: 15,
                                     lineHeight: 15,
@@ -175,7 +172,6 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     fontFamily: 'Gelion-Bold',
-                                    fontWeight: 'bold',
                                     color: iptcColors.almostBlack,
                                     fontSize: 15,
                                     lineHeight: 15,

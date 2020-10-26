@@ -217,7 +217,6 @@ function PayScreen(props: Props) {
                                 padding: 10,
                                 textAlign: 'center',
                                 fontSize: 35,
-                                fontWeight: 'bold',
                                 fontFamily: 'Gelion-Bold',
                             }}
                             placeholder={`${getCurrencySymbol(

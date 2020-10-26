@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
     },
     headlineBalance: {
         fontFamily: 'Gelion-Bold',
-        fontWeight: 'bold',
         letterSpacing: 0,
         marginTop: 20,
     },

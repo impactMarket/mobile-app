@@ -302,6 +302,9 @@ export interface IAddressAndName {
     name: string;
 }
 
+/**
+ * @deprecated
+ */
 export interface IUserTxAPI {
     picture: string;
     counterParty: IAddressAndName;

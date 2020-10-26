@@ -210,6 +210,9 @@ class Api {
         return result ? result : [];
     }
 
+    /**
+     * @deprecated
+     */
     static async userTx(accountAddress: string): Promise<IUserTxAPI[]> {
         const result = await getRequest<IUserTxAPI[]>(
             `/transactions/usertx/${accountAddress}`

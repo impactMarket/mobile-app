@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     },
     textInfo: {
         fontFamily: 'Gelion-Regular',
-        fontStyle: 'normal',
         textAlign: 'center',
         marginVertical: 20,
         fontSize: 18

@@ -348,7 +348,6 @@ const styles = StyleSheet.create({
     communityName: {
         zIndex: 5,
         fontSize: 25,
-        fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
         textAlign: 'center',
@@ -361,7 +360,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Gelion-Regular',
         fontSize: 18,
         color: '#7E8DA6',
-        fontStyle: 'normal',
         letterSpacing: 0.3,
         textAlign: 'center',
     },
@@ -369,7 +367,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Gelion-Bold',
         fontSize: 18,
         fontWeight: '500',
-        fontStyle: 'normal',
         letterSpacing: 0.3,
         color: iptcColors.softBlue,
         height: 25,
@@ -377,8 +374,6 @@ const styles = StyleSheet.create({
     haveClaimed: {
         fontFamily: 'Gelion-Regular',
         fontSize: 15,
-        fontWeight: 'normal',
-        fontStyle: 'normal',
         lineHeight: 14,
         letterSpacing: 0.25,
         textAlign: 'center',

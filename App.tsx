@@ -349,7 +349,6 @@ export default class App extends React.Component<any, IAppState> {
                                         <Headline
                                             style={{
                                                 fontFamily: 'Gelion-Regular',
-                                                fontWeight: 'bold',
                                                 fontSize: 24,
                                                 lineHeight: 24,
                                                 textAlign: 'center',
@@ -455,8 +454,6 @@ export default class App extends React.Component<any, IAppState> {
                                         style={{
                                             fontFamily: 'Gelion-Regular',
                                             fontSize: 19,
-                                            fontWeight: 'normal',
-                                            fontStyle: 'normal',
                                             lineHeight: 26,
                                             letterSpacing: 0,
                                             textAlign: 'center',
@@ -471,8 +468,6 @@ export default class App extends React.Component<any, IAppState> {
                                             style={{
                                                 fontFamily: 'Gelion-Regular',
                                                 fontSize: 19,
-                                                fontWeight: 'normal',
-                                                fontStyle: 'normal',
                                                 lineHeight: 26,
                                                 letterSpacing: 0,
                                                 textAlign: 'center',
@@ -496,7 +491,6 @@ export default class App extends React.Component<any, IAppState> {
                                         >
                                             {/* <Text
                                                 style={{
-                                                    fontWeight: 'bold',
                                                     fontSize: 20,
                                                     lineHeight: 24,
                                                     color: 'white'

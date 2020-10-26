@@ -154,7 +154,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             >
                 <BaseCommunity community={community}>
                     <View style={styles.container}>
-                        <Card elevation={3}>
+                        <Card elevation={0}>
                             <Card.Content>
                                 <Paragraph
                                     style={{
@@ -180,7 +180,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 )}
                             </Card.Content>
                         </Card>
-                        <Card elevation={3} style={{ marginTop: 16 }}>
+                        <Card elevation={0} style={{ marginTop: 16 }}>
                             <Card.Content>
                                 <Paragraph
                                     style={{
@@ -267,7 +267,6 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         fontSize: 30,
         lineHeight: 36,
-        fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
         textAlign: 'center',
@@ -282,8 +281,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     ssiExplained: {
-        fontWeight: 'normal',
-        fontStyle: 'normal',
         fontSize: 15,
         lineHeight: 18,
         letterSpacing: 0.25,
@@ -291,7 +288,6 @@ const styles = StyleSheet.create({
     },
     ssiHeadline: {
         fontFamily: 'Gelion-Bold',
-        fontWeight: 'bold',
         fontSize: 36,
         lineHeight: 36,
         textAlign: 'right',

@@ -105,7 +105,15 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                             onPress={() => navigation.goBack()}
                         />
                     )}
-                    <Appbar.Content title={title} />
+                    <Appbar.Content
+                        title={title}
+                        titleStyle={{
+                            fontFamily: 'Gelion-Bold',
+                            fontSize: 30,
+                            lineHeight: 36,
+                            color: '#1E3252',
+                        }}
+                    />
                     {appBarContent}
                 </Appbar.Header>
                 <BottomSheet

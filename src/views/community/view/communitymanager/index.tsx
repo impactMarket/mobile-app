@@ -147,8 +147,6 @@ function CommunityManagerView(props: Props) {
                             style={{
                                 fontFamily: 'Gelion-Regular',
                                 fontSize: 22,
-                                fontWeight: 'bold',
-                                fontStyle: 'normal',
                                 lineHeight: 22,
                                 height: 22,
                                 letterSpacing: 0,
@@ -161,8 +159,6 @@ function CommunityManagerView(props: Props) {
                             style={{
                                 fontFamily: 'Gelion-Regular',
                                 fontSize: 19,
-                                fontWeight: 'normal',
-                                fontStyle: 'normal',
                                 lineHeight: 19,
                                 height: 100,
                                 letterSpacing: 0,
@@ -275,7 +271,6 @@ const styles = StyleSheet.create({
     },
     communityName: {
         fontSize: 25,
-        fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
         textAlign: 'center',

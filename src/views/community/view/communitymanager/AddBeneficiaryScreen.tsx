@@ -185,26 +185,6 @@ function AddBeneficiaryScreen() {
                 >
                     {i18n.t('addBeneficiary')}
                 </Button>
-                {/* <Button
-                    mode="contained"
-                    style={{
-                        marginVertical: 10,
-                        marginHorizontal: 20,
-                        backgroundColor: iptcColors.greenishTeal,
-                    }}
-                    disabled={
-                        usedAddressWarningMessageCondition ||
-                        inputAddress.length === 0
-                        // (selectButtonInProgress !== undefined &&
-                        //     selectButtonInProgress === true)
-                    }
-                    loading={addInProgress === true}
-                    onPress={() => handleModalScanQR()}
-                >
-                    <Text style={{ textTransform: 'none', color: 'white', fontWeight: 'bold' }}>
-                        {i18n.t('addBeneficiary')}
-                    </Text>
-                </Button> */}
             </View>
             <ScanQR
                 isVisible={usingCamera}

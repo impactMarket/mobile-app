@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
         marginBottom: 2,
         fontSize: 30,
         lineHeight: 36,
-        fontWeight: 'bold',
         fontFamily: 'Gelion-Bold',
         color: 'white',
         textAlign: 'center',
