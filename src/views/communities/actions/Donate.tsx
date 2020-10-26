@@ -194,24 +194,6 @@ class Donate extends Component<Props, IDonateState> {
                 .dividedBy(10 ** config.cUSDDecimals)
                 .toNumber() /
             community.beneficiaries.added.length;
-        if (backForDays < 1) {
-            donatingModalString = i18n.t('yourDonationWillBack', {
-                backNBeneficiaries: Math.max(
-                    1,
-                    Math.floor(
-                        amountInDollars /
-                            new BigNumber(community.vars._claimAmount)
-                                .dividedBy(10 ** config.cUSDDecimals)
-                                .toNumber()
-                    )
-                ),
-            });
-        } else {
-            donatingModalString = i18n.t('yourDonationWillBackFor', {
-                backNBeneficiaries: community.beneficiaries.added.length,
-                backForDays: Math.floor(backForDays),
-            });
-        }
 
         const donateWithValoraButton =
             user.celoInfo.address.length > 0 ? (
@@ -335,32 +317,49 @@ class Donate extends Component<Props, IDonateState> {
                                             })
                                         }
                                     />
-                                    {amountDonate.length > 0 && (
+                                    {amountDonate.length > 0 ? (
                                         <Paragraph
                                             style={{ marginVertical: 10 }}
                                         >
                                             ~
                                             {`${getCurrencySymbol(
                                                 community.currency
-                                            )}${
-                                                (Math.floor(
+                                            )}${(
+                                                Math.floor(
                                                     amountInCommunityCurrency *
                                                         100
-                                                ) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                            } ${community.currency}`}
+                                                ) / 100
+                                            )
+                                                .toString()
+                                                .replace(
+                                                    /\B(?=(\d{3})+(?!\d))/g,
+                                                    ','
+                                                )} ${community.currency}`}
+                                        </Paragraph>
+                                    ) : (
+                                        <Paragraph
+                                            style={{ marginVertical: 10 }}
+                                        >
+                                            ~
+                                            {`${getCurrencySymbol(
+                                                community.currency
+                                            )}0 ${community.currency}`}
                                         </Paragraph>
                                     )}
                                 </View>
-                                {amountDonate.length > 0 && (
-                                    <Paragraph
-                                        style={{
-                                            marginBottom: 20,
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        {donatingModalString}
-                                    </Paragraph>
-                                )}
+                                <Paragraph
+                                    style={{
+                                        marginBottom: 20,
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {i18n.t('yourDonationWillBackFor', {
+                                        backNBeneficiaries:
+                                            community.beneficiaries.added
+                                                .length,
+                                        backForDays: Math.floor(backForDays),
+                                    })}
+                                </Paragraph>
                                 <Button
                                     modeType="gray"
                                     bold={true}
