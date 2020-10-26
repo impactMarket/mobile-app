@@ -88,7 +88,7 @@ jobs:
         - yarn global add turtle-cli@$TURTLE_VERSION
       script:
         - yarn
-        - openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+        - openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -md sha256 -d
         - export ARTIFACT_PATH="/Users/travis/expo-project-$TRAVIS_COMMIT-`date +%s`.ipa"
         - turtle setup:ios --sdk-version $EXPO_SDK_VERSION || travis_terminate 1
         - echo $EXPO_IOS_DIST_P12_BASE64 > expo-project_dist.p12.base64
