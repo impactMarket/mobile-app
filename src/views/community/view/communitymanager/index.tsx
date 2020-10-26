@@ -129,73 +129,60 @@ function CommunityManagerView(props: Props) {
         }
         return (
             <View style={{ flex: 1 }}>
-                <ImageBackground
-                    source={{ uri: community.coverImage }}
-                    resizeMode="cover"
-                    style={styles.imageBackground}
-                >
-                    <Text style={styles.communityName}>{community.name}</Text>
-                    <LinearGradient
-                        colors={['transparent', 'rgba(246,246,246,1)']}
+                <BaseCommunity community={_community} full={true}>
+                    <View
                         style={{
-                            position: 'absolute',
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            height: 80,
-                        }}
-                    />
-                </ImageBackground>
-                <View
-                    style={{
-                        marginHorizontal: 20,
-                        flex: 1,
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
-                    }}
-                >
-                    <Image
-                        source={require('assets/images/pending.png')}
-                        style={{ width: 50, height: 50 }}
-                    />
-                    <Headline
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 22,
-                            fontWeight: 'bold',
-                            fontStyle: 'normal',
-                            lineHeight: 22,
-                            height: 22,
-                            letterSpacing: 0,
-                            textAlign: 'center',
+                            marginHorizontal: 20,
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'space-around',
                         }}
                     >
-                        {i18n.t('pendingApproval')}
-                    </Headline>
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 19,
-                            fontWeight: 'normal',
-                            fontStyle: 'normal',
-                            lineHeight: 19,
-                            height: 100,
-                            letterSpacing: 0,
-                            textAlign: 'center',
-                        }}
-                    >
-                        {i18n.t('pendingApprovalMessage')}{' '}
-                        <Text
-                            style={{ color: iptcColors.softBlue }}
-                            onPress={() =>
-                                Linking.openURL('mailto:hello@impactmarket.com')
-                            }
+                        <Image
+                            source={require('assets/images/pending.png')}
+                            style={{ width: 50, height: 50 }}
+                        />
+                        <Headline
+                            style={{
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 22,
+                                fontWeight: 'bold',
+                                fontStyle: 'normal',
+                                lineHeight: 22,
+                                height: 22,
+                                letterSpacing: 0,
+                                textAlign: 'center',
+                            }}
                         >
-                            hello@impactmarket.com
+                            {i18n.t('pendingApproval')}
+                        </Headline>
+                        <Text
+                            style={{
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 19,
+                                fontWeight: 'normal',
+                                fontStyle: 'normal',
+                                lineHeight: 19,
+                                height: 100,
+                                letterSpacing: 0,
+                                textAlign: 'center',
+                            }}
+                        >
+                            {i18n.t('pendingApprovalMessage')}{' '}
+                            <Text
+                                style={{ color: iptcColors.softBlue }}
+                                onPress={() =>
+                                    Linking.openURL(
+                                        'mailto:hello@impactmarket.com'
+                                    )
+                                }
+                            >
+                                hello@impactmarket.com
+                            </Text>
                         </Text>
-                    </Text>
-                </View>
+                    </View>
+                </BaseCommunity>
             </View>
         );
     };
