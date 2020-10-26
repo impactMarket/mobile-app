@@ -740,6 +740,7 @@ export default class App extends React.Component<any, IAppState> {
             if (!supportedLanguages.includes(language)) {
                 language = 'en';
             }
+            i18n.locale = language;
             store.dispatch(setUserLanguage(language));
             const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
             if (new Date().getTime() - lastUpdate > 3600000) {
