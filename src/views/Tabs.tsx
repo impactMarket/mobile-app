@@ -1,5 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import i18n from 'assets/i18n';
+import ManageSvg from 'components/svg/ManageSvg';
+import ProfileSvg from 'components/svg/ProfileSvg';
 import { IRootState, ITabBarIconProps } from 'helpers/types';
 import React from 'react';
 import { Image } from 'react-native';
@@ -78,13 +80,7 @@ function Tabs(props: Props) {
             options={{
                 title: i18n.t('manage'),
                 tabBarIcon: (props: ITabBarIconProps) => (
-                    <Image
-                        source={selectTabBarIcon(props.focused, 'manage')}
-                        style={{
-                            width: props.size + iconExtraSize,
-                            height: props.size - 5 + iconExtraSize,
-                        }}
-                    />
+                    <ManageSvg focused={props.focused} />
                 ),
             }}
         />
@@ -110,7 +106,17 @@ function Tabs(props: Props) {
     const { isManager, isBeneficiary } = props.user.community;
     return (
         <Tab.Navigator
-        // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
+            // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
+            tabBarOptions={{
+                labelStyle: {
+                    fontFamily: 'Gelion-Regular',
+                    fontSize: 15,
+                    lineHeight: 18,
+                    letterSpacing: 0.212727,
+                },
+                // tabStyle: { height: 84 },
+                // style: { backgroundColor: 'powderblue' },
+            }}
         >
             {isBeneficiary && tabBeneficiary}
             {isManager && tabManager}
@@ -139,13 +145,7 @@ function Tabs(props: Props) {
                 options={{
                     title: i18n.t('profile'),
                     tabBarIcon: (props: ITabBarIconProps) => (
-                        <Image
-                            source={selectTabBarIcon(props.focused, 'wallet')}
-                            style={{
-                                width: props.size - 5 + iconExtraSize,
-                                height: props.size - 5 + iconExtraSize,
-                            }}
-                        />
+                        <ProfileSvg focused={props.focused} />
                     ),
                 }}
             />

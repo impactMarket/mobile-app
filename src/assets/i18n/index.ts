@@ -194,8 +194,6 @@ i18n.translations = {
             "By pressing 'Send', you will send {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
         donateConfirmMessage:
             "By pressing 'Donate', you will donate {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
-        yourDonationWillBack:
-            'Your donation will back {{backNBeneficiaries}} beneficiaries for 1 day.',
         yourDonationWillBackFor:
             'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
@@ -419,8 +417,6 @@ i18n.translations = {
             "Ao selecionar 'Enviar', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
         donateConfirmMessage:
             "Ao selecionar 'Contribuir', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
-        yourDonationWillBack:
-            'O seu contributo irá apoiar {{backNBeneficiaries}} beneficiários por 1 dia.',
         yourDonationWillBackFor:
             'O seu contributo irá apoiar {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
         eachBeneficiaryCanClaimXUpToY:
