@@ -28,7 +28,7 @@ import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Button from 'components/Button';
 
-function LoginScreen() {
+function Login() {
     const store = useStore();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
@@ -123,7 +123,7 @@ function LoginScreen() {
                 if (state.user.celoInfo.address.length > 0) {
                     unsubscribe();
                     setConnecting(false);
-                    navigation.goBack();
+                    // navigation.goBack();
                     if (state.user.community.isBeneficiary) {
                         navigation.navigate('claim');
                     } else if (state.user.community.isManager) {
@@ -327,4 +327,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginScreen;
+export default Login;

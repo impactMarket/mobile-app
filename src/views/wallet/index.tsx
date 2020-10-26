@@ -18,6 +18,7 @@ import RecentTx, { IRecentTxRef } from './RecentTx';
 import BigNumber from 'bignumber.js';
 import { setUserWalletBalance } from 'helpers/redux/actions/ReduxActions';
 import Card from 'components/Card';
+import Login from './Login';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -47,20 +48,7 @@ function WalletScreen(props: Props) {
     };
 
     if (props.user.celoInfo.address.length === 0) {
-        return (
-            <SafeAreaView>
-                <Button
-                    mode="contained"
-                    style={{
-                        alignSelf: 'center',
-                        marginTop: '50%',
-                    }}
-                    onPress={() => navigation.navigate('LoginScreen')}
-                >
-                    {i18n.t('loginNow')}
-                </Button>
-            </SafeAreaView>
-        );
+        return <Login />
     }
     const userBalance = amountToCurrency(
         props.user.celoInfo.balance,

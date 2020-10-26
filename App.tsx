@@ -60,7 +60,6 @@ import Tabs from './src/views/Tabs';
 import CommunityDetailsScreen from './src/views/common/CommunityDetailsScreen';
 import CreateCommunityScreen from './src/views/common/CreateCommunityScreen';
 import FAQScreen from './src/views/common/FAQScreen';
-import LoginScreen from './src/views/common/LoginScreen';
 import ClaimExplainedScreen from './src/views/community/view/beneficiary/ClaimExplainedScreen';
 import AddedScreen from './src/views/community/view/communitymanager/AddedScreen';
 import RemovedScreen from './src/views/community/view/communitymanager/RemovedScreen';
@@ -596,13 +595,6 @@ export default class App extends React.Component<any, IAppState> {
                                 }}
                                 name="RemovedScreen"
                                 component={RemovedScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="LoginScreen"
-                                component={LoginScreen}
                             />
                             <Stack.Screen
                                 options={{
