@@ -170,8 +170,8 @@ class Donate extends Component<Props, IDonateState> {
                 setTimeout(
                     () =>
                         updateCommunityInfo(
-                            this.props.user.celoInfo.address,
-                            this.props
+                            this.props.community.publicId,
+                            this.props.dispatch
                         ),
                     10000
                 );

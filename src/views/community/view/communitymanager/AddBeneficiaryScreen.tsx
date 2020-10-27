@@ -2,27 +2,24 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/Button';
 import Header from 'components/Header';
-import ValidatedTextInput from 'components/ValidatedTextInput';
 import { ethers } from 'ethers';
-import { iptcColors } from 'helpers/index';
+import { updateCommunityInfo } from 'helpers/index';
 import { IStoreCombinedState, IStoreCombinedActionsTypes } from 'helpers/types';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import {
-    // Button,
     Divider,
     IconButton,
     Paragraph,
-    Portal,
     TextInput,
-    Text,
 } from 'react-native-paper';
-import { useStore } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 import ScanQR from '../../../common/ScanQR';
 
 function AddBeneficiaryScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const { user, network, app } = store.getState();
 
@@ -63,8 +60,11 @@ function AddBeneficiaryScreen() {
             .then(() => {
                 setTimeout(
                     () =>
-                        // updateCommunityInfo(user.celoInfo.address, props),
-                        10000
+                        updateCommunityInfo(
+                            network.community.publicId,
+                            dispatch
+                        ),
+                    10000
                 );
 
                 Alert.alert(

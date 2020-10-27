@@ -12,7 +12,7 @@ import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { ScrollView, Alert } from 'react-native';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 import { writeLog } from 'services/logger/write';
 
@@ -33,6 +33,7 @@ type Props = PropsFromRedux & IAddedScreenProps;
 
 function AddedScreen(props: Props) {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const beneficiaries = props.route.params
         .beneficiaries as ICommunityInfoBeneficiary[];
 
@@ -60,7 +61,7 @@ function AddedScreen(props: Props) {
                 );
                 navigation.goBack();
                 // TODO: update after going back
-                updateCommunityInfo(props.user.celoInfo.address, props);
+                updateCommunityInfo(props.network.community.publicId, dispatch);
             })
             .catch((e) => {
                 writeLog({

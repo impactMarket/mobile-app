@@ -6,18 +6,18 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import {
     humanifyNumber,
-    loadContracts,
     validateEmail,
-    // amountToUserCurrency,
     formatInputAmountToTransfer,
     getCurrencySymbol,
     amountToCurrency,
+    updateCommunityInfo,
 } from 'helpers/index';
 import {
     ICommunityInfo,
     IUserState,
     IStoreCombinedState,
     IStoreCombinedActionsTypes,
+    ICommunity,
 } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import {
@@ -28,7 +28,6 @@ import {
     ImageBackground,
 } from 'react-native';
 import {
-    // Card,
     Button,
     Paragraph,
     Headline,
@@ -358,12 +357,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             );
                         }
                     });
-                    // TODO: replace with updateCommunityInfo
-                    await loadContracts(
-                        user.celoInfo.address,
-                        app.kit,
-                        dispatch
-                    );
+                    await updateCommunityInfo(community.publicId, dispatch);
                 }
             } catch (e) {
                 Alert.alert(
@@ -402,7 +396,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                 setSending(false);
                 return;
             }
-            let apiRequestResult = false;
+            let apiRequestResult: ICommunity | undefined = undefined;
             if (visibility === 'private') {
                 apiRequestResult = await Api.createPrivateCommunity(
                     user.celoInfo.address,
@@ -496,8 +490,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                     }
                 });
                 if (visibility === 'private') {
-                    // TODO: replace with updateCommunityInfo
-                    loadContracts(user.celoInfo.address, app.kit, dispatch);
+                    await updateCommunityInfo(apiRequestResult.publicId, dispatch);
                 } else {
                     dispatch(setUserIsCommunityManager(true));
                 }

@@ -697,6 +697,7 @@ export default class App extends React.Component<any, IAppState> {
                     address,
                     pushNotificationsToken
                 );
+                console.log('userWelcome', userWelcome)
                 if (userWelcome !== undefined) {
                     CacheStore.cacheUser(userWelcome.user);
                     await welcomeUser(

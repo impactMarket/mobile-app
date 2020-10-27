@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import { updateCommunityInfo, iptcColors } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
@@ -13,7 +12,6 @@ import {
     StyleSheet,
     View,
     Text,
-    ImageBackground,
     RefreshControl,
     Image,
 } from 'react-native';
@@ -26,7 +24,7 @@ import {
     Headline,
     ActivityIndicator,
 } from 'react-native-paper';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useDispatch } from 'react-redux';
 
 import Beneficiaries from './cards/Beneficiaries';
 
@@ -40,6 +38,7 @@ type Props = PropsFromRedux;
 
 function CommunityManagerView(props: Props) {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [community, setCommunity] = useState<ICommunityInfo>(
         props.network.community
     );
@@ -80,21 +79,19 @@ function CommunityManagerView(props: Props) {
             contractAddress = props.network.community.contractAddress;
         }
         if (contractAddress !== undefined && contractAddress !== null) {
-            updateCommunityInfo(props.user.celoInfo.address, props).then(
-                async () => {
-                    const stableToken = await props.app.kit.contracts.getStableToken();
-                    const cUSDBalanceBig = await stableToken.balanceOf(
-                        props.network.contracts.communityContract._address
-                    );
-                    // at least five cents
-                    setHasFundsToNewBeneficiary(
-                        new BigNumber(cUSDBalanceBig.toString()).gte(
-                            '50000000000000000'
-                        )
-                    );
-                    setRefreshing(false);
-                }
-            );
+            updateCommunityInfo(community.publicId, dispatch).then(async () => {
+                const stableToken = await props.app.kit.contracts.getStableToken();
+                const cUSDBalanceBig = await stableToken.balanceOf(
+                    props.network.contracts.communityContract._address
+                );
+                // at least five cents
+                setHasFundsToNewBeneficiary(
+                    new BigNumber(cUSDBalanceBig.toString()).gte(
+                        '50000000000000000'
+                    )
+                );
+                setRefreshing(false);
+            });
         }
     };
 

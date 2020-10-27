@@ -63,6 +63,7 @@ function Tabs(props: Props) {
         />
     );
     const { isManager, isBeneficiary } = props.user.community;
+    console.log(props.user.community)
     return (
         <Tab.Navigator
             // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
-import { amountToUserCurrency, getCurrencySymbol } from 'helpers/index';
+import { amountToCurrency, getCurrencySymbol } from 'helpers/index';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import React from 'react';
 import { ScrollView } from 'react-native';
@@ -15,8 +15,8 @@ interface IRemovedScreenProps {
     };
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user, network, app } = state;
+    return { user, network, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -37,9 +37,10 @@ function RemovedScreen(props: Props) {
                         item={{
                             description: `${getCurrencySymbol(
                                 props.user.user.currency
-                            )} ${amountToUserCurrency(
+                            )} ${amountToCurrency(
                                 beneficiary.claimed,
-                                props.user.user
+                                props.user.user.currency,
+                                props.app.exchangeRates,
                             )}`,
                             from: beneficiary,
                             key: beneficiary.address,

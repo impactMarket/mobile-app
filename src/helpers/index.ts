@@ -2,7 +2,7 @@ import { ContractKit } from '@celo/contractkit';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
-import { Store, CombinedState } from 'redux';
+import { Store, CombinedState, Dispatch } from 'redux';
 import Api from 'services/api';
 
 import config from '../../config';
@@ -150,19 +150,6 @@ export function amountToCurrency(
     return humanifyCurrency(bgn);
 }
 
-/**
- * @deprecated
- */
-export function amountToUserCurrency(
-    amount: BigNumber | string,
-    user: IUserInfo
-) {
-    const exchangeRate = user.exchangeRate;
-    const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
-    const result = humanifyNumber(bgn);
-    return result;
-}
-
 export function claimFrequencyToText(frequency: BigNumber | string): string {
     const f = new BigNumber(frequency);
     if (f.eq(86400)) return i18n.t('daily');
@@ -237,47 +224,13 @@ export var iptcColors = {
     almostBlack: '#1E3252',
 };
 
-/**
- * @deprecated
- */
-export async function loadContracts(
-    address: string,
-    kit: ContractKit,
-    dispatch: any
+export async function updateCommunityInfo(
+    communityPublicId: string,
+    dispatch: Dispatch<any>
 ) {
-    const fSetCommunity = (c: ICommunityInfo) => {
-        // c.contractAddress can be null if community approval is still pending
-        const communityContract = new kit.web3.eth.Contract(
-            CommunityContractABI as any,
-            c.contractAddress
-        );
-        dispatch(setCommunity(c));
-        dispatch(setCommunityContract(communityContract));
-    };
-    const isBeneficiary = await Api.findComunityToBeneficicary(address);
-    if (isBeneficiary !== undefined) {
-        dispatch(setUserIsBeneficiary(true));
-        fSetCommunity(isBeneficiary);
-        return 1;
-    }
-    const isManager = await Api.findComunityToManager(address);
-    if (isManager !== undefined) {
-        dispatch(setUserIsCommunityManager(true));
-        fSetCommunity(isManager);
-        return 0;
-    }
-    return -1;
-}
-
-export async function updateCommunityInfo(address: string, store: any) {
-    const isBeneficiary = await Api.findComunityToBeneficicary(address);
-    if (isBeneficiary !== undefined) {
-        store.dispatch(setCommunity(isBeneficiary));
-        return;
-    }
-    const isManager = await Api.findComunityToManager(address);
-    if (isManager !== undefined) {
-        store.dispatch(setCommunity(isManager));
+    const community = await Api.getCommunityByPublicId(communityPublicId);
+    if (community !== undefined) {
+        dispatch(setCommunity(community));
     }
 }
 
