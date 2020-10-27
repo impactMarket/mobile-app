@@ -26,6 +26,7 @@ import Card from 'components/Card';
 
 interface ICommunitiesScreenProps {
     navigation: any;
+    route: any;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -93,14 +94,14 @@ function CommunitiesScreen(props: Props) {
                         }}
                     >
                         <View style={{ flex: 1 }}>
-                            <View style={{ position: 'absolute' }}>
-                                <Text style={styles.cellHeader}>
-                                    {community.beneficiaries.added.length}
-                                </Text>
-                                <Text style={styles.cellDescription}>
-                                    {i18n.t('beneficiaries')}
-                                </Text>
-                            </View>
+                            {/* <View style={{ position: 'absolute' }}> */}
+                            <Text style={styles.cellHeader}>
+                                {community.beneficiaries.added.length}
+                            </Text>
+                            <Text style={styles.cellDescription}>
+                                {i18n.t('beneficiaries')}
+                            </Text>
+                            {/* </View> */}
                         </View>
                         <View style={{ flex: 1 }}>
                             <Text style={styles.cellHeader}>
@@ -113,14 +114,14 @@ function CommunitiesScreen(props: Props) {
                             </Text>
                         </View>
                         <View style={{ flex: 1 }}>
-                            <View style={{ position: 'absolute', right: 0 }}>
-                                <Text style={styles.cellHeader}>
-                                    {community.backers.length}
-                                </Text>
-                                <Text style={styles.cellDescription}>
-                                    {i18n.t('backers')}
-                                </Text>
-                            </View>
+                            {/* <View style={{ position: 'absolute', right: 0 }}> */}
+                            <Text style={styles.cellHeader}>
+                                {community.backers.length}
+                            </Text>
+                            <Text style={styles.cellDescription}>
+                                {i18n.t('backers')}
+                            </Text>
+                            {/* </View> */}
                         </View>
                     </View>
                     <View
@@ -162,6 +163,13 @@ function CommunitiesScreen(props: Props) {
             </Card.Content>
         </Card>
     );
+
+    if (
+        props.user.celoInfo.address.length === 0 &&
+        props.route.params?.previous !== 'profile'
+    ) {
+        navigation.navigate('WelcomeScreen');
+    }
 
     return (
         <>

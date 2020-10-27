@@ -52,7 +52,9 @@ function ProfileScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const userAddress = useSelector((state: IRootState) => state.user.celoInfo.address)
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.celoInfo.address
+    );
 
     const { user, app } = store.getState();
     const rates = app.exchangeRates;
@@ -97,7 +99,7 @@ function ProfileScreen() {
                 unsubscribe();
                 setLogingOut(false);
                 // navigation.goBack();
-                navigation.navigate('communities');
+                navigation.navigate('communities', { previous: 'profile' });
             }
         });
         store.dispatch(setUserIsBeneficiary(false));

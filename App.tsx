@@ -12,10 +12,6 @@ import {
     Paragraph,
     Headline,
 } from 'react-native-paper';
-import {
-    SafeAreaProvider,
-    SafeAreaConsumer,
-} from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { createStore, Unsubscribe } from 'redux';
 import * as Sentry from 'sentry-expo';
@@ -66,6 +62,7 @@ import RemovedScreen from './src/views/community/view/communitymanager/RemovedSc
 import Profile from './src/views/profile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
 import AddBeneficiaryScreen from './src/views/community/view/communitymanager/AddBeneficiaryScreen';
+import WelcomeScreen from './src/views/welcome/index';
 import Button from 'components/Button';
 import CacheStore from 'services/cacheStore';
 import NetInfo from '@react-native-community/netinfo';
@@ -422,90 +419,6 @@ export default class App extends React.Component<any, IAppState> {
             );
         }
 
-        if (firstTimeUser) {
-            return (
-                <SafeAreaProvider>
-                    <SafeAreaConsumer>
-                        {(insets) => (
-                            <PaperProvider theme={theme}>
-                                <View
-                                    style={{
-                                        paddingTop: insets?.top,
-                                        flex: 1,
-                                        flexDirection: 'column',
-                                        justifyContent: 'space-around',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Image
-                                        style={{ height: 82, maxWidth: '51%' }}
-                                        source={require('./src/assets/images/splash/logo.png')}
-                                    />
-                                    <Image
-                                        style={{
-                                            height: 136,
-                                            maxWidth: '100%',
-                                        }}
-                                        source={require('./src/assets/images/splash/diversity.png')}
-                                    />
-                                    <Text
-                                        style={{
-                                            fontFamily: 'Gelion-Regular',
-                                            fontSize: 19,
-                                            lineHeight: 26,
-                                            letterSpacing: 0,
-                                            textAlign: 'center',
-                                            color: '#172b4d',
-                                            marginHorizontal: 40,
-                                        }}
-                                    >
-                                        {i18n.t('oneTimeWelcomeMessage1')}
-                                    </Text>
-                                    <View>
-                                        <Text
-                                            style={{
-                                                fontFamily: 'Gelion-Regular',
-                                                fontSize: 19,
-                                                lineHeight: 26,
-                                                letterSpacing: 0,
-                                                textAlign: 'center',
-                                                color: '#172b4d',
-                                                marginHorizontal: 40,
-                                            }}
-                                        >
-                                            {i18n.t('oneTimeWelcomeMessage2')}
-                                        </Text>
-                                        <Button
-                                            modeType="default"
-                                            bold={true}
-                                            style={{
-                                                // width: '100%',
-                                                marginVertical: 16,
-                                                alignSelf: 'center',
-                                            }}
-                                            onPress={() =>
-                                                this.openExploreCommunities()
-                                            }
-                                        >
-                                            {/* <Text
-                                                style={{
-                                                    fontSize: 20,
-                                                    lineHeight: 24,
-                                                    color: 'white'
-                                                }}
-                                            >
-                                            </Text> */}
-                                            {i18n.t('exploreCommunities')}
-                                        </Button>
-                                    </View>
-                                </View>
-                            </PaperProvider>
-                        )}
-                    </SafeAreaConsumer>
-                </SafeAreaProvider>
-            );
-        }
-
         const testnetWarningView = (
             <View
                 style={{
@@ -609,6 +522,13 @@ export default class App extends React.Component<any, IAppState> {
                                 name="AddBeneficiaryScreen"
                                 component={AddBeneficiaryScreen}
                             />
+                            <Stack.Screen
+                                options={{
+                                    headerShown: false,
+                                }}
+                                name="WelcomeScreen"
+                                component={WelcomeScreen}
+                            />
                         </Stack.Navigator>
                     </NavigationContainer>
                 </Provider>
@@ -696,7 +616,6 @@ export default class App extends React.Component<any, IAppState> {
                     address,
                     pushNotificationsToken
                 );
-                console.log('userWelcome', userWelcome)
                 if (userWelcome !== undefined) {
                     CacheStore.cacheUser(userWelcome.user);
                     await welcomeUser(
@@ -709,45 +628,37 @@ export default class App extends React.Component<any, IAppState> {
                     loggedIn = true;
                 }
             }
-            const firstTime = await AsyncStorage.getItem(
-                STORAGE_USER_FIRST_TIME
-            );
+            if (!loggedIn) {
+                let language = Localization.locale;
+                if (language.includes('-')) {
+                    language = language.substr(0, language.indexOf('-'));
+                } else if (language.includes('_')) {
+                    language = language.substr(0, language.indexOf('_'));
+                }
+                if (!supportedLanguages.includes(language)) {
+                    language = 'en';
+                }
+                i18n.locale = language;
+                store.dispatch(setUserLanguage(language));
+                const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
+                if (new Date().getTime() - lastUpdate > 3600000) {
+                    // 1h in ms
+                    const exchangeRates = await Api.getExchangeRate();
+                    store.dispatch(setAppExchangeRatesAction(exchangeRates));
+                    CacheStore.cacheExchangeRates(exchangeRates);
+                } else {
+                    store.dispatch(
+                        setAppExchangeRatesAction(
+                            await CacheStore.getExchangeRates()
+                        )
+                    );
+                }
+            }
             this.setState({
-                firstTimeUser: firstTime === null,
-                loggedIn: address !== null && phoneNumber !== null,
+                loggedIn,
             });
         } catch (error) {
-            Api.uploadError(
-                '',
-                'auth_user',
-                error,
-            );
-        }
-        if (!loggedIn) {
-            let language = Localization.locale;
-            if (language.includes('-')) {
-                language = language.substr(0, language.indexOf('-'));
-            } else if (language.includes('_')) {
-                language = language.substr(0, language.indexOf('_'));
-            }
-            if (!supportedLanguages.includes(language)) {
-                language = 'en';
-            }
-            i18n.locale = language;
-            store.dispatch(setUserLanguage(language));
-            const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
-            if (new Date().getTime() - lastUpdate > 3600000) {
-                // 1h in ms
-                const exchangeRates = await Api.getExchangeRate();
-                store.dispatch(setAppExchangeRatesAction(exchangeRates));
-                CacheStore.cacheExchangeRates(exchangeRates);
-            } else {
-                store.dispatch(
-                    setAppExchangeRatesAction(
-                        await CacheStore.getExchangeRates()
-                    )
-                );
-            }
+            Api.uploadError('', 'auth_user', error);
         }
     };
 }
