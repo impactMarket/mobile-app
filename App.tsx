@@ -67,7 +67,6 @@ import Profile from './src/views/profile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
 import AddBeneficiaryScreen from './src/views/community/view/communitymanager/AddBeneficiaryScreen';
 import Button from 'components/Button';
-import { writeLog } from 'services/logger/write';
 import CacheStore from 'services/cacheStore';
 import NetInfo from '@react-native-community/netinfo';
 import Card from 'components/Card';
@@ -718,10 +717,11 @@ export default class App extends React.Component<any, IAppState> {
                 loggedIn: address !== null && phoneNumber !== null,
             });
         } catch (error) {
-            writeLog({
-                action: 'auth_user',
-                details: error.message,
-            });
+            Api.uploadError(
+                '',
+                'auth_user',
+                error,
+            );
         }
         if (!loggedIn) {
             let language = Localization.locale;

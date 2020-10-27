@@ -63,7 +63,6 @@ function Tabs(props: Props) {
         />
     );
     const { isManager, isBeneficiary } = props.user.community;
-    console.log(props.user.community)
     return (
         <Tab.Navigator
             // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
@@ -81,24 +80,6 @@ function Tabs(props: Props) {
             {isBeneficiary && tabBeneficiary}
             {isManager && tabManager}
             {!isBeneficiary && !isManager && tabCommunities}
-            {/* {props.user.celoInfo.address.length > 0 && (
-                <Tab.Screen
-                    name="pay"
-                    component={PayScreen}
-                    options={{
-                        title: i18n.t('pay'),
-                        tabBarIcon: (props: ITabBarIconProps) => (
-                            <Image
-                                source={selectTabBarIcon(props.focused, 'pay')}
-                                style={{
-                                    width: props.size + 7 + iconExtraSize,
-                                    height: props.size + 7 + iconExtraSize,
-                                }}
-                            />
-                        ),
-                    }}
-                />
-            )} */}
             <Tab.Screen
                 name="profile"
                 component={ProfileScreen}

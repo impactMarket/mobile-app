@@ -18,7 +18,6 @@ import { celoWalletRequest } from 'services/celoWallet';
 import config from '../../../../../config';
 import * as Device from 'expo-device';
 import { analytics } from 'services/analytics';
-import { writeLog } from 'services/logger/write';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -112,7 +111,7 @@ class Claim extends React.Component<Props, IClaimState> {
                             success: true,
                         });
                     } catch (e) {
-                        writeLog({ action: 'claim', details: e.message });
+                        Api.uploadError(address, 'claim', e);
                         analytics('claim_location', {
                             device: Device.brand,
                             success: 'false',
@@ -128,7 +127,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 analytics('claim', { device: Device.brand, success: true });
             })
             .catch((e) => {
-                writeLog({ action: 'claim', details: e.message });
+                Api.uploadError(address, 'claim', e);
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
                 Alert.alert(

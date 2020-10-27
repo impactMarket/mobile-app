@@ -13,8 +13,8 @@ import moment from 'moment';
 import React, { useState } from 'react';
 import { ScrollView, Alert } from 'react-native';
 import { connect, ConnectedProps, useDispatch } from 'react-redux';
+import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import { writeLog } from 'services/logger/write';
 
 interface IAddedScreenProps {
     route: {
@@ -64,10 +64,7 @@ function AddedScreen(props: Props) {
                 updateCommunityInfo(props.network.community.publicId, dispatch);
             })
             .catch((e) => {
-                writeLog({
-                    action: 'remove_beneficiary',
-                    details: e.message,
-                });
+                Api.uploadError(address, 'remove_beneficiary', e);
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorRemovingBeneficiary'),

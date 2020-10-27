@@ -4,7 +4,7 @@ import * as Linking from 'expo-linking';
 import { ContractKit } from '@celo/contractkit';
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
-import { writeLog } from './logger/write';
+import Api from './api';
 
 async function celoWalletRequest(
     from: string,
@@ -26,18 +26,6 @@ async function celoWalletRequest(
                 .host;
         }
     }
-    const eventContent = {
-        action: 'wallet_request',
-        details: {
-            fee: FeeCurrency.cUSD,
-            provider: currentProvider,
-            requestId,
-            from,
-            to,
-            method: txObject._method.name,
-        },
-    };
-    writeLog(eventContent);
     const dappName = 'impactmarket';
     const callback = Linking.makeUrl('/');
     try {
@@ -76,6 +64,7 @@ async function celoWalletRequest(
             );
             Sentry.captureException(e);
         }
+        Api.uploadError(from, 'wallet_request', e);
         throw new Error(e);
     }
 }

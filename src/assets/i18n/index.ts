@@ -205,16 +205,11 @@ i18n.translations = {
         donationBiggerThanBalance:
             'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',
         errorClaiming: 'An error happened while claiming.',
-        sendLogs: 'Send logs',
-        logsSent: 'Logs sent! Thank you!',
-        errorSendingLogs: 'An error happened while sending the logs.',
-        logsNotFound: 'Logs registry not found.',
         consentAnonymousAnalytics: 'Consent Anonymous Analytics',
         youCreatedPrivateCommunity:
             "You've created a private community. Welcome!",
         youAreNotConnected:
             'You are not connected to your Valora. Connect to send directly.',
-        reportError: 'Report error',
         errorConnectToValora:
             'An error happened while connecting to Valora. Please, try again.',
         addingYourOwnAddress:
@@ -429,17 +424,12 @@ i18n.translations = {
             'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
         errorClaiming:
             'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.',
-        sendLogs: 'Enviar logs',
-        logsSent: 'Logs enviados! Obrigado!',
-        errorSendingLogs: 'Ocorreu um erro ao enviar os logs.',
-        logsNotFound: 'Registo de logs não encontrado.',
         consentAnonymousAnalytics:
             'Aceitar enviar dados anonimos para análises',
         youCreatedPrivateCommunity:
             'Você criou uma comunidade privada. Seja bem vindo.',
         youAreNotConnected:
             'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
-        reportError: 'Reportar erro',
         errorConnectToValora:
             'Ocorreu um erro enquanto se conectava á Valora. Por favor, tente novamente.',
         addingYourOwnAddress:

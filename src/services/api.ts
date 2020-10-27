@@ -1,20 +1,15 @@
 import axios from 'axios';
 import {
     ICommunityInfo,
-    IRecentTxAPI,
-    IPaymentsTxAPI,
-    IUser,
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_FIRST_TIME,
     IUserWelcome,
-    IUserTxAPI,
     IUserWelcomeAuth,
     ICommunity,
 } from 'helpers/types';
 import { AsyncStorage, DevSettings } from 'react-native';
 
 import config from '../../config';
-import { writeLog } from './logger/write';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -31,7 +26,7 @@ async function getRequest<T>(endpoint: string): Promise<T | undefined> {
             response = result.data as T;
         }
     } catch (error) {
-        writeLog({ action: 'get_request', details: error.message });
+        Api.uploadError('', 'get_request', error);
     }
     return response;
 }
@@ -65,7 +60,7 @@ async function postRequest<T>(
         }
         response = result.data as T;
     } catch (error) {
-        writeLog({ action: 'post_request', details: error.message });
+        Api.uploadError('', 'post_request', error);
     }
     return response;
 }
@@ -197,7 +192,7 @@ class Api {
             );
             response = result;
         } catch (error) {
-            writeLog({ action: 'upload_image_async', details: error.message });
+            Api.uploadError('', 'upload_image_async', error);
         }
         return response;
     }
@@ -315,11 +310,20 @@ class Api {
 
     // misc
 
-    static async uploadLogs(logs: string): Promise<boolean> {
+    static async uploadError(
+        address: string,
+        action: string,
+        error: any
+    ): Promise<boolean> {
         const requestBody = {
-            logs,
+            address,
+            action,
+            error: JSON.stringify({
+                reason: error.reason,
+                message: error.message,
+            }),
         };
-        const result = await postRequest<boolean>('/mobile/logs', requestBody);
+        const result = await postRequest<boolean>('/mobile/error', requestBody);
         return !!result;
     }
 

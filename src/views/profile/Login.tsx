@@ -22,8 +22,6 @@ import * as Localization from 'expo-localization';
 import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import config from '../../../config';
-import { uploadLogs } from 'services/logger/upload';
-import { writeLog } from 'services/logger/write';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Button from 'components/Button';
@@ -53,17 +51,13 @@ function Login() {
             dappkitResponse = await waitForAccountAuth(requestId);
             userAddress = ethers.utils.getAddress(dappkitResponse.address);
         } catch (e) {
-            writeLog({ action: 'login', details: e.message });
+            Api.uploadError('', 'login', e);
             analytics('login', { device: Device.brand, success: false });
             Sentry.captureException(e);
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('errorConnectToValora'),
                 [
-                    {
-                        text: i18n.t('reportError'),
-                        onPress: () => uploadLogs(),
-                    },
                     { text: i18n.t('close') },
                 ],
                 { cancelable: false }
@@ -88,7 +82,7 @@ function Login() {
             pushNotificationsToken
         );
         if (user === undefined) {
-            writeLog({ action: 'login', details: 'undefined user' });
+            Api.uploadError('', 'login', { reason: '', message: 'undefined user'});
             analytics('login', { device: Device.brand, success: false });
             Sentry.captureMessage(
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
@@ -98,10 +92,6 @@ function Login() {
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
                 [
-                    {
-                        text: i18n.t('reportError'),
-                        onPress: () => uploadLogs(),
-                    },
                     { text: i18n.t('close') },
                 ],
                 { cancelable: false }
@@ -141,13 +131,9 @@ function Login() {
                 store as any
             );
             store.dispatch(setPushNotificationsToken(pushNotificationsToken));
-            writeLog({ action: 'login', details: 'success' });
             analytics('login', { device: Device.brand, success: true });
         } catch (error) {
-            writeLog({
-                action: 'login',
-                details: `config user - ${error.message}`,
-            });
+            Api.uploadError('', 'login', error);
             analytics('login', { device: Device.brand, success: false });
             Sentry.captureMessage(
                 JSON.stringify({
@@ -160,10 +146,6 @@ function Login() {
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
                 [
-                    {
-                        text: i18n.t('reportError'),
-                        onPress: () => uploadLogs(),
-                    },
                     { text: i18n.t('close') },
                 ],
                 { cancelable: false }

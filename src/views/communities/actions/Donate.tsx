@@ -29,11 +29,11 @@ import {
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
-import { writeLog } from 'services/logger/write';
 import config from '../../../../config';
 import * as Device from 'expo-device';
 import Button from 'components/Button';
 import Card from 'components/Card';
+import Api from 'services/api';
 
 interface IExploreScreenProps {
     community: ICommunityInfo;
@@ -185,7 +185,7 @@ class Donate extends Component<Props, IDonateState> {
                 analytics('donate', { device: Device.brand, success: true });
             })
             .catch((e) => {
-                writeLog({ action: 'donate', details: e.message });
+                Api.uploadError(this.props.user.celoInfo.address, 'donate', e);
                 analytics('donate', { device: Device.brand, success: false });
                 Alert.alert(
                     i18n.t('failure'),

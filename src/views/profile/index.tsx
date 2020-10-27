@@ -45,7 +45,6 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useStore } from 'react-redux';
 import Api from 'services/api';
-import { uploadLogs } from 'services/logger/upload';
 
 function WalletScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
@@ -118,44 +117,6 @@ function WalletScreen() {
         dispatch(setUserLanguage(text));
         i18n.locale = text;
         moment.locale(text);
-    };
-
-    const handleSendLogs = () => {
-        setSendingLogs(true);
-        uploadLogs()
-            .then((uploaded) => {
-                if (uploaded === 0) {
-                    Alert.alert(
-                        i18n.t('success'),
-                        i18n.t('logsSent'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                } else if (uploaded === 1) {
-                    Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('errorSendingLogs'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                } else {
-                    Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('logsNotFound'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                }
-            })
-            .catch((e) => {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorSendingLogs'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-            })
-            .finally(() => setSendingLogs(false));
     };
 
     const userBalance = amountToCurrency(
@@ -279,15 +240,6 @@ function WalletScreen() {
                             onValueChange={onToggleSwitch}
                         />
                     </View>
-                    <Button
-                        mode="contained"
-                        style={{ marginVertical: 10 }}
-                        onPress={handleSendLogs}
-                        loading={sendingLogs}
-                        disabled={sendingLogs}
-                    >
-                        {i18n.t('sendLogs')}
-                    </Button>
                     <Button
                         mode="contained"
                         style={{ marginVertical: 10 }}
