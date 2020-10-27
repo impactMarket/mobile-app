@@ -24,6 +24,7 @@ import {
 } from 'helpers/redux/actions/ReduxActions';
 import {
     CONSENT_ANALYTICS,
+    IRootState,
     IStoreCombinedActionsTypes,
     IStoreCombinedState,
     STORAGE_USER_FIRST_TIME,
@@ -43,19 +44,20 @@ import {
     Switch,
     Headline,
 } from 'react-native-paper';
-import { useDispatch, useStore } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
+import Login from './Login';
 
-function WalletScreen() {
+function ProfileScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const userAddress = useSelector((state: IRootState) => state.user.celoInfo.address)
 
     const { user, app } = store.getState();
     const rates = app.exchangeRates;
 
     const [isConsentAnalytics, setIsConsentAnalytics] = React.useState(true);
-    const [sendingLogs, setSendingLogs] = useState(false);
     const [name, setName] = useState('');
     const [logingOut, setLogingOut] = useState(false);
     const [currency, setCurrency] = useState('usd');
@@ -64,14 +66,16 @@ function WalletScreen() {
     const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
 
     useEffect(() => {
-        if (user.user.name !== null && user.user.name.length > 0) {
-            setName(decrypt(user.user.name));
+        if (userAddress.length > 0) {
+            if (user.user.name !== null && user.user.name.length > 0) {
+                setName(decrypt(user.user.name));
+            }
+            setCurrency(user.user.currency);
+            setLanguage(user.user.language);
+            AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
+                setIsConsentAnalytics(c === null || c === 'true' ? true : false)
+            );
         }
-        setCurrency(user.user.currency);
-        setLanguage(user.user.language);
-        AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
-            setIsConsentAnalytics(c === null || c === 'true' ? true : false)
-        );
     }, []);
 
     const onToggleSwitch = () => {
@@ -92,7 +96,7 @@ function WalletScreen() {
             ) {
                 unsubscribe();
                 setLogingOut(false);
-                navigation.goBack();
+                // navigation.goBack();
                 navigation.navigate('communities');
             }
         });
@@ -119,11 +123,16 @@ function WalletScreen() {
         moment.locale(text);
     };
 
+    if (userAddress.length === 0) {
+        return <Login />;
+    }
+
     const userBalance = amountToCurrency(
         user.celoInfo.balance,
         user.user.currency,
         app.exchangeRates
     );
+
     return (
         <>
             <Header title={i18n.t('profile')} navigation={navigation} />
@@ -351,4 +360,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default WalletScreen;
+export default ProfileScreen;

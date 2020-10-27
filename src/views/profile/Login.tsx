@@ -57,9 +57,7 @@ function Login() {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('errorConnectToValora'),
-                [
-                    { text: i18n.t('close') },
-                ],
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
             setConnecting(false);
@@ -82,7 +80,10 @@ function Login() {
             pushNotificationsToken
         );
         if (user === undefined) {
-            Api.uploadError('', 'login', { reason: '', message: 'undefined user'});
+            Api.uploadError('', 'login', {
+                reason: '',
+                message: 'undefined user',
+            });
             analytics('login', { device: Device.brand, success: false });
             Sentry.captureMessage(
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
@@ -91,9 +92,7 @@ function Login() {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
-                [
-                    { text: i18n.t('close') },
-                ],
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
             setConnecting(false);
@@ -145,9 +144,7 @@ function Login() {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
-                [
-                    { text: i18n.t('close') },
-                ],
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
             setConnecting(false);
@@ -164,12 +161,14 @@ function Login() {
                     modeType="gray"
                     bold={true}
                     style={{
-                        marginHorizontal: 10,
+                        width: '100%',
                         backgroundColor: '#e9e9e9',
                     }}
                     onPress={() => Linking.openURL(androidURL)}
                 >
-                    <Text style={{ color: 'black' }}>{i18n.t('installValoraApp')}</Text>
+                    <Text style={{ color: 'black' }}>
+                        {i18n.t('installValoraApp')}
+                    </Text>
                 </Button>
             );
         } else if (Device.osName === 'iOS') {
@@ -178,12 +177,14 @@ function Login() {
                     modeType="gray"
                     bold={true}
                     style={{
-                        marginHorizontal: 10,
+                        width: '100%',
                         backgroundColor: '#e9e9e9',
                     }}
                     onPress={() => Linking.openURL(iosURL)}
                 >
-                    <Text style={{ color: 'black' }}>{i18n.t('installValoraApp')}</Text>
+                    <Text style={{ color: 'black' }}>
+                        {i18n.t('installValoraApp')}
+                    </Text>
                 </Button>
             );
         }
@@ -193,8 +194,8 @@ function Login() {
                     modeType="gray"
                     bold={true}
                     style={{
-                        marginHorizontal: 10,
-                        width: '40%',
+                        // marginHorizontal: 10,
+                        width: '100%',
                         backgroundColor: '#e9e9e9',
                     }}
                     onPress={() => Linking.openURL(iosURL)}
@@ -205,8 +206,8 @@ function Login() {
                     modeType="gray"
                     bold={true}
                     style={{
-                        marginHorizontal: 10,
-                        width: '40%',
+                        // marginHorizontal: 10,
+                        width: '100%',
                         backgroundColor: '#e9e9e9',
                     }}
                     onPress={() => Linking.openURL(androidURL)}
@@ -220,9 +221,7 @@ function Login() {
     return (
         <View style={styles.mainView}>
             <Text style={styles.description}>{i18n.t('toContinuePlease')}</Text>
-            <Text style={styles.title}>
-                {i18n.t('connectToYourCeloWallet')}
-            </Text>
+            <Text style={styles.title}>{i18n.t('connectWithValora')}</Text>
             <Text style={styles.description}>
                 {i18n.t('loginDescription1')}
             </Text>
@@ -233,9 +232,7 @@ function Login() {
             <Text style={styles.instructionText}>
                 {i18n.t('createValoraAccount')}
             </Text>
-            <View>
-                {buttonStoreLink()}
-            </View>
+            <View style={{ width: '100%' }}>{buttonStoreLink()}</View>
             <Text style={styles.stepText}>{i18n.t('step2')}</Text>
             {/* <Text style={styles.instructionText}>
                 {i18n.t('createValoraAccount')}
@@ -248,11 +245,11 @@ function Login() {
                 disabled={connecting}
                 loading={connecting}
                 style={{
-                    width: '80%',
+                    width: '100%',
                     backgroundColor: iptcColors.greenishTeal,
                 }}
             >
-                {i18n.t('connectCeloWallet')}
+                {i18n.t('connectWithValora')}
             </Button>
             {/* <Button
                 modeType="gray"
@@ -273,7 +270,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginHorizontal: 18,
+        marginHorizontal: 32,
         marginVertical: 20,
     },
     title: {

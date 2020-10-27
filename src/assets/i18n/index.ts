@@ -29,7 +29,6 @@ i18n.translations = {
         communities: 'Communities',
         pay: 'Send',
         wallet: 'Wallet',
-        loginNow: 'Connect with Valora',
         profile: 'Profile',
         balance: 'Balance',
         name: 'Name',
@@ -104,7 +103,6 @@ i18n.translations = {
             'An error happened while placing the request to create a community!',
         anErroHappenedTryAgain: 'An error happened, please, try again.',
         toContinuePlease: 'To continue please',
-        connectToYourCeloWallet: 'Connect with Valora',
         loginDescription1:
             'impactMarket operates on top of Celo network, an open and global financial platform.',
         loginDescription2: 'With Valora you can easily send and receive money.',
@@ -112,7 +110,7 @@ i18n.translations = {
         step2: 'Step 2',
         createValoraAccount: 'Create an Valora account.',
         installValoraApp: 'Install Valora App',
-        connectCeloWallet: 'Connect with Valora',
+        connectWithValora: 'Connect with Valora',
         notNow: 'Not now',
         beforeMovingInsertPin:
             'Before moving any further, please, insert your PIN', // pin is for moving dude!
@@ -250,7 +248,6 @@ i18n.translations = {
         communities: 'Comunidades',
         pay: 'Enviar',
         wallet: 'Carteira',
-        loginNow: 'Conectar Agora',
         profile: 'Perfil',
         balance: 'Balanço',
         name: 'Nome',
@@ -325,7 +322,6 @@ i18n.translations = {
             'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
         anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',
         toContinuePlease: 'Para continuar, deverá',
-        connectToYourCeloWallet: 'Conectar com Valora',
         loginDescription1:
             'impactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.',
         loginDescription2:
@@ -334,7 +330,7 @@ i18n.translations = {
         step2: 'Step 2',
         createValoraAccount: 'Criar conta com Valora',
         installValoraApp: 'Instalar aplicativo Valora',
-        connectCeloWallet: 'Conectar com Valora',
+        connectWithValora: 'Conectar com Valora',
         notNow: 'Agora não',
         beforeMovingInsertPin: 'Antes de continuar, por favor, introduza o PIN',
         pin4Digits: 'PIN (4 digitos)',
