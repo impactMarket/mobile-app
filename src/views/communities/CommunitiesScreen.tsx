@@ -20,7 +20,6 @@ import {
 } from 'react-native';
 import { ProgressBar, Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
-import { LinearGradient } from 'expo-linear-gradient';
 import Api from 'services/api';
 import Card from 'components/Card';
 
@@ -39,6 +38,7 @@ type Props = PropsFromRedux & ICommunitiesScreenProps;
 
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
+    const [goWelcomeScreen, setGoWelcomeScreen] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 
@@ -166,8 +166,9 @@ function CommunitiesScreen(props: Props) {
 
     if (
         props.user.celoInfo.address.length === 0 &&
-        props.route.params?.previous !== 'profile'
+        goWelcomeScreen
     ) {
+        setGoWelcomeScreen(false);
         navigation.navigate('WelcomeScreen');
     }
 
