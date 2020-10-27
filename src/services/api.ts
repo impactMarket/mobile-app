@@ -9,6 +9,7 @@ import {
     IUserWelcome,
     IUserTxAPI,
     IUserWelcomeAuth,
+    ICommunity,
 } from 'helpers/types';
 import { AsyncStorage, DevSettings } from 'react-native';
 
@@ -70,12 +71,7 @@ async function postRequest<T>(
 }
 
 class Api {
-    static async getAllValidCommunities(): Promise<ICommunityInfo[]> {
-        const result = await getRequest<ICommunityInfo[]>(
-            '/community/all/valid'
-        );
-        return result ? result : [];
-    }
+    // community
 
     static async createPrivateCommunity(
         requestByAddress: string,
@@ -94,8 +90,8 @@ class Api {
         coverImage: string,
         txReceipt: any,
         txCreationObj: any
-    ): Promise<boolean> {
-        const result = await postRequest<boolean>('/community/create', {
+    ): Promise<ICommunity | undefined> {
+        return await postRequest<ICommunity>('/community/create', {
             requestByAddress,
             name,
             contractAddress,
@@ -110,7 +106,6 @@ class Api {
             txReceipt,
             txCreationObj,
         });
-        return !!result;
     }
 
     static async requestCreatePublicCommunity(
@@ -128,8 +123,8 @@ class Api {
         email: string,
         coverImage: string,
         txCreationObj: any
-    ): Promise<boolean> {
-        const result = await postRequest<boolean>('/community/request', {
+    ): Promise<ICommunity | undefined> {
+        return await postRequest<ICommunity>('/community/request', {
             requestByAddress,
             name,
             description,
@@ -142,7 +137,6 @@ class Api {
             coverImage,
             txCreationObj,
         });
-        return !!result;
     }
 
     static async editCommunity(
@@ -175,22 +169,50 @@ class Api {
         return !!result;
     }
 
-    /**
-     * @deprecated
-     */
-    static async findComunityToBeneficicary(beneficiaryAddress: string) {
-        return getRequest<ICommunityInfo>(
-            `/transactions/beneficiaryin/${beneficiaryAddress}`
-        );
+    static async uploadImageAsync(uri: string) {
+        let response;
+        try {
+            // handle success
+            const uriParts = uri.split('.');
+            const fileType = uriParts[uriParts.length - 1];
+
+            const formData = new FormData();
+            formData.append('photo', {
+                uri,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            } as any);
+            const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+            const requestHeaders = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            const result = await axios.post(
+                '/s3/upload',
+                formData,
+                requestHeaders
+            );
+            response = result;
+        } catch (error) {
+            writeLog({ action: 'upload_image_async', details: error.message });
+        }
+        return response;
     }
 
-    /**
-     * @deprecated
-     */
-    static async findComunityToManager(managerAddress: string) {
-        return getRequest<ICommunityInfo>(
-            `/transactions/managerin/${managerAddress}`
+    static async getAllValidCommunities(): Promise<ICommunityInfo[]> {
+        const result = await getRequest<ICommunityInfo[]>(
+            '/community/all/valid'
         );
+        return result ? result : [];
+    }
+
+    static async getCommunityByPublicId(
+        publicId: string
+    ): Promise<ICommunityInfo | undefined> {
+        return await getRequest<ICommunityInfo>('/community/id/' + publicId);
     }
 
     static async getCommunityByContractAddress(
@@ -210,41 +232,19 @@ class Api {
         return result ? result : [];
     }
 
-    /**
-     * @deprecated
-     */
-    static async userTx(accountAddress: string): Promise<IUserTxAPI[]> {
-        const result = await getRequest<IUserTxAPI[]>(
-            `/transactions/usertx/${accountAddress}`
-        );
-        return result ? result : [];
-    }
+    // user
 
-    /**
-     * @deprecated
-     */
-    static async tokenTx(accountAddress: string): Promise<IRecentTxAPI[]> {
-        const result = await getRequest<IRecentTxAPI[]>(
-            `/transactions/tokentx/${accountAddress}`
-        );
-        return result ? result : [];
-    }
-
-    /**
-     * @deprecated
-     */
-    static async paymentsTx(accountAddress: string): Promise<IPaymentsTxAPI[]> {
-        const result = await getRequest<IPaymentsTxAPI[]>(
-            `/transactions/paymentstx/${accountAddress}`
-        );
-        return result ? result : [];
-    }
-
-    /**
-     * @deprecated Use 'welcome' instead.
-     */
-    static async getUser(address: string) {
-        return getRequest<IUser>(`/user/${address}`);
+    static async userAuth(
+        address: string,
+        language: string,
+        pushNotificationsToken: string
+    ): Promise<IUserWelcomeAuth | undefined> {
+        return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
+            authKey: process.env.EXPO_AUTH_KEY,
+            address,
+            language,
+            pushNotificationsToken,
+        });
     }
 
     static async welcome(address: string, token: string) {
@@ -288,78 +288,6 @@ class Api {
         return !!result;
     }
 
-    /**
-     * Must use values from user storage and update when opening app.
-     */
-    static async getExchangeRate(): Promise<any> {
-        const result = await getRequest<any>('/exchange-rates/');
-        return result;
-    }
-
-    static async uploadImageAsync(uri: string) {
-        let response;
-        try {
-            // handle success
-            const uriParts = uri.split('.');
-            const fileType = uriParts[uriParts.length - 1];
-
-            const formData = new FormData();
-            formData.append('photo', {
-                uri,
-                name: `photo.${fileType}`,
-                type: `image/${fileType}`,
-            } as any);
-            const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-            const requestHeaders = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
-            };
-            const result = await axios.post(
-                '/s3/upload',
-                formData,
-                requestHeaders
-            );
-            response = result;
-        } catch (error) {
-            writeLog({ action: 'upload_image_async', details: error.message });
-        }
-        return response;
-    }
-
-    static async userAuth(
-        address: string,
-        language: string,
-        pushNotificationsToken: string
-    ): Promise<IUserWelcomeAuth | undefined> {
-        return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
-            authKey: process.env.EXPO_AUTH_KEY,
-            address,
-            language,
-            pushNotificationsToken,
-        });
-    }
-
-    /**
-     * @deprecated
-     */
-    static async setUserPushNotificationToken(
-        address: string,
-        token: string
-    ): Promise<boolean> {
-        const requestBody = {
-            address,
-            token,
-        };
-        const result = await postRequest<boolean>(
-            '/user/push-notifications',
-            requestBody
-        );
-        return !!result;
-    }
-
     static async addClaimLocation(
         communityPublicId: string,
         gps: any
@@ -375,6 +303,18 @@ class Api {
         return !!result;
     }
 
+    // app
+
+    /**
+     * Must use values from user storage and update when opening app.
+     */
+    static async getExchangeRate(): Promise<any> {
+        const result = await getRequest<any>('/exchange-rates/');
+        return result;
+    }
+
+    // misc
+
     static async uploadLogs(logs: string): Promise<boolean> {
         const requestBody = {
             logs,
@@ -386,10 +326,13 @@ class Api {
     /**
      * if undefined here happens, it means there's a connection problem
      */
-    static async getMobileVersion(): Promise<{
-        latest: string;
-        minimal: string;
-    } | undefined> {
+    static async getMobileVersion(): Promise<
+        | {
+              latest: string;
+              minimal: string;
+          }
+        | undefined
+    > {
         return await getRequest<any>('/mobile/version');
     }
 }
