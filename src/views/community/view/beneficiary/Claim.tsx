@@ -79,7 +79,11 @@ class Claim extends React.Component<Props, IClaimState> {
             app.kit
         )
             .then(async () => {
-                if (network.community.visibility === 'public') {
+                // do not collect manager claim location nor private communities
+                if (
+                    network.community.visibility === 'public' &&
+                    user.community.isManager === false
+                ) {
                     try {
                         let loc: Location.LocationData | undefined = undefined;
                         const availableGPSToRequest =
@@ -123,7 +127,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         this.setState({ claiming: false });
                         this.props.updateClaimedAmount();
                     });
-                })
+                });
                 analytics('claim', { device: Device.brand, success: true });
             })
             .catch((e) => {
