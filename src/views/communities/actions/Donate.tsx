@@ -359,15 +359,18 @@ class Donate extends Component<Props, IDonateState> {
                                 >
                                     <TextInput
                                         keyboardType="numeric"
-                                        placeholder={i18n.t('amountSymbol', {
-                                            symbol: getCurrencySymbol(
-                                                user.user.currency
-                                            ),
-                                        })}
+                                        // placeholder={i18n.t('amountSymbol', {
+                                        //     symbol: getCurrencySymbol(
+                                        //         user.user.currency
+                                        //     ),
+                                        // })}
+                                        maxLength={9}
+                                        autoFocus={true}
                                         style={{
                                             fontFamily: 'Gelion-Regular',
                                             fontSize: 40,
                                             lineHeight: 50,
+                                            height: 50,
                                             textAlign: 'center',
                                         }}
                                         value={amountDonate}
@@ -414,12 +417,28 @@ class Donate extends Component<Props, IDonateState> {
                                     }}
                                 >
                                     {i18n.t('yourDonationWillBackFor', {
-                                        backNBeneficiaries:
-                                            community.beneficiaries.added
-                                                .length,
+                                        backNBeneficiaries: Math.max(
+                                            0,
+                                            amountDonate.length > 0
+                                                ? Math.floor(
+                                                      amountInDollars /
+                                                          new BigNumber(
+                                                              community.vars._claimAmount
+                                                          )
+                                                              .dividedBy(
+                                                                  10 **
+                                                                      config.cUSDDecimals
+                                                              )
+                                                              .toNumber()
+                                                  )
+                                                : 0
+                                        ),
                                         backForDays:
                                             amountDonate.length > 0
-                                                ? Math.floor(backForDays)
+                                                ? Math.max(
+                                                      1,
+                                                      Math.floor(backForDays)
+                                                  )
                                                 : 0,
                                     })}
                                 </Paragraph>
