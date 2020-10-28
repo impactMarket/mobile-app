@@ -153,9 +153,7 @@ i18n.translations = {
         errorAddingBeneficiary:
             'An error happened while adding the beneficiary.',
         oneTimeWelcomeMessage1:
-            'impactMarket enables any community to create its own unconditional basic income system for their beneficiaries, where each member can claim a fixed amount on a regular basis',
-        oneTimeWelcomeMessage2:
-            'Anyone can back those beneficiaries by donating directly to their communities.',
+            'impactMarket enables any community to setup its own Unconditional Basic Income for their beneficiaries. Anyone can back those communities by donating directly to their UBI contracts.',
         exploreCommunities: 'Explore Communities',
         noFunds: 'No Funds',
         notFundsToAddBeneficiary:
@@ -222,7 +220,8 @@ i18n.translations = {
         update: 'Update',
         skip: 'Skip',
         newVersionAvailable: 'New version available',
-        newVersionAvailableMessage: 'To get the latest improvements and features we need you to update to the latest version.'
+        newVersionAvailableMessage:
+            'To get the latest improvements and features we need you to update to the latest version.',
     },
     pt: {
         testnetWarning:
@@ -368,8 +367,6 @@ i18n.translations = {
         errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.',
         oneTimeWelcomeMessage1:
             'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
-        oneTimeWelcomeMessage2:
-            'Pode apoiar esses beneficiários doando diretamente para as suas comunidades.',
         exploreCommunities: 'Explorar Comunidades',
         noFunds:
             'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
@@ -440,7 +437,8 @@ i18n.translations = {
         update: 'Atualizar',
         skip: 'Mais Tarde',
         newVersionAvailable: 'Nova versão disponível',
-        newVersionAvailableMessage: 'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.'
+        newVersionAvailableMessage:
+            'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.',
     },
 };
 // Set the locale once at the beginning of your app.
