@@ -193,7 +193,7 @@ i18n.translations = {
         donateConfirmMessage:
             "By pressing 'Donate', you will donate {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
         yourDonationWillBackFor:
-            'Your donation will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
+            'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         eachBeneficiaryCanClaimXUpToY:
             'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) per day, up till ${{upToY}} cUSD. Each claim adds {{minIncrement}} min to its waiting interval.',
         nextTimeWillWaitClaim:
@@ -409,7 +409,7 @@ i18n.translations = {
         donateConfirmMessage:
             "Ao selecionar 'Contribuir', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
         yourDonationWillBackFor:
-            'O seu contributo irá apoiar {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
+            'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
         eachBeneficiaryCanClaimXUpToY:
             'Cada beneficiário pode aceder a ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) por dia, até acumular ${{upToY}} cUSD. A cada pedido, {{minIncrement}} minutos são adicionados ao tempo de espera.',
         nextTimeWillWaitClaim:
