@@ -51,67 +51,57 @@ class CommuntyStatus extends Component<Props, object> {
                             // backgroundColor: 'yellow',
                         }}
                     >
-                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                            <View
+                        <View
+                            style={{
+                                flex: 1,
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Title
                                 style={{
-                                    // position: 'absolute',
-                                    alignItems: 'center',
-                                    marginRight: 53/2,
-                                    // width: '30%',
-                                    // backgroundColor: 'red',
+                                    fontFamily: 'Gelion-Bold',
+                                    fontSize: 42,
+                                    lineHeight: 42,
+                                    marginVertical: 4,
                                 }}
                             >
-                                <Title
-                                    style={{
-                                        fontFamily: 'Gelion-Bold',
-                                        fontSize: 42,
-                                        lineHeight: 42,
-                                        marginVertical: 4,
-                                    }}
-                                >
-                                    {community.beneficiaries.added.length}
-                                </Title>
-                                <Text
-                                    style={{
-                                        color: iptcColors.textGray,
-                                        fontSize: 14,
-                                        lineHeight: 15,
-                                    }}
-                                >
-                                    {i18n.t('beneficiaries')}
-                                </Text>
-                            </View>
+                                {community.beneficiaries.added.length}
+                            </Title>
+                            <Text
+                                style={{
+                                    color: iptcColors.textGray,
+                                    fontSize: 14,
+                                    lineHeight: 15,
+                                }}
+                            >
+                                {i18n.t('beneficiaries')}
+                            </Text>
                         </View>
-                        <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <View
+                        <View
+                            style={{
+                                flex: 1,
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Title
                                 style={{
-                                    // position: 'absolute',
-                                    alignItems: 'center',
-                                    marginLeft: 53/2,
-                                    // width: '30%',
-                                    // backgroundColor: 'blue',
+                                    fontFamily: 'Gelion-Bold',
+                                    fontSize: 42,
+                                    lineHeight: 42,
+                                    marginVertical: 4,
                                 }}
                             >
-                                <Title
-                                    style={{
-                                        fontFamily: 'Gelion-Bold',
-                                        fontSize: 42,
-                                        lineHeight: 42,
-                                        marginVertical: 4,
-                                    }}
-                                >
-                                    {community.backers.length}
-                                </Title>
-                                <Text
-                                    style={{
-                                        color: iptcColors.textGray,
-                                        fontSize: 14,
-                                        lineHeight: 15,
-                                    }}
-                                >
-                                    {i18n.t('backers')}
-                                </Text>
-                            </View>
+                                {community.backers.length}
+                            </Title>
+                            <Text
+                                style={{
+                                    color: iptcColors.textGray,
+                                    fontSize: 14,
+                                    lineHeight: 15,
+                                }}
+                            >
+                                {i18n.t('backers')}
+                            </Text>
                         </View>
                     </View>
                     <View style={{ marginTop: 21 }}>
