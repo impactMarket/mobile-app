@@ -4,6 +4,7 @@ import {
     updateCommunityInfo,
     formatInputAmountToTransfer,
     getCurrencySymbol,
+    iptcColors,
 } from 'helpers/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
@@ -284,6 +285,12 @@ class Donate extends Component<Props, IDonateState> {
                 };
             }
         }
+        console.log(
+            community.vars._claimAmount,
+            new BigNumber(community.vars._claimAmount).dividedBy(
+                10 ** config.cUSDDecimals
+            )
+        );
         return (
             <>
                 <Button
@@ -357,23 +364,20 @@ class Donate extends Component<Props, IDonateState> {
                                         // opacity: 0.27,
                                         alignItems: 'center',
                                         borderRadius: 5,
+                                        padding: 13,
                                     }}
                                 >
                                     <TextInput
                                         keyboardType="numeric"
-                                        // placeholder={i18n.t('amountSymbol', {
-                                        //     symbol: getCurrencySymbol(
-                                        //         user.user.currency
-                                        //     ),
-                                        // })}
                                         maxLength={9}
                                         autoFocus={true}
                                         style={{
                                             fontFamily: 'Gelion-Regular',
-                                            fontSize: 40,
-                                            lineHeight: 50,
-                                            height: 50,
+                                            fontSize: 50,
+                                            lineHeight: 60,
+                                            height: 60,
                                             textAlign: 'center',
+                                            color: iptcColors.almostBlack,
                                         }}
                                         value={amountDonate}
                                         onChangeText={(text) =>
@@ -382,9 +386,18 @@ class Donate extends Component<Props, IDonateState> {
                                             })
                                         }
                                     />
-                                    {amountDonate.length > 0 ? (
+                                    <View style={{ height: 19 }}>
                                         <Paragraph
-                                            style={{ marginVertical: 10 }}
+                                            style={{
+                                                fontSize: 16,
+                                                lineHeight: 19,
+                                                height: 19,
+                                                color: 'rgba(0, 0, 0, 0.6)',
+                                                display:
+                                                    amountDonate.length > 0
+                                                        ? 'flex'
+                                                        : 'none',
+                                            }}
                                         >
                                             ~
                                             {`${getCurrencySymbol(
@@ -401,55 +414,91 @@ class Donate extends Component<Props, IDonateState> {
                                                     ','
                                                 )} ${community.currency}`}
                                         </Paragraph>
-                                    ) : (
-                                        <Paragraph
-                                            style={{ marginVertical: 10 }}
-                                        >
-                                            ~
-                                            {`${getCurrencySymbol(
-                                                community.currency
-                                            )}0 ${community.currency}`}
-                                        </Paragraph>
-                                    )}
+                                    </View>
                                 </View>
-                                <Paragraph
-                                    style={{
-                                        marginBottom: 20,
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    {i18n.t('yourDonationWillBackFor', {
-                                        backNBeneficiaries: Math.max(
-                                            0,
-                                            amountDonate.length > 0
-                                                ? Math.floor(
-                                                      amountInDollars /
-                                                          new BigNumber(
-                                                              community.vars._claimAmount
-                                                          )
-                                                              .dividedBy(
-                                                                  10 **
-                                                                      config.cUSDDecimals
+                                <View style={{ height: 23 * 2 + 19 }}>
+                                    <Paragraph
+                                        style={{
+                                            marginVertical: 23,
+                                            fontSize: 16,
+                                            lineHeight: 19,
+                                            height: 19,
+                                            textAlign: 'center',
+                                            fontStyle: 'italic',
+                                            color: iptcColors.textGray,
+                                            display:
+                                                amountDonate.length > 0 &&
+                                                new BigNumber(
+                                                    community.vars._claimAmount
+                                                )
+                                                    .dividedBy(
+                                                        10 **
+                                                            config.cUSDDecimals
+                                                    )
+                                                    .gt(amountInDollars)
+                                                    ? 'flex'
+                                                    : 'none',
+                                        }}
+                                    >
+                                        Amount should be $2+ to calculate..
+                                    </Paragraph>
+                                    <Paragraph
+                                        style={{
+                                            marginVertical: 23,
+                                            fontSize: 16,
+                                            lineHeight: 19,
+                                            height: 19,
+                                            textAlign: 'center',
+                                            display:
+                                                amountDonate.length > 0 &&
+                                                new BigNumber(
+                                                    community.vars._claimAmount
+                                                )
+                                                    .dividedBy(
+                                                        10 **
+                                                            config.cUSDDecimals
+                                                    )
+                                                    .lte(amountInDollars)
+                                                    ? 'flex'
+                                                    : 'none',
+                                        }}
+                                    >
+                                        {i18n.t('yourDonationWillBackFor', {
+                                            backNBeneficiaries: Math.min(
+                                                community.beneficiaries.added
+                                                    .length,
+                                                amountDonate.length > 0
+                                                    ? Math.floor(
+                                                          amountInDollars /
+                                                              new BigNumber(
+                                                                  community.vars._claimAmount
                                                               )
-                                                              .toNumber()
-                                                  )
-                                                : 0
-                                        ),
-                                        backForDays:
-                                            amountDonate.length > 0
-                                                ? Math.max(
-                                                      1,
-                                                      Math.floor(backForDays)
-                                                  )
-                                                : 0,
-                                    })}
-                                </Paragraph>
+                                                                  .dividedBy(
+                                                                      10 **
+                                                                          config.cUSDDecimals
+                                                                  )
+                                                                  .toNumber()
+                                                      )
+                                                    : 0
+                                            ),
+                                            backForDays:
+                                                amountDonate.length > 0
+                                                    ? Math.max(
+                                                          1,
+                                                          Math.floor(
+                                                              backForDays
+                                                          )
+                                                      )
+                                                    : 0,
+                                        })}
+                                    </Paragraph>
+                                </View>
                                 <Button
                                     modeType="gray"
                                     bold={true}
                                     style={{
                                         // backgroundColor: '#F2F3F5',
-                                        marginVertical: 10,
+                                        marginBottom: 10,
                                     }}
                                     onPress={this.handleCopyAddressToClipboard}
                                 >
