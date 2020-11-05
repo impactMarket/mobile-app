@@ -585,7 +585,7 @@ export default class App extends React.Component<any, IAppState> {
         }
         let lastVersionFromCache = await CacheStore.getLastVersion();
         if (lastVersionFromCache === null) {
-            lastVersionFromCache = version.latest;
+            lastVersionFromCache = Constants.manifest.version!;
         }
         const currentVersion = Constants.manifest.version;
         if (semverGt(version.latest, lastVersionFromCache)) {
