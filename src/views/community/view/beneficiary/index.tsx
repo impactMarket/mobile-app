@@ -207,7 +207,7 @@ function BeneficiaryView(props: Props) {
                         style={{
                             flex: 1,
                             justifyContent: 'space-around',
-                            height: Dimensions.get('window').height - 130 - 152, // TODO: ideally, this should be header - navigation
+                            height: Dimensions.get('window').height - 130 - 186, // TODO: ideally, this should be header - navigation
                         }}
                     >
                         <View style={{ marginTop: '5%' }}>

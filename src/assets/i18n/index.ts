@@ -222,6 +222,7 @@ i18n.translations = {
         newVersionAvailable: 'New version available',
         newVersionAvailableMessage:
             'To get the latest improvements and features we need you to update to the latest version.',
+        amountShouldBe: 'Amount should be ${{claimAmount}}+ to calculate..',
     },
     pt: {
         testnetWarning:
@@ -439,6 +440,7 @@ i18n.translations = {
         newVersionAvailable: 'Nova versão disponível',
         newVersionAvailableMessage:
             'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.',
+        amountShouldBe: 'Quantidade deve ser ${{claimAmount}}+ para calcular..',
     },
 };
 // Set the locale once at the beginning of your app.

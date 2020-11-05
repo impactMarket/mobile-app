@@ -13,7 +13,6 @@ import BeneficiaryView from './community/view/beneficiary';
 import CommunityManagerView from './community/view/communitymanager';
 import ProfileScreen from './profile';
 
-
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
     return { user, network };
@@ -25,7 +24,6 @@ type Props = PropsFromRedux;
 const Tab = createBottomTabNavigator();
 
 function Tabs(props: Props) {
-
     const tabBeneficiary = (
         <Tab.Screen
             name="claim"
@@ -73,8 +71,10 @@ function Tabs(props: Props) {
                     lineHeight: 18,
                     letterSpacing: 0.212727,
                 },
-                // tabStyle: { height: 84 },
-                // style: { backgroundColor: 'powderblue' },
+                tabStyle: {
+                    marginVertical: 16,
+                },
+                style: { height: 84 },
             }}
         >
             {isBeneficiary && tabBeneficiary}

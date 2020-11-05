@@ -285,12 +285,6 @@ class Donate extends Component<Props, IDonateState> {
                 };
             }
         }
-        console.log(
-            community.vars._claimAmount,
-            new BigNumber(community.vars._claimAmount).dividedBy(
-                10 ** config.cUSDDecimals
-            )
-        );
         return (
             <>
                 <Button
@@ -416,13 +410,15 @@ class Donate extends Component<Props, IDonateState> {
                                         </Paragraph>
                                     </View>
                                 </View>
-                                <View style={{ height: 23 * 2 + 19 }}>
+                                {/** TODO: fix height */}
+                                <View style={{ height: 23 * 2 + 19 * 2 }}>
                                     <Paragraph
                                         style={{
                                             marginVertical: 23,
                                             fontSize: 16,
                                             lineHeight: 19,
-                                            height: 19,
+                                            height:
+                                                19 * 2 /** TODO: fix height */,
                                             textAlign: 'center',
                                             fontStyle: 'italic',
                                             color: iptcColors.textGray,
@@ -440,7 +436,19 @@ class Donate extends Component<Props, IDonateState> {
                                                     : 'none',
                                         }}
                                     >
-                                        Amount should be $2+ to calculate..
+                                        {i18n.t('amountShouldBe', {
+                                            claimAmount: parseFloat(
+                                                new BigNumber(
+                                                    community.vars._claimAmount
+                                                )
+                                                    .dividedBy(
+                                                        10 **
+                                                            config.cUSDDecimals
+                                                    )
+                                                    .decimalPlaces(2, 1)
+                                                    .toString()
+                                            ),
+                                        })}
                                     </Paragraph>
                                     <Paragraph
                                         style={{
