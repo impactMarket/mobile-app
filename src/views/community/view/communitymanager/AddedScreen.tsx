@@ -52,7 +52,10 @@ function AddedScreen(props: Props) {
             'removebeneficiary',
             props.app.kit
         )
-            .then(() => {
+            .then((tx) => {
+                if (tx === undefined) {
+                    return;
+                }
                 Alert.alert(
                     i18n.t('success'),
                     i18n.t('beneficiaryWasRemoved', { beneficiary }),

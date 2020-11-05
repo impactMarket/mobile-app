@@ -78,7 +78,10 @@ class Claim extends React.Component<Props, IClaimState> {
             'beneficiaryclaim',
             app.kit
         )
-            .then(async () => {
+            .then(async (tx) => {
+                if (tx === undefined) {
+                    return;
+                }
                 // do not collect manager claim location nor private communities
                 if (
                     network.community.visibility === 'public' &&

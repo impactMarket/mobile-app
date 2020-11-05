@@ -8,6 +8,7 @@ import {
     ICommunity,
 } from 'helpers/types';
 import { AsyncStorage, DevSettings } from 'react-native';
+import Constants from 'expo-constants';
 
 import config from '../../config';
 
@@ -316,6 +317,7 @@ class Api {
         error: any
     ): Promise<boolean> {
         const requestBody = {
+            version: Constants.manifest.version,
             address,
             action,
             error: JSON.stringify({

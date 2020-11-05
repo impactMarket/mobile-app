@@ -28,6 +28,7 @@ import {
     NetworkActionTypes,
     UserActionTypes,
 } from './types';
+import * as Linking from 'expo-linking';
 
 const avatarRound1 = require('assets/images/avatar/round/avatar1.png');
 const avatarSquare1 = require('assets/images/avatar/square/avatar1.png');
@@ -54,6 +55,13 @@ const usergetUserAvatars = [
         avatarSquare1,
     ],
 ];
+
+export function makeDeeplinkUrl() {
+    if (config.testnet) {
+        return Linking.makeUrl();
+    }
+    return 'impactmarket://';
+}
 
 export async function getUserBalance(kit: ContractKit, address: string) {
     const stableToken = await kit.contracts.getStableToken();

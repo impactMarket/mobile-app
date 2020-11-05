@@ -1,10 +1,11 @@
 import { toTxResult } from '@celo/contractkit/lib/utils/tx-result';
 import { requestTxSig, FeeCurrency, waitForSignedTxs } from '@celo/dappkit';
-import * as Linking from 'expo-linking';
 import { ContractKit } from '@celo/contractkit';
 import * as Sentry from 'sentry-expo';
 import Constants from 'expo-constants';
 import Api from './api';
+import { makeDeeplinkUrl } from 'helpers/index';
+import { TransactionReceipt } from 'web3-core'; // imported from waitReceipt method
 
 async function celoWalletRequest(
     from: string,
@@ -13,7 +14,7 @@ async function celoWalletRequest(
     requestId: string,
     kit: ContractKit,
     useTo?: boolean
-): Promise<any> {
+): Promise<TransactionReceipt | undefined> {
     let currentProvider = '';
     if (kit.web3.currentProvider !== null) {
         if (typeof kit.web3.currentProvider === 'string') {
@@ -27,7 +28,7 @@ async function celoWalletRequest(
         }
     }
     const dappName = 'impactmarket';
-    const callback = Linking.makeUrl('/');
+    const callback = makeDeeplinkUrl();
     try {
         const reqTxTo = {
             from,
@@ -53,6 +54,10 @@ async function celoWalletRequest(
             Constants.manifest.packagerOpts === undefined ||
             !Constants.manifest.packagerOpts?.dev
         ) {
+            // as transaction requests get pending, they then resume all at once
+            if (e.message.includes('known transaction')) {
+                return;
+            }
             Sentry.captureMessage(
                 JSON.stringify({
                     from,

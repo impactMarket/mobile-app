@@ -57,7 +57,10 @@ function AddBeneficiaryScreen() {
             'addbeneficiary',
             app.kit
         )
-            .then(() => {
+            .then((tx) => {
+                if (tx === undefined) {
+                    return;
+                }
                 setTimeout(
                     () =>
                         updateCommunityInfo(

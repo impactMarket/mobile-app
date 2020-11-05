@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
-import { iptcColors } from 'helpers/index';
+import { iptcColors, makeDeeplinkUrl } from 'helpers/index';
 import { setPushNotificationsToken } from 'helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
@@ -34,7 +34,7 @@ function Login() {
     const login = async () => {
         const requestId = 'login';
         const dappName = 'impactmarket';
-        const callback = Linking.makeUrl('/');
+        const callback = makeDeeplinkUrl();
         setConnecting(true);
 
         const pushNotificationsToken = await registerForPushNotifications();

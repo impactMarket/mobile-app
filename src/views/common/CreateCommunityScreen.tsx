@@ -183,6 +183,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
             ],
         });
         // exception is handled outside
+        // receipt as undefined is handled outside
         const receipt = await celoWalletRequest(
             user.celoInfo.address,
             '0x0000000000000000000000000000000000000000',
@@ -377,6 +378,9 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
             try {
                 if (visibility === 'private') {
                     txReceipt = await deployPrivateCommunity();
+                    if (txReceipt === undefined) {
+                        return;
+                    }
                     communityAddress = txReceipt.contractAddress;
                 }
                 uploadResponse = await Api.uploadImageAsync(coverImage);
@@ -401,7 +405,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                 apiRequestResult = await Api.createPrivateCommunity(
                     user.celoInfo.address,
                     name,
-                    communityAddress,
+                    communityAddress!,
                     description,
                     user.user.language,
                     currency,

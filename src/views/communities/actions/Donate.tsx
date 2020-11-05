@@ -164,7 +164,9 @@ class Donate extends Component<Props, IDonateState> {
             this.props.app.kit
         )
             .then((tx) => {
-                console.log(tx);
+                if (tx === undefined) {
+                    return;
+                }
                 // TODO: wait for tx confirmation and request UI update
                 // update donated values
                 setTimeout(
