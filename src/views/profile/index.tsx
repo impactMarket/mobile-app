@@ -47,6 +47,7 @@ import {
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
 import Login from './Login';
+import * as Linking from 'expo-linking';
 
 function ProfileScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
@@ -140,7 +141,7 @@ function ProfileScreen() {
             <Header title={i18n.t('profile')} navigation={navigation} />
             <ScrollView style={styles.scrollView}>
                 <View style={styles.container}>
-                    <Card elevation={0} style={styles.card}>
+                    <Card elevation={0} style={styles.card} onPress={() => Linking.openURL('celo://wallet')}>
                         <Card.Content>
                             <Text
                                 style={{
