@@ -69,7 +69,7 @@ async function celoWalletRequest(
             );
             Sentry.captureException(e);
         }
-        Api.uploadError(from, 'wallet_request', e);
+        // Api.uploadError(from, 'wallet_request', e);
         throw new Error(e);
     }
 }

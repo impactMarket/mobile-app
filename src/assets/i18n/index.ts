@@ -200,7 +200,7 @@ i18n.translations = {
         copyContractAddress: 'Copy Contract Address',
         donationBiggerThanBalance:
             'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',
-        errorClaiming: 'An error happened while claiming.',
+        errorClaiming: 'An error happened while claiming. Error: {{error}}',
         consentAnonymousAnalytics: 'Consent Anonymous Analytics',
         youCreatedPrivateCommunity:
             "You've created a private community. Welcome!",
@@ -416,7 +416,7 @@ i18n.translations = {
         donationBiggerThanBalance:
             'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
         errorClaiming:
-            'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.',
+            'O erro ocorreu ao tentar pegar. Tente novamente mais tarde. Erro: {{error}}',
         consentAnonymousAnalytics:
             'Aceitar enviar dados anonimos para análises',
         youCreatedPrivateCommunity:
