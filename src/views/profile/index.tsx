@@ -31,11 +31,11 @@ import {
 } from 'helpers/types';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage, StyleSheet, View, Alert } from 'react-native';
+import { AsyncStorage, StyleSheet, TextInput, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,
-    TextInput,
+    // TextInput,
     Paragraph,
     Portal,
     Dialog,
@@ -48,6 +48,7 @@ import { useDispatch, useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
 import Login from './Login';
 import * as Linking from 'expo-linking';
+import Input from 'components/Input';
 
 function ProfileScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
@@ -138,10 +139,32 @@ function ProfileScreen() {
 
     return (
         <>
-            <Header title={i18n.t('profile')} navigation={navigation} />
+            <Header title={i18n.t('profile')} navigation={navigation}>
+                <Button
+                    mode="text"
+                    uppercase={false}
+                    labelStyle={{
+                        fontFamily: 'Gelion-Bold',
+                        fontSize: 22,
+                        lineHeight: 26,
+                        textAlign: 'center',
+                        letterSpacing: 0.366667,
+                        color: '#2643E9',
+                    }}
+                    onPress={handleLogout}
+                    loading={logingOut}
+                    disabled={logingOut}
+                >
+                    {i18n.t('logout')}
+                </Button>
+            </Header>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.container}>
-                    <Card elevation={0} style={styles.card} onPress={() => Linking.openURL('celo://wallet')}>
+                    <Card
+                        elevation={0}
+                        style={styles.card}
+                        onPress={() => Linking.openURL('celo://wallet')}
+                    >
                         <Card.Content>
                             <Text
                                 style={{
@@ -170,11 +193,38 @@ function ProfileScreen() {
                             </View>
                         </Card.Content>
                     </Card>
-                    <ValidatedTextInput
+                    {/* <ValidatedTextInput
                         label={i18n.t('name')}
                         value={name}
                         maxLength={32}
                         required
+                        onEndEditing={(e) => {
+                            let eName = '';
+                            if (name.length > 0) {
+                                eName = encrypt(name);
+                            }
+                            Api.setUsername(user.celoInfo.address, eName);
+                            dispatch(
+                                setUserInfo({ ...user.user, name: eName })
+                            );
+                        }}
+                        onChangeText={(value) => setName(value)}
+                    /> */}
+                    <Input
+                        label={i18n.t('name')}
+                        style={{
+                            backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                            // opacity: 0.27,
+                            borderRadius: 6,
+                            fontSize: 20,
+                            lineHeight: 24,
+                            // height: 24,
+                            color: iptcColors.almostBlack,
+                            paddingVertical: 9,
+                            paddingHorizontal: 14,
+                        }}
+                        value={name}
+                        maxLength={32}
                         onEndEditing={(e) => {
                             let eName = '';
                             if (name.length > 0) {
@@ -217,21 +267,21 @@ function ProfileScreen() {
                             {language === 'en' ? 'English' : ' Português'}
                         </Text>
                     </Button>
-                    <TextInput
+                    <Input
                         label={i18n.t('country')}
                         style={{ marginVertical: 3 }}
                         value={getCountryFromPhoneNumber(
                             user.celoInfo.phoneNumber
                         )}
-                        disabled
+                        editable={false}
                     />
-                    <TextInput
+                    <Input
                         label={i18n.t('phoneNumber')}
                         style={{ marginVertical: 3 }}
                         value={user.celoInfo.phoneNumber}
-                        disabled
+                        editable={false}
                     />
-                    <View
+                    {/* <View
                         style={{
                             flex: 1,
                             flexDirection: 'row',
@@ -251,21 +301,13 @@ function ProfileScreen() {
                             value={isConsentAnalytics}
                             onValueChange={onToggleSwitch}
                         />
-                    </View>
-                    <Button
-                        mode="contained"
-                        style={{ marginVertical: 10 }}
-                        onPress={handleLogout}
-                        loading={logingOut}
-                        disabled={logingOut}
-                    >
-                        {i18n.t('logout')}
-                    </Button>
+                    </View> */}
                     <View
                         style={{
                             flex: 1,
-                            flexDirection: 'row',
+                            flexDirection: 'column',
                             justifyContent: 'space-around',
+                            marginBottom: 31,
                         }}
                     >
                         <Paragraph>
@@ -334,7 +376,8 @@ const styles = StyleSheet.create({
     scrollView: {},
     card: {
         backgroundColor: iptcColors.softBlue,
-        marginVertical: 10,
+        marginTop: 10,
+        marginBottom: 45,
     },
     headlineBalance: {
         fontFamily: 'Gelion-Bold',
@@ -358,8 +401,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     inputTextFieldLabel: {
-        color: 'grey',
-        fontFamily: 'Gelion-Regular',
+        fontSize: 17,
+        lineHeight: 17,
+        letterSpacing: 0.245455,
+        color: iptcColors.textGray,
+        marginVertical: 8,
     },
 });
 
