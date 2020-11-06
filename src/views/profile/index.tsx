@@ -80,7 +80,7 @@ function ProfileScreen() {
                 setIsConsentAnalytics(c === null || c === 'true' ? true : false)
             );
         }
-    }, []);
+    }, [userAddress]);
 
     const onToggleSwitch = () => {
         AsyncStorage.setItem(CONSENT_ANALYTICS, `${!isConsentAnalytics}`);

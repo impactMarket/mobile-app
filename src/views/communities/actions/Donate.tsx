@@ -423,7 +423,7 @@ class Donate extends Component<Props, IDonateState> {
                                             fontStyle: 'italic',
                                             color: iptcColors.textGray,
                                             display:
-                                                amountDonate.length > 0 &&
+                                                amountDonate.length === 0 ||
                                                 new BigNumber(
                                                     community.vars._claimAmount
                                                 )
