@@ -380,7 +380,7 @@ class Donate extends Component<Props, IDonateState> {
                                             })
                                         }
                                     />
-                                    <View style={{ height: 19 }}>
+                                    <View style={{ height: 19, flexDirection: 'row' }}>
                                         <Paragraph
                                             style={{
                                                 fontSize: 16,
@@ -406,7 +406,17 @@ class Donate extends Component<Props, IDonateState> {
                                                 .replace(
                                                     /\B(?=(\d{3})+(?!\d))/g,
                                                     ','
-                                                )} ${community.currency}`}
+                                                )} `}
+                                        </Paragraph>
+                                        <Paragraph
+                                            style={{
+                                                fontSize: 16,
+                                                lineHeight: 19,
+                                                height: 19,
+                                                color: 'rgba(0, 0, 0, 0.6)',
+                                            }}
+                                        >
+                                            {community.currency}
                                         </Paragraph>
                                     </View>
                                 </View>
