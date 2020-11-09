@@ -6,8 +6,8 @@ import {
 import React from 'react';
 import { Alert, View } from 'react-native';
 import { Headline } from 'react-native-paper';
-import Button from 'components/Button';
-import Card from 'components/Card';
+import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;

@@ -24,7 +24,7 @@ import { newKitFromWeb3 } from '@celo/contractkit';
 import config from '../../../config';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
-import Button from 'components/Button';
+import Button from 'components/core/Button';
 
 function Login() {
     const store = useStore();

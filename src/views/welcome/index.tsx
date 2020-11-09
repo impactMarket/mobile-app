@@ -3,7 +3,7 @@ import { Image, SafeAreaView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import i18n from 'assets/i18n';
 import { iptcColors } from 'helpers/index';
-import Button from 'components/Button';
+import Button from 'components/core/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

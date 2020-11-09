@@ -30,10 +30,10 @@ import {
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
-import config from '../../../config';
+import config from '../../../../config';
 import * as Device from 'expo-device';
-import Button from 'components/Button';
-import Card from 'components/Card';
+import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 import Api from 'services/api';
 
 interface IExploreScreenProps {

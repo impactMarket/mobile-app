@@ -6,12 +6,13 @@ import { IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
-import { Appbar, Subheading, Headline, Button } from 'react-native-paper';
+import { Appbar, Subheading, Headline } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { connect, ConnectedProps } from 'react-redux';
 
 import ModalScanQR from '../views/common/ModalScanQR';
-import Card from './Card';
+import Button from './core/Button';
+import Card from './core/Card';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -148,10 +149,8 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                                 />
                             </View>
                             <Button
-                                mode="contained"
-                                style={{
-                                    backgroundColor: iptcColors.greenishTeal,
-                                }}
+                                modeType="green"
+                                bold={true}
                                 onPress={() =>
                                     this.setState({
                                         openScanQR: true,

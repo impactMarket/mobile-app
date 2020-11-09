@@ -16,12 +16,12 @@ import { View, StyleSheet, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Paragraph, Divider, Headline, Text } from 'react-native-paper';
 
-import config from '../../../config';
-import Donate from '../communities/Donate';
+import config from '../../../../config';
+import Donate from './Donate';
 import Api from 'services/api';
 import { useStore } from 'react-redux';
-import Button from 'components/Button';
-import Card from 'components/Card';
+import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 
 import { LineChart } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import Button from 'components/Button';
+import Button from 'components/core/Button';
 import Header from 'components/Header';
 import { ethers } from 'ethers';
 import { updateCommunityInfo } from 'helpers/index';

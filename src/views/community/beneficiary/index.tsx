@@ -22,7 +22,7 @@ import Claim from './Claim';
 import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
 import BaseCommunity from 'components/BaseCommunity';
-import Button from 'components/Button';
+import Button from 'components/core/Button';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
