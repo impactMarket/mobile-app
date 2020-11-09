@@ -8,7 +8,7 @@ import { decrypt, encrypt } from 'helpers/encryption';
 import {
     amountToCurrency,
     getCountryFromPhoneNumber,
-    getCurrencySymbol,
+    getUserBalance,
     humanifyNumber,
     iptcColors,
 } from 'helpers/index';
@@ -48,7 +48,6 @@ import Login from './Login';
 import * as Linking from 'expo-linking';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
-import { BigNumber } from 'bignumber.js';
 
 function ProfileScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
@@ -84,12 +83,11 @@ function ProfileScreen() {
 
     const onRefresh = () => {
         const updateBalance = async () => {
-            const stableToken = await app.kit.contracts.getStableToken();
-            const cUSDBalanceBig = await stableToken.balanceOf(
-                userWallet.address
+            dispatch(
+                setUserWalletBalance(
+                    getUserBalance(app.kit, userWallet.address).toString()
+                )
             );
-            const balance = new BigNumber(cUSDBalanceBig.toString());
-            dispatch(setUserWalletBalance(balance.toString()));
             setRefreshing(false);
         };
         updateBalance();
@@ -209,7 +207,6 @@ function ProfileScreen() {
                                         ...styles.headlineBalance,
                                     }}
                                 >
-                                    {getCurrencySymbol(user.currency)}
                                     {userBalance}
                                 </Headline>
                                 <Text style={{ color: '#FFFFFF' }}>

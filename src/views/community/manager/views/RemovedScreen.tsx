@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
-import { amountToCurrency, getCurrencySymbol } from 'helpers/index';
+import { amountToCurrency } from 'helpers/index';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import React from 'react';
 import { ScrollView } from 'react-native';
@@ -35,9 +35,7 @@ function RemovedScreen(props: Props) {
                     <ListActionItem
                         key={beneficiary.address}
                         item={{
-                            description: `${getCurrencySymbol(
-                                props.user.user.currency
-                            )} ${amountToCurrency(
+                            description: `${amountToCurrency(
                                 beneficiary.claimed,
                                 props.user.user.currency,
                                 props.app.exchangeRates,

@@ -1,18 +1,16 @@
-import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
-import { LinearGradient } from 'expo-linear-gradient';
 import * as WebBrowser from 'expo-web-browser';
-import { humanifyNumber, getCurrencySymbol, iptcColors } from 'helpers/index';
+import { iptcColors, amountToCurrency, humanifyCurrency } from 'helpers/index';
 import {
     ICommunityInfo,
     IStoreCombinedActionsTypes,
     IStoreCombinedState,
 } from 'helpers/types';
 import React, { useState } from 'react';
-import { View, StyleSheet, RefreshControl, Image } from 'react-native';
+import { View, StyleSheet, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Paragraph, Divider, Headline, Text } from 'react-native-paper';
 
@@ -192,16 +190,15 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     <Trans
                                         i18nKey="eachBeneficiaryCanClaimXUpToY"
                                         values={{
-                                            communityCurrency: getCurrencySymbol(
-                                                community.currency
+                                            claimXCCurrency: amountToCurrency(
+                                                community.vars._claimAmount,
+                                                community.currency,
+                                                rates
                                             ),
-                                            claimXCCurrency: humanifyNumber(
-                                                amountInCommunityCurrency.toString()
-                                            ),
-                                            claimX: humanifyNumber(
+                                            claimX: humanifyCurrency(
                                                 community.vars._claimAmount
                                             ),
-                                            upToY: humanifyNumber(
+                                            upToY: humanifyCurrency(
                                                 community.vars._maxClaim
                                             ),
                                             interval:

@@ -228,8 +228,6 @@ class Donate extends Component<Props, IDonateState> {
         const amountInDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
             this.props.user.user.exchangeRate;
-        const amountInCommunityCurrency =
-            amountInDollars * rates[community.currency].rate;
 
         const backForDays =
             amountInDollars /
@@ -398,7 +396,10 @@ class Donate extends Component<Props, IDonateState> {
                                                 community.currency
                                             )}${(
                                                 Math.floor(
-                                                    amountInCommunityCurrency *
+                                                    amountInDollars *
+                                                        rates[
+                                                            community.currency
+                                                        ].rate *
                                                         100
                                                 ) / 100
                                             )

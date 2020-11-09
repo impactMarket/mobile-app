@@ -8,7 +8,6 @@ import {
     humanifyNumber,
     validateEmail,
     formatInputAmountToTransfer,
-    getCurrencySymbol,
     amountToCurrency,
     updateCommunityInfo,
 } from 'helpers/index';
@@ -863,7 +862,6 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             {claimAmount.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
-                                        symbol: getCurrencySymbol(currency),
                                         amount: amountToCurrency(
                                             new BigNumber(
                                                 claimAmount
@@ -922,7 +920,6 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             {maxClaim.length > 0 && (
                                 <Text style={styles.aroundCurrencyValue}>
                                     {i18n.t('aroundValue', {
-                                        symbol: getCurrencySymbol(currency),
                                         amount: amountToCurrency(
                                             new BigNumber(
                                                 maxClaim

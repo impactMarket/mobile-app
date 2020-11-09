@@ -65,7 +65,7 @@ export default {
     email: 'Email',
     contractDetails: 'Detalhes do Contrato',
     claimAmount: 'Montante por Pedido',
-    aroundValue: '~ {{symbol}}{{amount}}',
+    aroundValue: '~ {{amount}}',
     totalClaimPerBeneficiary: 'Montante total por beneficiário',
     frequency: 'Frequência',
     hourly: 'Por Hora',
@@ -117,8 +117,8 @@ export default {
     amountSymbol: 'Montante em {{symbol}}',
     donateSymbol: 'Contribuir {{symbol}}',
     close: 'Fechar',
-    youCanClaimXin: 'Poderá pegar {{symbol}}{{amount}} em',
-    claimX: 'Pegar {{symbol}}{{amount}}',
+    youCanClaimXin: 'Poderá pegar {{amount}} em',
+    claimX: 'Pegar {{amount}}',
     loading: 'A carregar...',
     youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
     hour: 'hora',
@@ -177,7 +177,7 @@ export default {
     yourDonationWillBackFor:
         'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
     eachBeneficiaryCanClaimXUpToY:
-        'Cada beneficiário pode aceder a ~{{communityCurrency}}{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) por <bold>{{interval}}</bold>, até acumular $<bold>{{upToY}}</bold> cUSD. A cada pedido, <bold>{{minIncrement}}</bold> minutos são adicionados ao tempo de espera.',
+        'Cada beneficiário pode aceder a ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) por <bold>{{interval}}</bold>, até acumular $<bold>{{upToY}}</bold> cUSD. A cada pedido, <bold>{{minIncrement}}</bold> minutos são adicionados ao tempo de espera.',
     nextTimeWillWaitClaim:
         'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
     copyContractAddress: 'Copiar Endereço do Contrato',
@@ -199,7 +199,7 @@ export default {
     requestingPermission: 'Perdido de permissão',
     requestCameraPermission:
         'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
-    claimedSince: 'Recebeu {{symbol}}{{amount}} desde {{date}}',
+    claimedSince: 'Recebeu {{amount}} desde {{date}}',
     language: 'Idioma',
     update: 'Atualizar',
     skip: 'Mais Tarde',

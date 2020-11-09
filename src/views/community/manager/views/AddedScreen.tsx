@@ -5,7 +5,6 @@ import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
 import {
     amountToCurrency,
-    getCurrencySymbol,
     updateCommunityInfo,
 } from 'helpers/index';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
@@ -89,9 +88,6 @@ function AddedScreen(props: Props) {
                         key={beneficiary.address}
                         item={{
                             description: i18n.t('claimedSince', {
-                                symbol: getCurrencySymbol(
-                                    props.user.user.currency
-                                ),
                                 amount:
                                     beneficiary.claimed === undefined
                                         ? '0'

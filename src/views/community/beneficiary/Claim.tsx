@@ -4,7 +4,6 @@ import * as Location from 'expo-location';
 import {
     humanifyNumber,
     iptcColors,
-    getCurrencySymbol,
     amountToCurrency,
 } from 'helpers/index';
 import { IRootState } from 'helpers/types';
@@ -184,9 +183,6 @@ class Claim extends React.Component<Props, IClaimState> {
                 <View style={{ height: 90 }}>
                     <Text style={styles.mainPageContent}>
                         {i18n.t('youCanClaimXin', {
-                            symbol: getCurrencySymbol(
-                                this.props.user.user.currency
-                            ),
                             amount: amountToCurrency(
                                 this.props.claimAmount,
                                 this.props.user.user.currency,
@@ -240,9 +236,6 @@ class Claim extends React.Component<Props, IClaimState> {
                 >
                     <Text style={styles.claimText}>
                         {i18n.t('claimX', {
-                            symbol: getCurrencySymbol(
-                                this.props.user.user.currency
-                            ),
                             amount: amountToCurrency(
                                 this.props.claimAmount,
                                 this.props.user.user.currency,

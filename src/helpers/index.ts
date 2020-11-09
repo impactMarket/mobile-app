@@ -110,6 +110,21 @@ export function getCurrencySymbol(currency: string) {
     }
 }
 
+export function humanifyCurrency(inputNumber: BigNumber | string): string {
+    const decimals = new BigNumber(10).pow(config.cUSDDecimals);
+    const value = new BigNumber(inputNumber).div(decimals);
+    if (value.gte('100000')) {
+        return value
+            .decimalPlaces(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+    return value
+        .decimalPlaces(2, 1)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
 export function amountToCurrency(
     amount: BigNumber | string,
     currency: string,
@@ -117,7 +132,11 @@ export function amountToCurrency(
 ): string {
     const exchangeRate = exchangeRates[currency].rate;
     const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
-    return humanifyCurrency(bgn);
+    const hValue = humanifyCurrency(bgn);
+    if (currency === 'CVE') {
+        return hValue.replace('.', getCurrencySymbol(currency));
+    }
+    return getCurrencySymbol(currency) + hValue;
 }
 
 export function claimFrequencyToText(frequency: BigNumber | string): string {
@@ -133,21 +152,6 @@ export function humanifyNumber(inputNumber: BigNumber | string): number {
     return parseFloat(
         new BigNumber(inputNumber).div(decimals).decimalPlaces(2, 1).toString()
     );
-}
-
-export function humanifyCurrency(inputNumber: BigNumber | string): string {
-    const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-    const value = new BigNumber(inputNumber).div(decimals);
-    if (value.gte('100000')) {
-        return value
-            .decimalPlaces(0)
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-    return value
-        .decimalPlaces(2, 1)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export function calculateCommunityProgress(

@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import {
     calculateCommunityProgress,
     iptcColors,
-    getCurrencySymbol,
     amountToCurrency,
 } from 'helpers/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
@@ -186,7 +185,6 @@ class CommuntyStatus extends Component<Props, object> {
                                     letterSpacing: 0.245455,
                                 }}
                             >
-                                {getCurrencySymbol(user.user.currency)}
                                 {amountToCurrency(
                                     community.totalRaised,
                                     user.user.currency,

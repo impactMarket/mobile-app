@@ -66,7 +66,7 @@ export default {
     email: 'Email',
     contractDetails: 'Contract Details',
     claimAmount: 'Claim Amount',
-    aroundValue: '~ {{symbol}}{{amount}}',
+    aroundValue: '~ {{amount}}',
     totalClaimPerBeneficiary: 'Total claim amount per beneficiary',
     frequency: 'Frequency',
     hourly: 'Hourly',
@@ -117,8 +117,8 @@ export default {
     amountSymbol: 'Amount ({{symbol}})',
     donateSymbol: 'Donate ({{symbol}})',
     close: 'Close',
-    youCanClaimXin: 'You can claim {{symbol}}{{amount}} in',
-    claimX: 'Claim {{symbol}}{{amount}}',
+    youCanClaimXin: 'You can claim {{amount}} in',
+    claimX: 'Claim {{amount}}',
     loading: 'Loading...',
     youHaveClaimedXoutOfY: 'You have claimed ${{claimed}} out of ${{max}}',
     hour: 'hour',
@@ -181,7 +181,7 @@ export default {
     yourDonationWillBackFor:
         'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
     eachBeneficiaryCanClaimXUpToY:
-        'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',
+        'Each beneficiary can claim ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',
     nextTimeWillWaitClaim:
         'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
     copyContractAddress: 'Copy Contract Address',
@@ -201,7 +201,7 @@ export default {
     requestingPermission: 'Questing Permission',
     requestCameraPermission:
         'impactMarket requires permission to use your camera in order to scan the QR code.',
-    claimedSince: '{{symbol}}{{amount}} claimed since {{date}}',
+    claimedSince: '{{amount}} claimed since {{date}}',
     language: 'Language',
     update: 'Update',
     skip: 'Skip',
