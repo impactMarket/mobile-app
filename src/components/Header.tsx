@@ -1,17 +1,13 @@
 import { NavigationState, NavigationProp } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import { iptcColors } from 'helpers/index';
 import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 import { IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
-import { Appbar, Subheading, Headline } from 'react-native-paper';
+import { Appbar, Headline } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { connect, ConnectedProps } from 'react-redux';
-
-import ModalScanQR from '../views/common/ModalScanQR';
-import Button from './core/Button';
 import Card from './core/Card';
 
 const mapStateToProps = (state: IRootState) => {
@@ -110,7 +106,6 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                         title={title}
                         titleStyle={{
                             fontFamily: 'Gelion-Bold',
-                            // alignSelf: 'auto',
                             fontSize: 30,
                             lineHeight: 36,
                             color: '#1E3252',
@@ -123,54 +118,25 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                     onBackButtonPress={this.toggleQR}
                     onBackdropPress={this.toggleQR}
                 >
-                    <Card style={styles.card}>
+                    <Card
+                        style={{
+                            borderBottomEndRadius: 0,
+                            borderBottomStartRadius: 0,
+                        }}
+                    >
                         <Card.Content>
-                            <View style={styles.cardHeadView}>
-                                <View style={styles.nameCountry}>
-                                    <Headline style={styles.headingSubHeading}>
-                                        {i18n.t('scanToPay')}
-                                    </Headline>
-                                    <Subheading
-                                        style={styles.headingSubHeading}
-                                    >
-                                        {i18n.t('showQRToScan')}
-                                    </Subheading>
-                                </View>
-                                {/* <Avatar.Image
-                                style={styles.avatar}
-                                size={58}
-                                source={getUserAvatar(this.props.user.user, true)}
-                            /> */}
-                            </View>
+                            <Headline style={{ textAlign: 'center' }}>
+                                {i18n.t('yourQRCode')}
+                            </Headline>
                             <View style={styles.qrView}>
                                 <SvgQRCode
                                     value={this.props.user.celoInfo.address}
                                     size={200}
                                 />
                             </View>
-                            <Button
-                                modeType="green"
-                                bold={true}
-                                onPress={() =>
-                                    this.setState({
-                                        openScanQR: true,
-                                        openQR: false,
-                                    })
-                                }
-                            >
-                                {i18n.t('scanToPay')}
-                            </Button>
                         </Card.Content>
                     </Card>
                 </BottomSheet>
-                <ModalScanQR
-                    isVisible={this.state.openScanQR}
-                    openInCamera={false}
-                    onDismiss={() => this.setState({ openScanQR: false })}
-                    inputText={i18n.t('currentAddress')}
-                    selectButtonText={i18n.t('select')}
-                    callback={this.handleModalScanQR}
-                />
             </>
         );
     }
@@ -182,25 +148,6 @@ const styles = StyleSheet.create({
     },
     appbarIcon: {
         backgroundColor: '#eaedf0',
-    },
-    nameCountry: {
-        // flex: 1,
-        // flexDirection: 'column',
-        // alignItems: 'flex-start'
-    },
-    headingSubHeading: {
-        paddingHorizontal: 20,
-    },
-    card: {
-        // height: 500,
-    },
-    cardHeadView: {
-        // flex: 1,
-        // flexDirection: 'row'
-    },
-    avatar: {
-        alignSelf: 'center',
-        marginLeft: 'auto',
     },
     qrView: {
         alignItems: 'center',

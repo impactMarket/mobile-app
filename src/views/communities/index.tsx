@@ -21,7 +21,7 @@ import {
 import { ProgressBar, Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
-import Card from 'components/Card';
+import Card from 'components/core/Card';
 
 interface ICommunitiesScreenProps {
     navigation: any;

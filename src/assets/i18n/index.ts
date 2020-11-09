@@ -117,8 +117,6 @@ i18n.translations = {
         pin4Digits: 'PIN (4 digits)',
         continue: 'Continue',
         yourQRCode: 'Your QR Code',
-        scanToPay: 'Scan to Pay',
-        showQRToScan: 'Show QR to be scanned',
         youHaveDonated: 'Thank you for your donation!',
         errorDonating: 'An error happened while donating!',
         addressCopiedClipboard:
@@ -336,8 +334,6 @@ i18n.translations = {
         pin4Digits: 'PIN (4 digitos)',
         continue: 'Continuar',
         yourQRCode: 'Seu código QR',
-        scanToPay: 'Scan para Pagar',
-        showQRToScan: 'Mostrar código QR',
         youHaveDonated: 'Obrigado pelo seu donativo!',
         errorDonating: 'Um erro ocorreu durante o donativo!',
         addressCopiedClipboard:

@@ -47,7 +47,7 @@ import { celoWalletRequest } from 'services/celoWallet';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
-import Card from 'components/Card';
+import Card from 'components/core/Card';
 
 interface ICreateCommunityScreen {
     route: {

@@ -11,7 +11,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Title, ProgressBar, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
-import Card from './Card';
+import Card from './core/Card';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes

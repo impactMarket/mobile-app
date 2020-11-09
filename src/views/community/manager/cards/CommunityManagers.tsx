@@ -1,4 +1,4 @@
-import Card from 'components/Card';
+import Card from 'components/core/Card';
 // import ListCommunityManagers from 'components/ListCommunityManagers';
 import { IRootState } from 'helpers/types';
 import React from 'react';

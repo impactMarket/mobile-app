@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import Card from 'components/Card';
+import Card from 'components/core/Card';
 import Header from 'components/Header';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
@@ -46,8 +46,8 @@ import { batch, useDispatch, useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
 import Login from './Login';
 import * as Linking from 'expo-linking';
-import Input from 'components/Input';
-import Select from 'components/Select';
+import Input from 'components/core/Input';
+import Select from 'components/core/Select';
 import { BigNumber } from 'bignumber.js';
 
 function ProfileScreen() {
