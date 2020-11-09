@@ -39,33 +39,7 @@ const ENV = {
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
 
         /**
-         * ImpactMarket contract, use to deploy private communities
-         */
-        cUSDContract: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
-
-        /**
-         * Is it in testnet?
-         */
-        testnet: true,
-    },
-    staging: {
-        /**
-         * Block explorer base URL. Contract address is added at the end.
-         */
-        blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
-
-        /**
-         * The default API URL
-         */
-        baseApiUrl: 'https://impactmarket-api-staging.herokuapp.com/api',
-
-        /**
-         * JSON RPC url
-         */
-        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
-
-        /**
-         * ImpactMarket contract, use to deploy private communities
+         * cUSD contract address
          */
         cUSDContract: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
 
@@ -89,10 +63,10 @@ const ENV = {
          * JSON RPC url
          */
         jsonRpc:
-            'https://celo-mainnet--rpc.datahub.figment.io/apikey/b883d48310aa603380b19750aae4f9f4/',
+            'https://celo-mainnet--rpc.datahub.figment.io/apikey/' + process.env.EXPO_FIGMENT_API_KEY! + '/',
 
         /**
-         * ImpactMarket contract, use to deploy private communities
+         * cUSD contract address
          */
         cUSDContract:
             '0x765de816845861e75a25fca122bb6898b8b1282a',
@@ -107,15 +81,8 @@ const ENV = {
 function getEnvVars() {
     if (Constants.manifest.packagerOpts?.dev) {
         return { ...commonConfig, ...ENV.dev };
-    } else if (Constants.appOwnership === 'standalone') {
-        return { ...commonConfig, ...ENV.production };
-    } else if (Constants.appOwnership === 'expo') {
-        if (Constants.manifest.releaseChannel?.indexOf('production') !== -1) {
-            return { ...commonConfig, ...ENV.production };
-        }
-        return { ...commonConfig, ...ENV.staging };
     }
-    return { ...commonConfig, ...ENV.dev };
+    return { ...commonConfig, ...ENV.production };
 }
 
 export default getEnvVars();
