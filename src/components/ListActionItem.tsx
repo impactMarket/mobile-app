@@ -6,9 +6,8 @@ import {
     TouchableOpacity,
     GestureResponderEvent,
 } from 'react-native';
-import { Avatar, Text, IconButton } from 'react-native-paper';
+import { Text, IconButton } from 'react-native-paper';
 import { IAddressAndName } from 'helpers/types';
-import { getAvatarFromId } from 'helpers/index';
 import { decrypt } from 'helpers/encryption';
 
 export interface IListActionItem {
@@ -65,26 +64,6 @@ export default class ListActionItem extends Component<
                     : from.name;
         }
 
-        const { avatar } = item;
-        let avatarSrc;
-        if (avatar === undefined || avatar.length === 0) {
-            avatarSrc = (
-                <Avatar.Text
-                    size={46}
-                    label={fromHasName ? name.slice(0, 1) : '?'}
-                />
-            );
-        } else if (avatar.length > 3) {
-            avatarSrc = <Avatar.Image size={46} source={{ uri: avatar }} />;
-        } else {
-            avatarSrc = (
-                <Avatar.Image
-                    size={46}
-                    source={getAvatarFromId(parseInt(avatar))}
-                />
-            );
-        }
-
         let renderRight;
         let renderAction;
         if (item.value !== undefined) {
@@ -139,7 +118,6 @@ export default class ListActionItem extends Component<
                     }}
                 >
                     <View style={{ flexDirection: 'row' }}>
-                        <View style={{ marginRight: 5 }}>{avatarSrc}</View>
                         <View style={{ justifyContent: 'center' }}>
                             <Text style={styles.textTitle}>
                                 {itemFrom.length > titleMaxLength
