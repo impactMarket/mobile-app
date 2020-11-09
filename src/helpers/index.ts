@@ -86,8 +86,10 @@ export async function welcomeUser(
 ) {
     const balance = await getUserBalance(kit, address);
     let language = user.user.language;
-    i18n.locale = language;
-    moment.locale(language);
+    if (i18n.language !== language) {
+        i18n.changeLanguage(language);
+        moment.locale(language);
+    }
     store.dispatch(setAppExchangeRatesAction(user.exchangeRates));
     store.dispatch(
         initUser({

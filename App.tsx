@@ -28,7 +28,7 @@ import {
 } from '@react-navigation/native';
 
 import config from './config';
-import i18n, { supportedLanguages } from './src/assets/i18n';
+import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
 import { iptcColors, welcomeUser } from './src/helpers';
 import {
     setCeloKit,
@@ -317,8 +317,7 @@ export default class App extends React.Component<any, IAppState> {
                                             textAlign: 'center',
                                         }}
                                     >
-                                        The Internet connection appears to be
-                                        offline
+                                        {i18n.t('offline')}
                                     </Paragraph>
                                 </Card.Content>
                             </Card>
@@ -567,6 +566,19 @@ export default class App extends React.Component<any, IAppState> {
                 uri: require('./src/assets/fonts/FontGelion/Gelion-Thin.ttf'),
             },
         });
+        // wait to load langiages
+        await loadi18n;
+        let language = Localization.locale;
+        if (language.includes('-')) {
+            language = language.substr(0, language.indexOf('-'));
+        } else if (language.includes('_')) {
+            language = language.substr(0, language.indexOf('_'));
+        }
+        if (!supportedLanguages.includes(language)) {
+            language = 'en';
+        }
+        i18n.changeLanguage(language);
+        store.dispatch(setUserLanguage(language));
         const netState = await NetInfo.fetch();
         if (!netState.isConnected) {
             this.setState({ netAvailable: false });
@@ -629,17 +641,6 @@ export default class App extends React.Component<any, IAppState> {
                 }
             }
             if (!loggedIn) {
-                let language = Localization.locale;
-                if (language.includes('-')) {
-                    language = language.substr(0, language.indexOf('-'));
-                } else if (language.includes('_')) {
-                    language = language.substr(0, language.indexOf('_'));
-                }
-                if (!supportedLanguages.includes(language)) {
-                    language = 'en';
-                }
-                i18n.locale = language;
-                store.dispatch(setUserLanguage(language));
                 const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
                 if (new Date().getTime() - lastUpdate > 3600000) {
                     // 1h in ms

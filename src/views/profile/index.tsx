@@ -140,7 +140,7 @@ function ProfileScreen() {
         setLanguage(text);
         Api.setLanguage(userWallet.address, text);
         dispatch(setUserLanguage(text));
-        i18n.locale = text;
+        i18n.changeLanguage(text);
         moment.locale(text);
     };
 
