@@ -17,7 +17,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Paragraph, Divider, Headline, Text } from 'react-native-paper';
 
 import config from '../../../config';
-import Donate from '../communities/actions/Donate';
+import Donate from '../communities/Donate';
 import Api from 'services/api';
 import { useStore } from 'react-redux';
 import Button from 'components/Button';

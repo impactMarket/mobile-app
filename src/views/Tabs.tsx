@@ -8,9 +8,9 @@ import { IRootState, ITabBarIconProps } from 'helpers/types';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import CommunitiesScreen from './communities/CommunitiesScreen';
+import CommunitiesScreen from './communities';
 import BeneficiaryView from './community/view/beneficiary';
-import CommunityManagerView from './community/view/communitymanager';
+import CommunityManagerView from './community/view/manager';
 import ProfileScreen from './profile';
 
 const mapStateToProps = (state: IRootState) => {
