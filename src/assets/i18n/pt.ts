@@ -177,10 +177,9 @@ export default {
     yourDonationWillBackFor:
         'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
     eachBeneficiaryCanClaimXUpToY:
-        'Cada beneficiário pode aceder a ~{{communityCurrency,bold}}{{claimXCCurrency}} (${{claimX}} cUSD) por dia, até acumular ${{upToY}} cUSD. A cada pedido, {{minIncrement}} minutos são adicionados ao tempo de espera.',
+        'Cada beneficiário pode aceder a ~{{communityCurrency}}{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) por <bold>{{interval}}</bold>, até acumular $<bold>{{upToY}}</bold> cUSD. A cada pedido, <bold>{{minIncrement}}</bold> minutos são adicionados ao tempo de espera.',
     nextTimeWillWaitClaim:
-        'Na próxima terá de esperar pelo menos {{nextWait}}.',
-    knowHowClaimWorks: 'Como funciona?',
+        'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
     copyContractAddress: 'Copiar Endereço do Contrato',
     donationBiggerThanBalance:
         'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',

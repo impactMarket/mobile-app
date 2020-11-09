@@ -26,6 +26,7 @@ import Card from 'components/core/Card';
 import { LineChart } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import BaseCommunity from 'components/BaseCommunity';
+import { Trans } from 'react-i18next';
 
 interface ICommunityDetailsScreen {
     route: {
@@ -188,25 +189,43 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                         lineHeight: 21,
                                     }}
                                 >
-                                    {i18n.t('eachBeneficiaryCanClaimXUpToY', {
-                                        communityCurrency: getCurrencySymbol(
-                                            community.currency
-                                        ),
-                                        claimXCCurrency: humanifyNumber(
-                                            amountInCommunityCurrency.toString()
-                                        ),
-                                        claimX: humanifyNumber(
-                                            community.vars._claimAmount
-                                        ),
-                                        upToY: humanifyNumber(
-                                            community.vars._maxClaim
-                                        ),
-                                        minIncrement:
-                                            parseInt(
-                                                community.vars
-                                                    ._incrementInterval
-                                            ) / 60,
-                                    })}
+                                    <Trans
+                                        i18nKey="eachBeneficiaryCanClaimXUpToY"
+                                        values={{
+                                            communityCurrency: getCurrencySymbol(
+                                                community.currency
+                                            ),
+                                            claimXCCurrency: humanifyNumber(
+                                                amountInCommunityCurrency.toString()
+                                            ),
+                                            claimX: humanifyNumber(
+                                                community.vars._claimAmount
+                                            ),
+                                            upToY: humanifyNumber(
+                                                community.vars._maxClaim
+                                            ),
+                                            interval:
+                                                community.vars._baseInterval ===
+                                                '86400'
+                                                    ? i18n.t('day')
+                                                    : i18n.t('week'),
+                                            minIncrement:
+                                                parseInt(
+                                                    community.vars
+                                                        ._incrementInterval
+                                                ) / 60,
+                                        }}
+                                        components={{
+                                            bold: (
+                                                <Text
+                                                    style={{
+                                                        fontFamily:
+                                                            'Gelion-Bold',
+                                                    }}
+                                                />
+                                            ),
+                                        }}
+                                    />
                                 </Paragraph>
                                 {renderSSI()}
                             </Card.Content>

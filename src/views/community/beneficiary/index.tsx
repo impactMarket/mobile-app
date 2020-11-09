@@ -13,7 +13,7 @@ import {
     RefreshControl,
     Dimensions,
 } from 'react-native';
-import { ActivityIndicator, ProgressBar, Snackbar } from 'react-native-paper';
+import { ActivityIndicator, Paragraph, ProgressBar, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import * as Location from 'expo-location';
@@ -23,6 +23,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import moment from 'moment';
 import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
+import { Trans } from 'react-i18next';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -244,19 +245,28 @@ function BeneficiaryView(props: Props) {
                                 marginHorizontal: 25,
                             }}
                         >
-                            <Text style={styles.howClaimsWorks}>
-                                {i18n.t('nextTimeWillWaitClaim', {
-                                    nextWait: formatedTimeNextCooldown(),
-                                })}
-                            </Text>
-                            <Text
-                                onPress={() =>
-                                    navigation.navigate('ClaimExplainedScreen')
-                                }
-                                style={styles.howClaimsWorksLink}
-                            >
-                                {i18n.t('knowHowClaimWorks')}
-                            </Text>
+                            <Paragraph style={styles.howClaimsWorks}>
+                                <Trans
+                                    i18nKey="nextTimeWillWaitClaim"
+                                    values={{
+                                        nextWait: formatedTimeNextCooldown(),
+                                    }}
+                                    components={{
+                                        a: (
+                                            <Text
+                                                onPress={() =>
+                                                    navigation.navigate(
+                                                        'ClaimExplainedScreen'
+                                                    )
+                                                }
+                                                style={
+                                                    styles.howClaimsWorksLink
+                                                }
+                                            />
+                                        ),
+                                    }}
+                                />
+                            </Paragraph>
                         </View>
                     </View>
                 </BaseCommunity>

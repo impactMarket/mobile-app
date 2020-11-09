@@ -181,10 +181,9 @@ export default {
     yourDonationWillBackFor:
         'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
     eachBeneficiaryCanClaimXUpToY:
-        'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} (${{claimX}} cUSD) per day, up till ${{upToY}} cUSD. Each claim adds {{minIncrement}} min to its waiting interval.',
+        'Each beneficiary can claim ~{{communityCurrency}}{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',
     nextTimeWillWaitClaim:
-        'Next time you will have to wait at least {{nextWait}}.',
-    knowHowClaimWorks: 'How claims work.',
+        'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
     copyContractAddress: 'Copy Contract Address',
     donationBiggerThanBalance:
         'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',

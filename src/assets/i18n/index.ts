@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import { initReactI18next } from "react-i18next";
 import 'moment/locale/pt';
 
 import pt from './pt';
@@ -13,7 +14,7 @@ const resources = {
     },
 };
 
-export const loadi18n = i18next.init({
+export const loadi18n = i18next.use(initReactI18next).init({
     fallbackLng: 'en',
     resources,
 });
