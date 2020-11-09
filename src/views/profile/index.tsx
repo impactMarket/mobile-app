@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Card from 'components/Card';
 import Header from 'components/Header';
-import ValidatedTextInput from 'components/ValidatedTextInput';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { decrypt, encrypt } from 'helpers/encryption';
@@ -21,6 +20,7 @@ import {
     setUserIsBeneficiary,
     setUserIsCommunityManager,
     setUserLanguage,
+    setUserWalletBalance,
 } from 'helpers/redux/actions/ReduxActions';
 import {
     CONSENT_ANALYTICS,
@@ -31,34 +31,33 @@ import {
 } from 'helpers/types';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage, StyleSheet, TextInput, View } from 'react-native';
+import { AsyncStorage, RefreshControl, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,
-    // TextInput,
     Paragraph,
     Portal,
     Dialog,
     RadioButton,
     Text,
-    Switch,
     Headline,
 } from 'react-native-paper';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { batch, useDispatch, useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
 import Login from './Login';
 import * as Linking from 'expo-linking';
 import Input from 'components/Input';
+import Select from 'components/Select';
+import { BigNumber } from 'bignumber.js';
 
 function ProfileScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const userAddress = useSelector(
-        (state: IRootState) => state.user.celoInfo.address
-    );
+    const user = useSelector((state: IRootState) => state.user.user);
+    const userWallet = useSelector((state: IRootState) => state.user.celoInfo);
+    const app = useSelector((state: IRootState) => state.app);
 
-    const { user, app } = store.getState();
     const rates = app.exchangeRates;
 
     const [isConsentAnalytics, setIsConsentAnalytics] = React.useState(true);
@@ -68,19 +67,33 @@ function ProfileScreen() {
     const [language, setLanguage] = useState('en');
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
     const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        if (userAddress.length > 0) {
-            if (user.user.name !== null && user.user.name.length > 0) {
-                setName(decrypt(user.user.name));
+        if (userWallet.address.length > 0) {
+            if (user.name !== null && user.name.length > 0) {
+                setName(decrypt(user.name));
             }
-            setCurrency(user.user.currency);
-            setLanguage(user.user.language);
+            setCurrency(user.currency);
+            setLanguage(user.language);
             AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
                 setIsConsentAnalytics(c === null || c === 'true' ? true : false)
             );
         }
-    }, [userAddress]);
+    }, [userWallet]);
+
+    const onRefresh = () => {
+        const updateBalance = async () => {
+            const stableToken = await app.kit.contracts.getStableToken();
+            const cUSDBalanceBig = await stableToken.balanceOf(
+                userWallet.address
+            );
+            const balance = new BigNumber(cUSDBalanceBig.toString());
+            dispatch(setUserWalletBalance(balance.toString()));
+            setRefreshing(false);
+        };
+        updateBalance();
+    };
 
     const onToggleSwitch = () => {
         AsyncStorage.setItem(CONSENT_ANALYTICS, `${!isConsentAnalytics}`);
@@ -104,36 +117,40 @@ function ProfileScreen() {
                 navigation.navigate('communities', { previous: 'profile' });
             }
         });
-        store.dispatch(setUserIsBeneficiary(false));
-        store.dispatch(setUserIsCommunityManager(false));
-        store.dispatch(resetUserApp());
-        store.dispatch(resetNetworkContractsApp());
+        batch(() => {
+            dispatch(setUserIsBeneficiary(false));
+            dispatch(setUserIsCommunityManager(false));
+            dispatch(resetUserApp());
+            dispatch(resetNetworkContractsApp());
+        });
     };
 
     const handleChangeCurrency = async (text: string) => {
         setCurrency(text);
-        Api.setUserCurrency(user.celoInfo.address, text);
-        dispatch(setUserInfo({ ...user.user, currency: text }));
+        Api.setUserCurrency(userWallet.address, text);
         // update exchange rate!
         const exchangeRate = (rates as any)[text.toUpperCase()].rate;
-        dispatch(setUserExchangeRate(exchangeRate));
+        batch(() => {
+            dispatch(setUserInfo({ ...user, currency: text }));
+            dispatch(setUserExchangeRate(exchangeRate));
+        });
     };
 
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
-        Api.setLanguage(user.celoInfo.address, text);
+        Api.setLanguage(userWallet.address, text);
         dispatch(setUserLanguage(text));
         i18n.locale = text;
         moment.locale(text);
     };
 
-    if (userAddress.length === 0) {
+    if (userWallet.address.length === 0) {
         return <Login />;
     }
 
     const userBalance = amountToCurrency(
-        user.celoInfo.balance,
-        user.user.currency,
+        userWallet.balance,
+        user.currency,
         app.exchangeRates
     );
 
@@ -158,7 +175,15 @@ function ProfileScreen() {
                     {i18n.t('logout')}
                 </Button>
             </Header>
-            <ScrollView style={styles.scrollView}>
+            <ScrollView
+                style={styles.scrollView}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <View style={styles.container}>
                     <Card
                         elevation={0}
@@ -184,11 +209,11 @@ function ProfileScreen() {
                                         ...styles.headlineBalance,
                                     }}
                                 >
-                                    {getCurrencySymbol(user.user.currency)}
+                                    {getCurrencySymbol(user.currency)}
                                     {userBalance}
                                 </Headline>
                                 <Text style={{ color: '#FFFFFF' }}>
-                                    {humanifyNumber(user.celoInfo.balance)} cUSD
+                                    {humanifyNumber(userWallet.balance)} cUSD
                                 </Text>
                             </View>
                         </Card.Content>
@@ -214,11 +239,10 @@ function ProfileScreen() {
                         label={i18n.t('name')}
                         style={{
                             backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                            // opacity: 0.27,
                             borderRadius: 6,
                             fontSize: 20,
                             lineHeight: 24,
-                            // height: 24,
+                            height: 24,
                             color: iptcColors.almostBlack,
                             paddingVertical: 9,
                             paddingHorizontal: 14,
@@ -230,55 +254,33 @@ function ProfileScreen() {
                             if (name.length > 0) {
                                 eName = encrypt(name);
                             }
-                            Api.setUsername(user.celoInfo.address, eName);
-                            dispatch(
-                                setUserInfo({ ...user.user, name: eName })
-                            );
+                            Api.setUsername(userWallet.address, eName);
+                            dispatch(setUserInfo({ ...user, name: eName }));
                         }}
                         onChangeText={(value) => setName(value)}
                     />
-                    <Paragraph style={styles.inputTextFieldLabel}>
-                        {i18n.t('currency')}
-                    </Paragraph>
-                    <Button
-                        mode="contained"
-                        style={{
-                            marginVertical: 3,
-                            backgroundColor: 'rgba(206,212,218,0.27)',
-                        }}
+                    <Select
+                        label={i18n.t('currency')}
+                        value={currency}
                         onPress={() => setIsDialogCurrencyOpen(true)}
-                    >
-                        <Text style={{ color: 'black', opacity: 1 }}>
-                            {currency}
-                        </Text>
-                    </Button>
-                    <Paragraph style={styles.inputTextFieldLabel}>
-                        {i18n.t('language')}
-                    </Paragraph>
-                    <Button
-                        mode="contained"
-                        style={{
-                            marginVertical: 3,
-                            backgroundColor: 'rgba(206,212,218,0.27)',
-                        }}
+                    />
+                    <Select
+                        label={i18n.t('language')}
+                        value={language === 'en' ? 'English' : ' Português'}
                         onPress={() => setIsDialogLanguageOpen(true)}
-                    >
-                        <Text style={{ color: 'black', opacity: 1 }}>
-                            {language === 'en' ? 'English' : ' Português'}
-                        </Text>
-                    </Button>
+                    />
                     <Input
                         label={i18n.t('country')}
                         style={{ marginVertical: 3 }}
                         value={getCountryFromPhoneNumber(
-                            user.celoInfo.phoneNumber
+                            userWallet.phoneNumber
                         )}
                         editable={false}
                     />
                     <Input
                         label={i18n.t('phoneNumber')}
                         style={{ marginVertical: 3 }}
-                        value={user.celoInfo.phoneNumber}
+                        value={userWallet.phoneNumber}
                         editable={false}
                     />
                     {/* <View
