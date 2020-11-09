@@ -9,7 +9,7 @@ import {
     amountToCurrency,
     getCountryFromPhoneNumber,
     getUserBalance,
-    humanifyNumber,
+    humanifyCurrencyAmount,
 } from 'helpers/index';
 import { iptcColors } from 'styles/index';
 import {
@@ -105,14 +105,13 @@ function ProfileScreen() {
         const unsubscribe = store.subscribe(() => {
             const state = store.getState();
             if (
-                state.user.celoInfo.address.length > 0 &&
                 !state.user.community.isBeneficiary &&
                 !state.user.community.isManager
             ) {
                 unsubscribe();
                 setLogingOut(false);
-                // navigation.goBack();
-                navigation.navigate('communities', { previous: 'profile' });
+                // TODO: improve this line below
+                setTimeout(() => navigation.navigate('communities', { previous: 'profile' }), 500);
             }
         });
         batch(() => {
@@ -210,7 +209,7 @@ function ProfileScreen() {
                                     {userBalance}
                                 </Headline>
                                 <Text style={{ color: '#FFFFFF' }}>
-                                    {humanifyNumber(userWallet.balance)} cUSD
+                                    {humanifyCurrencyAmount(userWallet.balance)} cUSD
                                 </Text>
                             </View>
                         </Card.Content>

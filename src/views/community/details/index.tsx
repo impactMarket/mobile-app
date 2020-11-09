@@ -3,7 +3,7 @@ import i18n from 'assets/i18n';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
 import * as WebBrowser from 'expo-web-browser';
-import { amountToCurrency, humanifyCurrency } from 'helpers/index';
+import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/index';
 import { iptcColors } from 'styles/index';
 import {
     ICommunityInfo,
@@ -196,10 +196,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                                 community.currency,
                                                 rates
                                             ),
-                                            claimX: humanifyCurrency(
+                                            claimX: humanifyCurrencyAmount(
                                                 community.vars._claimAmount
                                             ),
-                                            upToY: humanifyCurrency(
+                                            upToY: humanifyCurrencyAmount(
                                                 community.vars._maxClaim
                                             ),
                                             interval:

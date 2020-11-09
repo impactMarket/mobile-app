@@ -5,7 +5,7 @@ import Header from 'components/Header';
 import {
     calculateCommunityProgress,
     claimFrequencyToText,
-    humanifyNumber,
+    humanifyCurrencyAmount,
 } from 'helpers/index';
 import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
@@ -105,7 +105,7 @@ function CommunitiesScreen(props: Props) {
                         </View>
                         <View style={{ flex: 1 }}>
                             <Text style={styles.cellHeader}>
-                                ${humanifyNumber(community.vars._claimAmount)}
+                                ${humanifyCurrencyAmount(community.vars._claimAmount)}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {claimFrequencyToText(

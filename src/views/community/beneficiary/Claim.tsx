@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import * as Location from 'expo-location';
 import {
-    humanifyNumber,
+    humanifyCurrencyAmount,
     amountToCurrency,
 } from 'helpers/index';
 import { iptcColors } from 'styles/index';
@@ -244,7 +244,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         })}
                     </Text>
                     <Text style={styles.claimTextCUSD}>
-                        ${humanifyNumber(this.props.claimAmount)} cUSD
+                        ${humanifyCurrencyAmount(this.props.claimAmount)} cUSD
                     </Text>
                 </View>
             </TouchableOpacity>

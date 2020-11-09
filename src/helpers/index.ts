@@ -110,7 +110,7 @@ export function getCurrencySymbol(currency: string) {
     }
 }
 
-export function humanifyCurrency(inputNumber: BigNumber | string): string {
+export function humanifyCurrencyAmount(inputNumber: BigNumber | string): string {
     const decimals = new BigNumber(10).pow(config.cUSDDecimals);
     const value = new BigNumber(inputNumber).div(decimals);
     if (value.gte('100000')) {
@@ -132,7 +132,7 @@ export function amountToCurrency(
 ): string {
     const exchangeRate = exchangeRates[currency].rate;
     const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
-    const hValue = humanifyCurrency(bgn);
+    const hValue = humanifyCurrencyAmount(bgn);
     if (currency === 'CVE') {
         return hValue.replace('.', getCurrencySymbol(currency));
     }

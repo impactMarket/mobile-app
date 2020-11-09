@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
-import { humanifyNumber } from 'helpers/index';
+import { humanifyCurrencyAmount } from 'helpers/index';
 import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
@@ -39,7 +39,7 @@ function BeneficiaryView(props: Props) {
     const [lastInterval, setLastInterval] = useState(0);
     const [cooldownTime, setCooldownTime] = useState(0);
     const [community, setCommunity] = useState<ICommunityInfo>();
-    const [claimedAmount, setClaimedAmount] = useState(0);
+    const [claimedAmount, setClaimedAmount] = useState('');
     const [claimedProgress, setClaimedProgress] = useState(0.1);
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(true);
@@ -57,7 +57,7 @@ function BeneficiaryView(props: Props) {
                 const progress = new BigNumber(amount.toString()).div(
                     props.network.community.vars._maxClaim
                 );
-                setClaimedAmount(humanifyNumber(amount.toString()));
+                setClaimedAmount(humanifyCurrencyAmount(amount.toString()));
                 setClaimedProgress(progress.toNumber());
                 setCommunity(props.network.community);
                 setCooldownTime(
@@ -127,7 +127,7 @@ function BeneficiaryView(props: Props) {
             props.network.community.vars._maxClaim
         );
         setClaimedProgress(progress.toNumber());
-        setClaimedAmount(humanifyNumber(amount.toString()));
+        setClaimedAmount(humanifyCurrencyAmount(amount.toString()));
     };
 
     if (community === undefined || lastInterval === 0 || cooldownTime === 0) {
@@ -221,7 +221,7 @@ function BeneficiaryView(props: Props) {
                             >
                                 {i18n.t('youHaveClaimedXoutOfY', {
                                     claimed: claimedAmount,
-                                    max: humanifyNumber(
+                                    max: humanifyCurrencyAmount(
                                         community.vars._maxClaim
                                     ),
                                 })}
