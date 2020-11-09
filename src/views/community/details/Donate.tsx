@@ -4,8 +4,8 @@ import {
     updateCommunityInfo,
     formatInputAmountToTransfer,
     getCurrencySymbol,
-    iptcColors,
 } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import {

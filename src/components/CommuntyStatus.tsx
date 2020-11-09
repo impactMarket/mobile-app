@@ -2,9 +2,9 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import {
     calculateCommunityProgress,
-    iptcColors,
     amountToCurrency,
 } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';

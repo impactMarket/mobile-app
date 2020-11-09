@@ -17,6 +17,9 @@
             "views": [
                 "./src/views"
             ],
+            "styles": [
+                "./src/styles"
+            ],
         },
         "allowSyntheticDefaultImports": true,
         "jsx": "react-native",

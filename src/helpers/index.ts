@@ -190,14 +190,6 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
     return 'Unknown';
 }
 
-export var iptcColors = {
-    greenishTeal: '#2dce89',
-    softBlue: '#5e72e4',
-    softGray: '#E9ECEF',
-    textGray: '#7E8DA6',
-    almostBlack: '#1E3252',
-};
-
 export async function updateCommunityInfo(
     communityPublicId: string,
     dispatch: Dispatch<any>

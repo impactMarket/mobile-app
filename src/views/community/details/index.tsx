@@ -3,7 +3,8 @@ import i18n from 'assets/i18n';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
 import * as WebBrowser from 'expo-web-browser';
-import { iptcColors, amountToCurrency, humanifyCurrency } from 'helpers/index';
+import { amountToCurrency, humanifyCurrency } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import {
     ICommunityInfo,
     IStoreCombinedActionsTypes,

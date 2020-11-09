@@ -10,8 +10,8 @@ import {
     getCountryFromPhoneNumber,
     getUserBalance,
     humanifyNumber,
-    iptcColors,
 } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import {
     resetUserApp,
     resetNetworkContractsApp,

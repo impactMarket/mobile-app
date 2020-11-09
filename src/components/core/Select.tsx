@@ -1,4 +1,4 @@
-import { iptcColors } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import React, { Component } from 'react';
 import {
     GestureResponderEvent,

@@ -29,7 +29,8 @@ import {
 
 import config from './config';
 import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
-import { iptcColors, welcomeUser } from './src/helpers';
+import { welcomeUser } from './src/helpers';
+import { iptcColors } from './src/styles';
 import {
     setCeloKit,
     setPushNotificationsToken,

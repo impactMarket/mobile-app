@@ -1,4 +1,4 @@
-import { iptcColors } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import React, { Component } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 import { Paragraph } from 'react-native-paper';

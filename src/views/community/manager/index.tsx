@@ -5,7 +5,8 @@ import BaseCommunity from 'components/BaseCommunity';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
 import * as Linking from 'expo-linking';
-import { updateCommunityInfo, iptcColors } from 'helpers/index';
+import { updateCommunityInfo } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import {

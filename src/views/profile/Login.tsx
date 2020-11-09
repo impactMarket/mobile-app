@@ -3,7 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
-import { iptcColors, makeDeeplinkUrl } from 'helpers/index';
+import { makeDeeplinkUrl } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import { setPushNotificationsToken } from 'helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,

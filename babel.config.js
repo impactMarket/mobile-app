@@ -12,7 +12,8 @@ module.exports = function (api) {
                         components: './src/components',
                         helpers: './src/helpers',
                         services: './src/services',
-                        views: './src/views'
+                        views: './src/views',
+                        styles: './src/styles'
                     },
                 }
             ]

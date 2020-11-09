@@ -3,9 +3,9 @@ import BigNumber from 'bignumber.js';
 import * as Location from 'expo-location';
 import {
     humanifyNumber,
-    iptcColors,
     amountToCurrency,
 } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import { IRootState } from 'helpers/types';
 import moment from 'moment';
 import React from 'react';

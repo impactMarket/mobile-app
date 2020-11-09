@@ -6,8 +6,8 @@ import {
     calculateCommunityProgress,
     claimFrequencyToText,
     humanifyNumber,
-    iptcColors,
 } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import {
