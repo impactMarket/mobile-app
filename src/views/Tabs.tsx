@@ -9,8 +9,8 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import CommunitiesScreen from './communities';
-import BeneficiaryView from './community/view/beneficiary';
-import CommunityManagerView from './community/view/manager';
+import BeneficiaryView from './community/beneficiary';
+import CommunityManagerView from './community/manager';
 import ProfileScreen from './profile';
 
 const mapStateToProps = (state: IRootState) => {

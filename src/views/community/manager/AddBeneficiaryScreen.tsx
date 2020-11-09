@@ -15,7 +15,7 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useStore } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
-import ScanQR from '../../../common/ScanQR';
+import ScanQR from '../../common/ScanQR';
 
 function AddBeneficiaryScreen() {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();

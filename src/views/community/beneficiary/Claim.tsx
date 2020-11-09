@@ -15,7 +15,7 @@ import { ActivityIndicator, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import config from '../../../../../config';
+import config from '../../../../config';
 import * as Device from 'expo-device';
 import { analytics } from 'services/analytics';
 

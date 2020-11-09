@@ -44,8 +44,8 @@ import { useDispatch, useStore } from 'react-redux';
 import Api from 'services/api';
 import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
-import CommunityContractABI from './../../contracts/CommunityABI.json';
-import CommunityBytecode from './../../contracts/CommunityBytecode.json';
+import CommunityContractABI from '../../contracts/CommunityABI.json';
+import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
 import Card from 'components/Card';
 
