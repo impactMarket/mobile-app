@@ -4,36 +4,36 @@ import Button from 'components/core/Button';
 import Header from 'components/Header';
 import { ethers } from 'ethers';
 import { updateCommunityInfo } from 'helpers/index';
-import { IStoreCombinedState, IStoreCombinedActionsTypes } from 'helpers/types';
+import { IRootState } from 'helpers/types';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
-import {
-    Divider,
-    IconButton,
-    Paragraph,
-    TextInput,
-} from 'react-native-paper';
-import { useDispatch, useStore } from 'react-redux';
+import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
-import ScanQR from '../../../common/ScanQR';
+import ScanQR from './ScanQR';
 
 function AddBeneficiaryScreen() {
-    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const { user, network, app } = store.getState();
+    const communityContract = useSelector(
+        (state: IRootState) => state.network.contracts.communityContract
+    );
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.celoInfo.address
+    );
+    const community = useSelector(
+        (state: IRootState) => state.network.community
+    );
+    const kit = useSelector((state: IRootState) => state.app.kit);
 
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
 
     const handleModalScanQR = async () => {
-        const { communityContract } = network.contracts;
-        const { address } = user.celoInfo;
         let addressToAdd: string;
 
         if (communityContract === undefined) {
-            // TODO: do something beatiful, la la la
             return;
         }
 
@@ -51,22 +51,18 @@ function AddBeneficiaryScreen() {
 
         setAddInProgress(true);
         celoWalletRequest(
-            address,
+            userAddress,
             communityContract.options.address,
             await communityContract.methods.addBeneficiary(addressToAdd),
             'addbeneficiary',
-            app.kit
+            kit
         )
             .then((tx) => {
                 if (tx === undefined) {
                     return;
                 }
                 setTimeout(
-                    () =>
-                        updateCommunityInfo(
-                            network.community.publicId,
-                            dispatch
-                        ),
+                    () => updateCommunityInfo(community.publicId, dispatch),
                     10000
                 );
 
@@ -92,9 +88,9 @@ function AddBeneficiaryScreen() {
     };
 
     const personalAddressWarningMessageCondition =
-        inputAddress.toLowerCase() === user.celoInfo.address.toLowerCase();
+        inputAddress.toLowerCase() === userAddress.toLowerCase();
     const usedAddressWarningMessageCondition =
-        network.community.beneficiaries.added.find(
+        community.beneficiaries.added.find(
             (b) => b.address.toLowerCase() === inputAddress.toLowerCase()
         ) !== undefined;
 

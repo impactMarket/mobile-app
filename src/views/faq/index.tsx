@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import Header from 'components/Header';
-import { IStoreCombinedState, IStoreCombinedActionsTypes } from 'helpers/types';
+import { IRootState } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { List, Text } from 'react-native-paper';
-import { useStore } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const enFAQ = [
     {
@@ -171,12 +171,11 @@ const ptFAQ = [
 
 function FAQScreen() {
     const navigation = useNavigation();
-    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
+    const language = useSelector((state: IRootState) => state.user.user.language);
     const [expanded, setExpanded] = useState<string[]>([]);
     const [faq, setFaq] = useState<{ title: string; message: string }[]>([]);
 
     useEffect(() => {
-        const { language } = store.getState().user.user;
         setFaq(language === 'en' ? enFAQ : ptFAQ);
     }, []);
 

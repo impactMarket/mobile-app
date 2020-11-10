@@ -7,8 +7,7 @@ import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import {
     ICommunityInfo,
-    IStoreCombinedActionsTypes,
-    IStoreCombinedState,
+    IRootState,
 } from 'helpers/types';
 import React, { useState } from 'react';
 import { View, StyleSheet, RefreshControl } from 'react-native';
@@ -18,7 +17,7 @@ import { Paragraph, Divider, Headline, Text } from 'react-native-paper';
 import config from '../../../../config';
 import Donate from './Donate';
 import Api from 'services/api';
-import { useStore } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 
@@ -35,9 +34,9 @@ interface ICommunityDetailsScreen {
     };
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
-    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
-    const rates = store.getState().app.exchangeRates;
+    const rates = useSelector((state: IRootState) => state.app.exchangeRates);
+    const language = useSelector((state: IRootState) => state.user.user.language);
 
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
@@ -127,7 +126,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     let description;
     const cDescription =
-        store.getState().user.user.language === community.language
+        language === community.language
             ? community.description
             : community.descriptionEn === null
             ? community.description
@@ -137,9 +136,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     } else {
         description = cDescription.slice(0, cDescription.indexOf('\n'));
     }
-    const amountInDollars = parseFloat(community.vars._claimAmount);
-    const amountInCommunityCurrency =
-        amountInDollars * rates[community.currency].rate;
 
     return (
         <>

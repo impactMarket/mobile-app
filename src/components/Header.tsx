@@ -35,7 +35,6 @@ interface IHeaderProps {
 }
 interface IHeaderState {
     openQR: boolean;
-    openScanQR: boolean;
 }
 
 class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
@@ -43,16 +42,10 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
         super(props);
         this.state = {
             openQR: false,
-            openScanQR: false,
         };
     }
 
     toggleQR = () => this.setState({ openQR: !this.state.openQR });
-
-    handleModalScanQR = async (inputAddress: string) => {
-        this.props.dispatch(setAppPaymentToAction(inputAddress));
-        this.setState({ openQR: false, openScanQR: false });
-    };
 
     render() {
         const {
