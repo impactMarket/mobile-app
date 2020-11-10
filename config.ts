@@ -63,13 +63,14 @@ const ENV = {
          * JSON RPC url
          */
         jsonRpc:
-            'https://celo-mainnet--rpc.datahub.figment.io/apikey/' + process.env.EXPO_FIGMENT_API_KEY! + '/',
+            'https://celo-mainnet--rpc.datahub.figment.io/apikey/' +
+            process.env.EXPO_FIGMENT_API_KEY! +
+            '/',
 
         /**
          * cUSD contract address
          */
-        cUSDContract:
-            '0x765de816845861e75a25fca122bb6898b8b1282a',
+        cUSDContract: '0x765de816845861e75a25fca122bb6898b8b1282a',
 
         /**
          * Is it in testnet?

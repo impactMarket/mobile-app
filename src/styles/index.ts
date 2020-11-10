@@ -8,5 +8,4 @@ export const iptcColors = {
     almostBlack: '#1E3252',
 };
 
-export default StyleSheet.create({
-});
+export default StyleSheet.create({});

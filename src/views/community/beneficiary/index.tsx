@@ -14,7 +14,12 @@ import {
     RefreshControl,
     Dimensions,
 } from 'react-native';
-import { ActivityIndicator, Paragraph, ProgressBar, Snackbar } from 'react-native-paper';
+import {
+    ActivityIndicator,
+    Paragraph,
+    ProgressBar,
+    Snackbar,
+} from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import * as Location from 'expo-location';

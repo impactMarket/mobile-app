@@ -5,10 +5,7 @@ import Header from 'components/Header';
 import * as WebBrowser from 'expo-web-browser';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import {
-    ICommunityInfo,
-    IRootState,
-} from 'helpers/types';
+import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { useState } from 'react';
 import { View, StyleSheet, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -36,7 +33,9 @@ interface ICommunityDetailsScreen {
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const navigation = useNavigation();
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
-    const language = useSelector((state: IRootState) => state.user.user.language);
+    const language = useSelector(
+        (state: IRootState) => state.user.user.language
+    );
 
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);

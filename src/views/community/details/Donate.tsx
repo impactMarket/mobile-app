@@ -1,8 +1,6 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import {
-    updateCommunityInfo,
-} from 'helpers/index';
+import { updateCommunityInfo } from 'helpers/index';
 import {
     formatInputAmountToTransfer,
     getCurrencySymbol,

@@ -29,6 +29,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Gelion-Regular',
         textAlign: 'center',
         marginVertical: 20,
-        fontSize: 18
+        fontSize: 18,
     },
 });

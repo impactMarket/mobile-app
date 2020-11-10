@@ -9,13 +9,7 @@ import { updateCommunityInfo } from 'helpers/index';
 import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    RefreshControl,
-    Image,
-} from 'react-native';
+import { StyleSheet, View, Text, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,

@@ -68,7 +68,10 @@ export default class ValidatedTextInput extends Component<
                     ((this.props.isValid !== undefined
                         ? !this.props.isValid
                         : false) && (
-                        <HelperText type="error" visible={this.props.validation}>
+                        <HelperText
+                            type="error"
+                            visible={this.props.validation}
+                        >
                             {this.props.errorMessage}
                         </HelperText>
                     ))}

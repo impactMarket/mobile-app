@@ -4,10 +4,7 @@ import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import {
-    validateEmail,
-    updateCommunityInfo,
-} from 'helpers/index';
+import { validateEmail, updateCommunityInfo } from 'helpers/index';
 import {
     humanifyNumber,
     formatInputAmountToTransfer,
@@ -495,7 +492,10 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                     }
                 });
                 if (visibility === 'private') {
-                    await updateCommunityInfo(apiRequestResult.publicId, dispatch);
+                    await updateCommunityInfo(
+                        apiRequestResult.publicId,
+                        dispatch
+                    );
                 } else {
                     dispatch(setUserIsCommunityManager(true));
                 }

@@ -1,10 +1,7 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import * as Location from 'expo-location';
-import {
-    humanifyCurrencyAmount,
-    amountToCurrency,
-} from 'helpers/currency';
+import { humanifyCurrencyAmount, amountToCurrency } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { IRootState } from 'helpers/types';
 import moment from 'moment';

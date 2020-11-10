@@ -6,7 +6,7 @@ import * as Sentry from 'sentry-expo';
 
 export async function registerForPushNotifications(): Promise<string> {
     let token = '';
-    try  {
+    try {
         if (Constants.isDevice) {
             const { status: existingStatus } = await Permissions.getAsync(
                 Permissions.NOTIFICATIONS
@@ -25,7 +25,7 @@ export async function registerForPushNotifications(): Promise<string> {
         } else {
             return '';
         }
-    
+
         if (Platform.OS === 'android') {
             Notifications.setNotificationChannelAsync('default', {
                 name: 'default',
@@ -34,7 +34,7 @@ export async function registerForPushNotifications(): Promise<string> {
                 lightColor: '#FF231F',
             });
         }
-    } catch(e) {
+    } catch (e) {
         Sentry.captureException(e);
     }
 

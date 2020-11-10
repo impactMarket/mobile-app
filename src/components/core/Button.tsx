@@ -27,7 +27,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
         let buttonStyle: StyleProp<ViewStyle> = {
             elevation: 0,
             height: 39,
-            justifyContent: 'center'
+            justifyContent: 'center',
             // borderRadius: 4,
         };
         if (!disabled) {

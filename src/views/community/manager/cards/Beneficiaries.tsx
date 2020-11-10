@@ -1,8 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import {
-    ICommunityInfo,
-} from 'helpers/types';
+import { ICommunityInfo } from 'helpers/types';
 import React from 'react';
 import { Alert, View } from 'react-native';
 import { Headline } from 'react-native-paper';

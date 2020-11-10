@@ -7,13 +7,11 @@ import * as Permissions from 'expo-permissions';
 
 export const getCacheContactsAddress = async () => {
     // const db = SQLite.openDatabase('impactMarket', '0.1');
-
     // db.transaction((tx) => {
     //     tx.executeSql(
     //         'create table if not exists contactsAddress (id integer primary key not null, accountaddress text, phonenumber text, name text);'
     //     );
     // });
-
     // db.transaction(
     //     (tx) => {
     //         tx.executeSql(
@@ -26,7 +24,6 @@ export const getCacheContactsAddress = async () => {
     //     undefined,
     //     () => {}
     // );
-
     // db.transaction((tx) => {
     //     tx.executeSql(`select * from contactsAddress;`, [], (_, resultSet) =>
     //     );
@@ -41,7 +38,6 @@ export const crossContactsAddress = async (kit: ContractKit) => {
     }
 
     // const { phoneNumbersByAddress } = await fetchContacts(kit);
-
 
     // TODO: simplify
     // const { status } = await Contacts.requestPermissionsAsync();

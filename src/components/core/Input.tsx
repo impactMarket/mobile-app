@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 
-
 interface IInputProps extends TextInputProps {
     label: string;
 }
@@ -19,7 +18,7 @@ export default class Input extends Component<IInputProps, {}> {
             maxLength,
             onEndEditing,
             onChangeText,
-            editable
+            editable,
         } = this.props;
         return (
             <>
@@ -36,14 +35,19 @@ export default class Input extends Component<IInputProps, {}> {
                 </Paragraph>
                 <TextInput
                     style={{
-                        backgroundColor: editable === undefined || editable ? 'rgba(206, 212, 218, 0.27)' : 'white',
+                        backgroundColor:
+                            editable === undefined || editable
+                                ? 'rgba(206, 212, 218, 0.27)'
+                                : 'white',
                         borderRadius: 6,
                         fontSize: 20,
                         lineHeight: 24,
                         color: iptcColors.almostBlack,
-                        paddingVertical: editable === undefined || editable ? 9 : 2,
-                        paddingHorizontal: editable === undefined || editable ? 14 : 0,
-                        marginBottom: 8
+                        paddingVertical:
+                            editable === undefined || editable ? 9 : 2,
+                        paddingHorizontal:
+                            editable === undefined || editable ? 14 : 0,
+                        marginBottom: 8,
                     }}
                     value={value}
                     maxLength={maxLength}

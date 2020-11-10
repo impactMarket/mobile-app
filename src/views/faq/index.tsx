@@ -13,8 +13,7 @@ const enFAQ = [
             'impactMarket is an open and free platform that allows the creation and distribution of unconditional basic income between communities and their beneficiaries, according to their needs.',
     },
     {
-        title:
-            'What is Universal Basic Income)?',
+        title: 'What is Universal Basic Income)?',
         message:
             'This form of income presupposes that a group of people, whether from the same country, city or even local community, has access, unconditionally, to sufficient recurring income to escape extreme poverty.',
     },
@@ -49,8 +48,7 @@ const enFAQ = [
             'You can send $ cUSD directly from your wallet or exchange, or, in the Valora app, you can buy $ cUSD directly with a credit / debit card and then send.',
     },
     {
-        title:
-            'How can I have access to a basic income?',
+        title: 'How can I have access to a basic income?',
         message:
             'Contact a local social institution that you know and trust and ask to create a community or get in touch with us.',
     },
@@ -64,7 +62,11 @@ const enFAQ = [
         message:
             'The currency used as the basis for all transactions is the US dollar, represented by cUSD. cUSD is a cryptocurrency, which operates on the Celo network, and is worth $ 1. These currencies can be converted, at any time, into dollars.',
     },
-    { title: 'Where can I transact/use cUSD? ', message: 'You can transact cUSD with any partner or payment processor that accepts cUSD directly. Alternatively, Valora has an option to buy or sell CELO with cUSD. CELO is available on several exchanges.' },
+    {
+        title: 'Where can I transact/use cUSD? ',
+        message:
+            'You can transact cUSD with any partner or payment processor that accepts cUSD directly. Alternatively, Valora has an option to buy or sell CELO with cUSD. CELO is available on several exchanges.',
+    },
     {
         title: 'How much is the transaction fee?',
         message:
@@ -145,7 +147,11 @@ const ptFAQ = [
         message:
             'A moeda usada como base de todas as transações é o dólar americano, representado por cUSD. cUSD é uma criptomoeda, que opera na rede da Celo, e que vale $1. Estas moedas são convertíveis, a qualquer momento, em doláres.',
     },
-    { title: 'Onde posso transacionar cUSD? ', message: 'Poderá transacionar cUSD em qualquer parceiros ou processador de pagamento que aceite cUSD diretamente. Em alternativa, a Valora tem uma opção para comprar ou vender CELO com cUSD. CELO está disponível em diversas exchanges.' },
+    {
+        title: 'Onde posso transacionar cUSD? ',
+        message:
+            'Poderá transacionar cUSD em qualquer parceiros ou processador de pagamento que aceite cUSD diretamente. Em alternativa, a Valora tem uma opção para comprar ou vender CELO com cUSD. CELO está disponível em diversas exchanges.',
+    },
     {
         title: 'Quanto é a taxa por cada transação?',
         message:
@@ -171,7 +177,9 @@ const ptFAQ = [
 
 function FAQScreen() {
     const navigation = useNavigation();
-    const language = useSelector((state: IRootState) => state.user.user.language);
+    const language = useSelector(
+        (state: IRootState) => state.user.user.language
+    );
     const [expanded, setExpanded] = useState<string[]>([]);
     const [faq, setFaq] = useState<{ title: string; message: string }[]>([]);
 

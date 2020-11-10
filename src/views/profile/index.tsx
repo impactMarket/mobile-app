@@ -5,14 +5,8 @@ import Header from 'components/Header';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { decrypt, encrypt } from 'helpers/encryption';
-import {
-    getCountryFromPhoneNumber,
-    getUserBalance,
-} from 'helpers/index';
-import {
-    amountToCurrency,
-    humanifyCurrencyAmount,
-} from 'helpers/currency';
+import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
+import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import {
     resetUserApp,
@@ -113,7 +107,13 @@ function ProfileScreen() {
                 unsubscribe();
                 setLogingOut(false);
                 // TODO: improve this line below
-                setTimeout(() => navigation.navigate('communities', { previous: 'profile' }), 500);
+                setTimeout(
+                    () =>
+                        navigation.navigate('communities', {
+                            previous: 'profile',
+                        }),
+                    500
+                );
             }
         });
         batch(() => {
@@ -211,7 +211,8 @@ function ProfileScreen() {
                                     {userBalance}
                                 </Headline>
                                 <Text style={{ color: '#FFFFFF' }}>
-                                    {humanifyCurrencyAmount(userWallet.balance)} cUSD
+                                    {humanifyCurrencyAmount(userWallet.balance)}{' '}
+                                    cUSD
                                 </Text>
                             </View>
                         </Card.Content>

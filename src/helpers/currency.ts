@@ -28,7 +28,9 @@ export function getCurrencySymbol(currency: string) {
     }
 }
 
-export function humanifyCurrencyAmount(inputNumber: BigNumber | string): string {
+export function humanifyCurrencyAmount(
+    inputNumber: BigNumber | string
+): string {
     const decimals = new BigNumber(10).pow(config.cUSDDecimals);
     const value = new BigNumber(inputNumber).div(decimals);
     if (value.gte('100000')) {

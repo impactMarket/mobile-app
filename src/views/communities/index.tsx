@@ -6,9 +6,7 @@ import {
     calculateCommunityProgress,
     claimFrequencyToText,
 } from 'helpers/index';
-import {
-    humanifyCurrencyAmount,
-} from 'helpers/currency';
+import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
@@ -107,7 +105,10 @@ function CommunitiesScreen(props: Props) {
                         </View>
                         <View style={{ flex: 1 }}>
                             <Text style={styles.cellHeader}>
-                                ${humanifyCurrencyAmount(community.vars._claimAmount)}
+                                $
+                                {humanifyCurrencyAmount(
+                                    community.vars._claimAmount
+                                )}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {claimFrequencyToText(
@@ -166,10 +167,7 @@ function CommunitiesScreen(props: Props) {
         </Card>
     );
 
-    if (
-        props.user.celoInfo.address.length === 0 &&
-        goWelcomeScreen
-    ) {
+    if (props.user.celoInfo.address.length === 0 && goWelcomeScreen) {
         setGoWelcomeScreen(false);
         navigation.navigate('WelcomeScreen');
     }

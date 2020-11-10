@@ -38,7 +38,7 @@ function RemovedScreen(props: Props) {
                             description: `${amountToCurrency(
                                 beneficiary.claimed,
                                 props.user.user.currency,
-                                props.app.exchangeRates,
+                                props.app.exchangeRates
                             )}`,
                             from: beneficiary,
                             key: beneficiary.address,
