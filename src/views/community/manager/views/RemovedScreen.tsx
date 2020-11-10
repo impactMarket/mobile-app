@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
-import { amountToCurrency } from 'helpers/index';
+import { amountToCurrency } from 'helpers/currency';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import React from 'react';
 import { ScrollView } from 'react-native';

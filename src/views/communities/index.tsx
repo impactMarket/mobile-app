@@ -5,8 +5,10 @@ import Header from 'components/Header';
 import {
     calculateCommunityProgress,
     claimFrequencyToText,
-    humanifyCurrencyAmount,
 } from 'helpers/index';
+import {
+    humanifyCurrencyAmount,
+} from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';

@@ -5,12 +5,14 @@ import Header from 'components/Header';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import {
-    humanifyNumber,
     validateEmail,
-    formatInputAmountToTransfer,
-    amountToCurrency,
     updateCommunityInfo,
 } from 'helpers/index';
+import {
+    humanifyNumber,
+    formatInputAmountToTransfer,
+    amountToCurrency,
+} from 'helpers/currency';
 import {
     ICommunityInfo,
     IUserState,

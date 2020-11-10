@@ -3,10 +3,8 @@ import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
-import {
-    amountToCurrency,
-    updateCommunityInfo,
-} from 'helpers/index';
+import { updateCommunityInfo } from 'helpers/index';
+import { amountToCurrency } from 'helpers/currency';
 import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import moment from 'moment';
 import React, { useState } from 'react';

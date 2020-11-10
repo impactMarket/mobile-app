@@ -2,8 +2,10 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import {
     calculateCommunityProgress,
-    amountToCurrency,
 } from 'helpers/index';
+import {
+    amountToCurrency,
+} from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { Component } from 'react';

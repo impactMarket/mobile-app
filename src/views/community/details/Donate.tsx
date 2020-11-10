@@ -2,9 +2,11 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import {
     updateCommunityInfo,
+} from 'helpers/index';
+import {
     formatInputAmountToTransfer,
     getCurrencySymbol,
-} from 'helpers/index';
+} from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';

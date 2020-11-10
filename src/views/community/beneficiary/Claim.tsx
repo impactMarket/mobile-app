@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 import {
     humanifyCurrencyAmount,
     amountToCurrency,
-} from 'helpers/index';
+} from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { IRootState } from 'helpers/types';
 import moment from 'moment';

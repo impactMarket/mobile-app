@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
-import { humanifyCurrencyAmount } from 'helpers/index';
+import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useEffect, useState } from 'react';

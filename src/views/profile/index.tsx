@@ -6,11 +6,13 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { decrypt, encrypt } from 'helpers/encryption';
 import {
-    amountToCurrency,
     getCountryFromPhoneNumber,
     getUserBalance,
-    humanifyCurrencyAmount,
 } from 'helpers/index';
+import {
+    amountToCurrency,
+    humanifyCurrencyAmount,
+} from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import {
     resetUserApp,
