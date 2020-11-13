@@ -107,7 +107,7 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
     if (phoneNumber.slice(0, 4) === '+351') {
         return '🇵🇹 Portugal';
     } else if (phoneNumber.slice(0, 3) === '+55') {
-        return '🇧🇷 Brazil';
+        return '🇧🇷 Brasil';
     } else if (phoneNumber.slice(0, 2) === '+1') {
         return '🇺🇸 United States of America';
     } else if (phoneNumber.slice(0, 3) === '+62') {
@@ -122,6 +122,10 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
         return '🇳🇬 Nigeria';
     } else if (phoneNumber.slice(0, 3) === '+54') {
         return '🇦🇷 Argentina';
+    } else if (phoneNumber.slice(0, 3) === '+58') {
+        return '🇻🇪 Venezuela';
+    } else if (phoneNumber.slice(0, 3) === '+63') {
+        return '🇵🇭 Philippines';
     }
     return 'Unknown';
 }

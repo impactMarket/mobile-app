@@ -1,4 +1,3 @@
-import Constants from 'expo-constants';
 
 const commonConfig = {
     /**
@@ -80,7 +79,9 @@ const ENV = {
 };
 
 function getEnvVars() {
-    if (Constants.manifest.packagerOpts?.dev) {
+    if (__DEV__) {
+        // thanks https://stackoverflow.com/a/57468503/3348623
+        // do dev stuff 🤘
         return { ...commonConfig, ...ENV.dev };
     }
     return { ...commonConfig, ...ENV.production };

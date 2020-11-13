@@ -252,26 +252,45 @@ function BeneficiaryView(props: Props) {
                             }}
                         >
                             <Paragraph style={styles.howClaimsWorks}>
-                                <Trans
-                                    i18nKey="nextTimeWillWaitClaim"
-                                    values={{
-                                        nextWait: formatedTimeNextCooldown(),
-                                    }}
-                                    components={{
-                                        a: (
-                                            <Text
-                                                onPress={() =>
-                                                    navigation.navigate(
-                                                        'ClaimExplainedScreen'
-                                                    )
-                                                }
-                                                style={
-                                                    styles.howClaimsWorksLink
-                                                }
-                                            />
-                                        ),
-                                    }}
-                                />
+                                {moment
+                                    .duration(
+                                        moment(cooldownTime * 1000).diff(
+                                            moment()
+                                        )
+                                    )
+                                    .asSeconds() < 0 ? (
+                                    <Trans
+                                        i18nKey="nextTimeWillWaitClaim"
+                                        values={{
+                                            nextWait: formatedTimeNextCooldown(),
+                                        }}
+                                        components={{
+                                            a: (
+                                                <Text
+                                                    onPress={() =>
+                                                        navigation.navigate(
+                                                            'ClaimExplainedScreen'
+                                                        )
+                                                    }
+                                                    style={
+                                                        styles.howClaimsWorksLink
+                                                    }
+                                                />
+                                            ),
+                                        }}
+                                    />
+                                ) : (
+                                    <Text
+                                        onPress={() =>
+                                            navigation.navigate(
+                                                'ClaimExplainedScreen'
+                                            )
+                                        }
+                                        style={styles.howClaimsWorksLink}
+                                    >
+                                        {i18n.t('howClaimWorks')}
+                                    </Text>
+                                )}
                             </Paragraph>
                         </View>
                     </View>

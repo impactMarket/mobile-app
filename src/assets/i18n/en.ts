@@ -184,6 +184,7 @@ export default {
         'Each beneficiary can claim ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',
     nextTimeWillWaitClaim:
         'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
+    howClaimWorks: 'How claims work.',
     copyContractAddress: 'Copy Contract Address',
     donationBiggerThanBalance:
         'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',

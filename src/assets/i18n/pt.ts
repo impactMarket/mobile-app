@@ -180,6 +180,7 @@ export default {
         'Cada beneficiário pode aceder a ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) por <bold>{{interval}}</bold>, até acumular $<bold>{{upToY}}</bold> cUSD. A cada pedido, <bold>{{minIncrement}}</bold> minutos são adicionados ao tempo de espera.',
     nextTimeWillWaitClaim:
         'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
+    howClaimWorks: 'Como funciona?',
     copyContractAddress: 'Copiar Endereço do Contrato',
     donationBiggerThanBalance:
         'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
