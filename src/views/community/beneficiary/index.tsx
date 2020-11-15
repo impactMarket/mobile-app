@@ -30,6 +30,7 @@ import moment from 'moment';
 import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
 import { Trans } from 'react-i18next';
+import CacheStore from 'services/cacheStore';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -51,40 +52,60 @@ function BeneficiaryView(props: Props) {
 
     useEffect(() => {
         const loadCommunity = async () => {
-            if (
-                props.network.contracts.communityContract !== undefined &&
-                props.network.community !== undefined &&
-                props.user.celoInfo.address.length > 0
-            ) {
-                const amount = await props.network.contracts.communityContract.methods
-                    .claimed(props.user.celoInfo.address)
-                    .call();
-                const progress = new BigNumber(amount.toString()).div(
-                    props.network.community.vars._maxClaim
-                );
-                setClaimedAmount(humanifyCurrencyAmount(amount.toString()));
-                setClaimedProgress(progress.toNumber());
-                setCommunity(props.network.community);
-                setCooldownTime(
-                    parseInt(
+            if (props.network.community !== undefined) {
+                const beneficiaryClaimCache = await CacheStore.getBeneficiaryClaim();
+                if (beneficiaryClaimCache !== null) {
+                    const progress = new BigNumber(
+                        beneficiaryClaimCache.claimed
+                    ).div(props.network.community.vars._maxClaim);
+                    setClaimedAmount(
+                        humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
+                    );
+                    setClaimedProgress(progress.toNumber());
+                    setCommunity(props.network.community);
+                    setCooldownTime(beneficiaryClaimCache.cooldown);
+                    setLastInterval(beneficiaryClaimCache.lastInterval);
+                } else if (
+                    props.network.contracts.communityContract !== undefined &&
+                    props.user.celoInfo.address.length > 0
+                ) {
+                    const claimed = (
+                        await props.network.contracts.communityContract.methods
+                            .claimed(props.user.celoInfo.address)
+                            .call()
+                    ).toString();
+                    const cooldown = parseInt(
                         (
                             await props.network.contracts.communityContract.methods
                                 .cooldown(props.user.celoInfo.address)
                                 .call()
                         ).toString(),
                         10
-                    )
-                );
-                setLastInterval(
-                    parseInt(
+                    );
+                    const lastIntv = parseInt(
                         (
                             await props.network.contracts.communityContract.methods
                                 .lastInterval(props.user.celoInfo.address)
                                 .call()
                         ).toString(),
                         10
-                    )
-                );
+                    );
+                    // cache it
+                    const beneficiaryClaimCache = {
+                        claimed,
+                        cooldown,
+                        lastInterval: lastIntv,
+                    };
+                    CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
+                    const progress = new BigNumber(claimed).div(
+                        props.network.community.vars._maxClaim
+                    );
+                    setClaimedAmount(humanifyCurrencyAmount(claimed));
+                    setClaimedProgress(progress.toNumber());
+                    setCommunity(props.network.community);
+                    setCooldownTime(cooldown);
+                    setLastInterval(lastIntv);
+                }
             }
         };
         const isLocationAvailable = async () => {
@@ -123,16 +144,41 @@ function BeneficiaryView(props: Props) {
         );
     };
 
-    const updateClaimedAmount = async () => {
-        const amount = await props.network.contracts.communityContract.methods
-            .claimed(props.user.celoInfo.address)
-            .call();
+    const updateClaimedAmountAndCache = async () => {
+        const claimed = (
+            await props.network.contracts.communityContract.methods
+                .claimed(props.user.celoInfo.address)
+                .call()
+        ).toString();
+        const cooldown = parseInt(
+            (
+                await props.network.contracts.communityContract.methods
+                    .cooldown(props.user.celoInfo.address)
+                    .call()
+            ).toString(),
+            10
+        );
+        const lastIntv = parseInt(
+            (
+                await props.network.contracts.communityContract.methods
+                    .lastInterval(props.user.celoInfo.address)
+                    .call()
+            ).toString(),
+            10
+        );
+        // cache it
+        const beneficiaryClaimCache = {
+            claimed,
+            cooldown,
+            lastInterval: lastIntv,
+        };
+        CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
 
-        const progress = new BigNumber(amount.toString()).div(
+        const progress = new BigNumber(claimed).div(
             props.network.community.vars._maxClaim
         );
         setClaimedProgress(progress.toNumber());
-        setClaimedAmount(humanifyCurrencyAmount(amount.toString()));
+        setClaimedAmount(humanifyCurrencyAmount(claimed.toString()));
     };
 
     if (community === undefined || lastInterval === 0 || cooldownTime === 0) {
@@ -240,7 +286,7 @@ function BeneficiaryView(props: Props) {
                         </View>
                         <Claim
                             claimAmount={community.vars._claimAmount}
-                            updateClaimedAmount={updateClaimedAmount}
+                            updateClaimedAmount={updateClaimedAmountAndCache}
                             cooldownTime={cooldownTime}
                             updateCooldownTime={getNewCooldownTime}
                         />

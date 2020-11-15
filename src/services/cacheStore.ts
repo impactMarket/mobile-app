@@ -2,11 +2,19 @@ import { IUser } from 'helpers/types';
 import { AsyncStorage } from 'react-native';
 
 const CACHE_STORE_USER = '@CacheStore:user';
+const CACHE_STORE_BENEFICIARY_CLAIM = '@CacheStore:beneficiaryClaim';
+//
 const CACHE_STORE_EXCHANGE_RATES = '@CacheStore:exchangeRates';
 const CACHE_STORE_LAST_EXCHANGE_RATES = '@CacheStore:lastExchangeRates';
 const CACHE_STORE_LAST_VERSION = '@CacheStore:lastVersion';
 const CACHE_STORE_LAST_LAST_VERSION = '@CacheStore:lastLastVersion';
 const CACHE_STORE_APP_NEEDS_UPDATE = '@CacheStore:appNeedsUpdate';
+
+interface IBeneficiaryClaim {
+    claimed: string;
+    cooldown: number;
+    lastInterval: number;
+};
 
 export default class CacheStore {
     // user cache
@@ -21,6 +29,18 @@ export default class CacheStore {
             return null;
         }
         return JSON.parse(user);
+    }
+
+    static async cacheBeneficiaryClaim(beneficiaryClaim: IBeneficiaryClaim) {
+        await AsyncStorage.setItem(CACHE_STORE_BENEFICIARY_CLAIM, JSON.stringify(beneficiaryClaim));
+    }
+
+    static async getBeneficiaryClaim(): Promise<IBeneficiaryClaim | null> {
+        const beneficiaryClaim = await AsyncStorage.getItem(CACHE_STORE_BENEFICIARY_CLAIM);
+        if (beneficiaryClaim === null) {
+            return null;
+        }
+        return JSON.parse(beneficiaryClaim);
     }
 
     // last version cache

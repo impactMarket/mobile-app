@@ -53,7 +53,7 @@ function Login() {
             userAddress = ethers.utils.getAddress(dappkitResponse.address);
         } catch (e) {
             Api.uploadError('', 'login', e);
-            analytics('login', { device: Device.brand, success: false });
+            analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureException(e);
             Alert.alert(
                 i18n.t('failure'),
@@ -85,7 +85,7 @@ function Login() {
                 reason: '',
                 message: 'undefined user',
             });
-            analytics('login', { device: Device.brand, success: false });
+            analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureMessage(
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
                 Sentry.Severity.Critical
@@ -131,10 +131,10 @@ function Login() {
                 store as any
             );
             store.dispatch(setPushNotificationsToken(pushNotificationsToken));
-            analytics('login', { device: Device.brand, success: true });
+            analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             Api.uploadError('', 'login', error);
-            analytics('login', { device: Device.brand, success: false });
+            analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureMessage(
                 JSON.stringify({
                     action: 'login',

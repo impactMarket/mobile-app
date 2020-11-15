@@ -111,7 +111,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         }
                         analytics('claim_location', {
                             device: Device.brand,
-                            success: true,
+                            success: 'true',
                         });
                     } catch (e) {
                         Api.uploadError(address, 'claim', e);
@@ -127,7 +127,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         this.props.updateClaimedAmount();
                     });
                 });
-                analytics('claim', { device: Device.brand, success: true });
+                analytics('claim', { device: Device.brand, success: 'true' });
             })
             .catch((e) => {
                 Api.uploadError(address, 'claim', e);

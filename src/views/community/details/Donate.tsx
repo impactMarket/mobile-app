@@ -185,11 +185,11 @@ class Donate extends Component<Props, IDonateState> {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
-                analytics('donate', { device: Device.brand, success: true });
+                analytics('donate', { device: Device.brand, success: 'true' });
             })
             .catch((e) => {
                 Api.uploadError(this.props.user.celoInfo.address, 'donate', e);
-                analytics('donate', { device: Device.brand, success: false });
+                analytics('donate', { device: Device.brand, success: 'false' });
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorDonating'),
