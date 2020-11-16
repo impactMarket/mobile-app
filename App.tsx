@@ -40,6 +40,7 @@ import {
     setUserIsBeneficiary,
     setAppExchangeRatesAction,
     setUserLanguage,
+    setAppSuspectWrongDateTime,
 } from './src/helpers/redux/actions/ReduxActions';
 import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
 import {
@@ -74,6 +75,7 @@ import { gt as semverGt, gte as semverGte } from 'semver';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
+import moment from 'moment';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -591,10 +593,20 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     _checkForNewVersion = async () => {
+        // this should not be built this way,
+        // wee need instead an udp library and a NTP server.
+        const preTime = new Date();
         const version = await Api.getMobileVersion();
+        const postTime = new Date();
         if (version === undefined) {
             // TODO: error loading app, reload
             return;
+        }
+        const requestDiff = moment(preTime).diff(postTime);
+        const timeDiff = new Date(postTime.getTime() - requestDiff / 2).getTime() - version.timestamp;
+        // 10 seconds
+        if (timeDiff > 10000 || timeDiff < 10000) {
+            store.dispatch(setAppSuspectWrongDateTime(true, timeDiff));
         }
         let lastVersionFromCache = await CacheStore.getLastVersion();
         if (lastVersionFromCache === null) {

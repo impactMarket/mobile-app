@@ -23,6 +23,8 @@ export const SET_USER_LANGUAGE = 'SET_USER_LANGUAGE';
 export const SET_EXCHANGE_RATES = 'SET_EXCHANGE_RATES';
 export const CONSENT_ANALYTICS = 'CONSENT_ANALYTICS';
 
+export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
+
 // state
 export interface IUserCeloInfo {
     // verify if address is undefined to determine if user is logged in
@@ -69,6 +71,8 @@ export interface IAppState {
     kit: ContractKit;
     exchangeRates: any;
     paymentToAddress: string;
+    suspectWrongDateTime: boolean;
+    timeDiff: number;
 }
 
 // same as ICombinedState
@@ -159,6 +163,14 @@ interface SetAppPaymentToAction {
     payload: string;
 }
 
+interface SetAppSuspectWrongDateTime {
+    type: typeof SET_APP_SUSPECT_WRONG_DATETIME;
+    payload: {
+        suspect: boolean;
+        timeDiff: number;
+    };
+}
+
 interface SetAppEchangeRatesAction {
     type: typeof SET_EXCHANGE_RATES;
     payload: any;
@@ -184,7 +196,8 @@ export type AuthActionTypes =
 export type AppActionTypes =
     | CeloKitAction
     | SetAppPaymentToAction
-    | SetAppEchangeRatesAction;
+    | SetAppEchangeRatesAction
+    | SetAppSuspectWrongDateTime;
 
 export interface IStoreCombinedState {
     user: IUserState;

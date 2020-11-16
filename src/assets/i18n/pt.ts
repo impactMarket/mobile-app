@@ -209,4 +209,8 @@ export default {
         'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.',
     amountShouldBe: 'Quantidade deve ser ${{claimAmount}}+ para calcular..',
     offline: 'Você não está conectado à internet.',
+    openClockSettings: 'Abrir definições data/hora',
+    dismiss: 'Fechar',
+    incorrectTime: 'Data/Hora incorreta',
+    incorrectTimeMessage: 'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}.',
 };

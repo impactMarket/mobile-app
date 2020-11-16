@@ -26,6 +26,7 @@ import {
     SET_USER_LANGUAGE,
     INIT_USER,
     SET_EXCHANGE_RATES,
+    SET_APP_SUSPECT_WRONG_DATETIME,
 } from '../../types';
 
 const INITIAL_STATE_USER: IUserState = {
@@ -65,6 +66,8 @@ const INITIAL_STATE_APP: IAppState = {
     kit: undefined as any,
     exchangeRates: undefined as any,
     paymentToAddress: '',
+    suspectWrongDateTime: false,
+    timeDiff: 0,
 };
 
 const userReducer = (
@@ -168,6 +171,12 @@ const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
             return { ...state, paymentToAddress: action.payload };
         case SET_EXCHANGE_RATES:
             return { ...state, exchangeRates: action.payload };
+        case SET_APP_SUSPECT_WRONG_DATETIME:
+            return {
+                ...state,
+                suspectWrongDateTime: action.payload.suspect,
+                timeDiff: action.payload.timeDiff,
+            };
         default:
             return state;
     }

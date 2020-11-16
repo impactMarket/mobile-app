@@ -26,6 +26,7 @@ import {
     INIT_USER,
     IInitUser,
     SET_EXCHANGE_RATES,
+    SET_APP_SUSPECT_WRONG_DATETIME,
 } from '../../types';
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
@@ -127,6 +128,19 @@ export function setAppPaymentToAction(
     return {
         type: SET_APP_PYMENT_TO_ACTION,
         payload: paymentToAddress,
+    };
+}
+
+export function setAppSuspectWrongDateTime(
+    suspect: boolean,
+    timeDiff: number,
+): AppActionTypes {
+    return {
+        type: SET_APP_SUSPECT_WRONG_DATETIME,
+        payload: {
+            suspect,
+            timeDiff,
+        },
     };
 }
 

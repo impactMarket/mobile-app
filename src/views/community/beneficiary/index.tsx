@@ -16,13 +16,17 @@ import {
 } from 'react-native';
 import {
     ActivityIndicator,
+    Headline,
+    Modal,
     Paragraph,
+    Portal,
     ProgressBar,
     Snackbar,
 } from 'react-native-paper';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import * as Location from 'expo-location';
+import * as IntentLauncher from 'expo-intent-launcher';
 
 import Claim from './Claim';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -31,6 +35,9 @@ import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
 import { Trans } from 'react-i18next';
 import CacheStore from 'services/cacheStore';
+import Card from 'components/core/Card';
+import WaitingRedSvg from 'components/svg/WaitingRedSvg';
+import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/ReduxActions';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -41,7 +48,15 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
 function BeneficiaryView(props: Props) {
+    let timeoutTimeDiff: number | undefined;
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    const suspectWrongDateTime = useSelector(
+        (state: IRootState) => state.app.suspectWrongDateTime
+    );
+    const timeDiff = useSelector((state: IRootState) => state.app.timeDiff);
+
     const [lastInterval, setLastInterval] = useState(0);
     const [cooldownTime, setCooldownTime] = useState(0);
     const [community, setCommunity] = useState<ICommunityInfo>();
@@ -49,6 +64,7 @@ function BeneficiaryView(props: Props) {
     const [claimedProgress, setClaimedProgress] = useState(0.1);
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(true);
+    const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
 
     useEffect(() => {
         const loadCommunity = async () => {
@@ -123,6 +139,14 @@ function BeneficiaryView(props: Props) {
         props.network.community,
         props.user.celoInfo.address,
     ]);
+
+    useEffect(() => {
+        if (suspectWrongDateTime) {
+            timeoutTimeDiff = setInterval(() => setDateTimeDiffModal(new Date()), 1000);
+        } else if (timeoutTimeDiff !== undefined) {
+            clearInterval(timeoutTimeDiff);
+        }
+    }, [suspectWrongDateTime]);
 
     const getNewCooldownTime = async () => {
         return parseInt(
@@ -383,6 +407,77 @@ function BeneficiaryView(props: Props) {
             >
                 {i18n.t('turnOnLocationHint')}
             </Snackbar>
+            <Portal>
+                <Modal visible={suspectWrongDateTime} dismissable={false}>
+                    <Card style={{ marginHorizontal: 20 }}>
+                        <Card.Content>
+                            <View
+                                style={{
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <WaitingRedSvg />
+                                <Headline
+                                    style={{
+                                        fontFamily: 'Gelion-Regular',
+                                        fontSize: 24,
+                                        lineHeight: 24,
+                                        textAlign: 'center',
+                                        color: iptcColors.almostBlack,
+                                        marginVertical: 16,
+                                    }}
+                                >
+                                    {i18n.t('incorrectTime')}
+                                </Headline>
+                                <Paragraph
+                                    style={{
+                                        fontFamily: 'Gelion-Regular',
+                                        fontSize: 16,
+                                        lineHeight: 19,
+                                        color: iptcColors.almostBlack,
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {i18n.t('incorrectTimeMessage', {
+                                        serverTime: moment(dateTimeDiffModal.getTime() - timeDiff).format(
+                                            'H[h]mm[m]ss[s]'
+                                        ),
+                                        userTime: moment(dateTimeDiffModal).format(
+                                            'H[h]mm[m]ss[s]'
+                                        ),
+                                    })}
+                                </Paragraph>
+                            </View>
+                            <Button
+                                modeType="default"
+                                style={{
+                                    marginTop: 20,
+                                    marginHorizontal: 5,
+                                }}
+                                bold={true}
+                                onPress={() => IntentLauncher.startActivityAsync(IntentLauncher.ACTION_DATE_SETTINGS)}
+                            >
+                                {i18n.t('openClockSettings')}
+                            </Button>
+                            <Button
+                                modeType="gray"
+                                style={{
+                                    marginTop: 8,
+                                    marginHorizontal: 5,
+                                }}
+                                bold={true}
+                                onPress={() =>
+                                    dispatch(
+                                        setAppSuspectWrongDateTime(false, 0)
+                                    )
+                                }
+                            >
+                                {i18n.t('dismiss')}
+                            </Button>
+                        </Card.Content>
+                    </Card>
+                </Modal>
+            </Portal>
         </>
     );
 }

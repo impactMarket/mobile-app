@@ -211,4 +211,8 @@ export default {
         'To get the latest improvements and features we need you to update to the latest version.',
     amountShouldBe: 'Amount should be ${{claimAmount}}+ to calculate..',
     offline: 'The Internet connection appears to be offline',
+    openClockSettings: 'Open Clock Settings',
+    dismiss: 'Dismiss',
+    incorrectTime: 'Incorrect Time',
+    incorrectTimeMessage: 'We have detected that your device may have the time incorrectly set. Please open the clock settings to match {{serverTime}}. Your time is currently {{userTime}}.',
 };
