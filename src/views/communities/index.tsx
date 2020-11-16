@@ -107,12 +107,12 @@ function CommunitiesScreen(props: Props) {
                             <Text style={styles.cellHeader}>
                                 $
                                 {humanifyCurrencyAmount(
-                                    community.vars._claimAmount
+                                    community.contractParams.claimAmount
                                 )}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {claimFrequencyToText(
-                                    community.vars._baseInterval
+                                    community.contractParams.baseInterval.toString()
                                 )}
                             </Text>
                         </View>

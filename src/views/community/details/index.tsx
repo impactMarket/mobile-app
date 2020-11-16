@@ -51,7 +51,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     };
 
     const renderSSI = () => {
-        if (community.ssi.values.length > 1) {
+        if (community.metrics.historicalSSI.length > 1) {
             return (
                 <>
                     <Divider
@@ -64,7 +64,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <View style={styles.chartView}>
                         <LineChart
                             style={{ flex: 2, height: 100, width: 200 }}
-                            data={community.ssi.values}
+                            data={community.metrics.historicalSSI}
                             contentInset={{ top: 20, bottom: 20 }}
                             curve={shape.curveMonotoneX}
                             svg={{
@@ -87,11 +87,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 }}
                             >
                                 <Headline style={styles.ssiHeadline}>
-                                    {
-                                        community.ssi.values[
-                                            community.ssi.values.length - 1
-                                        ]
-                                    }
+                                    {community.metrics.ssi}
                                 </Headline>
                                 <Text
                                     style={{
@@ -187,26 +183,27 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                         i18nKey="eachBeneficiaryCanClaimXUpToY"
                                         values={{
                                             claimXCCurrency: amountToCurrency(
-                                                community.vars._claimAmount,
+                                                community.contractParams
+                                                    .claimAmount,
                                                 community.currency,
                                                 rates
                                             ),
                                             claimX: humanifyCurrencyAmount(
-                                                community.vars._claimAmount
+                                                community.contractParams
+                                                    .claimAmount
                                             ),
                                             upToY: humanifyCurrencyAmount(
-                                                community.vars._maxClaim
+                                                community.contractParams
+                                                    .maxClaim
                                             ),
                                             interval:
-                                                community.vars._baseInterval ===
-                                                '86400'
+                                                community.contractParams
+                                                    .baseInterval === 86400
                                                     ? i18n.t('day')
                                                     : i18n.t('week'),
                                             minIncrement:
-                                                parseInt(
-                                                    community.vars
-                                                        ._incrementInterval
-                                                ) / 60,
+                                                community.contractParams
+                                                    .incrementInterval / 60,
                                         }}
                                         components={{
                                             bold: (

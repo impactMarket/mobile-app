@@ -234,32 +234,50 @@ export interface ICommunity {
     email: string;
     coverImage: string;
     status: string;
-    txCreationObj: ICommunityVars;
-    createdAt: string;
-    updatedAt: string;
+}
+
+export interface ICommunityState {
+    claimed: string;
+    raised: string;
+    beneficiaries: number;
+    backers: number;
+}
+
+export interface ICommunityMetrics {
+    ssiDayAlone: number;
+    ssi: number;
+    ubiRate: number;
+    estimatedDuration: number;
+    historicalSSI: number[];
 }
 
 export interface ICommunityInfo extends ICommunity {
+    /**
+     * @deprecated
+     */
     backers: string[];
     beneficiaries: {
         added: ICommunityInfoBeneficiary[];
         removed: ICommunityInfoBeneficiary[];
     };
     managers: string[];
+    /**
+     * @deprecated
+     */
     ssi: {
-        dates: Date[];
-        values: number[];
+        dates: Date[],
+        values: number[],
     };
-    totalClaimed: string;
-    totalRaised: string;
-    vars: ICommunityVars;
+    state: ICommunityState;
+    metrics: ICommunityMetrics;
+    contractParams: ICommunityContractParams;
 }
 
-export interface ICommunityVars {
-    _claimAmount: string;
-    _baseInterval: string;
-    _incrementInterval: string;
-    _maxClaim: string;
+export interface ICommunityContractParams {
+    claimAmount: string,
+    maxClaim: string,
+    baseInterval: number,
+    incrementInterval: number,
 }
 
 export interface ICommunityInfoBeneficiary {

@@ -231,7 +231,7 @@ class Donate extends Component<Props, IDonateState> {
 
         const backForDays =
             amountInDollars /
-            new BigNumber(community.vars._claimAmount)
+            new BigNumber(community.contractParams.claimAmount)
                 .dividedBy(10 ** config.cUSDDecimals)
                 .toNumber() /
             community.beneficiaries.added.length;
@@ -426,7 +426,7 @@ class Donate extends Component<Props, IDonateState> {
                                             display:
                                                 amountDonate.length === 0 ||
                                                 new BigNumber(
-                                                    community.vars._claimAmount
+                                                    community.contractParams.claimAmount
                                                 )
                                                     .dividedBy(
                                                         10 **
@@ -440,7 +440,7 @@ class Donate extends Component<Props, IDonateState> {
                                         {i18n.t('amountShouldBe', {
                                             claimAmount: parseFloat(
                                                 new BigNumber(
-                                                    community.vars._claimAmount
+                                                    community.contractParams.claimAmount
                                                 )
                                                     .dividedBy(
                                                         10 **
@@ -461,7 +461,7 @@ class Donate extends Component<Props, IDonateState> {
                                             display:
                                                 amountDonate.length > 0 &&
                                                 new BigNumber(
-                                                    community.vars._claimAmount
+                                                    community.contractParams.claimAmount
                                                 )
                                                     .dividedBy(
                                                         10 **
@@ -480,7 +480,7 @@ class Donate extends Component<Props, IDonateState> {
                                                     ? Math.floor(
                                                           amountInDollars /
                                                               new BigNumber(
-                                                                  community.vars._claimAmount
+                                                                  community.contractParams.claimAmount
                                                               )
                                                                   .dividedBy(
                                                                       10 **

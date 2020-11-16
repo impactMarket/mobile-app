@@ -57,7 +57,7 @@ function BeneficiaryView(props: Props) {
                 if (beneficiaryClaimCache !== null) {
                     const progress = new BigNumber(
                         beneficiaryClaimCache.claimed
-                    ).div(props.network.community.vars._maxClaim);
+                    ).div(props.network.community.contractParams.maxClaim);
                     setClaimedAmount(
                         humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
                     );
@@ -98,7 +98,7 @@ function BeneficiaryView(props: Props) {
                     };
                     CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
                     const progress = new BigNumber(claimed).div(
-                        props.network.community.vars._maxClaim
+                        props.network.community.contractParams.maxClaim
                     );
                     setClaimedAmount(humanifyCurrencyAmount(claimed));
                     setClaimedProgress(progress.toNumber());
@@ -175,7 +175,7 @@ function BeneficiaryView(props: Props) {
         CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
 
         const progress = new BigNumber(claimed).div(
-            props.network.community.vars._maxClaim
+            props.network.community.contractParams.maxClaim
         );
         setClaimedProgress(progress.toNumber());
         setClaimedAmount(humanifyCurrencyAmount(claimed.toString()));
@@ -201,7 +201,7 @@ function BeneficiaryView(props: Props) {
 
     const formatedTimeNextCooldown = () => {
         const nextCooldownTime = moment.duration(
-            (lastInterval + parseInt(community.vars._incrementInterval)) * 1000
+            (lastInterval + community.contractParams.incrementInterval) * 1000
         );
         let next = '';
         if (nextCooldownTime.days() > 0) {
@@ -273,7 +273,7 @@ function BeneficiaryView(props: Props) {
                                 {i18n.t('youHaveClaimedXoutOfY', {
                                     claimed: claimedAmount,
                                     max: humanifyCurrencyAmount(
-                                        community.vars._maxClaim
+                                        community.contractParams.maxClaim
                                     ),
                                 })}
                             </Text>
@@ -285,7 +285,7 @@ function BeneficiaryView(props: Props) {
                             />
                         </View>
                         <Claim
-                            claimAmount={community.vars._claimAmount}
+                            claimAmount={community.contractParams.claimAmount}
                             updateClaimedAmount={updateClaimedAmountAndCache}
                             cooldownTime={cooldownTime}
                             updateCooldownTime={getNewCooldownTime}

@@ -6,6 +6,7 @@ import {
     IUserWelcome,
     IUserWelcomeAuth,
     ICommunity,
+    ICommunityContractParams,
 } from 'helpers/types';
 import { AsyncStorage, DevSettings } from 'react-native';
 import Constants from 'expo-constants';
@@ -85,7 +86,7 @@ class Api {
         email: string,
         coverImage: string,
         txReceipt: any,
-        txCreationObj: any
+        contractParams: ICommunityContractParams,
     ): Promise<ICommunity | undefined> {
         return await postRequest<ICommunity>('/community/create', {
             requestByAddress,
@@ -100,7 +101,7 @@ class Api {
             email,
             coverImage,
             txReceipt,
-            txCreationObj,
+            contractParams,
         });
     }
 
@@ -118,7 +119,7 @@ class Api {
         },
         email: string,
         coverImage: string,
-        txCreationObj: any
+        contractParams: ICommunityContractParams,
     ): Promise<ICommunity | undefined> {
         return await postRequest<ICommunity>('/community/request', {
             requestByAddress,
@@ -131,7 +132,7 @@ class Api {
             gps,
             email,
             coverImage,
-            txCreationObj,
+            contractParams,
         });
     }
 
@@ -336,6 +337,7 @@ class Api {
         | {
               latest: string;
               minimal: string;
+              timestamp: number;
           }
         | undefined
     > {

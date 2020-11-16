@@ -94,11 +94,11 @@ export function calculateCommunityProgress(
     toCalculte: string /*'raised' | 'claimed'*/,
     community: ICommunityInfo
 ): number {
-    const m = new BigNumber(community.vars._maxClaim).multipliedBy(
+    const m = new BigNumber(community.contractParams.maxClaim).multipliedBy(
         community.beneficiaries.added.length // + community.beneficiaries.removed.length
     );
     const result = new BigNumber(
-        toCalculte === 'raised' ? community.totalRaised : community.totalClaimed
+        toCalculte === 'raised' ? community.state.raised : community.state.claimed
     ).div(m.eq(0) ? 1 : m);
     return parseFloat(result.decimalPlaces(5, 1).toString());
 }

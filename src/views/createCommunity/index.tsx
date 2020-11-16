@@ -119,16 +119,18 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                 } as Location.LocationData);
                 // cover image
                 setClaimAmount(
-                    humanifyNumber(community.vars._claimAmount).toString()
+                    humanifyNumber(
+                        community.contractParams.claimAmount
+                    ).toString()
                 );
-                setBaseInterval(community.vars._baseInterval);
+                setBaseInterval(
+                    community.contractParams.baseInterval.toString()
+                );
                 setIncrementalInterval(
-                    new BigNumber(community.vars._incrementInterval)
-                        .div(60)
-                        .toString()
+                    (community.contractParams.incrementInterval / 60).toString()
                 );
                 setMaxClaim(
-                    humanifyNumber(community.vars._maxClaim).toString()
+                    humanifyNumber(community.contractParams.maxClaim).toString()
                 );
                 // currency
                 setCoverImage(community.coverImage);
@@ -287,7 +289,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
             //     _baseInterval,
             //     _maxClaim,
             //     _incrementInterval,
-            // } = props.route.params.community.vars;
+            // } = props.route.params.community.contractParams;
             try {
                 // if (
                 //     !new BigNumber(claimAmount)
@@ -421,20 +423,18 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                     uploadImagePath,
                     txReceipt,
                     {
-                        _claimAmount: new BigNumber(
+                        claimAmount: new BigNumber(
                             formatInputAmountToTransfer(claimAmount)
                         )
                             .multipliedBy(decimals)
                             .toString(),
-                        _maxClaim: new BigNumber(
+                        maxClaim: new BigNumber(
                             formatInputAmountToTransfer(maxClaim)
                         )
                             .multipliedBy(decimals)
                             .toString(),
-                        _baseInterval: baseInterval,
-                        _incrementInterval: (
-                            parseInt(incrementInterval, 10) * 60
-                        ).toString(),
+                        baseInterval: parseInt(baseInterval),
+                        incrementInterval: parseInt(incrementInterval, 10) * 60,
                     }
                 );
             } else {
@@ -467,10 +467,8 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                         )
                             .multipliedBy(decimals)
                             .toString(),
-                        baseInterval,
-                        incrementInterval: (
-                            parseInt(incrementInterval, 10) * 60
-                        ).toString(),
+                        baseInterval: parseInt(baseInterval),
+                        incrementInterval: parseInt(incrementInterval, 10) * 60,
                     }
                 );
             }
