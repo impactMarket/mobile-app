@@ -282,7 +282,7 @@ export interface ICommunityInfo extends ICommunity {
         values: number[],
     };
     state: ICommunityState;
-    metrics: ICommunityMetrics;
+    metrics?: ICommunityMetrics;
     contractParams: ICommunityContractParams;
 }
 
