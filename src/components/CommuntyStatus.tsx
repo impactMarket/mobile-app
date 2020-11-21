@@ -88,7 +88,7 @@ class CommuntyStatus extends Component<Props, object> {
                                     marginVertical: 4,
                                 }}
                             >
-                                {community.backers.length}
+                                {community.state.backers}
                             </Title>
                             <Text
                                 style={{

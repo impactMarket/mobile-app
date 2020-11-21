@@ -1,10 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { IRootState, ICommunityInfo } from 'helpers/types';
+import { IRootState, ICommunityInfo, ITabBarIconProps } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
@@ -38,6 +38,11 @@ import CacheStore from 'services/cacheStore';
 import Card from 'components/core/Card';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
 import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/ReduxActions';
+import ClaimSvg from 'components/svg/ClaimSvg';
+import BackSvg from 'components/svg/header/BackSvg';
+import FaqSvg from 'components/svg/header/FaqSvg';
+import QRCodeSvg from 'components/svg/header/QRCodeSvg';
+import { Screens } from 'helpers/constants';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network } = state;
@@ -47,7 +52,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux;
 
-function BeneficiaryView(props: Props) {
+function BeneficiaryScreen(props: Props) {
     let timeoutTimeDiff: number | undefined;
     const navigation = useNavigation();
     const dispatch = useDispatch();
@@ -142,7 +147,10 @@ function BeneficiaryView(props: Props) {
 
     useEffect(() => {
         if (suspectWrongDateTime) {
-            timeoutTimeDiff = setInterval(() => setDateTimeDiffModal(new Date()), 1000);
+            timeoutTimeDiff = setInterval(
+                () => setDateTimeDiffModal(new Date()),
+                1000
+            );
         } else if (timeoutTimeDiff !== undefined) {
             clearInterval(timeoutTimeDiff);
         }
@@ -271,7 +279,7 @@ function BeneficiaryView(props: Props) {
                             }}
                             labelStyle={{ textAlign: 'center' }}
                             onPress={() =>
-                                navigation.navigate('CommunityDetailsScreen', {
+                                navigation.navigate(Screens.CommunityDetails, {
                                     community,
                                 })
                             }
@@ -290,7 +298,7 @@ function BeneficiaryView(props: Props) {
                         <View style={{ marginTop: '5%' }}>
                             <Text
                                 onPress={() =>
-                                    navigation.navigate('ClaimExplainedScreen')
+                                    navigation.navigate(Screens.ClaimExplained)
                                 }
                                 style={styles.haveClaimed}
                             >
@@ -339,7 +347,7 @@ function BeneficiaryView(props: Props) {
                                                 <Text
                                                     onPress={() =>
                                                         navigation.navigate(
-                                                            'ClaimExplainedScreen'
+                                                            Screens.ClaimExplained
                                                         )
                                                     }
                                                     style={
@@ -353,7 +361,7 @@ function BeneficiaryView(props: Props) {
                                     <Text
                                         onPress={() =>
                                             navigation.navigate(
-                                                'ClaimExplainedScreen'
+                                                Screens.ClaimExplained
                                             )
                                         }
                                         style={styles.howClaimsWorksLink}
@@ -439,12 +447,13 @@ function BeneficiaryView(props: Props) {
                                     }}
                                 >
                                     {i18n.t('incorrectTimeMessage', {
-                                        serverTime: moment(dateTimeDiffModal.getTime() - timeDiff).format(
-                                            'H[h]mm[m]ss[s]'
-                                        ),
-                                        userTime: moment(dateTimeDiffModal).format(
-                                            'H[h]mm[m]ss[s]'
-                                        ),
+                                        serverTime: moment(
+                                            dateTimeDiffModal.getTime() -
+                                                timeDiff
+                                        ).format('H[h]mm[m]ss[s]'),
+                                        userTime: moment(
+                                            dateTimeDiffModal
+                                        ).format('H[h]mm[m]ss[s]'),
                                     })}
                                 </Paragraph>
                             </View>
@@ -455,7 +464,11 @@ function BeneficiaryView(props: Props) {
                                     marginHorizontal: 5,
                                 }}
                                 bold={true}
-                                onPress={() => IntentLauncher.startActivityAsync(IntentLauncher.ACTION_DATE_SETTINGS)}
+                                onPress={() =>
+                                    IntentLauncher.startActivityAsync(
+                                        IntentLauncher.ACTION_DATE_SETTINGS
+                                    )
+                                }
                             >
                                 {i18n.t('openClockSettings')}
                             </Button>
@@ -481,6 +494,25 @@ function BeneficiaryView(props: Props) {
         </>
     );
 }
+
+BeneficiaryScreen.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerRight: () => (
+            <>
+                <FaqSvg />
+                <QRCodeSvg />
+            </>
+        ),
+        title: i18n.t('claim'),
+        tabBarIcon: (props: ITabBarIconProps) => (
+            <ClaimSvg focused={props.focused} />
+        ),
+    };
+};
 
 const styles = StyleSheet.create({
     // container: {
@@ -557,4 +589,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(BeneficiaryView);
+export default connector(BeneficiaryScreen);

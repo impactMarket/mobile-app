@@ -7,7 +7,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 
-interface IRemovedScreenProps {
+interface IRemovedBeneficiaryScreenProps {
     route: {
         params: {
             beneficiaries: ICommunityInfoBeneficiary[];
@@ -20,9 +20,9 @@ const mapStateToProps = (state: IRootState) => {
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & IRemovedScreenProps;
+type Props = PropsFromRedux & IRemovedBeneficiaryScreenProps;
 
-function RemovedScreen(props: Props) {
+function RemovedBeneficiaryScreen(props: Props) {
     const navigation = useNavigation();
     const beneficiaries = props.route.params
         .beneficiaries as ICommunityInfoBeneficiary[];
@@ -51,4 +51,4 @@ function RemovedScreen(props: Props) {
     );
 }
 
-export default connector(RemovedScreen);
+export default connector(RemovedBeneficiaryScreen);

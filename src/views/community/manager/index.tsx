@@ -22,6 +22,7 @@ import {
 import { connect, ConnectedProps, useDispatch } from 'react-redux';
 
 import Beneficiaries from './cards/Beneficiaries';
+import { Screens } from 'helpers/constants';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, network, app } = state;
@@ -216,7 +217,7 @@ function CommunityManagerView(props: Props) {
                             style={{ marginVertical: 10 }}
                             onPress={() => {
                                 setOpenModalMore(false);
-                                navigation.navigate('CreateCommunityScreen', {
+                                navigation.navigate(Screens.CreateCommunity, {
                                     community,
                                 });
                             }}
@@ -228,19 +229,12 @@ function CommunityManagerView(props: Props) {
                             style={{ marginVertical: 10 }}
                             onPress={() => {
                                 setOpenModalMore(false);
-                                navigation.navigate('CommunityDetailsScreen', {
+                                navigation.navigate(Screens.CommunityDetails, {
                                     community,
                                 });
                             }}
                         >
                             {i18n.t('viewAsPublic')}
-                        </Button>
-                        <Button
-                            mode="outlined"
-                            style={{ marginVertical: 10 }}
-                            disabled
-                        >
-                            {i18n.t('share')}
                         </Button>
                     </Dialog.Content>
                 </Dialog>

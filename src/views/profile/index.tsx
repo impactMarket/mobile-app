@@ -44,10 +44,15 @@ import Login from './Login';
 import * as Linking from 'expo-linking';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
+import { Screens } from 'helpers/constants';
 
-function ProfileScreen() {
+function ProfileScreen({
+    navigation,
+}: {
+    navigation: StackNavigationProp<any, any>;
+}) {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.user.user);
     const userWallet = useSelector((state: IRootState) => state.user.celoInfo);
@@ -76,6 +81,12 @@ function ProfileScreen() {
             );
         }
     }, [userWallet]);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <Button>Update count</Button>,
+        });
+    }, [navigation]);
 
     const onRefresh = () => {
         const updateBalance = async () => {
@@ -109,8 +120,8 @@ function ProfileScreen() {
                 // TODO: improve this line below
                 setTimeout(
                     () =>
-                        navigation.navigate('communities', {
-                            previous: 'profile',
+                        navigation.navigate(Screens.Communities, {
+                            previous: Screens.Profile,
                         }),
                     500
                 );

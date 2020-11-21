@@ -13,7 +13,7 @@ import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 
-interface IAddedScreenProps {
+interface IAddedBeneficiaryScreenProps {
     route: {
         params: {
             beneficiaries: ICommunityInfoBeneficiary[];
@@ -26,9 +26,9 @@ const mapStateToProps = (state: IRootState) => {
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & IAddedScreenProps;
+type Props = PropsFromRedux & IAddedBeneficiaryScreenProps;
 
-function AddedScreen(props: Props) {
+function AddedBeneficiaryScreen(props: Props) {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const beneficiaries = props.route.params
@@ -122,4 +122,4 @@ function AddedScreen(props: Props) {
     );
 }
 
-export default connector(AddedScreen);
+export default connector(AddedBeneficiaryScreen);

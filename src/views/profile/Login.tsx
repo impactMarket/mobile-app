@@ -26,6 +26,7 @@ import config from '../../../config';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Button from 'components/core/Button';
+import { Screens } from 'helpers/constants';
 
 function Login() {
     const store = useStore();
@@ -115,11 +116,11 @@ function Login() {
                     setConnecting(false);
                     // navigation.goBack();
                     if (state.user.community.isBeneficiary) {
-                        navigation.navigate('claim');
+                        navigation.navigate(Screens.Beneficiary);
                     } else if (state.user.community.isManager) {
-                        navigation.navigate('manage');
+                        navigation.navigate(Screens.CommunityManager);
                     } else {
-                        navigation.navigate('communities');
+                        navigation.navigate(Screens.CommunityManager);
                     }
                 }
             });

@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Header from 'components/Header';
@@ -22,6 +22,9 @@ import { LineChart } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
 import BaseCommunity from 'components/BaseCommunity';
 import { Trans } from 'react-i18next';
+
+import BackSvg from 'components/svg/header/BackSvg';
+import FaqSvg from 'components/svg/header/FaqSvg';
 
 interface ICommunityDetailsScreen {
     route: {
@@ -51,7 +54,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     };
 
     const renderSSI = () => {
-        if (community.metrics.historicalSSI.length > 1) {
+        if (
+            community.metrics !== undefined &&
+            community.metrics.historicalSSI.length > 1
+        ) {
             return (
                 <>
                     <Divider
@@ -64,7 +70,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <View style={styles.chartView}>
                         <LineChart
                             style={{ flex: 2, height: 100, width: 200 }}
-                            data={community.metrics.historicalSSI}
+                            data={community.metrics.historicalSSI.reverse()}
                             contentInset={{ top: 20, bottom: 20 }}
                             curve={shape.curveMonotoneX}
                             svg={{
@@ -243,6 +249,18 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         </>
     );
 }
+
+CommunityDetailsScreen.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerLeft: () => <BackSvg />,
+        headerRight: () => <FaqSvg />,
+        headerTitle: '',
+    };
+};
 
 const styles = StyleSheet.create({
     container: {

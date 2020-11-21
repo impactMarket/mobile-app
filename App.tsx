@@ -11,6 +11,7 @@ import {
     Portal,
     Paragraph,
     Headline,
+    Button as ButtonRNP,
 } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import { createStore, Unsubscribe } from 'redux';
@@ -59,8 +60,8 @@ import CommunityDetailsScreen from './src/views/community/details';
 import CreateCommunityScreen from './src/views/createCommunity';
 import FAQScreen from './src/views/faq';
 import ClaimExplainedScreen from './src/views/community/beneficiary/ClaimExplainedScreen';
-import AddedScreen from './src/views/community/manager/views/AddedScreen';
-import RemovedScreen from './src/views/community/manager/views/RemovedScreen';
+import AddedScreen from './src/views/community/manager/views/AddedBeneficiaryScreen';
+import RemovedScreen from './src/views/community/manager/views/RemovedBeneficiaryScreen';
 import Profile from './src/views/profile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
 import AddBeneficiaryScreen from './src/views/community/manager/views/AddBeneficiaryScreen';
@@ -76,6 +77,9 @@ import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
 import moment from 'moment';
+import BackSvg from 'components/svg/header/BackSvg';
+import FaqSvg from 'components/svg/header/FaqSvg';
+import Navigator from './src/navigator';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -167,94 +171,94 @@ export default class App extends React.Component<any, IAppState> {
         };
     }
 
-    componentDidMount = () => {
-        this.unsubscribeStore = store.subscribe(() => {
-            const previousLoggedIn = this.state.loggedIn;
-            const currentLoggedIn =
-                store.getState().user.celoInfo.address.length > 0;
+    // componentDidMount = () => {
+    //     this.unsubscribeStore = store.subscribe(() => {
+    //         const previousLoggedIn = this.state.loggedIn;
+    //         const currentLoggedIn =
+    //             store.getState().user.celoInfo.address.length > 0;
 
-            if (previousLoggedIn !== currentLoggedIn) {
-                if (currentLoggedIn) {
-                    // when notification received!
-                    Notifications.addNotificationReceivedListener(
-                        (notification: Notifications.Notification) => {
-                            const {
-                                action,
-                                communityAddress,
-                            } = notification.request.content.data;
-                            if (
-                                action === 'community-accepted' ||
-                                action === 'beneficiary-added'
-                            ) {
-                                Api.getCommunityByContractAddress(
-                                    communityAddress as string
-                                ).then((community) => {
-                                    if (community !== undefined) {
-                                        const communityContract = new kit.web3.eth.Contract(
-                                            CommunityContractABI as any,
-                                            communityAddress as string
-                                        );
-                                        if (action === 'community-accepted') {
-                                            store.dispatch(
-                                                setUserIsCommunityManager(true)
-                                            );
-                                        }
-                                        if (action === 'beneficiary-added') {
-                                            store.dispatch(
-                                                setUserIsBeneficiary(true)
-                                            );
-                                        }
-                                        store.dispatch(setCommunity(community));
-                                        store.dispatch(
-                                            setCommunityContract(
-                                                communityContract
-                                            )
-                                        );
-                                    }
-                                });
-                            }
-                        }
-                    );
-                    // when user interacts with notification
-                    Notifications.addNotificationResponseReceivedListener(
-                        (response) => {
-                            const {
-                                action,
-                                communityAddress,
-                            } = response.notification.request.content.data;
-                            if (action === 'community-low-funds') {
-                                Api.getCommunityByContractAddress(
-                                    communityAddress as string
-                                ).then((community) => {
-                                    if (community !== undefined) {
-                                        (this.navigationRef
-                                            .current as any).navigate(
-                                            'CommunityDetailsScreen',
-                                            {
-                                                community,
-                                            }
-                                        );
-                                    }
-                                });
-                            }
-                        }
-                    );
-                    // Notifications.addPushTokenListener
-                    // In rare situations a push token may be changed by the push notification service while the app is running.
-                }
-            }
-        });
-        store.dispatch(setCeloKit(kit));
-        this.setState({ testnetWarningOpen: true });
-        setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
-    };
+    //         if (previousLoggedIn !== currentLoggedIn) {
+    //             if (currentLoggedIn) {
+    //                 // when notification received!
+    //                 Notifications.addNotificationReceivedListener(
+    //                     (notification: Notifications.Notification) => {
+    //                         const {
+    //                             action,
+    //                             communityAddress,
+    //                         } = notification.request.content.data;
+    //                         if (
+    //                             action === 'community-accepted' ||
+    //                             action === 'beneficiary-added'
+    //                         ) {
+    //                             Api.getCommunityByContractAddress(
+    //                                 communityAddress as string
+    //                             ).then((community) => {
+    //                                 if (community !== undefined) {
+    //                                     const communityContract = new kit.web3.eth.Contract(
+    //                                         CommunityContractABI as any,
+    //                                         communityAddress as string
+    //                                     );
+    //                                     if (action === 'community-accepted') {
+    //                                         store.dispatch(
+    //                                             setUserIsCommunityManager(true)
+    //                                         );
+    //                                     }
+    //                                     if (action === 'beneficiary-added') {
+    //                                         store.dispatch(
+    //                                             setUserIsBeneficiary(true)
+    //                                         );
+    //                                     }
+    //                                     store.dispatch(setCommunity(community));
+    //                                     store.dispatch(
+    //                                         setCommunityContract(
+    //                                             communityContract
+    //                                         )
+    //                                     );
+    //                                 }
+    //                             });
+    //                         }
+    //                     }
+    //                 );
+    //                 // when user interacts with notification
+    //                 Notifications.addNotificationResponseReceivedListener(
+    //                     (response) => {
+    //                         const {
+    //                             action,
+    //                             communityAddress,
+    //                         } = response.notification.request.content.data;
+    //                         if (action === 'community-low-funds') {
+    //                             Api.getCommunityByContractAddress(
+    //                                 communityAddress as string
+    //                             ).then((community) => {
+    //                                 if (community !== undefined) {
+    //                                     (this.navigationRef
+    //                                         .current as any).navigate(
+    //                                         'CommunityDetailsScreen',
+    //                                         {
+    //                                             community,
+    //                                         }
+    //                                     );
+    //                                 }
+    //                             });
+    //                         }
+    //                     }
+    //                 );
+    //                 // Notifications.addPushTokenListener
+    //                 // In rare situations a push token may be changed by the push notification service while the app is running.
+    //             }
+    //         }
+    //     });
+    //     store.dispatch(setCeloKit(kit));
+    //     this.setState({ testnetWarningOpen: true });
+    //     setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
+    // };
 
-    componentWillUnmount = () => {
-        try {
-            this.unsubscribeStore();
-        } catch (e) {}
-        Notifications.removeAllNotificationListeners();
-    };
+    // componentWillUnmount = () => {
+    //     try {
+    //         this.unsubscribeStore();
+    //     } catch (e) {}
+    //     Notifications.removeAllNotificationListeners();
+    // };
 
     openExploreCommunities = async () => {
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
@@ -460,24 +464,57 @@ export default class App extends React.Component<any, IAppState> {
                         theme={navigationTheme}
                         ref={this.navigationRef as any}
                     >
-                        <Stack.Navigator>
+                        <Navigator />
+                        {/* <Stack.Navigator
+                            screenOptions={{
+                                headerTitleAlign: 'left',
+                                headerStyle: {
+                                    elevation: 0, // remove shadow on Android
+                                    shadowOpacity: 0, // remove shadow on iOS
+                                    // backgroundColor: 'tomato'
+                                },
+                                headerTintColor: '#fff',
+                                headerTitleStyle: {
+                                    fontFamily: 'Gelion-Bold',
+                                    fontSize: 30,
+                                    lineHeight: 36,
+                                    color: iptcColors.almostBlack,
+                                },
+                            }}
+                        >
                             <Stack.Screen
                                 options={{
-                                    headerShown: false,
+                                    // headerTitle: i18n.t('communities'),
+                                    headerRight: () => (
+                                        <ButtonRNP
+                                            mode="text"
+                                            uppercase={false}
+                                            labelStyle={{
+                                                fontFamily: 'Gelion-Bold',
+                                                fontSize: 22,
+                                                lineHeight: 26,
+                                                textAlign: 'center',
+                                                letterSpacing: 0.366667,
+                                                color: '#2643E9',
+                                            }}
+                                            onPress={() =>
+                                                (this.navigationRef as any).navigate(
+                                                    'CreateCommunityScreen'
+                                                )
+                                            }
+                                        >
+                                            {i18n.t('create')}
+                                        </ButtonRNP>
+                                    ),
                                 }}
                                 name="Home"
                                 component={Tabs}
                             />
                             <Stack.Screen
                                 options={{
-                                    headerShown: false,
-                                }}
-                                name="Profile"
-                                component={Profile}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
+                                    headerTitle: '',
+                                    headerLeft: () => <BackSvg />,
+                                    headerRight: () => <FaqSvg />,
                                 }}
                                 name="CommunityDetailsScreen"
                                 component={CommunityDetailsScreen}
@@ -531,7 +568,7 @@ export default class App extends React.Component<any, IAppState> {
                                 name="WelcomeScreen"
                                 component={WelcomeScreen}
                             />
-                        </Stack.Navigator>
+                        </Stack.Navigator> */}
                     </NavigationContainer>
                 </Provider>
             </PaperProvider>
@@ -603,9 +640,11 @@ export default class App extends React.Component<any, IAppState> {
             return;
         }
         const requestDiff = moment(preTime).diff(postTime);
-        const timeDiff = new Date(postTime.getTime() - requestDiff / 2).getTime() - version.timestamp;
+        const timeDiff =
+            new Date(postTime.getTime() - requestDiff / 2).getTime() -
+            version.timestamp;
         // 10 seconds
-        if (timeDiff > 10000 || timeDiff < 10000) {
+        if (timeDiff < -10000 || timeDiff > 10000) {
             store.dispatch(setAppSuspectWrongDateTime(true, timeDiff));
         }
         let lastVersionFromCache = await CacheStore.getLastVersion();

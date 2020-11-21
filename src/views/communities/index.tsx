@@ -1,5 +1,5 @@
 import { Entypo } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Header from 'components/Header';
 import {
@@ -8,7 +8,7 @@ import {
 } from 'helpers/index';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { IRootState, ICommunityInfo } from 'helpers/types';
+import { IRootState, ICommunityInfo, ITabBarIconProps } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
@@ -22,6 +22,8 @@ import { ProgressBar, Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import Card from 'components/core/Card';
+import CommunitiesSvg from 'components/svg/CommunitiesSvg';
+import { Screens } from 'helpers/constants';
 
 interface ICommunitiesScreenProps {
     navigation: any;
@@ -38,7 +40,7 @@ type Props = PropsFromRedux & ICommunitiesScreenProps;
 
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
-    const [goWelcomeScreen, setGoWelcomeScreen] = useState(true);
+    const [goWelcomeScreen, setGoWelcomeScreen] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 
@@ -57,7 +59,7 @@ function CommunitiesScreen(props: Props) {
             // elevation={8}
             style={styles.card}
             onPress={() =>
-                navigation.navigate('CommunityDetailsScreen', {
+                navigation.navigate(Screens.CommunityDetails, {
                     community,
                 })
             }
@@ -169,7 +171,7 @@ function CommunitiesScreen(props: Props) {
 
     if (props.user.celoInfo.address.length === 0 && goWelcomeScreen) {
         setGoWelcomeScreen(false);
-        navigation.navigate('WelcomeScreen');
+        navigation.navigate(Screens.Welcome);
     }
 
     return (
@@ -186,7 +188,7 @@ function CommunitiesScreen(props: Props) {
                         letterSpacing: 0.366667,
                         color: '#2643E9',
                     }}
-                    onPress={() => navigation.navigate('CreateCommunityScreen')}
+                    onPress={() => navigation.navigate(Screens.CreateCommunity)}
                 >
                     {i18n.t('create')}
                 </Button>
@@ -205,6 +207,33 @@ function CommunitiesScreen(props: Props) {
         </>
     );
 }
+
+CommunitiesScreen.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
+    return {
+        //   ...emptyHeader,
+        //   headerTitle: () => (
+        //     <HeaderTitleWithBalance
+        //       title={i18n.t('exchangeFlow9:withdrawCeloReview')}
+        //       token={CURRENCY_ENUM.GOLD}
+        //     />
+        //   ),
+        //   headerLeft: () => <CancelButton onCancel={onCancel} />,
+        //   headerRight: () => (
+        //     <TopBarTextButton
+        //       title={i18n.t('global:edit')}
+        //       testID="EditButton"
+        //       onPress={onEdit}
+        //       titleStyle={{ color: colors.goldDark }}
+        //       eventName={CeloExchangeEvents.celo_sell_edit}
+        //     />
+        //   ),
+        headerTitle: 'toze',
+        title: i18n.t('communities'),
+        tabBarIcon: (props: ITabBarIconProps) => (
+            <CommunitiesSvg focused={props.focused} />
+        ),
+    };
+};
 
 const styles = StyleSheet.create({
     scrollView: {},

@@ -286,11 +286,11 @@ class Api {
     }
 
     static async addClaimLocation(
-        communityPublicId: string,
+        communityId: string,
         gps: any
     ): Promise<boolean> {
         const requestBody = {
-            communityPublicId,
+            communityId,
             gps,
         };
         const result = await postRequest<boolean>(

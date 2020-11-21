@@ -6,6 +6,7 @@ import { iptcColors } from 'styles/index';
 import Button from 'components/core/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Screens } from 'helpers/constants';
 
 export default function Welcome() {
     const insets = useSafeAreaInsets();
@@ -61,7 +62,7 @@ export default function Welcome() {
                         style={{
                             width: '100%',
                         }}
-                        onPress={() => navigation.navigate('profile')}
+                        onPress={() => navigation.navigate(Screens.Profile)}
                     >
                         {i18n.t('connectWithValora')}
                     </Button>

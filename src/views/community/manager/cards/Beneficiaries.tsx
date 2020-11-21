@@ -6,6 +6,7 @@ import { Alert, View } from 'react-native';
 import { Headline } from 'react-native-paper';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
+import { Screens } from 'helpers/constants';
 
 interface IBeneficiariesProps {
     community: ICommunityInfo;
@@ -39,7 +40,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         }
                         style={{ marginVertical: 5 }}
                         onPress={() =>
-                            navigation.navigate('AddedScreen', {
+                            navigation.navigate(Screens.AddedBeneficiary, {
                                 beneficiaries:
                                     props.community.beneficiaries.added,
                             })
@@ -56,7 +57,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         }
                         style={{ marginVertical: 5 }}
                         onPress={() =>
-                            navigation.navigate('RemovedScreen', {
+                            navigation.navigate(Screens.RemovedBeneficiary, {
                                 beneficiaries:
                                     props.community.beneficiaries.removed,
                             })
@@ -74,7 +75,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                     marginVertical: 5,
                                 }}
                                 onPress={() =>
-                                    navigation.navigate('AddBeneficiaryScreen')
+                                    navigation.navigate(Screens.AddBeneficiary)
                                 }
                             >
                                 {i18n.t('addBeneficiary')}

@@ -131,10 +131,10 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
 }
 
 export async function updateCommunityInfo(
-    communityPublicId: string,
+    communityId: string,
     dispatch: Dispatch<any>
 ) {
-    const community = await Api.getCommunityByPublicId(communityPublicId);
+    const community = await Api.getCommunityByPublicId(communityId);
     if (community !== undefined) {
         dispatch(setCommunity(community));
     }
