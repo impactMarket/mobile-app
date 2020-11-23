@@ -31,7 +31,7 @@ const commonScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.FAQ}
             component={FAQScreen}
-            // options={FAQScreen.navigationOptions}
+            options={FAQScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.Welcome}
@@ -46,7 +46,7 @@ const nonBeneficiaryManagerScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.CreateCommunity}
             component={CreateCommunityScreen}
-            // options={CreateCommunityScreen.navigationOptions}
+            options={CreateCommunityScreen.navigationOptions}
         />
     </>
 );
@@ -56,7 +56,7 @@ const beneficiaryScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.ClaimExplained}
             component={ClaimExplainedScreen}
-            // options={ClaimExplainedScreen.navigationOptions}
+            options={ClaimExplainedScreen.navigationOptions}
         />
     </>
 );
@@ -66,17 +66,17 @@ const managerScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.AddedBeneficiary}
             component={AddedBeneficiaryScreen}
-            // options={AddedBeneficiaryScreen.navigationOptions}
+            options={AddedBeneficiaryScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.RemovedBeneficiary}
             component={RemovedBeneficiaryScreen}
-            // options={RemovedBeneficiaryScreen.navigationOptions}
+            options={RemovedBeneficiaryScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.AddBeneficiary}
             component={AddBeneficiaryScreen}
-            // options={AddBeneficiaryScreen.navigationOptions}
+            options={AddBeneficiaryScreen.navigationOptions}
         />
     </>
 );

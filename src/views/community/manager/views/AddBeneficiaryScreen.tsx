@@ -1,7 +1,8 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Header from 'components/Header';
+import BackSvg from 'components/svg/header/BackSvg';
 import { ethers } from 'ethers';
 import { updateCommunityInfo } from 'helpers/index';
 import { IRootState } from 'helpers/types';
@@ -96,11 +97,11 @@ function AddBeneficiaryScreen() {
 
     return (
         <>
-            <Header
+            {/* <Header
                 title={i18n.t('addBeneficiary')}
                 hasBack
                 navigation={navigation}
-            />
+            /> */}
             {personalAddressWarningMessageCondition && (
                 <View
                     style={{ alignItems: 'center', paddingHorizontal: '20%' }}
@@ -193,5 +194,15 @@ function AddBeneficiaryScreen() {
         </>
     );
 }
+AddBeneficiaryScreen.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerLeft: () => <BackSvg />,
+        headerTitle: i18n.t('addBeneficiary'),
+    };
+};
 
 export default AddBeneficiaryScreen;

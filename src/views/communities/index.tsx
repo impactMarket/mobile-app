@@ -176,7 +176,7 @@ function CommunitiesScreen(props: Props) {
 
     return (
         <>
-            <Header title={i18n.t('communities')} navigation={navigation}>
+            {/* <Header title={i18n.t('communities')} navigation={navigation}>
                 <Button
                     mode="text"
                     uppercase={false}
@@ -192,7 +192,7 @@ function CommunitiesScreen(props: Props) {
                 >
                     {i18n.t('create')}
                 </Button>
-            </Header>
+            </Header> */}
             <ScrollView
                 style={styles.scrollView}
                 refreshControl={

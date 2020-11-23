@@ -252,12 +252,12 @@ function BeneficiaryScreen(props: Props) {
 
     return (
         <>
-            <Header
+            {/* <Header
                 title={i18n.t('claim')}
                 navigation={navigation}
                 hasHelp
                 hasQr
-            />
+            /> */}
             <ScrollView
                 refreshControl={
                     <RefreshControl

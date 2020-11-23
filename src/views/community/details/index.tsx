@@ -140,7 +140,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     return (
         <>
-            <Header title="" hasBack hasHelp navigation={navigation} />
+            {/* <Header title="" hasBack hasHelp navigation={navigation} /> */}
             <ScrollView
                 refreshControl={
                     <RefreshControl

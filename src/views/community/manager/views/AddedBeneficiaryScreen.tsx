@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Header from 'components/Header';
@@ -12,6 +12,7 @@ import { ScrollView, Alert } from 'react-native';
 import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
+import BackSvg from 'components/svg/header/BackSvg';
 
 interface IAddedBeneficiaryScreenProps {
     route: {
@@ -79,7 +80,7 @@ function AddedBeneficiaryScreen(props: Props) {
 
     return (
         <>
-            <Header title={i18n.t('added')} hasBack navigation={navigation} />
+            {/* <Header title={i18n.t('added')} hasBack navigation={navigation} /> */}
             <ScrollView style={{ marginHorizontal: 15 }}>
                 {beneficiaries.map((beneficiary) => (
                     <ListActionItem
@@ -121,5 +122,15 @@ function AddedBeneficiaryScreen(props: Props) {
         </>
     );
 }
+AddedBeneficiaryScreen.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerLeft: () => <BackSvg />,
+        headerTitle: i18n.t('added'),
+    };
+};
 
 export default connector(AddedBeneficiaryScreen);

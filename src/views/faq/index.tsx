@@ -1,5 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import Header from 'components/Header';
+import BackSvg from 'components/svg/header/BackSvg';
 import { IRootState } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
@@ -199,7 +200,7 @@ function FAQScreen() {
     };
     return (
         <>
-            <Header title="FAQ" navigation={navigation} hasBack />
+            {/* <Header title="FAQ" navigation={navigation} hasBack /> */}
             <ScrollView style={styles.contentView}>
                 {faq.map((faq) => (
                     <List.Accordion
@@ -219,6 +220,15 @@ function FAQScreen() {
         </>
     );
 }
+FAQScreen.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerLeft: () => <BackSvg />,
+    };
+};
 
 const styles = StyleSheet.create({
     contentView: {

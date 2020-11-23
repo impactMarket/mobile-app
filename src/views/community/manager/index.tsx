@@ -196,7 +196,7 @@ function CommunityManagerView(props: Props) {
 
     return (
         <>
-            <Header title={i18n.t('manage')} navigation={navigation}>
+            {/* <Header title={i18n.t('manage')} navigation={navigation}>
                 {community.status === 'valid' && (
                     <IconButton
                         icon="dots-horizontal"
@@ -204,7 +204,7 @@ function CommunityManagerView(props: Props) {
                         onPress={() => setOpenModalMore(true)}
                     />
                 )}
-            </Header>
+            </Header> */}
             {communityStatus(community)}
             <Portal>
                 <Dialog

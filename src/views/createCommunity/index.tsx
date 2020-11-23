@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Header from 'components/Header';
@@ -46,6 +46,8 @@ import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
 import Card from 'components/core/Card';
+import BackSvg from 'components/svg/header/BackSvg';
+import SubmitCommunity from '../../navigator/header/SubmitCommunity';
 
 interface ICreateCommunityScreen {
     route: {
@@ -1128,6 +1130,17 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
         </>
     );
 }
+CreateCommunityScreen.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerLeft: () => <BackSvg />,
+        headerRight: () => <SubmitCommunity />,
+        headerTitle: i18n.t('create'), // editing ? i18n.t('edit') : i18n.t('create'),
+    };
+};
 
 const styles = StyleSheet.create({
     cardContent: {
