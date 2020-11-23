@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Card from 'components/core/Card';
 import Header from 'components/Header';
@@ -40,11 +39,11 @@ import {
 } from 'react-native-paper';
 import { batch, useDispatch, useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
-import Login from './Login';
 import * as Linking from 'expo-linking';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import { Screens } from 'helpers/constants';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 function ProfileScreen({
     navigation,
@@ -82,12 +81,6 @@ function ProfileScreen({
         }
     }, [userWallet]);
 
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => <Button>Update count</Button>,
-        });
-    }, [navigation]);
-
     const onRefresh = () => {
         const updateBalance = async () => {
             dispatch(
@@ -103,36 +96,6 @@ function ProfileScreen({
     const onToggleSwitch = () => {
         AsyncStorage.setItem(CONSENT_ANALYTICS, `${!isConsentAnalytics}`);
         setIsConsentAnalytics(!isConsentAnalytics);
-    };
-
-    const handleLogout = async () => {
-        setLogingOut(true);
-        await AsyncStorage.clear();
-        await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-        const unsubscribe = store.subscribe(() => {
-            const state = store.getState();
-            if (
-                !state.user.community.isBeneficiary &&
-                !state.user.community.isManager
-            ) {
-                unsubscribe();
-                setLogingOut(false);
-                // TODO: improve this line below
-                setTimeout(
-                    () =>
-                        navigation.navigate(Screens.Communities, {
-                            previous: Screens.Profile,
-                        }),
-                    500
-                );
-            }
-        });
-        batch(() => {
-            dispatch(setUserIsBeneficiary(false));
-            dispatch(setUserIsCommunityManager(false));
-            dispatch(resetUserApp());
-            dispatch(resetNetworkContractsApp());
-        });
     };
 
     const handleChangeCurrency = async (text: string) => {
@@ -154,10 +117,6 @@ function ProfileScreen({
         moment.locale(text);
     };
 
-    if (userWallet.address.length === 0) {
-        return <Login />;
-    }
-
     const userBalance = amountToCurrency(
         userWallet.balance,
         user.currency,
@@ -166,25 +125,6 @@ function ProfileScreen({
 
     return (
         <>
-            <Header title={i18n.t('profile')} navigation={navigation}>
-                <Button
-                    mode="text"
-                    uppercase={false}
-                    labelStyle={{
-                        fontFamily: 'Gelion-Bold',
-                        fontSize: 22,
-                        lineHeight: 26,
-                        textAlign: 'center',
-                        letterSpacing: 0.366667,
-                        color: '#2643E9',
-                    }}
-                    onPress={handleLogout}
-                    loading={logingOut}
-                    disabled={logingOut}
-                >
-                    {i18n.t('logout')}
-                </Button>
-            </Header>
             <ScrollView
                 style={styles.scrollView}
                 refreshControl={

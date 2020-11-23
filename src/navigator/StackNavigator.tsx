@@ -21,7 +21,7 @@ const commonScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name="TabNavigator" // doesn't really matter here
             component={TabNavigator}
-            // options={TabNavigator.navigationOptions}
+            options={TabNavigator.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.CommunityDetails}
@@ -36,7 +36,7 @@ const commonScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.Welcome}
             component={WelcomeScreen}
-            // options={WelcomeScreen.navigationOptions}
+            options={WelcomeScreen.navigationOptions}
         />
     </>
 );

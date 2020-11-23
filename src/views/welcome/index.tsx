@@ -4,11 +4,11 @@ import { Text } from 'react-native-paper';
 import i18n from 'assets/i18n';
 import { iptcColors } from 'styles/index';
 import Button from 'components/core/Button';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screens } from 'helpers/constants';
 
-export default function Welcome() {
+function Welcome() {
     const insets = useSafeAreaInsets();
     const navigation = useNavigation();
     return (
@@ -82,3 +82,15 @@ export default function Welcome() {
         </View>
     );
 }
+
+Welcome.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerShown: false,
+    };
+};
+
+export default Welcome;

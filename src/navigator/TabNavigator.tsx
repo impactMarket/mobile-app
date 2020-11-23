@@ -1,12 +1,10 @@
-import React from 'react';
-// import { useSelector } from 'react-redux';
+import React, { useLayoutEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import i18n from 'assets/i18n';
-import { IRootState, ITabBarIconProps, STORAGE_USER_FIRST_TIME } from 'helpers/types';
+import { IRootState, ITabBarIconProps } from 'helpers/types';
 
 import ManageSvg from 'components/svg/ManageSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
-import ClaimSvg from 'components/svg/ClaimSvg';
 
 import CommunitiesScreen from 'views/communities';
 import BeneficiaryScreen from 'views/community/beneficiary';
@@ -22,54 +20,13 @@ import { Screens } from 'helpers/constants';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import QRCodeSvg from 'components/svg/header/QRCodeSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
-import { AsyncStorage, View } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 
-import { batch, useDispatch, useSelector, useStore } from 'react-redux';
-import {
-    resetUserApp,
-    resetNetworkContractsApp,
-    setUserInfo,
-    setUserExchangeRate,
-    setUserIsBeneficiary,
-    setUserIsCommunityManager,
-    setUserLanguage,
-    setUserWalletBalance,
-} from 'helpers/redux/actions/ReduxActions';
+import { useSelector } from 'react-redux';
+import Logout from './header/Logout';
+import Login from 'views/profile/auth';
 
-const handleLogout = async (navigation: StackNavigationProp<any, any>) => {
-    console.log('handleLogout')
-    const store = useStore();
-    const dispatch = useDispatch();
-    // setLogingOut(true);
-    await AsyncStorage.clear();
-    await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-    const unsubscribe = store.subscribe(() => {
-        const state = store.getState();
-        if (
-            !state.user.community.isBeneficiary &&
-            !state.user.community.isManager
-        ) {
-            unsubscribe();
-            // setLogingOut(false);
-            // TODO: improve this line below
-            setTimeout(
-                () =>
-                    navigation.navigate(Screens.Communities, {
-                        previous: Screens.Profile,
-                    }),
-                500
-            );
-        }
-    });
-    batch(() => {
-        dispatch(setUserIsBeneficiary(false));
-        dispatch(setUserIsCommunityManager(false));
-        dispatch(resetUserApp());
-        dispatch(resetNetworkContractsApp());
-    });
-};
 function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
     let routeName = getFocusedRouteNameFromRoute(route);
     if (routeName === undefined) {
@@ -136,6 +93,8 @@ function getHeaderRight(
                     </Text>
                 </View>
             );
+        case Screens.Profile:
+            return <Logout />;
     }
 }
 
@@ -154,8 +113,9 @@ function TabNavigator({
     const isBeneficiary = useSelector(
         (state: IRootState) => state.user.community.isBeneficiary
     );
+    const userWallet = useSelector((state: IRootState) => state.user.celoInfo);
 
-    React.useLayoutEffect(() => {
+    useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: getHeaderTitle(
                 route,
@@ -204,6 +164,30 @@ function TabNavigator({
             options={CommunitiesScreen.navigationOptions}
         />
     );
+    const tabProfile = (
+        <Tab.Screen
+            name={Screens.Profile}
+            component={ProfileScreen}
+            options={{
+                title: i18n.t('profile'),
+                tabBarIcon: (props: ITabBarIconProps) => (
+                    <ProfileSvg focused={props.focused} />
+                ),
+            }}
+        />
+    );
+    const tabAuth = (
+        <Tab.Screen
+            name={Screens.Auth}
+            component={Login}
+            options={{
+                title: i18n.t('profile'),
+                tabBarIcon: (props: ITabBarIconProps) => (
+                    <ProfileSvg focused={props.focused} />
+                ),
+            }}
+        />
+    );
     return (
         <Tab.Navigator
             tabBarOptions={{
@@ -222,18 +206,22 @@ function TabNavigator({
             {isBeneficiary && tabBeneficiary}
             {isManager && tabManager}
             {!isBeneficiary && !isManager && tabCommunities}
-            <Tab.Screen
-                name={Screens.Profile}
-                component={ProfileScreen}
-                options={{
-                    title: i18n.t('profile'),
-                    tabBarIcon: (props: ITabBarIconProps) => (
-                        <ProfileSvg focused={props.focused} />
-                    ),
-                }}
-            />
+            {userWallet.address.length === 0 ? tabAuth : tabProfile}
         </Tab.Navigator>
     );
 }
+
+TabNavigator.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    let routeName = getFocusedRouteNameFromRoute(route);
+    if (routeName === Screens.Auth) {
+        return {
+            headerShown: false,
+        };
+    }
+};
 
 export default TabNavigator;

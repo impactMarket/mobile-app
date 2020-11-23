@@ -1,5 +1,5 @@
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
@@ -22,13 +22,13 @@ import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
 import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
-import config from '../../../config';
+import config from '../../../../config';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Button from 'components/core/Button';
 import { Screens } from 'helpers/constants';
 
-function Login() {
+function Auth() {
     const store = useStore();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
@@ -120,7 +120,7 @@ function Login() {
                     } else if (state.user.community.isManager) {
                         navigation.navigate(Screens.CommunityManager);
                     } else {
-                        navigation.navigate(Screens.CommunityManager);
+                        navigation.navigate(Screens.Communities);
                     }
                 }
             });
@@ -244,7 +244,7 @@ function Login() {
                 modeType="green"
                 bold={true}
                 onPress={() => login()}
-                disabled={connecting}
+                // disabled={connecting}
                 loading={connecting}
                 style={{
                     width: '100%',
@@ -265,6 +265,18 @@ function Login() {
         </View>
     );
 }
+
+Auth.navigationOptions = ({
+    route,
+}: {
+    route: RouteProp<any, any>;
+}) => {
+    return {
+        headerShown: false,
+    };
+};
+
+export default Auth;
 
 const styles = StyleSheet.create({
     mainView: {
@@ -307,5 +319,3 @@ const styles = StyleSheet.create({
         color: '#172b4d',
     },
 });
-
-export default Login;
