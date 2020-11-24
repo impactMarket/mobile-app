@@ -1,7 +1,6 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import Header from 'components/Header';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { validateEmail, updateCommunityInfo } from 'helpers/index';
@@ -17,7 +16,7 @@ import {
     IStoreCombinedActionsTypes,
     ICommunity,
 } from 'helpers/types';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     StyleSheet,
     ScrollView,
@@ -102,6 +101,12 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
     const [incrementInterval, setIncrementalInterval] = useState('');
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisivility] = useState('public');
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <SubmitCommunity submit={submitNewCommunity} submitting={sending} />,
+        });
+    }, [navigation]);
 
     useEffect(() => {
         if (props.route.params !== undefined) {
@@ -555,20 +560,20 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
         );
     };
 
-    if (user.celoInfo.address.length === 0) {
-        return (
-            <View>
-                {/* <Header
-                    title={i18n.t('create')}
-                    navigation={navigation}
-                    hasBack
-                /> */}
-                <View style={styles.container}>
-                    <Text>{i18n.t('needLoginToCreateCommunity')}</Text>
-                </View>
-            </View>
-        );
-    }
+    // if (user.celoInfo.address.length === 0) {
+    //     return (
+    //         <View>
+    //             {/* <Header
+    //                 title={i18n.t('create')}
+    //                 navigation={navigation}
+    //                 hasBack
+    //             /> */}
+    //             <View style={styles.container}>
+    //                 <Text>{i18n.t('needLoginToCreateCommunity')}</Text>
+    //             </View>
+    //         </View>
+    //     );
+    // }
 
     return (
         <>
@@ -1137,7 +1142,7 @@ CreateCommunityScreen.navigationOptions = ({
 }) => {
     return {
         headerLeft: () => <BackSvg />,
-        headerRight: () => <SubmitCommunity />,
+        // headerRight: () => <SubmitCommunity route={route} />,
         headerTitle: i18n.t('create'), // editing ? i18n.t('edit') : i18n.t('create'),
     };
 };

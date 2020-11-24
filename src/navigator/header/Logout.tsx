@@ -62,6 +62,7 @@ function Logout(props: { navigation: StackNavigationProp<any, any> }) {
                     fontFamily: 'Gelion-Bold',
                     fontSize: 22,
                     lineHeight: 26,
+                    height: 26,
                     textAlign: 'center',
                     letterSpacing: 0.366667,
                     color: '#2643E9',

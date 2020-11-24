@@ -2,7 +2,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { Screens } from 'helpers/constants';
 import React from 'react';
 import { View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import i18n from 'assets/i18n';
 
 function CreateCommunity(props: { navigation: StackNavigationProp<any, any> }) {
@@ -14,21 +14,26 @@ function CreateCommunity(props: { navigation: StackNavigationProp<any, any> }) {
                 alignItems: 'center',
             }}
         >
-            <Text
-                style={{
+            <Button
+                mode="text"
+                uppercase={false}
+                labelStyle={{
                     fontFamily: 'Gelion-Bold',
                     fontSize: 22,
-                    lineHeight: 22, // TODO: design is 26
+                    lineHeight: 26,
+                    height: 26,
                     textAlign: 'center',
                     letterSpacing: 0.366667,
                     color: '#2643E9',
                     // marginLeft: 8.4,
                     marginRight: 16,
                 }}
-                onPress={() => props.navigation.navigate(Screens.CreateCommunity)}
+                onPress={() =>
+                    props.navigation.navigate(Screens.CreateCommunity)
+                }
             >
                 {i18n.t('create')}
-            </Text>
+            </Button>
         </View>
     );
 }
