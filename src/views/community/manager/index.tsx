@@ -3,7 +3,6 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CommuntyStatus from 'components/CommuntyStatus';
-import Header from 'components/Header';
 import * as Linking from 'expo-linking';
 import { updateCommunityInfo } from 'helpers/index';
 import { iptcColors } from 'styles/index';
@@ -13,31 +12,28 @@ import { StyleSheet, View, Text, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,
-    IconButton,
     Dialog,
     Portal,
     Headline,
     ActivityIndicator,
 } from 'react-native-paper';
-import { connect, ConnectedProps, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Beneficiaries from './cards/Beneficiaries';
 import { Screens } from 'helpers/constants';
 
-const mapStateToProps = (state: IRootState) => {
-    const { user, network, app } = state;
-    return { user, network, app };
-};
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
-
-function CommunityManagerView(props: Props) {
+function CommunityManagerScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [community, setCommunity] = useState<ICommunityInfo>(
-        props.network.community
+
+    const kit = useSelector((state: IRootState) => state.app.kit);
+    const communityContract = useSelector(
+        (state: IRootState) => state.network.contracts.communityContract
     );
+    const community = useSelector(
+        (state: IRootState) => state.network.community
+    );
+
     const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
@@ -45,15 +41,11 @@ function CommunityManagerView(props: Props) {
     );
 
     useEffect(() => {
-        // cluncky issue after creating community
-        if (props.network.community !== community) {
-            setCommunity(props.network.community);
-        }
         const loadCommunityBalance = async () => {
-            if (props.app.kit.contracts !== undefined) {
-                const stableToken = await props.app.kit.contracts.getStableToken();
+            if (kit !== undefined) {
+                const stableToken = await kit.contracts.getStableToken();
                 const cUSDBalanceBig = await stableToken.balanceOf(
-                    props.network.contracts.communityContract._address
+                    communityContract._address
                 );
                 // at least five cents
                 setHasFundsToNewBeneficiary(
@@ -64,31 +56,22 @@ function CommunityManagerView(props: Props) {
             }
         };
         loadCommunityBalance();
-    }, [props.network.community]);
+    }, [community, kit]);
 
     const onRefresh = () => {
-        let contractAddress;
-        if (props.network.contracts.communityContract !== undefined) {
-            contractAddress =
-                props.network.contracts.communityContract._address;
-        } else if (props.network.community !== undefined) {
-            contractAddress = props.network.community.contractAddress;
-        }
-        if (contractAddress !== undefined && contractAddress !== null) {
-            updateCommunityInfo(community.publicId, dispatch).then(async () => {
-                const stableToken = await props.app.kit.contracts.getStableToken();
-                const cUSDBalanceBig = await stableToken.balanceOf(
-                    props.network.contracts.communityContract._address
-                );
-                // at least five cents
-                setHasFundsToNewBeneficiary(
-                    new BigNumber(cUSDBalanceBig.toString()).gte(
-                        '50000000000000000'
-                    )
-                );
-                setRefreshing(false);
-            });
-        }
+        updateCommunityInfo(community.publicId, dispatch).then(async () => {
+            const stableToken = await kit.contracts.getStableToken();
+            const cUSDBalanceBig = await stableToken.balanceOf(
+                communityContract._address
+            );
+            // at least five cents
+            setHasFundsToNewBeneficiary(
+                new BigNumber(cUSDBalanceBig.toString()).gte(
+                    '50000000000000000'
+                )
+            );
+            setRefreshing(false);
+        });
     };
 
     const communityStatus = (_community: ICommunityInfo) => {
@@ -267,4 +250,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(CommunityManagerView);
+export default CommunityManagerScreen;

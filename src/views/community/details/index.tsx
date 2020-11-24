@@ -257,7 +257,7 @@ CommunityDetailsScreen.navigationOptions = ({
 }) => {
     return {
         headerLeft: () => <BackSvg />,
-        headerRight: () => <FaqSvg />,
+        headerRight: () => <FaqSvg style={{ marginRight: 16 }} />,
         headerTitle: '',
     };
 };

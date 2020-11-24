@@ -171,94 +171,94 @@ export default class App extends React.Component<any, IAppState> {
         };
     }
 
-    // componentDidMount = () => {
-    //     this.unsubscribeStore = store.subscribe(() => {
-    //         const previousLoggedIn = this.state.loggedIn;
-    //         const currentLoggedIn =
-    //             store.getState().user.celoInfo.address.length > 0;
+    componentDidMount = () => {
+        this.unsubscribeStore = store.subscribe(() => {
+            const previousLoggedIn = this.state.loggedIn;
+            const currentLoggedIn =
+                store.getState().user.celoInfo.address.length > 0;
 
-    //         if (previousLoggedIn !== currentLoggedIn) {
-    //             if (currentLoggedIn) {
-    //                 // when notification received!
-    //                 Notifications.addNotificationReceivedListener(
-    //                     (notification: Notifications.Notification) => {
-    //                         const {
-    //                             action,
-    //                             communityAddress,
-    //                         } = notification.request.content.data;
-    //                         if (
-    //                             action === 'community-accepted' ||
-    //                             action === 'beneficiary-added'
-    //                         ) {
-    //                             Api.getCommunityByContractAddress(
-    //                                 communityAddress as string
-    //                             ).then((community) => {
-    //                                 if (community !== undefined) {
-    //                                     const communityContract = new kit.web3.eth.Contract(
-    //                                         CommunityContractABI as any,
-    //                                         communityAddress as string
-    //                                     );
-    //                                     if (action === 'community-accepted') {
-    //                                         store.dispatch(
-    //                                             setUserIsCommunityManager(true)
-    //                                         );
-    //                                     }
-    //                                     if (action === 'beneficiary-added') {
-    //                                         store.dispatch(
-    //                                             setUserIsBeneficiary(true)
-    //                                         );
-    //                                     }
-    //                                     store.dispatch(setCommunity(community));
-    //                                     store.dispatch(
-    //                                         setCommunityContract(
-    //                                             communityContract
-    //                                         )
-    //                                     );
-    //                                 }
-    //                             });
-    //                         }
-    //                     }
-    //                 );
-    //                 // when user interacts with notification
-    //                 Notifications.addNotificationResponseReceivedListener(
-    //                     (response) => {
-    //                         const {
-    //                             action,
-    //                             communityAddress,
-    //                         } = response.notification.request.content.data;
-    //                         if (action === 'community-low-funds') {
-    //                             Api.getCommunityByContractAddress(
-    //                                 communityAddress as string
-    //                             ).then((community) => {
-    //                                 if (community !== undefined) {
-    //                                     (this.navigationRef
-    //                                         .current as any).navigate(
-    //                                         'CommunityDetailsScreen',
-    //                                         {
-    //                                             community,
-    //                                         }
-    //                                     );
-    //                                 }
-    //                             });
-    //                         }
-    //                     }
-    //                 );
-    //                 // Notifications.addPushTokenListener
-    //                 // In rare situations a push token may be changed by the push notification service while the app is running.
-    //             }
-    //         }
-    //     });
-    //     store.dispatch(setCeloKit(kit));
-    //     this.setState({ testnetWarningOpen: true });
-    //     setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
-    // };
+            if (previousLoggedIn !== currentLoggedIn) {
+                if (currentLoggedIn) {
+                    // when notification received!
+                    Notifications.addNotificationReceivedListener(
+                        (notification: Notifications.Notification) => {
+                            const {
+                                action,
+                                communityAddress,
+                            } = notification.request.content.data;
+                            if (
+                                action === 'community-accepted' ||
+                                action === 'beneficiary-added'
+                            ) {
+                                Api.getCommunityByContractAddress(
+                                    communityAddress as string
+                                ).then((community) => {
+                                    if (community !== undefined) {
+                                        const communityContract = new kit.web3.eth.Contract(
+                                            CommunityContractABI as any,
+                                            communityAddress as string
+                                        );
+                                        if (action === 'community-accepted') {
+                                            store.dispatch(
+                                                setUserIsCommunityManager(true)
+                                            );
+                                        }
+                                        if (action === 'beneficiary-added') {
+                                            store.dispatch(
+                                                setUserIsBeneficiary(true)
+                                            );
+                                        }
+                                        store.dispatch(setCommunity(community));
+                                        store.dispatch(
+                                            setCommunityContract(
+                                                communityContract
+                                            )
+                                        );
+                                    }
+                                });
+                            }
+                        }
+                    );
+                    // when user interacts with notification
+                    Notifications.addNotificationResponseReceivedListener(
+                        (response) => {
+                            const {
+                                action,
+                                communityAddress,
+                            } = response.notification.request.content.data;
+                            if (action === 'community-low-funds') {
+                                Api.getCommunityByContractAddress(
+                                    communityAddress as string
+                                ).then((community) => {
+                                    if (community !== undefined) {
+                                        (this.navigationRef
+                                            .current as any).navigate(
+                                            'CommunityDetailsScreen',
+                                            {
+                                                community,
+                                            }
+                                        );
+                                    }
+                                });
+                            }
+                        }
+                    );
+                    // Notifications.addPushTokenListener
+                    // In rare situations a push token may be changed by the push notification service while the app is running.
+                }
+            }
+        });
+        store.dispatch(setCeloKit(kit));
+        this.setState({ testnetWarningOpen: true });
+        setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
+    };
 
-    // componentWillUnmount = () => {
-    //     try {
-    //         this.unsubscribeStore();
-    //     } catch (e) {}
-    //     Notifications.removeAllNotificationListeners();
-    // };
+    componentWillUnmount = () => {
+        try {
+            this.unsubscribeStore();
+        } catch (e) {}
+        Notifications.removeAllNotificationListeners();
+    };
 
     openExploreCommunities = async () => {
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');

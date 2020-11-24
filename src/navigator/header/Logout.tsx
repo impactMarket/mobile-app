@@ -24,7 +24,7 @@ function Logout() {
     const [logingOut, setLogingOut] = useState(false);
 
     const handleLogout = async () => {
-        console.log('logout')
+        console.log('logout');
         setLogingOut(true);
         await AsyncStorage.clear();
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
@@ -55,7 +55,7 @@ function Logout() {
     };
 
     return (
-        <View style={{ flex: 1, flexDirection: 'row', marginTop: 16 }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Text
                 style={{
                     fontFamily: 'Gelion-Bold',

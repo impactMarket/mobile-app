@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
 import * as React from 'react';
-import Svg, { Circle, Path } from 'react-native-svg';
+import Svg, { Circle, Path, SvgProps } from 'react-native-svg';
 
-function SvgComponent() {
+function FAQSvg(props: SvgProps) {
     const navigation = useNavigation();
     return (
         <Svg
@@ -12,6 +12,7 @@ function SvgComponent() {
             height={34}
             viewBox="0 0 34 34"
             fill="none"
+            {...props}
         >
             <Circle cx={16.8} cy={16.8} r={16.8} fill="#EAEDF0" />
             <Circle cx={17} cy={24} r={1} fill="#172B4D" />
@@ -23,4 +24,4 @@ function SvgComponent() {
     );
 }
 
-export default SvgComponent;
+export default FAQSvg;

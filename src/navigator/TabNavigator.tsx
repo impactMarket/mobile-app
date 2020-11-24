@@ -57,14 +57,26 @@ function getHeaderRight(
     switch (routeName) {
         case Screens.Beneficiary:
             return (
-                <View style={{ flex: 1, flexDirection: 'row', marginTop: 16 }}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}
+                >
                     <FaqSvg />
                     <QRCodeSvg style={{ marginLeft: 8.4, marginRight: 16 }} />
                 </View>
             );
         case Screens.CommunityManager:
             return (
-                <View style={{ flex: 1, flexDirection: 'row', marginTop: 16 }}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}
+                >
                     <FaqSvg />
                     <ThreeDotsSvg
                         style={{ marginLeft: 8.4, marginRight: 16 }}
@@ -73,7 +85,13 @@ function getHeaderRight(
             );
         case Screens.Communities:
             return (
-                <View style={{ flex: 1, flexDirection: 'row', marginTop: 16 }}>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}
+                >
                     <Text
                         style={{
                             fontFamily: 'Gelion-Bold',

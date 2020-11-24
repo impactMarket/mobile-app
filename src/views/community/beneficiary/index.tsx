@@ -1,10 +1,9 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import Header from 'components/Header';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { IRootState, ICommunityInfo, ITabBarIconProps } from 'helpers/types';
+import { IRootState, ITabBarIconProps } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
@@ -23,7 +22,7 @@ import {
     ProgressBar,
     Snackbar,
 } from 'react-native-paper';
-import { connect, ConnectedProps, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import * as Location from 'expo-location';
 import * as IntentLauncher from 'expo-intent-launcher';
@@ -37,26 +36,27 @@ import { Trans } from 'react-i18next';
 import CacheStore from 'services/cacheStore';
 import Card from 'components/core/Card';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
-import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/ReduxActions';
+import {
+    setAppSuspectWrongDateTime,
+    setCommunity,
+} from 'helpers/redux/actions/ReduxActions';
 import ClaimSvg from 'components/svg/ClaimSvg';
-import BackSvg from 'components/svg/header/BackSvg';
-import FaqSvg from 'components/svg/header/FaqSvg';
-import QRCodeSvg from 'components/svg/header/QRCodeSvg';
 import { Screens } from 'helpers/constants';
 
-const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
-};
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
-
-function BeneficiaryScreen(props: Props) {
+function BeneficiaryScreen() {
     let timeoutTimeDiff: number | undefined;
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
+    const communityContract = useSelector(
+        (state: IRootState) => state.network.contracts.communityContract
+    );
+    const community = useSelector(
+        (state: IRootState) => state.network.community
+    );
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.celoInfo.address
+    );
     const suspectWrongDateTime = useSelector(
         (state: IRootState) => state.app.suspectWrongDateTime
     );
@@ -64,7 +64,6 @@ function BeneficiaryScreen(props: Props) {
 
     const [lastInterval, setLastInterval] = useState(0);
     const [cooldownTime, setCooldownTime] = useState(0);
-    const [community, setCommunity] = useState<ICommunityInfo>();
     const [claimedAmount, setClaimedAmount] = useState('');
     const [claimedProgress, setClaimedProgress] = useState(0.1);
     const [refreshing, setRefreshing] = useState(false);
@@ -73,77 +72,63 @@ function BeneficiaryScreen(props: Props) {
 
     useEffect(() => {
         const loadCommunity = async () => {
-            if (props.network.community !== undefined) {
+            if (community !== undefined) {
                 const beneficiaryClaimCache = await CacheStore.getBeneficiaryClaim();
-                if (beneficiaryClaimCache !== null) {
+                if (beneficiaryClaimCache !== null && beneficiaryClaimCache.communityId === community.publicId) {
                     const progress = new BigNumber(
                         beneficiaryClaimCache.claimed
-                    ).div(props.network.community.contractParams.maxClaim);
+                    ).div(community.contractParams.maxClaim);
                     setClaimedAmount(
                         humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
                     );
                     setClaimedProgress(progress.toNumber());
-                    setCommunity(props.network.community);
                     setCooldownTime(beneficiaryClaimCache.cooldown);
                     setLastInterval(beneficiaryClaimCache.lastInterval);
                 } else if (
-                    props.network.contracts.communityContract !== undefined &&
-                    props.user.celoInfo.address.length > 0
+                    communityContract !== undefined &&
+                    userAddress.length > 0
                 ) {
                     const claimed = (
-                        await props.network.contracts.communityContract.methods
-                            .claimed(props.user.celoInfo.address)
+                        await communityContract.methods
+                            .claimed(userAddress)
                             .call()
                     ).toString();
                     const cooldown = parseInt(
                         (
-                            await props.network.contracts.communityContract.methods
-                                .cooldown(props.user.celoInfo.address)
+                            await communityContract.methods
+                                .cooldown(userAddress)
                                 .call()
                         ).toString(),
                         10
                     );
                     const lastIntv = parseInt(
                         (
-                            await props.network.contracts.communityContract.methods
-                                .lastInterval(props.user.celoInfo.address)
+                            await communityContract.methods
+                                .lastInterval(userAddress)
                                 .call()
                         ).toString(),
                         10
                     );
                     // cache it
                     const beneficiaryClaimCache = {
+                        communityId: community.publicId,
                         claimed,
                         cooldown,
                         lastInterval: lastIntv,
                     };
                     CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
                     const progress = new BigNumber(claimed).div(
-                        props.network.community.contractParams.maxClaim
+                        community.contractParams.maxClaim
                     );
                     setClaimedAmount(humanifyCurrencyAmount(claimed));
                     setClaimedProgress(progress.toNumber());
-                    setCommunity(props.network.community);
                     setCooldownTime(cooldown);
                     setLastInterval(lastIntv);
                 }
             }
         };
-        const isLocationAvailable = async () => {
-            const availableGPSToRequest =
-                (await Location.hasServicesEnabledAsync()) &&
-                (await Location.getPermissionsAsync()).status === 'granted' &&
-                (await Location.getProviderStatusAsync())
-                    .locationServicesEnabled;
-            setAskLocationOnOpen(!availableGPSToRequest);
-        };
         loadCommunity();
-        isLocationAvailable();
-    }, [
-        props.network.contracts.communityContract,
-        props.network.community,
-        props.user.celoInfo.address,
-    ]);
+    }, [communityContract, community, userAddress]);
 
     useEffect(() => {
         if (suspectWrongDateTime) {
@@ -154,23 +139,34 @@ function BeneficiaryScreen(props: Props) {
         } else if (timeoutTimeDiff !== undefined) {
             clearInterval(timeoutTimeDiff);
         }
+        return clearInterval(timeoutTimeDiff);
     }, [suspectWrongDateTime]);
+
+    useEffect(() => {
+        const isLocationAvailable = async () => {
+            const availableGPSToRequest =
+                (await Location.hasServicesEnabledAsync()) &&
+                (await Location.getPermissionsAsync()).status === 'granted' &&
+                (await Location.getProviderStatusAsync())
+                    .locationServicesEnabled;
+            setAskLocationOnOpen(!availableGPSToRequest);
+        };
+        isLocationAvailable();
+    }, []);
 
     const getNewCooldownTime = async () => {
         return parseInt(
             (
-                await props.network.contracts.communityContract.methods
-                    .cooldown(props.user.celoInfo.address)
-                    .call()
+                await communityContract.methods.cooldown(userAddress).call()
             ).toString(),
             10
         );
     };
 
     const onRefresh = () => {
-        Api.getCommunityByContractAddress(community!.contractAddress).then(
+        Api.getCommunityByContractAddress(community.contractAddress).then(
             (c) => {
-                setCommunity(c!);
+                dispatch(setCommunity(c!));
                 setRefreshing(false);
             }
         );
@@ -178,28 +174,23 @@ function BeneficiaryScreen(props: Props) {
 
     const updateClaimedAmountAndCache = async () => {
         const claimed = (
-            await props.network.contracts.communityContract.methods
-                .claimed(props.user.celoInfo.address)
-                .call()
+            await communityContract.methods.claimed(userAddress).call()
         ).toString();
         const cooldown = parseInt(
             (
-                await props.network.contracts.communityContract.methods
-                    .cooldown(props.user.celoInfo.address)
-                    .call()
+                await communityContract.methods.cooldown(userAddress).call()
             ).toString(),
             10
         );
         const lastIntv = parseInt(
             (
-                await props.network.contracts.communityContract.methods
-                    .lastInterval(props.user.celoInfo.address)
-                    .call()
+                await communityContract.methods.lastInterval(userAddress).call()
             ).toString(),
             10
         );
         // cache it
         const beneficiaryClaimCache = {
+            communityId: community.publicId,
             claimed,
             cooldown,
             lastInterval: lastIntv,
@@ -207,7 +198,7 @@ function BeneficiaryScreen(props: Props) {
         CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
 
         const progress = new BigNumber(claimed).div(
-            props.network.community.contractParams.maxClaim
+            community.contractParams.maxClaim
         );
         setClaimedProgress(progress.toNumber());
         setClaimedAmount(humanifyCurrencyAmount(claimed.toString()));
@@ -252,12 +243,6 @@ function BeneficiaryScreen(props: Props) {
 
     return (
         <>
-            {/* <Header
-                title={i18n.t('claim')}
-                navigation={navigation}
-                hasHelp
-                hasQr
-            /> */}
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -501,12 +486,6 @@ BeneficiaryScreen.navigationOptions = ({
     route: RouteProp<any, any>;
 }) => {
     return {
-        headerRight: () => (
-            <>
-                <FaqSvg />
-                <QRCodeSvg />
-            </>
-        ),
         title: i18n.t('claim'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <ClaimSvg focused={props.focused} />
@@ -589,4 +568,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(BeneficiaryScreen);
+export default BeneficiaryScreen;

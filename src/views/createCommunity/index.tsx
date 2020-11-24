@@ -558,11 +558,11 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
     if (user.celoInfo.address.length === 0) {
         return (
             <View>
-                <Header
+                {/* <Header
                     title={i18n.t('create')}
                     navigation={navigation}
                     hasBack
-                />
+                /> */}
                 <View style={styles.container}>
                     <Text>{i18n.t('needLoginToCreateCommunity')}</Text>
                 </View>
@@ -572,7 +572,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
 
     return (
         <>
-            <Header
+            {/* <Header
                 title={editing ? i18n.t('edit') : i18n.t('create')}
                 navigation={navigation}
                 hasBack
@@ -593,7 +593,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                 >
                     {i18n.t('submit')}
                 </Button>
-            </Header>
+            </Header> */}
             <ScrollView>
                 <View style={styles.container}>
                     <Card elevation={8}>

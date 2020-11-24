@@ -227,8 +227,7 @@ CommunitiesScreen.navigationOptions = ({ route }: { route: RouteProp<any, any> }
         //       eventName={CeloExchangeEvents.celo_sell_edit}
         //     />
         //   ),
-        headerTitle: 'toze',
-        title: i18n.t('communities'),
+        headerTitle: i18n.t('communities'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <CommunitiesSvg focused={props.focused} />
         ),

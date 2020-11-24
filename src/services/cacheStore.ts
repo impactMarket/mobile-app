@@ -11,6 +11,7 @@ const CACHE_STORE_LAST_LAST_VERSION = '@CacheStore:lastLastVersion';
 const CACHE_STORE_APP_NEEDS_UPDATE = '@CacheStore:appNeedsUpdate';
 
 interface IBeneficiaryClaim {
+    communityId: string;
     claimed: string;
     cooldown: number;
     lastInterval: number;
