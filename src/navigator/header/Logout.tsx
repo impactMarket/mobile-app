@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
 import {
     resetNetworkContractsApp,
@@ -12,19 +11,19 @@ import {
     STORAGE_USER_FIRST_TIME,
 } from 'helpers/types';
 import React, { useState } from 'react';
-import { View, Text, AsyncStorage } from 'react-native';
+import { View, AsyncStorage } from 'react-native';
 import { batch, useDispatch, useStore } from 'react-redux';
 import i18n from 'assets/i18n';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Button } from 'react-native-paper';
 
-function Logout() {
+function Logout(props: { navigation: StackNavigationProp<any, any> }) {
     const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
-    const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const [logingOut, setLogingOut] = useState(false);
 
     const handleLogout = async () => {
-        console.log('logout');
         setLogingOut(true);
         await AsyncStorage.clear();
         await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
@@ -39,7 +38,7 @@ function Logout() {
                 // TODO: improve this line below
                 setTimeout(
                     () =>
-                        navigation.navigate(Screens.Communities, {
+                        props.navigation.navigate(Screens.Communities, {
                             previous: Screens.Profile,
                         }),
                     500
@@ -56,11 +55,13 @@ function Logout() {
 
     return (
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-            <Text
-                style={{
+            <Button
+                mode="text"
+                uppercase={false}
+                labelStyle={{
                     fontFamily: 'Gelion-Bold',
                     fontSize: 22,
-                    lineHeight: 22, // TODO: design is 26
+                    lineHeight: 26,
                     textAlign: 'center',
                     letterSpacing: 0.366667,
                     color: '#2643E9',
@@ -68,11 +69,11 @@ function Logout() {
                     marginRight: 16,
                 }}
                 onPress={handleLogout}
-                // loading={logingOut}
-                // disabled={logingOut}
+                loading={logingOut}
+                disabled={logingOut}
             >
                 {i18n.t('logout')}
-            </Text>
+            </Button>
         </View>
     );
 }

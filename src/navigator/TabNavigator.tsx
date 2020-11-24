@@ -17,15 +17,12 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Screens } from 'helpers/constants';
 
-import FaqSvg from 'components/svg/header/FaqSvg';
-import QRCodeSvg from 'components/svg/header/QRCodeSvg';
-import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
-import { View } from 'react-native';
-import { Text } from 'react-native-paper';
-
 import { useSelector } from 'react-redux';
 import Logout from './header/Logout';
 import Login from 'views/profile/auth';
+import CreateCommunity from './header/CreateCommunity';
+import CommunityManager from './header/CommunityManager';
+import Beneficiary from './header/Beneficiary';
 
 function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
     let routeName = getFocusedRouteNameFromRoute(route);
@@ -56,63 +53,13 @@ function getHeaderRight(
 
     switch (routeName) {
         case Screens.Beneficiary:
-            return (
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
-                    <FaqSvg />
-                    <QRCodeSvg style={{ marginLeft: 8.4, marginRight: 16 }} />
-                </View>
-            );
+            return <Beneficiary />;
         case Screens.CommunityManager:
-            return (
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
-                    <FaqSvg />
-                    <ThreeDotsSvg
-                        style={{ marginLeft: 8.4, marginRight: 16 }}
-                    />
-                </View>
-            );
+            return <CommunityManager />;
         case Screens.Communities:
-            return (
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Bold',
-                            fontSize: 22,
-                            lineHeight: 22, // TODO: design is 26
-                            textAlign: 'center',
-                            letterSpacing: 0.366667,
-                            color: '#2643E9',
-                            // marginLeft: 8.4,
-                            marginRight: 16,
-                        }}
-                        onPress={() =>
-                            navigation.navigate(Screens.CreateCommunity)
-                        }
-                    >
-                        {i18n.t('create')}
-                    </Text>
-                </View>
-            );
+            return <CreateCommunity navigation={navigation} />;
         case Screens.Profile:
-            return <Logout />;
+            return <Logout navigation={navigation} />;
     }
 }
 
