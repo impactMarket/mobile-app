@@ -9,7 +9,6 @@ import { setPushNotificationsToken } from 'helpers/redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
-    STORAGE_USER_FIRST_TIME,
     STORAGE_USER_AUTH_TOKEN,
 } from 'helpers/types';
 import { welcomeUser } from 'helpers/index';
@@ -107,7 +106,6 @@ function Auth() {
                 STORAGE_USER_PHONE_NUMBER,
                 dappkitResponse.phoneNumber
             );
-            await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
 
             const unsubscribe = store.subscribe(() => {
                 const state = store.getState();

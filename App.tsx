@@ -11,7 +11,6 @@ import {
     Portal,
     Paragraph,
     Headline,
-    Button as ButtonRNP,
 } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import { createStore, Unsubscribe } from 'redux';
@@ -26,6 +25,7 @@ import { Asset } from 'expo-asset';
 import {
     NavigationContainer,
     DefaultTheme as NavigationDefaultTheme,
+    NavigationContainerRef,
 } from '@react-navigation/native';
 
 import config from './config';
@@ -47,25 +47,13 @@ import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
-    STORAGE_USER_FIRST_TIME,
 } from './src/helpers/types';
 
 import BigNumber from 'bignumber.js';
-import { createStackNavigator } from '@react-navigation/stack';
 
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
-import Tabs from './src/views/Tabs';
-import CommunityDetailsScreen from './src/views/community/details';
-import CreateCommunityScreen from './src/views/createCommunity';
-import FAQScreen from './src/views/faq';
-import ClaimExplainedScreen from './src/views/community/beneficiary/ClaimExplainedScreen';
-import AddedScreen from './src/views/community/manager/views/AddedBeneficiaryScreen';
-import RemovedScreen from './src/views/community/manager/views/RemovedBeneficiaryScreen';
-import Profile from './src/views/profile';
 import CommunityContractABI from './src/contracts/CommunityABI.json';
-import AddBeneficiaryScreen from './src/views/community/manager/views/AddBeneficiaryScreen';
-import WelcomeScreen from './src/views/welcome/index';
 import Button from 'components/core/Button';
 import CacheStore from 'services/cacheStore';
 import NetInfo from '@react-native-community/netinfo';
@@ -77,13 +65,10 @@ import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
 import moment from 'moment';
-import BackSvg from 'components/svg/header/BackSvg';
-import FaqSvg from 'components/svg/header/FaqSvg';
 import Navigator from './src/navigator';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
-const Stack = createStackNavigator();
 const store = createStore(combinedReducer);
 const fonts = {
     regular: {
@@ -142,10 +127,10 @@ Sentry.init({
     debug: true,
 });
 
+const prefix = Linking.makeUrl('/');
 interface IAppState {
     isSplashReady: boolean;
     isAppReady: boolean;
-    firstTimeUser: boolean;
     // loggedIn is not used anywhere, only forces update!
     loggedIn: boolean;
     testnetWarningOpen: boolean;
@@ -155,14 +140,16 @@ interface IAppState {
 }
 export default class App extends React.Component<any, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
-    private navigationRef = React.createRef();
+    private navigationRef = React.createRef<NavigationContainerRef>();
+    private linking = {
+        prefixes: [prefix],
+    };
 
     constructor(props: any) {
         super(props);
         this.state = {
             isSplashReady: false,
             isAppReady: false,
-            firstTimeUser: true,
             loggedIn: false,
             testnetWarningOpen: false,
             infoUserNewAppVersion: false,
@@ -231,8 +218,7 @@ export default class App extends React.Component<any, IAppState> {
                                     communityAddress as string
                                 ).then((community) => {
                                     if (community !== undefined) {
-                                        (this.navigationRef
-                                            .current as any).navigate(
+                                        this.navigationRef.current?.navigate(
                                             'CommunityDetailsScreen',
                                             {
                                                 community,
@@ -260,10 +246,7 @@ export default class App extends React.Component<any, IAppState> {
         Notifications.removeAllNotificationListeners();
     };
 
-    openExploreCommunities = async () => {
-        await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
-        this.setState({ firstTimeUser: false });
-    };
+    openExploreCommunities = async () => {};
 
     handleUpdateClick = () => {
         const androidURL =
@@ -280,7 +263,6 @@ export default class App extends React.Component<any, IAppState> {
         const {
             isAppReady,
             isSplashReady,
-            firstTimeUser,
             testnetWarningOpen,
             infoUserNewAppVersion,
             blockUserToUpdateApp,
@@ -462,113 +444,10 @@ export default class App extends React.Component<any, IAppState> {
                     {config.testnet && testnetWarningView}
                     <NavigationContainer
                         theme={navigationTheme}
-                        ref={this.navigationRef as any}
+                        linking={this.linking}
+                        ref={this.navigationRef}
                     >
                         <Navigator />
-                        {/* <Stack.Navigator
-                            screenOptions={{
-                                headerTitleAlign: 'left',
-                                headerStyle: {
-                                    elevation: 0, // remove shadow on Android
-                                    shadowOpacity: 0, // remove shadow on iOS
-                                    // backgroundColor: 'tomato'
-                                },
-                                headerTintColor: '#fff',
-                                headerTitleStyle: {
-                                    fontFamily: 'Gelion-Bold',
-                                    fontSize: 30,
-                                    lineHeight: 36,
-                                    color: iptcColors.almostBlack,
-                                },
-                            }}
-                        >
-                            <Stack.Screen
-                                options={{
-                                    // headerTitle: i18n.t('communities'),
-                                    headerRight: () => (
-                                        <ButtonRNP
-                                            mode="text"
-                                            uppercase={false}
-                                            labelStyle={{
-                                                fontFamily: 'Gelion-Bold',
-                                                fontSize: 22,
-                                                lineHeight: 26,
-                                                textAlign: 'center',
-                                                letterSpacing: 0.366667,
-                                                color: '#2643E9',
-                                            }}
-                                            onPress={() =>
-                                                (this.navigationRef as any).navigate(
-                                                    'CreateCommunityScreen'
-                                                )
-                                            }
-                                        >
-                                            {i18n.t('create')}
-                                        </ButtonRNP>
-                                    ),
-                                }}
-                                name="Home"
-                                component={Tabs}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerTitle: '',
-                                    headerLeft: () => <BackSvg />,
-                                    headerRight: () => <FaqSvg />,
-                                }}
-                                name="CommunityDetailsScreen"
-                                component={CommunityDetailsScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="ClaimExplainedScreen"
-                                component={ClaimExplainedScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="CreateCommunityScreen"
-                                component={CreateCommunityScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="AddedScreen"
-                                component={AddedScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="RemovedScreen"
-                                component={RemovedScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="FAQScreen"
-                                component={FAQScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="AddBeneficiaryScreen"
-                                component={AddBeneficiaryScreen}
-                            />
-                            <Stack.Screen
-                                options={{
-                                    headerShown: false,
-                                }}
-                                name="WelcomeScreen"
-                                component={WelcomeScreen}
-                            />
-                        </Stack.Navigator> */}
                     </NavigationContainer>
                 </Provider>
             </PaperProvider>

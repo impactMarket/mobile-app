@@ -22,7 +22,6 @@ import {
     IRootState,
     IStoreCombinedActionsTypes,
     IStoreCombinedState,
-    STORAGE_USER_FIRST_TIME,
 } from 'helpers/types';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';

@@ -2,7 +2,6 @@ import { ContractKit } from '@celo/contractkit';
 
 export const STORAGE_USER_ADDRESS = '@celoinfo:address';
 export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber';
-export const STORAGE_USER_FIRST_TIME = '@status:firstime';
 export const STORAGE_USER_AUTH_TOKEN = '@user:authtoken';
 export const INIT_USER = 'INIT_USER';
 export const SET_USER_CELO_INFO = 'SET_USER_CELO_INFO';

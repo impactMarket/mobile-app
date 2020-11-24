@@ -8,7 +8,6 @@ import {
 import {
     IStoreCombinedActionsTypes,
     IStoreCombinedState,
-    STORAGE_USER_FIRST_TIME,
 } from 'helpers/types';
 import React, { useState } from 'react';
 import { View, AsyncStorage } from 'react-native';
@@ -26,7 +25,6 @@ function Logout(props: { navigation: StackNavigationProp<any, any> }) {
     const handleLogout = async () => {
         setLogingOut(true);
         await AsyncStorage.clear();
-        await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
         const unsubscribe = store.subscribe(() => {
             const state = store.getState();
             if (

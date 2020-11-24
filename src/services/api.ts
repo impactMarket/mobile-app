@@ -2,7 +2,6 @@ import axios from 'axios';
 import {
     ICommunityInfo,
     STORAGE_USER_AUTH_TOKEN,
-    STORAGE_USER_FIRST_TIME,
     IUserWelcome,
     IUserWelcomeAuth,
     ICommunity,
@@ -53,7 +52,6 @@ async function postRequest<T>(
         const result = await axios.post(endpoint, requestBody, requestOptions);
         if (result.status === 401) {
             await AsyncStorage.clear();
-            await AsyncStorage.setItem(STORAGE_USER_FIRST_TIME, 'false');
             DevSettings.reload();
             return undefined;
         }
