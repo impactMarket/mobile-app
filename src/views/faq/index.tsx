@@ -200,7 +200,6 @@ function FAQScreen() {
     };
     return (
         <>
-            {/* <Header title="FAQ" navigation={navigation} hasBack /> */}
             <ScrollView style={styles.contentView}>
                 {faq.map((faq) => (
                     <List.Accordion
@@ -220,11 +219,7 @@ function FAQScreen() {
         </>
     );
 }
-FAQScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+FAQScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
     };

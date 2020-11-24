@@ -1,6 +1,5 @@
 import { NavigationState, NavigationProp } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import { setAppPaymentToAction } from 'helpers/redux/actions/ReduxActions';
 import { IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';

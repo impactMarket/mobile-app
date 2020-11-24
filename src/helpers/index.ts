@@ -12,7 +12,7 @@ import {
     setCommunity,
     initUser,
     setAppExchangeRatesAction,
-} from './redux/actions/ReduxActions';
+} from '../redux/actions/ReduxActions';
 import {
     AppActionTypes,
     AuthActionTypes,

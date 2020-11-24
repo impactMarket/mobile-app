@@ -22,12 +22,11 @@ import {
     SET_USER_EXCHANGE_RATE,
     IAppState,
     AppActionTypes,
-    SET_APP_PYMENT_TO_ACTION,
     SET_USER_LANGUAGE,
     INIT_USER,
     SET_EXCHANGE_RATES,
     SET_APP_SUSPECT_WRONG_DATETIME,
-} from '../../types';
+} from '../../helpers/types';
 
 const INITIAL_STATE_USER: IUserState = {
     celoInfo: {
@@ -167,8 +166,6 @@ const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
     switch (action.type) {
         case SET_CELO_KIT:
             return { ...state, kit: action.payload };
-        case SET_APP_PYMENT_TO_ACTION:
-            return { ...state, paymentToAddress: action.payload };
         case SET_EXCHANGE_RATES:
             return { ...state, exchangeRates: action.payload };
         case SET_APP_SUSPECT_WRONG_DATETIME:

@@ -20,14 +20,13 @@ import {
     SET_PUSH_NOTIFICATION_TOKEN,
     SET_AUTH_TOKEN,
     SET_USER_EXCHANGE_RATE,
-    SET_APP_PYMENT_TO_ACTION,
     AppActionTypes,
     SET_USER_LANGUAGE,
     INIT_USER,
     IInitUser,
     SET_EXCHANGE_RATES,
     SET_APP_SUSPECT_WRONG_DATETIME,
-} from '../../types';
+} from '../../helpers/types';
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
     return {
@@ -119,15 +118,6 @@ export function setAuthToken(token: string): AuthActionTypes {
     return {
         type: SET_AUTH_TOKEN,
         payload: token,
-    };
-}
-
-export function setAppPaymentToAction(
-    paymentToAddress: string
-): AppActionTypes {
-    return {
-        type: SET_APP_PYMENT_TO_ACTION,
-        payload: paymentToAddress,
     };
 }
 

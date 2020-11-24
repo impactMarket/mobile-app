@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
 import { makeDeeplinkUrl } from 'helpers/index';
 import { iptcColors } from 'styles/index';
-import { setPushNotificationsToken } from 'helpers/redux/actions/ReduxActions';
+import { setPushNotificationsToken } from 'redux/actions/ReduxActions';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,

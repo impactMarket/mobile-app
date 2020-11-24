@@ -42,8 +42,8 @@ import {
     setAppExchangeRatesAction,
     setUserLanguage,
     setAppSuspectWrongDateTime,
-} from './src/helpers/redux/actions/ReduxActions';
-import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
+} from './src/redux/actions/ReduxActions';
+import combinedReducer from './src/redux/reducers/ReduxReducers';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,

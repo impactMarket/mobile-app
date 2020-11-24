@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import * as ImagePicker from 'expo-image-picker';
@@ -43,7 +43,7 @@ import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
-import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
+import { setUserIsCommunityManager } from 'redux/actions/ReduxActions';
 import Card from 'components/core/Card';
 import BackSvg from 'components/svg/header/BackSvg';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
@@ -560,45 +560,8 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
         );
     };
 
-    // if (user.celoInfo.address.length === 0) {
-    //     return (
-    //         <View>
-    //             {/* <Header
-    //                 title={i18n.t('create')}
-    //                 navigation={navigation}
-    //                 hasBack
-    //             /> */}
-    //             <View style={styles.container}>
-    //                 <Text>{i18n.t('needLoginToCreateCommunity')}</Text>
-    //             </View>
-    //         </View>
-    //     );
-    // }
-
     return (
         <>
-            {/* <Header
-                title={editing ? i18n.t('edit') : i18n.t('create')}
-                navigation={navigation}
-                hasBack
-            >
-                <Button
-                    mode="text"
-                    uppercase={false}
-                    labelStyle={{
-                        fontFamily: 'Gelion-Bold',
-                        fontSize: 22,
-                        lineHeight: 26,
-                        textAlign: 'center',
-                        letterSpacing: 0.366667,
-                        color: '#2643E9',
-                    }}
-                    loading={sending}
-                    onPress={() => submitNewCommunity()}
-                >
-                    {i18n.t('submit')}
-                </Button>
-            </Header> */}
             <ScrollView>
                 <View style={styles.container}>
                     <Card elevation={8}>
@@ -1135,14 +1098,9 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
         </>
     );
 }
-CreateCommunityScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+CreateCommunityScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        // headerRight: () => <SubmitCommunity route={route} />,
         headerTitle: i18n.t('create'), // editing ? i18n.t('edit') : i18n.t('create'),
     };
 };

@@ -1,7 +1,5 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import CommuntyStatus from 'components/CommuntyStatus';
-import Header from 'components/Header';
 import * as WebBrowser from 'expo-web-browser';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
@@ -34,7 +32,6 @@ interface ICommunityDetailsScreen {
     };
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
-    const navigation = useNavigation();
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
     const language = useSelector(
         (state: IRootState) => state.user.user.language
@@ -81,13 +78,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         <View
                             style={{
                                 ...styles.ssiView,
-                                // backgroundColor: 'blue',
                             }}
                         >
                             <View
                                 style={{
-                                    // backgroundColor: 'red',
-                                    // flex: 1,
                                     flexDirection: 'row',
                                     justifyContent: 'flex-end',
                                 }}
@@ -140,7 +134,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     return (
         <>
-            {/* <Header title="" hasBack hasHelp navigation={navigation} /> */}
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -250,11 +243,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     );
 }
 
-CommunityDetailsScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+CommunityDetailsScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerRight: () => <FaqSvg style={{ marginRight: 16 }} />,

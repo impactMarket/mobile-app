@@ -93,9 +93,6 @@ function CommunityManagerScreen() {
                                 hasFundsToNewBeneficiary={
                                     hasFundsToNewBeneficiary
                                 }
-                                // updateCommunity={(_communityUpdate) =>
-                                //     setCommunity(_communityUpdate)
-                                // }
                             />
                             <CommuntyStatus community={_community} />
                         </View>
@@ -179,15 +176,6 @@ function CommunityManagerScreen() {
 
     return (
         <>
-            {/* <Header title={i18n.t('manage')} navigation={navigation}>
-                {community.status === 'valid' && (
-                    <IconButton
-                        icon="dots-horizontal"
-                        style={{ backgroundColor: '#eaedf0' }}
-                        onPress={() => setOpenModalMore(true)}
-                    />
-                )}
-            </Header> */}
             {communityStatus(community)}
             <Portal>
                 <Dialog

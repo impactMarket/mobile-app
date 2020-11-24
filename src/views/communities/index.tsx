@@ -1,7 +1,6 @@
 import { Entypo } from '@expo/vector-icons';
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import Header from 'components/Header';
 import {
     calculateCommunityProgress,
     claimFrequencyToText,
@@ -18,7 +17,7 @@ import {
     RefreshControl,
     Image,
 } from 'react-native';
-import { ProgressBar, Button } from 'react-native-paper';
+import { ProgressBar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import Card from 'components/core/Card';
@@ -96,14 +95,12 @@ function CommunitiesScreen(props: Props) {
                         }}
                     >
                         <View style={{ flex: 1 }}>
-                            {/* <View style={{ position: 'absolute' }}> */}
                             <Text style={styles.cellHeader}>
                                 {community.beneficiaries.added.length}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {i18n.t('beneficiaries')}
                             </Text>
-                            {/* </View> */}
                         </View>
                         <View style={{ flex: 1 }}>
                             <Text style={styles.cellHeader}>
@@ -119,21 +116,17 @@ function CommunitiesScreen(props: Props) {
                             </Text>
                         </View>
                         <View style={{ flex: 1 }}>
-                            {/* <View style={{ position: 'absolute', right: 0 }}> */}
                             <Text style={styles.cellHeader}>
                                 {community.backers.length}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {i18n.t('backers')}
                             </Text>
-                            {/* </View> */}
                         </View>
                     </View>
                     <View
                         style={{
                             marginTop: 15,
-                            // marginBottom: 5,
-                            // marginHorizontal: 15,
                         }}
                     >
                         <ProgressBar
@@ -176,23 +169,6 @@ function CommunitiesScreen(props: Props) {
 
     return (
         <>
-            {/* <Header title={i18n.t('communities')} navigation={navigation}>
-                <Button
-                    mode="text"
-                    uppercase={false}
-                    labelStyle={{
-                        fontFamily: 'Gelion-Bold',
-                        fontSize: 22,
-                        lineHeight: 26,
-                        textAlign: 'center',
-                        letterSpacing: 0.366667,
-                        color: '#2643E9',
-                    }}
-                    onPress={() => navigation.navigate(Screens.CreateCommunity)}
-                >
-                    {i18n.t('create')}
-                </Button>
-            </Header> */}
             <ScrollView
                 style={styles.scrollView}
                 refreshControl={
@@ -208,25 +184,8 @@ function CommunitiesScreen(props: Props) {
     );
 }
 
-CommunitiesScreen.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
+CommunitiesScreen.navigationOptions = () => {
     return {
-        //   ...emptyHeader,
-        //   headerTitle: () => (
-        //     <HeaderTitleWithBalance
-        //       title={i18n.t('exchangeFlow9:withdrawCeloReview')}
-        //       token={CURRENCY_ENUM.GOLD}
-        //     />
-        //   ),
-        //   headerLeft: () => <CancelButton onCancel={onCancel} />,
-        //   headerRight: () => (
-        //     <TopBarTextButton
-        //       title={i18n.t('global:edit')}
-        //       testID="EditButton"
-        //       onPress={onEdit}
-        //       titleStyle={{ color: colors.goldDark }}
-        //       eventName={CeloExchangeEvents.celo_sell_edit}
-        //     />
-        //   ),
         headerTitle: i18n.t('communities'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <CommunitiesSvg focused={props.focused} />

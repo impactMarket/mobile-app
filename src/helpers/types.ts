@@ -17,7 +17,6 @@ export const RESET_USER_APP = 'RESET_USER_APP';
 export const RESET_NETWORK_APP = 'RESET_NETWORK_APP';
 export const SET_PUSH_NOTIFICATION_TOKEN = 'SET_PUSH_NOTIFICATION_TOKEN';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
-export const SET_APP_PYMENT_TO_ACTION = 'SET_APP_PYMENT_TO_ACTION';
 export const SET_USER_LANGUAGE = 'SET_USER_LANGUAGE';
 export const SET_EXCHANGE_RATES = 'SET_EXCHANGE_RATES';
 export const CONSENT_ANALYTICS = 'CONSENT_ANALYTICS';
@@ -157,11 +156,6 @@ interface UserLanguageAction {
     payload: string;
 }
 
-interface SetAppPaymentToAction {
-    type: typeof SET_APP_PYMENT_TO_ACTION;
-    payload: string;
-}
-
 interface SetAppSuspectWrongDateTime {
     type: typeof SET_APP_SUSPECT_WRONG_DATETIME;
     payload: {
@@ -194,7 +188,6 @@ export type AuthActionTypes =
     | SetAuthTokenAction;
 export type AppActionTypes =
     | CeloKitAction
-    | SetAppPaymentToAction
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime;
 

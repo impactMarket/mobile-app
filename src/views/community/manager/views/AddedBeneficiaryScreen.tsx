@@ -1,7 +1,6 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
-import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
 import { updateCommunityInfo } from 'helpers/index';
 import { amountToCurrency } from 'helpers/currency';
@@ -80,7 +79,6 @@ function AddedBeneficiaryScreen(props: Props) {
 
     return (
         <>
-            {/* <Header title={i18n.t('added')} hasBack navigation={navigation} /> */}
             <ScrollView style={{ marginHorizontal: 15 }}>
                 {beneficiaries.map((beneficiary) => (
                     <ListActionItem
@@ -122,11 +120,7 @@ function AddedBeneficiaryScreen(props: Props) {
         </>
     );
 }
-AddedBeneficiaryScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+AddedBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('added'),

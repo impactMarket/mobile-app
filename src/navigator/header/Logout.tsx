@@ -4,7 +4,7 @@ import {
     resetUserApp,
     setUserIsBeneficiary,
     setUserIsCommunityManager,
-} from 'helpers/redux/actions/ReduxActions';
+} from 'redux/actions/ReduxActions';
 import {
     IStoreCombinedActionsTypes,
     IStoreCombinedState,

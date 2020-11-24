@@ -1,6 +1,4 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import Header from 'components/Header';
 import ListActionItem from 'components/ListActionItem';
 import BackSvg from 'components/svg/header/BackSvg';
 import { amountToCurrency } from 'helpers/currency';
@@ -25,13 +23,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & IRemovedBeneficiaryScreenProps;
 
 function RemovedBeneficiaryScreen(props: Props) {
-    const navigation = useNavigation();
     const beneficiaries = props.route.params
         .beneficiaries as ICommunityInfoBeneficiary[];
 
     return (
         <>
-            {/* <Header title="Removed" hasBack navigation={navigation} /> */}
             <ScrollView style={{ marginHorizontal: 15 }}>
                 {beneficiaries.map((beneficiary) => (
                     <ListActionItem
@@ -52,11 +48,7 @@ function RemovedBeneficiaryScreen(props: Props) {
         </>
     );
 }
-RemovedBeneficiaryScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+RemovedBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('removed'),
