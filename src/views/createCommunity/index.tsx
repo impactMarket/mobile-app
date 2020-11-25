@@ -43,7 +43,7 @@ import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
-import { setUserIsCommunityManager } from 'redux/actions/ReduxActions';
+import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
 import Card from 'components/core/Card';
 import BackSvg from 'components/svg/header/BackSvg';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
@@ -106,7 +106,22 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
         navigation.setOptions({
             headerRight: () => <SubmitCommunity submit={submitNewCommunity} submitting={sending} />,
         });
-    }, [navigation]);
+        // TODO: this next line should change though.
+    }, [
+        navigation,
+        coverImage,
+        name,
+        description,
+        city,
+        country,
+        email,
+        gpsLocation,
+        claimAmount,
+        incrementInterval,
+        maxClaim,
+        baseInterval,
+        sending
+    ]);
 
     useEffect(() => {
         if (props.route.params !== undefined) {
