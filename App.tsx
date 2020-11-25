@@ -42,8 +42,8 @@ import {
     setAppExchangeRatesAction,
     setUserLanguage,
     setAppSuspectWrongDateTime,
-} from './src/redux/actions/ReduxActions';
-import combinedReducer from './src/redux/reducers/ReduxReducers';
+} from './src/helpers/redux/actions/ReduxActions';
+import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
@@ -66,6 +66,7 @@ import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
 import moment from 'moment';
 import Navigator from './src/navigator';
+import * as Analytics from 'expo-firebase-analytics';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -141,6 +142,7 @@ interface IAppState {
 export default class App extends React.Component<any, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
     private navigationRef = React.createRef<NavigationContainerRef>();
+    private currentRouteName: string | undefined = '';
     private linking = {
         prefixes: [prefix],
     };
@@ -245,8 +247,6 @@ export default class App extends React.Component<any, IAppState> {
         } catch (e) {}
         Notifications.removeAllNotificationListeners();
     };
-
-    openExploreCommunities = async () => {};
 
     handleUpdateClick = () => {
         const androidURL =
@@ -445,6 +445,22 @@ export default class App extends React.Component<any, IAppState> {
                     <NavigationContainer
                         theme={navigationTheme}
                         linking={this.linking}
+                        onStateChange={() => {
+                            const previousRouteName = this.currentRouteName;
+                            const currentRouteName = this.navigationRef.current?.getCurrentRoute()
+                                ?.name;
+
+                            if (previousRouteName !== currentRouteName) {
+                                // The line below uses the expo-firebase-analytics tracker
+                                // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
+                                // Change this line to use another Mobile analytics SDK
+                                Analytics.setCurrentScreen(currentRouteName);
+                                console.log('currentRouteName', currentRouteName)
+                            }
+
+                            // Save the current route name for later comparision
+                            this.currentRouteName = currentRouteName;
+                        }}
                         ref={this.navigationRef}
                     >
                         <Navigator />

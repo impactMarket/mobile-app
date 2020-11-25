@@ -36,13 +36,11 @@ async function celoWalletRequest(
         const tx = dappkitResponse.rawTxs[0];
         return toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt();
     } catch (e) {
-        console.log('---------------- e', e);
         if (!__DEV__) {
             // as transaction requests get pending, they then resume all at once
-            if (e.message.includes('known transaction')) {
-                return;
+            if (!e.message.toLowerCase().includes('known transaction')) {
+                Sentry.captureException(e);
             }
-            Sentry.captureException(e);
         }
         throw new Error(e);
     }

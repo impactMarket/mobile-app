@@ -132,17 +132,17 @@ class Claim extends React.Component<Props, IClaimState> {
                 Api.uploadError(address, 'claim', e);
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
-                let error = 'Possible network issues.';
+                let error = i18n.t('possibleNetworkIssues');
                 if (e.message.includes('gas required exceeds allowance')) {
-                    error = 'Transaction possibly not allowed.';
+                    error = i18n.t('transactionPossiblyNotAllowed');
                 }
                 if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'The network connection was lost.';
+                        error = i18n.t('networkConnectionLost');
                     }
-                    error = 'Possible network issues related to RPC.';
+                    error = i18n.t('networkIssuesRPC');
                 }
                 Alert.alert(
                     i18n.t('failure'),

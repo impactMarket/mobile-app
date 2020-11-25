@@ -12,7 +12,7 @@ import {
     setCommunity,
     initUser,
     setAppExchangeRatesAction,
-} from '../redux/actions/ReduxActions';
+} from './redux/actions/ReduxActions';
 import {
     AppActionTypes,
     AuthActionTypes,
@@ -28,10 +28,7 @@ import {
 import * as Linking from 'expo-linking';
 
 export function makeDeeplinkUrl() {
-    if (config.testnet) {
-        return Linking.makeUrl();
-    }
-    return 'impactmarket://';
+    return Linking.makeUrl('/');
 }
 
 export async function welcomeUser(

@@ -39,7 +39,7 @@ import WaitingRedSvg from 'components/svg/WaitingRedSvg';
 import {
     setAppSuspectWrongDateTime,
     setCommunity,
-} from 'redux/actions/ReduxActions';
+} from 'helpers/redux/actions/ReduxActions';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import { Screens } from 'helpers/constants';
 

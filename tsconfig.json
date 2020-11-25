@@ -11,14 +11,17 @@
             "helpers": [
                 "./src/helpers"
             ],
-            "services": [
-                "./src/services"
+            "navigator": [
+                "./src/navigator"
             ],
-            "views": [
-                "./src/views"
+            "services": [
+                "src/helpers/reduxces"
             ],
             "styles": [
                 "./src/styles"
+            ],
+            "views": [
+                "./src/views"
             ],
         },
         "allowSyntheticDefaultImports": true,

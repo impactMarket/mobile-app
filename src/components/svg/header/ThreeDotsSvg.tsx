@@ -50,6 +50,7 @@ function ThreeDotsSvg(props: SvgProps) {
                         <Button
                             modeType="gray"
                             bold={true}
+                            disabled={true}
                             style={{ marginVertical: 10 }}
                             onPress={() => {
                                 setOpenThreeDotsMenu(false);

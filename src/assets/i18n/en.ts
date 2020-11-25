@@ -215,4 +215,8 @@ export default {
     dismiss: 'Dismiss',
     incorrectTime: 'Incorrect Time',
     incorrectTimeMessage: 'We have detected that your device may have the time incorrectly set. Please open the clock settings to match {{serverTime}}. Your time is currently {{userTime}}.',
+    possibleNetworkIssues: 'Possible network issues.',
+    transactionPossiblyNotAllowed: 'Transaction possibly not allowed.',
+    networkConnectionLost: 'The network connection was lost.',
+    networkIssuesRPC: 'Possible network issues related to RPC.',
 };

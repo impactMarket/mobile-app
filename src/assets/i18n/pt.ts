@@ -213,4 +213,8 @@ export default {
     dismiss: 'Fechar',
     incorrectTime: 'Data/Hora incorreta',
     incorrectTimeMessage: 'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}.',
+    possibleNetworkIssues: 'Posivelmente problemas de conexão.',
+    transactionPossiblyNotAllowed: 'Possivelmente a transação não é permitida.',
+    networkConnectionLost: 'A ligação é internet foi perdida.',
+    networkIssuesRPC: 'Possivelmente erros de ligação ao serviço RPC.',
 };

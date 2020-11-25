@@ -16,7 +16,7 @@ import {
     setUserIsCommunityManager,
     setUserLanguage,
     setUserWalletBalance,
-} from 'redux/actions/ReduxActions';
+} from 'helpers/redux/actions/ReduxActions';
 import {
     CONSENT_ANALYTICS,
     IRootState,
