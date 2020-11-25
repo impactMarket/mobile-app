@@ -26,7 +26,7 @@ import {
     INIT_USER,
     SET_EXCHANGE_RATES,
     SET_APP_SUSPECT_WRONG_DATETIME,
-} from '../../helpers/types';
+} from '../../types';
 
 const INITIAL_STATE_USER: IUserState = {
     celoInfo: {

@@ -26,7 +26,7 @@ import {
     IInitUser,
     SET_EXCHANGE_RATES,
     SET_APP_SUSPECT_WRONG_DATETIME,
-} from '../../helpers/types';
+} from '../../types';
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
     return {
