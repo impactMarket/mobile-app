@@ -1,6 +1,7 @@
 import React from 'react';
 import './global';
-import { Image, View, YellowBox, AsyncStorage, StatusBar } from 'react-native';
+import { Image, View, LogBox, StatusBar } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -20,7 +21,7 @@ import { newKitFromWeb3 } from '@celo/contractkit';
 import * as Font from 'expo-font';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import { AppLoading, SplashScreen } from 'expo';
+import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import {
     NavigationContainer,
@@ -67,6 +68,7 @@ import * as Localization from 'expo-localization';
 import moment from 'moment';
 import Navigator from './src/navigator';
 import * as Analytics from 'expo-firebase-analytics';
+import * as SplashScreen from 'expo-splash-screen';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -108,7 +110,8 @@ const navigationTheme = {
     },
 };
 
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
+    'No DSN provided, backend will not do anything',
     "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
     "The provided value 'ms-stream' is not a valid 'responseType'.",
     'Firebase Analytics is not available in the Expo client.',
@@ -124,8 +127,6 @@ Notifications.setNotificationHandler({
 
 Sentry.init({
     dsn: process.env.EXPO_SENTRY_DNS,
-    // enableInExpoDevelopment: true,
-    debug: true,
 });
 
 const prefix = Linking.makeUrl('/');
@@ -445,17 +446,28 @@ export default class App extends React.Component<any, IAppState> {
                     <NavigationContainer
                         theme={navigationTheme}
                         linking={this.linking}
+                        onReady={() => {
+                            const currentRouteName = this.navigationRef.current?.getCurrentRoute()
+                                ?.name;
+                            if (currentRouteName !== undefined) {
+                                Analytics.setCurrentScreen(currentRouteName);
+                            }
+                            // Save the current route name for later comparision
+                            this.currentRouteName = currentRouteName;
+                        }}
                         onStateChange={() => {
                             const previousRouteName = this.currentRouteName;
                             const currentRouteName = this.navigationRef.current?.getCurrentRoute()
                                 ?.name;
 
-                            if (previousRouteName !== currentRouteName) {
+                            if (
+                                previousRouteName !== currentRouteName &&
+                                currentRouteName !== undefined
+                            ) {
                                 // The line below uses the expo-firebase-analytics tracker
                                 // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
                                 // Change this line to use another Mobile analytics SDK
                                 Analytics.setCurrentScreen(currentRouteName);
-                                console.log('currentRouteName', currentRouteName)
                             }
 
                             // Save the current route name for later comparision
@@ -471,12 +483,17 @@ export default class App extends React.Component<any, IAppState> {
     }
 
     _cacheSplashResourcesAsync = async () => {
-        const gif = require('./src/assets/images/splash.png');
-        return Asset.fromModule(gif).downloadAsync();
+        const images = [require('./src/assets/images/splash.png')];
+
+        const cacheImages = images.map((image) => {
+            return Asset.fromModule(image).downloadAsync();
+        });
+        await Promise.all(cacheImages);
+        return;
     };
 
     _cacheResourcesAsync = async () => {
-        SplashScreen.hide();
+        SplashScreen.hideAsync();
         await Font.loadAsync({
             // Load a font `Montserrat` from a static resource
             // Montserrat: require('assets/fonts/Montserrat.ttf'),

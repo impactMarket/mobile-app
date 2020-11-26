@@ -25,7 +25,8 @@ import {
 } from 'helpers/types';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import { AsyncStorage, RefreshControl, StyleSheet, View } from 'react-native';
+import { RefreshControl, StyleSheet, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Button,

@@ -10,7 +10,8 @@ import {
     IStoreCombinedState,
 } from 'helpers/types';
 import React, { useState } from 'react';
-import { View, AsyncStorage } from 'react-native';
+import { View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { batch, useDispatch, useStore } from 'react-redux';
 import i18n from 'assets/i18n';
 import { StackNavigationProp } from '@react-navigation/stack';

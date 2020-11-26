@@ -7,7 +7,8 @@ import {
     ICommunity,
     ICommunityContractParams,
 } from 'helpers/types';
-import { AsyncStorage, DevSettings } from 'react-native';
+import { DevSettings } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
 import config from '../../config';
