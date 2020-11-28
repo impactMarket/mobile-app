@@ -3,18 +3,20 @@ dist: bionic
 
 branches:
   only:
-  - ci
+  - staging
+  - production
 
 env:
   global:
-    - EXPO_SDK_VERSION="38.0.0"
+    - EXPO_SDK_VERSION="39.0.3"
     - TURTLE_VERSION="0.19.1"
     - NODE_VERSION="12.18.3"
-    - YARN_VERSION="1.21.1"
+    - YARN_VERSION="1.22.5"
 
 jobs:
   include:
     - stage: publish app
+      if: branch = staging
       env:
         - CACHE_NAME=publish YARN_CACHE_FOLDER="/home/travis/yarn_cache"
       cache:
@@ -36,6 +38,7 @@ jobs:
         - yarn
         - expo publish
     - stage: build standalone apps
+      if: branch = production
       env:
         - CACHE_NAME=build-android-v3 YARN_CACHE_FOLDER="/home/travis/yarn_cache"
       jdk: openjdk8
@@ -69,6 +72,7 @@ jobs:
       after_success:
         - aws s3 cp $ARTIFACT_PATH s3://$AWS_BUCKET/`basename $ARTIFACT_PATH`
     - stage: build standalone apps
+      if: branch = production
       os: osx
       osx_image: xcode11.2
       language: node_js
