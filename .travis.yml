@@ -8,7 +8,7 @@ branches:
 env:
   global:
     - EXPO_SDK_VERSION="38.0.0"
-    - TURTLE_VERSION="0.18.5"
+    - TURTLE_VERSION="0.19.1"
     - NODE_VERSION="12.18.3"
     - YARN_VERSION="1.21.1"
 
@@ -73,6 +73,7 @@ jobs:
       osx_image: xcode11.2
       language: node_js
       node_js: $NODE_VERSION
+      python: 3.6
       env:
         - CACHE_NAME=build-ios-ipa YARN_CACHE_FOLDER="/Users/travis/yarn_cache"
       cache:
@@ -84,7 +85,8 @@ jobs:
         - export PATH="$HOME/.yarn/bin:$PATH"
       install:
         - python3 -m pip install --user awscli
-        - export PATH=/Users/travis/Library/Python/2.7/bin:$PATH
+        - python3 -V
+        - export PATH=/Users/travis/Library/Python/3.6/bin:$PATH
         - yarn global add turtle-cli@$TURTLE_VERSION
       script:
         - yarn
