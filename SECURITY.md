@@ -6,4 +6,4 @@ While we are currently preparing to release the first stable version, we do not 
 
 ## Reporting a Vulnerability
 
-Please report (suspected) security vulnerabilities to **[admin@impactmarket.com](mailto:admin@impactmarket.com)**. You will receive a response from us within 48 hours.
+Please report (suspected) security vulnerabilities to **[hello@impactmarket.com](mailto:hello@impactmarket.com)**. You will receive a response from us within 48 hours.
