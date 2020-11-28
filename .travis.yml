@@ -73,7 +73,6 @@ jobs:
       osx_image: xcode11.2
       language: node_js
       node_js: $NODE_VERSION
-      python: 3.6
       env:
         - CACHE_NAME=build-ios-ipa YARN_CACHE_FOLDER="/Users/travis/yarn_cache"
       cache:
@@ -86,7 +85,7 @@ jobs:
       install:
         - python3 -m pip install --user awscli
         - python3 -V
-        - export PATH=/Users/travis/Library/Python/3.6/bin:$PATH
+        - export PATH=/Users/travis/Library/Python/3.7/bin:$PATH
         - yarn global add turtle-cli@$TURTLE_VERSION
       script:
         - yarn
