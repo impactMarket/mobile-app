@@ -577,8 +577,8 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     _authUser = async () => {
-        const pushNotificationsToken = await registerForPushNotifications();
-        store.dispatch(setPushNotificationsToken(pushNotificationsToken));
+        const pushNotificationToken = await registerForPushNotifications();
+        store.dispatch(setPushNotificationsToken(pushNotificationToken));
 
         let address: string | null = '';
         let phoneNumber: string | null = '';
@@ -590,7 +590,7 @@ export default class App extends React.Component<any, IAppState> {
             if (address !== null && phoneNumber !== null) {
                 const userWelcome = await Api.welcome(
                     address,
-                    pushNotificationsToken
+                    pushNotificationToken
                 );
                 if (userWelcome !== undefined) {
                     CacheStore.cacheUser(userWelcome.user);

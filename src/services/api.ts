@@ -233,13 +233,13 @@ class Api {
     static async userAuth(
         address: string,
         language: string,
-        pushNotificationsToken: string
+        pushNotificationToken: string
     ): Promise<IUserWelcomeAuth | undefined> {
         return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
             authKey: process.env.EXPO_AUTH_KEY,
             address,
             language,
-            pushNotificationsToken,
+            pushNotificationToken,
         });
     }
 

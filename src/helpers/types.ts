@@ -61,7 +61,7 @@ export interface INetworkState {
 }
 
 export interface IAuthState {
-    pushNotificationsToken: string;
+    pushNotificationToken: string;
     authToken: string;
 }
 

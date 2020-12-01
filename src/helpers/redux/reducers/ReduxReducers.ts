@@ -56,7 +56,7 @@ const INITIAL_STATE_NETWORK: INetworkState = {
 };
 
 const INITIAL_STATE_AUTH: IAuthState = {
-    pushNotificationsToken: '',
+    pushNotificationToken: '',
     authToken: '',
 };
 
@@ -154,7 +154,7 @@ const networkReducer = (
 const authReducer = (state = INITIAL_STATE_AUTH, action: AuthActionTypes) => {
     switch (action.type) {
         case SET_PUSH_NOTIFICATION_TOKEN:
-            return { ...state, pushNotificationsToken: action.payload };
+            return { ...state, pushNotificationToken: action.payload };
         case SET_AUTH_TOKEN:
             return { ...state, authToken: action.payload };
         default:

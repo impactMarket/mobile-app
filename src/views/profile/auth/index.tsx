@@ -39,7 +39,7 @@ function Auth() {
         const callback = makeDeeplinkUrl();
         setConnecting(true);
 
-        const pushNotificationsToken = await registerForPushNotifications();
+        const pushNotificationToken = await registerForPushNotifications();
 
         let userAddress = '';
         let dappkitResponse: any;
@@ -79,7 +79,7 @@ function Auth() {
         const user = await Api.userAuth(
             userAddress,
             language,
-            pushNotificationsToken
+            pushNotificationToken
         );
         if (user === undefined) {
             Api.uploadError('', 'login', {
@@ -130,7 +130,7 @@ function Auth() {
                 newKitFromWeb3(new Web3(config.jsonRpc)),
                 store as any
             );
-            store.dispatch(setPushNotificationsToken(pushNotificationsToken));
+            store.dispatch(setPushNotificationsToken(pushNotificationToken));
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             Api.uploadError('', 'login', error);
