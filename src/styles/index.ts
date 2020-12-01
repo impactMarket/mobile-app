@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export const iptcColors = {
-    greenishTeal: '#2dce89',
+    greenishTeal: '#2DCE89',
     softBlue: '#5e72e4',
     softGray: '#E9ECEF',
     textGray: '#7E8DA6',

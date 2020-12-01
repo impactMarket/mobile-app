@@ -39,7 +39,7 @@ type Props = PropsFromRedux & ICommunitiesScreenProps;
 
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
-    const [goWelcomeScreen, setGoWelcomeScreen] = useState(false);
+    const [goWelcomeScreen, setGoWelcomeScreen] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 

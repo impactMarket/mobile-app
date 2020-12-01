@@ -7,6 +7,8 @@ import Button from 'components/core/Button';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screens } from 'helpers/constants';
+import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
+import DiversitySvg from 'components/svg/welcome/DiversitySvg';
 
 function Welcome() {
     const insets = useSafeAreaInsets();
@@ -16,30 +18,21 @@ function Welcome() {
             style={{
                 flex: 1,
                 flexDirection: 'column',
-                justifyContent: 'space-around',
-                alignItems: 'center',
+                justifyContent: 'space-between',
                 paddingTop: insets.top,
             }}
         >
-            <Image
-                style={{ height: 82, maxWidth: '51%' }}
-                source={require('../../assets/images/splash/logo.png')}
-            />
-            <Image
-                style={{
-                    height: 136,
-                    maxWidth: '100%',
-                }}
-                source={require('../../assets/images/splash/diversity.png')}
-            />
             <View
                 style={{
-                    paddingHorizontal: 30,
-                    width: '100%',
+                    alignItems: 'center',
                 }}
             >
+                <LogoBlueSvg style={{ height: 74, marginTop: 54 }} />
+                <DiversitySvg style={{ height: 136, marginTop: 22 }} />
                 <Text
                     style={{
+                        paddingHorizontal: 33,
+                        marginTop: 38,
                         fontFamily: 'Gelion-Regular',
                         fontSize: 17,
                         lineHeight: 24,
@@ -50,44 +43,50 @@ function Welcome() {
                 >
                     {i18n.t('oneTimeWelcomeMessage1')}
                 </Text>
-                <View
+            </View>
+            <View
+                style={{
+                    paddingHorizontal: 30,
+                    width: '100%',
+                }}
+            >
+                <Button
+                    modeType="green"
+                    bold={true}
                     style={{
-                        marginVertical: 16,
                         width: '100%',
                     }}
+                    labelStyle={{
+                        fontSize: 20,
+                        lineHeight: 24
+                    }}
+                    onPress={() => navigation.navigate(Screens.Profile)}
                 >
-                    <Button
-                        modeType="green"
-                        bold={true}
-                        style={{
-                            width: '100%',
-                        }}
-                        onPress={() => navigation.navigate(Screens.Profile)}
-                    >
-                        {i18n.t('connectWithValora')}
-                    </Button>
-                    <Button
-                        modeType="default"
-                        bold={true}
-                        style={{
-                            marginVertical: 16,
-                            width: '100%',
-                        }}
-                        onPress={() => navigation.goBack()}
-                    >
-                        {i18n.t('exploreCommunities')}
-                    </Button>
-                </View>
+                    {i18n.t('connectWithValora')}
+                </Button>
+                <Button
+                    modeType="gray"
+                    bold={true}
+                    style={{
+                        marginTop: 16,
+                        marginBottom: 41,
+                        width: '100%',
+                    }}
+                    labelStyle={{
+                        fontSize: 18,
+                        lineHeight: 22,
+                        letterSpacing: 0.3,
+                    }}
+                    onPress={() => navigation.goBack()}
+                >
+                    {i18n.t('exploreCommunities')}
+                </Button>
             </View>
         </View>
     );
 }
 
-Welcome.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+Welcome.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
     return {
         headerShown: false,
     };
