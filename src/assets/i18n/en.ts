@@ -95,9 +95,8 @@ export default {
         'An error happened while placing the request to create a community!',
     anErroHappenedTryAgain: 'An error happened, please, try again.',
     toContinuePlease: 'To continue please',
-    loginDescription1:
-        'impactMarket operates on top of Celo network, an open and global financial platform.',
-    loginDescription2: 'With Valora you can easily send and receive money.',
+    loginDescription:
+        'impactMarket operates on top of Celo network, an open and global financial platform.\n\nWith Valora you can easily send and receive money.',
     step1: 'Step 1',
     step2: 'Step 2',
     createValoraAccount: 'Create an Valora account.',

@@ -85,6 +85,7 @@ function TabNavigator({
     const userWallet = useSelector((state: IRootState) => state.user.celoInfo);
 
     useLayoutEffect(() => {
+        const routeName = getFocusedRouteNameFromRoute(route);
         navigation.setOptions({
             headerTitle: getHeaderTitle(
                 route,
@@ -94,7 +95,11 @@ function TabNavigator({
                     ? Screens.CommunityManager
                     : Screens.Communities
             ),
-            headerShown: fromWelcomeScreen === Screens.Auth ? false : true,
+            headerShown:
+                fromWelcomeScreen === Screens.Auth &&
+                (routeName === undefined || routeName === Screens.Auth)
+                    ? false
+                    : true,
             headerRight: () =>
                 getHeaderRight(
                     route,

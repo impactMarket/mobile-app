@@ -94,10 +94,8 @@ export default {
         'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
     anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',
     toContinuePlease: 'Para continuar, deverá',
-    loginDescription1:
-        'impactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.',
-    loginDescription2:
-        'Com a carteira Valora, pode enviar e receber dinheiro usando apenas um telemóvel.',
+    loginDescription:
+        'impactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.\n\nCom a carteira Valora, pode enviar e receber dinheiro usando apenas um telemóvel.',
     step1: 'Step 1',
     step2: 'Step 2',
     createValoraAccount: 'Criar conta com Valora',
@@ -212,7 +210,8 @@ export default {
     openClockSettings: 'Abrir definições data/hora',
     dismiss: 'Fechar',
     incorrectTime: 'Data/Hora incorreta',
-    incorrectTimeMessage: 'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}.',
+    incorrectTimeMessage:
+        'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}.',
     possibleNetworkIssues: 'Posivelmente problemas de conexão.',
     transactionPossiblyNotAllowed: 'Possivelmente a transação não é permitida.',
     networkConnectionLost: 'A ligação é internet foi perdida.',

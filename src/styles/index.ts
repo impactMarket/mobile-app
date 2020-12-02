@@ -6,6 +6,8 @@ export const iptcColors = {
     softGray: '#E9ECEF',
     textGray: '#7E8DA6',
     almostBlack: '#1E3252',
+    baliHai: '#8898AA',
+    nileBlue: '#172B4D',
 };
 
 export default StyleSheet.create({});

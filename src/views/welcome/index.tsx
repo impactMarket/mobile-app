@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import i18n from 'assets/i18n';
@@ -15,6 +15,7 @@ import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/ReduxActions';
 function Welcome() {
     const insets = useSafeAreaInsets();
     const dispatch = useDispatch();
+    const [redirecting, setRedirecting] = useState(false);
     return (
         <View
             style={{
@@ -60,9 +61,13 @@ function Welcome() {
                     }}
                     labelStyle={{
                         fontSize: 20,
-                        lineHeight: 24
+                        lineHeight: 24,
                     }}
-                    onPress={() => dispatch(SetAppFromWelcomeScreen(Screens.Auth))}
+                    disabled={redirecting}
+                    onPress={() => {
+                        setRedirecting(true);
+                        dispatch(SetAppFromWelcomeScreen(Screens.Auth));
+                    }}
                 >
                     {i18n.t('connectWithValora')}
                 </Button>
@@ -79,7 +84,11 @@ function Welcome() {
                         lineHeight: 22,
                         letterSpacing: 0.3,
                     }}
-                    onPress={() => dispatch(SetAppFromWelcomeScreen(Screens.Communities))}
+                    disabled={redirecting}
+                    onPress={() => {
+                        setRedirecting(true);
+                        dispatch(SetAppFromWelcomeScreen(Screens.Communities));
+                    }}
                 >
                     {i18n.t('exploreCommunities')}
                 </Button>

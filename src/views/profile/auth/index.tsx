@@ -161,10 +161,8 @@ function Auth() {
                 <Button
                     modeType="gray"
                     bold={true}
-                    style={{
-                        width: '100%',
-                        backgroundColor: '#e9e9e9',
-                    }}
+                    style={{ width: '100%' }}
+                    labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(androidURL)}
                 >
                     <Text style={{ color: 'black' }}>
@@ -177,10 +175,8 @@ function Auth() {
                 <Button
                     modeType="gray"
                     bold={true}
-                    style={{
-                        width: '100%',
-                        backgroundColor: '#e9e9e9',
-                    }}
+                    style={{ width: '100%' }}
+                    labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(iosURL)}
                 >
                     <Text style={{ color: 'black' }}>
@@ -194,11 +190,8 @@ function Auth() {
                 <Button
                     modeType="gray"
                     bold={true}
-                    style={{
-                        // marginHorizontal: 10,
-                        width: '100%',
-                        backgroundColor: '#e9e9e9',
-                    }}
+                    style={{ width: '100%' }}
+                    labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(iosURL)}
                 >
                     iOS
@@ -206,11 +199,8 @@ function Auth() {
                 <Button
                     modeType="gray"
                     bold={true}
-                    style={{
-                        // marginHorizontal: 10,
-                        width: '100%',
-                        backgroundColor: '#e9e9e9',
-                    }}
+                    style={{ width: '100%' }}
+                    labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(androidURL)}
                 >
                     <Text style={{ color: 'black' }}>Android</Text>
@@ -221,55 +211,37 @@ function Auth() {
 
     return (
         <View style={styles.mainView}>
-            <Text style={styles.description}>{i18n.t('toContinuePlease')}</Text>
+            <Text style={styles.descriptionTop}>
+                {i18n.t('toContinuePlease')}
+            </Text>
             <Text style={styles.title}>{i18n.t('connectWithValora')}</Text>
-            <Text style={styles.description}>
-                {i18n.t('loginDescription1')}
-            </Text>
-            <Text style={styles.description}>
-                {i18n.t('loginDescription2')}
-            </Text>
-            <Text style={styles.stepText}>{i18n.t('step1')}</Text>
+            <Text style={styles.description}>{i18n.t('loginDescription')}</Text>
+            <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
             <Text style={styles.instructionText}>
                 {i18n.t('createValoraAccount')}
             </Text>
-            <View style={{ width: '100%' }}>{buttonStoreLink()}</View>
-            <Text style={styles.stepText}>{i18n.t('step2')}</Text>
-            {/* <Text style={styles.instructionText}>
-                {i18n.t('createValoraAccount')}
-            </Text> */}
-            {/* <Text style={styles.stepText}>{i18n.t('finalStep')}</Text> */}
+            <View style={{ width: '100%', marginTop: 16 }}>
+                {buttonStoreLink()}
+            </View>
+            <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
             <Button
                 modeType="green"
                 bold={true}
                 onPress={() => login()}
-                // disabled={connecting}
                 loading={connecting}
                 style={{
                     width: '100%',
-                    backgroundColor: iptcColors.greenishTeal,
+                    marginTop: 16,
                 }}
+                labelStyle={styles.buttomConnectValoraText}
             >
                 {i18n.t('connectWithValora')}
             </Button>
-            {/* <Button
-                modeType="gray"
-                bold={true}
-                onPress={() => navigation.goBack()}
-                disabled={connecting}
-                style={{ width: '80%', backgroundColor: '#e9e9e9' }}
-            >
-                <Text style={{ color: 'black' }}>{i18n.t('notNow')}</Text>
-            </Button> */}
         </View>
     );
 }
 
-Auth.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+Auth.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
     return {
         headerShown: false,
     };
@@ -279,42 +251,69 @@ export default Auth;
 
 const styles = StyleSheet.create({
     mainView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'center',
+        // flex: 1,
+        // flexDirection: 'column',
+        // justifyContent: 'space-around',
+        // alignItems: 'center',
         marginHorizontal: 32,
         marginVertical: 20,
     },
+    buttomStoreText: {
+        fontSize: 18,
+        lineHeight: 22,
+        letterSpacing: 0.3,
+    },
+    buttomConnectValoraText: {
+        fontSize: 20,
+        lineHeight: 24,
+    },
     title: {
-        height: 62,
         fontFamily: 'Gelion-Bold',
         fontSize: 30,
         lineHeight: 31,
         letterSpacing: 0.7,
         textAlign: 'center',
-        color: '#1e3252',
+        color: iptcColors.almostBlack,
+        marginTop: 16,
+    },
+    descriptionTop: {
+        fontFamily: 'Gelion-Regular',
+        fontSize: 19,
+        lineHeight: 19,
+        textAlign: 'center',
+        color: iptcColors.baliHai,
+        marginTop: 16,
     },
     description: {
         fontFamily: 'Gelion-Regular',
         fontSize: 19,
         lineHeight: 23,
         textAlign: 'center',
-        color: '#8898aa',
+        color: iptcColors.baliHai,
+        marginTop: 27,
     },
-    stepText: {
+    stepText1: {
         fontFamily: 'Gelion-Bold',
         fontSize: 19,
         lineHeight: 23,
         textAlign: 'center',
-        color: '#172b4d',
+        color: iptcColors.nileBlue,
+        marginTop: 73,
+    },
+    stepText2: {
+        fontFamily: 'Gelion-Bold',
+        fontSize: 19,
+        lineHeight: 23,
+        textAlign: 'center',
+        color: iptcColors.nileBlue,
+        marginTop: 40,
     },
     instructionText: {
-        height: 23,
         fontFamily: 'Gelion-Regular',
         fontSize: 19,
         lineHeight: 23,
         textAlign: 'center',
-        color: '#172b4d',
+        color: iptcColors.nileBlue,
+        marginTop: 8,
     },
 });
