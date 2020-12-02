@@ -85,12 +85,13 @@ function CommunitiesScreen(props: Props) {
                     </View>
                     <View style={styles.darkerBackground} />
                 </View>
-                <View style={{ margin: 10 }}>
+                <View style={{ marginHorizontal: 17, marginBottom: 16.24 }}>
                     <View
                         style={{
                             flex: 3,
                             flexDirection: 'row',
-                            marginHorizontal: 15,
+                            marginTop: 19.27,
+                            marginBottom: 17.85,
                         }}
                     >
                         <View style={{ flex: 1 }}>
@@ -123,18 +124,14 @@ function CommunitiesScreen(props: Props) {
                             </Text>
                         </View>
                     </View>
-                    <View
-                        style={{
-                            marginTop: 15,
-                        }}
-                    >
+                    <View>
                         <ProgressBar
                             key="raised"
                             style={{
-                                backgroundColor: '#d6d6d6',
+                                backgroundColor: iptcColors.softGray,
                                 position: 'absolute',
                                 borderRadius: 6.5,
-                                height: 6.32,
+                                height: 8.12,
                             }}
                             progress={calculateCommunityProgress(
                                 'raised',
@@ -147,7 +144,7 @@ function CommunitiesScreen(props: Props) {
                             style={{
                                 backgroundColor: 'rgba(255,255,255,0)',
                                 borderRadius: 6.5,
-                                height: 6.32,
+                                height: 8.12,
                             }}
                             progress={calculateCommunityProgress(
                                 'claimed',
@@ -188,10 +185,12 @@ CommunitiesScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
-    scrollView: {},
+    scrollView: {
+        paddingTop: 12, // TODO: I'm not really sure about this
+    },
     cardImage: {
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
         width: '100%',
         height: 147,
         justifyContent: 'center',
@@ -199,8 +198,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     darkerBackground: {
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
         backgroundColor: 'rgba(0,0,0,0.15)',
         position: 'absolute',
         left: 0,
@@ -231,15 +230,16 @@ const styles = StyleSheet.create({
     },
     card: {
         marginHorizontal: 16,
-        marginBottom: 13,
-        marginTop: 8,
+        marginBottom: 22,
+        // marginTop: 8,
         padding: 0,
     },
     cellHeader: {
         fontFamily: 'Gelion-Bold',
         fontSize: 24,
+        lineHeight: 24,
         textAlign: 'center',
-        color: iptcColors.almostBlack,
+        color: iptcColors.nileBlue,
     },
     cellDescription: {
         fontFamily: 'Gelion-Regular',
@@ -247,7 +247,8 @@ const styles = StyleSheet.create({
         lineHeight: 16,
         opacity: 0.7,
         textAlign: 'center',
-        color: iptcColors.textGray,
+        color: iptcColors.nileBlue,
+        marginTop: 6,
     },
 });
 
