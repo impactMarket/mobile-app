@@ -11,6 +11,9 @@
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
         "test": "echo \"Not available yet.\""
     },
+    "engines": {
+        "node": "14.15.1"
+    },
     "dependencies": {
         "@celo/dappkit": "0.10.0",
         "@expo/vector-icons": "^10.0.0",
