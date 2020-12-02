@@ -99,8 +99,7 @@ export default {
         'impactMarket operates on top of Celo network, an open and global financial platform.\n\nWith Valora you can easily send and receive money.',
     step1: 'Step 1',
     step2: 'Step 2',
-    createValoraAccount: 'Create an Valora account.',
-    installValoraApp: 'Install Valora App',
+    installAndCreateValoraAccount: 'Install and create a Valora Account',
     connectWithValora: 'Connect with Valora',
     notNow: 'Not now',
     beforeMovingInsertPin: 'Before moving any further, please, insert your PIN', // pin is for moving dude!

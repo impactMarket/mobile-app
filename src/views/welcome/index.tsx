@@ -30,18 +30,17 @@ function Welcome() {
                     alignItems: 'center',
                 }}
             >
-                <LogoBlueSvg style={{ height: 74, marginTop: 54 }} />
-                <DiversitySvg style={{ height: 136, marginTop: 22 }} />
+                <LogoBlueSvg style={{ height: 74, marginTop: 25 }} />
+                <DiversitySvg style={{ height: 136, marginTop: 16 }} />
                 <Text
                     style={{
                         paddingHorizontal: 33,
-                        marginTop: 38,
+                        marginTop: 37,
                         fontFamily: 'Gelion-Regular',
                         fontSize: 17,
                         lineHeight: 24,
-                        letterSpacing: 0,
                         textAlign: 'center',
-                        color: iptcColors.almostBlack,
+                        color: iptcColors.nileBlue,
                     }}
                 >
                     {i18n.t('oneTimeWelcomeMessage1')}

@@ -1,24 +1,17 @@
-import { Screens } from 'helpers/constants';
 import {
     resetNetworkContractsApp,
     resetUserApp,
     setUserIsBeneficiary,
     setUserIsCommunityManager,
 } from 'helpers/redux/actions/ReduxActions';
-import {
-    IStoreCombinedActionsTypes,
-    IStoreCombinedState,
-} from 'helpers/types';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { batch, useDispatch, useStore } from 'react-redux';
+import { batch, useDispatch } from 'react-redux';
 import i18n from 'assets/i18n';
-import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from 'react-native-paper';
 
-function Logout(props: { navigation: StackNavigationProp<any, any> }) {
-    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
+function Logout() {
     const dispatch = useDispatch();
 
     const [logingOut, setLogingOut] = useState(false);
@@ -26,24 +19,6 @@ function Logout(props: { navigation: StackNavigationProp<any, any> }) {
     const handleLogout = async () => {
         setLogingOut(true);
         await AsyncStorage.clear();
-        const unsubscribe = store.subscribe(() => {
-            const state = store.getState();
-            if (
-                !state.user.community.isBeneficiary &&
-                !state.user.community.isManager
-            ) {
-                unsubscribe();
-                setLogingOut(false);
-                // TODO: improve this line below
-                setTimeout(
-                    () =>
-                        props.navigation.navigate(Screens.Communities, {
-                            previous: Screens.Profile,
-                        }),
-                    500
-                );
-            }
-        });
         batch(() => {
             dispatch(setUserIsBeneficiary(false));
             dispatch(setUserIsCommunityManager(false));

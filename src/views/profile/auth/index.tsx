@@ -27,8 +27,10 @@ import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Button from 'components/core/Button';
 import { Screens } from 'helpers/constants';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function Auth() {
+    const insets = useSafeAreaInsets();
     const store = useStore();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
@@ -166,7 +168,7 @@ function Auth() {
                     onPress={() => Linking.openURL(androidURL)}
                 >
                     <Text style={{ color: 'black' }}>
-                        {i18n.t('installValoraApp')}
+                        {i18n.t('installAndCreateValoraAccount')}
                     </Text>
                 </Button>
             );
@@ -180,7 +182,7 @@ function Auth() {
                     onPress={() => Linking.openURL(iosURL)}
                 >
                     <Text style={{ color: 'black' }}>
-                        {i18n.t('installValoraApp')}
+                        {i18n.t('installAndCreateValoraAccount')}
                     </Text>
                 </Button>
             );
@@ -210,33 +212,31 @@ function Auth() {
     };
 
     return (
-        <View style={styles.mainView}>
-            <Text style={styles.descriptionTop}>
-                {i18n.t('toContinuePlease')}
-            </Text>
-            <Text style={styles.title}>{i18n.t('connectWithValora')}</Text>
-            <Text style={styles.description}>{i18n.t('loginDescription')}</Text>
-            <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
-            <Text style={styles.instructionText}>
-                {i18n.t('createValoraAccount')}
-            </Text>
-            <View style={{ width: '100%', marginTop: 16 }}>
-                {buttonStoreLink()}
+        <View style={{paddingTop: insets.top + 10,...styles.mainView}}>
+            <View style={{ width: '100%', paddingHorizontal: 16 }}>
+                <Text style={styles.descriptionTop}>
+                    {i18n.t('toContinuePlease')}
+                </Text>
+                <Text style={styles.title}>{i18n.t('connectWithValora')}</Text>
+                <Text style={styles.description}>{i18n.t('loginDescription')}</Text>
             </View>
-            <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
-            <Button
-                modeType="green"
-                bold={true}
-                onPress={() => login()}
-                loading={connecting}
-                style={{
-                    width: '100%',
-                    marginTop: 16,
-                }}
-                labelStyle={styles.buttomConnectValoraText}
-            >
-                {i18n.t('connectWithValora')}
-            </Button>
+            <View style={{ width: '100%', paddingHorizontal: 31 }}>
+                <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
+                <View style={{ width: '100%', marginTop: 16 }}>
+                    {buttonStoreLink()}
+                </View>
+                <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
+                <Button
+                    modeType="green"
+                    bold={true}
+                    onPress={() => login()}
+                    loading={connecting}
+                    style={{ width: '100%', marginTop: 16 }}
+                    labelStyle={styles.buttomConnectValoraText}
+                >
+                    {i18n.t('connectWithValora')}
+                </Button>
+            </View>
         </View>
     );
 }
@@ -251,12 +251,13 @@ export default Auth;
 
 const styles = StyleSheet.create({
     mainView: {
-        // flex: 1,
-        // flexDirection: 'column',
-        // justifyContent: 'space-around',
-        // alignItems: 'center',
-        marginHorizontal: 32,
-        marginVertical: 20,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        // marginHorizontal: 32,
+        // marginTop: 20,
+        marginBottom: 38,
     },
     buttomStoreText: {
         fontSize: 18,
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
         lineHeight: 23,
         textAlign: 'center',
         color: iptcColors.nileBlue,
-        marginTop: 40,
+        marginTop: 22,
     },
     instructionText: {
         fontFamily: 'Gelion-Regular',
