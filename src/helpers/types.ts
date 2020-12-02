@@ -22,6 +22,7 @@ export const SET_EXCHANGE_RATES = 'SET_EXCHANGE_RATES';
 export const CONSENT_ANALYTICS = 'CONSENT_ANALYTICS';
 
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
+export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
 
 // state
 export interface IUserCeloInfo {
@@ -71,6 +72,7 @@ export interface IAppState {
     paymentToAddress: string;
     suspectWrongDateTime: boolean;
     timeDiff: number;
+    fromWelcomeScreen: string;
 }
 
 // same as ICombinedState
@@ -163,6 +165,10 @@ interface SetAppSuspectWrongDateTime {
         timeDiff: number;
     };
 }
+interface SetAppFromWelcomeScreen {
+    type: typeof SET_APP_FROM_WELCOME_SCREEN;
+    payload: string;
+}
 
 interface SetAppEchangeRatesAction {
     type: typeof SET_EXCHANGE_RATES;
@@ -189,7 +195,8 @@ export type AuthActionTypes =
 export type AppActionTypes =
     | CeloKitAction
     | SetAppEchangeRatesAction
-    | SetAppSuspectWrongDateTime;
+    | SetAppSuspectWrongDateTime
+    | SetAppFromWelcomeScreen;
 
 export interface IStoreCombinedState {
     user: IUserState;

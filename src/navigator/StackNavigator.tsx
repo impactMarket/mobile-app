@@ -15,13 +15,20 @@ import { iptcColors } from 'styles/index';
 import { useSelector } from 'react-redux';
 import { Screens } from 'helpers/constants';
 
+const welcomeScreen = (Navigator: typeof Stack) => (
+    <Navigator.Screen
+        name={Screens.Welcome}
+        component={WelcomeScreen}
+        options={WelcomeScreen.navigationOptions}
+    />
+);
 
 const commonScreens = (Navigator: typeof Stack) => (
     <>
         <Navigator.Screen
             name="TabNavigator" // doesn't really matter here
             component={TabNavigator}
-            options={TabNavigator.navigationOptions}
+            // options={TabNavigator.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.CommunityDetails}
@@ -32,11 +39,6 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.FAQ}
             component={FAQScreen}
             options={FAQScreen.navigationOptions}
-        />
-        <Navigator.Screen
-            name={Screens.Welcome}
-            component={WelcomeScreen}
-            options={WelcomeScreen.navigationOptions}
         />
     </>
 );
@@ -90,6 +92,12 @@ function StackNavigator() {
     const isBeneficiary = useSelector(
         (state: IRootState) => state.user.community.isBeneficiary
     );
+    const isAuthenticated = useSelector(
+        (state: IRootState) => state.user.celoInfo.address.length > 0
+    );
+    const fromWelcomeScreen = useSelector(
+        (state: IRootState) => state.app.fromWelcomeScreen
+    );
 
     return (
         <Stack.Navigator
@@ -108,11 +116,14 @@ function StackNavigator() {
                     color: iptcColors.almostBlack,
                 },
             }}
+            initialRouteName={fromWelcomeScreen}
         >
-            {commonScreens(Stack)}
+            {isAuthenticated || fromWelcomeScreen.length > 0 ? commonScreens(Stack) : welcomeScreen(Stack)}
             {isBeneficiary && beneficiaryScreens(Stack)}
             {isManager && managerScreens(Stack)}
-            {!isBeneficiary && !isManager && nonBeneficiaryManagerScreens(Stack)}
+            {!isBeneficiary &&
+                !isManager &&
+                nonBeneficiaryManagerScreens(Stack)}
         </Stack.Navigator>
     );
 }

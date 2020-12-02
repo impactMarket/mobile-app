@@ -12,6 +12,7 @@ import CommunityManagerScreen from 'views/community/manager';
 import ProfileScreen from 'views/profile';
 import {
     getFocusedRouteNameFromRoute,
+    Route,
     RouteProp,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -78,6 +79,9 @@ function TabNavigator({
     const isBeneficiary = useSelector(
         (state: IRootState) => state.user.community.isBeneficiary
     );
+    const fromWelcomeScreen = useSelector(
+        (state: IRootState) => state.app.fromWelcomeScreen
+    );
     const userWallet = useSelector((state: IRootState) => state.user.celoInfo);
 
     useLayoutEffect(() => {
@@ -90,6 +94,7 @@ function TabNavigator({
                     ? Screens.CommunityManager
                     : Screens.Communities
             ),
+            headerShown: fromWelcomeScreen === Screens.Auth ? false : true,
             headerRight: () =>
                 getHeaderRight(
                     route,
@@ -167,6 +172,7 @@ function TabNavigator({
                 },
                 style: { height: 84 },
             }}
+            initialRouteName={fromWelcomeScreen}
         >
             {isBeneficiary && tabBeneficiary}
             {isManager && tabManager}
@@ -176,17 +182,22 @@ function TabNavigator({
     );
 }
 
-TabNavigator.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
-    let routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === Screens.Auth) {
-        return {
-            headerShown: false,
-        };
-    }
-};
+// TabNavigator.navigationOptions = (props: {
+//     route: Route<'TabNavigator', object | undefined>;
+//     navigation: any;
+// }): StackNavigationOptions => {
+//     let routeName = getFocusedRouteNameFromRoute(props.route);
+//     console.log(
+//         'TabNavigator.navigationOptions',
+//         routeName,
+//         props.navigation.dangerouslyGetState()
+//     );
+//     if (routeName === Screens.Auth) {
+//         return {
+//             headerShown: false,
+//         };
+//     }
+//     return {};
+// };
 
 export default TabNavigator;

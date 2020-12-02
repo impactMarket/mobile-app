@@ -26,6 +26,7 @@ import {
     INIT_USER,
     SET_EXCHANGE_RATES,
     SET_APP_SUSPECT_WRONG_DATETIME,
+    SET_APP_FROM_WELCOME_SCREEN,
 } from '../../types';
 
 const INITIAL_STATE_USER: IUserState = {
@@ -67,6 +68,7 @@ const INITIAL_STATE_APP: IAppState = {
     paymentToAddress: '',
     suspectWrongDateTime: false,
     timeDiff: 0,
+    fromWelcomeScreen: '',
 };
 
 const userReducer = (
@@ -173,6 +175,11 @@ const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
                 ...state,
                 suspectWrongDateTime: action.payload.suspect,
                 timeDiff: action.payload.timeDiff,
+            };
+        case SET_APP_FROM_WELCOME_SCREEN:
+            return {
+                ...state,
+                fromWelcomeScreen: action.payload,
             };
         default:
             return state;

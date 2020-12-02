@@ -39,7 +39,6 @@ type Props = PropsFromRedux & ICommunitiesScreenProps;
 
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
-    const [goWelcomeScreen, setGoWelcomeScreen] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
 
@@ -161,11 +160,6 @@ function CommunitiesScreen(props: Props) {
             </Card.Content>
         </Card>
     );
-
-    if (props.user.celoInfo.address.length === 0 && goWelcomeScreen) {
-        setGoWelcomeScreen(false);
-        navigation.navigate(Screens.Welcome);
-    }
 
     return (
         <>

@@ -1,18 +1,20 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import { Text } from 'react-native-paper';
 import i18n from 'assets/i18n';
 import { iptcColors } from 'styles/index';
 import Button from 'components/core/Button';
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Screens } from 'helpers/constants';
 import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
 import DiversitySvg from 'components/svg/welcome/DiversitySvg';
+import { useDispatch } from 'react-redux';
+import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/ReduxActions';
 
 function Welcome() {
     const insets = useSafeAreaInsets();
-    const navigation = useNavigation();
+    const dispatch = useDispatch();
     return (
         <View
             style={{
@@ -60,7 +62,7 @@ function Welcome() {
                         fontSize: 20,
                         lineHeight: 24
                     }}
-                    onPress={() => navigation.navigate(Screens.Profile)}
+                    onPress={() => dispatch(SetAppFromWelcomeScreen(Screens.Auth))}
                 >
                     {i18n.t('connectWithValora')}
                 </Button>
@@ -77,7 +79,7 @@ function Welcome() {
                         lineHeight: 22,
                         letterSpacing: 0.3,
                     }}
-                    onPress={() => navigation.goBack()}
+                    onPress={() => dispatch(SetAppFromWelcomeScreen(Screens.Communities))}
                 >
                     {i18n.t('exploreCommunities')}
                 </Button>

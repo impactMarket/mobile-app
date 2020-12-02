@@ -26,6 +26,7 @@ import {
     IInitUser,
     SET_EXCHANGE_RATES,
     SET_APP_SUSPECT_WRONG_DATETIME,
+    SET_APP_FROM_WELCOME_SCREEN,
 } from '../../types';
 
 export function setUserCeloInfo(celoInfo: IUserCeloInfo): UserActionTypes {
@@ -131,6 +132,15 @@ export function setAppSuspectWrongDateTime(
             suspect,
             timeDiff,
         },
+    };
+}
+
+export function SetAppFromWelcomeScreen(
+    nextScreen: string
+): AppActionTypes {
+    return {
+        type: SET_APP_FROM_WELCOME_SCREEN,
+        payload: nextScreen,
     };
 }
 
