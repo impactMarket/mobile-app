@@ -112,7 +112,7 @@ export default {
     donate: 'Contribuir',
     donateWithValora: 'Doar com Valora',
     amountSymbol: 'Montante em {{symbol}}',
-    donateSymbol: 'Contribuir {{symbol}}',
+    donateSymbol: 'Contribuir ({{symbol}})',
     close: 'Fechar',
     youCanClaimXin: 'Poderá pegar {{amount}} em',
     claimX: 'Pegar {{amount}}',

@@ -18,6 +18,7 @@ import {
     Keyboard,
     LayoutAnimation,
     Platform,
+    Pressable,
 } from 'react-native';
 import {
     Paragraph,
@@ -25,7 +26,6 @@ import {
     Snackbar,
     Modal,
     Headline,
-    IconButton,
 } from 'react-native-paper';
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
@@ -35,6 +35,7 @@ import * as Device from 'expo-device';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import Api from 'services/api';
+import CloseSvg from 'components/svg/CloseSvg';
 
 interface IExploreScreenProps {
     community: ICommunityInfo;
@@ -241,6 +242,7 @@ class Donate extends Component<Props, IDonateState> {
                 <Button
                     modeType="default"
                     bold={true}
+                    labelStyle={styles.donateLabel}
                     loading={donating}
                     disabled={donating}
                     onPress={this.handleConfirmDonateWithCeloWallet}
@@ -255,6 +257,7 @@ class Donate extends Component<Props, IDonateState> {
                     style={{
                         backgroundColor: '#f0ad4e',
                     }}
+                    labelStyle={styles.donateLabel}
                     onPress={() => {
                         Alert.alert(
                             i18n.t('failure'),
@@ -293,7 +296,6 @@ class Donate extends Component<Props, IDonateState> {
                         fontSize: 20,
                         lineHeight: 23,
                         color: 'white',
-                        // backgroundColor: 'red',
                     }}
                     onPress={() => this.setState({ openModalDonate: true })}
                 >
@@ -325,29 +327,42 @@ class Donate extends Component<Props, IDonateState> {
                             }}
                         >
                             <Card.Content>
-                                <View style={{ height: 40 }}>
+                                <View
+                                    style={{
+                                        height: 24,
+                                        marginTop: 4,
+                                        marginBottom: 19,
+                                    }}
+                                >
                                     <View
                                         style={{
                                             flex: 1,
                                             flexDirection: 'row',
                                             justifyContent: 'space-between',
+                                            alignItems: 'center',
                                         }}
                                     >
-                                        <Headline style={{ marginVertical: 3 }}>
+                                        <Headline
+                                            style={{
+                                                fontFamily: 'Gelion-Bold',
+                                                fontSize: 24,
+                                                lineHeight: 24,
+                                            }}
+                                        >
                                             {i18n.t('donateSymbol', {
                                                 symbol: user.user.currency,
                                             })}
                                         </Headline>
-                                        <IconButton
-                                            icon="close"
-                                            size={20}
-                                            style={{ top: -5 }}
+                                        <Pressable
+                                            hitSlop={15}
                                             onPress={() =>
                                                 this.setState({
                                                     openModalDonate: false,
                                                 })
                                             }
-                                        />
+                                        >
+                                            <CloseSvg />
+                                        </Pressable>
                                     </View>
                                 </View>
                                 <View
@@ -505,10 +520,8 @@ class Donate extends Component<Props, IDonateState> {
                                 <Button
                                     modeType="gray"
                                     bold={true}
-                                    style={{
-                                        // backgroundColor: '#F2F3F5',
-                                        marginBottom: 10,
-                                    }}
+                                    style={{ marginBottom: 10 }}
+                                    labelStyle={styles.donateLabel}
                                     onPress={this.handleCopyAddressToClipboard}
                                 >
                                     {i18n.t('copyContractAddress')}
@@ -527,6 +540,11 @@ const styles = StyleSheet.create({
     donate: {
         borderRadius: 0,
         height: 69,
+    },
+    donateLabel: {
+        fontSize: 16,
+        lineHeight: 19,
+        letterSpacing: 0.3,
     },
 });
 
