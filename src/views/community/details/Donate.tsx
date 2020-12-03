@@ -10,7 +10,6 @@ import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import {
     StyleSheet,
-    Clipboard,
     Alert,
     View,
     TextInput,
@@ -27,6 +26,7 @@ import {
     Modal,
     Headline,
 } from 'react-native-paper';
+import Clipboard from '@react-native-community/clipboard';
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';

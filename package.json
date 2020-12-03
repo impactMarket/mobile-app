@@ -18,6 +18,7 @@
         "@celo/dappkit": "0.10.0",
         "@expo/vector-icons": "^10.0.0",
         "@react-native-async-storage/async-storage": "1.13.2",
+        "@react-native-community/clipboard": "1.5.1",
         "@react-native-community/masked-view": "0.1.10",
         "@react-native-community/netinfo": "5.9.6",
         "@react-navigation/bottom-tabs": "5.11.2",
