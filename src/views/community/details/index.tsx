@@ -91,7 +91,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 </Headline>
                                 <Text
                                     style={{
-                                        textAlignVertical: 'center',
+                                        alignSelf: 'center',
                                         fontSize: 18,
                                         lineHeight: 18,
                                         padding: 3,
@@ -155,18 +155,28 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     {description}
                                 </Paragraph>
                                 {community.description.indexOf('\n') !== -1 && (
-                                    <Button
-                                        modeType="gray"
-                                        onPress={() =>
-                                            setSeeFullDescription(
-                                                !seeFullDescription
-                                            )
-                                        }
-                                    >
-                                        {seeFullDescription
-                                            ? i18n.t('seeLess')
-                                            : i18n.t('seeMore')}
-                                    </Button>
+                                    <View style={{ paddingTop: 16 }}>
+                                        <Button
+                                            modeType="gray"
+                                            bold={true}
+                                            style={{
+                                                backgroundColor: 'rgba(206, 212, 218, .27)',
+                                            }}
+                                            labelStyle={{
+                                                fontSize: 15,
+                                                lineHeight: 18,
+                                            }}
+                                            onPress={() =>
+                                                setSeeFullDescription(
+                                                    !seeFullDescription
+                                                )
+                                            }
+                                        >
+                                            {seeFullDescription
+                                                ? i18n.t('seeLess')
+                                                : i18n.t('seeMore')}
+                                        </Button>
+                                    </View>
                                 )}
                             </Card.Content>
                         </Card>
@@ -299,7 +309,7 @@ const styles = StyleSheet.create({
     ssiExplained: {
         fontSize: 15,
         lineHeight: 18,
-        letterSpacing: 0.25,
+        letterSpacing: 0.245455,
         color: iptcColors.textGray,
     },
     ssiHeadline: {

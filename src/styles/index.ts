@@ -9,6 +9,7 @@ export const iptcColors = {
     baliHai: '#8898AA',
     nileBlue: '#172B4D',
     blueRibbon: '#2362FB',
+    ghost: '#CED4DA',
 };
 
 export default StyleSheet.create({});

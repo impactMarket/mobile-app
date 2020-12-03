@@ -193,7 +193,6 @@ class Claim extends React.Component<Props, IClaimState> {
         return (
             <TouchableOpacity
                 style={{
-                    flexGrow: 0,
                     flexDirection: 'row',
                     backgroundColor:
                         claimDisabled || notEnoughToClaimOnContract
@@ -201,11 +200,10 @@ class Claim extends React.Component<Props, IClaimState> {
                             : iptcColors.softBlue,
                     alignSelf: 'center',
                     alignItems: 'center',
-                    paddingVertical: 5,
-                    // marginVertical: '10%',
-                    paddingHorizontal: 15,
+                    paddingTop: 11,
+                    paddingBottom: 17,
+                    paddingHorizontal: 27,
                     borderRadius: 8,
-                    // height: 60,
                 }}
                 disabled={
                     claimDisabled ||
@@ -273,14 +271,19 @@ const styles = StyleSheet.create({
     claimText: {
         textTransform: 'none',
         fontFamily: 'Gelion-Bold',
-        fontSize: 25,
-        letterSpacing: 0.46,
+        fontSize: 28,
+        lineHeight: 34,
+        letterSpacing: 0.458182,
         color: 'white',
     },
     claimTextCUSD: {
         textTransform: 'none',
         fontFamily: 'Gelion-Regular',
-        color: 'white',
+        fontSize: 15,
+        lineHeight: 14,
+        letterSpacing: 0.245455,
+        color: 'rgba(255, 255, 255, 0.52)',
+        marginTop: 6,
     },
     mainPageContent: {
         fontSize: 27,

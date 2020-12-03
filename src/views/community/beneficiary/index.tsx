@@ -279,11 +279,11 @@ function BeneficiaryScreen() {
                     <View
                         style={{
                             flex: 1,
-                            justifyContent: 'space-around',
+                            justifyContent: 'space-between',
                             height: Dimensions.get('window').height - 130 - 186, // TODO: ideally, this should be header - navigation
                         }}
                     >
-                        <View style={{ marginTop: '5%' }}>
+                        <View>
                             <Text
                                 onPress={() =>
                                     navigation.navigate(Screens.ClaimExplained)
@@ -297,12 +297,14 @@ function BeneficiaryScreen() {
                                     ),
                                 })}
                             </Text>
-                            <ProgressBar
-                                key="claimedbybeneficiary"
-                                style={styles.claimedProgress}
-                                progress={claimedProgress}
-                                color="#5289ff"
-                            />
+                            <View style={{ marginHorizontal: 30 }}>
+                                <ProgressBar
+                                    key="claimedbybeneficiary"
+                                    style={styles.claimedProgress}
+                                    progress={claimedProgress}
+                                    color="#5289ff"
+                                />
+                            </View>
                         </View>
                         <Claim
                             claimAmount={community.contractParams.claimAmount}
@@ -523,8 +525,8 @@ const styles = StyleSheet.create({
     },
     claimedProgress: {
         backgroundColor: '#d6d6d6',
-        marginHorizontal: 30,
-        marginVertical: 13,
+        // marginHorizontal: 30,
+        marginTop: 16.16,
         height: 6.32,
         borderRadius: 6.5,
     },
@@ -568,6 +570,7 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         textAlign: 'center',
         color: '#7e8da6',
+        marginTop: 53,
     },
 });
 
