@@ -50,10 +50,7 @@ class Claim extends React.Component<Props, IClaimState> {
     componentDidMount = async () => {
         await this._loadAllowance(this.props.cooldownTime);
         // check if there's enough funds to enable/disable claim button
-        const {
-            state,
-            contractParams,
-        } = this.props.network.community;
+        const { state, contractParams } = this.props.network.community;
         const notEnoughToClaimOnContract = new BigNumber(state.raised)
             .minus(state.claimed)
             .lt(contractParams.claimAmount);

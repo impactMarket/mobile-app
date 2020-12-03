@@ -95,7 +95,9 @@ export function calculateCommunityProgress(
         community.beneficiaries.added.length // + community.beneficiaries.removed.length
     );
     const result = new BigNumber(
-        toCalculte === 'raised' ? community.state.raised : community.state.claimed
+        toCalculte === 'raised'
+            ? community.state.raised
+            : community.state.claimed
     ).div(m.eq(0) ? 1 : m);
     return parseFloat(result.decimalPlaces(5, 1).toString());
 }

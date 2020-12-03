@@ -20,7 +20,6 @@ ClaimExplainedScreen.navigationOptions = () => {
     };
 };
 
-
 const styles = StyleSheet.create({
     contentView: {
         marginHorizontal: 30,

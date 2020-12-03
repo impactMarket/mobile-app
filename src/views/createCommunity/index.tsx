@@ -104,7 +104,12 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: () => <SubmitCommunity submit={submitNewCommunity} submitting={sending} />,
+            headerRight: () => (
+                <SubmitCommunity
+                    submit={submitNewCommunity}
+                    submitting={sending}
+                />
+            ),
         });
         // TODO: this next line should change though.
     }, [
@@ -120,7 +125,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
         incrementInterval,
         maxClaim,
         baseInterval,
-        sending
+        sending,
     ]);
 
     useEffect(() => {

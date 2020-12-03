@@ -212,13 +212,15 @@ function Auth() {
     };
 
     return (
-        <View style={{paddingTop: insets.top + 10,...styles.mainView}}>
+        <View style={{ paddingTop: insets.top + 10, ...styles.mainView }}>
             <View style={{ width: '100%', paddingHorizontal: 16 }}>
                 <Text style={styles.descriptionTop}>
                     {i18n.t('toContinuePlease')}
                 </Text>
                 <Text style={styles.title}>{i18n.t('connectWithValora')}</Text>
-                <Text style={styles.description}>{i18n.t('loginDescription')}</Text>
+                <Text style={styles.description}>
+                    {i18n.t('loginDescription')}
+                </Text>
             </View>
             <View style={{ width: '100%', paddingHorizontal: 31 }}>
                 <Text style={styles.stepText1}>{i18n.t('step1')}</Text>

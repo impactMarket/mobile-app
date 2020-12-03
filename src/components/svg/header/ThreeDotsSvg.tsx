@@ -12,7 +12,9 @@ import { useSelector } from 'react-redux';
 
 function ThreeDotsSvg(props: SvgProps) {
     const navigation = useNavigation();
-    const community = useSelector((state: IRootState) => state.network.community);
+    const community = useSelector(
+        (state: IRootState) => state.network.community
+    );
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
 
     const toggleThreeDotsMenu = () => setOpenThreeDotsMenu(!openThreeDotsMenu);

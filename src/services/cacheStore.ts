@@ -15,7 +15,7 @@ interface IBeneficiaryClaim {
     claimed: string;
     cooldown: number;
     lastInterval: number;
-};
+}
 
 export default class CacheStore {
     // user cache
@@ -33,11 +33,16 @@ export default class CacheStore {
     }
 
     static async cacheBeneficiaryClaim(beneficiaryClaim: IBeneficiaryClaim) {
-        await AsyncStorage.setItem(CACHE_STORE_BENEFICIARY_CLAIM, JSON.stringify(beneficiaryClaim));
+        await AsyncStorage.setItem(
+            CACHE_STORE_BENEFICIARY_CLAIM,
+            JSON.stringify(beneficiaryClaim)
+        );
     }
 
     static async getBeneficiaryClaim(): Promise<IBeneficiaryClaim | null> {
-        const beneficiaryClaim = await AsyncStorage.getItem(CACHE_STORE_BENEFICIARY_CLAIM);
+        const beneficiaryClaim = await AsyncStorage.getItem(
+            CACHE_STORE_BENEFICIARY_CLAIM
+        );
         if (beneficiaryClaim === null) {
             return null;
         }

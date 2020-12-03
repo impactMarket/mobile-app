@@ -3,13 +3,7 @@ import Svg, { SvgProps, Path } from 'react-native-svg';
 
 function CloseSvg(props: SvgProps) {
     return (
-        <Svg
-            width={17}
-            height={16}
-            viewBox="0 0 17 16"
-            fill="none"
-            {...props}
-        >
+        <Svg width={17} height={16} viewBox="0 0 17 16" fill="none" {...props}>
             <Path
                 d="M10.58 7.533l5.838-5.634a.802.802 0 000-1.165l-.512-.493A.863.863 0 0015.303 0a.862.862 0 00-.604.24L7.75 6.949a.803.803 0 00-.249.585c0 .221.088.429.249.585l6.944 6.7c.16.156.375.242.603.242a.863.863 0 00.604-.241l.511-.494a.805.805 0 000-1.165l-5.83-5.627z"
                 fill="#172B4D"

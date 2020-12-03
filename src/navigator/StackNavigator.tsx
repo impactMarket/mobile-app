@@ -118,7 +118,9 @@ function StackNavigator() {
             }}
             initialRouteName={fromWelcomeScreen}
         >
-            {isAuthenticated || fromWelcomeScreen.length > 0 ? commonScreens(Stack) : welcomeScreen(Stack)}
+            {isAuthenticated || fromWelcomeScreen.length > 0
+                ? commonScreens(Stack)
+                : welcomeScreen(Stack)}
             {isBeneficiary && beneficiaryScreens(Stack)}
             {isManager && managerScreens(Stack)}
             {!isBeneficiary &&

@@ -124,7 +124,7 @@ export function setAuthToken(token: string): AuthActionTypes {
 
 export function setAppSuspectWrongDateTime(
     suspect: boolean,
-    timeDiff: number,
+    timeDiff: number
 ): AppActionTypes {
     return {
         type: SET_APP_SUSPECT_WRONG_DATETIME,
@@ -135,9 +135,7 @@ export function setAppSuspectWrongDateTime(
     };
 }
 
-export function SetAppFromWelcomeScreen(
-    nextScreen: string
-): AppActionTypes {
+export function SetAppFromWelcomeScreen(nextScreen: string): AppActionTypes {
     return {
         type: SET_APP_FROM_WELCOME_SCREEN,
         payload: nextScreen,

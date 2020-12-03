@@ -85,7 +85,7 @@ class Api {
         email: string,
         coverImage: string,
         txReceipt: any,
-        contractParams: ICommunityContractParams,
+        contractParams: ICommunityContractParams
     ): Promise<ICommunity | undefined> {
         return await postRequest<ICommunity>('/community/create', {
             requestByAddress,
@@ -118,7 +118,7 @@ class Api {
         },
         email: string,
         coverImage: string,
-        contractParams: ICommunityContractParams,
+        contractParams: ICommunityContractParams
     ): Promise<ICommunity | undefined> {
         return await postRequest<ICommunity>('/community/request', {
             requestByAddress,

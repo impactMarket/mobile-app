@@ -30,7 +30,9 @@ class CommuntyStatus extends Component<Props, object> {
         // But to draw the progress bar, it's relative to the progress bar size.
         const claimedByRaised = parseFloat(
             new BigNumber(community.state.claimed)
-                .div(community.state.raised === '0' ? 1 : community.state.raised)
+                .div(
+                    community.state.raised === '0' ? 1 : community.state.raised
+                )
                 .multipliedBy(100)
                 .decimalPlaces(2, 1)
                 .toString()

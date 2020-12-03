@@ -1,4 +1,3 @@
-
 const commonConfig = {
     /**
      * cUSD decimals to use in ui format

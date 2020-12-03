@@ -277,8 +277,8 @@ export interface ICommunityInfo extends ICommunity {
      * @deprecated
      */
     ssi: {
-        dates: Date[],
-        values: number[],
+        dates: Date[];
+        values: number[];
     };
     state: ICommunityState;
     metrics?: ICommunityMetrics;
@@ -286,10 +286,10 @@ export interface ICommunityInfo extends ICommunity {
 }
 
 export interface ICommunityContractParams {
-    claimAmount: string,
-    maxClaim: string,
-    baseInterval: number,
-    incrementInterval: number,
+    claimAmount: string;
+    maxClaim: string;
+    baseInterval: number;
+    incrementInterval: number;
 }
 
 export interface ICommunityInfoBeneficiary {

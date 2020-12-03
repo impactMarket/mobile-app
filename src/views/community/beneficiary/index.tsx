@@ -74,7 +74,10 @@ function BeneficiaryScreen() {
         const loadCommunity = async () => {
             if (community !== undefined) {
                 const beneficiaryClaimCache = await CacheStore.getBeneficiaryClaim();
-                if (beneficiaryClaimCache !== null && beneficiaryClaimCache.communityId === community.publicId) {
+                if (
+                    beneficiaryClaimCache !== null &&
+                    beneficiaryClaimCache.communityId === community.publicId
+                ) {
                     const progress = new BigNumber(
                         beneficiaryClaimCache.claimed
                     ).div(community.contractParams.maxClaim);
