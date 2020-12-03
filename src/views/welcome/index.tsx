@@ -60,7 +60,7 @@ function Welcome() {
                     }}
                     labelStyle={{
                         fontSize: 20,
-                        lineHeight: 24,
+                        lineHeight: 20,
                     }}
                     disabled={redirecting}
                     onPress={() => {
@@ -80,7 +80,7 @@ function Welcome() {
                     }}
                     labelStyle={{
                         fontSize: 18,
-                        lineHeight: 22,
+                        lineHeight: 18,
                         letterSpacing: 0.3,
                     }}
                     disabled={redirecting}

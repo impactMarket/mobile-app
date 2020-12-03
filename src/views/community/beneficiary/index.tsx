@@ -280,7 +280,7 @@ function BeneficiaryScreen() {
                         style={{
                             flex: 1,
                             justifyContent: 'space-between',
-                            height: Dimensions.get('window').height - 130 - 186, // TODO: ideally, this should be header - navigation
+                            height: Dimensions.get('window').height - 100 - 84 - 152, // this is the: height - header - navigation - image
                         }}
                     >
                         <View>

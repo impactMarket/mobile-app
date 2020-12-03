@@ -263,12 +263,12 @@ const styles = StyleSheet.create({
     },
     buttomStoreText: {
         fontSize: 18,
-        lineHeight: 22,
+        lineHeight: 18,
         letterSpacing: 0.3,
     },
     buttomConnectValoraText: {
         fontSize: 20,
-        lineHeight: 24,
+        lineHeight: 20,
     },
     title: {
         fontFamily: 'Gelion-Bold',

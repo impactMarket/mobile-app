@@ -60,7 +60,7 @@ function getHeaderRight(
         case Screens.Communities:
             return <CreateCommunity navigation={navigation} />;
         case Screens.Profile:
-            return <Logout navigation={navigation} />;
+            return <Logout />;
     }
 }
 
@@ -96,8 +96,9 @@ function TabNavigator({
                     : Screens.Communities
             ),
             headerShown:
-                fromWelcomeScreen === Screens.Auth &&
-                (routeName === undefined || routeName === Screens.Auth)
+                (routeName === undefined &&
+                    fromWelcomeScreen === Screens.Auth) ||
+                routeName === Screens.Auth
                     ? false
                     : true,
             headerRight: () =>
