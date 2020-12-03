@@ -1,7 +1,11 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import * as Location from 'expo-location';
-import { humanifyCurrencyAmount, amountToCurrency } from 'helpers/currency';
+import {
+    humanifyCurrencyAmount,
+    amountToCurrency,
+    getCurrencySymbol,
+} from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import { IRootState } from 'helpers/types';
 import moment from 'moment';
@@ -225,15 +229,20 @@ class Claim extends React.Component<Props, IClaimState> {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={styles.claimText}>
-                        {i18n.t('claimX', {
-                            amount: amountToCurrency(
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={styles.claimText}>{i18n.t('claimX')}</Text>
+                        <Text style={styles.claimTextCurrency}>
+                            {getCurrencySymbol(this.props.user.user.currency)}
+                        </Text>
+                        <Text style={styles.claimText}>
+                            {amountToCurrency(
                                 this.props.claimAmount,
                                 this.props.user.user.currency,
-                                this.props.app.exchangeRates
-                            ),
-                        })}
-                    </Text>
+                                this.props.app.exchangeRates,
+                                false
+                            )}
+                        </Text>
+                    </View>
                     <Text style={styles.claimTextCUSD}>
                         ${humanifyCurrencyAmount(this.props.claimAmount)} cUSD
                     </Text>
@@ -274,6 +283,16 @@ const styles = StyleSheet.create({
         fontSize: 28,
         lineHeight: 34,
         letterSpacing: 0.458182,
+        color: 'white',
+    },
+    claimTextCurrency: {
+        textTransform: 'none',
+        fontFamily: 'Gelion-Bold',
+        fontSize: 20,
+        lineHeight: 29,
+        letterSpacing: 0.458182,
+        // marginVertical: 4,
+        alignSelf: 'flex-end',
         color: 'white',
     },
     claimTextCUSD: {

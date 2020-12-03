@@ -1,6 +1,6 @@
 import { iptcColors } from 'styles/index';
 import React, { Component } from 'react';
-import { TextInput, TextInputProps } from 'react-native';
+import { TextInput, TextInputProps, View } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 
 interface IInputProps extends TextInputProps {
@@ -19,16 +19,17 @@ export default class Input extends Component<IInputProps, {}> {
             onEndEditing,
             onChangeText,
             editable,
+            style
         } = this.props;
         return (
-            <>
+            <View style={style}>
                 <Paragraph
                     style={{
                         fontSize: 17,
                         lineHeight: 17,
                         letterSpacing: 0.245455,
                         color: iptcColors.textGray,
-                        marginVertical: 8,
+                        marginBottom: 10,
                     }}
                 >
                     {label}
@@ -47,7 +48,7 @@ export default class Input extends Component<IInputProps, {}> {
                             editable === undefined || editable ? 9 : 2,
                         paddingHorizontal:
                             editable === undefined || editable ? 14 : 0,
-                        marginBottom: 8,
+                        // marginBottom: 8,
                     }}
                     value={value}
                     maxLength={maxLength}
@@ -55,7 +56,7 @@ export default class Input extends Component<IInputProps, {}> {
                     onChangeText={onChangeText}
                     editable={editable}
                 />
-            </>
+            </View>
         );
     }
 }

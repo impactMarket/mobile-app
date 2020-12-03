@@ -5,7 +5,11 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { decrypt, encrypt } from 'helpers/encryption';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
-import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
+import {
+    amountToCurrency,
+    getCurrencySymbol,
+    humanifyCurrencyAmount,
+} from 'helpers/currency';
 import { iptcColors } from 'styles/index';
 import {
     resetUserApp,
@@ -120,7 +124,8 @@ function ProfileScreen({
     const userBalance = amountToCurrency(
         userWallet.balance,
         user.currency,
-        app.exchangeRates
+        app.exchangeRates,
+        false
     );
 
     return (
@@ -140,63 +145,62 @@ function ProfileScreen({
                         style={styles.card}
                         onPress={() => Linking.openURL('celo://wallet')}
                     >
-                        <Card.Content>
+                        <Card.Content style={{ alignItems: 'center' }}>
                             <Text
                                 style={{
                                     color: '#FFFFFF',
-                                    textAlign: 'center',
+                                    fontSize: 16,
+                                    lineHeight: 16,
+                                    letterSpacing: 0.7,
+                                    opacity: 0.48,
                                 }}
                             >
                                 {i18n.t('balance').toUpperCase()}
                             </Text>
-                            <View style={{ alignItems: 'center' }}>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    flexDirection: 'row',
+                                    // backgroundColor: 'red',
+                                    alignItems: 'flex-end',
+                                    marginTop: 19,
+                                    marginBottom: 8
+                                }}
+                            >
+                                <Headline
+                                    style={styles.headlineBalanceCurrency}
+                                >
+                                    {getCurrencySymbol(user.currency)}
+                                </Headline>
                                 <Headline
                                     style={{
                                         fontSize:
-                                            userBalance.length > 6 ? 43 : 56,
+                                            userBalance.length > 12 ? 43 : 56,
                                         lineHeight:
-                                            userBalance.length > 6 ? 43 : 56,
+                                            userBalance.length > 12 ? 43 : 56,
                                         ...styles.headlineBalance,
+                                        // backgroundColor: 'yellow'
                                     }}
                                 >
                                     {userBalance}
                                 </Headline>
-                                <Text style={{ color: '#FFFFFF' }}>
-                                    {humanifyCurrencyAmount(userWallet.balance)}{' '}
-                                    cUSD
-                                </Text>
                             </View>
+                            <Text
+                                style={{
+                                    color: '#FFFFFF',
+                                    fontSize: 17,
+                                    lineHeight: 20,
+                                    letterSpacing: 0.7,
+                                    opacity: 0.56,
+                                }}
+                            >
+                                {humanifyCurrencyAmount(userWallet.balance)}{' '}
+                                cUSD
+                            </Text>
                         </Card.Content>
                     </Card>
-                    {/* <ValidatedTextInput
-                        label={i18n.t('name')}
-                        value={name}
-                        maxLength={32}
-                        required
-                        onEndEditing={(e) => {
-                            let eName = '';
-                            if (name.length > 0) {
-                                eName = encrypt(name);
-                            }
-                            Api.setUsername(user.celoInfo.address, eName);
-                            dispatch(
-                                setUserInfo({ ...user.user, name: eName })
-                            );
-                        }}
-                        onChangeText={(value) => setName(value)}
-                    /> */}
                     <Input
                         label={i18n.t('name')}
-                        style={{
-                            backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                            borderRadius: 6,
-                            fontSize: 20,
-                            lineHeight: 24,
-                            height: 24,
-                            color: iptcColors.almostBlack,
-                            paddingVertical: 9,
-                            paddingHorizontal: 14,
-                        }}
                         value={name}
                         maxLength={32}
                         onEndEditing={(e) => {
@@ -209,19 +213,23 @@ function ProfileScreen({
                         }}
                         onChangeText={(value) => setName(value)}
                     />
-                    <Select
-                        label={i18n.t('currency')}
-                        value={currency}
-                        onPress={() => setIsDialogCurrencyOpen(true)}
-                    />
-                    <Select
-                        label={i18n.t('language')}
-                        value={language === 'en' ? 'English' : ' Português'}
-                        onPress={() => setIsDialogLanguageOpen(true)}
-                    />
+                    <View style={{ marginTop: 16 }}>
+                        <Select
+                            label={i18n.t('currency')}
+                            value={currency}
+                            onPress={() => setIsDialogCurrencyOpen(true)}
+                        />
+                    </View>
+                    <View style={{ marginTop: 16 }}>
+                        <Select
+                            label={i18n.t('language')}
+                            value={language === 'en' ? 'English' : ' Português'}
+                            onPress={() => setIsDialogLanguageOpen(true)}
+                        />
+                    </View>
                     <Input
                         label={i18n.t('country')}
-                        style={{ marginVertical: 3 }}
+                        style={{ marginTop: 16 }}
                         value={getCountryFromPhoneNumber(
                             userWallet.phoneNumber
                         )}
@@ -229,43 +237,36 @@ function ProfileScreen({
                     />
                     <Input
                         label={i18n.t('phoneNumber')}
-                        style={{ marginVertical: 3 }}
+                        style={{ marginTop: 16 }}
                         value={userWallet.phoneNumber}
                         editable={false}
                     />
-                    {/* <View
-                        style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginVertical: 10,
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 15,
-                                paddingVertical: 5,
-                            }}
-                        >
-                            {i18n.t('consentAnonymousAnalytics')}
-                        </Text>
-                        <Switch
-                            value={isConsentAnalytics}
-                            onValueChange={onToggleSwitch}
-                        />
-                    </View> */}
                     <View
                         style={{
                             flex: 1,
                             flexDirection: 'column',
-                            justifyContent: 'space-around',
+                            marginTop: 36,
                             marginBottom: 31,
                         }}
                     >
-                        <Paragraph>
+                        <Paragraph
+                            style={{
+                                fontSize: 14,
+                                lineHeight: 17,
+                                color: 'rgba(30, 50, 82, 0.59)',
+                            }}
+                        >
                             Build: {Constants.manifest.version}
                         </Paragraph>
-                        <Paragraph>OS version: {Device.osVersion}</Paragraph>
+                        <Paragraph
+                            style={{
+                                fontSize: 14,
+                                lineHeight: 17,
+                                color: 'rgba(30, 50, 82, 0.59)',
+                            }}
+                        >
+                            OS version: {Device.osVersion}
+                        </Paragraph>
                     </View>
                 </View>
             </ScrollView>
@@ -331,11 +332,15 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 45,
     },
+    headlineBalanceCurrency: {
+        fontFamily: 'Gelion-Bold',
+        color: 'white',
+        paddingVertical: 6,
+        // backgroundColor: 'green',
+    },
     headlineBalance: {
         fontFamily: 'Gelion-Bold',
         color: 'white',
-        letterSpacing: 0,
-        marginTop: 20,
     },
     container: {
         marginHorizontal: 20,

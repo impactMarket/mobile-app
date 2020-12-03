@@ -116,7 +116,7 @@ export default {
     donateSymbol: 'Donate ({{symbol}})',
     close: 'Close',
     youCanClaimXin: 'You can claim {{amount}} in',
-    claimX: 'Claim {{amount}}',
+    claimX: 'Claim ', // {{amount}}
     loading: 'Loading...',
     youHaveClaimedXoutOfY: 'You have claimed ${{claimed}} out of ${{max}}',
     hour: 'hour',

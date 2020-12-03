@@ -48,15 +48,20 @@ export function humanifyCurrencyAmount(
 export function amountToCurrency(
     amount: BigNumber | string,
     currency: string,
-    exchangeRates: any
+    exchangeRates: any,
+    showSymbol: boolean = true
 ): string {
     const exchangeRate = exchangeRates[currency].rate;
     const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
     const hValue = humanifyCurrencyAmount(bgn);
+    const currencySymbol = getCurrencySymbol(currency);
     if (currency === 'CVE') {
-        return hValue.replace('.', getCurrencySymbol(currency));
+        return hValue.replace('.', currencySymbol);
     }
-    return getCurrencySymbol(currency) + hValue;
+    if (!showSymbol) {
+        return hValue;
+    }
+    return currencySymbol + hValue;
 }
 
 // cUSD has 18 zeros!

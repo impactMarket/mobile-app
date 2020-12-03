@@ -115,7 +115,7 @@ export default {
     donateSymbol: 'Contribuir ({{symbol}})',
     close: 'Fechar',
     youCanClaimXin: 'Poderá pegar {{amount}} em',
-    claimX: 'Pegar {{amount}}',
+    claimX: 'Pegar ', // {{amount}}
     loading: 'A carregar...',
     youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
     hour: 'hora',
