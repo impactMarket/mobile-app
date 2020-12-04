@@ -52,10 +52,11 @@ type Props = PropsFromRedux & IExploreScreenProps;
 
 interface IDonateState {
     openModalDonate: boolean;
+    modalConfirmSend: boolean;
+    modalError: boolean;
     donating: boolean;
     amountDonate: string;
     showCopiedToClipboard: boolean;
-    modalConfirmSend: boolean;
     rates: any;
     keyboardOpen: boolean;
     bottom: number;
@@ -69,10 +70,11 @@ class Donate extends Component<Props, IDonateState> {
         super(props);
         this.state = {
             openModalDonate: false,
+            modalConfirmSend: false,
+            modalError: false,
             donating: false,
             amountDonate: '',
             showCopiedToClipboard: false,
-            modalConfirmSend: false,
             rates: this.props.app.exchangeRates,
             keyboardOpen: false,
             bottom: 0,
@@ -116,34 +118,17 @@ class Donate extends Component<Props, IDonateState> {
                 .dividedBy(10 ** config.cUSDDecimals)
                 .toNumber()
         ) {
-            Alert.alert(
-                i18n.t('donate'),
-                i18n.t('donationBiggerThanBalance'),
-                [{ text: i18n.t('close') }],
-                { cancelable: true }
-            );
-            return;
+            // Alert.alert(
+            //     i18n.t('donate'),
+            //     i18n.t('donationBiggerThanBalance'),
+            //     [{ text: i18n.t('close') }],
+            //     { cancelable: true }
+            // );
+            // return;
+            this.setState({ openModalDonate: false, modalError: true });
+        } else {
+            this.setState({ openModalDonate: false, modalConfirmSend: true });
         }
-        const { community, user } = this.props;
-        Alert.alert(
-            i18n.t('donate'),
-            i18n.t('donateConfirmMessage', {
-                symbol: getCurrencySymbol(user.user.currency),
-                amount: amountDonate.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-                amountInDollars: amountInDollars.toFixed(2),
-                to: community.name,
-            }),
-            [
-                {
-                    text: i18n.t('donate'),
-                    onPress: () => this.donateWithCeloWallet(),
-                },
-                {
-                    text: i18n.t('cancel'),
-                },
-            ],
-            { cancelable: true }
-        );
     };
 
     donateWithCeloWallet = async () => {
@@ -218,6 +203,8 @@ class Donate extends Component<Props, IDonateState> {
     render() {
         const {
             openModalDonate,
+            modalConfirmSend,
+            modalError,
             donating,
             amountDonate,
             showCopiedToClipboard,
@@ -318,7 +305,10 @@ class Donate extends Component<Props, IDonateState> {
                     <Modal
                         visible={openModalDonate}
                         onDismiss={() =>
-                            this.setState({ openModalDonate: false })
+                            this.setState({
+                                openModalDonate: false,
+                                amountDonate: '',
+                            })
                         }
                     >
                         <Card
@@ -359,6 +349,7 @@ class Donate extends Component<Props, IDonateState> {
                                             onPress={() =>
                                                 this.setState({
                                                     openModalDonate: false,
+                                                    amountDonate: '',
                                                 })
                                             }
                                         >
@@ -387,7 +378,9 @@ class Donate extends Component<Props, IDonateState> {
                                                 textAlignVertical: 'center',
                                             }}
                                         >
-                                            {getCurrencySymbol(this.props.user.user.currency)}
+                                            {getCurrencySymbol(
+                                                this.props.user.user.currency
+                                            )}
                                         </Text>
                                         <TextInput
                                             keyboardType="numeric"
@@ -543,6 +536,211 @@ class Donate extends Component<Props, IDonateState> {
                                     {i18n.t('copyContractAddress')}
                                 </Button>
                                 {donateWithValoraButton}
+                            </Card.Content>
+                        </Card>
+                    </Modal>
+                    <Modal
+                        visible={modalConfirmSend}
+                        onDismiss={() =>
+                            this.setState({
+                                modalConfirmSend: false,
+                                amountDonate: '',
+                            })
+                        }
+                    >
+                        <Card
+                            style={{
+                                marginHorizontal: 20,
+                                ...cardModalStyle,
+                            }}
+                        >
+                            <Card.Content>
+                                <View
+                                    style={{
+                                        height: 24,
+                                        marginTop: 4,
+                                        marginBottom: 19,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Headline
+                                            style={{
+                                                fontFamily: 'Gelion-Bold',
+                                                fontSize: 24,
+                                                lineHeight: 24,
+                                            }}
+                                        >
+                                            {i18n.t('donateSymbol', {
+                                                symbol: user.user.currency,
+                                            })}
+                                        </Headline>
+                                        <Pressable
+                                            hitSlop={15}
+                                            onPress={() =>
+                                                this.setState({
+                                                    openModalDonate: false,
+                                                    amountDonate: '',
+                                                })
+                                            }
+                                        >
+                                            <CloseSvg />
+                                        </Pressable>
+                                    </View>
+                                </View>
+                                <Paragraph
+                                    style={{
+                                        marginHorizontal: 44,
+                                        marginVertical: 50,
+                                        fontSize: 19,
+                                        lineHeight: 23,
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {i18n.t('donateConfirmMessage', {
+                                        symbol: getCurrencySymbol(
+                                            user.user.currency
+                                        ),
+                                        amount: amountDonate.replace(
+                                            /\B(?=(\d{3})+(?!\d))/g,
+                                            ','
+                                        ),
+                                        amountInDollars: amountInDollars.toFixed(
+                                            2
+                                        ),
+                                        to: community.name,
+                                    })}
+                                </Paragraph>
+                                <View
+                                    style={{
+                                        height: 42 /** TODO: this is currently th buttons height */,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flex: 2,
+                                            flexDirection: 'row',
+                                        }}
+                                    >
+                                        <Button
+                                            modeType="gray"
+                                            bold={true}
+                                            style={{
+                                                marginRight: 14.48,
+                                                flex: 1,
+                                            }}
+                                            labelStyle={styles.donateLabel}
+                                            onPress={() =>
+                                                this.setState({
+                                                    openModalDonate: true,
+                                                    modalConfirmSend: false,
+                                                })
+                                            }
+                                        >
+                                            {i18n.t('backWithSymbol')}
+                                        </Button>
+                                        <Button
+                                            modeType="default"
+                                            bold={true}
+                                            style={{ flex: 1 }}
+                                            labelStyle={styles.donateLabel}
+                                            onPress={() =>
+                                                this.donateWithCeloWallet()
+                                            }
+                                        >
+                                            {i18n.t('donate')}
+                                        </Button>
+                                    </View>
+                                </View>
+                            </Card.Content>
+                        </Card>
+                    </Modal>
+                    <Modal
+                        visible={modalError}
+                        onDismiss={() =>
+                            this.setState({
+                                modalError: false,
+                                amountDonate: '',
+                            })
+                        }
+                    >
+                        <Card
+                            style={{
+                                marginHorizontal: 20,
+                                ...cardModalStyle,
+                            }}
+                        >
+                            <Card.Content>
+                                <View
+                                    style={{
+                                        height: 24,
+                                        marginTop: 4,
+                                        marginBottom: 19,
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Headline
+                                            style={{
+                                                fontFamily: 'Gelion-Bold',
+                                                fontSize: 24,
+                                                lineHeight: 24,
+                                            }}
+                                        >
+                                            {i18n.t('donateSymbol', {
+                                                symbol: user.user.currency,
+                                            })}
+                                        </Headline>
+                                        <Pressable
+                                            hitSlop={15}
+                                            onPress={() =>
+                                                this.setState({
+                                                    modalError: false,
+                                                    amountDonate: '',
+                                                })
+                                            }
+                                        >
+                                            <CloseSvg />
+                                        </Pressable>
+                                    </View>
+                                </View>
+                                <Paragraph
+                                    style={{
+                                        marginHorizontal: 44,
+                                        marginVertical: 50,
+                                        fontSize: 19,
+                                        lineHeight: 23,
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {i18n.t('donationBiggerThanBalance')}
+                                </Paragraph>
+                                <Button
+                                    modeType="gray"
+                                    bold={true}
+                                    style={{}}
+                                    labelStyle={styles.donateLabel}
+                                    onPress={() =>
+                                        this.setState({
+                                            openModalDonate: true,
+                                            modalError: false,
+                                        })
+                                    }
+                                >
+                                    {i18n.t('backWithSymbol')}
+                                </Button>
                             </Card.Content>
                         </Card>
                     </Modal>

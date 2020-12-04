@@ -215,4 +215,5 @@ export default {
     transactionPossiblyNotAllowed: 'Possivelmente a transação não é permitida.',
     networkConnectionLost: 'A ligação é internet foi perdida.',
     networkIssuesRPC: 'Possivelmente erros de ligação ao serviço RPC.',
+    backWithSymbol: '< Voltar'
 };

@@ -218,4 +218,5 @@ export default {
     transactionPossiblyNotAllowed: 'Transaction possibly not allowed.',
     networkConnectionLost: 'The network connection was lost.',
     networkIssuesRPC: 'Possible network issues related to RPC.',
+    backWithSymbol: '< Back'
 };
