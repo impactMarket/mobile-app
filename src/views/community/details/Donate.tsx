@@ -18,6 +18,7 @@ import {
     LayoutAnimation,
     Platform,
     Pressable,
+    Text,
 } from 'react-native';
 import {
     Paragraph,
@@ -374,25 +375,40 @@ class Donate extends Component<Props, IDonateState> {
                                         padding: 13,
                                     }}
                                 >
-                                    <TextInput
-                                        keyboardType="numeric"
-                                        maxLength={9}
-                                        autoFocus={true}
-                                        style={{
-                                            fontFamily: 'Gelion-Regular',
-                                            fontSize: 50,
-                                            lineHeight: 60,
-                                            height: 60,
-                                            textAlign: 'center',
-                                            color: iptcColors.almostBlack,
-                                        }}
-                                        value={amountDonate}
-                                        onChangeText={(text) =>
-                                            this.setState({
-                                                amountDonate: text,
-                                            })
-                                        }
-                                    />
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Gelion-Regular',
+                                                fontSize: 50,
+                                                lineHeight: 60,
+                                                height: 60,
+                                                textAlign: 'center',
+                                                color: iptcColors.almostBlack,
+                                                textAlignVertical: 'center',
+                                            }}
+                                        >
+                                            {getCurrencySymbol(this.props.user.user.currency)}
+                                        </Text>
+                                        <TextInput
+                                            keyboardType="numeric"
+                                            maxLength={9}
+                                            autoFocus={true}
+                                            style={{
+                                                fontFamily: 'Gelion-Regular',
+                                                fontSize: 50,
+                                                lineHeight: 60,
+                                                height: 60,
+                                                textAlign: 'center',
+                                                color: iptcColors.almostBlack,
+                                            }}
+                                            value={amountDonate}
+                                            onChangeText={(text) =>
+                                                this.setState({
+                                                    amountDonate: text,
+                                                })
+                                            }
+                                        />
+                                    </View>
                                     <View style={{ height: 19 }}>
                                         <Paragraph
                                             style={{
