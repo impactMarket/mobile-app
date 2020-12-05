@@ -1,3 +1,5 @@
+import Constants from 'expo-constants';
+
 const commonConfig = {
     /**
      * cUSD decimals to use in ui format
@@ -46,6 +48,33 @@ const ENV = {
          */
         testnet: true,
     },
+    staging: {
+        /**
+         * Block explorer base URL. Contract address is added at the end.
+         */
+        blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
+
+        /**
+         * The default API URL
+         */
+        baseApiUrl: 'https://impactmarket-api-staging.herokuapp.com/api',
+
+        /**
+         * JSON RPC url
+         */
+        jsonRpc: 'https://alfajores-forno.celo-testnet.org',
+
+        /**
+         * Contract Address to use in dev
+         */
+        impactMarketContractAddress:
+            '0x4ebE844858c756498902B6517b20d50e28F8Dd62',
+
+        /**
+         * Is it in testnet?
+         */
+        testnet: true,
+    },
     production: {
         /**
          * Block explorer base URL. Contract address is added at the end.
@@ -82,6 +111,8 @@ function getEnvVars() {
         // thanks https://stackoverflow.com/a/57468503/3348623
         // do dev stuff 🤘
         return { ...commonConfig, ...ENV.dev };
+    } else if (Constants.appOwnership === 'expo') {
+        return { ...commonConfig, ...ENV.staging };
     }
     return { ...commonConfig, ...ENV.production };
 }
