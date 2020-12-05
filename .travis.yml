@@ -10,7 +10,7 @@ env:
   global:
     - EXPO_SDK_VERSION="39.0.3"
     - TURTLE_VERSION="0.19.1"
-    - NODE_VERSION="12.18.3"
+    - NODE_VERSION="14.15.1"
     - YARN_VERSION="1.22.5"
 
 jobs:
