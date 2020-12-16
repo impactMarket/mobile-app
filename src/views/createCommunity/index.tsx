@@ -5,16 +5,11 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { validateEmail, updateCommunityInfo } from 'helpers/index';
 import {
-    humanifyNumber,
     formatInputAmountToTransfer,
     amountToCurrency,
 } from 'helpers/currency';
 import {
-    ICommunityInfo,
-    IUserState,
-    IStoreCombinedState,
-    IStoreCombinedActionsTypes,
-    ICommunity,
+    IRootState,
 } from 'helpers/types';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
@@ -37,7 +32,7 @@ import {
     IconButton,
     Text,
 } from 'react-native-paper';
-import { useDispatch, useStore } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -47,29 +42,23 @@ import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
 import Card from 'components/core/Card';
 import BackSvg from 'components/svg/header/BackSvg';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
-
-interface ICreateCommunityScreen {
-    route: {
-        params: {
-            community: ICommunityInfo;
-            user: IUserState;
-        };
-    };
-}
+import { CommunityCreationAttributes } from 'types/endpoints';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
-function CreateCommunityScreen(props: ICreateCommunityScreen) {
+function CreateCommunityScreen() {
     const dispatch = useDispatch();
-    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
-    const { user, network, app } = store.getState();
+    const userAddress = useSelector((state: IRootState) => state.user.celoInfo.address);
+    const userCurrency = useSelector((state: IRootState) => state.user.user.currency);
+    const userLanguage = useSelector((state: IRootState) => state.user.user.language);
+    const exchangeRates = useSelector((state: IRootState) => state.app.exchangeRates);
+    const kit = useSelector((state: IRootState) => state.app.kit);
     const navigation = useNavigation();
 
     const [availableCurrencies, setAvailableCurrencies] = useState<
         { name: string; symbol: string }[]
     >([]);
-    const [editing, setEditing] = useState(false);
     const [sending, setSending] = useState(false);
-    const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
+    const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     //
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
     const [isDialogFrequencyOpen, setIsDialogFrequencyOpen] = useState(false);
@@ -89,7 +78,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
     ] = useState(true);
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
-    const [currency, setCurrency] = useState<string>(user.user.currency);
+    const [currency, setCurrency] = useState<string>(userCurrency);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [city, setCity] = useState('');
@@ -129,52 +118,8 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
     ]);
 
     useEffect(() => {
-        if (props.route.params !== undefined) {
-            const community = props.route.params.community as ICommunityInfo;
-            if (community !== undefined) {
-                setName(community.name);
-                setDescription(community.description);
-                setCity(community.city);
-                setCountry(community.country);
-                setEmail(community.email);
-                setVisivility(community.visibility);
-                setGpsLocation({
-                    coords: {
-                        latitude: community.gps.latitude,
-                        longitude: community.gps.longitude,
-                    },
-                } as Location.LocationData);
-                // cover image
-                setClaimAmount(
-                    humanifyNumber(
-                        community.contractParams.claimAmount
-                    ).toString()
-                );
-                setBaseInterval(
-                    community.contractParams.baseInterval.toString()
-                );
-                setIncrementalInterval(
-                    (community.contractParams.incrementInterval / 60).toString()
-                );
-                setMaxClaim(
-                    humanifyNumber(community.contractParams.maxClaim).toString()
-                );
-                // currency
-                setCoverImage(community.coverImage);
-
-                setIsNameValid(true);
-                setIsDescriptionValid(true);
-                setIsCityValid(true);
-                setIsCountryValid(true);
-                setIsClaimAmountValid(true);
-                setIsIncrementalIntervalValid(true);
-                setIsMaxClaimValid(true);
-
-                setEditing(true);
-            }
-        }
         const getAvailableCurrencies = async () => {
-            const rates = app.exchangeRates;
+            const rates = exchangeRates;
             const currencies: { name: string; symbol: string }[] = [];
             for (const currency in rates) {
                 currencies.push({
@@ -189,13 +134,13 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
 
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        const CommunityContract = new app.kit.web3.eth.Contract(
+        const CommunityContract = new kit.web3.eth.Contract(
             CommunityContractABI as any
         );
         const txObject = await CommunityContract.deploy({
             data: CommunityBytecode.bytecode,
             arguments: [
-                user.celoInfo.address,
+                userAddress,
                 new BigNumber(formatInputAmountToTransfer(claimAmount))
                     .multipliedBy(decimals)
                     .toString(),
@@ -206,17 +151,17 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                 (parseInt(incrementInterval, 10) * 60).toString(),
                 '0x0000000000000000000000000000000000000000',
                 config.cUSDContract,
-                user.celoInfo.address,
+                userAddress,
             ],
         });
         // exception is handled outside
         // receipt as undefined is handled outside
         const receipt = await celoWalletRequest(
-            user.celoInfo.address,
+            userAddress,
             '0x0000000000000000000000000000000000000000',
             txObject,
             'createcommunity',
-            app.kit,
+            kit,
             false
         );
         return receipt;
@@ -307,223 +252,89 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
             );
             return;
         }
+
+        //
         setSending(true);
+
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        if (editing) {
-            const community = props.route.params.community as ICommunityInfo;
-            // const {
-            //     _claimAmount,
-            //     _baseInterval,
-            //     _maxClaim,
-            //     _incrementInterval,
-            // } = props.route.params.community.contractParams;
-            try {
-                // if (
-                //     !new BigNumber(claimAmount)
-                //         .multipliedBy(decimals)
-                //         .eq(_claimAmount) ||
-                //     baseInterval !== _baseInterval ||
-                //     parseInt(incrementInterval, 10) * 3600 !==
-                //         parseInt(_incrementInterval, 10) ||
-                //     !new BigNumber(maxClaim)
-                //         .multipliedBy(decimals)
-                //         .eq(_maxClaim)
-                // ) {
-                //     // if one of the fields is changed, send contract edit!
-                //     await celoWalletRequest(
-                //         user.celoInfo.address,
-                //         community.contractAddress,
-                //         await props.network.contracts.communityContract.methods.edit(
-                //             new BigNumber(claimAmount)
-                //                 .multipliedBy(decimals)
-                //                 .toString(),
-                //             new BigNumber(maxClaim)
-                //                 .multipliedBy(decimals)
-                //                 .toString(),
-                //             baseInterval,
-                //             (parseInt(incrementInterval, 10) * 60).toString()
-                //         ),
-                //         'editcommunity',
-                //         app.kit
-                //     );
-                // }
-                const success = await Api.editCommunity(
-                    community.publicId,
-                    user.celoInfo.address,
-                    name,
-                    description,
-                    city,
-                    country,
-                    {
-                        latitude: gpsLocation!.coords.latitude,
-                        longitude: gpsLocation!.coords.longitude,
-                    },
-                    email,
-                    visibility,
-                    coverImage
-                );
-                if (!success) {
-                    Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('errorCreatingCommunity'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                    return;
-                } else {
-                    const previousCommunity = network.community;
-                    const unsubscribe = store.subscribe(() => {
-                        const newCommunity = network.community;
-                        if (previousCommunity !== newCommunity) {
-                            unsubscribe();
-                            navigation.goBack();
-                            Alert.alert(
-                                i18n.t('success'),
-                                i18n.t('communityUpdated'),
-                                [{ text: 'OK' }],
-                                { cancelable: false }
-                            );
-                        }
-                    });
-                    await updateCommunityInfo(community.publicId, dispatch);
-                }
-            } catch (e) {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorUpdatingCommunity'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-            } finally {
-                setSending(false);
-            }
-        } else {
-            let uploadResponse,
-                uploadImagePath,
-                txReceipt = null,
-                communityAddress = null;
-            try {
-                if (visibility === 'private') {
-                    txReceipt = await deployPrivateCommunity();
-                    if (txReceipt === undefined) {
-                        return;
-                    }
-                    communityAddress = txReceipt.contractAddress;
-                }
-                uploadResponse = await Api.uploadImageAsync(coverImage);
-                if (uploadResponse?.status === 200) {
-                    uploadImagePath = uploadResponse.data.location;
-                }
-            } catch (e) {
-                // log({ uploadResponse });
-                // log({ uploadImagePath });
-                // log({ e });
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorCreatingCommunity'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                setSending(false);
-                return;
-            }
-            let apiRequestResult: ICommunity | undefined = undefined;
+        let uploadResponse;
+        let uploadImagePath;
+        let txReceipt = null;
+        let communityAddress = null;
+
+        try {
+            const contractParams = {
+                claimAmount: new BigNumber(
+                    formatInputAmountToTransfer(claimAmount)
+                )
+                    .multipliedBy(decimals)
+                    .toString(),
+                maxClaim: new BigNumber(formatInputAmountToTransfer(maxClaim))
+                    .multipliedBy(decimals)
+                    .toString(),
+                baseInterval: parseInt(baseInterval),
+                incrementInterval: parseInt(incrementInterval, 10) * 60,
+            };
+            let privateParamsIfAvailable = {};
             if (visibility === 'private') {
-                apiRequestResult = await Api.createPrivateCommunity(
-                    user.celoInfo.address,
-                    name,
-                    communityAddress!,
-                    description,
-                    user.user.language,
-                    currency,
-                    city,
-                    country,
-                    {
-                        latitude:
-                            gpsLocation!.coords.latitude +
-                            config.locationErrorMargin,
-                        longitude:
-                            gpsLocation!.coords.longitude +
-                            config.locationErrorMargin,
-                    },
-                    email,
-                    uploadImagePath,
+                txReceipt = await deployPrivateCommunity();
+                if (txReceipt === undefined) {
+                    return;
+                }
+                communityAddress = txReceipt.contractAddress;
+                privateParamsIfAvailable = {
+                    contractAddress: communityAddress,
                     txReceipt,
-                    {
-                        claimAmount: new BigNumber(
-                            formatInputAmountToTransfer(claimAmount)
-                        )
-                            .multipliedBy(decimals)
-                            .toString(),
-                        maxClaim: new BigNumber(
-                            formatInputAmountToTransfer(maxClaim)
-                        )
-                            .multipliedBy(decimals)
-                            .toString(),
-                        baseInterval: parseInt(baseInterval),
-                        incrementInterval: parseInt(incrementInterval, 10) * 60,
-                    }
-                );
-            } else {
-                apiRequestResult = await Api.requestCreatePublicCommunity(
-                    user.celoInfo.address,
-                    name,
-                    description,
-                    user.user.language,
-                    currency,
-                    city,
-                    country,
-                    {
-                        latitude:
-                            gpsLocation!.coords.latitude +
-                            config.locationErrorMargin,
-                        longitude:
-                            gpsLocation!.coords.longitude +
-                            config.locationErrorMargin,
-                    },
-                    email,
-                    uploadImagePath,
-                    {
-                        claimAmount: new BigNumber(
-                            formatInputAmountToTransfer(claimAmount)
-                        )
-                            .multipliedBy(decimals)
-                            .toString(),
-                        maxClaim: new BigNumber(
-                            formatInputAmountToTransfer(maxClaim)
-                        )
-                            .multipliedBy(decimals)
-                            .toString(),
-                        baseInterval: parseInt(baseInterval),
-                        incrementInterval: parseInt(incrementInterval, 10) * 60,
-                    }
-                );
+                };
             }
+            uploadResponse = await Api.uploadImageAsync(coverImage);
+            if (uploadResponse?.status === 200) {
+                uploadImagePath = uploadResponse.data.location;
+            } else {
+                throw new Error(uploadResponse?.statusText);
+            }
+            const communityDetails: CommunityCreationAttributes = {
+                requestByAddress: userAddress,
+                name,
+                description,
+                language: userLanguage,
+                currency,
+                city,
+                country,
+                gps: {
+                    latitude:
+                        gpsLocation!.coords.latitude +
+                        config.locationErrorMargin,
+                    longitude:
+                        gpsLocation!.coords.longitude +
+                        config.locationErrorMargin,
+                },
+                email,
+                coverImage: uploadImagePath,
+                contractParams,
+                ...privateParamsIfAvailable,
+            };
+
+            const apiRequestResult = await Api.community.create(communityDetails);
 
             if (apiRequestResult) {
-                const unsubscribe = store.subscribe(() => {
-                    if (user.community.isManager) {
-                        unsubscribe();
-                        setSending(false);
-                        navigation.goBack();
-                        Alert.alert(
-                            i18n.t('success'),
-                            visibility === 'private'
-                                ? i18n.t('youCreatedPrivateCommunity')
-                                : i18n.t('requestNewCommunityPlaced'),
-                            [{ text: 'OK' }],
-                            { cancelable: false }
-                        );
-                    }
-                });
-                if (visibility === 'private') {
-                    await updateCommunityInfo(
-                        apiRequestResult.publicId,
-                        dispatch
-                    );
-                } else {
-                    dispatch(setUserIsCommunityManager(true));
-                }
+                // const unsubscribe = store.subscribe(() => {
+                //     if (user.community.isManager) {
+                //         unsubscribe();
+                //         setSending(false);
+                //         navigation.goBack();
+                //         Alert.alert(
+                //             i18n.t('success'),
+                //             visibility === 'private'
+                //                 ? i18n.t('youCreatedPrivateCommunity')
+                //                 : i18n.t('requestNewCommunityPlaced'),
+                //             [{ text: 'OK' }],
+                //             { cancelable: false }
+                //         );
+                //     }
+                // });
+                await updateCommunityInfo(apiRequestResult.publicId, dispatch);
+                dispatch(setUserIsCommunityManager(true));
             } else {
                 Alert.alert(
                     i18n.t('failure'),
@@ -533,28 +344,48 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                 );
                 setSending(false);
             }
+        } catch (e) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('errorCreatingCommunity'),
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
+            setSending(false);
+            Api.uploadError(userAddress, 'create_community', e);
+            return;
         }
     };
 
     const enableGPSLocation = async () => {
         setIsEnablingGPS(true);
-        const { status } = await Location.requestPermissionsAsync();
-        setIsEnablingGPS(false);
-        if (status !== 'granted') {
+        try {
+            const { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorGettingGPSLocation'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                return;
+            }
+
+            const loc = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Low,
+            });
+            setGpsLocation(loc);
+            setIsEnabledGPS(true);
+        } catch (e) {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('errorGettingGPSLocation'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
-            return;
+        } finally {
+            setIsEnablingGPS(false);
         }
-
-        const loc = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.Low,
-        });
-        setGpsLocation(loc);
-        setIsEnabledGPS(true);
     };
 
     const pickImage = async () => {
@@ -707,7 +538,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                         </HelperText>
                                     )}
                                 </View>
-                                {gpsLocation === undefined && (
+                                {gpsLocation === undefined ? (
                                     <View>
                                         <Button
                                             mode="outlined"
@@ -726,8 +557,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                             </HelperText>
                                         )}
                                     </View>
-                                )}
-                                {gpsLocation !== undefined && (
+                                ) : (
                                     <Button
                                         icon="check"
                                         mode="outlined"
@@ -812,7 +642,6 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             <View style={{ margin: 10 }}>
                                 <TextInput
                                     mode="flat"
-                                    disabled={editing}
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('claimAmount')}
@@ -861,7 +690,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                                 )
                                             ),
                                             currency,
-                                            app.exchangeRates
+                                            exchangeRates
                                         ),
                                     })}
                                 </Text>
@@ -872,7 +701,6 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             <View style={{ margin: 10 }}>
                                 <TextInput
                                     mode="flat"
-                                    disabled={editing}
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('totalClaimPerBeneficiary')}
@@ -919,7 +747,7 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                                                 )
                                             ),
                                             currency,
-                                            app.exchangeRates
+                                            exchangeRates
                                         ),
                                     })}
                                 </Text>
@@ -938,7 +766,6 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                         >
                             <Button
                                 mode="contained"
-                                disabled={editing}
                                 style={{
                                     width: '80%',
                                     borderRadius: 6,
@@ -964,7 +791,6 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                             <View style={{ margin: 10 }}>
                                 <TextInput
                                     mode="flat"
-                                    disabled={editing}
                                     underlineColor="transparent"
                                     style={styles.inputTextField}
                                     label={i18n.t('timeIncrementAfterClaim')}
@@ -1014,7 +840,6 @@ function CreateCommunityScreen(props: ICreateCommunityScreen) {
                         >
                             <Button
                                 mode="contained"
-                                disabled={editing}
                                 style={{
                                     width: '80%',
                                     borderRadius: 6,
