@@ -5,7 +5,6 @@ import moment from 'moment';
 import { Store, CombinedState, Dispatch } from 'redux';
 import Api from 'services/api';
 
-import config from '../../config';
 import CommunityContractABI from '../contracts/CommunityABI.json';
 import {
     setCommunityContract,
@@ -18,7 +17,6 @@ import {
     AuthActionTypes,
     IAppState,
     IAuthState,
-    ICommunityInfo,
     INetworkState,
     IUserState,
     IUserWelcome,
@@ -26,6 +24,7 @@ import {
     UserActionTypes,
 } from './types';
 import * as Linking from 'expo-linking';
+import { ICommunity, ICommunityLightDetails } from 'types/endpoints';
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
@@ -80,19 +79,18 @@ export async function getUserBalance(kit: ContractKit, address: string) {
     return new BigNumber(cUSDBalanceBig.toString());
 }
 
-export function claimFrequencyToText(frequency: BigNumber | string): string {
-    const f = new BigNumber(frequency);
-    if (f.eq(86400)) return i18n.t('daily');
-    if (f.eq(604800)) return i18n.t('weekly');
+export function claimFrequencyToText(frequency: number): string {
+    if (frequency === 86400) return i18n.t('daily');
+    if (frequency === 604800) return i18n.t('weekly');
     return 'unknown';
 }
 
 export function calculateCommunityProgress(
     toCalculte: string /*'raised' | 'claimed'*/,
-    community: ICommunityInfo
+    community: ICommunity | ICommunityLightDetails
 ): number {
-    const m = new BigNumber(community.contractParams.maxClaim).multipliedBy(
-        community.beneficiaries.added.length // + community.beneficiaries.removed.length
+    const m = new BigNumber(community.contract.maxClaim).multipliedBy(
+        community.state.beneficiaries
     );
     const result = new BigNumber(
         toCalculte === 'raised'

@@ -5,13 +5,13 @@ import {
     IUserWelcome,
     IUserWelcomeAuth,
     ICommunity,
-    ICommunityContractParams,
 } from 'helpers/types';
 import { DevSettings } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
 import config from '../../config';
+import { CommunityCreationAttributes, ICommunityLightDetails } from 'types/endpoints';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -66,74 +66,23 @@ async function postRequest<T>(
     return response;
 }
 
+class ApiRouteCommunity {
+    static async list() {
+        const result = await getRequest<ICommunityLightDetails[]>(
+            '/community/list'
+        );
+        return result ? result : [];
+    }
+
+    static async create(details: CommunityCreationAttributes): Promise<ICommunity | undefined> {
+        return await postRequest<ICommunity>('/community/create', details);
+    }
+}
+
 class Api {
+    public static community = ApiRouteCommunity;
     // community
 
-    static async createPrivateCommunity(
-        requestByAddress: string,
-        name: string,
-        contractAddress: string,
-        description: string,
-        language: string,
-        currency: string,
-        city: string,
-        country: string,
-        gps: {
-            latitude: number;
-            longitude: number;
-        },
-        email: string,
-        coverImage: string,
-        txReceipt: any,
-        contractParams: ICommunityContractParams
-    ): Promise<ICommunity | undefined> {
-        return await postRequest<ICommunity>('/community/create', {
-            requestByAddress,
-            name,
-            contractAddress,
-            description,
-            language,
-            currency,
-            city,
-            country,
-            gps,
-            email,
-            coverImage,
-            txReceipt,
-            contractParams,
-        });
-    }
-
-    static async requestCreatePublicCommunity(
-        requestByAddress: string,
-        name: string,
-        description: string,
-        language: string,
-        currency: string,
-        city: string,
-        country: string,
-        gps: {
-            latitude: number;
-            longitude: number;
-        },
-        email: string,
-        coverImage: string,
-        contractParams: ICommunityContractParams
-    ): Promise<ICommunity | undefined> {
-        return await postRequest<ICommunity>('/community/request', {
-            requestByAddress,
-            name,
-            description,
-            language,
-            currency,
-            city,
-            country,
-            gps,
-            email,
-            coverImage,
-            contractParams,
-        });
-    }
 
     static async editCommunity(
         publicId: string,
@@ -196,13 +145,6 @@ class Api {
             Api.uploadError('', 'upload_image_async', error);
         }
         return response;
-    }
-
-    static async getAllValidCommunities(): Promise<ICommunityInfo[]> {
-        const result = await getRequest<ICommunityInfo[]>(
-            '/community/all/valid'
-        );
-        return result ? result : [];
     }
 
     static async getCommunityByPublicId(

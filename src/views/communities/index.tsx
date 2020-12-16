@@ -23,6 +23,7 @@ import Api from 'services/api';
 import Card from 'components/core/Card';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import { Screens } from 'helpers/constants';
+import { ICommunityLightDetails } from 'types/endpoints';
 
 interface ICommunitiesScreenProps {
     navigation: any;
@@ -40,18 +41,18 @@ type Props = PropsFromRedux & ICommunitiesScreenProps;
 function CommunitiesScreen(props: Props) {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
-    const [communities, setCommunities] = useState<ICommunityInfo[]>([]);
+    const [communities, setCommunities] = useState<ICommunityLightDetails[]>([]);
 
     useEffect(() => {
-        Api.getAllValidCommunities().then(setCommunities);
+        Api.community.list().then(setCommunities);
     }, []);
 
     const onRefresh = () => {
-        Api.getAllValidCommunities().then(setCommunities);
+        Api.community.list().then(setCommunities);
         setRefreshing(false);
     };
 
-    const communityCard = (community: ICommunityInfo) => (
+    const communityCard = (community: ICommunityLightDetails) => (
         <Card
             key={community.name}
             // elevation={8}
@@ -96,7 +97,7 @@ function CommunitiesScreen(props: Props) {
                     >
                         <View style={{ flex: 1 }}>
                             <Text style={styles.cellHeader}>
-                                {community.beneficiaries.added.length}
+                                {community.state.beneficiaries}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {i18n.t('beneficiaries')}
@@ -106,18 +107,18 @@ function CommunitiesScreen(props: Props) {
                             <Text style={styles.cellHeader}>
                                 $
                                 {humanifyCurrencyAmount(
-                                    community.contractParams.claimAmount
+                                    community.contract.claimAmount
                                 )}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {claimFrequencyToText(
-                                    community.contractParams.baseInterval.toString()
+                                    community.contract.baseInterval
                                 )}
                             </Text>
                         </View>
                         <View style={{ flex: 1 }}>
                             <Text style={styles.cellHeader}>
-                                {community.backers.length}
+                                {community.state.backers}
                             </Text>
                             <Text style={styles.cellDescription}>
                                 {i18n.t('backers')}
