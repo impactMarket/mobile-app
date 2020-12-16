@@ -183,7 +183,7 @@ function CommunityManagerScreen() {
                     onDismiss={() => setOpenModalMore(false)}
                 >
                     <Dialog.Content>
-                        <Button
+                        {/* <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
                             onPress={() => {
@@ -194,7 +194,7 @@ function CommunityManagerScreen() {
                             }}
                         >
                             {i18n.t('editCommunityDetails')}
-                        </Button>
+                        </Button> */}
                         <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
