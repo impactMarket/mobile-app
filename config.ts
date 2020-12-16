@@ -65,10 +65,9 @@ const ENV = {
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
 
         /**
-         * Contract Address to use in dev
+         * cUSD contract address
          */
-        impactMarketContractAddress:
-            '0x4ebE844858c756498902B6517b20d50e28F8Dd62',
+        cUSDContract: '0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1',
 
         /**
          * Is it in testnet?
