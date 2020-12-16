@@ -5,12 +5,6 @@ import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
 import { makeDeeplinkUrl } from 'helpers/index';
 import { iptcColors } from 'styles/index';
-import { setPushNotificationsToken } from 'helpers/redux/actions/ReduxActions';
-import {
-    STORAGE_USER_ADDRESS,
-    STORAGE_USER_PHONE_NUMBER,
-    STORAGE_USER_AUTH_TOKEN,
-} from 'helpers/types';
 import { welcomeUser } from 'helpers/index';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Alert } from 'react-native';
@@ -26,8 +20,9 @@ import config from '../../../../config';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Button from 'components/core/Button';
-import { Screens } from 'helpers/constants';
+import { Screens, STORAGE_USER_ADDRESS, STORAGE_USER_AUTH_TOKEN, STORAGE_USER_PHONE_NUMBER } from 'helpers/constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 
 function Auth() {
     const insets = useSafeAreaInsets();
@@ -78,7 +73,7 @@ function Auth() {
             language = 'en';
         }
 
-        const user = await Api.userAuth(
+        const user = await Api.user.auth(
             userAddress,
             language,
             pushNotificationToken

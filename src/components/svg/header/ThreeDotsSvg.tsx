@@ -7,13 +7,13 @@ import Card from 'components/core/Card';
 import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
 import i18n from 'assets/i18n';
-import { IRootState } from 'helpers/types';
 import { useSelector } from 'react-redux';
+import { IRootState } from 'helpers/types/state';
 
 function ThreeDotsSvg(props: SvgProps) {
     const navigation = useNavigation();
     const community = useSelector(
-        (state: IRootState) => state.network.community
+        (state: IRootState) => state.user.community.metadata
     );
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
 

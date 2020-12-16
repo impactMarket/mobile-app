@@ -1,6 +1,6 @@
 import { NavigationState, NavigationProp } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import { IRootState } from 'helpers/types';
+import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
@@ -10,8 +10,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import Card from './core/Card';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user } = state;
+    return { user };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -122,7 +122,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                             </Headline>
                             <View style={styles.qrView}>
                                 <SvgQRCode
-                                    value={this.props.user.celoInfo.address}
+                                    value={this.props.user.wallet.address}
                                     size={200}
                                 />
                             </View>

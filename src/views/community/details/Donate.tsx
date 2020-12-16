@@ -6,7 +6,6 @@ import {
     getCurrencySymbol,
 } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { ICommunityInfo, IRootState } from 'helpers/types';
 import React, { Component } from 'react';
 import {
     StyleSheet,
@@ -37,9 +36,11 @@ import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import Api from 'services/api';
 import CloseSvg from 'components/svg/CloseSvg';
+import { ICommunity } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 
 interface IExploreScreenProps {
-    community: ICommunityInfo;
+    community: ICommunity;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, app } = state;
@@ -111,10 +112,10 @@ class Donate extends Component<Props, IDonateState> {
         const { amountDonate } = this.state;
         const amountInDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
-            this.props.user.user.exchangeRate;
+            this.props.user.exchangeRate;
         if (
             amountInDollars >
-            new BigNumber(this.props.user.celoInfo.balance)
+            new BigNumber(this.props.user.wallet.balance)
                 .dividedBy(10 ** config.cUSDDecimals)
                 .toNumber()
         ) {
@@ -137,15 +138,15 @@ class Donate extends Component<Props, IDonateState> {
         const cUSDDecimals = await stableToken.decimals();
         const amountInDollars =
             parseFloat(formatInputAmountToTransfer(this.state.amountDonate)) /
-            this.props.user.user.exchangeRate;
+            this.props.user.exchangeRate;
         const txObject = stableToken.transfer(
-            this.props.community.contractAddress,
+            this.props.user.community.metadata.contractAddress!,
             new BigNumber(amountInDollars)
                 .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
                 .toString()
         ).txo;
         celoWalletRequest(
-            this.props.user.celoInfo.address,
+            this.props.user.wallet.address,
             stableToken.address,
             txObject,
             'donatetocommunity',
@@ -175,7 +176,7 @@ class Donate extends Component<Props, IDonateState> {
                 analytics('donate', { device: Device.brand, success: 'true' });
             })
             .catch((e) => {
-                Api.uploadError(this.props.user.celoInfo.address, 'donate', e);
+                Api.uploadError(this.props.user.wallet.address, 'donate', e);
                 analytics('donate', { device: Device.brand, success: 'false' });
                 Alert.alert(
                     i18n.t('failure'),
@@ -194,7 +195,7 @@ class Donate extends Component<Props, IDonateState> {
     };
 
     handleCopyAddressToClipboard = () => {
-        Clipboard.setString(this.props.community.contractAddress);
+        Clipboard.setString(this.props.user.community.metadata.contractAddress!);
         this.setState({ showCopiedToClipboard: true });
         setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);
         this.setState({ openModalDonate: false });
@@ -216,17 +217,17 @@ class Donate extends Component<Props, IDonateState> {
 
         const amountInDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
-            this.props.user.user.exchangeRate;
+            this.props.user.exchangeRate;
 
         const backForDays =
             amountInDollars /
-            new BigNumber(community.contractParams.claimAmount)
+            new BigNumber(community.contract.claimAmount)
                 .dividedBy(10 ** config.cUSDDecimals)
                 .toNumber() /
-            community.beneficiaries.added.length;
+            community.state.beneficiaries;
 
         const donateWithValoraButton =
-            user.celoInfo.address.length > 0 ? (
+            user.wallet.address.length > 0 ? (
                 <Button
                     modeType="default"
                     bold={true}
@@ -341,7 +342,7 @@ class Donate extends Component<Props, IDonateState> {
                                             }}
                                         >
                                             {i18n.t('donateSymbol', {
-                                                symbol: user.user.currency,
+                                                symbol: user.metadata.currency,
                                             })}
                                         </Headline>
                                         <Pressable
@@ -379,7 +380,7 @@ class Donate extends Component<Props, IDonateState> {
                                             }}
                                         >
                                             {getCurrencySymbol(
-                                                this.props.user.user.currency
+                                                this.props.user.metadata.currency
                                             )}
                                         </Text>
                                         <TextInput
@@ -450,7 +451,7 @@ class Donate extends Component<Props, IDonateState> {
                                             display:
                                                 amountDonate.length === 0 ||
                                                 new BigNumber(
-                                                    community.contractParams.claimAmount
+                                                    community.contract.claimAmount
                                                 )
                                                     .dividedBy(
                                                         10 **
@@ -464,7 +465,7 @@ class Donate extends Component<Props, IDonateState> {
                                         {i18n.t('amountShouldBe', {
                                             claimAmount: parseFloat(
                                                 new BigNumber(
-                                                    community.contractParams.claimAmount
+                                                    community.contract.claimAmount
                                                 )
                                                     .dividedBy(
                                                         10 **
@@ -485,7 +486,7 @@ class Donate extends Component<Props, IDonateState> {
                                             display:
                                                 amountDonate.length > 0 &&
                                                 new BigNumber(
-                                                    community.contractParams.claimAmount
+                                                    community.contract.claimAmount
                                                 )
                                                     .dividedBy(
                                                         10 **
@@ -498,13 +499,12 @@ class Donate extends Component<Props, IDonateState> {
                                     >
                                         {i18n.t('yourDonationWillBackFor', {
                                             backNBeneficiaries: Math.min(
-                                                community.beneficiaries.added
-                                                    .length,
+                                                community.state.beneficiaries,
                                                 amountDonate.length > 0
                                                     ? Math.floor(
                                                           amountInDollars /
                                                               new BigNumber(
-                                                                  community.contractParams.claimAmount
+                                                                  community.contract.claimAmount
                                                               )
                                                                   .dividedBy(
                                                                       10 **
@@ -578,7 +578,7 @@ class Donate extends Component<Props, IDonateState> {
                                             }}
                                         >
                                             {i18n.t('donateSymbol', {
-                                                symbol: user.user.currency,
+                                                symbol: user.metadata.currency,
                                             })}
                                         </Headline>
                                         <Pressable
@@ -605,7 +605,7 @@ class Donate extends Component<Props, IDonateState> {
                                 >
                                     {i18n.t('donateConfirmMessage', {
                                         symbol: getCurrencySymbol(
-                                            user.user.currency
+                                            user.metadata.currency
                                         ),
                                         amount: amountDonate.replace(
                                             /\B(?=(\d{3})+(?!\d))/g,
@@ -700,7 +700,7 @@ class Donate extends Component<Props, IDonateState> {
                                             }}
                                         >
                                             {i18n.t('donateSymbol', {
-                                                symbol: user.user.currency,
+                                                symbol: user.metadata.currency,
                                             })}
                                         </Headline>
                                         <Pressable

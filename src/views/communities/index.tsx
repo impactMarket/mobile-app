@@ -7,7 +7,6 @@ import {
 } from 'helpers/index';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { IRootState, ICommunityInfo, ITabBarIconProps } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import {
     StyleSheet,
@@ -23,15 +22,17 @@ import Api from 'services/api';
 import Card from 'components/core/Card';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import { Screens } from 'helpers/constants';
-import { ICommunityLightDetails } from 'types/endpoints';
+import { ICommunityLightDetails } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
+import { ITabBarIconProps } from 'helpers/types/common';
 
 interface ICommunitiesScreenProps {
     navigation: any;
     route: any;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user } = state;
+    return { user };
 };
 
 const connector = connect(mapStateToProps);

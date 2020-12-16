@@ -1,17 +1,17 @@
 import axios from 'axios';
-import {
-    ICommunityInfo,
-    STORAGE_USER_AUTH_TOKEN,
-    IUserWelcome,
-    IUserWelcomeAuth,
-    ICommunity,
-} from 'helpers/types';
 import { DevSettings } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
 import config from '../../config';
-import { CommunityCreationAttributes, ICommunityLightDetails } from 'types/endpoints';
+import {
+    CommunityCreationAttributes,
+    ICommunity,
+    ICommunityLightDetails,
+    IUserWelcome,
+    IUserWelcomeAuth,
+} from 'helpers/types/endpoints';
+import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -74,15 +74,46 @@ class ApiRouteCommunity {
         return result ? result : [];
     }
 
-    static async create(details: CommunityCreationAttributes): Promise<ICommunity | undefined> {
+    static async getByPublicId(
+        publicId: string
+    ): Promise<ICommunity | undefined> {
+        return await getRequest<ICommunity>('/community/publicid/' + publicId);
+    }
+
+    static async create(
+        details: CommunityCreationAttributes
+    ): Promise<ICommunity | undefined> {
         return await postRequest<ICommunity>('/community/create', details);
+    }
+}
+
+class ApiRouteUser {
+    static async welcome(address: string, token: string) {
+        return postRequest<IUserWelcome>(`/user/welcome`, {
+            authKey: process.env.EXPO_AUTH_KEY,
+            address,
+            token,
+        });
+    }
+
+    static async auth(
+        address: string,
+        language: string,
+        pushNotificationToken: string
+    ): Promise<IUserWelcomeAuth | undefined> {
+        return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
+            authKey: process.env.EXPO_AUTH_KEY,
+            address,
+            language,
+            pushNotificationToken,
+        });
     }
 }
 
 class Api {
     public static community = ApiRouteCommunity;
+    public static user = ApiRouteUser;
     // community
-
 
     static async editCommunity(
         publicId: string,
@@ -147,16 +178,19 @@ class Api {
         return response;
     }
 
-    static async getCommunityByPublicId(
-        publicId: string
-    ): Promise<ICommunityInfo | undefined> {
-        return await getRequest<ICommunityInfo>('/community/id/' + publicId);
-    }
+    // static async getCommunityByPublicId(
+    //     publicId: string
+    // ): Promise<ICommunityInfo | undefined> {
+    //     return await getRequest<ICommunityInfo>('/community/id/' + publicId);
+    // }
 
+    /**
+     * @deprecated
+     */
     static async getCommunityByContractAddress(
         communityContractAddress: string
-    ): Promise<ICommunityInfo | undefined> {
-        return getRequest<ICommunityInfo>(
+    ): Promise<any> {
+        return getRequest<any>(
             `/community/address/${communityContractAddress}`
         );
     }
@@ -172,26 +206,18 @@ class Api {
 
     // user
 
-    static async userAuth(
-        address: string,
-        language: string,
-        pushNotificationToken: string
-    ): Promise<IUserWelcomeAuth | undefined> {
-        return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
-            authKey: process.env.EXPO_AUTH_KEY,
-            address,
-            language,
-            pushNotificationToken,
-        });
-    }
-
-    static async welcome(address: string, token: string) {
-        return postRequest<IUserWelcome>(`/user/welcome`, {
-            authKey: process.env.EXPO_AUTH_KEY,
-            address,
-            token,
-        });
-    }
+    // static async userAuth(
+    //     address: string,
+    //     language: string,
+    //     pushNotificationToken: string
+    // ): Promise<IUserWelcomeAuth | undefined> {
+    //     return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
+    //         authKey: process.env.EXPO_AUTH_KEY,
+    //         address,
+    //         language,
+    //         pushNotificationToken,
+    //     });
+    // }
 
     static async setUsername(
         address: string,

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Entypo } from '@expo/vector-icons';
-import { ICommunityInfo } from 'helpers/types';
 import { Text, View, StyleSheet, Image } from 'react-native';
+import { ICommunity } from 'helpers/types/endpoints';
 
 export default function BaseCommunity(props: {
-    community: ICommunityInfo;
+    community: ICommunity;
     full?: boolean;
     action?: React.ReactNode;
     children?: React.ReactNode;

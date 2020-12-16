@@ -3,8 +3,7 @@ import CommuntyStatus from 'components/CommuntyStatus';
 import * as WebBrowser from 'expo-web-browser';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { ICommunityInfo, IRootState } from 'helpers/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Paragraph, Divider, Headline, Text } from 'react-native-paper';
@@ -23,35 +22,45 @@ import { Trans } from 'react-i18next';
 
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
+import { ICommunity } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 
 interface ICommunityDetailsScreen {
     route: {
         params: {
-            community: ICommunityInfo;
+            communityId: string;
         };
     };
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
     const language = useSelector(
-        (state: IRootState) => state.user.user.language
+        (state: IRootState) => state.user.metadata.language
     );
 
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
-    const [community, setCommunity] = useState<ICommunityInfo>(
-        props.route.params.community
+    const [community, setCommunity] = useState<ICommunity | undefined>(
+        undefined
     );
 
+    useEffect(() => {
+        Api.community
+            .getByPublicId(props.route.params.communityId)
+            .then((c) => setCommunity(c!))
+            .finally(() => setRefreshing(false));
+    });
+
     const onRefresh = () => {
-        Api.getCommunityByContractAddress(community.contractAddress).then((c) =>
-            setCommunity(c!)
-        );
-        setRefreshing(false);
+        Api.community
+            .getByPublicId(props.route.params.communityId)
+            .then((c) => setCommunity(c!))
+            .finally(() => setRefreshing(false));
     };
 
     const renderSSI = () => {
         if (
+            community !== undefined &&
             community.metrics !== undefined &&
             community.metrics.historicalSSI.length > 1
         ) {
@@ -119,6 +128,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         }
     };
 
+    if (community === undefined) {
+        return null;
+    }
+
     let description;
     const cDescription =
         language === community.language
@@ -160,7 +173,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                             modeType="gray"
                                             bold={true}
                                             style={{
-                                                backgroundColor: 'rgba(206, 212, 218, .27)',
+                                                backgroundColor:
+                                                    'rgba(206, 212, 218, .27)',
                                             }}
                                             labelStyle={{
                                                 fontSize: 15,
@@ -192,26 +206,26 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                         i18nKey="eachBeneficiaryCanClaimXUpToY"
                                         values={{
                                             claimXCCurrency: amountToCurrency(
-                                                community.contractParams
+                                                community.contract
                                                     .claimAmount,
                                                 community.currency,
                                                 rates
                                             ),
                                             claimX: humanifyCurrencyAmount(
-                                                community.contractParams
+                                                community.contract
                                                     .claimAmount
                                             ),
                                             upToY: humanifyCurrencyAmount(
-                                                community.contractParams
+                                                community.contract
                                                     .maxClaim
                                             ),
                                             interval:
-                                                community.contractParams
+                                                community.contract
                                                     .baseInterval === 86400
                                                     ? i18n.t('day')
                                                     : i18n.t('week'),
                                             minIncrement:
-                                                community.contractParams
+                                                community.contract
                                                     .incrementInterval / 60,
                                         }}
                                         components={{

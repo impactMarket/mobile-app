@@ -33,22 +33,22 @@ import config from './config';
 import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
 import { welcomeUser } from './src/helpers';
 import { iptcColors } from './src/styles';
-import {
-    setCeloKit,
-    setPushNotificationsToken,
-    setCommunity,
-    setCommunityContract,
-    setUserIsCommunityManager,
-    setUserIsBeneficiary,
-    setAppExchangeRatesAction,
-    setUserLanguage,
-    setAppSuspectWrongDateTime,
-} from './src/helpers/redux/actions/ReduxActions';
+// import {
+//     setCeloKit,
+//     setPushNotificationsToken,
+//     setCommunity,
+//     setCommunityContract,
+//     setUserIsCommunityManager,
+//     setUserIsBeneficiary,
+//     setAppExchangeRatesAction,
+//     setUserLanguage,
+//     setAppSuspectWrongDateTime,
+// } from './src/helpers/redux/actions/ReduxActions';
 import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
-import {
-    STORAGE_USER_ADDRESS,
-    STORAGE_USER_PHONE_NUMBER,
-} from './src/helpers/types';
+// import {
+//     STORAGE_USER_ADDRESS,
+//     STORAGE_USER_PHONE_NUMBER,
+// } from './src/helpers/types';
 
 import BigNumber from 'bignumber.js';
 
@@ -69,6 +69,10 @@ import moment from 'moment';
 import Navigator from './src/navigator';
 import * as Analytics from 'expo-firebase-analytics';
 import * as SplashScreen from 'expo-splash-screen';
+import { setCommunityContract, setCommunityMetadata, setUserIsBeneficiary, setUserIsCommunityManager, setUserLanguage } from 'helpers/redux/actions/user';
+import { setAppExchangeRatesAction, setAppSuspectWrongDateTime, setCeloKit } from 'helpers/redux/actions/app';
+import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
+import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER } from 'helpers/constants';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -165,7 +169,7 @@ export default class App extends React.Component<any, IAppState> {
         this.unsubscribeStore = store.subscribe(() => {
             const previousLoggedIn = this.state.loggedIn;
             const currentLoggedIn =
-                store.getState().user.celoInfo.address.length > 0;
+                store.getState().user.wallet.address.length > 0;
 
             if (previousLoggedIn !== currentLoggedIn) {
                 if (currentLoggedIn) {
@@ -198,7 +202,7 @@ export default class App extends React.Component<any, IAppState> {
                                                 setUserIsBeneficiary(true)
                                             );
                                         }
-                                        store.dispatch(setCommunity(community));
+                                        store.dispatch(setCommunityMetadata(community));
                                         store.dispatch(
                                             setCommunityContract(
                                                 communityContract
@@ -584,16 +588,15 @@ export default class App extends React.Component<any, IAppState> {
         let phoneNumber: string | null = '';
         let loggedIn = false;
         try {
-            // TODO: changed in version 0.0.22, to be refactored in 0.0.24
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
-                const userWelcome = await Api.welcome(
+                const userWelcome = await Api.user.welcome(
                     address,
                     pushNotificationToken
                 );
                 if (userWelcome !== undefined) {
-                    CacheStore.cacheUser(userWelcome.user);
+                    // CacheStore.cacheUser(userWelcome.user);
                     await welcomeUser(
                         address,
                         phoneNumber,

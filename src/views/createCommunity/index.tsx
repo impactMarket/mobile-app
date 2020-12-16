@@ -8,9 +8,6 @@ import {
     formatInputAmountToTransfer,
     amountToCurrency,
 } from 'helpers/currency';
-import {
-    IRootState,
-} from 'helpers/types';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     StyleSheet,
@@ -38,18 +35,19 @@ import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
-import { setUserIsCommunityManager } from 'helpers/redux/actions/ReduxActions';
 import Card from 'components/core/Card';
 import BackSvg from 'components/svg/header/BackSvg';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
-import { CommunityCreationAttributes } from 'types/endpoints';
+import { CommunityCreationAttributes } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
+import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
-    const userAddress = useSelector((state: IRootState) => state.user.celoInfo.address);
-    const userCurrency = useSelector((state: IRootState) => state.user.user.currency);
-    const userLanguage = useSelector((state: IRootState) => state.user.user.language);
+    const userAddress = useSelector((state: IRootState) => state.user.wallet.address);
+    const userCurrency = useSelector((state: IRootState) => state.user.metadata.currency);
+    const userLanguage = useSelector((state: IRootState) => state.user.metadata.language);
     const exchangeRates = useSelector((state: IRootState) => state.app.exchangeRates);
     const kit = useSelector((state: IRootState) => state.app.kit);
     const navigation = useNavigation();

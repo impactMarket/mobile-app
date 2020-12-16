@@ -1,7 +1,6 @@
 import React, { useLayoutEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import i18n from 'assets/i18n';
-import { IRootState, ITabBarIconProps } from 'helpers/types';
 
 import ManageSvg from 'components/svg/ManageSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
@@ -24,6 +23,8 @@ import Login from 'views/profile/auth';
 import CreateCommunity from './header/CreateCommunity';
 import CommunityManager from './header/CommunityManager';
 import Beneficiary from './header/Beneficiary';
+import { IRootState } from 'helpers/types/state';
+import { ITabBarIconProps } from 'helpers/types/common';
 
 function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
     let routeName = getFocusedRouteNameFromRoute(route);
@@ -82,7 +83,7 @@ function TabNavigator({
     const fromWelcomeScreen = useSelector(
         (state: IRootState) => state.app.fromWelcomeScreen
     );
-    const userWallet = useSelector((state: IRootState) => state.user.celoInfo);
+    const userWallet = useSelector((state: IRootState) => state.user.wallet);
 
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);

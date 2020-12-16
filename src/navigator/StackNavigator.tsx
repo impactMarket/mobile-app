@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { IRootState } from 'helpers/types';
 import TabNavigator from './TabNavigator';
 
 import CommunityDetailsScreen from 'views/community/details';
@@ -14,6 +13,7 @@ import WelcomeScreen from 'views/welcome/index';
 import { iptcColors } from 'styles/index';
 import { useSelector } from 'react-redux';
 import { Screens } from 'helpers/constants';
+import { IRootState } from 'helpers/types/state';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -93,7 +93,7 @@ function StackNavigator() {
         (state: IRootState) => state.user.community.isBeneficiary
     );
     const isAuthenticated = useSelector(
-        (state: IRootState) => state.user.celoInfo.address.length > 0
+        (state: IRootState) => state.user.wallet.address.length > 0
     );
     const fromWelcomeScreen = useSelector(
         (state: IRootState) => state.app.fromWelcomeScreen

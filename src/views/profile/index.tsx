@@ -1,6 +1,5 @@
 import i18n from 'assets/i18n';
 import Card from 'components/core/Card';
-import Header from 'components/Header';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import { decrypt, encrypt } from 'helpers/encryption';
@@ -11,29 +10,11 @@ import {
     humanifyCurrencyAmount,
 } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import {
-    resetUserApp,
-    resetNetworkContractsApp,
-    setUserInfo,
-    setUserExchangeRate,
-    setUserIsBeneficiary,
-    setUserIsCommunityManager,
-    setUserLanguage,
-    setUserWalletBalance,
-} from 'helpers/redux/actions/ReduxActions';
-import {
-    CONSENT_ANALYTICS,
-    IRootState,
-    IStoreCombinedActionsTypes,
-    IStoreCombinedState,
-} from 'helpers/types';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import { RefreshControl, StyleSheet, View } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
-    Button,
     Paragraph,
     Portal,
     Dialog,
@@ -41,31 +22,23 @@ import {
     Text,
     Headline,
 } from 'react-native-paper';
-import { batch, useDispatch, useSelector, useStore } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import * as Linking from 'expo-linking';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
-import { Screens } from 'helpers/constants';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { IRootState } from 'helpers/types/state';
+import { setUserExchangeRate, setUserLanguage, setUserMetadata, setUserWalletBalance } from 'helpers/redux/actions/user';
 
-function ProfileScreen({
-    navigation,
-}: {
-    navigation: StackNavigationProp<any, any>;
-}) {
-    const store = useStore<IStoreCombinedState, IStoreCombinedActionsTypes>();
-    // const navigation = useNavigation();
+function ProfileScreen() {
     const dispatch = useDispatch();
-    const user = useSelector((state: IRootState) => state.user.user);
-    const userWallet = useSelector((state: IRootState) => state.user.celoInfo);
+    const user = useSelector((state: IRootState) => state.user.metadata);
+    const userWallet = useSelector((state: IRootState) => state.user.wallet);
     const app = useSelector((state: IRootState) => state.app);
 
     const rates = app.exchangeRates;
 
-    const [isConsentAnalytics, setIsConsentAnalytics] = React.useState(true);
     const [name, setName] = useState('');
-    const [logingOut, setLogingOut] = useState(false);
     const [currency, setCurrency] = useState('usd');
     const [language, setLanguage] = useState('en');
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
@@ -74,14 +47,11 @@ function ProfileScreen({
 
     useEffect(() => {
         if (userWallet.address.length > 0) {
-            if (user.name !== null && user.name.length > 0) {
-                setName(decrypt(user.name));
+            if (user.username !== null && user.username.length > 0) {
+                setName(decrypt(user.username));
             }
             setCurrency(user.currency);
             setLanguage(user.language);
-            AsyncStorage.getItem(CONSENT_ANALYTICS).then((c) =>
-                setIsConsentAnalytics(c === null || c === 'true' ? true : false)
-            );
         }
     }, [userWallet]);
 
@@ -97,18 +67,13 @@ function ProfileScreen({
         updateBalance();
     };
 
-    const onToggleSwitch = () => {
-        AsyncStorage.setItem(CONSENT_ANALYTICS, `${!isConsentAnalytics}`);
-        setIsConsentAnalytics(!isConsentAnalytics);
-    };
-
     const handleChangeCurrency = async (text: string) => {
         setCurrency(text);
         Api.setUserCurrency(userWallet.address, text);
         // update exchange rate!
         const exchangeRate = (rates as any)[text.toUpperCase()].rate;
         batch(() => {
-            dispatch(setUserInfo({ ...user, currency: text }));
+            dispatch(setUserMetadata({ ...user, currency: text }));
             dispatch(setUserExchangeRate(exchangeRate));
         });
     };
@@ -209,7 +174,7 @@ function ProfileScreen({
                                 eName = encrypt(name);
                             }
                             Api.setUsername(userWallet.address, eName);
-                            dispatch(setUserInfo({ ...user, name: eName }));
+                            dispatch(setUserMetadata({ ...user, username: eName }));
                         }}
                         onChangeText={(value) => setName(value)}
                     />

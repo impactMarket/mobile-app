@@ -3,7 +3,6 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { IRootState, ITabBarIconProps } from 'helpers/types';
 import React, { useEffect, useState } from 'react';
 import {
     StyleSheet,
@@ -36,12 +35,12 @@ import { Trans } from 'react-i18next';
 import CacheStore from 'services/cacheStore';
 import Card from 'components/core/Card';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
-import {
-    setAppSuspectWrongDateTime,
-    setCommunity,
-} from 'helpers/redux/actions/ReduxActions';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import { Screens } from 'helpers/constants';
+import { IRootState } from 'helpers/types/state';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/app';
+import { ITabBarIconProps } from 'helpers/types/common';
 
 function BeneficiaryScreen() {
     let timeoutTimeDiff: number | undefined;
@@ -49,13 +48,13 @@ function BeneficiaryScreen() {
     const dispatch = useDispatch();
 
     const communityContract = useSelector(
-        (state: IRootState) => state.network.contracts.communityContract
+        (state: IRootState) => state.user.community.contract
     );
     const community = useSelector(
-        (state: IRootState) => state.network.community
+        (state: IRootState) => state.user.community.metadata
     );
     const userAddress = useSelector(
-        (state: IRootState) => state.user.celoInfo.address
+        (state: IRootState) => state.user.wallet.address
     );
     const suspectWrongDateTime = useSelector(
         (state: IRootState) => state.app.suspectWrongDateTime
@@ -80,7 +79,7 @@ function BeneficiaryScreen() {
                 ) {
                     const progress = new BigNumber(
                         beneficiaryClaimCache.claimed
-                    ).div(community.contractParams.maxClaim);
+                    ).div(community.contract.maxClaim);
                     setClaimedAmount(
                         humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
                     );
@@ -121,7 +120,7 @@ function BeneficiaryScreen() {
                     };
                     CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
                     const progress = new BigNumber(claimed).div(
-                        community.contractParams.maxClaim
+                        community.contract.maxClaim
                     );
                     setClaimedAmount(humanifyCurrencyAmount(claimed));
                     setClaimedProgress(progress.toNumber());
@@ -167,9 +166,9 @@ function BeneficiaryScreen() {
     };
 
     const onRefresh = () => {
-        Api.getCommunityByContractAddress(community.contractAddress).then(
+        Api.community.getByPublicId(community.publicId).then(
             (c) => {
-                dispatch(setCommunity(c!));
+                dispatch(setCommunityMetadata(c!));
                 setRefreshing(false);
             }
         );
@@ -201,7 +200,7 @@ function BeneficiaryScreen() {
         CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
 
         const progress = new BigNumber(claimed).div(
-            community.contractParams.maxClaim
+            community.contract.maxClaim
         );
         setClaimedProgress(progress.toNumber());
         setClaimedAmount(humanifyCurrencyAmount(claimed.toString()));
@@ -227,7 +226,7 @@ function BeneficiaryScreen() {
 
     const formatedTimeNextCooldown = () => {
         const nextCooldownTime = moment.duration(
-            (lastInterval + community.contractParams.incrementInterval) * 1000
+            (lastInterval + community.contract.incrementInterval) * 1000
         );
         let next = '';
         if (nextCooldownTime.days() > 0) {
@@ -293,7 +292,7 @@ function BeneficiaryScreen() {
                                 {i18n.t('youHaveClaimedXoutOfY', {
                                     claimed: claimedAmount,
                                     max: humanifyCurrencyAmount(
-                                        community.contractParams.maxClaim
+                                        community.contract.maxClaim
                                     ),
                                 })}
                             </Text>
@@ -307,7 +306,7 @@ function BeneficiaryScreen() {
                             </View>
                         </View>
                         <Claim
-                            claimAmount={community.contractParams.claimAmount}
+                            claimAmount={community.contract.claimAmount}
                             updateClaimedAmount={updateClaimedAmountAndCache}
                             cooldownTime={cooldownTime}
                             updateCooldownTime={getNewCooldownTime}

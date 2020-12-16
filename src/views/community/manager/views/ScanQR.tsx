@@ -1,7 +1,7 @@
 import i18n from 'assets/i18n';
 import { ethers } from 'ethers';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { IRootState } from 'helpers/types';
+import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { StyleSheet, View, Alert, Modal } from 'react-native';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
@@ -20,8 +20,8 @@ interface IModalScanQRState {
     requestingCameraPermissions: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user } = state;
+    return { user };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;

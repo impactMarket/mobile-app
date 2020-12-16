@@ -7,13 +7,13 @@ import { Headline } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { IRootState } from 'helpers/types';
 import Card from 'components/core/Card';
+import { IRootState } from 'helpers/types/state';
 
 function QRCodeSvg(props: SvgProps) {
     const [openQR, setOpenQR] = useState(false);
     const userAddress = useSelector(
-        (state: IRootState) => state.user.celoInfo.address
+        (state: IRootState) => state.user.wallet.address
     );
 
     const toggleQR = () => setOpenQR(!openQR);

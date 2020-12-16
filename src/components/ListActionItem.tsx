@@ -7,8 +7,8 @@ import {
     GestureResponderEvent,
 } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
-import { IAddressAndName } from 'helpers/types';
 import { decrypt } from 'helpers/encryption';
+import { IAddressAndName } from 'helpers/types/common';
 
 export interface IListActionItem {
     key: string;

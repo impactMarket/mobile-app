@@ -1,58 +1,43 @@
-import { combineReducers } from 'redux';
-
 import {
-    UserActionTypes,
-    SET_USER_CELO_INFO,
+    RESET_USER_APP,
+    SET_APP_FROM_WELCOME_SCREEN,
+    SET_APP_SUSPECT_WRONG_DATETIME,
+    SET_AUTH_TOKEN,
     SET_CELO_KIT,
+    SET_COMMUNITY,
     SET_COMMUNITY_CONTRACT,
-    IUserState,
-    INetworkState,
-    NetworkActionTypes,
-    SET_USER_WALLET_BALANCE,
+    SET_EXCHANGE_RATES,
+    SET_PUSH_NOTIFICATION_TOKEN,
+    SET_USER_CELO_INFO,
+    SET_USER_EXCHANGE_RATE,
+    SET_USER_INFO,
     SET_USER_IS_BENEFICIARY,
     SET_USER_IS_COMMUNITY_MANAGER,
-    RESET_USER_APP,
-    RESET_NETWORK_APP,
-    SET_USER_INFO,
-    SET_COMMUNITY,
-    IAuthState,
-    AuthActionTypes,
-    SET_PUSH_NOTIFICATION_TOKEN,
-    SET_AUTH_TOKEN,
-    SET_USER_EXCHANGE_RATE,
-    IAppState,
-    AppActionTypes,
     SET_USER_LANGUAGE,
-    INIT_USER,
-    SET_EXCHANGE_RATES,
-    SET_APP_SUSPECT_WRONG_DATETIME,
-    SET_APP_FROM_WELCOME_SCREEN,
-} from '../../types';
+    SET_USER_WALLET_BALANCE,
+} from 'helpers/constants';
+import { combineReducers } from 'redux';
+import { AppActionTypes, AuthActionTypes, UserActionTypes } from 'helpers/types/redux';
+import { IAppState, IAuthState, IUserState } from 'helpers/types/state';
 
 const INITIAL_STATE_USER: IUserState = {
-    celoInfo: {
+    wallet: {
         address: '',
         phoneNumber: '',
         balance: '0',
     },
-    user: {
-        name: '',
+    metadata: {
+        address: '',
+        username: null,
         currency: 'USD',
-        exchangeRate: 1,
-        avatar: '1',
         language: 'en',
     },
+    exchangeRate: 1,
     community: {
         isBeneficiary: false,
         isManager: false,
-    },
-};
-
-const INITIAL_STATE_NETWORK: INetworkState = {
-    // TODO: save community object from database with contract inside
-    community: undefined as any,
-    contracts: {
-        communityContract: undefined as any,
+        metadata: undefined as any,
+        contract: undefined as any,
     },
 };
 
@@ -62,10 +47,8 @@ const INITIAL_STATE_AUTH: IAuthState = {
 };
 
 const INITIAL_STATE_APP: IAppState = {
-    // TODO: save exhangeRates on load
     kit: undefined as any,
-    exchangeRates: undefined as any,
-    paymentToAddress: '',
+    exchangeRates: undefined as any, // save exhangeRates on load
     suspectWrongDateTime: false,
     timeDiff: 0,
     fromWelcomeScreen: '',
@@ -76,78 +59,35 @@ const userReducer = (
     action: UserActionTypes
 ): IUserState => {
     const community = state.community;
-    const user = state.user;
+    const { metadata } = state;
     switch (action.type) {
-        case INIT_USER:
-            return {
-                celoInfo: {
-                    address: action.payload.user.address,
-                    phoneNumber: action.payload.user.phoneNumber,
-                    balance: action.payload.user.balance,
-                },
-                user: {
-                    name:
-                        action.payload.user.username === null
-                            ? ''
-                            : action.payload.user.username,
-                    currency: action.payload.user.currency,
-                    language: action.payload.user.language,
-                    avatar: action.payload.user.avatar,
-                    exchangeRate:
-                        action.payload.exchangeRates[
-                            action.payload.user.currency.toUpperCase()
-                        ].rate,
-                },
-                community: {
-                    isBeneficiary: action.payload.isBeneficiary,
-                    isManager: action.payload.isManager,
-                },
-            };
         case RESET_USER_APP:
             return INITIAL_STATE_USER;
         case SET_USER_CELO_INFO:
-            return { ...state, celoInfo: action.payload };
+            return { ...state, wallet: action.payload };
         case SET_USER_INFO:
-            return { ...state, user: action.payload };
+            return { ...state, metadata: action.payload };
         case SET_USER_EXCHANGE_RATE:
-            user.exchangeRate = action.payload;
-            return { ...state, user };
+            return { ...state, exchangeRate: action.payload };
         case SET_USER_WALLET_BALANCE:
-            const celoInfo = state.celoInfo;
-            celoInfo.balance = action.payload;
-            return { ...state, celoInfo };
+            const wallet = state.wallet;
+            wallet.balance = action.payload;
+            return { ...state, wallet };
         case SET_USER_LANGUAGE:
-            user.language = action.payload;
-            return { ...state, user };
+            metadata.language = action.payload;
+            return { ...state, metadata };
         case SET_USER_IS_BENEFICIARY:
             community.isBeneficiary = action.payload;
             return { ...state, community };
         case SET_USER_IS_COMMUNITY_MANAGER:
             community.isManager = action.payload;
             return { ...state, community };
-        default:
-            return state;
-    }
-};
-
-const networkReducer = (
-    state = INITIAL_STATE_NETWORK,
-    action: NetworkActionTypes
-) => {
-    let contracts;
-    switch (action.type) {
-        case RESET_NETWORK_APP:
-            return INITIAL_STATE_NETWORK;
         case SET_COMMUNITY:
-            return { ...state, community: action.payload };
+            community.metadata = action.payload;
+            return { ...state, community };
         case SET_COMMUNITY_CONTRACT:
-            // Pulls current and possible out of previous state
-            // We do not want to alter state directly in case
-            // another action is altering it at the same time
-            contracts = state.contracts;
-            contracts.communityContract = action.payload;
-            // Finally, update our redux state
-            return { ...state, contracts };
+            community.contract = action.payload;
+            return { ...state, community };
         default:
             return state;
     }
@@ -188,7 +128,6 @@ const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
 
 export default combineReducers({
     user: userReducer,
-    network: networkReducer,
     auth: authReducer,
     app: appReducer,
 });

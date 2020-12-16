@@ -4,7 +4,6 @@ import ManageSvg from 'components/svg/ManageSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import ClaimSvg from 'components/svg/ClaimSvg';
-import { IRootState, ITabBarIconProps } from 'helpers/types';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
@@ -12,10 +11,12 @@ import CommunitiesScreen from './communities';
 import BeneficiaryView from './community/beneficiary';
 import CommunityManagerView from './community/manager';
 import ProfileScreen from './profile';
+import { IRootState } from 'helpers/types/state';
+import { ITabBarIconProps } from 'helpers/types/common';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user } = state;
+    return { user };
 };
 
 const connector = connect(mapStateToProps);

@@ -6,25 +6,37 @@ import { Store, CombinedState, Dispatch } from 'redux';
 import Api from 'services/api';
 
 import CommunityContractABI from '../contracts/CommunityABI.json';
-import {
-    setCommunityContract,
-    setCommunity,
-    initUser,
-    setAppExchangeRatesAction,
-} from './redux/actions/ReduxActions';
+// import {
+//     setCommunityContract,
+//     setCommunity,
+//     initUser,
+//     setAppExchangeRatesAction,
+//     resetUserApp,
+//     setUserExchangeRate,
+// } from './redux/actions/ReduxActions';
 import {
     AppActionTypes,
     AuthActionTypes,
-    IAppState,
-    IAuthState,
-    INetworkState,
-    IUserState,
-    IUserWelcome,
-    NetworkActionTypes,
     UserActionTypes,
-} from './types';
+} from '../types/redux';
+import { IAppState, IAuthState, IUserState } from '../types/state';
 import * as Linking from 'expo-linking';
-import { ICommunity, ICommunityLightDetails } from 'types/endpoints';
+import {
+    ICommunity,
+    ICommunityLightDetails,
+    IUserWelcome,
+} from 'helpers/types/endpoints';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CacheStore from 'services/cacheStore';
+import { batch } from 'react-redux';
+import {
+    resetUserApp,
+    setCommunityContract,
+    setCommunityMetadata,
+    setUserExchangeRate,
+    setUserWallet,
+} from './redux/actions/user';
+import { setAppExchangeRatesAction } from './redux/actions/app';
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
@@ -38,39 +50,53 @@ export async function welcomeUser(
     store: Store<
         CombinedState<{
             user: IUserState;
-            network: INetworkState;
             auth: IAuthState;
             app: IAppState;
         }>,
-        UserActionTypes | NetworkActionTypes | AuthActionTypes | AppActionTypes
+        UserActionTypes | AuthActionTypes | AppActionTypes
     >
 ) {
     const balance = await getUserBalance(kit, address);
-    let language = user.user.language;
+    const userMetadata = await CacheStore.getUser();
+    if (userMetadata === null) {
+        // clear everything, same as logout
+        await AsyncStorage.clear();
+        batch(() => {
+            // dispatch(setUserIsBeneficiary(false));
+            // dispatch(setUserIsCommunityManager(false));
+            store.dispatch(resetUserApp());
+        });
+        return;
+    }
+    let language = userMetadata.language;
     if (i18n.language !== language) {
         i18n.changeLanguage(language);
         moment.locale(language);
     }
-    store.dispatch(setAppExchangeRatesAction(user.exchangeRates));
-    store.dispatch(
-        initUser({
-            ...user,
-            user: {
-                ...user.user,
+    batch(() => {
+        store.dispatch(
+            setUserWallet({
+                address,
                 phoneNumber,
                 balance: balance.toString(),
-            },
-        })
-    );
-    if (user.isBeneficiary || user.isManager) {
-        const c = user.community!;
-        const communityContract = new kit.web3.eth.Contract(
-            CommunityContractABI as any,
-            c.contractAddress
+            })
         );
-        store.dispatch(setCommunity(c));
-        store.dispatch(setCommunityContract(communityContract));
-    }
+        store.dispatch(
+            setUserExchangeRate(
+                user.exchangeRates[userMetadata.currency.toUpperCase()].rate
+            )
+        );
+        store.dispatch(setAppExchangeRatesAction(user.exchangeRates));
+        if (user.isBeneficiary || user.isManager) {
+            const c = user.community!;
+            const communityContract = new kit.web3.eth.Contract(
+                CommunityContractABI as any,
+                c.contractAddress!
+            );
+            store.dispatch(setCommunityMetadata(c));
+            store.dispatch(setCommunityContract(communityContract));
+        }
+    });
 }
 
 export async function getUserBalance(kit: ContractKit, address: string) {
@@ -131,9 +157,9 @@ export async function updateCommunityInfo(
     communityId: string,
     dispatch: Dispatch<any>
 ) {
-    const community = await Api.getCommunityByPublicId(communityId);
+    const community = await Api.community.getByPublicId(communityId);
     if (community !== undefined) {
-        dispatch(setCommunity(community));
+        dispatch(setCommunityMetadata(community));
     }
 }
 

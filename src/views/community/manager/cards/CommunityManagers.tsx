@@ -1,6 +1,6 @@
 import Card from 'components/core/Card';
+import { IRootState } from 'helpers/types/state';
 // import ListCommunityManagers from 'components/ListCommunityManagers';
-import { IRootState } from 'helpers/types';
 import React from 'react';
 import { Button } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
@@ -9,8 +9,8 @@ interface ICommunityManagersProps {
     managers: string[];
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network } = state;
-    return { user, network };
+    const { user } = state;
+    return { user };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;

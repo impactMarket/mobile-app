@@ -1,20 +1,23 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import { ICommunityInfo } from 'helpers/types';
 import React from 'react';
 import { Alert, View } from 'react-native';
 import { Headline } from 'react-native-paper';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import { Screens } from 'helpers/constants';
+import { ICommunity } from 'helpers/types/endpoints';
 
 interface IBeneficiariesProps {
-    community: ICommunityInfo;
+    community: ICommunity;
     hasFundsToNewBeneficiary: boolean;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
     const navigation = useNavigation();
+
+    // TODO: load added and removed beneficiaries
+    // maybe load list of managers all together
 
     return (
         <View>

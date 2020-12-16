@@ -1,5 +1,5 @@
-import { IUser } from 'helpers/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IUser } from 'helpers/types/models';
 
 const CACHE_STORE_USER = '@CacheStore:user';
 const CACHE_STORE_BENEFICIARY_CLAIM = '@CacheStore:beneficiaryClaim';

@@ -7,7 +7,6 @@ import {
     getCurrencySymbol,
 } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { IRootState } from 'helpers/types';
 import moment from 'moment';
 import React from 'react';
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -18,10 +17,11 @@ import { celoWalletRequest } from 'services/celoWallet';
 import config from '../../../../config';
 import * as Device from 'expo-device';
 import { analytics } from 'services/analytics';
+import { IRootState } from 'helpers/types/state';
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, network, app } = state;
-    return { user, network, app };
+    const { user, app } = state;
+    return { user, app };
 };
 
 const connector = connect(mapStateToProps);
@@ -54,17 +54,17 @@ class Claim extends React.Component<Props, IClaimState> {
     componentDidMount = async () => {
         await this._loadAllowance(this.props.cooldownTime);
         // check if there's enough funds to enable/disable claim button
-        const { state, contractParams } = this.props.network.community;
+        const { state, contract } = this.props.user.community.metadata;
         const notEnoughToClaimOnContract = new BigNumber(state.raised)
             .minus(state.claimed)
-            .lt(contractParams.claimAmount);
+            .lt(contract.claimAmount);
         this.setState({ notEnoughToClaimOnContract });
     };
 
     handleClaimPress = async () => {
-        const { user, network, app } = this.props;
-        const { communityContract } = network.contracts;
-        const { address } = user.celoInfo;
+        const { user, app } = this.props;
+        const communityContract = user.community.contract;
+        const { address } = user.wallet;
 
         this.setState({ claiming: true });
         celoWalletRequest(
@@ -80,11 +80,11 @@ class Claim extends React.Component<Props, IClaimState> {
                 }
                 // do not collect manager claim location nor private communities
                 if (
-                    network.community.visibility === 'public' &&
+                    user.community.metadata.visibility === 'public' &&
                     user.community.isManager === false
                 ) {
                     try {
-                        let loc: Location.LocationData | undefined = undefined;
+                        let loc: Location.LocationObject | undefined = undefined;
                         const availableGPSToRequest =
                             (await Location.hasServicesEnabledAsync()) &&
                             (await Location.getPermissionsAsync()).status ===
@@ -98,7 +98,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         }
                         if (loc !== undefined) {
                             await Api.addClaimLocation(
-                                network.community.publicId,
+                                user.community.metadata.publicId,
                                 {
                                     latitude:
                                         loc.coords.latitude +
@@ -182,7 +182,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         {i18n.t('youCanClaimXin', {
                             amount: amountToCurrency(
                                 this.props.claimAmount,
-                                this.props.user.user.currency,
+                                this.props.user.metadata.currency,
                                 this.props.app.exchangeRates
                             ),
                         })}
@@ -232,12 +232,12 @@ class Claim extends React.Component<Props, IClaimState> {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.claimText}>{i18n.t('claimX')}</Text>
                         <Text style={styles.claimTextCurrency}>
-                            {getCurrencySymbol(this.props.user.user.currency)}
+                            {getCurrencySymbol(this.props.user.metadata.currency)}
                         </Text>
                         <Text style={styles.claimText}>
                             {amountToCurrency(
                                 this.props.claimAmount,
-                                this.props.user.user.currency,
+                                this.props.user.metadata.currency,
                                 this.props.app.exchangeRates,
                                 false
                             )}

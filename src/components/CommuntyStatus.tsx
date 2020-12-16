@@ -3,20 +3,21 @@ import BigNumber from 'bignumber.js';
 import { calculateCommunityProgress } from 'helpers/index';
 import { amountToCurrency } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Title, ProgressBar, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import Card from './core/Card';
+import { ICommunity } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
-    community: ICommunityInfo;
+    community: ICommunity;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network, app } = state;
-    return { user, network, app };
+    const { user, app } = state;
+    return { user, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -64,7 +65,7 @@ class CommuntyStatus extends Component<Props, object> {
                                     marginVertical: 4,
                                 }}
                             >
-                                {community.beneficiaries.added.length}
+                                {community.state.beneficiaries}
                             </Title>
                             <Text
                                 style={{
@@ -187,7 +188,7 @@ class CommuntyStatus extends Component<Props, object> {
                             >
                                 {amountToCurrency(
                                     community.state.raised,
-                                    user.user.currency,
+                                    user.metadata.currency,
                                     app.exchangeRates
                                 )}{' '}
                             </Text>

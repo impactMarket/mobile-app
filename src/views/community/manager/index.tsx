@@ -6,7 +6,6 @@ import CommuntyStatus from 'components/CommuntyStatus';
 import * as Linking from 'expo-linking';
 import { updateCommunityInfo } from 'helpers/index';
 import { iptcColors } from 'styles/index';
-import { IRootState, ICommunityInfo } from 'helpers/types';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -21,6 +20,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Beneficiaries from './cards/Beneficiaries';
 import { Screens } from 'helpers/constants';
+import { IRootState } from 'helpers/types/state';
+import { ICommunity } from 'helpers/types/endpoints';
 
 function CommunityManagerScreen() {
     const navigation = useNavigation();
@@ -28,10 +29,10 @@ function CommunityManagerScreen() {
 
     const kit = useSelector((state: IRootState) => state.app.kit);
     const communityContract = useSelector(
-        (state: IRootState) => state.network.contracts.communityContract
+        (state: IRootState) => state.user.community.contract
     );
     const community = useSelector(
-        (state: IRootState) => state.network.community
+        (state: IRootState) => state.user.community.metadata
     );
 
     const [openModalMore, setOpenModalMore] = useState(false);
@@ -74,7 +75,7 @@ function CommunityManagerScreen() {
         });
     };
 
-    const communityStatus = (_community: ICommunityInfo) => {
+    const communityStatus = (_community: ICommunity) => {
         if (_community.status === 'valid') {
             return (
                 <ScrollView

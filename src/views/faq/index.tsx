@@ -1,7 +1,6 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
-import Header from 'components/Header';
+import { useNavigation } from '@react-navigation/native';
 import BackSvg from 'components/svg/header/BackSvg';
-import { IRootState } from 'helpers/types';
+import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { List, Text } from 'react-native-paper';
@@ -177,9 +176,8 @@ const ptFAQ = [
 ];
 
 function FAQScreen() {
-    const navigation = useNavigation();
     const language = useSelector(
-        (state: IRootState) => state.user.user.language
+        (state: IRootState) => state.user.metadata.language
     );
     const [expanded, setExpanded] = useState<string[]>([]);
     const [faq, setFaq] = useState<{ title: string; message: string }[]>([]);

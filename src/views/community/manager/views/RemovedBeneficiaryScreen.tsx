@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import ListActionItem from 'components/ListActionItem';
 import BackSvg from 'components/svg/header/BackSvg';
 import { amountToCurrency } from 'helpers/currency';
-import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
+import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
@@ -15,8 +15,8 @@ interface IRemovedBeneficiaryScreenProps {
     };
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network, app } = state;
-    return { user, network, app };
+    const { user, app } = state;
+    return { user, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -35,7 +35,7 @@ function RemovedBeneficiaryScreen(props: Props) {
                         item={{
                             description: `${amountToCurrency(
                                 beneficiary.claimed,
-                                props.user.user.currency,
+                                props.user.metadata.currency,
                                 props.app.exchangeRates
                             )}`,
                             from: beneficiary,

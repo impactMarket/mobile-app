@@ -4,7 +4,6 @@ import Button from 'components/core/Button';
 import ListActionItem from 'components/ListActionItem';
 import { updateCommunityInfo } from 'helpers/index';
 import { amountToCurrency } from 'helpers/currency';
-import { IRootState, ICommunityInfoBeneficiary } from 'helpers/types';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { ScrollView, Alert } from 'react-native';
@@ -12,6 +11,7 @@ import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import BackSvg from 'components/svg/header/BackSvg';
+import { IRootState } from 'helpers/types/state';
 
 interface IAddedBeneficiaryScreenProps {
     route: {
@@ -21,8 +21,8 @@ interface IAddedBeneficiaryScreenProps {
     };
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user, network, app } = state;
-    return { user, network, app };
+    const { user, app } = state;
+    return { user, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -37,9 +37,9 @@ function AddedBeneficiaryScreen(props: Props) {
     const [removing, setRemoving] = useState(false);
 
     const handleRemoveBeneficiary = async (beneficiary: string) => {
-        const { user, network } = props;
-        const { communityContract } = network.contracts;
-        const { address } = user.celoInfo;
+        const { user } = props;
+        const communityContract = user.community.contract;
+        const { address } = user.wallet;
 
         setRemoving(true);
         celoWalletRequest(
@@ -61,7 +61,7 @@ function AddedBeneficiaryScreen(props: Props) {
                 );
                 navigation.goBack();
                 // TODO: update after going back
-                updateCommunityInfo(props.network.community.publicId, dispatch);
+                updateCommunityInfo(props.user.community.metadata.publicId, dispatch);
             })
             .catch((e) => {
                 Api.uploadError(address, 'remove_beneficiary', e);
@@ -90,7 +90,7 @@ function AddedBeneficiaryScreen(props: Props) {
                                         ? '0'
                                         : amountToCurrency(
                                               beneficiary.claimed,
-                                              props.user.user.currency,
+                                              props.user.metadata.currency,
                                               props.app.exchangeRates
                                           ),
                                 date: moment(beneficiary.timestamp).format(

@@ -4,7 +4,7 @@ import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
 import { ethers } from 'ethers';
 import { updateCommunityInfo } from 'helpers/index';
-import { IRootState } from 'helpers/types';
+import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
@@ -16,13 +16,13 @@ function AddBeneficiaryScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const communityContract = useSelector(
-        (state: IRootState) => state.network.contracts.communityContract
+        (state: IRootState) => state.user.community.contract
     );
     const userAddress = useSelector(
-        (state: IRootState) => state.user.celoInfo.address
+        (state: IRootState) => state.user.wallet.address
     );
     const community = useSelector(
-        (state: IRootState) => state.network.community
+        (state: IRootState) => state.user.community.metadata
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
