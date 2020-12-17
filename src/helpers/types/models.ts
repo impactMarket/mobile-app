@@ -45,6 +45,22 @@ export interface CommunityDailyMetricsAttributes {
     date: Date;
 }
 
+export interface BeneficiaryAttributes {
+    address: string;
+    communityId: string;
+    active: boolean;
+    tx: string;
+    txAt: Date;
+    claims: number;
+    lastClaimAt: Date | null;
+    penultimateClaimAt: Date | null;
+};
+
+export interface ManagerAttributes {
+    user: string;
+    communityId: string;
+};
+
 export interface IUser {
     address: string;
     username: string | null;

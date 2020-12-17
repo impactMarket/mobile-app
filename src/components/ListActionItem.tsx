@@ -8,14 +8,16 @@ import {
 } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { decrypt } from 'helpers/encryption';
-import { IAddressAndName } from 'helpers/types/common';
 
 export interface IListActionItem {
     key: string;
     avatar?: string;
     timestamp: number;
     description: string;
-    from: IAddressAndName;
+    from: {
+        address: string;
+        username: string | null;
+    };
     value?: string;
     isValueIn?: boolean;
 }
@@ -55,13 +57,13 @@ export default class ListActionItem extends Component<
         if (maxTextTitleLength !== undefined) {
             titleMaxLength = maxTextTitleLength;
         }
-        const fromHasName = from.name.length > 0;
+        const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
-        if (fromHasName) {
+        if (from.username !== null && fromHasName) {
             name =
-                from.name.length === 32 && from.name.indexOf(' ') === -1 // this is an encrypted name
-                    ? decrypt(from.name)
-                    : from.name;
+                from.username.length === 32 && from.username.indexOf(' ') === -1 // this is an encrypted name
+                    ? decrypt(from.username)
+                    : from.username;
         }
 
         let renderRight;

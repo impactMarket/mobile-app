@@ -4,11 +4,14 @@ import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
 import { ethers } from 'ethers';
 import { updateCommunityInfo } from 'helpers/index';
+import { setStateManagersDetails } from 'helpers/redux/actions/views';
+import { IManagersDetails } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import ScanQR from './ScanQR';
 
@@ -25,10 +28,32 @@ function AddBeneficiaryScreen() {
         (state: IRootState) => state.user.community.metadata
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
+    const stateManagerDetails = useSelector(
+        (state: IRootState) => state.view.managerDetails
+    );
 
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
+    const [managerDetails, setManagerDetails] = useState<
+        IManagersDetails | undefined
+    >();
+
+    useEffect(() => {
+        const loadDetails = () => {
+            // it's not correct, I guess
+            if (stateManagerDetails !== undefined) {
+                setManagerDetails(stateManagerDetails);
+            } else {
+                Api.community.managersDetails().then((details) => {
+                    setManagerDetails(details);
+                    dispatch(setStateManagersDetails(details));
+                });
+            }
+        };
+        loadDetails();
+        return;
+    }, [stateManagerDetails]);
 
     const handleModalScanQR = async () => {
         let addressToAdd: string;
@@ -90,7 +115,7 @@ function AddBeneficiaryScreen() {
     const personalAddressWarningMessageCondition =
         inputAddress.toLowerCase() === userAddress.toLowerCase();
     const usedAddressWarningMessageCondition =
-        community.beneficiaries.added.find(
+        managerDetails?.beneficiaries.active.find(
             (b) => b.address.toLowerCase() === inputAddress.toLowerCase()
         ) !== undefined;
 

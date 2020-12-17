@@ -6,22 +6,23 @@ import { Headline } from 'react-native-paper';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import { Screens } from 'helpers/constants';
-import { ICommunity } from 'helpers/types/endpoints';
 
 interface IBeneficiariesProps {
-    community: ICommunity;
+    beneficiaries: {
+        active: number;
+        inactive: number;
+    };
     hasFundsToNewBeneficiary: boolean;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
     const navigation = useNavigation();
 
-    // TODO: load added and removed beneficiaries
-    // maybe load list of managers all together
+    const { active, inactive } = props.beneficiaries;
 
     return (
         <View>
-            <Card elevation={8}>
+            <Card>
                 <Card.Content>
                     <Headline
                         style={{
@@ -38,36 +39,24 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     <Button
                         modeType="gray"
                         bold={true}
-                        disabled={
-                            props.community.beneficiaries.added.length === 0
-                        }
+                        disabled={active === 0}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
-                            navigation.navigate(Screens.AddedBeneficiary, {
-                                beneficiaries:
-                                    props.community.beneficiaries.added,
-                            })
+                            navigation.navigate(Screens.AddedBeneficiary)
                         }
                     >
-                        {i18n.t('added')} (
-                        {props.community.beneficiaries.added.length})
+                        {i18n.t('added')} ({active})
                     </Button>
                     <Button
                         modeType="gray"
                         bold={true}
-                        disabled={
-                            props.community.beneficiaries.removed.length === 0
-                        }
+                        disabled={inactive === 0}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
-                            navigation.navigate(Screens.RemovedBeneficiary, {
-                                beneficiaries:
-                                    props.community.beneficiaries.removed,
-                            })
+                            navigation.navigate(Screens.RemovedBeneficiary)
                         }
                     >
-                        {i18n.t('removed')} (
-                        {props.community.beneficiaries.removed.length})
+                        {i18n.t('removed')} ({inactive})
                     </Button>
                     <View>
                         {props.hasFundsToNewBeneficiary ? (

@@ -21,7 +21,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Beneficiaries from './cards/Beneficiaries';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
-import { ICommunity } from 'helpers/types/endpoints';
+import { ICommunity, IManagers } from 'helpers/types/endpoints';
+import Api from 'services/api';
 
 function CommunityManagerScreen() {
     const navigation = useNavigation();
@@ -37,13 +38,16 @@ function CommunityManagerScreen() {
 
     const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [detailsForManagers, setDetailsForManagers] = useState<
+        IManagers | undefined
+    >(undefined);
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
     );
 
     useEffect(() => {
-        const loadCommunityBalance = async () => {
-            if (kit !== undefined) {
+        if (kit !== undefined) {
+            const loadCommunityBalance = async () => {
                 const stableToken = await kit.contracts.getStableToken();
                 const cUSDBalanceBig = await stableToken.balanceOf(
                     communityContract._address
@@ -54,9 +58,12 @@ function CommunityManagerScreen() {
                         '50000000000000000'
                     )
                 );
-            }
-        };
-        loadCommunityBalance();
+            };
+            loadCommunityBalance();
+        }
+        const loadDetailsForManagers = () =>
+            Api.community.managers().then(setDetailsForManagers);
+        loadDetailsForManagers();
     }, [community, kit]);
 
     const onRefresh = () => {
@@ -76,7 +83,7 @@ function CommunityManagerScreen() {
     };
 
     const communityStatus = (_community: ICommunity) => {
-        if (_community.status === 'valid') {
+        if (_community.status === 'valid' && detailsForManagers !== undefined) {
             return (
                 <ScrollView
                     refreshControl={
@@ -90,7 +97,7 @@ function CommunityManagerScreen() {
                     <BaseCommunity community={community}>
                         <View style={styles.container}>
                             <Beneficiaries
-                                community={_community}
+                                beneficiaries={detailsForManagers.beneficiaries}
                                 hasFundsToNewBeneficiary={
                                     hasFundsToNewBeneficiary
                                 }

@@ -18,8 +18,9 @@ import {
     SET_APP_SUSPECT_WRONG_DATETIME,
     SET_APP_FROM_WELCOME_SCREEN,
     SET_EXCHANGE_RATES,
+    SET_VIEW_MANAGER_DETAILS,
 } from 'helpers/constants';
-import { ICommunity } from './endpoints';
+import { ICommunity, IManagersDetails } from './endpoints';
 import { IUser } from './models';
 import { IUserWallet } from './state';
 
@@ -119,6 +120,11 @@ interface SetAppEchangeRatesAction {
     payload: any;
 }
 
+interface SetViewManagerDetailsAction {
+    type: typeof SET_VIEW_MANAGER_DETAILS;
+    payload: IManagersDetails;
+}
+
 export type UserActionTypes =
     | UserWalletAction
     | UserSetBalanceAction
@@ -141,7 +147,10 @@ export type AppActionTypes =
     | SetAppSuspectWrongDateTime
     | SetAppFromWelcomeScreen;
 
+export type ViewActionTypes = SetViewManagerDetailsAction;
+
 export type IStoreCombinedActionsTypes =
     | UserActionTypes
     | AuthActionTypes
-    | AppActionTypes;
+    | AppActionTypes
+    | ViewActionTypes;

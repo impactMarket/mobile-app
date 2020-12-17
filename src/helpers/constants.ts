@@ -41,3 +41,5 @@ export const CONSENT_ANALYTICS = 'CONSENT_ANALYTICS';
 
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
+
+export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

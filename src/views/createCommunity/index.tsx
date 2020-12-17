@@ -413,7 +413,7 @@ function CreateCommunityScreen() {
         <>
             <ScrollView>
                 <View style={styles.container}>
-                    <Card elevation={8}>
+                    <Card>
                         <Card.Content style={{ margin: -16 }}>
                             <Headline style={styles.communityDetailsHeadline}>
                                 {i18n.t('communityDetails').toUpperCase()}

@@ -15,10 +15,21 @@ import {
     SET_USER_IS_COMMUNITY_MANAGER,
     SET_USER_LANGUAGE,
     SET_USER_WALLET_BALANCE,
+    SET_VIEW_MANAGER_DETAILS,
 } from 'helpers/constants';
 import { combineReducers } from 'redux';
-import { AppActionTypes, AuthActionTypes, UserActionTypes } from 'helpers/types/redux';
-import { IAppState, IAuthState, IUserState } from 'helpers/types/state';
+import {
+    AppActionTypes,
+    AuthActionTypes,
+    UserActionTypes,
+    ViewActionTypes,
+} from 'helpers/types/redux';
+import {
+    IAppState,
+    IAuthState,
+    IUserState,
+    IViewState,
+} from 'helpers/types/state';
 
 const INITIAL_STATE_USER: IUserState = {
     wallet: {
@@ -52,6 +63,10 @@ const INITIAL_STATE_APP: IAppState = {
     suspectWrongDateTime: false,
     timeDiff: 0,
     fromWelcomeScreen: '',
+};
+
+const INITIAL_STATE_VIEW: IViewState = {
+    managerDetails: undefined,
 };
 
 const userReducer = (
@@ -126,8 +141,18 @@ const appReducer = (state = INITIAL_STATE_APP, action: AppActionTypes) => {
     }
 };
 
+const viewReducer = (state = INITIAL_STATE_VIEW, action: ViewActionTypes) => {
+    switch (action.type) {
+        case SET_VIEW_MANAGER_DETAILS:
+            return { ...state, managerDetails: action.payload };
+        default:
+            return state;
+    }
+};
+
 export default combineReducers({
     user: userReducer,
     auth: authReducer,
+    view: viewReducer,
     app: appReducer,
 });

@@ -1,5 +1,5 @@
 import { ContractKit } from '@celo/contractkit';
-import { ICommunity } from './endpoints';
+import { ICommunity, IManagersDetails } from './endpoints';
 import { IUser } from "./models";
 
 export interface IUserWallet {
@@ -27,6 +27,10 @@ export interface IAuthState {
     authToken: string;
 }
 
+export interface IViewState {
+    managerDetails?: IManagersDetails;
+}
+
 export interface IAppState {
     kit: ContractKit;
     exchangeRates: any;
@@ -37,7 +41,7 @@ export interface IAppState {
 
 export interface IRootState {
     user: IUserState;
-    // network: INetworkState;
     auth: IAuthState;
+    view: IViewState;
     app: IAppState;
 }

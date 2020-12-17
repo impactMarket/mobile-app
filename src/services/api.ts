@@ -8,6 +8,8 @@ import {
     CommunityCreationAttributes,
     ICommunity,
     ICommunityLightDetails,
+    IManagers,
+    IManagersDetails,
     IUserWelcome,
     IUserWelcomeAuth,
 } from 'helpers/types/endpoints';
@@ -72,6 +74,20 @@ class ApiRouteCommunity {
             '/community/list'
         );
         return result ? result : [];
+    }
+
+    static async managers() {
+        return await getRequest<IManagers>('/community/managers');
+    }
+
+    static async managersDetails() {
+        const result = await getRequest<IManagersDetails>(
+            '/community/managers/details'
+        );
+        if (result) {
+            return result;
+        }
+        throw new Error("Can't load '/community/managers/details'");
     }
 
     static async getByPublicId(

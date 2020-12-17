@@ -1,8 +1,10 @@
 import {
+    BeneficiaryAttributes,
     CommunityAttributes,
     CommunityContractAttributes,
     CommunityDailyMetricsAttributes,
     CommunityStateAttributes,
+    ManagerAttributes,
 } from './models';
 
 export interface ICommunityLightDetails {
@@ -18,6 +20,35 @@ export interface ICommunity extends CommunityAttributes {
     state: CommunityStateAttributes;
     contract: CommunityContractAttributes;
     metrics: CommunityDailyMetricsAttributes;
+}
+
+export interface IManagers {
+    managers: number,
+    beneficiaries: {
+        active: number,
+        inactive: number
+    }
+}
+
+export interface IManagerDetailsManager {
+    address: string;
+    username: string | null;
+    timestamp: number;
+}
+
+export interface IManagerDetailsBeneficiary {
+    address: string;
+    username: string | null;
+    timestamp: number;
+    claimed: string;
+}
+
+export interface IManagersDetails {
+    managers: IManagerDetailsManager[],
+    beneficiaries: {
+        active: IManagerDetailsBeneficiary[],
+        inactive: IManagerDetailsBeneficiary[]
+    }
 }
 
 //
