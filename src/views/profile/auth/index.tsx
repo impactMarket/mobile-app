@@ -20,13 +20,21 @@ import config from '../../../../config';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Button from 'components/core/Button';
-import { Screens, STORAGE_USER_ADDRESS, STORAGE_USER_AUTH_TOKEN, STORAGE_USER_PHONE_NUMBER } from 'helpers/constants';
+import {
+    Screens,
+    STORAGE_USER_ADDRESS,
+    STORAGE_USER_AUTH_TOKEN,
+    STORAGE_USER_PHONE_NUMBER,
+} from 'helpers/constants';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
+import { IRootState } from 'helpers/types/state';
+import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
+import CacheStore from 'services/cacheStore';
 
 function Auth() {
     const insets = useSafeAreaInsets();
-    const store = useStore();
+    const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
     const [connecting, setConnecting] = useState(false);
 
@@ -78,6 +86,7 @@ function Auth() {
             language,
             pushNotificationToken
         );
+        console.log('user', user)
         if (user === undefined) {
             Api.uploadError('', 'login', {
                 reason: '',
@@ -104,10 +113,11 @@ function Auth() {
                 STORAGE_USER_PHONE_NUMBER,
                 dappkitResponse.phoneNumber
             );
+            await CacheStore.cacheUser(user.user);
 
             const unsubscribe = store.subscribe(() => {
                 const state = store.getState();
-                if (state.user.celoInfo.address.length > 0) {
+                if (state.user.wallet.address.length > 0) {
                     unsubscribe();
                     setConnecting(false);
                     // navigation.goBack();
@@ -125,7 +135,8 @@ function Auth() {
                 dappkitResponse.phoneNumber,
                 user,
                 newKitFromWeb3(new Web3(config.jsonRpc)),
-                store as any
+                store,
+                user.user
             );
             store.dispatch(setPushNotificationsToken(pushNotificationToken));
             analytics('login', { device: Device.brand, success: 'true' });

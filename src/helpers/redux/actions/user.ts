@@ -15,10 +15,10 @@ import { IUser } from 'helpers/types/models';
 import { UserActionTypes } from 'helpers/types/redux';
 import { IUserWallet } from 'helpers/types/state';
 
-export function setUserWallet(celoInfo: IUserWallet): UserActionTypes {
+export function setUserWallet(wallet: IUserWallet): UserActionTypes {
     return {
         type: SET_USER_CELO_INFO,
-        payload: celoInfo,
+        payload: wallet,
     };
 }
 

@@ -40,6 +40,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
+    const [historicalSSI, setHistoricalSSI] = useState<number[]>([]);
     const [community, setCommunity] = useState<ICommunity | undefined>(
         undefined
     );
@@ -49,7 +50,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             .getByPublicId(props.route.params.communityId)
             .then((c) => setCommunity(c!))
             .finally(() => setRefreshing(false));
-    });
+        Api.community
+            .getHistoricalSSI(props.route.params.communityId)
+            .then(setHistoricalSSI);
+        return;
+    }, []);
 
     const onRefresh = () => {
         Api.community
@@ -62,7 +67,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         if (
             community !== undefined &&
             community.metrics !== undefined &&
-            community.metrics.historicalSSI.length > 1
+            historicalSSI.length > 1
         ) {
             return (
                 <>
@@ -76,7 +81,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <View style={styles.chartView}>
                         <LineChart
                             style={{ flex: 2, height: 100, width: 200 }}
-                            data={community.metrics.historicalSSI.reverse()}
+                            data={historicalSSI.reverse()}
                             contentInset={{ top: 20, bottom: 20 }}
                             curve={shape.curveMonotoneX}
                             svg={{
@@ -206,18 +211,15 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                         i18nKey="eachBeneficiaryCanClaimXUpToY"
                                         values={{
                                             claimXCCurrency: amountToCurrency(
-                                                community.contract
-                                                    .claimAmount,
+                                                community.contract.claimAmount,
                                                 community.currency,
                                                 rates
                                             ),
                                             claimX: humanifyCurrencyAmount(
-                                                community.contract
-                                                    .claimAmount
+                                                community.contract.claimAmount
                                             ),
                                             upToY: humanifyCurrencyAmount(
-                                                community.contract
-                                                    .maxClaim
+                                                community.contract.maxClaim
                                             ),
                                             interval:
                                                 community.contract

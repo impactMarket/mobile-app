@@ -6,20 +6,8 @@ import { Store, CombinedState, Dispatch } from 'redux';
 import Api from 'services/api';
 
 import CommunityContractABI from '../contracts/CommunityABI.json';
-// import {
-//     setCommunityContract,
-//     setCommunity,
-//     initUser,
-//     setAppExchangeRatesAction,
-//     resetUserApp,
-//     setUserExchangeRate,
-// } from './redux/actions/ReduxActions';
-import {
-    AppActionTypes,
-    AuthActionTypes,
-    UserActionTypes,
-} from '../types/redux';
-import { IAppState, IAuthState, IUserState } from '../types/state';
+import { IStoreCombinedActionsTypes } from './types/redux';
+import { IRootState } from './types/state';
 import * as Linking from 'expo-linking';
 import {
     ICommunity,
@@ -34,9 +22,12 @@ import {
     setCommunityContract,
     setCommunityMetadata,
     setUserExchangeRate,
+    setUserIsBeneficiary,
+    setUserIsCommunityManager,
     setUserWallet,
 } from './redux/actions/user';
 import { setAppExchangeRatesAction } from './redux/actions/app';
+import { IUser } from './types/models';
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
@@ -47,27 +38,10 @@ export async function welcomeUser(
     phoneNumber: string,
     user: IUserWelcome,
     kit: ContractKit,
-    store: Store<
-        CombinedState<{
-            user: IUserState;
-            auth: IAuthState;
-            app: IAppState;
-        }>,
-        UserActionTypes | AuthActionTypes | AppActionTypes
-    >
+    store: Store<CombinedState<IRootState>, IStoreCombinedActionsTypes>,
+    userMetadata: IUser
 ) {
     const balance = await getUserBalance(kit, address);
-    const userMetadata = await CacheStore.getUser();
-    if (userMetadata === null) {
-        // clear everything, same as logout
-        await AsyncStorage.clear();
-        batch(() => {
-            // dispatch(setUserIsBeneficiary(false));
-            // dispatch(setUserIsCommunityManager(false));
-            store.dispatch(resetUserApp());
-        });
-        return;
-    }
     let language = userMetadata.language;
     if (i18n.language !== language) {
         i18n.changeLanguage(language);
@@ -95,6 +69,11 @@ export async function welcomeUser(
             );
             store.dispatch(setCommunityMetadata(c));
             store.dispatch(setCommunityContract(communityContract));
+            if (user.isBeneficiary) {
+                store.dispatch(setUserIsBeneficiary(true));
+            } else {
+                store.dispatch(setUserIsCommunityManager(true));
+            }
         }
     });
 }

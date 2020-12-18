@@ -1,12 +1,12 @@
 // import { ContractKit } from '@celo/contractkit';
 
 // state
-export interface IUserCeloInfo {
-    // verify if address is undefined to determine if user is logged in
-    address: string;
-    phoneNumber: string;
-    balance: string;
-}
+// export interface IUserCeloInfo {
+//     // verify if address is undefined to determine if user is logged in
+//     address: string;
+//     phoneNumber: string;
+//     balance: string;
+// }
 
 // TODO: same as IUser. Rmove one.
 export interface IUserInfo {

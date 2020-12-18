@@ -13,7 +13,7 @@ import {
     Paragraph,
     Headline,
 } from 'react-native-paper';
-import { Provider } from 'react-redux';
+import { batch, Provider } from 'react-redux';
 import { createStore, Unsubscribe } from 'redux';
 import * as Sentry from 'sentry-expo';
 import Web3 from 'web3';
@@ -33,22 +33,7 @@ import config from './config';
 import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
 import { welcomeUser } from './src/helpers';
 import { iptcColors } from './src/styles';
-// import {
-//     setCeloKit,
-//     setPushNotificationsToken,
-//     setCommunity,
-//     setCommunityContract,
-//     setUserIsCommunityManager,
-//     setUserIsBeneficiary,
-//     setAppExchangeRatesAction,
-//     setUserLanguage,
-//     setAppSuspectWrongDateTime,
-// } from './src/helpers/redux/actions/ReduxActions';
 import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
-// import {
-//     STORAGE_USER_ADDRESS,
-//     STORAGE_USER_PHONE_NUMBER,
-// } from './src/helpers/types';
 
 import BigNumber from 'bignumber.js';
 
@@ -69,10 +54,24 @@ import moment from 'moment';
 import Navigator from './src/navigator';
 import * as Analytics from 'expo-firebase-analytics';
 import * as SplashScreen from 'expo-splash-screen';
-import { setCommunityContract, setCommunityMetadata, setUserIsBeneficiary, setUserIsCommunityManager, setUserLanguage } from 'helpers/redux/actions/user';
-import { setAppExchangeRatesAction, setAppSuspectWrongDateTime, setCeloKit } from 'helpers/redux/actions/app';
+import {
+    resetUserApp,
+    setCommunityContract,
+    setCommunityMetadata,
+    setUserIsBeneficiary,
+    setUserIsCommunityManager,
+    setUserLanguage,
+} from 'helpers/redux/actions/user';
+import {
+    setAppExchangeRatesAction,
+    setAppSuspectWrongDateTime,
+    setCeloKit,
+} from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
-import { STORAGE_USER_ADDRESS, STORAGE_USER_PHONE_NUMBER } from 'helpers/constants';
+import {
+    STORAGE_USER_ADDRESS,
+    STORAGE_USER_PHONE_NUMBER,
+} from 'helpers/constants';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -202,7 +201,9 @@ export default class App extends React.Component<any, IAppState> {
                                                 setUserIsBeneficiary(true)
                                             );
                                         }
-                                        store.dispatch(setCommunityMetadata(community));
+                                        store.dispatch(
+                                            setCommunityMetadata(community)
+                                        );
                                         store.dispatch(
                                             setCommunityContract(
                                                 communityContract
@@ -597,12 +598,25 @@ export default class App extends React.Component<any, IAppState> {
                 );
                 if (userWelcome !== undefined) {
                     // CacheStore.cacheUser(userWelcome.user);
+                    const userMetadata = await CacheStore.getUser();
+                    console.log();
+                    if (userMetadata === null) {
+                        // clear everything, same as logout
+                        await AsyncStorage.clear();
+                        batch(() => {
+                            // dispatch(setUserIsBeneficiary(false));
+                            // dispatch(setUserIsCommunityManager(false));
+                            store.dispatch(resetUserApp());
+                        });
+                        return;
+                    }
                     await welcomeUser(
                         address,
                         phoneNumber,
                         userWelcome,
                         kit,
-                        store
+                        store,
+                        userMetadata
                     );
                     loggedIn = true;
                 }

@@ -1,15 +1,14 @@
-import {
-    resetNetworkContractsApp,
-    resetUserApp,
-    setUserIsBeneficiary,
-    setUserIsCommunityManager,
-} from 'helpers/redux/actions/ReduxActions';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { batch, useDispatch } from 'react-redux';
 import i18n from 'assets/i18n';
 import { Button } from 'react-native-paper';
+import {
+    resetUserApp,
+    setUserIsBeneficiary,
+    setUserIsCommunityManager,
+} from 'helpers/redux/actions/user';
 
 function Logout() {
     const dispatch = useDispatch();
@@ -23,7 +22,6 @@ function Logout() {
             dispatch(setUserIsBeneficiary(false));
             dispatch(setUserIsCommunityManager(false));
             dispatch(resetUserApp());
-            dispatch(resetNetworkContractsApp());
         });
     };
 

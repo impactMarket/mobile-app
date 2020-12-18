@@ -16,8 +16,8 @@ export enum Screens {
 }
 
 // async storage
-export const STORAGE_USER_ADDRESS = '@celoinfo:address';
-export const STORAGE_USER_PHONE_NUMBER = '@celoinfo:phonenumber';
+export const STORAGE_USER_ADDRESS = '@wallet:address';
+export const STORAGE_USER_PHONE_NUMBER = '@wallet:phonenumber';
 export const STORAGE_USER_AUTH_TOKEN = '@user:authtoken';
 
 // redux

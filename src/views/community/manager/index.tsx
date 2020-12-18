@@ -38,9 +38,13 @@ function CommunityManagerScreen() {
 
     const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    const [detailsForManagers, setDetailsForManagers] = useState<
-        IManagers | undefined
-    >(undefined);
+    const [detailsForManagers, setDetailsForManagers] = useState<IManagers>({
+        managers: 0,
+        beneficiaries: {
+            active: 0,
+            inactive: 0,
+        },
+    });
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
     );
@@ -83,7 +87,8 @@ function CommunityManagerScreen() {
     };
 
     const communityStatus = (_community: ICommunity) => {
-        if (_community.status === 'valid' && detailsForManagers !== undefined) {
+        if (_community.status === 'valid') {
+            console.log(_community);
             return (
                 <ScrollView
                     refreshControl={

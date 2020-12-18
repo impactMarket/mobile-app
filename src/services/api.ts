@@ -17,10 +17,24 @@ import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
-async function getRequest<T>(endpoint: string): Promise<T | undefined> {
+async function getRequest<T>(
+    endpoint: string,
+    useAuthToken = false
+): Promise<T | undefined> {
     let response: T | undefined;
     try {
-        const result = await axios.get(endpoint);
+        let result;
+        if (useAuthToken) {
+            const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+            const requestOptions = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
+            result = await axios.get(endpoint, requestOptions);
+        } else {
+            result = await axios.get(endpoint);
+        }
         if (result.status >= 400) {
             return undefined;
         }
@@ -77,12 +91,17 @@ class ApiRouteCommunity {
     }
 
     static async managers() {
-        return await getRequest<IManagers>('/community/managers');
+        const result = await getRequest<IManagers>('/community/managers', true);
+        if (result) {
+            return result;
+        }
+        throw new Error("Can't load '/community/managers'");
     }
 
     static async managersDetails() {
         const result = await getRequest<IManagersDetails>(
-            '/community/managers/details'
+            '/community/managers/details',
+            true
         );
         if (result) {
             return result;
@@ -94,6 +113,13 @@ class ApiRouteCommunity {
         publicId: string
     ): Promise<ICommunity | undefined> {
         return await getRequest<ICommunity>('/community/publicid/' + publicId);
+    }
+
+    static async getHistoricalSSI(publicId: string): Promise<number[]> {
+        const result = await getRequest<number[]>(
+            '/community/hssi/' + publicId
+        );
+        return result ? result : [];
     }
 
     static async create(

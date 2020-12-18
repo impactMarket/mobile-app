@@ -1,10 +1,10 @@
 import {
-    BeneficiaryAttributes,
     CommunityAttributes,
     CommunityContractAttributes,
     CommunityDailyMetricsAttributes,
     CommunityStateAttributes,
-    ManagerAttributes,
+    IUser,
+    UserAttributes,
 } from './models';
 
 export interface ICommunityLightDetails {
@@ -23,11 +23,11 @@ export interface ICommunity extends CommunityAttributes {
 }
 
 export interface IManagers {
-    managers: number,
+    managers: number;
     beneficiaries: {
-        active: number,
-        inactive: number
-    }
+        active: number;
+        inactive: number;
+    };
 }
 
 export interface IManagerDetailsManager {
@@ -44,11 +44,11 @@ export interface IManagerDetailsBeneficiary {
 }
 
 export interface IManagersDetails {
-    managers: IManagerDetailsManager[],
+    managers: IManagerDetailsManager[];
     beneficiaries: {
-        active: IManagerDetailsBeneficiary[],
-        inactive: IManagerDetailsBeneficiary[]
-    }
+        active: IManagerDetailsBeneficiary[];
+        inactive: IManagerDetailsBeneficiary[];
+    };
 }
 
 //
@@ -84,5 +84,6 @@ export interface IUserWelcome {
 }
 
 export interface IUserWelcomeAuth extends IUserWelcome {
+    user: UserAttributes;
     token: string;
 }

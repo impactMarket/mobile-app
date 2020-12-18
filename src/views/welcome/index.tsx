@@ -10,7 +10,7 @@ import { Screens } from 'helpers/constants';
 import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
 import DiversitySvg from 'components/svg/welcome/DiversitySvg';
 import { useDispatch } from 'react-redux';
-import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/ReduxActions';
+import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
 
 function Welcome() {
     const insets = useSafeAreaInsets();

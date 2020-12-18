@@ -17,29 +17,14 @@ import {
     Image,
 } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
-import { connect, ConnectedProps } from 'react-redux';
 import Api from 'services/api';
 import Card from 'components/core/Card';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import { Screens } from 'helpers/constants';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
 import { ITabBarIconProps } from 'helpers/types/common';
 
-interface ICommunitiesScreenProps {
-    navigation: any;
-    route: any;
-}
-const mapStateToProps = (state: IRootState) => {
-    const { user } = state;
-    return { user };
-};
-
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & ICommunitiesScreenProps;
-
-function CommunitiesScreen(props: Props) {
+function CommunitiesScreen() {
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const [communities, setCommunities] = useState<ICommunityLightDetails[]>([]);
@@ -60,7 +45,7 @@ function CommunitiesScreen(props: Props) {
             style={styles.card}
             onPress={() =>
                 navigation.navigate(Screens.CommunityDetails, {
-                    community,
+                    communityId: community.publicId,
                 })
             }
         >
@@ -254,4 +239,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default connector(CommunitiesScreen);
+export default CommunitiesScreen;
