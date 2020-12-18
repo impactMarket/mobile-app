@@ -44,7 +44,7 @@ async function getRequest<T>(
             response = result.data as T;
         }
     } catch (error) {
-        Api.uploadError('', 'get_request', error);
+        // Api.uploadError('', 'get_request', error);
     }
     return response;
 }
@@ -77,7 +77,7 @@ async function postRequest<T>(
         }
         response = result.data as T;
     } catch (error) {
-        Api.uploadError('', 'post_request', error);
+        // Api.uploadError('', 'post_request', error);
     }
     return response;
 }
@@ -130,8 +130,8 @@ class ApiRouteCommunity {
 }
 
 class ApiRouteUser {
-    static async welcome(address: string, token: string) {
-        return postRequest<IUserWelcome>(`/user/welcome`, {
+    static async hello(address: string, token: string) {
+        return postRequest<IUserWelcome>(`/user/hello`, {
             authKey: process.env.EXPO_AUTH_KEY,
             address,
             token,

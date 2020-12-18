@@ -69,11 +69,8 @@ export async function welcomeUser(
             );
             store.dispatch(setCommunityMetadata(c));
             store.dispatch(setCommunityContract(communityContract));
-            if (user.isBeneficiary) {
-                store.dispatch(setUserIsBeneficiary(true));
-            } else {
-                store.dispatch(setUserIsCommunityManager(true));
-            }
+            store.dispatch(setUserIsBeneficiary(user.isBeneficiary));
+            store.dispatch(setUserIsCommunityManager(user.isManager));
         }
     });
 }

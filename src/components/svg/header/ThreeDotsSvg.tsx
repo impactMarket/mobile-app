@@ -49,7 +49,7 @@ function ThreeDotsSvg(props: SvgProps) {
                     }}
                 >
                     <Card.Content>
-                        <Button
+                        {/* <Button
                             modeType="gray"
                             bold={true}
                             disabled={true}
@@ -57,12 +57,12 @@ function ThreeDotsSvg(props: SvgProps) {
                             onPress={() => {
                                 setOpenThreeDotsMenu(false);
                                 navigation.navigate(Screens.CreateCommunity, {
-                                    community,
+                                    communityId: community.publicId,
                                 });
                             }}
                         >
                             {i18n.t('editCommunityDetails')}
-                        </Button>
+                        </Button> */}
                         <Button
                             modeType="gray"
                             bold={true}
@@ -70,7 +70,7 @@ function ThreeDotsSvg(props: SvgProps) {
                             onPress={() => {
                                 setOpenThreeDotsMenu(false);
                                 navigation.navigate(Screens.CommunityDetails, {
-                                    community,
+                                    communityId: community.publicId,
                                 });
                             }}
                         >

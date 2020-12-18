@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
@@ -10,22 +10,22 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
-    Button,
-    Dialog,
-    Portal,
+    // Button,
+    // Dialog,
+    // Portal,
     Headline,
     ActivityIndicator,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Beneficiaries from './cards/Beneficiaries';
-import { Screens } from 'helpers/constants';
+// import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import { ICommunity, IManagers } from 'helpers/types/endpoints';
 import Api from 'services/api';
 
 function CommunityManagerScreen() {
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const kit = useSelector((state: IRootState) => state.app.kit);
@@ -36,7 +36,7 @@ function CommunityManagerScreen() {
         (state: IRootState) => state.user.community.metadata
     );
 
-    const [openModalMore, setOpenModalMore] = useState(false);
+    // const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [detailsForManagers, setDetailsForManagers] = useState<IManagers>({
         managers: 0,
@@ -50,7 +50,7 @@ function CommunityManagerScreen() {
     );
 
     useEffect(() => {
-        if (kit !== undefined) {
+        if (kit !== undefined && community.status === 'valid') {
             const loadCommunityBalance = async () => {
                 const stableToken = await kit.contracts.getStableToken();
                 const cUSDBalanceBig = await stableToken.balanceOf(
@@ -65,8 +65,11 @@ function CommunityManagerScreen() {
             };
             loadCommunityBalance();
         }
-        const loadDetailsForManagers = () =>
-            Api.community.managers().then(setDetailsForManagers);
+        const loadDetailsForManagers = () => {
+            if (community.status === 'valid') {
+                Api.community.managers().then(setDetailsForManagers);
+            }
+        }
         loadDetailsForManagers();
     }, [community, kit]);
 
@@ -190,13 +193,13 @@ function CommunityManagerScreen() {
     return (
         <>
             {communityStatus(community)}
-            <Portal>
+            {/* <Portal>
                 <Dialog
                     visible={openModalMore}
                     onDismiss={() => setOpenModalMore(false)}
                 >
                     <Dialog.Content>
-                        {/* <Button
+                        <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
                             onPress={() => {
@@ -207,14 +210,14 @@ function CommunityManagerScreen() {
                             }}
                         >
                             {i18n.t('editCommunityDetails')}
-                        </Button> */}
+                        </Button>
                         <Button
                             mode="outlined"
                             style={{ marginVertical: 10 }}
                             onPress={() => {
                                 setOpenModalMore(false);
                                 navigation.navigate(Screens.CommunityDetails, {
-                                    community,
+                                    communityId: community.publicId,
                                 });
                             }}
                         >
@@ -222,7 +225,7 @@ function CommunityManagerScreen() {
                         </Button>
                     </Dialog.Content>
                 </Dialog>
-            </Portal>
+            </Portal> */}
         </>
     );
 }

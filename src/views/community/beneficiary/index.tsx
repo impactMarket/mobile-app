@@ -267,7 +267,7 @@ function BeneficiaryScreen() {
                             labelStyle={{ textAlign: 'center' }}
                             onPress={() =>
                                 navigation.navigate(Screens.CommunityDetails, {
-                                    community,
+                                    communityId: community.publicId,
                                 })
                             }
                         >

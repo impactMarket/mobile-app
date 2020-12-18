@@ -592,14 +592,13 @@ export default class App extends React.Component<any, IAppState> {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
-                const userWelcome = await Api.user.welcome(
+                const userWelcome = await Api.user.hello(
                     address,
                     pushNotificationToken
                 );
                 if (userWelcome !== undefined) {
                     // CacheStore.cacheUser(userWelcome.user);
                     const userMetadata = await CacheStore.getUser();
-                    console.log();
                     if (userMetadata === null) {
                         // clear everything, same as logout
                         await AsyncStorage.clear();
