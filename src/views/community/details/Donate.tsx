@@ -153,6 +153,9 @@ class Donate extends Component<Props, IDonateState> {
             this.props.app.kit
         )
             .then((tx) => {
+                // console.log('tx', tx);
+                // TODO: open window confirming donation
+                this.setState({ modalConfirmSend: false });
                 if (tx === undefined) {
                     return;
                 }
@@ -195,7 +198,9 @@ class Donate extends Component<Props, IDonateState> {
     };
 
     handleCopyAddressToClipboard = () => {
-        Clipboard.setString(this.props.user.community.metadata.contractAddress!);
+        Clipboard.setString(
+            this.props.user.community.metadata.contractAddress!
+        );
         this.setState({ showCopiedToClipboard: true });
         setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);
         this.setState({ openModalDonate: false });
@@ -380,7 +385,8 @@ class Donate extends Component<Props, IDonateState> {
                                             }}
                                         >
                                             {getCurrencySymbol(
-                                                this.props.user.metadata.currency
+                                                this.props.user.metadata
+                                                    .currency
                                             )}
                                         </Text>
                                         <TextInput
@@ -649,6 +655,7 @@ class Donate extends Component<Props, IDonateState> {
                                             modeType="default"
                                             bold={true}
                                             style={{ flex: 1 }}
+                                            loading={donating}
                                             labelStyle={styles.donateLabel}
                                             onPress={() =>
                                                 this.donateWithCeloWallet()
