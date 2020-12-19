@@ -23,6 +23,7 @@ import Beneficiaries from './cards/Beneficiaries';
 import { IRootState } from 'helpers/types/state';
 import { ICommunity, IManagers } from 'helpers/types/endpoints';
 import Api from 'services/api';
+import Managers from './cards/Managers';
 
 function CommunityManagerScreen() {
     // const navigation = useNavigation();
@@ -69,7 +70,7 @@ function CommunityManagerScreen() {
             if (community.status === 'valid') {
                 Api.community.managers().then(setDetailsForManagers);
             }
-        }
+        };
         loadDetailsForManagers();
     }, [community, kit]);
 
@@ -110,6 +111,7 @@ function CommunityManagerScreen() {
                                     hasFundsToNewBeneficiary
                                 }
                             />
+                            <Managers managers={detailsForManagers.managers} />
                             <CommuntyStatus community={_community} />
                         </View>
                     </BaseCommunity>
