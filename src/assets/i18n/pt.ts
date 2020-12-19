@@ -221,5 +221,10 @@ export default {
     male: 'Masculino',
     female: 'Feminino',
     others: 'Outros',
-    howManyChilds: 'Quantos filhos você tem?'
+    howManyChilds: 'Quantos filhos você tem?',
+    addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
+    errorAddingManager: 'Ocorreu um erro ao adicionar o gestor.',
+    managerAddress: 'Conta do Gestor',
+    addManager: 'Adicionar Gestor',
+    managers: 'Gestores',
 };

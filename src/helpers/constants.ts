@@ -7,6 +7,7 @@ export enum Screens {
     AddedBeneficiary = 'AddedBeneficiary',
     RemovedBeneficiary = 'RemovedBeneficiary',
     AddBeneficiary = 'AddBeneficiary',
+    AddManager = 'AddManager',
     //
     Beneficiary = 'Beneficiary',
     CommunityManager = 'CommunityManager',

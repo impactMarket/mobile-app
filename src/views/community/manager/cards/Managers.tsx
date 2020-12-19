@@ -7,6 +7,7 @@ import { View } from 'react-native';
 import { Headline } from 'react-native-paper';
 import i18n from 'assets/i18n';
 import { useNavigation } from '@react-navigation/native';
+import { Screens } from 'helpers/constants';
 
 interface IManagersProps {
     managers: number;
@@ -30,12 +31,13 @@ function Managers(props: IManagersProps) {
                             letterSpacing: 0.7,
                         }}
                     >
-                        {i18n.t('beneficiaries').toUpperCase()}
+                        {i18n.t('managers').toUpperCase()}
                     </Headline>
                     <Button
                         modeType="gray"
                         bold={true}
-                        disabled={managers === 0}
+                        // disabled={managers === 0}
+                        disabled={true}
                         style={{ marginVertical: 5 }}
                         // onPress={() =>
                         //     navigation.navigate(Screens.AddedBeneficiary)
@@ -49,11 +51,11 @@ function Managers(props: IManagersProps) {
                         style={{
                             marginVertical: 5,
                         }}
-                        // onPress={() =>
-                        //     navigation.navigate(Screens.AddBeneficiary)
-                        // }
+                        onPress={() =>
+                            navigation.navigate(Screens.AddManager)
+                        }
                     >
-                        {i18n.t('addBeneficiary')}
+                        {i18n.t('addManager')}
                     </Button>
                 </Card.Content>
             </Card>

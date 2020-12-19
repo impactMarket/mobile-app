@@ -9,6 +9,7 @@ import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScre
 import AddedBeneficiaryScreen from 'views/community/manager/views/AddedBeneficiaryScreen';
 import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBeneficiaryScreen';
 import AddBeneficiaryScreen from 'views/community/manager/views/AddBeneficiaryScreen';
+import AddManagerScreen from 'views/community/manager/views/AddManagerScreen';
 import WelcomeScreen from 'views/welcome/index';
 import { iptcColors } from 'styles/index';
 import { useSelector } from 'react-redux';
@@ -79,6 +80,11 @@ const managerScreens = (Navigator: typeof Stack) => (
             name={Screens.AddBeneficiary}
             component={AddBeneficiaryScreen}
             options={AddBeneficiaryScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.AddManager}
+            component={AddManagerScreen}
+            options={AddManagerScreen.navigationOptions}
         />
     </>
 );
