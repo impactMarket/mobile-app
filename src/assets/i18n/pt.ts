@@ -215,5 +215,11 @@ export default {
     transactionPossiblyNotAllowed: 'Possivelmente a transação não é permitida.',
     networkConnectionLost: 'A ligação é internet foi perdida.',
     networkIssuesRPC: 'Possivelmente erros de ligação ao serviço RPC.',
-    backWithSymbol: '< Voltar'
+    backWithSymbol: '< Voltar',
+    age: 'Idade',
+    gender: 'Género',
+    male: 'Masculino',
+    female: 'Feminino',
+    others: 'Outros',
+    howManyChilds: 'Quantos filhos você tem?'
 };

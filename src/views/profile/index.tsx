@@ -28,7 +28,12 @@ import * as Linking from 'expo-linking';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import { IRootState } from 'helpers/types/state';
-import { setUserExchangeRate, setUserLanguage, setUserMetadata, setUserWalletBalance } from 'helpers/redux/actions/user';
+import {
+    setUserExchangeRate,
+    setUserLanguage,
+    setUserMetadata,
+    setUserWalletBalance,
+} from 'helpers/redux/actions/user';
 
 function ProfileScreen() {
     const dispatch = useDispatch();
@@ -41,6 +46,10 @@ function ProfileScreen() {
     const [name, setName] = useState('');
     const [currency, setCurrency] = useState('usd');
     const [language, setLanguage] = useState('en');
+    const [gender, setGender] = useState<string | null>(null);
+    const [isDialogGenderOpen, setIsDialogGenderOpen] = useState(false);
+    const [age, setAge] = useState('');
+    const [childs, setChilds] = useState('');
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
     const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
@@ -52,6 +61,15 @@ function ProfileScreen() {
             }
             setCurrency(user.currency);
             setLanguage(user.language);
+            if (user.gender !== null) {
+                setGender(user.gender);
+            }
+            if (user.age !== null) {
+                setAge(user.age.toString());
+            }
+            if (user.childs !== null) {
+                setChilds(user.childs.toString());
+            }
         }
     }, [userWallet]);
 
@@ -67,9 +85,15 @@ function ProfileScreen() {
         updateBalance();
     };
 
+    const handleChangeGender = async (gender: string) => {
+        setGender(gender);
+        Api.user.setGender(userWallet.address, gender);
+        dispatch(setUserMetadata({ ...user, gender }));
+    };
+
     const handleChangeCurrency = async (text: string) => {
         setCurrency(text);
-        Api.setUserCurrency(userWallet.address, text);
+        Api.user.setCurrency(userWallet.address, text);
         // update exchange rate!
         const exchangeRate = (rates as any)[text.toUpperCase()].rate;
         batch(() => {
@@ -80,10 +104,23 @@ function ProfileScreen() {
 
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
-        Api.setLanguage(userWallet.address, text);
+        Api.user.setLanguage(userWallet.address, text);
         dispatch(setUserLanguage(text));
         i18n.changeLanguage(text);
         moment.locale(text);
+    };
+
+    const textGender = (g: string | null) => {
+        switch (g) {
+            case 'f':
+                return i18n.t('female');
+            case 'm':
+                return i18n.t('male');
+            case 'o':
+                return i18n.t('others');
+            default:
+                return i18n.t('select');
+        }
     };
 
     const userBalance = amountToCurrency(
@@ -126,10 +163,9 @@ function ProfileScreen() {
                                 style={{
                                     flex: 1,
                                     flexDirection: 'row',
-                                    // backgroundColor: 'red',
                                     alignItems: 'flex-end',
                                     marginTop: 19,
-                                    marginBottom: 8
+                                    marginBottom: 8,
                                 }}
                             >
                                 <Headline
@@ -144,7 +180,6 @@ function ProfileScreen() {
                                         lineHeight:
                                             userBalance.length > 12 ? 43 : 56,
                                         ...styles.headlineBalance,
-                                        // backgroundColor: 'yellow'
                                     }}
                                 >
                                     {userBalance}
@@ -173,11 +208,66 @@ function ProfileScreen() {
                             if (name.length > 0) {
                                 eName = encrypt(name);
                             }
-                            Api.setUsername(userWallet.address, eName);
-                            dispatch(setUserMetadata({ ...user, username: eName }));
+                            Api.user.setUsername(userWallet.address, eName);
+                            dispatch(
+                                setUserMetadata({ ...user, username: eName })
+                            );
                         }}
                         onChangeText={(value) => setName(value)}
                     />
+                    <View
+                        style={{ marginTop: 16, flex: 2, flexDirection: 'row' }}
+                    >
+                        <View style={{ flex: 1, marginRight: 10 }}>
+                            <Select
+                                label={i18n.t('gender')}
+                                value={textGender(gender)}
+                                onPress={() => setIsDialogGenderOpen(true)}
+                            />
+                        </View>
+                        <View style={{ flex: 1, marginLeft: 10 }}>
+                            <Input
+                                label={i18n.t('age')}
+                                value={age}
+                                maxLength={4}
+                                keyboardType="numeric"
+                                onEndEditing={(e) => {
+                                    Api.user.setAge(
+                                        userWallet.address,
+                                        parseInt(age, 10)
+                                    );
+                                    dispatch(
+                                        setUserMetadata({
+                                            ...user,
+                                            age: parseInt(age, 10),
+                                        })
+                                    );
+                                }}
+                                onChangeText={(value) => setAge(value)}
+                            />
+                        </View>
+                    </View>
+                    <View style={{ marginTop: 16 }}>
+                        <Input
+                            label={i18n.t('howManyChilds')}
+                            value={childs}
+                            maxLength={4}
+                            keyboardType="numeric"
+                            onEndEditing={(e) => {
+                                Api.user.setChilds(
+                                    userWallet.address,
+                                    parseInt(childs, 10)
+                                );
+                                dispatch(
+                                    setUserMetadata({
+                                        ...user,
+                                        childs: parseInt(childs, 10),
+                                    })
+                                );
+                            }}
+                            onChangeText={(value) => setChilds(value)}
+                        />
+                    </View>
                     <View style={{ marginTop: 16 }}>
                         <Select
                             label={i18n.t('currency')}
@@ -281,6 +371,36 @@ function ProfileScreen() {
                                 key="pt"
                                 label="Português"
                                 value="pt"
+                            />
+                        </RadioButton.Group>
+                    </Dialog.Content>
+                </Dialog>
+                <Dialog
+                    visible={isDialogGenderOpen}
+                    onDismiss={() => setIsDialogGenderOpen(false)}
+                >
+                    <Dialog.Content>
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                setIsDialogGenderOpen(false);
+                                handleChangeGender(value);
+                            }}
+                            value={gender ? gender : ''}
+                        >
+                            <RadioButton.Item
+                                key="f"
+                                label={i18n.t('female')}
+                                value="f"
+                            />
+                            <RadioButton.Item
+                                key="m"
+                                label={i18n.t('male')}
+                                value="m"
+                            />
+                            <RadioButton.Item
+                                key="o"
+                                label={i18n.t('others')}
+                                value="o"
                             />
                         </RadioButton.Group>
                     </Dialog.Content>

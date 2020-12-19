@@ -42,6 +42,9 @@ const INITIAL_STATE_USER: IUserState = {
         username: null,
         currency: 'USD',
         language: 'en',
+        gender: null,
+        age: null,
+        childs: null,
     },
     exchangeRate: 1,
     community: {

@@ -11,7 +11,7 @@ import {
     RESET_USER_APP,
 } from 'helpers/constants';
 import { ICommunity } from 'helpers/types/endpoints';
-import { IUser } from 'helpers/types/models';
+import { UserAttributes } from 'helpers/types/models';
 import { UserActionTypes } from 'helpers/types/redux';
 import { IUserWallet } from 'helpers/types/state';
 
@@ -22,7 +22,7 @@ export function setUserWallet(wallet: IUserWallet): UserActionTypes {
     };
 }
 
-export function setUserMetadata(userInfo: IUser): UserActionTypes {
+export function setUserMetadata(userInfo: UserAttributes): UserActionTypes {
     return {
         type: SET_USER_INFO,
         payload: userInfo,

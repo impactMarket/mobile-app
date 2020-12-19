@@ -21,14 +21,14 @@ export default class Select extends Component<ISelectProps, {}> {
     render() {
         const { label, value, onPress } = this.props;
         return (
-            <>
+            <View style={{ flexDirection: 'column' }}>
                 <Paragraph
                     style={{
                         fontSize: 17,
                         lineHeight: 17,
                         letterSpacing: 0.245455,
                         color: iptcColors.textGray,
-                        marginVertical: 8,
+                        marginBottom: 10,
                     }}
                 >
                     {label}
@@ -41,7 +41,7 @@ export default class Select extends Component<ISelectProps, {}> {
                             paddingVertical: 8,
                             paddingHorizontal: 15,
                             elevation: 0,
-                            height: 42,
+                            height: 46,
                             backgroundColor: 'rgba(206,212,218,0.27)',
                             borderRadius: 6,
                         }}
@@ -72,7 +72,7 @@ export default class Select extends Component<ISelectProps, {}> {
                         </Svg>
                     </View>
                 </TouchableWithoutFeedback>
-            </>
+            </View>
         );
     }
 }

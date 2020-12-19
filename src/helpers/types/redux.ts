@@ -21,7 +21,7 @@ import {
     SET_VIEW_MANAGER_DETAILS,
 } from 'helpers/constants';
 import { ICommunity, IManagersDetails } from './endpoints';
-import { IUser } from './models';
+import { UserAttributes } from './models';
 import { IUserWallet } from './state';
 
 // export interface IInitUser {
@@ -41,7 +41,7 @@ interface UserWalletAction {
 
 interface UserMetadataAction {
     type: typeof SET_USER_INFO;
-    payload: IUser;
+    payload: UserAttributes;
 }
 
 interface UserExchangeRateAction {

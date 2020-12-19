@@ -1,6 +1,6 @@
 import { ContractKit } from '@celo/contractkit';
 import { ICommunity, IManagersDetails } from './endpoints';
-import { IUser } from "./models";
+import { UserAttributes } from "./models";
 
 export interface IUserWallet {
     address: string;
@@ -12,7 +12,7 @@ export interface IUserWallet {
 
 export interface IUserState {
     wallet: IUserWallet;
-    metadata: IUser;
+    metadata: UserAttributes;
     exchangeRate: number; // it's singular!
     community: {
         isBeneficiary: boolean;

@@ -74,7 +74,9 @@ export interface IUser {
 export interface UserAttributes {
     address: string;
     username: string | null;
-    avatar: string;
     language: string;
     currency: string;
+    gender: string | null;
+    age: number | null;
+    childs: number | null;
 };
