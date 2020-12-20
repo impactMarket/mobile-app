@@ -15,6 +15,7 @@ import { iptcColors } from 'styles/index';
 import { useSelector } from 'react-redux';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
+import AddedManagerScreen from 'views/community/manager/views/AddedManagerScreen';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -85,6 +86,11 @@ const managerScreens = (Navigator: typeof Stack) => (
             name={Screens.AddManager}
             component={AddManagerScreen}
             options={AddManagerScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.AddedManager}
+            component={AddedManagerScreen}
+            options={AddedManagerScreen.navigationOptions}
         />
     </>
 );

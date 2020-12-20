@@ -36,12 +36,11 @@ function Managers(props: IManagersProps) {
                     <Button
                         modeType="gray"
                         bold={true}
-                        // disabled={managers === 0}
-                        disabled={true}
+                        disabled={managers === 0}
                         style={{ marginVertical: 5 }}
-                        // onPress={() =>
-                        //     navigation.navigate(Screens.AddedBeneficiary)
-                        // }
+                        onPress={() =>
+                            navigation.navigate(Screens.AddedManager)
+                        }
                     >
                         {i18n.t('added')} ({managers})
                     </Button>

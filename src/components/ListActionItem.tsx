@@ -53,17 +53,14 @@ export default class ListActionItem extends Component<
         const { item, maxTextTitleLength, prefix, suffix, action } = this.props;
         const { from } = item;
 
-        let titleMaxLength = 15;
+        let titleMaxLength = 25;
         if (maxTextTitleLength !== undefined) {
             titleMaxLength = maxTextTitleLength;
         }
         const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
         if (from.username !== null && fromHasName) {
-            name =
-                from.username.length === 32 && from.username.indexOf(' ') === -1 // this is an encrypted name
-                    ? decrypt(from.username)
-                    : from.username;
+            name = decrypt(from.username)
         }
 
         let renderRight;

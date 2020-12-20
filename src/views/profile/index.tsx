@@ -34,6 +34,7 @@ import {
     setUserMetadata,
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
+import CacheStore from 'services/cacheStore';
 
 function ProfileScreen() {
     const dispatch = useDispatch();
@@ -71,7 +72,19 @@ function ProfileScreen() {
                 setChilds(user.childs.toString());
             }
         }
-    }, [userWallet]);
+    }, [userWallet, user]);
+
+    const updateUserMetadataCache = () => {
+        CacheStore.cacheUser({
+            address: userWallet.address,
+            age: age ? parseInt(age, 10) : null,
+            childs: childs ? parseInt(childs, 10) : null,
+            currency,
+            gender,
+            language,
+            username: encrypt(name)
+        });
+    }
 
     const onRefresh = () => {
         const updateBalance = async () => {
@@ -88,12 +101,14 @@ function ProfileScreen() {
     const handleChangeGender = async (gender: string) => {
         setGender(gender);
         Api.user.setGender(userWallet.address, gender);
+        updateUserMetadataCache();
         dispatch(setUserMetadata({ ...user, gender }));
     };
 
     const handleChangeCurrency = async (text: string) => {
         setCurrency(text);
         Api.user.setCurrency(userWallet.address, text);
+        updateUserMetadataCache();
         // update exchange rate!
         const exchangeRate = (rates as any)[text.toUpperCase()].rate;
         batch(() => {
@@ -105,6 +120,7 @@ function ProfileScreen() {
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
         Api.user.setLanguage(userWallet.address, text);
+        updateUserMetadataCache();
         dispatch(setUserLanguage(text));
         i18n.changeLanguage(text);
         moment.locale(text);
@@ -209,6 +225,7 @@ function ProfileScreen() {
                                 eName = encrypt(name);
                             }
                             Api.user.setUsername(userWallet.address, eName);
+                            updateUserMetadataCache();
                             dispatch(
                                 setUserMetadata({ ...user, username: eName })
                             );
@@ -236,6 +253,7 @@ function ProfileScreen() {
                                         userWallet.address,
                                         parseInt(age, 10)
                                     );
+                                    updateUserMetadataCache();
                                     dispatch(
                                         setUserMetadata({
                                             ...user,
@@ -258,6 +276,7 @@ function ProfileScreen() {
                                     userWallet.address,
                                     parseInt(childs, 10)
                                 );
+                                updateUserMetadataCache();
                                 dispatch(
                                     setUserMetadata({
                                         ...user,

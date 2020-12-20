@@ -86,7 +86,6 @@ function Auth() {
             language,
             pushNotificationToken
         );
-        console.log('user', user)
         if (user === undefined) {
             Api.uploadError('', 'login', {
                 reason: '',

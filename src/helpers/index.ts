@@ -21,6 +21,7 @@ import {
     setUserExchangeRate,
     setUserIsBeneficiary,
     setUserIsCommunityManager,
+    setUserMetadata,
     setUserWallet,
 } from './redux/actions/user';
 import { setAppExchangeRatesAction } from './redux/actions/app';
@@ -52,6 +53,7 @@ export async function welcomeUser(
                 balance: balance.toString(),
             })
         );
+        store.dispatch(setUserMetadata(userMetadata));
         store.dispatch(
             setUserExchangeRate(
                 user.exchangeRates[userMetadata.currency.toUpperCase()].rate
