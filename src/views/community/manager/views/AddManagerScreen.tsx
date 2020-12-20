@@ -73,8 +73,21 @@ function AddManagerScreen() {
             );
             return;
         }
-
+        
         setAddInProgress(true);
+        
+        const userExists = await Api.user.exists(addressToAdd);
+        if (!userExists) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('notAnUser'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            setAddInProgress(false);
+            return;
+        }
+
         celoWalletRequest(
             userAddress,
             communityContract.options.address,

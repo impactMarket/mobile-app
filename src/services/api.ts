@@ -38,7 +38,7 @@ async function getRequest<T>(
         if (result.status >= 400) {
             return undefined;
         }
-        if (result.data === '') {
+        if (result.data === '') { // TODO: this condition should not exist
             response = undefined;
         } else {
             response = result.data as T;
@@ -152,6 +152,12 @@ class ApiRouteUser {
             language,
             pushNotificationToken,
         });
+    }
+
+    static async exists(
+        address: string
+    ): Promise<boolean> {
+        return !!await getRequest<boolean>('/user/exists/' + address);
     }
 
     static async setUsername(

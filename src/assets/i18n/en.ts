@@ -230,4 +230,5 @@ export default {
     managerAddress: 'Manager Account No (address)',
     addManager: 'Add Manager',
     managers: 'Managers',
+    notAnUser: 'The address you are adding, is not an user.'
 };

@@ -227,4 +227,5 @@ export default {
     managerAddress: 'Conta do Gestor',
     addManager: 'Adicionar Gestor',
     managers: 'Gestores',
+    notAnUser: 'O endereço que está a tentar adicionar não é um utilizador.'
 };

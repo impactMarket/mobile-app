@@ -92,7 +92,6 @@ function CommunityManagerScreen() {
 
     const communityStatus = (_community: ICommunity) => {
         if (_community.status === 'valid') {
-            console.log(_community);
             return (
                 <ScrollView
                     refreshControl={
