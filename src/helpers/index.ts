@@ -12,13 +12,10 @@ import * as Linking from 'expo-linking';
 import {
     ICommunity,
     ICommunityLightDetails,
-    IUserWelcome,
+    IUserHello,
 } from 'helpers/types/endpoints';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import CacheStore from 'services/cacheStore';
 import { batch } from 'react-redux';
 import {
-    resetUserApp,
     setCommunityContract,
     setCommunityMetadata,
     setUserExchangeRate,
@@ -27,7 +24,7 @@ import {
     setUserWallet,
 } from './redux/actions/user';
 import { setAppExchangeRatesAction } from './redux/actions/app';
-import { IUser } from './types/models';
+import { UserAttributes } from './types/models';
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
@@ -36,10 +33,10 @@ export function makeDeeplinkUrl() {
 export async function welcomeUser(
     address: string,
     phoneNumber: string,
-    user: IUserWelcome,
+    user: IUserHello,
     kit: ContractKit,
     store: Store<CombinedState<IRootState>, IStoreCombinedActionsTypes>,
-    userMetadata: IUser
+    userMetadata: UserAttributes
 ) {
     const balance = await getUserBalance(kit, address);
     let language = userMetadata.language;

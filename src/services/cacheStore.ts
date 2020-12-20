@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { IUser } from 'helpers/types/models';
+import { UserAttributes } from 'helpers/types/models';
 
 const CACHE_STORE_USER = '@CacheStore:user';
 const CACHE_STORE_BENEFICIARY_CLAIM = '@CacheStore:beneficiaryClaim';
@@ -20,11 +20,11 @@ interface IBeneficiaryClaim {
 export default class CacheStore {
     // user cache
 
-    static async cacheUser(user: IUser) {
+    static async cacheUser(user: UserAttributes) {
         await AsyncStorage.setItem(CACHE_STORE_USER, JSON.stringify(user));
     }
 
-    static async getUser(): Promise<IUser | null> {
+    static async getUser(): Promise<UserAttributes | null> {
         const user = await AsyncStorage.getItem(CACHE_STORE_USER);
         if (user === null) {
             return null;

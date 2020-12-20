@@ -3,7 +3,6 @@ import {
     CommunityContractAttributes,
     CommunityDailyMetricsAttributes,
     CommunityStateAttributes,
-    IUser,
     UserAttributes,
 } from './models';
 
@@ -76,14 +75,14 @@ export interface CommunityCreationAttributes {
     };
 }
 
-export interface IUserWelcome {
+export interface IUserHello {
     exchangeRates: any; // TODO: this is not really an any
     isBeneficiary: boolean;
     isManager: boolean;
     community?: ICommunity;
 }
 
-export interface IUserWelcomeAuth extends IUserWelcome {
+export interface IUserAuth extends IUserHello {
     user: UserAttributes;
     token: string;
 }

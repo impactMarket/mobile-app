@@ -61,21 +61,13 @@ export interface ManagerAttributes {
     communityId: string;
 };
 
-/**
- * @deprecated use `UserAttributes`
- */
-export interface IUser {
-    address: string;
-    username: string | null;
-    currency: string;
-    language: string;
-}
 
 export interface UserAttributes {
     address: string;
     username: string | null;
     language: string;
     currency: string;
+    // pushNotificationToken: string | null;
     gender: string | null;
     age: number | null;
     childs: number | null;

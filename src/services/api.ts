@@ -10,8 +10,8 @@ import {
     ICommunityLightDetails,
     IManagers,
     IManagersDetails,
-    IUserWelcome,
-    IUserWelcomeAuth,
+    IUserHello,
+    IUserAuth,
 } from 'helpers/types/endpoints';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 
@@ -130,8 +130,11 @@ class ApiRouteCommunity {
 }
 
 class ApiRouteUser {
-    static async hello(address: string, token: string) {
-        return postRequest<IUserWelcome>(`/user/hello`, {
+    static async hello(
+        address: string,
+        token: string
+    ): Promise<IUserHello | undefined> {
+        return postRequest<IUserHello>(`/user/hello`, {
             authKey: process.env.EXPO_AUTH_KEY,
             address,
             token,
@@ -142,8 +145,8 @@ class ApiRouteUser {
         address: string,
         language: string,
         pushNotificationToken: string
-    ): Promise<IUserWelcomeAuth | undefined> {
-        return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
+    ): Promise<IUserAuth | undefined> {
+        return await postRequest<IUserAuth>('/user/auth', {
             authKey: process.env.EXPO_AUTH_KEY,
             address,
             language,
@@ -184,10 +187,7 @@ class ApiRouteUser {
         return !!result;
     }
 
-    static async setGender(
-        address: string,
-        gender: string
-    ): Promise<boolean> {
+    static async setGender(address: string, gender: string): Promise<boolean> {
         const result = await postRequest<boolean>('/user/gender', {
             address,
             gender,
@@ -195,10 +195,7 @@ class ApiRouteUser {
         return !!result;
     }
 
-    static async setAge(
-        address: string,
-        age: number
-    ): Promise<boolean> {
+    static async setAge(address: string, age: number): Promise<boolean> {
         const result = await postRequest<boolean>('/user/age', {
             address,
             age,
@@ -206,10 +203,7 @@ class ApiRouteUser {
         return !!result;
     }
 
-    static async setChilds(
-        address: string,
-        childs: number
-    ): Promise<boolean> {
+    static async setChilds(address: string, childs: number): Promise<boolean> {
         const result = await postRequest<boolean>('/user/childs', {
             address,
             childs,

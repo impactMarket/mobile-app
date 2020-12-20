@@ -24,15 +24,6 @@ import { ICommunity, IManagersDetails } from './endpoints';
 import { UserAttributes } from './models';
 import { IUserWallet } from './state';
 
-// export interface IInitUser {
-//     wallet: IUserWallet;
-//     metadata: IUser;
-//     exchangeRates: any;
-//     isBeneficiary: boolean;
-//     isManager: boolean;
-//     community?: ICommunity;
-// }
-
 // action
 interface UserWalletAction {
     type: typeof SET_USER_CELO_INFO;
@@ -48,11 +39,6 @@ interface UserExchangeRateAction {
     type: typeof SET_USER_EXCHANGE_RATE;
     payload: number;
 }
-
-// interface InitUserAction {
-//     type: typeof INIT_USER;
-//     payload: IInitUser;
-// }
 
 interface UserSetBalanceAction {
     type: typeof SET_USER_WALLET_BALANCE;
