@@ -124,6 +124,8 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
         return '🇻🇪 Venezuela';
     } else if (phoneNumber.slice(0, 3) === '+63') {
         return '🇵🇭 Philippines';
+    } else if (phoneNumber.slice(0, 4) === '+504') {
+        return '🇭🇳 Honduras';
     }
     return 'Unknown';
 }
