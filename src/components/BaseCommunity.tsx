@@ -1,7 +1,8 @@
 import React from 'react';
 import { Entypo } from '@expo/vector-icons';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { ICommunity } from 'helpers/types/endpoints';
+import CachedImage from './CacheImage';
 
 export default function BaseCommunity(props: {
     community: ICommunity;
@@ -22,7 +23,7 @@ export default function BaseCommunity(props: {
                     position: 'absolute',
                 }}
             >
-                <Image
+                <CachedImage
                     style={styles.imageBackground}
                     source={{ uri: community.coverImage }}
                 />

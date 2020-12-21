@@ -14,7 +14,6 @@ import {
     View,
     ScrollView,
     RefreshControl,
-    Image,
 } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import Api from 'services/api';
@@ -23,6 +22,7 @@ import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import { Screens } from 'helpers/constants';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { ITabBarIconProps } from 'helpers/types/common';
+import CachedImage from 'components/CacheImage';
 
 function CommunitiesScreen() {
     const navigation = useNavigation();
@@ -51,10 +51,11 @@ function CommunitiesScreen() {
         >
             <Card.Content style={{ margin: -16 }}>
                 <View style={{ position: 'relative' }}>
-                    <Image
+                    <CachedImage
                         style={styles.cardImage}
                         source={{ uri: community.coverImage }}
                     />
+                    
                     <View
                         style={{
                             position: 'absolute',

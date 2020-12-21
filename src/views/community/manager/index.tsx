@@ -7,7 +7,7 @@ import * as Linking from 'expo-linking';
 import { updateCommunityInfo } from 'helpers/index';
 import { iptcColors } from 'styles/index';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, RefreshControl, Image } from 'react-native';
+import { StyleSheet, View, Text, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     // Button,
@@ -24,6 +24,7 @@ import { IRootState } from 'helpers/types/state';
 import { ICommunity, IManagers } from 'helpers/types/endpoints';
 import Api from 'services/api';
 import Managers from './cards/Managers';
+import CachedImage from 'components/CacheImage';
 
 function CommunityManagerScreen() {
     // const navigation = useNavigation();
@@ -129,7 +130,7 @@ function CommunityManagerScreen() {
                             justifyContent: 'space-around',
                         }}
                     >
-                        <Image
+                        <CachedImage
                             source={require('assets/images/pending.png')}
                             style={{ width: 50, height: 50 }}
                         />
