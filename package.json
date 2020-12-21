@@ -36,6 +36,7 @@
         "expo-barcode-scanner": "~9.0.0",
         "expo-constants": "~9.2.0",
         "expo-contacts": "~8.5.0",
+        "expo-crypto": "8.4.0",
         "expo-device": "~2.3.0",
         "expo-file-system": "~9.2.0",
         "expo-firebase-analytics": "~2.5.0",
