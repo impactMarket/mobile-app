@@ -5678,10 +5678,10 @@ expo-contacts@~8.5.0:
   dependencies:
     uuid "^3.4.0"
 
-expo-crypto@8.4.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/expo-crypto/-/expo-crypto-8.4.0.tgz#59a5b0640bb39db93e6857feafa2c9514b172cef"
-  integrity sha512-EHEFx5sHTDVIuQH8/juuecQWj1uQ7ClM98fKXPFcNYcBlYSCQvkik37hwfJC5WLcVnelFDpvZJmHxiTfB5GKCg==
+expo-crypto@~8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/expo-crypto/-/expo-crypto-8.3.0.tgz#b46f09dd813f24b77edb367520b69149496db86e"
+  integrity sha512-PbfxihKJsAkAy5M6jfv5Eiv9pRHU1BjBa7jLcwKDH6aUiWiJNjUvfdwku/Odt/lpXDuNcyDASy4WrD/PZDHtLA==
 
 expo-device@*:
   version "2.4.0"
