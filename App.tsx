@@ -1,6 +1,6 @@
 import React from 'react';
 import './global';
-import { Image, View, LogBox, StatusBar } from 'react-native';
+import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     DefaultTheme,
@@ -245,6 +245,20 @@ export default class App extends React.Component<any, IAppState> {
         store.dispatch(setCeloKit(kit));
         this.setState({ testnetWarningOpen: true });
         setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
+
+        //
+        Analytics.setUserId(Device.osInternalBuildId);
+        const osVersion = Device.osVersion;
+        let userProperties: any = {
+            screen_resolution: `${Dimensions.get('window').width}x${Dimensions.get('window').height}`,
+        }
+        if (osVersion) { 
+            userProperties = {
+                ...userProperties,
+                osVersion
+            }
+        }
+        Analytics.setUserProperties(userProperties);
     };
 
     componentWillUnmount = () => {
