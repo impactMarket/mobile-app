@@ -135,7 +135,6 @@ class ApiRouteUser {
         token: string
     ): Promise<IUserHello | undefined> {
         return postRequest<IUserHello>(`/user/hello`, {
-            authKey: process.env.EXPO_AUTH_KEY,
             address,
             token,
         });
@@ -146,8 +145,7 @@ class ApiRouteUser {
         language: string,
         pushNotificationToken: string
     ): Promise<IUserAuth | undefined> {
-        return await postRequest<IUserAuth>('/user/auth', {
-            authKey: process.env.EXPO_AUTH_KEY,
+        return await postRequest<IUserAuth>('/user/authenticate', {
             address,
             language,
             pushNotificationToken,
@@ -223,36 +221,6 @@ class Api {
     public static user = ApiRouteUser;
     // community
 
-    static async editCommunity(
-        publicId: string,
-        userAddress: string,
-        name: string,
-        description: string,
-        city: string,
-        country: string,
-        gps: {
-            latitude: number;
-            longitude: number;
-        },
-        email: string,
-        visibility: string,
-        coverImage: string
-    ): Promise<boolean> {
-        const result = await postRequest('/community/edit', {
-            publicId,
-            userAddress,
-            name,
-            description,
-            city,
-            country,
-            gps,
-            email,
-            visibility,
-            coverImage,
-        });
-        return !!result;
-    }
-
     static async uploadImageAsync(uri: string) {
         let response;
         try {
@@ -286,12 +254,6 @@ class Api {
         return response;
     }
 
-    // static async getCommunityByPublicId(
-    //     publicId: string
-    // ): Promise<ICommunityInfo | undefined> {
-    //     return await getRequest<ICommunityInfo>('/community/id/' + publicId);
-    // }
-
     /**
      * @deprecated
      */
@@ -301,15 +263,6 @@ class Api {
         return getRequest<any>(
             `/community/address/${communityContractAddress}`
         );
-    }
-
-    static async getCommunityNamesFromAddresses(
-        communitiesContractAddresses: string
-    ): Promise<{ contractAddress: string; name: string }[]> {
-        const result = await getRequest<
-            { contractAddress: string; name: string }[]
-        >(`/community/getnames/${communitiesContractAddresses}`);
-        return result ? result : [];
     }
 
     // user
