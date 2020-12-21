@@ -26,16 +26,23 @@ import CachedImage from 'components/CacheImage';
 
 function CommunitiesScreen() {
     const navigation = useNavigation();
-    const [refreshing, setRefreshing] = useState(false);
-    const [communities, setCommunities] = useState<ICommunityLightDetails[]>([]);
+    const [refreshing, setRefreshing] = useState(true);
+    const [communities, setCommunities] = useState<ICommunityLightDetails[]>(
+        []
+    );
 
     useEffect(() => {
-        Api.community.list().then(setCommunities);
+        Api.community
+            .list()
+            .then((c) => setCommunities(c))
+            .finally(() => setRefreshing(false));
     }, []);
 
     const onRefresh = () => {
-        Api.community.list().then(setCommunities);
-        setRefreshing(false);
+        Api.community
+            .list()
+            .then((c) => setCommunities(c))
+            .finally(() => setRefreshing(false));
     };
 
     const communityCard = (community: ICommunityLightDetails) => (
@@ -55,7 +62,6 @@ function CommunitiesScreen() {
                         style={styles.cardImage}
                         source={{ uri: community.coverImage }}
                     />
-                    
                     <View
                         style={{
                             position: 'absolute',
