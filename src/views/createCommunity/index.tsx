@@ -358,16 +358,16 @@ function CreateCommunityScreen() {
     const enableGPSLocation = async () => {
         setIsEnablingGPS(true);
         try {
-            const { status } = await Location.requestPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorGettingGPSLocation'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                return;
-            }
+            // const { status } = await Location.requestPermissionsAsync();
+            // if (status !== 'granted') {
+            //     Alert.alert(
+            //         i18n.t('failure'),
+            //         i18n.t('errorGettingGPSLocation'),
+            //         [{ text: 'OK' }],
+            //         { cancelable: false }
+            //     );
+            //     return;
+            // }
 
             const loc = await Location.getCurrentPositionAsync({
                 accuracy: Location.Accuracy.Low,

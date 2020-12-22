@@ -41,10 +41,7 @@
             },
             "permissions": [
                 "CAMERA",
-                "ACCESS_FINE_LOCATION",
                 "ACCESS_COARSE_LOCATION",
-                "READ_CONTACTS",
-                "VIBRATE",
                 "READ_EXTERNAL_STORAGE",
                 "WRITE_EXTERNAL_STORAGE"
             ]

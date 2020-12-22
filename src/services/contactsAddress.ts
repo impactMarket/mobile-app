@@ -31,11 +31,11 @@ export const getCacheContactsAddress = async () => {
 };
 
 export const crossContactsAddress = async (kit: ContractKit) => {
-    const { status } = await Permissions.askAsync(Permissions.CONTACTS);
+    // const { status } = await Permissions.askAsync(Permissions.CONTACTS);
 
-    if (status !== Permissions.PermissionStatus.GRANTED) {
-        return;
-    }
+    // if (status !== Permissions.PermissionStatus.GRANTED) {
+    //     return;
+    // }
 
     // const { phoneNumbersByAddress } = await fetchContacts(kit);
 

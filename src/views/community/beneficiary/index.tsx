@@ -66,7 +66,7 @@ function BeneficiaryScreen() {
     const [claimedAmount, setClaimedAmount] = useState('');
     const [claimedProgress, setClaimedProgress] = useState(0.1);
     const [refreshing, setRefreshing] = useState(false);
-    const [askLocationOnOpen, setAskLocationOnOpen] = useState(true);
+    const [askLocationOnOpen, setAskLocationOnOpen] = useState(false);
     const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
 
     useEffect(() => {
@@ -371,7 +371,6 @@ function BeneficiaryScreen() {
                     label: i18n.t('turnOn'),
                     onPress: async () => {
                         try {
-                            await Location.requestPermissionsAsync();
                             await Location.getCurrentPositionAsync({
                                 accuracy: Location.Accuracy.Low,
                             });
@@ -383,7 +382,6 @@ function BeneficiaryScreen() {
                                     {
                                         text: i18n.t('tryAgain'),
                                         onPress: async () => {
-                                            await Location.requestPermissionsAsync();
                                             await Location.getCurrentPositionAsync(
                                                 {
                                                     accuracy:
