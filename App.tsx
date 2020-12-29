@@ -21,7 +21,7 @@ import { newKitFromWeb3 } from '@celo/contractkit';
 import * as Font from 'expo-font';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import {
     NavigationContainer,

@@ -26,7 +26,7 @@ import {
     Modal,
     Headline,
 } from 'react-native-paper';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from 'expo-clipboard';
 import { ConnectedProps, connect } from 'react-redux';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
