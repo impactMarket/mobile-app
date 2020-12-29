@@ -1,7 +1,6 @@
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
-import { ethers } from 'ethers';
 import * as Linking from 'expo-linking';
 import { makeDeeplinkUrl } from 'helpers/index';
 import { iptcColors } from 'styles/index';
@@ -56,7 +55,7 @@ function Auth() {
             });
 
             dappkitResponse = await waitForAccountAuth(requestId);
-            userAddress = ethers.utils.getAddress(dappkitResponse.address);
+            userAddress = store.getState().app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
         } catch (e) {
             Api.uploadError('', 'login', e);
             analytics('login', { device: Device.brand, success: 'false' });

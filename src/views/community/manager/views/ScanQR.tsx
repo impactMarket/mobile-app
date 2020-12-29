@@ -1,5 +1,4 @@
 import i18n from 'assets/i18n';
-import { ethers } from 'ethers';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
@@ -20,8 +19,8 @@ interface IModalScanQRState {
     requestingCameraPermissions: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
-    const { user } = state;
-    return { user };
+    const { user, app } = state;
+    return { user, app };
 };
 const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -51,7 +50,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                 if (isCeloLink !== -1) {
                     scannedAddress = data.match(/address=([0-9a-zA-Z]+)/)[1];
                 } else {
-                    scannedAddress = ethers.utils.getAddress(data);
+                    scannedAddress = this.props.app.kit.web3.utils.toChecksumAddress(data);
                 }
                 this.props.callback(scannedAddress);
                 this.props.onDismiss();

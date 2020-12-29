@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
-import { ethers } from 'ethers';
 import { updateCommunityInfo } from 'helpers/index';
 import { setStateManagersDetails } from 'helpers/redux/actions/views';
 import { IManagersDetails } from 'helpers/types/endpoints';
@@ -63,7 +62,7 @@ function AddBeneficiaryScreen() {
         }
 
         try {
-            addressToAdd = ethers.utils.getAddress(inputAddress);
+            addressToAdd = kit.web3.utils.toChecksumAddress(inputAddress);
         } catch (e) {
             Alert.alert(
                 i18n.t('failure'),
