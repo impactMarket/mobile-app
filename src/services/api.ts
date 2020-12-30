@@ -84,6 +84,24 @@ async function postRequest<T>(
 }
 
 class ApiRouteCommunity {
+    static async listNearest(
+        lat: number,
+        lng: number,
+        offset: number,
+        limit: number
+    ) {
+        const result = await getRequest<ICommunityLightDetails[]>(
+            '/community/list/light?order=nearest&lat=' +
+                lat +
+                '&lng=' +
+                lng +
+                '&offset=' +
+                offset +
+                '&limit=' +
+                limit
+        );
+        return result ? result : [];
+    }
     static async list(offset: number, limit: number) {
         const result = await getRequest<ICommunityLightDetails[]>(
             '/community/list/light?offset=' + offset + '&limit=' + limit

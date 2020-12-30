@@ -228,5 +228,8 @@ export default {
     addManager: 'Adicionar Gestor',
     managers: 'Gestores',
     notAnUser: 'O endereço que está a tentar adicionar não é um utilizador.',
-    managerSince: 'Gestor desde {{date}}'
+    managerSince: 'Gestor desde {{date}}',
+    order: 'Ordem',
+    nearest: 'Mais próxima',
+    bigger: 'Mais beneficiários',
 };

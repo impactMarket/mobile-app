@@ -231,5 +231,8 @@ export default {
     addManager: 'Add Manager',
     managers: 'Managers',
     notAnUser: 'The address you are adding, is not an user.',
-    managerSince: 'Manager since {{date}}'
+    managerSince: 'Manager since {{date}}',
+    order: 'Order',
+    nearest: 'Nearest',
+    bigger: 'Bigger (Beneficiaries)',
 };
