@@ -38,7 +38,8 @@ async function getRequest<T>(
         if (result.status >= 400) {
             return undefined;
         }
-        if (result.data === '') { // TODO: this condition should not exist
+        if (result.data === '') {
+            // TODO: this condition should not exist
             response = undefined;
         } else {
             response = result.data as T;
@@ -83,9 +84,9 @@ async function postRequest<T>(
 }
 
 class ApiRouteCommunity {
-    static async list() {
+    static async list(offset: number, limit: number) {
         const result = await getRequest<ICommunityLightDetails[]>(
-            '/community/list'
+            '/community/list/light?offset=' + offset + '&limit=' + limit
         );
         return result ? result : [];
     }
@@ -152,10 +153,8 @@ class ApiRouteUser {
         });
     }
 
-    static async exists(
-        address: string
-    ): Promise<boolean> {
-        return !!await getRequest<boolean>('/user/exists/' + address);
+    static async exists(address: string): Promise<boolean> {
+        return !!(await getRequest<boolean>('/user/exists/' + address));
     }
 
     static async setUsername(

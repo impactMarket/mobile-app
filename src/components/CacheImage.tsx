@@ -25,10 +25,7 @@ export default class CachedImage extends Component<ICachedImageProps, {}> {
         const filesystemURI = await this.getImageFilesystemKey(
             this.props.source.uri!
         );
-        await this.loadImage(
-            filesystemURI,
-            this.props.source.uri!
-        );
+        await this.loadImage(filesystemURI, this.props.source.uri!);
     }
 
     async componentDidUpdate() {
@@ -41,10 +38,7 @@ export default class CachedImage extends Component<ICachedImageProps, {}> {
         ) {
             return null;
         }
-        await this.loadImage(
-            filesystemURI,
-            this.props.source.uri!
-        );
+        await this.loadImage(filesystemURI, this.props.source.uri!);
     }
 
     async getImageFilesystemKey(remoteURI: string) {
@@ -82,7 +76,9 @@ export default class CachedImage extends Component<ICachedImageProps, {}> {
 
     render() {
         if (this.state.imgURI === null || this.state.imgURI.length === 0) {
-            return null;
+            return (
+                <View style={{ height: (this.props.style as any).height }} />
+            );
         }
         return (
             <View>

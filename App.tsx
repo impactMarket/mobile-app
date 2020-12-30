@@ -265,7 +265,8 @@ export default class App extends React.Component<any, IAppState> {
         try {
             this.unsubscribeStore();
         } catch (e) {}
-        Notifications.removeAllNotificationListeners();
+        // refactor https://docs.expo.io/versions/latest/sdk/notifications/
+        // Notifications.removeAllNotificationListeners();
     };
 
     handleUpdateClick = () => {

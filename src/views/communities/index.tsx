@@ -1,170 +1,52 @@
-import { Entypo } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import {
-    calculateCommunityProgress,
-    claimFrequencyToText,
-} from 'helpers/index';
-import { humanifyCurrencyAmount } from 'helpers/currency';
-import { iptcColors } from 'styles/index';
 import React, { useState, useEffect } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-    RefreshControl,
-} from 'react-native';
-import { ProgressBar } from 'react-native-paper';
+import { FlatList } from 'react-native';
 import Api from 'services/api';
-import Card from 'components/core/Card';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
-import { Screens } from 'helpers/constants';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { ITabBarIconProps } from 'helpers/types/common';
-import CachedImage from 'components/CacheImage';
+import CommunityCard from './CommunityCard';
 
 function CommunitiesScreen() {
-    const navigation = useNavigation();
-    const [refreshing, setRefreshing] = useState(true);
+    const [communtiesOffset, setCommuntiesOffset] = useState(0);
+    const [, setRefreshing] = useState(true);
     const [communities, setCommunities] = useState<ICommunityLightDetails[]>(
         []
     );
 
     useEffect(() => {
         Api.community
-            .list()
+            .list(0, 5)
             .then((c) => setCommunities(c))
             .finally(() => setRefreshing(false));
     }, []);
 
-    const onRefresh = () => {
-        Api.community
-            .list()
-            .then((c) => setCommunities(c))
-            .finally(() => setRefreshing(false));
-    };
-
-    const communityCard = (community: ICommunityLightDetails) => (
-        <Card
-            key={community.name}
-            // elevation={8}
-            style={styles.card}
-            onPress={() =>
-                navigation.navigate(Screens.CommunityDetails, {
-                    communityId: community.publicId,
-                })
-            }
-        >
-            <Card.Content style={{ margin: -16 }}>
-                <View style={{ position: 'relative' }}>
-                    <CachedImage
-                        style={styles.cardImage}
-                        source={{ uri: community.coverImage }}
-                    />
-                    <View
-                        style={{
-                            position: 'absolute',
-                            zIndex: 5,
-                            ...styles.cardImage,
-                        }}
-                    >
-                        <Text style={styles.cardCommunityName}>
-                            {community.name}
-                        </Text>
-                        <Text style={styles.cardLocation}>
-                            <Entypo name="location-pin" size={15} />{' '}
-                            {community.city}, {community.country}
-                        </Text>
-                    </View>
-                    <View style={styles.darkerBackground} />
-                </View>
-                <View style={{ marginHorizontal: 17, marginBottom: 16.24 }}>
-                    <View
-                        style={{
-                            flex: 3,
-                            flexDirection: 'row',
-                            marginTop: 19.27,
-                            marginBottom: 17.85,
-                        }}
-                    >
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.cellHeader}>
-                                {community.state.beneficiaries}
-                            </Text>
-                            <Text style={styles.cellDescription}>
-                                {i18n.t('beneficiaries')}
-                            </Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.cellHeader}>
-                                $
-                                {humanifyCurrencyAmount(
-                                    community.contract.claimAmount
-                                )}
-                            </Text>
-                            <Text style={styles.cellDescription}>
-                                {claimFrequencyToText(
-                                    community.contract.baseInterval
-                                )}
-                            </Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.cellHeader}>
-                                {community.state.backers}
-                            </Text>
-                            <Text style={styles.cellDescription}>
-                                {i18n.t('backers')}
-                            </Text>
-                        </View>
-                    </View>
-                    <View>
-                        <ProgressBar
-                            key="raised"
-                            style={{
-                                backgroundColor: iptcColors.softGray,
-                                position: 'absolute',
-                                borderRadius: 6.5,
-                                height: 8.12,
-                            }}
-                            progress={calculateCommunityProgress(
-                                'raised',
-                                community
-                            )}
-                            color="#5289ff"
-                        />
-                        <ProgressBar
-                            key="claimed"
-                            style={{
-                                backgroundColor: 'rgba(255,255,255,0)',
-                                borderRadius: 6.5,
-                                height: 8.12,
-                            }}
-                            progress={calculateCommunityProgress(
-                                'claimed',
-                                community
-                            )}
-                            color="#50ad53"
-                        />
-                    </View>
-                </View>
-            </Card.Content>
-        </Card>
-    );
-
     return (
         <>
-            <ScrollView
-                style={styles.scrollView}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }
-            >
-                {communities.map(communityCard)}
-            </ScrollView>
+            <FlatList
+                data={communities}
+                renderItem={({ item }: { item: ICommunityLightDetails }) => (
+                    <CommunityCard community={item} />
+                )}
+                keyExtractor={(item) => item.publicId}
+                onEndReachedThreshold={.7}
+                onEndReached={(info: { distanceFromEnd: number }) => {
+                    setRefreshing(true);
+                    Api.community
+                        .list(communtiesOffset + 5, 5)
+                        .then((c) => {
+                            setCommunities(communities.concat(c));
+                            setCommuntiesOffset(communtiesOffset + 5);
+                        })
+                        .finally(() => setRefreshing(false));
+                }}
+                // Performance settings
+                removeClippedSubviews={true} // Unmount components when outside of window
+                initialNumToRender={2} // Reduce initial render amount
+                maxToRenderPerBatch={1} // Reduce number in each render batch
+                updateCellsBatchingPeriod={100} // Increase time between renders
+                windowSize={7} // Reduce the window size
+            />
         </>
     );
 }
@@ -177,73 +59,5 @@ CommunitiesScreen.navigationOptions = () => {
         ),
     };
 };
-
-const styles = StyleSheet.create({
-    scrollView: {
-        paddingTop: 12, // TODO: I'm not really sure about this
-    },
-    cardImage: {
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        width: '100%',
-        height: 147,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-    },
-    darkerBackground: {
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        backgroundColor: 'rgba(0,0,0,0.15)',
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 0,
-        height: 147,
-    },
-    cardCommunityName: {
-        zIndex: 5,
-        marginHorizontal: 15,
-        fontSize: 28,
-        lineHeight: 34,
-        fontFamily: 'Gelion-Bold',
-        color: 'white',
-        textAlign: 'center',
-    },
-    cardLocation: {
-        zIndex: 5,
-        fontFamily: 'Gelion-Regular',
-        fontSize: 16,
-        lineHeight: 19,
-        color: 'white',
-    },
-    cardInfo: {
-        flex: 3,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
-    card: {
-        marginHorizontal: 16,
-        marginBottom: 22,
-        // marginTop: 8,
-        padding: 0,
-    },
-    cellHeader: {
-        fontFamily: 'Gelion-Bold',
-        fontSize: 24,
-        lineHeight: 24,
-        textAlign: 'center',
-        color: iptcColors.nileBlue,
-    },
-    cellDescription: {
-        fontFamily: 'Gelion-Regular',
-        fontSize: 14,
-        lineHeight: 16,
-        opacity: 0.7,
-        textAlign: 'center',
-        color: iptcColors.nileBlue,
-        marginTop: 6,
-    },
-});
 
 export default CommunitiesScreen;
