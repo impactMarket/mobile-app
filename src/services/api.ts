@@ -224,10 +224,10 @@ class ApiRouteUser {
         return !!result;
     }
 
-    static async setChilds(address: string, childs: number): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/childs', {
+    static async setChildren(address: string, children: number | null): Promise<boolean> {
+        const result = await postRequest<boolean>('/user/children', {
             address,
-            childs,
+            children,
         });
         return !!result;
     }

@@ -50,7 +50,7 @@ function ProfileScreen() {
     const [gender, setGender] = useState<string | null>(null);
     const [isDialogGenderOpen, setIsDialogGenderOpen] = useState(false);
     const [age, setAge] = useState('');
-    const [childs, setChilds] = useState('');
+    const [children, setChildren] = useState('');
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
     const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
@@ -62,14 +62,14 @@ function ProfileScreen() {
             }
             setCurrency(user.currency);
             setLanguage(user.language);
-            if (user.gender !== null) {
+            if (user.gender !== null && user.gender !== undefined) {
                 setGender(user.gender);
             }
-            if (user.age !== null) {
-                setAge(user.age.toString());
+            if (user.year !== null && user.year !== undefined) {
+                setAge((new Date().getFullYear() - user.year).toString());
             }
-            if (user.childs !== null) {
-                setChilds(user.childs.toString());
+            if (user.children !== null && user.children !== undefined) {
+                setChildren(user.children.toString());
             }
         }
     }, [userWallet, user]);
@@ -77,14 +77,18 @@ function ProfileScreen() {
     const updateUserMetadataCache = () => {
         CacheStore.cacheUser({
             address: userWallet.address,
-            age: age ? parseInt(age, 10) : null,
-            childs: childs ? parseInt(childs, 10) : null,
+            year:
+                age && age.length > 0
+                    ? new Date().getFullYear() - parseInt(age, 10)
+                    : null,
+            children:
+                children && children.length > 0 ? parseInt(children, 10) : null,
             currency,
             gender,
             language,
-            username: encrypt(name)
+            username: encrypt(name),
         });
-    }
+    };
 
     const onRefresh = () => {
         const updateBalance = async () => {
@@ -257,7 +261,11 @@ function ProfileScreen() {
                                     dispatch(
                                         setUserMetadata({
                                             ...user,
-                                            age: parseInt(age, 10),
+                                            year:
+                                                age.length > 0
+                                                    ? new Date().getFullYear() -
+                                                      parseInt(age, 10)
+                                                    : null,
                                         })
                                     );
                                 }}
@@ -267,24 +275,29 @@ function ProfileScreen() {
                     </View>
                     <View style={{ marginTop: 16 }}>
                         <Input
-                            label={i18n.t('howManyChilds')}
-                            value={childs}
+                            label={i18n.t('howManyChildren')}
+                            value={children}
                             maxLength={4}
                             keyboardType="numeric"
                             onEndEditing={(e) => {
-                                Api.user.setChilds(
+                                Api.user.setChildren(
                                     userWallet.address,
-                                    parseInt(childs, 10)
+                                    children.length > 0
+                                        ? parseInt(children, 10)
+                                        : null
                                 );
                                 updateUserMetadataCache();
                                 dispatch(
                                     setUserMetadata({
                                         ...user,
-                                        childs: parseInt(childs, 10),
+                                        children:
+                                            children.length > 0
+                                                ? parseInt(children, 10)
+                                                : null,
                                     })
                                 );
                             }}
-                            onChangeText={(value) => setChilds(value)}
+                            onChangeText={(value) => setChildren(value)}
                         />
                     </View>
                     <View style={{ marginTop: 16 }}>

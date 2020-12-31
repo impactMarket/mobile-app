@@ -224,7 +224,7 @@ export default {
     male: 'Male',
     female: 'Female',
     others: 'Others',
-    howManyChilds: 'How many childs do you have?',
+    howManyChildren: 'How many children do you have?',
     addedNewManager: "You've successfully added a new manager!",
     errorAddingManager: 'An error happened while adding the manager.',
     managerAddress: 'Manager Account No (address)',

@@ -69,6 +69,6 @@ export interface UserAttributes {
     currency: string;
     // pushNotificationToken: string | null;
     gender: string | null;
-    age: number | null;
-    childs: number | null;
+    year: number | null;
+    children: number | null;
 };
