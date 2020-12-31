@@ -140,7 +140,7 @@ class Donate extends Component<Props, IDonateState> {
             parseFloat(formatInputAmountToTransfer(this.state.amountDonate)) /
             this.props.user.exchangeRate;
         const txObject = stableToken.transfer(
-            this.props.user.community.metadata.contractAddress!,
+            this.props.community.contractAddress!,
             new BigNumber(amountInDollars)
                 .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
                 .toString()
@@ -199,7 +199,7 @@ class Donate extends Component<Props, IDonateState> {
 
     handleCopyAddressToClipboard = () => {
         Clipboard.setString(
-            this.props.user.community.metadata.contractAddress!
+            this.props.community.contractAddress!
         );
         this.setState({ showCopiedToClipboard: true });
         setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);

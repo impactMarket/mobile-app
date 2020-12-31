@@ -8,6 +8,7 @@ import {
 
 export interface ICommunityLightDetails {
     publicId: string;
+    contractAddress: string;
     name: string;
     city: string;
     country: string;
