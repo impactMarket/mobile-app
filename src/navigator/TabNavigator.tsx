@@ -178,7 +178,7 @@ function TabNavigator({
                 tabStyle: {
                     marginVertical: 16,
                 },
-                style: { height: 84 + insets.top },
+                style: { height: 84 },
             }}
             initialRouteName={fromWelcomeScreen}
         >

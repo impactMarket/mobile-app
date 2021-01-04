@@ -11,23 +11,25 @@ import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
 import DiversitySvg from 'components/svg/welcome/DiversitySvg';
 import { useDispatch } from 'react-redux';
 import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function Welcome() {
     const insets = useSafeAreaInsets();
     const dispatch = useDispatch();
     const [redirecting, setRedirecting] = useState(false);
     return (
-        <View
+        <ScrollView
             style={{
-                flex: 1,
+                // flex: 1,
                 flexDirection: 'column',
-                justifyContent: 'space-between',
+                // justifyContent: 'space-between',
                 paddingTop: insets.top,
             }}
         >
             <View
                 style={{
                     alignItems: 'center',
+                    paddingBottom: 20
                 }}
             >
                 <LogoBlueSvg style={{ height: 74, marginTop: 25 }} />
@@ -49,7 +51,7 @@ function Welcome() {
             <View
                 style={{
                     paddingHorizontal: 30,
-                    width: '100%',
+                    width: '100%'
                 }}
             >
                 <Button
@@ -92,7 +94,7 @@ function Welcome() {
                     {i18n.t('exploreCommunities')}
                 </Button>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 

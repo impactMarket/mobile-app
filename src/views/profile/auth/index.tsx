@@ -6,7 +6,7 @@ import { makeDeeplinkUrl } from 'helpers/index';
 import { iptcColors } from 'styles/index';
 import { welcomeUser } from 'helpers/index';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useStore } from 'react-redux';
 import Api from 'services/api';
@@ -216,7 +216,7 @@ function Auth() {
     };
 
     return (
-        <View style={{ paddingTop: insets.top + 10, ...styles.mainView }}>
+        <ScrollView style={{ paddingTop: insets.top + 10, ...styles.mainView }}>
             <View style={{ width: '100%', paddingHorizontal: 16 }}>
                 <Text style={styles.descriptionTop}>
                     {i18n.t('toContinuePlease')}
@@ -226,7 +226,7 @@ function Auth() {
                     {i18n.t('loginDescription')}
                 </Text>
             </View>
-            <View style={{ width: '100%', paddingHorizontal: 31 }}>
+            <View style={{ width: '100%', paddingHorizontal: 31, paddingBottom: 38 }}>
                 <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
                 <View style={{ width: '100%', marginTop: 16 }}>
                     {buttonStoreLink()}
@@ -243,7 +243,7 @@ function Auth() {
                     {i18n.t('connectWithValora')}
                 </Button>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
@@ -257,13 +257,13 @@ export default Auth;
 
 const styles = StyleSheet.create({
     mainView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'center',
+        // flex: 1,
+        // flexDirection: 'column',
+        // justifyContent: 'space-around',
+        // alignItems: 'center',
         // marginHorizontal: 32,
         // marginTop: 20,
-        marginBottom: 38,
+        paddingBottom: 38,
     },
     buttomStoreText: {
         fontSize: 18,
