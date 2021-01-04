@@ -265,10 +265,10 @@ export default Auth;
 
 const styles = StyleSheet.create({
     mainView: {
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'center',
+        // flex: 1,
+        // flexDirection: 'column',
+        // justifyContent: 'space-around',
+        // alignItems: 'center',
         // marginHorizontal: 32,
         // marginTop: 20,
         paddingBottom: 38,

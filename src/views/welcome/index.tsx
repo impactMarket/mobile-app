@@ -11,6 +11,7 @@ import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
 import DiversitySvg from 'components/svg/welcome/DiversitySvg';
 import { useDispatch } from 'react-redux';
 import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function Welcome() {
     const insets = useSafeAreaInsets();
@@ -51,7 +52,7 @@ function Welcome() {
             <View
                 style={{
                     paddingHorizontal: 30,
-                    width: '100%',
+                    width: '100%'
                 }}
             >
                 <Button
