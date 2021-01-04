@@ -166,12 +166,10 @@ function BeneficiaryScreen() {
     };
 
     const onRefresh = () => {
-        Api.community.getByPublicId(community.publicId).then(
-            (c) => {
-                dispatch(setCommunityMetadata(c!));
-                setRefreshing(false);
-            }
-        );
+        Api.community.getByPublicId(community.publicId).then((c) => {
+            dispatch(setCommunityMetadata(c!));
+            setRefreshing(false);
+        });
     };
 
     const updateClaimedAmountAndCache = async () => {
@@ -279,7 +277,11 @@ function BeneficiaryScreen() {
                         style={{
                             flex: 1,
                             justifyContent: 'space-between',
-                            height: Dimensions.get('window').height - 100 - 84 - 152, // this is the: height - header - navigation - image
+                            height:
+                                Dimensions.get('window').height -
+                                100 -
+                                84 -
+                                152, // this is the: height - header - navigation - image
                         }}
                     >
                         <View>
@@ -371,6 +373,18 @@ function BeneficiaryScreen() {
                     label: i18n.t('turnOn'),
                     onPress: async () => {
                         try {
+                            const {
+                                status,
+                            } = await Location.requestPermissionsAsync();
+                            if (status !== 'granted') {
+                                Alert.alert(
+                                    i18n.t('failure'),
+                                    i18n.t('errorGettingGPSLocation'),
+                                    [{ text: 'OK' }],
+                                    { cancelable: false }
+                                );
+                                return;
+                            }
                             await Location.getCurrentPositionAsync({
                                 accuracy: Location.Accuracy.Low,
                             });

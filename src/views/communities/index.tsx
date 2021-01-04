@@ -1,6 +1,6 @@
 import i18n from 'assets/i18n';
 import React, { useState, useEffect, useRef } from 'react';
-import { FlatList, View } from 'react-native';
+import { Alert, FlatList, View } from 'react-native';
 import Api from 'services/api';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
@@ -41,6 +41,16 @@ function CommunitiesScreen() {
         flatListRef.current?.scrollToIndex({ index: 0 });
         if (order === 'nearest') {
             try {
+                const { status } = await Location.requestPermissionsAsync();
+                if (status !== 'granted') {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('errorGettingGPSLocation'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                    return;
+                }
                 const location = await Location.getCurrentPositionAsync({
                     accuracy: Location.Accuracy.Low,
                 });
