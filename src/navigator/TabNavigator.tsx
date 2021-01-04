@@ -11,7 +11,6 @@ import CommunityManagerScreen from 'views/community/manager';
 import ProfileScreen from 'views/profile';
 import {
     getFocusedRouteNameFromRoute,
-    Route,
     RouteProp,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -25,6 +24,7 @@ import CommunityManager from './header/CommunityManager';
 import Beneficiary from './header/Beneficiary';
 import { IRootState } from 'helpers/types/state';
 import { ITabBarIconProps } from 'helpers/types/common';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
     let routeName = getFocusedRouteNameFromRoute(route);
@@ -74,6 +74,7 @@ function TabNavigator({
     route: RouteProp<any, any>;
     navigation: StackNavigationProp<any, any>;
 }) {
+    const insets = useSafeAreaInsets();
     const isManager = useSelector(
         (state: IRootState) => state.user.community.isManager
     );
@@ -177,7 +178,7 @@ function TabNavigator({
                 tabStyle: {
                     marginVertical: 16,
                 },
-                style: { height: 84 },
+                style: { height: 84 + insets.top },
             }}
             initialRouteName={fromWelcomeScreen}
         >
