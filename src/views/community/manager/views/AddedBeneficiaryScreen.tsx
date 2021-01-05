@@ -1,19 +1,22 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
-import ListActionItem from 'components/ListActionItem';
 import { amountToCurrency } from 'helpers/currency';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Alert, View } from 'react-native';
+import { StyleSheet, Alert, View, FlatList, RefreshControl } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import BackSvg from 'components/svg/header/BackSvg';
 import { IRootState } from 'helpers/types/state';
-import { IManagersDetails } from 'helpers/types/endpoints';
+import {
+    IManagerDetailsBeneficiary,
+    IManagersDetails,
+} from 'helpers/types/endpoints';
 import { setStateManagersDetails } from 'helpers/redux/actions/views';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, List } from 'react-native-paper';
 import { iptcColors } from 'styles/index';
+import { decrypt } from 'helpers/encryption';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -35,6 +38,15 @@ function AddedBeneficiaryScreen() {
     const [managerDetails, setManagerDetails] = useState<
         IManagersDetails | undefined
     >();
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        Api.community.managersDetails().then((details) => {
+            setManagerDetails(details);
+            dispatch(setStateManagersDetails(details));
+        }).finally(() => setRefreshing(false));
+    }, []);
 
     useEffect(() => {
         const loadDetails = () => {
@@ -125,45 +137,70 @@ function AddedBeneficiaryScreen() {
         );
     }
 
+    const formatAddressOrName = (from: IManagerDetailsBeneficiary) => {
+        let titleMaxLength = 25;
+        const fromHasName = from.username !== null && from.username.length > 0;
+        let name = '';
+        if (from.username !== null && fromHasName) {
+            name = decrypt(from.username);
+        }
+
+        return fromHasName
+            ? name
+            : `${from.address.slice(
+                  0,
+                  (titleMaxLength - 4) / 2
+              )}..${from.address.slice(42 - (titleMaxLength - 4) / 2, 42)}`;
+    };
+
     return (
-        <ScrollView style={{ marginHorizontal: 15 }}>
-            {managerDetails.beneficiaries.active.map((beneficiary, index) => (
-                <ListActionItem
-                    key={beneficiary.address}
-                    item={{
-                        description: i18n.t('claimedSince', {
-                            amount:
-                                beneficiary.claimed === undefined
-                                    ? '0'
-                                    : amountToCurrency(
-                                          beneficiary.claimed,
-                                          userCurrency,
-                                          exchangeRates
-                                      ),
-                            date: moment(beneficiary.timestamp).format(
-                                'MMM, YYYY'
-                            ),
-                        }),
-                        from: beneficiary,
-                        key: beneficiary.address,
-                        timestamp: 0,
-                    }}
-                >
-                    <Button
-                        modeType="gray"
-                        bold={true}
-                        disabled={removing[index]}
-                        loading={removing[index]}
-                        style={{ marginVertical: 5 }}
-                        onPress={() =>
-                            handleRemoveBeneficiary(beneficiary.address, index)
-                        }
-                    >
-                        {i18n.t('remove')}
-                    </Button>
-                </ListActionItem>
-            ))}
-        </ScrollView>
+        <FlatList
+            data={managerDetails.beneficiaries.active}
+            style={{ paddingHorizontal: 15 }}
+            renderItem={({
+                item,
+                index,
+            }: {
+                item: IManagerDetailsBeneficiary;
+                index: number;
+            }) => (
+                <List.Item
+                    title={formatAddressOrName(item)}
+                    description={i18n.t('claimedSince', {
+                        amount:
+                            item.claimed === undefined
+                                ? '0'
+                                : amountToCurrency(
+                                      item.claimed,
+                                      userCurrency,
+                                      exchangeRates
+                                  ),
+                        date: moment(item.timestamp).format('MMM, YYYY'),
+                    })}
+                    right={() => (
+                        <Button
+                            modeType="gray"
+                            bold={true}
+                            disabled={removing[index]}
+                            loading={removing[index]}
+                            style={{ marginVertical: 5 }}
+                            onPress={() =>
+                                handleRemoveBeneficiary(item.address, index)
+                            }
+                        >
+                            {i18n.t('remove')}
+                        </Button>
+                    )}
+                    titleStyle={styles.textTitle}
+                    descriptionStyle={styles.textDescription}
+                    style={{ paddingLeft: 0 }}
+                />
+            )}
+            keyExtractor={(item) => item.address}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+        />
     );
 }
 AddedBeneficiaryScreen.navigationOptions = () => {
@@ -172,5 +209,18 @@ AddedBeneficiaryScreen.navigationOptions = () => {
         headerTitle: i18n.t('added'),
     };
 };
+
+const styles = StyleSheet.create({
+    textTitle: {
+        fontFamily: 'Gelion-Regular',
+        fontSize: 20,
+        letterSpacing: 0,
+    },
+    textDescription: {
+        fontFamily: 'Gelion-Regular',
+        letterSpacing: 0.25,
+        color: 'grey',
+    },
+});
 
 export default AddedBeneficiaryScreen;
