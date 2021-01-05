@@ -6,7 +6,13 @@ import { iptcColors } from 'styles/index';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Paragraph, Divider, Headline, Text } from 'react-native-paper';
+import {
+    Paragraph,
+    Divider,
+    Headline,
+    Text,
+    ActivityIndicator,
+} from 'react-native-paper';
 
 import config from '../../../../config';
 import Donate from './Donate';
@@ -134,7 +140,21 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     };
 
     if (community === undefined) {
-        return null;
+        return (
+            <View
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                }}
+            >
+                <ActivityIndicator
+                    animating={true}
+                    size="large"
+                    color={iptcColors.softBlue}
+                />
+            </View>
+        );
     }
 
     let description;

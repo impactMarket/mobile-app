@@ -8,7 +8,7 @@ import { welcomeUser } from 'helpers/index';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useStore } from 'react-redux';
+import { useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';
 import * as Device from 'expo-device';
@@ -30,11 +30,13 @@ import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { IRootState } from 'helpers/types/state';
 import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import CacheStore from 'services/cacheStore';
+import { startNotificationsListeners } from 'services/pushNotifications';
 
 function Auth() {
     const insets = useSafeAreaInsets();
-    const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const navigation = useNavigation();
+    const store = useStore<IRootState, IStoreCombinedActionsTypes>();
+    const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
 
     const login = async () => {
@@ -139,6 +141,7 @@ function Auth() {
                 user.user
             );
             store.dispatch(setPushNotificationsToken(pushNotificationToken));
+            startNotificationsListeners(kit, store.dispatch);
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             Api.uploadError('', 'login', error);

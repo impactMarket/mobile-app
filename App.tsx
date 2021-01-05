@@ -26,7 +26,7 @@ import { Asset } from 'expo-asset';
 import {
     NavigationContainer,
     DefaultTheme as NavigationDefaultTheme,
-    NavigationContainerRef,
+    // NavigationContainerRef,
 } from '@react-navigation/native';
 
 import config from './config';
@@ -72,6 +72,8 @@ import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
+import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
+import { startNotificationsListeners } from 'services/pushNotifications';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -145,7 +147,7 @@ interface IAppState {
 }
 export default class App extends React.Component<any, IAppState> {
     private unsubscribeStore: Unsubscribe = undefined as any;
-    private navigationRef = React.createRef<NavigationContainerRef>();
+    // private navigationRef = React.createRef<NavigationContainerRef>();
     private currentRouteName: string | undefined = '';
     private linking = {
         prefixes: [prefix],
@@ -172,91 +174,32 @@ export default class App extends React.Component<any, IAppState> {
 
             if (previousLoggedIn !== currentLoggedIn) {
                 if (currentLoggedIn) {
-                    // when notification received!
-                    Notifications.addNotificationReceivedListener(
-                        (notification: Notifications.Notification) => {
-                            const {
-                                action,
-                                communityAddress,
-                            } = notification.request.content.data;
-                            if (
-                                action === 'community-accepted' ||
-                                action === 'beneficiary-added'
-                            ) {
-                                Api.getCommunityByContractAddress(
-                                    communityAddress as string
-                                ).then((community) => {
-                                    if (community !== undefined) {
-                                        const communityContract = new kit.web3.eth.Contract(
-                                            CommunityContractABI as any,
-                                            communityAddress as string
-                                        );
-                                        if (action === 'community-accepted') {
-                                            store.dispatch(
-                                                setUserIsCommunityManager(true)
-                                            );
-                                        }
-                                        if (action === 'beneficiary-added') {
-                                            store.dispatch(
-                                                setUserIsBeneficiary(true)
-                                            );
-                                        }
-                                        store.dispatch(
-                                            setCommunityMetadata(community)
-                                        );
-                                        store.dispatch(
-                                            setCommunityContract(
-                                                communityContract
-                                            )
-                                        );
-                                    }
-                                });
-                            }
-                        }
-                    );
-                    // when user interacts with notification
-                    Notifications.addNotificationResponseReceivedListener(
-                        (response) => {
-                            const {
-                                action,
-                                communityAddress,
-                            } = response.notification.request.content.data;
-                            if (action === 'community-low-funds') {
-                                Api.getCommunityByContractAddress(
-                                    communityAddress as string
-                                ).then((community) => {
-                                    if (community !== undefined) {
-                                        this.navigationRef.current?.navigate(
-                                            'CommunityDetailsScreen',
-                                            {
-                                                community,
-                                            }
-                                        );
-                                    }
-                                });
-                            }
-                        }
-                    );
-                    // Notifications.addPushTokenListener
-                    // In rare situations a push token may be changed by the push notification service while the app is running.
+                    startNotificationsListeners(kit, store.dispatch);
                 }
             }
         });
         store.dispatch(setCeloKit(kit));
-        this.setState({ testnetWarningOpen: true });
-        setTimeout(() => this.setState({ testnetWarningOpen: false }), 5000);
+        if (config.testnet) {
+            this.setState({ testnetWarningOpen: true });
+            setTimeout(
+                () => this.setState({ testnetWarningOpen: false }),
+                5000
+            );
+        }
 
         //
         Analytics.setUserId(Device.osInternalBuildId);
         const osVersion = Device.osVersion;
         let userProperties: any = {
-            screen_resolution: `${Dimensions.get('window').width}x${Dimensions.get('window').height}`,
-        }
-        if (osVersion) { 
+            screen_resolution: `${Dimensions.get('window').width}x${
+                Dimensions.get('window').height
+            }`,
+        };
+        if (osVersion) {
             userProperties = {
                 ...userProperties,
-                osVersion
-            }
+                osVersion,
+            };
         }
         Analytics.setUserProperties(userProperties);
     };
@@ -467,17 +410,18 @@ export default class App extends React.Component<any, IAppState> {
                         theme={navigationTheme}
                         linking={this.linking}
                         onReady={() => {
-                            const currentRouteName = this.navigationRef.current?.getCurrentRoute()
+                            const currentRouteName = navigationRef.current?.getCurrentRoute()
                                 ?.name;
                             if (currentRouteName !== undefined) {
                                 Analytics.setCurrentScreen(currentRouteName);
                             }
                             // Save the current route name for later comparision
                             this.currentRouteName = currentRouteName;
+                            (isReadyRef.current as any) = true; // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
                         }}
                         onStateChange={() => {
                             const previousRouteName = this.currentRouteName;
-                            const currentRouteName = this.navigationRef.current?.getCurrentRoute()
+                            const currentRouteName = navigationRef.current?.getCurrentRoute()
                                 ?.name;
 
                             if (
@@ -493,7 +437,7 @@ export default class App extends React.Component<any, IAppState> {
                             // Save the current route name for later comparision
                             this.currentRouteName = currentRouteName;
                         }}
-                        ref={this.navigationRef}
+                        ref={navigationRef}
                     >
                         <Navigator />
                     </NavigationContainer>
@@ -597,9 +541,6 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     _authUser = async () => {
-        const pushNotificationToken = await registerForPushNotifications();
-        store.dispatch(setPushNotificationsToken(pushNotificationToken));
-
         let address: string | null = '';
         let phoneNumber: string | null = '';
         let loggedIn = false;
@@ -607,21 +548,19 @@ export default class App extends React.Component<any, IAppState> {
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
+                const pushNotificationToken = await registerForPushNotifications();
+                store.dispatch(
+                    setPushNotificationsToken(pushNotificationToken)
+                );
                 const userWelcome = await Api.user.hello(
                     address,
                     pushNotificationToken
                 );
                 if (userWelcome !== undefined) {
-                    // CacheStore.cacheUser(userWelcome.user);
                     const userMetadata = await CacheStore.getUser();
                     if (userMetadata === null) {
-                        // clear everything, same as logout
                         await AsyncStorage.clear();
-                        batch(() => {
-                            // dispatch(setUserIsBeneficiary(false));
-                            // dispatch(setUserIsCommunityManager(false));
-                            store.dispatch(resetUserApp());
-                        });
+                        store.dispatch(resetUserApp());
                         return;
                     }
                     await welcomeUser(
@@ -632,6 +571,7 @@ export default class App extends React.Component<any, IAppState> {
                         store,
                         userMetadata
                     );
+                    startNotificationsListeners(kit, store.dispatch);
                     loggedIn = true;
                 }
             }

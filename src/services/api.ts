@@ -134,6 +134,12 @@ class ApiRouteCommunity {
         return await getRequest<ICommunity>('/community/publicid/' + publicId);
     }
 
+    static async getByContractAddress(
+        address: string
+    ): Promise<ICommunity | undefined> {
+        return await getRequest<ICommunity>('/community/contract/' + address);
+    }
+
     static async getHistoricalSSI(publicId: string): Promise<number[]> {
         const result = await getRequest<number[]>(
             '/community/hssi/' + publicId
@@ -271,31 +277,7 @@ class Api {
         return response;
     }
 
-    /**
-     * @deprecated
-     */
-    static async getCommunityByContractAddress(
-        communityContractAddress: string
-    ): Promise<any> {
-        return getRequest<any>(
-            `/community/address/${communityContractAddress}`
-        );
-    }
-
     // user
-
-    // static async userAuth(
-    //     address: string,
-    //     language: string,
-    //     pushNotificationToken: string
-    // ): Promise<IUserWelcomeAuth | undefined> {
-    //     return await postRequest<IUserWelcomeAuth | undefined>('/user/auth', {
-    //         authKey: process.env.EXPO_AUTH_KEY,
-    //         address,
-    //         language,
-    //         pushNotificationToken,
-    //     });
-    // }
 
     static async addClaimLocation(
         communityId: string,
