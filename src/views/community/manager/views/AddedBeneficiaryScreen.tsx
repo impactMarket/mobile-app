@@ -1,12 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import ListActionItem from 'components/ListActionItem';
-import { updateCommunityInfo } from 'helpers/index';
 import { amountToCurrency } from 'helpers/currency';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Alert } from 'react-native';
+import { ScrollView, Alert, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -14,9 +12,10 @@ import BackSvg from 'components/svg/header/BackSvg';
 import { IRootState } from 'helpers/types/state';
 import { IManagersDetails } from 'helpers/types/endpoints';
 import { setStateManagersDetails } from 'helpers/redux/actions/views';
+import { ActivityIndicator } from 'react-native-paper';
+import { iptcColors } from 'styles/index';
 
 function AddedBeneficiaryScreen() {
-    const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const community = useSelector((state: IRootState) => state.user.community);
@@ -32,7 +31,7 @@ function AddedBeneficiaryScreen() {
         (state: IRootState) => state.view.managerDetails
     );
 
-    const [removing, setRemoving] = useState(false);
+    const [removing, setRemoving] = useState<boolean[]>();
     const [managerDetails, setManagerDetails] = useState<
         IManagersDetails | undefined
     >();
@@ -41,9 +40,17 @@ function AddedBeneficiaryScreen() {
         const loadDetails = () => {
             // it's not correct, I guess
             if (stateManagerDetails !== undefined) {
+                setRemoving(
+                    Array(stateManagerDetails.beneficiaries.active.length).fill(
+                        false
+                    )
+                );
                 setManagerDetails(stateManagerDetails);
             } else {
                 Api.community.managersDetails().then((details) => {
+                    setRemoving(
+                        Array(details.beneficiaries.active.length).fill(false)
+                    );
                     setManagerDetails(details);
                     dispatch(setStateManagersDetails(details));
                 });
@@ -53,10 +60,15 @@ function AddedBeneficiaryScreen() {
         return;
     }, [stateManagerDetails]);
 
-    const handleRemoveBeneficiary = async (beneficiary: string) => {
+    const handleRemoveBeneficiary = async (
+        beneficiary: string,
+        index: number
+    ) => {
         const communityContract = community.contract;
 
-        setRemoving(true);
+        const newRemoving = removing!;
+        newRemoving[index] = true;
+        setRemoving(() => [...newRemoving]);
         celoWalletRequest(
             userWallet.address,
             communityContract.options.address,
@@ -74,9 +86,10 @@ function AddedBeneficiaryScreen() {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
-                navigation.goBack();
-                // TODO: update after going back
-                updateCommunityInfo(community.metadata.publicId, dispatch);
+                Api.community.managersDetails().then((details) => {
+                    setManagerDetails(details);
+                    dispatch(setStateManagersDetails(details));
+                });
             })
             .catch((e) => {
                 Api.uploadError(userWallet.address, 'remove_beneficiary', e);
@@ -88,18 +101,33 @@ function AddedBeneficiaryScreen() {
                 );
             })
             .finally(() => {
-                setRemoving(false);
+                const newRemoving = removing!;
+                newRemoving[index] = false;
+                setRemoving(() => [...newRemoving]);
             });
     };
 
-    if (managerDetails === undefined) {
-        // TODO: loading...
-        return null;
+    if (managerDetails === undefined || removing == undefined) {
+        return (
+            <View
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                }}
+            >
+                <ActivityIndicator
+                    animating={true}
+                    size="large"
+                    color={iptcColors.softBlue}
+                />
+            </View>
+        );
     }
 
     return (
         <ScrollView style={{ marginHorizontal: 15 }}>
-            {managerDetails.beneficiaries.active.map((beneficiary) => (
+            {managerDetails.beneficiaries.active.map((beneficiary, index) => (
                 <ListActionItem
                     key={beneficiary.address}
                     item={{
@@ -124,11 +152,11 @@ function AddedBeneficiaryScreen() {
                     <Button
                         modeType="gray"
                         bold={true}
-                        disabled={removing}
-                        loading={removing}
+                        disabled={removing[index]}
+                        loading={removing[index]}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
-                            handleRemoveBeneficiary(beneficiary.address)
+                            handleRemoveBeneficiary(beneficiary.address, index)
                         }
                     >
                         {i18n.t('remove')}
