@@ -5,7 +5,7 @@ import ProfileSvg from 'components/svg/ProfileSvg';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import CommunitiesScreen from './communities';
 import BeneficiaryView from './community/beneficiary';
@@ -14,17 +14,11 @@ import ProfileScreen from './profile';
 import { IRootState } from 'helpers/types/state';
 import { ITabBarIconProps } from 'helpers/types/common';
 
-const mapStateToProps = (state: IRootState) => {
-    const { user } = state;
-    return { user };
-};
-
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux;
 const Tab = createBottomTabNavigator();
 
-function Tabs(props: Props) {
+function Tabs() {
+    const isManager = useSelector((state: IRootState) => state.user.community.isManager);
+    const isBeneficiary = useSelector((state: IRootState) => state.user.community.isBeneficiary);
     const tabBeneficiary = (
         <Tab.Screen
             name="claim"
@@ -61,7 +55,6 @@ function Tabs(props: Props) {
             }}
         />
     );
-    const { isManager, isBeneficiary } = props.user.community;
     return (
         <Tab.Navigator
             // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
@@ -95,4 +88,4 @@ function Tabs(props: Props) {
     );
 }
 
-export default connector(Tabs);
+export default Tabs;
