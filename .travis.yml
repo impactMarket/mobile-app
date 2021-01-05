@@ -42,6 +42,7 @@ jobs:
       env:
         - CACHE_NAME=build-android-v3 YARN_CACHE_FOLDER="/home/travis/yarn_cache"
       jdk: openjdk8
+      rvm: 2.6
       cache:
         directories:
           - $HOME/.turtle
@@ -54,6 +55,7 @@ jobs:
         - export PATH="$HOME/.yarn/bin:$PATH"
         - sudo apt-get update
         - sudo apt-get -y install libsecret-1-0
+        - gem install fastlane
       install:
         - pip install --user awscli
         - yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
@@ -71,6 +73,7 @@ jobs:
             -o $ARTIFACT_PATH
       after_success:
         - aws s3 cp $ARTIFACT_PATH s3://$AWS_BUCKET/`basename $ARTIFACT_PATH`
+        - fastlane supply --aab $ARTIFACT_PATH --track beta
     - stage: build standalone apps
       if: branch = production
       os: osx
@@ -86,6 +89,7 @@ jobs:
       before_install:
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
         - export PATH="$HOME/.yarn/bin:$PATH"
+        - brew install fastlane
       install:
         - python3 -m pip install --user awscli
         - python3 -V
@@ -107,3 +111,4 @@ jobs:
             -o $ARTIFACT_PATH
       after_success:
         - aws s3 cp $ARTIFACT_PATH s3://$AWS_BUCKET/`basename $ARTIFACT_PATH`
+        - fastlane deliver --ipa $ARTIFACT_PATH --submit_for_review
