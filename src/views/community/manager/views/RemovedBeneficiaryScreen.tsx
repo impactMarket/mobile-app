@@ -2,42 +2,86 @@ import i18n from 'assets/i18n';
 import ListActionItem from 'components/ListActionItem';
 import BackSvg from 'components/svg/header/BackSvg';
 import { amountToCurrency } from 'helpers/currency';
+import { setStateManagersDetails } from 'helpers/redux/actions/views';
+import { IManagersDetails } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React from 'react';
-import { ScrollView } from 'react-native';
-import { connect, ConnectedProps } from 'react-redux';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
+import { iptcColors } from 'styles/index';
+function RemovedBeneficiaryScreen() {
+    const dispatch = useDispatch();
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
+    const stateManagerDetails = useSelector(
+        (state: IRootState) => state.view.managerDetails
+    );
 
-interface IRemovedBeneficiaryScreenProps {
-    route: {
-        params: {
-            beneficiaries: ICommunityInfoBeneficiary[];
+    const [managerDetails, setManagerDetails] = useState<
+        IManagersDetails | undefined
+    >();
+
+    useEffect(() => {
+        const loadDetails = () => {
+            // it's not correct, I guess
+            if (stateManagerDetails !== undefined) {
+                setManagerDetails(stateManagerDetails);
+            } else {
+                Api.community.managersDetails().then((details) => {
+                    setManagerDetails(details);
+                    dispatch(setStateManagersDetails(details));
+                });
+            }
         };
-    };
-}
-const mapStateToProps = (state: IRootState) => {
-    const { user, app } = state;
-    return { user, app };
-};
-const connector = connect(mapStateToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & IRemovedBeneficiaryScreenProps;
+        loadDetails();
+        return;
+    }, [stateManagerDetails]);
 
-function RemovedBeneficiaryScreen(props: Props) {
-    const beneficiaries = props.route.params
-        .beneficiaries as ICommunityInfoBeneficiary[];
+    if (managerDetails === undefined) {
+        return (
+            <View
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
+                }}
+            >
+                <ActivityIndicator
+                    animating={true}
+                    size="large"
+                    color={iptcColors.softBlue}
+                />
+            </View>
+        );
+    }
 
     return (
         <>
             <ScrollView style={{ marginHorizontal: 15 }}>
-                {beneficiaries.map((beneficiary) => (
+                {managerDetails.beneficiaries.inactive.map((beneficiary) => (
                     <ListActionItem
                         key={beneficiary.address}
                         item={{
-                            description: `${amountToCurrency(
-                                beneficiary.claimed,
-                                props.user.metadata.currency,
-                                props.app.exchangeRates
-                            )}`,
+                            description: i18n.t('claimedSince', {
+                                amount:
+                                    beneficiary.claimed === undefined
+                                        ? '0'
+                                        : amountToCurrency(
+                                              beneficiary.claimed,
+                                              userCurrency,
+                                              exchangeRates
+                                          ),
+                                date: moment(beneficiary.timestamp).format(
+                                    'MMM, YYYY'
+                                ),
+                            }),
                             from: beneficiary,
                             key: beneficiary.address,
                             timestamp: 0,
@@ -55,4 +99,4 @@ RemovedBeneficiaryScreen.navigationOptions = () => {
     };
 };
 
-export default connector(RemovedBeneficiaryScreen);
+export default RemovedBeneficiaryScreen;
