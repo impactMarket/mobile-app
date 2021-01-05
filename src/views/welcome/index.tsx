@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import i18n from 'assets/i18n';
 import { iptcColors } from 'styles/index';
@@ -11,28 +11,28 @@ import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
 import DiversitySvg from 'components/svg/welcome/DiversitySvg';
 import { useDispatch } from 'react-redux';
 import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
-import { ScrollView } from 'react-native-gesture-handler';
 
 function Welcome() {
     const insets = useSafeAreaInsets();
     const dispatch = useDispatch();
     const [redirecting, setRedirecting] = useState(false);
     return (
-        <ScrollView
+        <View
             style={{
-                // flex: 1,
+                flex: 1,
                 flexDirection: 'column',
-                // justifyContent: 'space-between',
+                justifyContent: 'space-between',
                 paddingTop: insets.top,
             }}
         >
-            <View
-                style={{
-                    alignItems: 'center',
-                    paddingBottom: 20
-                }}
-            >
-                <LogoBlueSvg style={{ height: 74, marginTop: 25 }} />
+            <ScrollView>
+                <View
+                    style={{
+                        alignItems: 'center',
+                    }}
+                >
+                    <LogoBlueSvg style={{ height: 74, marginTop: 25 }} />
+                </View>
                 <DiversitySvg style={{ height: 136, marginTop: 16 }} />
                 <Text
                     style={{
@@ -47,11 +47,11 @@ function Welcome() {
                 >
                     {i18n.t('oneTimeWelcomeMessage1')}
                 </Text>
-            </View>
+            </ScrollView>
             <View
                 style={{
                     paddingHorizontal: 30,
-                    width: '100%'
+                    width: '100%',
                 }}
             >
                 <Button
@@ -94,7 +94,7 @@ function Welcome() {
                     {i18n.t('exploreCommunities')}
                 </Button>
             </View>
-        </ScrollView>
+        </View>
     );
 }
 

@@ -55,7 +55,9 @@ function Auth() {
             });
 
             dappkitResponse = await waitForAccountAuth(requestId);
-            userAddress = store.getState().app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
+            userAddress = store
+                .getState()
+                .app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
         } catch (e) {
             Api.uploadError('', 'login', e);
             analytics('login', { device: Device.brand, success: 'false' });
@@ -216,8 +218,8 @@ function Auth() {
     };
 
     return (
-        <ScrollView style={{ paddingTop: insets.top + 10, ...styles.mainView }}>
-            <View style={{ width: '100%', paddingHorizontal: 16 }}>
+        <View style={{ paddingTop: insets.top + 10, ...styles.mainView }}>
+            <ScrollView style={{ width: '100%', paddingHorizontal: 16 }}>
                 <Text style={styles.descriptionTop}>
                     {i18n.t('toContinuePlease')}
                 </Text>
@@ -225,8 +227,8 @@ function Auth() {
                 <Text style={styles.description}>
                     {i18n.t('loginDescription')}
                 </Text>
-            </View>
-            <View style={{ width: '100%', paddingHorizontal: 31, paddingBottom: 38 }}>
+            </ScrollView>
+            <View style={{ width: '100%', paddingHorizontal: 31 }}>
                 <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
                 <View style={{ width: '100%', marginTop: 16 }}>
                     {buttonStoreLink()}
@@ -243,7 +245,7 @@ function Auth() {
                     {i18n.t('connectWithValora')}
                 </Button>
             </View>
-        </ScrollView>
+        </View>
     );
 }
 
@@ -257,10 +259,10 @@ export default Auth;
 
 const styles = StyleSheet.create({
     mainView: {
-        // flex: 1,
-        // flexDirection: 'column',
-        // justifyContent: 'space-around',
-        // alignItems: 'center',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
         // marginHorizontal: 32,
         // marginTop: 20,
         paddingBottom: 38,
@@ -298,6 +300,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: iptcColors.baliHai,
         marginTop: 27,
+        marginBottom: 73,
     },
     stepText1: {
         fontFamily: 'Gelion-Bold',
@@ -305,7 +308,6 @@ const styles = StyleSheet.create({
         lineHeight: 23,
         textAlign: 'center',
         color: iptcColors.nileBlue,
-        marginTop: 73,
     },
     stepText2: {
         fontFamily: 'Gelion-Bold',
