@@ -38,10 +38,10 @@ export interface IAppState {
     suspectWrongDateTime: boolean;
     timeDiff: number;
     fromWelcomeScreen: string;
-    notificationsListeners: {
+    notificationsListeners?: {
         notificationReceivedListener: Subscription;
         notificationResponseReceivedListener: Subscription;
-    }
+    };
 }
 
 export interface IRootState {

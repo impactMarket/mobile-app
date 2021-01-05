@@ -32,7 +32,7 @@ import config from './config';
 import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
 import { welcomeUser } from './src/helpers';
 import { iptcColors } from './src/styles';
-import combinedReducer from './src/helpers/redux/reducers/ReduxReducers';
+import combinedReducer from './src/helpers/redux/reducers';
 
 import BigNumber from 'bignumber.js';
 
@@ -190,8 +190,14 @@ export default class App extends React.Component<any, IAppState> {
 
     componentWillUnmount = () => {
         const listeners = store.getState().app.notificationsListeners;
-        Notifications.removeNotificationSubscription(listeners.notificationReceivedListener);
-        Notifications.removeNotificationSubscription(listeners.notificationResponseReceivedListener);
+        if (listeners) {
+            Notifications.removeNotificationSubscription(
+                listeners.notificationReceivedListener
+            );
+            Notifications.removeNotificationSubscription(
+                listeners.notificationResponseReceivedListener
+            );
+        }
     };
 
     handleUpdateClick = () => {
