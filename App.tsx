@@ -13,8 +13,8 @@ import {
     Paragraph,
     Headline,
 } from 'react-native-paper';
-import { batch, Provider } from 'react-redux';
-import { createStore, Unsubscribe } from 'redux';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 import * as Sentry from 'sentry-expo';
 import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
@@ -26,7 +26,6 @@ import { Asset } from 'expo-asset';
 import {
     NavigationContainer,
     DefaultTheme as NavigationDefaultTheme,
-    // NavigationContainerRef,
 } from '@react-navigation/native';
 
 import config from './config';
@@ -39,7 +38,6 @@ import BigNumber from 'bignumber.js';
 
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
-import CommunityContractABI from './src/contracts/CommunityABI.json';
 import Button from 'components/core/Button';
 import CacheStore from 'services/cacheStore';
 import NetInfo from '@react-native-community/netinfo';
@@ -54,18 +52,12 @@ import moment from 'moment';
 import Navigator from './src/navigator';
 import * as Analytics from 'expo-firebase-analytics';
 import * as SplashScreen from 'expo-splash-screen';
-import {
-    resetUserApp,
-    setCommunityContract,
-    setCommunityMetadata,
-    setUserIsBeneficiary,
-    setUserIsCommunityManager,
-    setUserLanguage,
-} from 'helpers/redux/actions/user';
+import { resetUserApp, setUserLanguage } from 'helpers/redux/actions/user';
 import {
     setAppExchangeRatesAction,
     setAppSuspectWrongDateTime,
     setCeloKit,
+    setPushNotificationListeners,
 } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import {
@@ -146,8 +138,6 @@ interface IAppState {
     netAvailable: boolean;
 }
 export default class App extends React.Component<any, IAppState> {
-    private unsubscribeStore: Unsubscribe = undefined as any;
-    // private navigationRef = React.createRef<NavigationContainerRef>();
     private currentRouteName: string | undefined = '';
     private linking = {
         prefixes: [prefix],
@@ -167,18 +157,12 @@ export default class App extends React.Component<any, IAppState> {
     }
 
     componentDidMount = () => {
-        this.unsubscribeStore = store.subscribe(() => {
-            const previousLoggedIn = this.state.loggedIn;
-            const currentLoggedIn =
-                store.getState().user.wallet.address.length > 0;
-
-            if (previousLoggedIn !== currentLoggedIn) {
-                if (currentLoggedIn) {
-                    startNotificationsListeners(kit, store.dispatch);
-                }
-            }
-        });
-        store.dispatch(setCeloKit(kit));
+        const currentLoggedIn = store.getState().user.wallet.address.length > 0;
+        if (currentLoggedIn) {
+            setPushNotificationListeners(
+                startNotificationsListeners(kit, store.dispatch)
+            );
+        }
         if (config.testnet) {
             this.setState({ testnetWarningOpen: true });
             setTimeout(
@@ -205,11 +189,9 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     componentWillUnmount = () => {
-        try {
-            this.unsubscribeStore();
-        } catch (e) {}
-        // refactor https://docs.expo.io/versions/latest/sdk/notifications/
-        // Notifications.removeAllNotificationListeners();
+        const listeners = store.getState().app.notificationsListeners;
+        Notifications.removeNotificationSubscription(listeners.notificationReceivedListener);
+        Notifications.removeNotificationSubscription(listeners.notificationResponseReceivedListener);
     };
 
     handleUpdateClick = () => {
@@ -545,6 +527,7 @@ export default class App extends React.Component<any, IAppState> {
         let phoneNumber: string | null = '';
         let loggedIn = false;
         try {
+            store.dispatch(setCeloKit(kit));
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
@@ -571,7 +554,6 @@ export default class App extends React.Component<any, IAppState> {
                         store,
                         userMetadata
                     );
-                    startNotificationsListeners(kit, store.dispatch);
                     loggedIn = true;
                 }
             }

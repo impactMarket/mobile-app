@@ -1,6 +1,7 @@
 import { ContractKit } from '@celo/contractkit';
 import { ICommunity, IManagersDetails } from './endpoints';
 import { UserAttributes } from "./models";
+import { Subscription } from '@unimodules/core';
 
 export interface IUserWallet {
     address: string;
@@ -37,6 +38,10 @@ export interface IAppState {
     suspectWrongDateTime: boolean;
     timeDiff: number;
     fromWelcomeScreen: string;
+    notificationsListeners: {
+        notificationReceivedListener: Subscription;
+        notificationResponseReceivedListener: Subscription;
+    }
 }
 
 export interface IRootState {

@@ -16,6 +16,7 @@ import * as Permissions from 'expo-permissions';
 import { Platform } from 'react-native';
 import * as Sentry from 'sentry-expo';
 import { Screens } from 'helpers/constants';
+import { Subscription } from '@unimodules/core';
 
 export async function registerForPushNotifications(): Promise<string> {
     let token = '';
@@ -58,9 +59,12 @@ export async function registerForPushNotifications(): Promise<string> {
 export const startNotificationsListeners = (
     kit: ContractKit,
     dispatch: Dispatch<any>
-) => {
+): {
+    notificationReceivedListener: Subscription,
+    notificationResponseReceivedListener: Subscription,
+} => {
     // when notification received!
-    Notifications.addNotificationReceivedListener(
+    const notificationReceivedListener = Notifications.addNotificationReceivedListener(
         (notification: Notifications.Notification) => {
             const notificationData = notification.request.content.data;
             const action = notificationData.action as string;
@@ -94,8 +98,8 @@ export const startNotificationsListeners = (
             }
         }
     );
-    // when user interacts with notification
-    Notifications.addNotificationResponseReceivedListener((response) => {
+    // when user clicks on the notification
+    const notificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener((response) => {
         const notificationData = response.notification.request.content.data;
         const action = notificationData.action as string;
         const communityAddress = notificationData.communityAddress as string;
@@ -116,4 +120,8 @@ export const startNotificationsListeners = (
     });
     // Notifications.addPushTokenListener
     // In rare situations a push token may be changed by the push notification service while the app is running.
+    return {
+        notificationReceivedListener,
+        notificationResponseReceivedListener,
+    }
 };

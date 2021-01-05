@@ -44,4 +44,8 @@ export const CONSENT_ANALYTICS = 'CONSENT_ANALYTICS';
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
 
+export enum appAction {
+    SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners'
+}
+
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

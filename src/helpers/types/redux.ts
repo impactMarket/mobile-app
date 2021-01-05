@@ -19,10 +19,12 @@ import {
     SET_APP_FROM_WELCOME_SCREEN,
     SET_EXCHANGE_RATES,
     SET_VIEW_MANAGER_DETAILS,
+    appAction,
 } from 'helpers/constants';
 import { ICommunity, IManagersDetails } from './endpoints';
 import { UserAttributes } from './models';
 import { IUserWallet } from './state';
+import { Subscription } from '@unimodules/core';
 
 // action
 interface UserWalletAction {
@@ -111,6 +113,14 @@ interface SetViewManagerDetailsAction {
     payload: IManagersDetails;
 }
 
+interface SetAppPushNotificationListeners {
+    type: typeof appAction.SET_PUSH_NOTIFICATION_LISTENERS;
+    payload: {
+        notificationReceivedListener: Subscription;
+        notificationResponseReceivedListener: Subscription;
+    };
+}
+
 export type UserActionTypes =
     | UserWalletAction
     | UserSetBalanceAction
@@ -131,7 +141,8 @@ export type AppActionTypes =
     | CeloKitAction
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime
-    | SetAppFromWelcomeScreen;
+    | SetAppFromWelcomeScreen
+    | SetAppPushNotificationListeners;
 
 export type ViewActionTypes = SetViewManagerDetailsAction;
 

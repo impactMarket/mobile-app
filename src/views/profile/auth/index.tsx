@@ -31,6 +31,7 @@ import { IRootState } from 'helpers/types/state';
 import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import CacheStore from 'services/cacheStore';
 import { startNotificationsListeners } from 'services/pushNotifications';
+import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 
 function Auth() {
     const insets = useSafeAreaInsets();
@@ -141,7 +142,9 @@ function Auth() {
                 user.user
             );
             store.dispatch(setPushNotificationsToken(pushNotificationToken));
-            startNotificationsListeners(kit, store.dispatch);
+            setPushNotificationListeners(
+                startNotificationsListeners(kit, store.dispatch)
+            );
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             Api.uploadError('', 'login', error);
