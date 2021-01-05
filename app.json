@@ -9,7 +9,7 @@
         "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarket",
         "splash": {
-            "image": "./src/assets/images/splash.png",
+            "image": "./src/assets/images/splash2.png",
             "backgroundColor": "#2362FB"
         },
         "updates": {
