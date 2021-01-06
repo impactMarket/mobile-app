@@ -38,6 +38,7 @@ import Api from 'services/api';
 import CloseSvg from 'components/svg/CloseSvg';
 import { ICommunity } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
+import { Trans } from 'react-i18next';
 
 interface IExploreScreenProps {
     community: ICommunity;
@@ -153,7 +154,7 @@ class Donate extends Component<Props, IDonateState> {
             this.props.app.kit
         )
             .then((tx) => {
-                // console.log('tx', tx);
+                console.log('tx', tx);
                 // TODO: open window confirming donation
                 this.setState({ modalConfirmSend: false });
                 if (tx === undefined) {
@@ -177,6 +178,12 @@ class Donate extends Component<Props, IDonateState> {
                     { cancelable: false }
                 );
                 analytics('donate', { device: Device.brand, success: 'true' });
+                this.setState({
+                    modalConfirmSend: false,
+                    openModalDonate: false,
+                    donating: false,
+                    amountDonate: '',
+                });
             })
             .catch((e) => {
                 Api.uploadError(this.props.user.wallet.address, 'donate', e);
@@ -187,20 +194,12 @@ class Donate extends Component<Props, IDonateState> {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
-            })
-            .finally(() => {
-                this.setState({
-                    openModalDonate: false,
-                    donating: false,
-                    amountDonate: '',
-                });
+                this.setState({ donating: false });
             });
     };
 
     handleCopyAddressToClipboard = () => {
-        Clipboard.setString(
-            this.props.community.contractAddress!
-        );
+        Clipboard.setString(this.props.community.contractAddress!);
         this.setState({ showCopiedToClipboard: true });
         setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);
         this.setState({ openModalDonate: false });
@@ -238,7 +237,12 @@ class Donate extends Component<Props, IDonateState> {
                     bold={true}
                     labelStyle={styles.donateLabel}
                     loading={donating}
-                    disabled={donating}
+                    disabled={
+                        donating ||
+                        amountDonate.length === 0 ||
+                        isNaN(parseInt(amountDonate, 10)) ||
+                        parseInt(amountDonate, 10) < 0
+                    }
                     onPress={this.handleConfirmDonateWithCeloWallet}
                 >
                     {i18n.t('donateWithValora')}
@@ -291,7 +295,12 @@ class Donate extends Component<Props, IDonateState> {
                         lineHeight: 23,
                         color: 'white',
                     }}
-                    onPress={() => this.setState({ openModalDonate: true })}
+                    onPress={() =>
+                        this.setState({
+                            openModalDonate: true,
+                            amountDonate: '',
+                        })
+                    }
                 >
                     {i18n.t('donate')}
                 </Button>
@@ -311,10 +320,7 @@ class Donate extends Component<Props, IDonateState> {
                     <Modal
                         visible={openModalDonate}
                         onDismiss={() =>
-                            this.setState({
-                                openModalDonate: false,
-                                amountDonate: '',
-                            })
+                            this.setState({ openModalDonate: false })
                         }
                     >
                         <Card
@@ -355,7 +361,6 @@ class Donate extends Component<Props, IDonateState> {
                                             onPress={() =>
                                                 this.setState({
                                                     openModalDonate: false,
-                                                    amountDonate: '',
                                                 })
                                             }
                                         >
@@ -417,7 +422,15 @@ class Donate extends Component<Props, IDonateState> {
                                                 height: 19,
                                                 color: 'rgba(0, 0, 0, 0.6)',
                                                 display:
-                                                    amountDonate.length > 0
+                                                    amountDonate.length > 0 &&
+                                                    !isNaN(
+                                                        parseInt(
+                                                            amountDonate,
+                                                            10
+                                                        )
+                                                    ) &&
+                                                    parseInt(amountDonate, 10) >
+                                                        0
                                                         ? 'flex'
                                                         : 'none',
                                             }}
@@ -456,6 +469,11 @@ class Donate extends Component<Props, IDonateState> {
                                             color: iptcColors.textGray,
                                             display:
                                                 amountDonate.length === 0 ||
+                                                isNaN(
+                                                    parseInt(amountDonate, 10)
+                                                ) ||
+                                                parseInt(amountDonate, 10) <
+                                                    0 ||
                                                 new BigNumber(
                                                     community.contract.claimAmount
                                                 )
@@ -548,10 +566,7 @@ class Donate extends Component<Props, IDonateState> {
                     <Modal
                         visible={modalConfirmSend}
                         onDismiss={() =>
-                            this.setState({
-                                modalConfirmSend: false,
-                                amountDonate: '',
-                            })
+                            this.setState({ modalConfirmSend: false })
                         }
                     >
                         <Card
@@ -591,8 +606,7 @@ class Donate extends Component<Props, IDonateState> {
                                             hitSlop={15}
                                             onPress={() =>
                                                 this.setState({
-                                                    openModalDonate: false,
-                                                    amountDonate: '',
+                                                    modalConfirmSend: false,
                                                 })
                                             }
                                         >
@@ -609,19 +623,34 @@ class Donate extends Component<Props, IDonateState> {
                                         textAlign: 'center',
                                     }}
                                 >
-                                    {i18n.t('donateConfirmMessage', {
-                                        symbol: getCurrencySymbol(
-                                            user.metadata.currency
-                                        ),
-                                        amount: amountDonate.replace(
-                                            /\B(?=(\d{3})+(?!\d))/g,
-                                            ','
-                                        ),
-                                        amountInDollars: amountInDollars.toFixed(
-                                            2
-                                        ),
-                                        to: community.name,
-                                    })}
+                                    <Trans
+                                        i18nKey="donateConfirmMessage"
+                                        values={{
+                                            symbol: getCurrencySymbol(
+                                                user.metadata.currency
+                                            ),
+                                            amount: amountDonate
+                                                .trim()
+                                                .replace(
+                                                    /\B(?=(\d{3})+(?!\d))/g,
+                                                    ','
+                                                ),
+                                            amountInDollars: amountInDollars.toFixed(
+                                                2
+                                            ),
+                                            to: community.name,
+                                        }}
+                                        components={{
+                                            bold: (
+                                                <Text
+                                                    style={{
+                                                        fontFamily:
+                                                            'Gelion-Bold',
+                                                    }}
+                                                />
+                                            ),
+                                        }}
+                                    />
                                 </Paragraph>
                                 <View
                                     style={{
@@ -670,12 +699,7 @@ class Donate extends Component<Props, IDonateState> {
                     </Modal>
                     <Modal
                         visible={modalError}
-                        onDismiss={() =>
-                            this.setState({
-                                modalError: false,
-                                amountDonate: '',
-                            })
-                        }
+                        onDismiss={() => this.setState({ modalError: false })}
                     >
                         <Card
                             style={{
@@ -715,7 +739,6 @@ class Donate extends Component<Props, IDonateState> {
                                             onPress={() =>
                                                 this.setState({
                                                     modalError: false,
-                                                    amountDonate: '',
                                                 })
                                             }
                                         >

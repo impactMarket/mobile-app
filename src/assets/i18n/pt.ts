@@ -170,7 +170,7 @@ export default {
     payConfirmMessage:
         "Ao selecionar 'Enviar', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
     donateConfirmMessage:
-        "Ao selecionar 'Contribuir', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
+        "Ao selecionar 'Contribuir', irá enviar <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> para {{to}}.",
     yourDonationWillBackFor:
         'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
     eachBeneficiaryCanClaimXUpToY:

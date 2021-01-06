@@ -175,7 +175,7 @@ export default {
     payConfirmMessage:
         "By pressing 'Send', you will send {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
     donateConfirmMessage:
-        "By pressing 'Donate', you will donate {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
+        "By pressing 'Donate', you will donate <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
     yourDonationWillBackFor:
         'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
     eachBeneficiaryCanClaimXUpToY:
