@@ -3,6 +3,8 @@ export enum Screens {
     FAQ = 'FAQ',
     Welcome = 'Welcome',
     CreateCommunity = 'CreateCommunity',
+    WaitingTx = 'WaitingTx',
+    //
     ClaimExplained = 'ClaimExplained',
     AddedBeneficiary = 'AddedBeneficiary',
     RemovedBeneficiary = 'RemovedBeneficiary',
@@ -46,6 +48,15 @@ export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
 
 export enum appAction {
     SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners'
+}
+
+export enum modalDonateAction {
+    OPEN = 'donateModal/open',
+    GO_TO_CONFIRM_DONATE = 'donateModal/goToConfirm',
+    GO_TO_ERROR_DONATE = 'donateModal/goToError',
+    GO_BACK_TO_DONATE = 'donateModal/goBackToDonate',
+    SUBMITTING = 'donateModal/submitting',
+    CLOSE = 'donateModal/close'
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

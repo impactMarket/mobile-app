@@ -1,6 +1,6 @@
 import { ContractKit } from '@celo/contractkit';
 import { ICommunity, IManagersDetails } from './endpoints';
-import { UserAttributes } from "./models";
+import { UserAttributes } from './models';
 import { Subscription } from '@unimodules/core';
 
 export interface IUserWallet {
@@ -20,7 +20,7 @@ export interface IUserState {
         isManager: boolean;
         metadata: ICommunity;
         contract: any;
-    }
+    };
 }
 
 export interface IAuthState {
@@ -30,6 +30,20 @@ export interface IAuthState {
 
 export interface IViewState {
     managerDetails?: IManagersDetails;
+}
+
+export interface IModalDonateState {
+    donationValues: {
+        inputAmount: string;
+        amountInDollars: number;
+        backNBeneficiaries: number;
+        backForDays: number;
+    };
+    community?: ICommunity;
+    modalDonateOpen: boolean;
+    modalConfirmOpen: boolean;
+    modalErrorOpen: boolean;
+    submitting: boolean;
 }
 
 export interface IAppState {
@@ -49,4 +63,5 @@ export interface IRootState {
     auth: IAuthState;
     view: IViewState;
     app: IAppState;
+    modalDonate: IModalDonateState;
 }

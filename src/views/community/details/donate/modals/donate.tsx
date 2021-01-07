@@ -6,30 +6,29 @@ import {
     formatInputAmountToTransfer,
     getCurrencySymbol,
 } from 'helpers/currency';
-import { ICommunity } from 'helpers/types/endpoints';
-import { IUserState } from 'helpers/types/state';
+import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Alert, TextInput } from 'react-native';
 import { Paragraph, Snackbar } from 'react-native-paper';
 import { iptcColors } from 'styles/index';
 import Clipboard from 'expo-clipboard';
 import config from '../../../../../../config';
+import { connect, ConnectedProps } from 'react-redux';
+import { Dispatch } from 'redux';
+import { ModalActionTypes } from 'helpers/types/redux';
+import { modalDonateAction } from 'helpers/constants';
+
+BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
 interface IDonateModalProps {
-    visible: boolean;
-    onDismiss: () => void;
-    user: IUserState;
-    rates: any;
-    community: ICommunity;
-    handleConfirmDonateWithCeloWallet: (amount: string) => void;
 }
 interface IDonateModalState {
     donating: boolean;
     amountDonate: string;
     showCopiedToClipboard: boolean;
 }
-export default class DonateModal extends Component<
-    IDonateModalProps,
+class DonateModal extends Component<
+    IDonateModalProps & PropsFromRedux,
     IDonateModalState
 > {
     constructor(props: any) {
@@ -42,26 +41,84 @@ export default class DonateModal extends Component<
     }
 
     handleCopyAddressToClipboard = () => {
-        Clipboard.setString(this.props.community.contractAddress!);
-        this.setState({ showCopiedToClipboard: true });
-        setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);
-        this.props.onDismiss();
+        if (this.props.community) {
+            Clipboard.setString(this.props.community.contractAddress!);
+            this.setState({ showCopiedToClipboard: true });
+            setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);
+            this.props.dismissModal();
+        }
+    };
+
+    handleConfirmDonateWithCeloWallet = () => {
+        const { exchangeRate, userBalance, community } = this.props;
+        if (community === undefined) {
+            return;
+        }
+        const { amountDonate } = this.state;
+        const amountInDollars =
+            parseFloat(formatInputAmountToTransfer(amountDonate)) /
+            exchangeRate;
+            console.log('amount', amountInDollars, amountDonate, userBalance, new BigNumber(userBalance)
+            .dividedBy(10 ** config.cUSDDecimals)
+            .toNumber());
+        if (
+            amountInDollars >
+            new BigNumber(userBalance)
+                .dividedBy(10 ** config.cUSDDecimals)
+                .toNumber()
+        ) {
+            this.props.goToErrorModal();
+        } else {
+            let backForDays =
+                amountInDollars /
+                new BigNumber(community.contract.claimAmount)
+                    .dividedBy(10 ** config.cUSDDecimals)
+                    .toNumber() /
+                community.state.beneficiaries;
+            backForDays =
+                amountDonate.length > 0
+                    ? Math.max(1, Math.floor(backForDays))
+                    : 0;
+            const backNBeneficiaries = Math.min(
+                community.state.beneficiaries,
+                amountDonate.length > 0
+                    ? Math.floor(
+                          amountInDollars /
+                              new BigNumber(community.contract.claimAmount)
+                                  .dividedBy(10 ** config.cUSDDecimals)
+                                  .toNumber()
+                      )
+                    : 0
+            );
+            this.props.goToConfirmModal({
+                inputAmount: amountDonate,
+                amountInDollars,
+                backForDays,
+                backNBeneficiaries,
+            });
+        }
     };
 
     render() {
         const {
             visible,
-            onDismiss,
-            user,
-            rates,
+            dismissModal,
             community,
-            handleConfirmDonateWithCeloWallet,
+            //
+            userCurrency,
+            exchangeRate,
+            exchangeRates,
+            userAddress,
         } = this.props;
         const { amountDonate, donating, showCopiedToClipboard } = this.state;
 
+        if (community === undefined) {
+            return null;
+        }
+
         const amountInDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
-            this.props.user.exchangeRate;
+            exchangeRate;
 
         const backForDays =
             amountInDollars /
@@ -71,7 +128,7 @@ export default class DonateModal extends Component<
             community.state.beneficiaries;
 
         const donateWithValoraButton =
-            user.wallet.address.length > 0 ? (
+            userAddress.length > 0 ? (
                 <Button
                     modeType="default"
                     bold={true}
@@ -83,9 +140,7 @@ export default class DonateModal extends Component<
                         isNaN(parseInt(amountDonate, 10)) ||
                         parseInt(amountDonate, 10) < 0
                     }
-                    onPress={() =>
-                        handleConfirmDonateWithCeloWallet(amountDonate)
-                    }
+                    onPress={this.handleConfirmDonateWithCeloWallet}
                 >
                     {i18n.t('donateWithValora')}
                 </Button>
@@ -128,7 +183,7 @@ export default class DonateModal extends Component<
                 </Snackbar>
                 <Modal
                     title={i18n.t('donateSymbol', {
-                        symbol: user.metadata.currency,
+                        symbol: userCurrency,
                     })}
                     visible={visible}
                     buttons={
@@ -146,7 +201,7 @@ export default class DonateModal extends Component<
                         </>
                     }
                     onDismiss={() => {
-                        onDismiss();
+                        dismissModal();
                         this.setState({ amountDonate: '' });
                     }}
                 >
@@ -171,9 +226,7 @@ export default class DonateModal extends Component<
                                     textAlignVertical: 'center',
                                 }}
                             >
-                                {getCurrencySymbol(
-                                    this.props.user.metadata.currency
-                                )}
+                                {getCurrencySymbol(userCurrency)}
                             </Text>
                             <TextInput
                                 keyboardType="numeric"
@@ -214,7 +267,8 @@ export default class DonateModal extends Component<
                                 {`${getCurrencySymbol(community.currency)}${(
                                     Math.floor(
                                         amountInDollars *
-                                            rates[community.currency].rate *
+                                            exchangeRates[community.currency]
+                                                .rate *
                                             100
                                     ) / 100
                                 )
@@ -319,3 +373,42 @@ const styles = StyleSheet.create({
         letterSpacing: 0.3,
     },
 });
+
+const mapStateToProps = (state: IRootState) => {
+    const { exchangeRates } = state.app;
+    const { currency, address } = state.user.metadata;
+    const { exchangeRate } = state.user;
+    const { modalDonateOpen, community } = state.modalDonate;
+    return {
+        exchangeRates,
+        userCurrency: currency,
+        userAddress: address,
+        userBalance: state.user.wallet.balance,
+        exchangeRate,
+        visible: modalDonateOpen,
+        community: community
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes>) => {
+    return {
+        goToConfirmModal: (values: {
+            inputAmount: string;
+            amountInDollars: number;
+            backNBeneficiaries: number;
+            backForDays: number;
+        }) =>
+            dispatch({
+                type: modalDonateAction.GO_TO_CONFIRM_DONATE,
+                payload: values,
+            }),
+        goToErrorModal: () =>
+            dispatch({ type: modalDonateAction.GO_TO_ERROR_DONATE }),
+        dismissModal: () => dispatch({ type: modalDonateAction.CLOSE }),
+    };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(DonateModal);

@@ -15,7 +15,7 @@ import {
 } from 'react-native-paper';
 
 import config from '../../../../config';
-import Donate from './Donate';
+import Donate from './donate';
 import Api from 'services/api';
 import { useSelector } from 'react-redux';
 import Button from 'components/core/Button';

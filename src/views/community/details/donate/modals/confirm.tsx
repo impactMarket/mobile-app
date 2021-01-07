@@ -2,30 +2,29 @@ import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Modal from 'components/Modal';
 import {
-    formatInputAmountToTransfer,
     getCurrencySymbol,
 } from 'helpers/currency';
-import { ICommunity } from 'helpers/types/endpoints';
-import { IUserState } from 'helpers/types/state';
-import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import React, { Component, Dispatch } from 'react';
+import { Text, View, StyleSheet, Alert } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 import { Trans } from 'react-i18next';
+import { connect, ConnectedProps } from 'react-redux';
+import { IRootState } from 'helpers/types/state';
+import { BigNumber } from 'bignumber.js';
+import { analytics } from 'services/analytics';
+import * as Device from 'expo-device';
+import { celoWalletRequest } from 'services/celoWallet';
+import Api from 'services/api';
+import { modalDonateAction } from 'helpers/constants';
+import { ModalActionTypes } from 'helpers/types/redux';
 
 interface IConfirmModalProps {
-    visible: boolean;
-    onDismiss: () => void;
-    user: IUserState;
-    community: ICommunity;
-    confirmAmount: string;
-    donateWithCeloWallet: () => void;
-    goBack: () => void;
 }
 interface IConfirmModalState {
     donating: boolean;
 }
-export default class ConfirmModal extends Component<
-    IConfirmModalProps,
+class ConfirmModal extends Component<
+    IConfirmModalProps & PropsFromRedux,
     IConfirmModalState
 > {
     constructor(props: any) {
@@ -35,26 +34,100 @@ export default class ConfirmModal extends Component<
         };
     }
 
+    donateWithCeloWallet = async () => {
+        const { kit, userAddress, amountInDollars } = this.props;
+        this.setState({ donating: true });
+        const stableToken = await this.props.kit.contracts.getStableToken();
+        const cUSDDecimals = await stableToken.decimals();
+        // const amountInDollars =
+        //     parseFloat(formatInputAmountToTransfer(this.state.confirmAmount)) /
+        //     this.props.user.exchangeRate;
+        const txObject = stableToken.transfer(
+            this.props.community.contractAddress!,
+            new BigNumber(amountInDollars)
+                .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
+                .toString()
+        ).txo;
+        celoWalletRequest(
+            userAddress,
+            stableToken.address,
+            txObject,
+            'donatetocommunity',
+            kit
+        )
+            .then((tx) => {
+                console.log('tx', tx);
+                // TODO: open window confirming donation
+                // this.setState({ modalConfirmSend: false });
+                if (tx === undefined) {
+                    return;
+                }
+                // TODO: wait for tx confirmation and request UI update
+                // update donated values
+                // setTimeout(
+                //     () =>
+                //         updateCommunityInfo(
+                //             this.props.community.publicId,
+                //             this.props.dispatch
+                //         ),
+                //     10000
+                // );
+
+                Alert.alert(
+                    i18n.t('success'),
+                    i18n.t('youHaveDonated'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                analytics('donate', { device: Device.brand, success: 'true' });
+                // this.setState({
+                //     modalConfirmSend: false,
+                //     openModalDonate: false,
+                //     donating: false,
+                //     // amountDonate: '',
+                // });
+            })
+            .catch((e) => {
+                Api.uploadError(userAddress, 'donate', e);
+                analytics('donate', { device: Device.brand, success: 'false' });
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorDonating'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                this.setState({ donating: false });
+            });
+    };
+
     render() {
         const {
             visible,
-            onDismiss,
-            user,
+            dismissModal,
+            // user,
             community,
-            confirmAmount,
-            goBack,
-            donateWithCeloWallet,
+            // confirmAmount,
+            // goBack,
+            // donateWithCeloWallet,
+            amountDonate,
+            amountInDollars,
+            goBackToDonateModal,
+            userCurrency,
         } = this.props;
         const { donating } = this.state;
 
-        const amountInDollars =
-            parseFloat(formatInputAmountToTransfer(confirmAmount)) /
-            this.props.user.exchangeRate;
+        // const amountInDollars =
+        //     parseFloat(formatInputAmountToTransfer(confirmAmount)) /
+        //     this.props.user.exchangeRate;
+
+        if(community === undefined) { 
+            return null;
+        }
 
         return (
             <Modal
                 title={i18n.t('donateSymbol', {
-                    symbol: user.metadata.currency,
+                    symbol: userCurrency,
                 })}
                 visible={visible}
                 buttons={
@@ -77,7 +150,7 @@ export default class ConfirmModal extends Component<
                                     flex: 1,
                                 }}
                                 labelStyle={styles.donateLabel}
-                                onPress={goBack}
+                                onPress={goBackToDonateModal}
                             >
                                 {i18n.t('backWithSymbol')}
                             </Button>
@@ -87,14 +160,14 @@ export default class ConfirmModal extends Component<
                                 style={{ flex: 1 }}
                                 loading={donating}
                                 labelStyle={styles.donateLabel}
-                                onPress={donateWithCeloWallet}
+                                onPress={this.donateWithCeloWallet}
                             >
                                 {i18n.t('donate')}
                             </Button>
                         </View>
                     </View>
                 }
-                onDismiss={onDismiss}
+                onDismiss={dismissModal}
             >
                 <Paragraph
                     style={{
@@ -108,8 +181,8 @@ export default class ConfirmModal extends Component<
                     <Trans
                         i18nKey="donateConfirmMessage"
                         values={{
-                            symbol: getCurrencySymbol(user.metadata.currency),
-                            amount: confirmAmount
+                            symbol: getCurrencySymbol(userCurrency),
+                            amount: amountDonate
                                 .trim()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
                             amountInDollars: amountInDollars.toFixed(2),
@@ -142,3 +215,32 @@ const styles = StyleSheet.create({
         letterSpacing: 0.3,
     },
 });
+
+const mapStateToProps = (state: IRootState) => {
+    const { kit } = state.app;
+    const { address, currency } = state.user.metadata;
+    const { inputAmount, amountInDollars } = state.modalDonate.donationValues;
+    const { modalConfirmOpen, community } = state.modalDonate;
+    return {
+        kit,
+        amountDonate: inputAmount,
+        amountInDollars,
+        userAddress: address,
+        userCurrency: currency,
+        visible: modalConfirmOpen,
+        community: community
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes>) => {
+    return {
+        goBackToDonateModal: () =>
+            dispatch({ type: modalDonateAction.GO_BACK_TO_DONATE }),
+        dismissModal: () => dispatch({ type: modalDonateAction.CLOSE }),
+    };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(ConfirmModal);

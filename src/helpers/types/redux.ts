@@ -11,7 +11,7 @@ import {
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
     RESET_USER_APP,
-    RESET_NETWORK_APP,
+    // RESET_NETWORK_APP,
     SET_PUSH_NOTIFICATION_TOKEN,
     SET_AUTH_TOKEN,
     SET_USER_LANGUAGE,
@@ -20,6 +20,7 @@ import {
     SET_EXCHANGE_RATES,
     SET_VIEW_MANAGER_DETAILS,
     appAction,
+    modalDonateAction,
 } from 'helpers/constants';
 import { ICommunity, IManagersDetails } from './endpoints';
 import { UserAttributes } from './models';
@@ -113,6 +114,41 @@ interface SetViewManagerDetailsAction {
     payload: IManagersDetails;
 }
 
+interface OpenModalDonateAction {
+    type: typeof modalDonateAction.OPEN;
+    payload: ICommunity;
+}
+
+interface GoToConfirmModalDonateAction {
+    type: typeof modalDonateAction.GO_TO_CONFIRM_DONATE;
+    payload: {
+        inputAmount: string;
+        amountInDollars: number;
+        backNBeneficiaries: number;
+        backForDays: number;
+    };
+}
+
+interface GoToErrorModalDonateAction {
+    type: typeof modalDonateAction.GO_TO_ERROR_DONATE;
+    // payload: IManagersDetails;
+}
+
+interface GoBackToModalDonateAction {
+    type: typeof modalDonateAction.GO_BACK_TO_DONATE;
+    // payload: IManagersDetails;
+}
+
+interface SubmittingModalDonateAction {
+    type: typeof modalDonateAction.CLOSE;
+    payload: boolean;
+}
+
+interface CloseModalDonateAction {
+    type: typeof modalDonateAction.CLOSE;
+    // payload: IManagersDetails;
+}
+
 interface SetAppPushNotificationListeners {
     type: typeof appAction.SET_PUSH_NOTIFICATION_LISTENERS;
     payload: {
@@ -145,6 +181,14 @@ export type AppActionTypes =
     | SetAppPushNotificationListeners;
 
 export type ViewActionTypes = SetViewManagerDetailsAction;
+
+export type ModalActionTypes =
+    | OpenModalDonateAction
+    | GoToConfirmModalDonateAction
+    | GoToErrorModalDonateAction
+    | GoBackToModalDonateAction
+    | SubmittingModalDonateAction
+    | CloseModalDonateAction;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes

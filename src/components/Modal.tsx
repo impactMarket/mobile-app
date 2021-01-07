@@ -7,10 +7,7 @@ import {
     Platform,
     Pressable,
 } from 'react-native';
-import {
-    Modal as ModalRNP,
-    Headline,
-} from 'react-native-paper';
+import { Modal as ModalRNP, Headline } from 'react-native-paper';
 import Card from 'components/core/Card';
 import CloseSvg from 'components/svg/CloseSvg';
 

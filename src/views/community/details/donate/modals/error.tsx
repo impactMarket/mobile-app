@@ -1,25 +1,24 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Modal from 'components/Modal';
-import { IUserState } from 'helpers/types/state';
-import React, { Component } from 'react';
+import { modalDonateAction } from 'helpers/constants';
+import { ModalActionTypes } from 'helpers/types/redux';
+import { IRootState } from 'helpers/types/state';
+import React, { Component, Dispatch } from 'react';
 import { StyleSheet } from 'react-native';
 import { Paragraph } from 'react-native-paper';
+import { connect, ConnectedProps } from 'react-redux';
 
 interface IErrorModalProps {
-    visible: boolean;
-    onDismiss: () => void;
-    user: IUserState;
-    goBack: () => void;
 }
-export default class ErrorModal extends Component<IErrorModalProps, {}> {
+class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, {}> {
     render() {
-        const { visible, onDismiss, user, goBack } = this.props;
+        const { visible, dismissModal, userCurrency, goBackToDonateModal } = this.props;
 
         return (
             <Modal
                 title={i18n.t('donateSymbol', {
-                    symbol: user.metadata.currency,
+                    symbol: userCurrency,
                 })}
                 visible={visible}
                 buttons={
@@ -27,12 +26,12 @@ export default class ErrorModal extends Component<IErrorModalProps, {}> {
                         modeType="gray"
                         bold={true}
                         labelStyle={styles.donateLabel}
-                        onPress={goBack}
+                        onPress={goBackToDonateModal}
                     >
                         {i18n.t('backWithSymbol')}
                     </Button>
                 }
-                onDismiss={onDismiss}
+                onDismiss={dismissModal}
             >
                 <Paragraph
                     style={{
@@ -57,3 +56,25 @@ const styles = StyleSheet.create({
         letterSpacing: 0.3,
     },
 });
+
+const mapStateToProps = (state: IRootState) => {
+    const { currency } = state.user.metadata;
+    const { modalErrorOpen } = state.modalDonate;
+    return {
+        userCurrency: currency,
+        visible: modalErrorOpen,
+    };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes>) => {
+    return {
+        goBackToDonateModal: () =>
+            dispatch({ type: modalDonateAction.GO_BACK_TO_DONATE }),
+        dismissModal: () => dispatch({ type: modalDonateAction.CLOSE }),
+    };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(ErrorModal);
