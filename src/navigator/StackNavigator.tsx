@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import AddedManagerScreen from 'views/community/manager/views/AddedManagerScreen';
+import WaitingTxScreen from 'views/community/details/donate/waitingTx';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -31,6 +32,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             name="TabNavigator" // doesn't really matter here
             component={TabNavigator}
             // options={TabNavigator.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.WaitingTx}
+            component={WaitingTxScreen}
+            options={WaitingTxScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.CommunityDetails}

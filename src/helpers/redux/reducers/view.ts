@@ -26,6 +26,7 @@ const INITIAL_STATE_MODAL_DONATE: IModalDonateState = {
         backForDays: 0,
     },
     // community: undefined,
+    inProgress: false,
     modalDonateOpen: false,
     modalConfirmOpen: false,
     modalErrorOpen: false,
@@ -40,6 +41,12 @@ export const modalDonateReducer = (
         case modalDonateAction.OPEN:
             return {
                 ...state,
+                donationValues: {
+                    inputAmount: '',
+                    amountInDollars: 0,
+                    backNBeneficiaries: 0,
+                    backForDays: 0,
+                },
                 community: action.payload,
                 modalDonateOpen: true,
             };
@@ -76,6 +83,11 @@ export const modalDonateReducer = (
                 modalDonateOpen: true,
                 modalConfirmOpen: false,
                 modalErrorOpen: false,
+            };
+        case modalDonateAction.IN_PROGRESS:
+            return {
+                ...state,
+                inProgress: action.payload,
             };
         default:
             return state;

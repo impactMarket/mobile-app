@@ -40,6 +40,7 @@ export interface IModalDonateState {
         backForDays: number;
     };
     community?: ICommunity;
+    inProgress: boolean;
     modalDonateOpen: boolean;
     modalConfirmOpen: boolean;
     modalErrorOpen: boolean;

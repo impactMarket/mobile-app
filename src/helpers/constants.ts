@@ -55,7 +55,7 @@ export enum modalDonateAction {
     GO_TO_CONFIRM_DONATE = 'donateModal/goToConfirm',
     GO_TO_ERROR_DONATE = 'donateModal/goToError',
     GO_BACK_TO_DONATE = 'donateModal/goBackToDonate',
-    SUBMITTING = 'donateModal/submitting',
+    IN_PROGRESS = 'donateModal/inProgress',
     CLOSE = 'donateModal/close'
 }
 

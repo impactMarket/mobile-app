@@ -235,4 +235,7 @@ export default {
     order: 'Order',
     nearest: 'Nearest',
     bigger: 'Bigger (Beneficiaries)',
+    pleaseWait: 'Please wait...',
+    thankYou: 'Thank you!',
+    donationBeingProcessed: 'Your donation is being processed...',
 };

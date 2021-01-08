@@ -20,8 +20,7 @@ import { modalDonateAction } from 'helpers/constants';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
-interface IDonateModalProps {
-}
+interface IDonateModalProps {}
 interface IDonateModalState {
     donating: boolean;
     amountDonate: string;
@@ -40,11 +39,16 @@ class DonateModal extends Component<
         };
     }
 
+    componentDidUpdate = (prevProps: IDonateModalProps & PropsFromRedux) => {
+        if (prevProps.inputAmount !== this.props.inputAmount) {
+            this.setState({ amountDonate: this.props.inputAmount });
+        }
+    };
+
     handleCopyAddressToClipboard = () => {
         if (this.props.community) {
             Clipboard.setString(this.props.community.contractAddress!);
             this.setState({ showCopiedToClipboard: true });
-            setTimeout(() => this.setState({ showCopiedToClipboard: false }), 5000);
             this.props.dismissModal();
         }
     };
@@ -58,9 +62,6 @@ class DonateModal extends Component<
         const amountInDollars =
             parseFloat(formatInputAmountToTransfer(amountDonate)) /
             exchangeRate;
-            console.log('amount', amountInDollars, amountDonate, userBalance, new BigNumber(userBalance)
-            .dividedBy(10 ** config.cUSDDecimals)
-            .toNumber());
         if (
             amountInDollars >
             new BigNumber(userBalance)
@@ -378,7 +379,7 @@ const mapStateToProps = (state: IRootState) => {
     const { exchangeRates } = state.app;
     const { currency, address } = state.user.metadata;
     const { exchangeRate } = state.user;
-    const { modalDonateOpen, community } = state.modalDonate;
+    const { modalDonateOpen, community, donationValues } = state.modalDonate;
     return {
         exchangeRates,
         userCurrency: currency,
@@ -386,7 +387,8 @@ const mapStateToProps = (state: IRootState) => {
         userBalance: state.user.wallet.balance,
         exchangeRate,
         visible: modalDonateOpen,
-        community: community
+        community: community,
+        inputAmount: donationValues.inputAmount,
     };
 };
 

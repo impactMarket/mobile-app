@@ -232,4 +232,7 @@ export default {
     order: 'Ordem',
     nearest: 'Mais próxima',
     bigger: 'Mais beneficiários',
+    pleaseWait: 'Por favor aguarde...',
+    thankYou: 'Obrigado!',
+    donationBeingProcessed: 'O seu donativo está a ser processado...',
 };

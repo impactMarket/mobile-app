@@ -57,10 +57,12 @@ export default class CachedImage extends Component<ICachedImageProps, {}> {
                 this.setState({
                     imgURI: filesystemURI,
                 });
+                console.log('loading from cache');
                 return;
             }
 
             // otherwise download to cache
+            console.log('loading from aws');
             const imageObject = await FileSystem.downloadAsync(
                 remoteURI,
                 filesystemURI

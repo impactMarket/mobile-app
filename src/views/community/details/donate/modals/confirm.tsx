@@ -1,25 +1,23 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Modal from 'components/Modal';
-import {
-    getCurrencySymbol,
-} from 'helpers/currency';
+import { getCurrencySymbol } from 'helpers/currency';
 import React, { Component, Dispatch } from 'react';
 import { Text, View, StyleSheet, Alert } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 import { Trans } from 'react-i18next';
-import { connect, ConnectedProps } from 'react-redux';
+import { batch, connect, ConnectedProps } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
 import { BigNumber } from 'bignumber.js';
 import { analytics } from 'services/analytics';
 import * as Device from 'expo-device';
 import { celoWalletRequest } from 'services/celoWallet';
 import Api from 'services/api';
-import { modalDonateAction } from 'helpers/constants';
+import { modalDonateAction, Screens } from 'helpers/constants';
 import { ModalActionTypes } from 'helpers/types/redux';
+import { navigationRef } from 'helpers/rootNavigation';
 
-interface IConfirmModalProps {
-}
+interface IConfirmModalProps {}
 interface IConfirmModalState {
     donating: boolean;
 }
@@ -35,19 +33,24 @@ class ConfirmModal extends Component<
     }
 
     donateWithCeloWallet = async () => {
-        const { kit, userAddress, amountInDollars } = this.props;
+        const { kit, userAddress, amountInDollars, community } = this.props;
+        if (community === undefined) {
+            return;
+        }
         this.setState({ donating: true });
         const stableToken = await this.props.kit.contracts.getStableToken();
         const cUSDDecimals = await stableToken.decimals();
-        // const amountInDollars =
-        //     parseFloat(formatInputAmountToTransfer(this.state.confirmAmount)) /
-        //     this.props.user.exchangeRate;
         const txObject = stableToken.transfer(
-            this.props.community.contractAddress!,
+            community.contractAddress!,
             new BigNumber(amountInDollars)
                 .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
                 .toString()
         ).txo;
+        batch(() => {
+            this.props.setInProgress(true);
+            this.props.dismissModal();
+        });
+        navigationRef.current?.navigate(Screens.WaitingTx);
         celoWalletRequest(
             userAddress,
             stableToken.address,
@@ -57,47 +60,27 @@ class ConfirmModal extends Component<
         )
             .then((tx) => {
                 console.log('tx', tx);
-                // TODO: open window confirming donation
-                // this.setState({ modalConfirmSend: false });
                 if (tx === undefined) {
                     return;
                 }
                 // TODO: wait for tx confirmation and request UI update
                 // update donated values
-                // setTimeout(
-                //     () =>
-                //         updateCommunityInfo(
-                //             this.props.community.publicId,
-                //             this.props.dispatch
-                //         ),
-                //     10000
-                // );
-
-                Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('youHaveDonated'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
+                this.props.setInProgress(false);
                 analytics('donate', { device: Device.brand, success: 'true' });
-                // this.setState({
-                //     modalConfirmSend: false,
-                //     openModalDonate: false,
-                //     donating: false,
-                //     // amountDonate: '',
-                // });
             })
             .catch((e) => {
                 Api.uploadError(userAddress, 'donate', e);
                 analytics('donate', { device: Device.brand, success: 'false' });
+                // TODO: 'nonce too low' have happened here!
+                navigationRef.current?.goBack();
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorDonating'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
-                this.setState({ donating: false });
-            });
+            })
+            .finally(() => this.setState({ donating: false }));
     };
 
     render() {
@@ -120,7 +103,7 @@ class ConfirmModal extends Component<
         //     parseFloat(formatInputAmountToTransfer(confirmAmount)) /
         //     this.props.user.exchangeRate;
 
-        if(community === undefined) { 
+        if (community === undefined) {
             return null;
         }
 
@@ -228,7 +211,7 @@ const mapStateToProps = (state: IRootState) => {
         userAddress: address,
         userCurrency: currency,
         visible: modalConfirmOpen,
-        community: community
+        community: community,
     };
 };
 
@@ -237,6 +220,11 @@ const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes>) => {
         goBackToDonateModal: () =>
             dispatch({ type: modalDonateAction.GO_BACK_TO_DONATE }),
         dismissModal: () => dispatch({ type: modalDonateAction.CLOSE }),
+        setInProgress: (inProgress: boolean) =>
+            dispatch({
+                type: modalDonateAction.IN_PROGRESS,
+                payload: inProgress,
+            }),
     };
 };
 

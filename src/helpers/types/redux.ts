@@ -139,8 +139,8 @@ interface GoBackToModalDonateAction {
     // payload: IManagersDetails;
 }
 
-interface SubmittingModalDonateAction {
-    type: typeof modalDonateAction.CLOSE;
+interface InProgressModalDonateAction {
+    type: typeof modalDonateAction.IN_PROGRESS;
     payload: boolean;
 }
 
@@ -187,7 +187,7 @@ export type ModalActionTypes =
     | GoToConfirmModalDonateAction
     | GoToErrorModalDonateAction
     | GoBackToModalDonateAction
-    | SubmittingModalDonateAction
+    | InProgressModalDonateAction
     | CloseModalDonateAction;
 
 export type IStoreCombinedActionsTypes =
