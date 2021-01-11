@@ -172,7 +172,7 @@ export default class App extends React.Component<any, IAppState> {
         }
 
         //
-        Analytics.setUserId(Device.osInternalBuildId);
+        // Analytics.setUserId(Device.osInternalBuildId);
         const osVersion = Device.osVersion;
         let userProperties: any = {
             screen_resolution: `${Dimensions.get('window').width}x${
