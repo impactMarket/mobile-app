@@ -150,7 +150,7 @@ class ApiRouteCommunity {
     static async create(
         details: CommunityCreationAttributes
     ): Promise<ICommunity | undefined> {
-        return await postRequest<ICommunity>('/community/create', details);
+        return await postRequest<ICommunity>('/community/add', details);
     }
 }
 
@@ -230,7 +230,10 @@ class ApiRouteUser {
         return !!result;
     }
 
-    static async setChildren(address: string, children: number | null): Promise<boolean> {
+    static async setChildren(
+        address: string,
+        children: number | null
+    ): Promise<boolean> {
         const result = await postRequest<boolean>('/user/children', {
             address,
             children,
@@ -239,12 +242,8 @@ class ApiRouteUser {
     }
 }
 
-class Api {
-    public static community = ApiRouteCommunity;
-    public static user = ApiRouteUser;
-    // community
-
-    static async uploadImageAsync(uri: string) {
+class ApiRouteUpload {
+    static async uploadCommunityCoverImage(communityId: string, uri: string) {
         let response;
         try {
             // handle success
@@ -252,11 +251,13 @@ class Api {
             const fileType = uriParts[uriParts.length - 1];
 
             const formData = new FormData();
-            formData.append('photo', {
+            formData.append('imageFile', {
                 uri,
                 name: `photo.${fileType}`,
                 type: `image/${fileType}`,
             } as any);
+            formData.append('pictureContext', 'community');
+            formData.append('communityId', communityId);
             const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
             const requestHeaders = {
                 headers: {
@@ -266,16 +267,22 @@ class Api {
                 },
             };
             const result = await axios.post(
-                '/s3/upload',
+                '/storage/upload',
                 formData,
                 requestHeaders
             );
             response = result;
         } catch (error) {
-            Api.uploadError('', 'upload_image_async', error);
+            Api.uploadError('', 'uploadCommunityCoverImage', error);
         }
         return response;
     }
+}
+
+class Api {
+    public static community = ApiRouteCommunity;
+    public static user = ApiRouteUser;
+    public static upload = ApiRouteUpload;
 
     // user
 

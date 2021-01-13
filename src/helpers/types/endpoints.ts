@@ -67,7 +67,7 @@ export interface CommunityCreationAttributes {
     };
     email: string;
     txReceipt?: any;
-    coverImage: string;
+    // coverImage: string; // default image is used
     contractParams: {
         claimAmount: string;
         maxClaim: string;

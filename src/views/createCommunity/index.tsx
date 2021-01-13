@@ -253,10 +253,7 @@ function CreateCommunityScreen() {
 
         //
         setSending(true);
-
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        let uploadResponse;
-        let uploadImagePath;
         let txReceipt = null;
         let communityAddress = null;
 
@@ -285,12 +282,6 @@ function CreateCommunityScreen() {
                     txReceipt,
                 };
             }
-            uploadResponse = await Api.uploadImageAsync(coverImage);
-            if (uploadResponse?.status === 200) {
-                uploadImagePath = uploadResponse.data.location;
-            } else {
-                throw new Error(uploadResponse?.statusText);
-            }
             const communityDetails: CommunityCreationAttributes = {
                 requestByAddress: userAddress,
                 name,
@@ -308,7 +299,7 @@ function CreateCommunityScreen() {
                         config.locationErrorMargin,
                 },
                 email,
-                coverImage: uploadImagePath,
+                // coverImage: uploadImagePath,
                 contractParams,
                 ...privateParamsIfAvailable,
             };
@@ -316,21 +307,7 @@ function CreateCommunityScreen() {
             const apiRequestResult = await Api.community.create(communityDetails);
 
             if (apiRequestResult) {
-                // const unsubscribe = store.subscribe(() => {
-                //     if (user.community.isManager) {
-                //         unsubscribe();
-                //         setSending(false);
-                //         navigation.goBack();
-                //         Alert.alert(
-                //             i18n.t('success'),
-                //             visibility === 'private'
-                //                 ? i18n.t('youCreatedPrivateCommunity')
-                //                 : i18n.t('requestNewCommunityPlaced'),
-                //             [{ text: 'OK' }],
-                //             { cancelable: false }
-                //         );
-                //     }
-                // });
+                await Api.upload.uploadCommunityCoverImage(apiRequestResult.publicId, coverImage);
                 await updateCommunityInfo(apiRequestResult.publicId, dispatch);
                 dispatch(setUserIsCommunityManager(true));
             } else {
