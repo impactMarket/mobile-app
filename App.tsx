@@ -541,6 +541,9 @@ export default class App extends React.Component<any, IAppState> {
                 store.dispatch(
                     setPushNotificationsToken(pushNotificationToken)
                 );
+                setPushNotificationListeners(
+                    startNotificationsListeners(kit, store.dispatch)
+                );
                 const userWelcome = await Api.user.hello(
                     address,
                     pushNotificationToken
@@ -557,7 +560,7 @@ export default class App extends React.Component<any, IAppState> {
                         phoneNumber,
                         userWelcome,
                         kit,
-                        store,
+                        store.dispatch,
                         userMetadata
                     );
                     loggedIn = true;

@@ -8,7 +8,7 @@ import { welcomeUser } from 'helpers/index';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useSelector, useStore } from 'react-redux';
+import { useDispatch, useSelector, useStore } from 'react-redux';
 import Api from 'services/api';
 import { registerForPushNotifications } from 'services/pushNotifications';
 import * as Device from 'expo-device';
@@ -36,6 +36,7 @@ import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 function Auth() {
     const insets = useSafeAreaInsets();
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
@@ -138,12 +139,12 @@ function Auth() {
                 dappkitResponse.phoneNumber,
                 user,
                 newKitFromWeb3(new Web3(config.jsonRpc)),
-                store,
+                dispatch,
                 user.user
             );
-            store.dispatch(setPushNotificationsToken(pushNotificationToken));
+            dispatch(setPushNotificationsToken(pushNotificationToken));
             setPushNotificationListeners(
-                startNotificationsListeners(kit, store.dispatch)
+                startNotificationsListeners(kit, dispatch)
             );
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {

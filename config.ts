@@ -31,7 +31,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: process.env.EXPO_API_BASE_URL! + '/api',
+        baseApiUrl: 'http://192.168.1.79:5000/api',
 
         /**
          * JSON RPC url
