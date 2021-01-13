@@ -16,6 +16,11 @@ Use the package manager [yarn](https://yarnpkg.com/) to install dependencies.
 yarn
 ```
 
+Replace .env variables.
+EXPO_API_BASE_URL=(the base url)
+EXPO_ENCRYPTION_KEY=(any string 32 character long)
+EXPO_ENCRYPTION_IV=(any string 16 character long)
+
 ## Usage
 
 Install [expo](https://expo.io/) on your smartphone, start the app with `yarn start` and scan the QR.
