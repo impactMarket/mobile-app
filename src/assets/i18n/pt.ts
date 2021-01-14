@@ -182,7 +182,7 @@ export default {
     donationBiggerThanBalance:
         'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
     errorClaiming:
-        'O erro ocorreu ao tentar pegar. Tente novamente mais tarde. Erro: {{error}}',
+        'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.\n\nErro: {{error}}',
     consentAnonymousAnalytics: 'Aceitar enviar dados anonimos para análises',
     youCreatedPrivateCommunity:
         'Você criou uma comunidade privada. Seja bem vindo.',
@@ -210,11 +210,7 @@ export default {
     dismiss: 'Fechar',
     incorrectTime: 'Data/Hora incorreta',
     incorrectTimeMessage:
-        'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}.',
-    possibleNetworkIssues: 'Posivelmente problemas de conexão.',
-    transactionPossiblyNotAllowed: 'Possivelmente a transação não é permitida.',
-    networkConnectionLost: 'A ligação é internet foi perdida.',
-    networkIssuesRPC: 'Possivelmente erros de ligação ao serviço RPC.',
+        'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}. Após terminar, reinicie o aplicativo.',
     backWithSymbol: '< Voltar',
     age: 'Idade',
     gender: 'Género',
@@ -235,4 +231,16 @@ export default {
     pleaseWait: 'Por favor aguarde...',
     thankYou: 'Obrigado!',
     donationBeingProcessed: 'O seu donativo está a ser processado...',
+    beneficiaryCommunityNoFunds:
+        'Infelizmente, a sua comunidade não tem fundos!',
+    possibleNetworkIssues: 'Posivelmente problemas de conexão.',
+    networkConnectionLost: 'A ligação à internet foi perdida.',
+    networkIssuesRPC: 'Serviço RPC indisponivel. Tente novamente mais tarde.',
+    possiblyValoraNotSynced:
+        "Parece que a sua valora não está sincronizada com a rede. Por favor, abra a Valora e certifique-se que não tem nenhuma mensagem como 'Connecting...'",
+    unknown: 'Desconhecido.',
+    clockNotSynced:
+        'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
+    communityWentOutOfFunds:
+        'Parece que a comunidade ficou sem fundos. Tente novamente mais tarde.',
 };

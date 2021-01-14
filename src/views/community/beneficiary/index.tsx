@@ -141,7 +141,9 @@ function BeneficiaryScreen() {
         } else if (timeoutTimeDiff !== undefined) {
             clearInterval(timeoutTimeDiff);
         }
-        return clearInterval(timeoutTimeDiff);
+        return () => {
+            clearInterval(timeoutTimeDiff);
+        };
     }, [suspectWrongDateTime]);
 
     useEffect(() => {

@@ -279,10 +279,18 @@ class ApiRouteUpload {
     }
 }
 
+class ApiRouteSystem {
+    static async getServerTime(): Promise<number> {
+        const result = await getRequest<number>('/clock');
+        return result ? result : 0;
+    }
+}
+
 class Api {
     public static community = ApiRouteCommunity;
     public static user = ApiRouteUser;
     public static upload = ApiRouteUpload;
+    public static system = ApiRouteSystem;
 
     // user
 
@@ -307,7 +315,7 @@ class Api {
      * Must use values from user storage and update when opening app.
      */
     static async getExchangeRate(): Promise<any> {
-        const result = await getRequest<any>('/exchange-rates/');
+        const result = await getRequest<any>('/exchange-rates');
         return result;
     }
 

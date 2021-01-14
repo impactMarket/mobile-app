@@ -26,9 +26,29 @@ import {
 } from './redux/actions/user';
 import { setAppExchangeRatesAction } from './redux/actions/app';
 import { UserAttributes } from './types/models';
+import config from '../../config';
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
+}
+
+export async function isOutOfTime() {
+    let tries = 3;
+    let totalDiff = 0;
+    while (--tries >= 0) {
+        const preTime = new Date();
+        const serverTime = await Api.system.getServerTime();
+        const postTime = new Date();
+        const requestDiff = moment(preTime).diff(postTime);
+        totalDiff +=
+            new Date(postTime.getTime() - requestDiff / 2).getTime() -
+            serverTime;
+    }
+    const timeDiff = totalDiff / 3;
+    return (
+        timeDiff < -config.outOfTimeThreshold ||
+        timeDiff > config.outOfTimeThreshold
+    );
 }
 
 export async function welcomeUser(
@@ -36,7 +56,7 @@ export async function welcomeUser(
     phoneNumber: string,
     user: IUserHello,
     kit: ContractKit,
-    store: Store<CombinedState<IRootState>, IStoreCombinedActionsTypes>,
+    dispatch: Dispatch<any>,
     userMetadata: UserAttributes
 ) {
     const balance = await getUserBalance(kit, address);
@@ -46,30 +66,30 @@ export async function welcomeUser(
         moment.locale(language);
     }
     batch(() => {
-        store.dispatch(
+        dispatch(
             setUserWallet({
                 address,
                 phoneNumber,
                 balance: balance.toString(),
             })
         );
-        store.dispatch(setUserMetadata(userMetadata));
-        store.dispatch(
+        dispatch(setUserMetadata(userMetadata));
+        dispatch(
             setUserExchangeRate(
                 user.exchangeRates[userMetadata.currency.toUpperCase()].rate
             )
         );
-        store.dispatch(setAppExchangeRatesAction(user.exchangeRates));
+        dispatch(setAppExchangeRatesAction(user.exchangeRates));
         if (user.isBeneficiary || user.isManager) {
             const c = user.community!;
             const communityContract = new kit.web3.eth.Contract(
                 CommunityContractABI as any,
                 c.contractAddress!
             );
-            store.dispatch(setCommunityMetadata(c));
-            store.dispatch(setCommunityContract(communityContract));
-            store.dispatch(setUserIsBeneficiary(user.isBeneficiary));
-            store.dispatch(setUserIsCommunityManager(user.isManager));
+            dispatch(setCommunityMetadata(c));
+            dispatch(setCommunityContract(communityContract));
+            dispatch(setUserIsBeneficiary(user.isBeneficiary));
+            dispatch(setUserIsCommunityManager(user.isManager));
         }
     });
 }

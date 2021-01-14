@@ -38,7 +38,7 @@ async function celoWalletRequest(
     } catch (e) {
         if (!__DEV__) {
             // as transaction requests get pending, they then resume all at once
-            if (!e.message.toLowerCase().includes('known transaction')) {
+            if (!e.toLowerCase().includes('known transaction')) {
                 Sentry.captureException(e);
             }
         }

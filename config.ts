@@ -20,6 +20,11 @@ const commonConfig = {
      * Encryption IV (this should be random in the future)
      */
     encryptionIV: process.env.EXPO_ENCRYPTION_IV!,
+
+    /**
+     * Out of time threshold in milliseconds used to verify phones time
+     */
+    outOfTimeThreshold: 10000,
 };
 const ENV = {
     dev: {
@@ -31,7 +36,7 @@ const ENV = {
         /**
          * The default API URL
          */
-        baseApiUrl: 'http://192.168.1.79:5000/api',
+        baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
 
         /**
          * JSON RPC url
@@ -109,6 +114,9 @@ function getEnvVars() {
     if (__DEV__) {
         // thanks https://stackoverflow.com/a/57468503/3348623
         // do dev stuff 🤘
+        if (process.env.EXPO_USE_STAGING) {
+            return { ...commonConfig, ...ENV.staging };
+        }
         return { ...commonConfig, ...ENV.dev };
     } else if (Constants.appOwnership === 'expo') {
         return { ...commonConfig, ...ENV.staging };

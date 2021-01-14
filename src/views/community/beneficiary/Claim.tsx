@@ -18,6 +18,7 @@ import config from '../../../../config';
 import * as Device from 'expo-device';
 import { analytics } from 'services/analytics';
 import { IRootState } from 'helpers/types/state';
+import { isOutOfTime } from 'helpers/index';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, app } = state;
@@ -55,16 +56,57 @@ class Claim extends React.Component<Props, IClaimState> {
         await this._loadAllowance(this.props.cooldownTime);
         // check if there's enough funds to enable/disable claim button
         const { state, contract } = this.props.user.community.metadata;
-        const notEnoughToClaimOnContract = new BigNumber(state.raised)
-            .minus(state.claimed)
-            .lt(contract.claimAmount);
+        // const notEnoughToClaimOnContract = new BigNumber(state.raised)
+        //     .minus(state.claimed)
+        //     .lt(contract.claimAmount);
+        // don't forget the 5 cents being sent for every new beneficiary
+
+        const claimedRatio = new BigNumber(state.claimed).dividedBy(
+            state.raised
+        );
+        const notEnoughToClaimOnContract = !(
+            state.raised !== '0' &&
+            claimedRatio.lte(new BigNumber(0.989)) &&
+            new BigNumber(state.raised)
+                .minus(state.claimed)
+                .gt(contract.claimAmount)
+        );
         this.setState({ notEnoughToClaimOnContract });
     };
+
+    // componentDidUpdate = (prevProps: Props) => {
+    //     console.log('componentDidUpdate new values, out', prevProps.user.community.metadata.state.raised, this.props.user.community.metadata.state.raised);
+    //     if (
+    //         prevProps.user.community.metadata.state.raised !==
+    //         this.props.user.community.metadata.state.raised
+    //     ) {
+    //         console.log('componentDidUpdate new values');
+    //         const { state } = this.props.user.community.metadata;
+    //         const notEnoughToClaimOnContract =
+    //             state.claimed === '0'
+    //                 ? true
+    //                 : new BigNumber(state.claimed)
+    //                       .dividedBy(state.raised)
+    //                       .gt(new BigNumber(0.989));
+    //         this.setState({ notEnoughToClaimOnContract });
+    //     }
+    // };
 
     handleClaimPress = async () => {
         const { user, app } = this.props;
         const communityContract = user.community.contract;
         const { address } = user.wallet;
+        const { notEnoughToClaimOnContract } = this.state;
+
+        if (notEnoughToClaimOnContract) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('beneficiaryCommunityNoFunds'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        }
 
         this.setState({ claiming: true });
         celoWalletRequest(
@@ -84,7 +126,9 @@ class Claim extends React.Component<Props, IClaimState> {
                     user.community.isManager === false
                 ) {
                     try {
-                        let loc: Location.LocationObject | undefined = undefined;
+                        let loc:
+                            | Location.LocationObject
+                            | undefined = undefined;
                         const availableGPSToRequest =
                             (await Location.hasServicesEnabledAsync()) &&
                             (await Location.getPermissionsAsync()).status ===
@@ -129,15 +173,55 @@ class Claim extends React.Component<Props, IClaimState> {
                 });
                 analytics('claim', { device: Device.brand, success: 'true' });
             })
-            .catch((e) => {
-                Api.uploadError(address, 'claim', e);
+            .catch(async (e) => {
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
                 let error = i18n.t('possibleNetworkIssues');
-                if (e.message.includes('gas required exceeds allowance')) {
-                    error = i18n.t('transactionPossiblyNotAllowed');
-                }
-                if (e.message.includes('Invalid JSON RPC response:')) {
+                if (
+                    e.message.includes('nonce') ||
+                    e.message.includes('gasprice is less')
+                ) {
+                    error = i18n.t('possiblyValoraNotSynced');
+                } else if (e.message.includes('gas required exceeds')) {
+                    error = i18n.t('unknown');
+                    // verify clock time
+                    if (await isOutOfTime()) {
+                        error = i18n.t('clockNotSynced');
+                    } else {
+                        // verify remaining time to claim
+                        const newCooldownTime = await this.props.updateCooldownTime();
+                        const claimDisabled =
+                            newCooldownTime * 1000 > new Date().getTime();
+                        if (claimDisabled) {
+                            // time to claim was wrong :/
+                            error = i18n.t('transactionPossiblyNotAllowed');
+                            this._loadAllowance(newCooldownTime).then(() => {
+                                this.setState({ claiming: false });
+                                this.props.updateClaimedAmount();
+                            });
+                        } else {
+                            // verify contract funds :/
+                            const communityUpdated = await Api.community.getByPublicId(
+                                this.props.user.community.metadata.publicId
+                            );
+                            if (communityUpdated) {
+                                const { state, contract } = communityUpdated;
+                                const claimedRatio = new BigNumber(
+                                    state.claimed
+                                ).dividedBy(state.raised);
+                                const notEnoughToClaimOnContract = !(
+                                    state.raised !== '0' &&
+                                    claimedRatio.lte(new BigNumber(0.989)) &&
+                                    new BigNumber(state.raised)
+                                        .minus(state.claimed)
+                                        .gt(contract.claimAmount)
+                                );
+                                error = i18n.t('communityWentOutOfFunds');
+                                this.setState({ notEnoughToClaimOnContract });
+                            }
+                        }
+                    }
+                } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
@@ -151,6 +235,7 @@ class Claim extends React.Component<Props, IClaimState> {
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
+                Api.uploadError(address, 'claim', `${e} <Presented Error> ${error}`);
             });
     };
 
@@ -198,10 +283,11 @@ class Claim extends React.Component<Props, IClaimState> {
             <TouchableOpacity
                 style={{
                     flexDirection: 'row',
-                    backgroundColor:
-                        claimDisabled || notEnoughToClaimOnContract
-                            ? '#E9ECEF'
-                            : iptcColors.softBlue,
+                    backgroundColor: claimDisabled
+                        ? '#E9ECEF'
+                        : notEnoughToClaimOnContract
+                        ? '#f0ad4e'
+                        : iptcColors.softBlue,
                     alignSelf: 'center',
                     alignItems: 'center',
                     paddingTop: 11,
@@ -210,8 +296,8 @@ class Claim extends React.Component<Props, IClaimState> {
                     borderRadius: 8,
                 }}
                 disabled={
-                    claimDisabled ||
-                    /* claiming || */ notEnoughToClaimOnContract
+                    claimDisabled // ||
+                    // claiming ||  notEnoughToClaimOnContract
                 }
                 onPress={this.handleClaimPress}
             >
@@ -232,7 +318,9 @@ class Claim extends React.Component<Props, IClaimState> {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.claimText}>{i18n.t('claimX')}</Text>
                         <Text style={styles.claimTextCurrency}>
-                            {getCurrencySymbol(this.props.user.metadata.currency)}
+                            {getCurrencySymbol(
+                                this.props.user.metadata.currency
+                            )}
                         </Text>
                         <Text style={styles.claimText}>
                             {amountToCurrency(

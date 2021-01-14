@@ -186,7 +186,7 @@ export default {
     copyContractAddress: 'Copy Contract Address',
     donationBiggerThanBalance:
         'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',
-    errorClaiming: 'An error happened while claiming. Error: {{error}}',
+    errorClaiming: 'An error happened while claiming.\n\nError: {{error}}',
     consentAnonymousAnalytics: 'Consent Anonymous Analytics',
     youCreatedPrivateCommunity: "You've created a private community. Welcome!",
     youAreNotConnected:
@@ -213,11 +213,7 @@ export default {
     dismiss: 'Dismiss',
     incorrectTime: 'Incorrect Time',
     incorrectTimeMessage:
-        'We have detected that your device may have the time incorrectly set. Please open the clock settings to match {{serverTime}}. Your time is currently {{userTime}}.',
-    possibleNetworkIssues: 'Possible network issues.',
-    transactionPossiblyNotAllowed: 'Transaction possibly not allowed.',
-    networkConnectionLost: 'The network connection was lost.',
-    networkIssuesRPC: 'Possible network issues related to RPC.',
+        'We have detected that your device may have the time incorrectly set. Please open the clock settings to match {{serverTime}}. Your time is currently {{userTime}}. After doing so, please, restart the app.',
     backWithSymbol: '< Back',
     age: 'Age',
     gender: 'Gender',
@@ -238,4 +234,16 @@ export default {
     pleaseWait: 'Please wait...',
     thankYou: 'Thank you!',
     donationBeingProcessed: 'Your donation is being processed...',
+    beneficiaryCommunityNoFunds:
+        'Unfortunately, your community does not have funds!',
+    possibleNetworkIssues: 'Possible network issues.',
+    networkConnectionLost: 'The network connection was lost.',
+    networkIssuesRPC: 'RPC service unavailable. Please try again later.',
+    possiblyValoraNotSynced:
+        "It seems like your valora isn't synced with the network. Please, open Valora and make sure you don't see any message similar to 'Connecting...'",
+    unknown: 'Unkown.',
+    clockNotSynced:
+        'It seems like your date or time is incorrect. Please, fix it before trying again.',
+    communityWentOutOfFunds:
+        'It seems like your community run out of funds. Please try again later',
 };
