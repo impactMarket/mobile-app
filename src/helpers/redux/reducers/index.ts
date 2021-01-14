@@ -9,5 +9,5 @@ export default combineReducers({
     auth: authReducer,
     view: viewReducer,
     app: appReducer,
-    modalDonate: modalDonateReducer
+    modalDonate: modalDonateReducer,
 });

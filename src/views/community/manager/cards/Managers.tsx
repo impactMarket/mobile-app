@@ -50,9 +50,7 @@ function Managers(props: IManagersProps) {
                         style={{
                             marginVertical: 5,
                         }}
-                        onPress={() =>
-                            navigation.navigate(Screens.AddManager)
-                        }
+                        onPress={() => navigation.navigate(Screens.AddManager)}
                     >
                         {i18n.t('addManager')}
                     </Button>

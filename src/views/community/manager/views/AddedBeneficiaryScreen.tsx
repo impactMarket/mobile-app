@@ -3,7 +3,13 @@ import Button from 'components/core/Button';
 import { amountToCurrency } from 'helpers/currency';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Alert, View, FlatList, RefreshControl } from 'react-native';
+import {
+    StyleSheet,
+    Alert,
+    View,
+    FlatList,
+    RefreshControl,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -42,10 +48,13 @@ function AddedBeneficiaryScreen() {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        Api.community.managersDetails().then((details) => {
-            setManagerDetails(details);
-            dispatch(setStateManagersDetails(details));
-        }).finally(() => setRefreshing(false));
+        Api.community
+            .managersDetails()
+            .then((details) => {
+                setManagerDetails(details);
+                dispatch(setStateManagersDetails(details));
+            })
+            .finally(() => setRefreshing(false));
     }, []);
 
     useEffect(() => {

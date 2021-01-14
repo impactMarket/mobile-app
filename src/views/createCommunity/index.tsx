@@ -45,10 +45,18 @@ import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
-    const userAddress = useSelector((state: IRootState) => state.user.wallet.address);
-    const userCurrency = useSelector((state: IRootState) => state.user.metadata.currency);
-    const userLanguage = useSelector((state: IRootState) => state.user.metadata.language);
-    const exchangeRates = useSelector((state: IRootState) => state.app.exchangeRates);
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
+    const userLanguage = useSelector(
+        (state: IRootState) => state.user.metadata.language
+    );
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
     const kit = useSelector((state: IRootState) => state.app.kit);
     const navigation = useNavigation();
 
@@ -304,10 +312,15 @@ function CreateCommunityScreen() {
                 ...privateParamsIfAvailable,
             };
 
-            const apiRequestResult = await Api.community.create(communityDetails);
+            const apiRequestResult = await Api.community.create(
+                communityDetails
+            );
 
             if (apiRequestResult) {
-                await Api.upload.uploadCommunityCoverImage(apiRequestResult.publicId, coverImage);
+                await Api.upload.uploadCommunityCoverImage(
+                    apiRequestResult.publicId,
+                    coverImage
+                );
                 await updateCommunityInfo(apiRequestResult.publicId, dispatch);
                 dispatch(setUserIsCommunityManager(true));
             } else {

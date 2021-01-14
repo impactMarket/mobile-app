@@ -54,13 +54,12 @@ export interface BeneficiaryAttributes {
     claims: number;
     lastClaimAt: Date | null;
     penultimateClaimAt: Date | null;
-};
+}
 
 export interface ManagerAttributes {
     user: string;
     communityId: string;
-};
-
+}
 
 export interface UserAttributes {
     address: string;
@@ -71,4 +70,4 @@ export interface UserAttributes {
     gender: string | null;
     year: number | null;
     children: number | null;
-};
+}

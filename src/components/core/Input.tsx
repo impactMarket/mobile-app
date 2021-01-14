@@ -19,7 +19,7 @@ export default class Input extends Component<IInputProps, {}> {
             onEndEditing,
             onChangeText,
             editable,
-            style
+            style,
         } = this.props;
         return (
             <View style={style}>

@@ -235,7 +235,11 @@ class Claim extends React.Component<Props, IClaimState> {
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
-                Api.uploadError(address, 'claim', `${e} <Presented Error> ${error}`);
+                Api.uploadError(
+                    address,
+                    'claim',
+                    `${e} <Presented Error> ${error}`
+                );
             });
     };
 

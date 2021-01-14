@@ -9,11 +9,15 @@ import { StyleSheet } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 
-interface IErrorModalProps {
-}
+interface IErrorModalProps {}
 class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, {}> {
     render() {
-        const { visible, dismissModal, userCurrency, goBackToDonateModal } = this.props;
+        const {
+            visible,
+            dismissModal,
+            userCurrency,
+            goBackToDonateModal,
+        } = this.props;
 
         return (
             <Modal

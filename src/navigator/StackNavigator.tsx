@@ -125,7 +125,7 @@ function StackNavigator() {
                     elevation: 0, // remove shadow on Android
                     shadowOpacity: 0, // remove shadow on iOS
                     // backgroundColor: 'tomato',
-                    height: 100
+                    height: 100,
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {

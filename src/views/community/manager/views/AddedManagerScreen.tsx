@@ -44,7 +44,6 @@ function AddedManagerScreen() {
         return;
     }, [stateManagerDetails]);
 
-
     if (managerDetails === undefined) {
         // TODO: loading...
         return null;
@@ -57,9 +56,7 @@ function AddedManagerScreen() {
                     key={manager.address}
                     item={{
                         description: i18n.t('managerSince', {
-                            date: moment(manager.timestamp).format(
-                                'MMM, YYYY'
-                            ),
+                            date: moment(manager.timestamp).format('MMM, YYYY'),
                         }),
                         from: manager,
                         key: manager.address,

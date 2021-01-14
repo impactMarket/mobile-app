@@ -17,8 +17,12 @@ import { ITabBarIconProps } from 'helpers/types/common';
 const Tab = createBottomTabNavigator();
 
 function Tabs() {
-    const isManager = useSelector((state: IRootState) => state.user.community.isManager);
-    const isBeneficiary = useSelector((state: IRootState) => state.user.community.isBeneficiary);
+    const isManager = useSelector(
+        (state: IRootState) => state.user.community.isManager
+    );
+    const isBeneficiary = useSelector(
+        (state: IRootState) => state.user.community.isBeneficiary
+    );
     const tabBeneficiary = (
         <Tab.Screen
             name="claim"

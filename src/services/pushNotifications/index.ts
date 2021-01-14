@@ -55,13 +55,12 @@ export async function registerForPushNotifications(): Promise<string> {
     return token;
 }
 
-
 export const startNotificationsListeners = (
     kit: ContractKit,
     dispatch: Dispatch<any>
 ): {
-    notificationReceivedListener: Subscription,
-    notificationResponseReceivedListener: Subscription,
+    notificationReceivedListener: Subscription;
+    notificationResponseReceivedListener: Subscription;
 } => {
     // when notification received!
     const notificationReceivedListener = Notifications.addNotificationReceivedListener(
@@ -99,29 +98,31 @@ export const startNotificationsListeners = (
         }
     );
     // when user clicks on the notification
-    const notificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener((response) => {
-        const notificationData = response.notification.request.content.data;
-        const action = notificationData.action as string;
-        const communityAddress = notificationData.communityAddress as string;
-        if (action === 'community-low-funds') {
-            Api.community
-                .getByContractAddress(communityAddress)
-                .then((community) => {
-                    if (community !== undefined) {
-                        navigationRef.current?.navigate(
-                            Screens.CommunityDetails,
-                            {
-                                communityId: community.publicId,
-                            }
-                        );
-                    }
-                });
+    const notificationResponseReceivedListener = Notifications.addNotificationResponseReceivedListener(
+        (response) => {
+            const notificationData = response.notification.request.content.data;
+            const action = notificationData.action as string;
+            const communityAddress = notificationData.communityAddress as string;
+            if (action === 'community-low-funds') {
+                Api.community
+                    .getByContractAddress(communityAddress)
+                    .then((community) => {
+                        if (community !== undefined) {
+                            navigationRef.current?.navigate(
+                                Screens.CommunityDetails,
+                                {
+                                    communityId: community.publicId,
+                                }
+                            );
+                        }
+                    });
+            }
         }
-    });
+    );
     // Notifications.addPushTokenListener
     // In rare situations a push token may be changed by the push notification service while the app is running.
     return {
         notificationReceivedListener,
         notificationResponseReceivedListener,
-    }
+    };
 };

@@ -47,7 +47,7 @@ export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
 
 export enum appAction {
-    SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners'
+    SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners',
 }
 
 export enum modalDonateAction {
@@ -56,7 +56,7 @@ export enum modalDonateAction {
     GO_TO_ERROR_DONATE = 'donateModal/goToError',
     GO_BACK_TO_DONATE = 'donateModal/goBackToDonate',
     IN_PROGRESS = 'donateModal/inProgress',
-    CLOSE = 'donateModal/close'
+    CLOSE = 'donateModal/close',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

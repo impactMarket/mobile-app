@@ -60,7 +60,7 @@ export default class ListActionItem extends Component<
         const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
         if (from.username !== null && fromHasName) {
-            name = decrypt(from.username)
+            name = decrypt(from.username);
         }
 
         let renderRight;

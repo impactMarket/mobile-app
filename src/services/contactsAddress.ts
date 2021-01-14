@@ -32,13 +32,10 @@ export const getCacheContactsAddress = async () => {
 
 export const crossContactsAddress = async (kit: ContractKit) => {
     // const { status } = await Permissions.askAsync(Permissions.CONTACTS);
-
     // if (status !== Permissions.PermissionStatus.GRANTED) {
     //     return;
     // }
-
     // const { phoneNumbersByAddress } = await fetchContacts(kit);
-
     // TODO: simplify
     // const { status } = await Contacts.requestPermissionsAsync();
     // const mappedContacts = new Map<string, string>();
@@ -54,7 +51,6 @@ export const crossContactsAddress = async (kit: ContractKit) => {
     //             .map((contact) =>
     //                 contact.phoneNumbers![0].number!.replace(/[ ]+/g, '')
     //             );
-
     //         const contactsPhoneHash: { contact: string; hash: string }[] = [];
     //         result.forEach((contact) => {
     //             // catch non valid numbers
@@ -69,7 +65,6 @@ export const crossContactsAddress = async (kit: ContractKit) => {
     //         const lookupResult = await attestations.lookupPhoneNumbers(
     //             contactsPhoneHash.map((c) => c.hash)
     //         );
-
     //         // TODO: get names instead of just numbers
     //         const mapped = contactsPhoneHash
     //             .map((contact) => ({
@@ -77,7 +72,6 @@ export const crossContactsAddress = async (kit: ContractKit) => {
     //                 lookup: lookupResult[contact.hash],
     //             }))
     //             .filter((matching) => matching.lookup !== undefined);
-
     //         for (let index = 0; index < mapped.length; index++) {
     //             const element = mapped[index];
     //             mappedContacts.set(

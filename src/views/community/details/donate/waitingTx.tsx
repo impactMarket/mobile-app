@@ -11,8 +11,12 @@ import { iptcColors } from 'styles/index';
 
 function WaitingTxScreen() {
     const navigation = useNavigation();
-    const inProgress = useSelector((state: IRootState) => state.modalDonate.inProgress);
-    const donationValues = useSelector((state: IRootState) => state.modalDonate.donationValues);
+    const inProgress = useSelector(
+        (state: IRootState) => state.modalDonate.inProgress
+    );
+    const donationValues = useSelector(
+        (state: IRootState) => state.modalDonate.donationValues
+    );
 
     return (
         <View
@@ -58,7 +62,7 @@ function WaitingTxScreen() {
                             color: iptcColors.almostBlack,
                         }}
                     >
-                        {inProgress ? i18n.t('pleaseWait'): i18n.t('thankYou')}
+                        {inProgress ? i18n.t('pleaseWait') : i18n.t('thankYou')}
                     </Text>
                     <Text
                         style={{
@@ -73,9 +77,10 @@ function WaitingTxScreen() {
                         {inProgress
                             ? i18n.t('donationBeingProcessed')
                             : i18n.t('yourDonationWillBackFor', {
-                                backNBeneficiaries: donationValues.backNBeneficiaries,
-                                backForDays: donationValues.backForDays
-                            })}
+                                  backNBeneficiaries:
+                                      donationValues.backNBeneficiaries,
+                                  backForDays: donationValues.backForDays,
+                              })}
                     </Text>
                 </View>
                 <Button

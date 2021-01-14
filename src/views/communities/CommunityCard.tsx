@@ -8,20 +8,14 @@ import {
 } from 'helpers/index';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
-import {
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import Card from 'components/core/Card';
 import { Screens } from 'helpers/constants';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import CachedImage from 'components/CacheImage';
 
-function CommunityCard(props: {
-    community: ICommunityLightDetails;
-}) {
+function CommunityCard(props: { community: ICommunityLightDetails }) {
     const navigation = useNavigation();
     const { community } = props;
 

@@ -3,11 +3,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Portal } from 'react-native-paper';
 
-import {
-    useDispatch,
-    Provider,
-    useStore,
-} from 'react-redux';
+import { useDispatch, Provider, useStore } from 'react-redux';
 import Button from 'components/core/Button';
 import { ICommunity } from 'helpers/types/endpoints';
 import DonateModal from '../donate/modals/donate';

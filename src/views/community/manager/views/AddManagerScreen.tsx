@@ -72,9 +72,9 @@ function AddManagerScreen() {
             );
             return;
         }
-        
+
         setAddInProgress(true);
-        
+
         const userExists = await Api.user.exists(addressToAdd);
         if (!userExists) {
             Alert.alert(
