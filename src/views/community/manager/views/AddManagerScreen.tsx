@@ -111,7 +111,8 @@ function AddManagerScreen() {
                 );
                 navigation.goBack();
             })
-            .catch(() => {
+            .catch((e) => {
+                Api.uploadError(userAddress, 'add_manager', e);
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorAddingManager'),
