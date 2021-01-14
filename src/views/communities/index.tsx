@@ -23,11 +23,17 @@ function CommunitiesScreen() {
     const [communities, setCommunities] = useState<ICommunityLightDetails[]>(
         []
     );
+    const [reachedEndList, setReachedEndList] = useState(false);
 
     useEffect(() => {
         Api.community
             .list(0, 5)
-            .then((c) => setCommunities(c))
+            .then((c) => {
+                if (c.length < 5) {
+                    setReachedEndList(true);
+                }
+                setCommunities(c);
+            })
             .finally(() => setRefreshing(false));
     }, []);
 
@@ -83,6 +89,41 @@ function CommunitiesScreen() {
         }
     };
 
+    const handleOnEndReached = (info: { distanceFromEnd: number }) => {
+        console.log(info);
+        if (!refreshing && !reachedEndList) {
+            setRefreshing(true);
+            if (communtiesOrder === 'nearest' && userLocation) {
+                Api.community
+                    .listNearest(
+                        userLocation.coords.latitude,
+                        userLocation.coords.longitude,
+                        communtiesOffset + 5,
+                        5
+                    )
+                    .then((c) => {
+                        if (c.length < 5) {
+                            setReachedEndList(true);
+                        }
+                        setCommunities(communities.concat(c));
+                        setCommuntiesOffset(communtiesOffset + 5);
+                    })
+                    .finally(() => setRefreshing(false));
+            } else {
+                Api.community
+                    .list(communtiesOffset + 5, 5)
+                    .then((c) => {
+                        if (c.length < 5) {
+                            setReachedEndList(true);
+                        }
+                        setCommunities(communities.concat(c));
+                        setCommuntiesOffset(communtiesOffset + 5);
+                    })
+                    .finally(() => setRefreshing(false));
+            }
+        }
+    };
+
     const textCommunitiesOrder = (g: string | null) => {
         switch (g) {
             case 'nearest':
@@ -116,33 +157,7 @@ function CommunitiesScreen() {
                 ref={flatListRef}
                 keyExtractor={(item) => item.publicId}
                 onEndReachedThreshold={0.7}
-                onEndReached={(info: { distanceFromEnd: number }) => {
-                    if (!refreshing) {
-                        setRefreshing(true);
-                        if (communtiesOrder === 'nearest' && userLocation) {
-                            Api.community
-                                .listNearest(
-                                    userLocation.coords.latitude,
-                                    userLocation.coords.longitude,
-                                    communtiesOffset + 5,
-                                    5
-                                )
-                                .then((c) => {
-                                    setCommunities(communities.concat(c));
-                                    setCommuntiesOffset(communtiesOffset + 5);
-                                })
-                                .finally(() => setRefreshing(false));
-                        } else {
-                            Api.community
-                                .list(communtiesOffset + 5, 5)
-                                .then((c) => {
-                                    setCommunities(communities.concat(c));
-                                    setCommuntiesOffset(communtiesOffset + 5);
-                                })
-                                .finally(() => setRefreshing(false));
-                        }
-                    }
-                }}
+                onEndReached={handleOnEndReached}
                 // Performance settings
                 removeClippedSubviews={true} // Unmount components when outside of window
                 initialNumToRender={2} // Reduce initial render amount
