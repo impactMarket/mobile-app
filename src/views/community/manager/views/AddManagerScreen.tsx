@@ -99,8 +99,13 @@ function AddManagerScreen() {
                     return;
                 }
                 setTimeout(
-                    () => updateCommunityInfo(community.publicId, dispatch),
-                    10000
+                    () => {
+                        Api.community.managersDetails().then((details) => {
+                            setManagerDetails(details);
+                            dispatch(setStateManagersDetails(details));
+                        });
+                    },
+                    3000
                 );
 
                 Alert.alert(
@@ -128,7 +133,7 @@ function AddManagerScreen() {
     const personalAddressWarningMessageCondition =
         inputAddress.toLowerCase() === userAddress.toLowerCase();
     const usedAddressWarningMessageCondition =
-        managerDetails?.beneficiaries.active.find(
+        managerDetails?.managers.find(
             (b) => b.address.toLowerCase() === inputAddress.toLowerCase()
         ) !== undefined;
 

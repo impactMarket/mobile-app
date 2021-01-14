@@ -14,12 +14,12 @@ import { setStateManagersDetails } from 'helpers/redux/actions/views';
 function AddedManagerScreen() {
     const dispatch = useDispatch();
 
-    const userCurrency = useSelector(
-        (state: IRootState) => state.user.metadata.currency
-    );
-    const exchangeRates = useSelector(
-        (state: IRootState) => state.app.exchangeRates
-    );
+    // const userCurrency = useSelector(
+    //     (state: IRootState) => state.user.metadata.currency
+    // );
+    // const exchangeRates = useSelector(
+    //     (state: IRootState) => state.app.exchangeRates
+    // );
     const stateManagerDetails = useSelector(
         (state: IRootState) => state.view.managerDetails
     );

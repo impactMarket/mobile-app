@@ -85,10 +85,12 @@ function AddBeneficiaryScreen() {
                 if (tx === undefined) {
                     return;
                 }
-                setTimeout(
-                    () => updateCommunityInfo(community.publicId, dispatch),
-                    10000
-                );
+                setTimeout(() => {
+                    Api.community.managersDetails().then((details) => {
+                        setManagerDetails(details);
+                        dispatch(setStateManagersDetails(details));
+                    });
+                }, 3000);
 
                 Alert.alert(
                     i18n.t('success'),
