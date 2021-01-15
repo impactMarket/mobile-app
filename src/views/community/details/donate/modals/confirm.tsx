@@ -69,7 +69,7 @@ class ConfirmModal extends Component<
                 analytics('donate', { device: Device.brand, success: 'true' });
             })
             .catch((e) => {
-                Api.uploadError(userAddress, 'donate', e);
+                Api.system.uploadError(userAddress, 'donate', e);
                 analytics('donate', { device: Device.brand, success: 'false' });
                 // TODO: 'nonce too low' have happened here!
                 navigationRef.current?.goBack();

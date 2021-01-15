@@ -340,7 +340,7 @@ function CreateCommunityScreen() {
                 { cancelable: false }
             );
             setSending(false);
-            Api.uploadError(userAddress, 'create_community', e);
+            Api.system.uploadError(userAddress, 'create_community', e);
             return;
         }
     };

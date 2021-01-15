@@ -45,7 +45,7 @@ async function getRequest<T>(
             response = result.data as T;
         }
     } catch (error) {
-        // Api.uploadError('', 'get_request', error);
+        // Api.system.uploadError('', 'get_request', error);
     }
     return response;
 }
@@ -78,7 +78,7 @@ async function postRequest<T>(
         }
         response = result.data as T;
     } catch (error) {
-        // Api.uploadError('', 'post_request', error);
+        // Api.system.uploadError('', 'post_request', error);
     }
     return response;
 }
@@ -177,6 +177,21 @@ class ApiRouteUser {
         });
     }
 
+    static async addClaimLocation(
+        communityId: string,
+        gps: any
+    ): Promise<boolean> {
+        const requestBody = {
+            communityId,
+            gps,
+        };
+        const result = await postRequest<boolean>(
+            '/claim-location',
+            requestBody
+        );
+        return !!result;
+    }
+
     static async exists(address: string): Promise<boolean> {
         return !!(await getRequest<boolean>('/user/exists/' + address));
     }
@@ -273,7 +288,7 @@ class ApiRouteUpload {
             );
             response = result;
         } catch (error) {
-            Api.uploadError('', 'uploadCommunityCoverImage', error);
+            Api.system.uploadError('', 'uploadCommunityCoverImage', error);
         }
         return response;
     }
@@ -284,32 +299,6 @@ class ApiRouteSystem {
         const result = await getRequest<number>('/clock');
         return result ? result : 0;
     }
-}
-
-class Api {
-    public static community = ApiRouteCommunity;
-    public static user = ApiRouteUser;
-    public static upload = ApiRouteUpload;
-    public static system = ApiRouteSystem;
-
-    // user
-
-    static async addClaimLocation(
-        communityId: string,
-        gps: any
-    ): Promise<boolean> {
-        const requestBody = {
-            communityId,
-            gps,
-        };
-        const result = await postRequest<boolean>(
-            '/claim-location',
-            requestBody
-        );
-        return !!result;
-    }
-
-    // app
 
     /**
      * Must use values from user storage and update when opening app.
@@ -318,8 +307,6 @@ class Api {
         const result = await getRequest<any>('/exchange-rates');
         return result;
     }
-
-    // misc
 
     static async uploadError(
         address: string,
@@ -352,6 +339,13 @@ class Api {
     > {
         return await getRequest<any>('/mobile/version');
     }
+}
+
+class Api {
+    public static community = ApiRouteCommunity;
+    public static user = ApiRouteUser;
+    public static upload = ApiRouteUpload;
+    public static system = ApiRouteSystem;
 }
 
 export default Api;

@@ -101,7 +101,7 @@ function AddBeneficiaryScreen() {
                 navigation.goBack();
             })
             .catch((e) => {
-                Api.uploadError(userAddress, 'add_beneficiary', e);
+                Api.system.uploadError(userAddress, 'add_beneficiary', e);
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorAddingBeneficiary'),

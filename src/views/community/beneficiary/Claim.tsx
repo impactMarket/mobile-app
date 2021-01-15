@@ -141,7 +141,7 @@ class Claim extends React.Component<Props, IClaimState> {
                             });
                         }
                         if (loc !== undefined) {
-                            await Api.addClaimLocation(
+                            await Api.user.addClaimLocation(
                                 user.community.metadata.publicId,
                                 {
                                     latitude:
@@ -158,7 +158,7 @@ class Claim extends React.Component<Props, IClaimState> {
                             success: 'true',
                         });
                     } catch (e) {
-                        Api.uploadError(address, 'claim', e);
+                        Api.system.uploadError(address, 'claim', e);
                         analytics('claim_location', {
                             device: Device.brand,
                             success: 'false',
@@ -235,7 +235,7 @@ class Claim extends React.Component<Props, IClaimState> {
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
-                Api.uploadError(
+                Api.system.uploadError(
                     address,
                     'claim',
                     `${e} <Presented Error> ${error}`

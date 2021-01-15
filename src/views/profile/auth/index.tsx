@@ -63,7 +63,7 @@ function Auth() {
                 .getState()
                 .app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
         } catch (e) {
-            Api.uploadError('', 'login', e);
+            Api.system.uploadError('', 'login', e);
             analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureException(e);
             Alert.alert(
@@ -92,7 +92,7 @@ function Auth() {
             pushNotificationToken
         );
         if (user === undefined) {
-            Api.uploadError('', 'login', {
+            Api.system.uploadError('', 'login', {
                 reason: '',
                 message: 'undefined user',
             });
@@ -148,7 +148,7 @@ function Auth() {
             );
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
-            Api.uploadError('', 'login', error);
+            Api.system.uploadError('', 'login', error);
             analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureMessage(
                 JSON.stringify({

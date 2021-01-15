@@ -113,7 +113,7 @@ function AddedBeneficiaryScreen() {
                 });
             })
             .catch((e) => {
-                Api.uploadError(userWallet.address, 'remove_beneficiary', e);
+                Api.system.uploadError(userWallet.address, 'remove_beneficiary', e);
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorRemovingBeneficiary'),

@@ -497,7 +497,7 @@ export default class App extends React.Component<any, IAppState> {
         // this should not be built this way,
         // wee need instead an udp library and a NTP server.
         const preTime = new Date();
-        const version = await Api.getMobileVersion();
+        const version = await Api.system.getMobileVersion();
         const postTime = new Date();
         if (version === undefined) {
             // TODO: error loading app, reload
@@ -570,7 +570,7 @@ export default class App extends React.Component<any, IAppState> {
                 const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
                 if (new Date().getTime() - lastUpdate > 3600000) {
                     // 1h in ms
-                    const exchangeRates = await Api.getExchangeRate();
+                    const exchangeRates = await Api.system.getExchangeRate();
                     store.dispatch(setAppExchangeRatesAction(exchangeRates));
                     CacheStore.cacheExchangeRates(exchangeRates);
                 } else {
@@ -585,7 +585,7 @@ export default class App extends React.Component<any, IAppState> {
                 loggedIn,
             });
         } catch (error) {
-            Api.uploadError('', 'auth_user', error);
+            Api.system.uploadError('', 'auth_user', error);
         }
     };
 }
