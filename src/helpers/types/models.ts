@@ -26,6 +26,8 @@ export interface CommunityStateAttributes {
     claimed: string;
     claims: number;
     beneficiaries: number;
+    removedBeneficiaries: number;
+    managers: number;
     raised: string;
     backers: number;
 }
@@ -71,3 +73,8 @@ export interface UserAttributes {
     year: number | null;
     children: number | null;
 }
+
+export interface IManagerAttributes {
+    user: string;
+    communityId: string;
+};

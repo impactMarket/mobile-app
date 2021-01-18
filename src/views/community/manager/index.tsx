@@ -40,13 +40,13 @@ function CommunityManagerScreen() {
 
     // const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    const [detailsForManagers, setDetailsForManagers] = useState<IManagers>({
-        managers: 0,
-        beneficiaries: {
-            active: 0,
-            inactive: 0,
-        },
-    });
+    // const [detailsForManagers, setDetailsForManagers] = useState<IManagers>({
+    //     managers: 0,
+    //     beneficiaries: {
+    //         active: 0,
+    //         inactive: 0,
+    //     },
+    // });
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
     );
@@ -67,12 +67,12 @@ function CommunityManagerScreen() {
             };
             loadCommunityBalance();
         }
-        const loadDetailsForManagers = () => {
-            if (community.status === 'valid') {
-                Api.community.managers().then(setDetailsForManagers);
-            }
-        };
-        loadDetailsForManagers();
+        // const loadDetailsForManagers = () => {
+        //     if (community.status === 'valid') {
+        //         Api.community.managers().then(setDetailsForManagers);
+        //     }
+        // };
+        // loadDetailsForManagers();
     }, [community, kit]);
 
     const onRefresh = () => {
@@ -106,12 +106,15 @@ function CommunityManagerScreen() {
                     <BaseCommunity community={community}>
                         <View style={styles.container}>
                             <Beneficiaries
-                                beneficiaries={detailsForManagers.beneficiaries}
+                                beneficiaries={_community.state.beneficiaries}
+                                removedBeneficiaries={
+                                    _community.state.removedBeneficiaries
+                                }
                                 hasFundsToNewBeneficiary={
                                     hasFundsToNewBeneficiary
                                 }
                             />
-                            <Managers managers={detailsForManagers.managers} />
+                            <Managers managers={_community.state.managers} />
                             <CommuntyStatus community={_community} />
                         </View>
                     </BaseCommunity>

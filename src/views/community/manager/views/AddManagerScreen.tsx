@@ -3,6 +3,7 @@ import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
 import { updateCommunityInfo } from 'helpers/index';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { setStateManagersDetails } from 'helpers/redux/actions/views';
 import { IManagersDetails } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
@@ -27,32 +28,32 @@ function AddManagerScreen() {
         (state: IRootState) => state.user.community.metadata
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
-    const stateManagerDetails = useSelector(
-        (state: IRootState) => state.view.managerDetails
-    );
+    // const stateManagerDetails = useSelector(
+    //     (state: IRootState) => state.view.managerDetails
+    // );
 
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
-    const [managerDetails, setManagerDetails] = useState<
-        IManagersDetails | undefined
-    >();
+    // const [managerDetails, setManagerDetails] = useState<
+    //     IManagersDetails | undefined
+    // >();
 
     useEffect(() => {
-        const loadDetails = () => {
-            // it's not correct, I guess
-            if (stateManagerDetails !== undefined) {
-                setManagerDetails(stateManagerDetails);
-            } else {
-                Api.community.managersDetails().then((details) => {
-                    setManagerDetails(details);
-                    dispatch(setStateManagersDetails(details));
-                });
-            }
-        };
-        loadDetails();
+        // const loadDetails = () => {
+        //     // it's not correct, I guess
+        //     if (stateManagerDetails !== undefined) {
+        //         setManagerDetails(stateManagerDetails);
+        //     } else {
+        //         Api.community.managersDetails().then((details) => {
+        //             setManagerDetails(details);
+        //             dispatch(setStateManagersDetails(details));
+        //         });
+        //     }
+        // };
+        // loadDetails();
         return;
-    }, [stateManagerDetails]);
+    }, []);
 
     const handleModalScanQR = async () => {
         let addressToAdd: string;
@@ -67,6 +68,17 @@ function AddManagerScreen() {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('addingInvalidAddress'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        }
+
+        const searchResult = await Api.community.searchManager(addressToAdd);
+        if (searchResult.length !== 0) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('alreadyInCommunity'),
                 [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
@@ -98,15 +110,12 @@ function AddManagerScreen() {
                 if (tx === undefined) {
                     return;
                 }
-                setTimeout(
-                    () => {
-                        Api.community.managersDetails().then((details) => {
-                            setManagerDetails(details);
-                            dispatch(setStateManagersDetails(details));
-                        });
-                    },
-                    3000
-                );
+                // refresh community details
+                setTimeout(() => {
+                    Api.community
+                        .getByPublicId(community.publicId)
+                        .then((c) => dispatch(setCommunityMetadata(c!)));
+                }, 2500);
 
                 Alert.alert(
                     i18n.t('success'),
@@ -132,14 +141,14 @@ function AddManagerScreen() {
 
     const personalAddressWarningMessageCondition =
         inputAddress.toLowerCase() === userAddress.toLowerCase();
-    const usedAddressWarningMessageCondition =
-        managerDetails?.managers.find(
-            (b) => b.address.toLowerCase() === inputAddress.toLowerCase()
-        ) !== undefined;
+    // const usedAddressWarningMessageCondition =
+    //     managerDetails?.managers.find(
+    //         (b) => b.address.toLowerCase() === inputAddress.toLowerCase()
+    //     ) !== undefined;
 
     return (
         <>
-            {(personalAddressWarningMessageCondition ||
+            {/* {(personalAddressWarningMessageCondition ||
                 usedAddressWarningMessageCondition) && (
                 <View
                     style={{ alignItems: 'center', paddingHorizontal: '20%' }}
@@ -154,7 +163,7 @@ function AddManagerScreen() {
                         {i18n.t('alreadyInCommunity')}
                     </Paragraph>
                 </View>
-            )}
+            )} */}
             <View style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
                 <Divider />
                 <View
@@ -199,7 +208,7 @@ function AddManagerScreen() {
                     }}
                     disabled={
                         personalAddressWarningMessageCondition ||
-                        usedAddressWarningMessageCondition ||
+                        // usedAddressWarningMessageCondition ||
                         inputAddress.length === 0
                     }
                     loading={addInProgress === true}

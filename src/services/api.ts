@@ -12,8 +12,11 @@ import {
     IManagersDetails,
     IUserHello,
     IUserAuth,
+    IManagerDetailsBeneficiary,
+    IManagerDetailsManager,
 } from 'helpers/types/endpoints';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
+import { IManagerAttributes } from 'helpers/types/models';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -84,6 +87,56 @@ async function postRequest<T>(
 }
 
 class ApiRouteCommunity {
+    static async searchBeneficiary(active: boolean, beneficiaryQuery: string) {
+        const result = await getRequest<IManagerDetailsBeneficiary[]>(
+            '/community/beneficiaries/search/' + (active ? 'true' : 'false') + '/' + beneficiaryQuery,
+            true
+        );
+        console.log('result', result)
+        if (result) {
+            return result;
+        }
+        throw new Error("Can't load '/beneficiary/search'");
+    }
+
+    static async searchManager(managerQuery: string) {
+        const result = await getRequest<IManagerDetailsManager[]>(
+            '/community/managers/search/' + managerQuery,
+            true
+        );
+        console.log('result', result)
+        if (result) {
+            return result;
+        }
+        throw new Error("Can't load '/managers/search'");
+    }
+
+    static async listBeneficiaries(
+        active: boolean,
+        offset: number,
+        limit: number
+    ) {
+        const result = await getRequest<IManagerDetailsBeneficiary[]>(
+            '/community/beneficiaries/list/' + active + '/' + offset + '/' + limit,
+            true
+        );
+        if (result) {
+            return result;
+        }
+        throw new Error("Can't load '/beneficiary/search'");
+    }
+
+    static async listManagers(offset: number, limit: number) {
+        const result = await getRequest<IManagerDetailsManager[]>(
+            '/community/managers/list/' + offset + '/' + limit,
+            true
+        );
+        if (result) {
+            return result;
+        }
+        throw new Error("Can't load '/manager/search'");
+    }
+
     static async listNearest(
         lat: number,
         lng: number,
@@ -109,24 +162,24 @@ class ApiRouteCommunity {
         return result ? result : [];
     }
 
-    static async managers() {
-        const result = await getRequest<IManagers>('/community/managers', true);
-        if (result) {
-            return result;
-        }
-        throw new Error("Can't load '/community/managers'");
-    }
+    // static async managers() {
+    //     const result = await getRequest<IManagers>('/community/managers', true);
+    //     if (result) {
+    //         return result;
+    //     }
+    //     throw new Error("Can't load '/community/managers'");
+    // }
 
-    static async managersDetails() {
-        const result = await getRequest<IManagersDetails>(
-            '/community/managers/details',
-            true
-        );
-        if (result) {
-            return result;
-        }
-        throw new Error("Can't load '/community/managers/details'");
-    }
+    // static async managersDetails() {
+    //     const result = await getRequest<IManagersDetails>(
+    //         '/community/managers/details',
+    //         true
+    //     );
+    //     if (result) {
+    //         return result;
+    //     }
+    //     throw new Error("Can't load '/community/managers/details'");
+    // }
 
     static async getByPublicId(
         publicId: string

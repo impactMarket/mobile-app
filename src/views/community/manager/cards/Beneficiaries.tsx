@@ -8,17 +8,19 @@ import Card from 'components/core/Card';
 import { Screens } from 'helpers/constants';
 
 interface IBeneficiariesProps {
-    beneficiaries: {
-        active: number;
-        inactive: number;
-    };
+    beneficiaries: number;
+    removedBeneficiaries: number;
     hasFundsToNewBeneficiary: boolean;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
     const navigation = useNavigation();
 
-    const { active, inactive } = props.beneficiaries;
+    const {
+        beneficiaries,
+        removedBeneficiaries,
+        hasFundsToNewBeneficiary,
+    } = props;
 
     return (
         <View>
@@ -39,27 +41,27 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     <Button
                         modeType="gray"
                         bold={true}
-                        disabled={active === 0}
+                        disabled={beneficiaries === 0}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
                             navigation.navigate(Screens.AddedBeneficiary)
                         }
                     >
-                        {i18n.t('added')} ({active})
+                        {i18n.t('added')} ({beneficiaries})
                     </Button>
                     <Button
                         modeType="gray"
                         bold={true}
-                        disabled={inactive === 0}
+                        disabled={removedBeneficiaries === 0}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
                             navigation.navigate(Screens.RemovedBeneficiary)
                         }
                     >
-                        {i18n.t('removed')} ({inactive})
+                        {i18n.t('removed')} ({removedBeneficiaries})
                     </Button>
                     <View>
-                        {props.hasFundsToNewBeneficiary ? (
+                        {hasFundsToNewBeneficiary ? (
                             <Button
                                 modeType="green"
                                 bold={true}
