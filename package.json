@@ -31,6 +31,7 @@
         "expo": "40.0.0",
         "expo-app-loading": "1.0.1",
         "expo-barcode-scanner": "~9.1.0",
+        "expo-camera": "9.1.1",
         "expo-clipboard": "~1.0.1",
         "expo-crypto": "~8.4.0",
         "expo-device": "~2.4.0",
