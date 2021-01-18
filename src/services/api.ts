@@ -8,15 +8,12 @@ import {
     CommunityCreationAttributes,
     ICommunity,
     ICommunityLightDetails,
-    IManagers,
-    IManagersDetails,
     IUserHello,
     IUserAuth,
     IManagerDetailsBeneficiary,
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
-import { IManagerAttributes } from 'helpers/types/models';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -161,25 +158,6 @@ class ApiRouteCommunity {
         );
         return result ? result : [];
     }
-
-    // static async managers() {
-    //     const result = await getRequest<IManagers>('/community/managers', true);
-    //     if (result) {
-    //         return result;
-    //     }
-    //     throw new Error("Can't load '/community/managers'");
-    // }
-
-    // static async managersDetails() {
-    //     const result = await getRequest<IManagersDetails>(
-    //         '/community/managers/details',
-    //         true
-    //     );
-    //     if (result) {
-    //         return result;
-    //     }
-    //     throw new Error("Can't load '/community/managers/details'");
-    // }
 
     static async getByPublicId(
         publicId: string

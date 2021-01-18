@@ -2,12 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
-import { updateCommunityInfo } from 'helpers/index';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
-import { setStateManagersDetails } from 'helpers/redux/actions/views';
-import { IManagersDetails } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,32 +25,10 @@ function AddManagerScreen() {
         (state: IRootState) => state.user.community.metadata
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
-    // const stateManagerDetails = useSelector(
-    //     (state: IRootState) => state.view.managerDetails
-    // );
 
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
-    // const [managerDetails, setManagerDetails] = useState<
-    //     IManagersDetails | undefined
-    // >();
-
-    useEffect(() => {
-        // const loadDetails = () => {
-        //     // it's not correct, I guess
-        //     if (stateManagerDetails !== undefined) {
-        //         setManagerDetails(stateManagerDetails);
-        //     } else {
-        //         Api.community.managersDetails().then((details) => {
-        //             setManagerDetails(details);
-        //             dispatch(setStateManagersDetails(details));
-        //         });
-        //     }
-        // };
-        // loadDetails();
-        return;
-    }, []);
 
     const handleModalScanQR = async () => {
         let addressToAdd: string;
@@ -141,15 +116,10 @@ function AddManagerScreen() {
 
     const personalAddressWarningMessageCondition =
         inputAddress.toLowerCase() === userAddress.toLowerCase();
-    // const usedAddressWarningMessageCondition =
-    //     managerDetails?.managers.find(
-    //         (b) => b.address.toLowerCase() === inputAddress.toLowerCase()
-    //     ) !== undefined;
 
     return (
         <>
-            {/* {(personalAddressWarningMessageCondition ||
-                usedAddressWarningMessageCondition) && (
+            {personalAddressWarningMessageCondition && (
                 <View
                     style={{ alignItems: 'center', paddingHorizontal: '20%' }}
                 >
@@ -163,7 +133,7 @@ function AddManagerScreen() {
                         {i18n.t('alreadyInCommunity')}
                     </Paragraph>
                 </View>
-            )} */}
+            )}
             <View style={{ flex: 1, marginHorizontal: 10, marginTop: 20 }}>
                 <Divider />
                 <View

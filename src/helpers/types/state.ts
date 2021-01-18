@@ -1,5 +1,5 @@
 import { ContractKit } from '@celo/contractkit';
-import { ICommunity, IManagersDetails } from './endpoints';
+import { ICommunity } from './endpoints';
 import { UserAttributes } from './models';
 import { Subscription } from '@unimodules/core';
 
@@ -27,11 +27,6 @@ export interface IAuthState {
     pushNotificationToken: string;
     authToken: string;
 }
-
-export interface IViewState {
-    managerDetails?: IManagersDetails;
-}
-
 export interface IModalDonateState {
     donationValues: {
         inputAmount: string;
@@ -62,7 +57,6 @@ export interface IAppState {
 export interface IRootState {
     user: IUserState;
     auth: IAuthState;
-    view: IViewState;
     app: IAppState;
     modalDonate: IModalDonateState;
 }

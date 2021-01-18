@@ -43,14 +43,6 @@ export interface IManagerDetailsBeneficiary {
     claimed: string;
 }
 
-export interface IManagersDetails {
-    managers: IManagerDetailsManager[];
-    beneficiaries: {
-        active: IManagerDetailsBeneficiary[];
-        inactive: IManagerDetailsBeneficiary[];
-    };
-}
-
 //
 export interface CommunityCreationAttributes {
     requestByAddress: string;

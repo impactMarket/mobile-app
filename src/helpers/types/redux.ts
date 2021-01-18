@@ -18,11 +18,10 @@ import {
     SET_APP_SUSPECT_WRONG_DATETIME,
     SET_APP_FROM_WELCOME_SCREEN,
     SET_EXCHANGE_RATES,
-    SET_VIEW_MANAGER_DETAILS,
     appAction,
     modalDonateAction,
 } from 'helpers/constants';
-import { ICommunity, IManagersDetails } from './endpoints';
+import { ICommunity } from './endpoints';
 import { UserAttributes } from './models';
 import { IUserWallet } from './state';
 import { Subscription } from '@unimodules/core';
@@ -109,11 +108,6 @@ interface SetAppEchangeRatesAction {
     payload: any;
 }
 
-interface SetViewManagerDetailsAction {
-    type: typeof SET_VIEW_MANAGER_DETAILS;
-    payload: IManagersDetails;
-}
-
 interface OpenModalDonateAction {
     type: typeof modalDonateAction.OPEN;
     payload: ICommunity;
@@ -131,12 +125,10 @@ interface GoToConfirmModalDonateAction {
 
 interface GoToErrorModalDonateAction {
     type: typeof modalDonateAction.GO_TO_ERROR_DONATE;
-    // payload: IManagersDetails;
 }
 
 interface GoBackToModalDonateAction {
     type: typeof modalDonateAction.GO_BACK_TO_DONATE;
-    // payload: IManagersDetails;
 }
 
 interface InProgressModalDonateAction {
@@ -146,7 +138,6 @@ interface InProgressModalDonateAction {
 
 interface CloseModalDonateAction {
     type: typeof modalDonateAction.CLOSE;
-    // payload: IManagersDetails;
 }
 
 interface SetAppPushNotificationListeners {
@@ -180,8 +171,6 @@ export type AppActionTypes =
     | SetAppFromWelcomeScreen
     | SetAppPushNotificationListeners;
 
-export type ViewActionTypes = SetViewManagerDetailsAction;
-
 export type ModalActionTypes =
     | OpenModalDonateAction
     | GoToConfirmModalDonateAction
@@ -193,5 +182,4 @@ export type ModalActionTypes =
 export type IStoreCombinedActionsTypes =
     | UserActionTypes
     | AuthActionTypes
-    | AppActionTypes
-    | ViewActionTypes;
+    | AppActionTypes;
