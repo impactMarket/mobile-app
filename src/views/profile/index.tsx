@@ -46,6 +46,7 @@ function ProfileScreen() {
 
     const [name, setName] = useState('');
     const [currency, setCurrency] = useState('usd');
+    const [userCusdBalance, setUserCusdBalance] = useState('0');
     const [language, setLanguage] = useState('en');
     const [gender, setGender] = useState<string | null>(null);
     const [isDialogGenderOpen, setIsDialogGenderOpen] = useState(false);
@@ -71,6 +72,7 @@ function ProfileScreen() {
             if (user.children !== null && user.children !== undefined) {
                 setChildren(user.children.toString());
             }
+            setUserCusdBalance(userWallet.balance);
         }
     }, [userWallet, user]);
 
@@ -94,7 +96,9 @@ function ProfileScreen() {
         const updateBalance = async () => {
             dispatch(
                 setUserWalletBalance(
-                    getUserBalance(app.kit, userWallet.address).toString()
+                    (
+                        await getUserBalance(app.kit, userWallet.address)
+                    ).toString()
                 )
             );
             setRefreshing(false);
@@ -144,7 +148,7 @@ function ProfileScreen() {
     };
 
     const userBalance = amountToCurrency(
-        userWallet.balance,
+        userCusdBalance,
         user.currency,
         app.exchangeRates,
         false
