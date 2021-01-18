@@ -3,8 +3,11 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { StyleSheet, View, Alert, Modal } from 'react-native';
-import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
+import { Portal } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
+import { Camera } from 'expo-camera';
+import { BarCodeFinder } from './BarCodeFinder';
+import Button from 'components/core/Button';
 
 interface IModalScanQRProps {
     isVisible: boolean;
@@ -16,7 +19,6 @@ interface IModalScanQRState {
     scanned: boolean;
     isVisible: boolean;
     invalidAddressWarningOpen: boolean;
-    requestingCameraPermissions: boolean;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, app } = state;
@@ -30,16 +32,20 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
     constructor(props: any) {
         super(props);
         this.state = {
-            hasPermission: true,
+            hasPermission: false,
             scanned: false,
             isVisible: this.props.isVisible,
             invalidAddressWarningOpen: false,
-            requestingCameraPermissions: false,
         };
     }
 
-    componentWillReceiveProps = (nextProps: IModalScanQRProps) => {
-        this.setState({ isVisible: nextProps.isVisible });
+    componentDidUpdate = (prevProps: Readonly<Props>) => {
+        if (prevProps.isVisible !== this.props.isVisible) {
+            this.setState({ isVisible: this.props.isVisible });
+            if (this.props.isVisible) {
+                this.handleAskCameraPermission();
+            }
+        }
     };
 
     handleBarCodeScanned = ({ type, data }: { type: any; data: any }) => {
@@ -77,11 +83,11 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
     };
 
     handleAskCameraPermission = async () => {
-        const hasPermission = await BarCodeScanner.getPermissionsAsync();
+        const hasPermission = await Camera.getPermissionsAsync();
         if (hasPermission.status === 'granted') {
             this.setState({ hasPermission: true });
         } else {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            const { status } = await Camera.requestPermissionsAsync();
             this.setState({ hasPermission: status === 'granted' });
         }
     };
@@ -93,22 +99,36 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
             if (hasPermission === true) {
                 return (
                     <View style={styles.scannerView}>
-                        <BarCodeScanner
+                        <Camera
                             onBarCodeScanned={this.handleBarCodeScanned}
-                            // barCodeTypes={['qr']}
+                            ratio="16:9"
+                            type={Camera.Constants.Type.back}
                             style={StyleSheet.absoluteFillObject}
-                        />
-                        <Button
-                            mode="contained"
-                            style={{
-                                position: 'absolute',
-                                bottom: '5%',
-                                alignSelf: 'center',
+                            barCodeScannerSettings={{
+                                barCodeTypes: [
+                                    BarCodeScanner.Constants.BarCodeType.qr,
+                                ],
                             }}
-                            onPress={onDismiss}
                         >
-                            {i18n.t('close')}
-                        </Button>
+                            <BarCodeFinder
+                                height={200}
+                                width={200}
+                                borderColor="black"
+                                borderWidth={5}
+                            />
+                            <Button
+                                modeType="default"
+                                bold={true}
+                                style={{
+                                    position: 'absolute',
+                                    bottom: '5%',
+                                    alignSelf: 'center',
+                                }}
+                                onPress={onDismiss}
+                            >
+                                {i18n.t('close')}
+                            </Button>
+                        </Camera>
                     </View>
                 );
             }
@@ -124,8 +144,11 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                 >
                     {inputCameraMethod()}
                 </Modal>
-                <Dialog
-                    visible={hasPermission === null || hasPermission === false}
+                {/* <Dialog
+                    visible={
+                        (hasPermission === null || hasPermission === false) &&
+                        requestingCameraPermissions === true
+                    }
                     onDismiss={() =>
                         this.setState({ requestingCameraPermissions: false })
                     }
@@ -149,10 +172,10 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                                 })
                             }
                         >
-                            Close
+                            {i18n.t('close')}
                         </Button>
                     </Dialog.Actions>
-                </Dialog>
+                </Dialog> */}
             </Portal>
         );
     }
@@ -161,7 +184,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
 const styles = StyleSheet.create({
     scannerView: {
         height: '100%',
-        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+        backgroundColor: '#000',
     },
 });
 
