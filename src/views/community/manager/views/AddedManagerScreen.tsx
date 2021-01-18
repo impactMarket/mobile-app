@@ -33,6 +33,7 @@ function AddedManagerScreen() {
     );
     const [refreshing, setRefreshing] = React.useState(false);
     const [reachedEndList, setReachedEndList] = useState(false);
+    const [totalManagers, setTotalManagers] = useState(0);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -40,6 +41,7 @@ function AddedManagerScreen() {
             if (l.length < 10) {
                 setReachedEndList(true);
             }
+            setTotalManagers(l.length);
             setManagers(l);
             setManagersOffset(0);
             setRemoving(Array(l.length).fill(false));
@@ -53,6 +55,7 @@ function AddedManagerScreen() {
                 if (l.length < 10) {
                     setReachedEndList(true);
                 }
+                setTotalManagers(l.length);
                 setManagers(l);
                 setManagersOffset(0);
                 setRemoving(Array(l.length).fill(false));
@@ -92,6 +95,7 @@ function AddedManagerScreen() {
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
+                setTotalManagers(totalManagers - 1);
                 // refresh community details
                 setTimeout(() => {
                     Api.community
@@ -178,7 +182,7 @@ function AddedManagerScreen() {
                 date: moment(item.timestamp).format('MMM, YYYY'),
             })}
             right={() => (
-                <Button
+                totalManagers > 2 && <Button
                     modeType="gray"
                     bold={true}
                     disabled={removing[index]}
