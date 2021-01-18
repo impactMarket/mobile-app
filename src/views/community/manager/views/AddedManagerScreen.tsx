@@ -36,7 +36,7 @@ function AddedManagerScreen() {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        Api.community.listBeneficiaries(true, 0, 10).then((l) => {
+        Api.community.listManagers(0, 10).then((l) => {
             if (l.length < 10) {
                 setReachedEndList(true);
             }
@@ -62,8 +62,8 @@ function AddedManagerScreen() {
         return;
     }, []);
 
-    const handleRemoveBeneficiary = async (
-        beneficiary: IManagerDetailsManager,
+    const handleRemoveManager = async (
+        manager: IManagerDetailsManager,
         index: number
     ) => {
         const communityContract = community.contract;
@@ -74,10 +74,10 @@ function AddedManagerScreen() {
         celoWalletRequest(
             userWallet.address,
             communityContract.options.address,
-            await communityContract.methods.removeBeneficiary(
-                beneficiary.address
+            await communityContract.methods.removeManager(
+                manager.address
             ),
-            'removebeneficiary',
+            'removemanager',
             kit
         )
             .then((tx) => {
@@ -86,8 +86,8 @@ function AddedManagerScreen() {
                 }
                 Alert.alert(
                     i18n.t('success'),
-                    i18n.t('beneficiaryWasRemoved', {
-                        beneficiary: formatAddressOrName(beneficiary),
+                    i18n.t('userWasRemoved', {
+                        user: formatAddressOrName(manager),
                     }),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -99,7 +99,7 @@ function AddedManagerScreen() {
                         .then((c) => dispatch(setCommunityMetadata(c!)));
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);
-                    Api.community.listBeneficiaries(true, 0, 10).then((l) => {
+                    Api.community.listManagers(0, 10).then((l) => {
                         if (l.length < 10) {
                             setReachedEndList(true);
                         }
@@ -113,12 +113,12 @@ function AddedManagerScreen() {
             .catch((e) => {
                 Api.system.uploadError(
                     userWallet.address,
-                    'remove_beneficiary',
+                    'remove_manager',
                     e
                 );
                 Alert.alert(
                     i18n.t('failure'),
-                    i18n.t('errorRemovingBeneficiary'),
+                    i18n.t('errorRemovingManager'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -184,7 +184,7 @@ function AddedManagerScreen() {
                     disabled={removing[index]}
                     loading={removing[index]}
                     style={{ marginVertical: 5 }}
-                    onPress={() => handleRemoveBeneficiary(item, index)}
+                    onPress={() => handleRemoveManager(item, index)}
                 >
                     {i18n.t('remove')}
                 </Button>

@@ -132,7 +132,7 @@ export default {
         'An error happened while getting the GPS location.',
     errorWhileLoadingRestart:
         'An error happened while loading. Please restart the app.',
-    beneficiaryWasRemoved: '{{beneficiary}} was successfully removed!',
+    userWasRemoved: '{{user}} was successfully removed!',
     errorRemovingBeneficiary:
         'An error happened while removing the beneficiary.',
     addedNewBeneficiary: "You've successfully added a new beneficiary!",
@@ -223,6 +223,8 @@ export default {
     howManyChildren: 'How many children do you have?',
     addedNewManager: "You've successfully added a new manager!",
     errorAddingManager: 'An error happened while adding the manager.',
+    errorRemovingManager:
+        'An error happened while removing the manager.',
     managerAddress: 'Manager Account No (address)',
     addManager: 'Add Manager',
     managers: 'Managers',

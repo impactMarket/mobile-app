@@ -126,7 +126,7 @@ export default {
     select: 'Selecionar',
     errorGettingGPSLocation: 'Ocorreu um erro ao obter a localização GPS.',
     errorWhileLoadingRestart: 'Ocorreu eu erro ao iniciar. Por favor reinicie.',
-    beneficiaryWasRemoved: '{{beneficiary}} foi removido com sucesso!',
+    userWasRemoved: '{{user}} foi removido com sucesso!',
     errorRemovingBeneficiary:
         'Ocorreu um erro enquanto removia o beneficiário.',
     addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
@@ -220,6 +220,8 @@ export default {
     howManyChildren: 'Quantos filhos você tem?',
     addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
     errorAddingManager: 'Ocorreu um erro ao adicionar o gestor.',
+    errorRemovingManager:
+        'Ocorreu um erro enquanto removia o gestor.',
     managerAddress: 'Conta do Gestor',
     addManager: 'Adicionar Gestor',
     managers: 'Gestores',

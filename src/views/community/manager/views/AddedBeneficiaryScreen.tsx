@@ -96,8 +96,8 @@ function AddedBeneficiaryScreen() {
                 }
                 Alert.alert(
                     i18n.t('success'),
-                    i18n.t('beneficiaryWasRemoved', {
-                        beneficiary: formatAddressOrName(beneficiary),
+                    i18n.t('userWasRemoved', {
+                        user: formatAddressOrName(beneficiary),
                     }),
                     [{ text: 'OK' }],
                     { cancelable: false }
