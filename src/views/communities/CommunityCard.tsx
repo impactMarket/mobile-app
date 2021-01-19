@@ -5,6 +5,7 @@ import i18n from 'assets/i18n';
 import {
     calculateCommunityProgress,
     claimFrequencyToText,
+    generateUrlWithCloudFront,
 } from 'helpers/index';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { iptcColors } from 'styles/index';
@@ -34,7 +35,7 @@ function CommunityCard(props: { community: ICommunityLightDetails }) {
                 <View style={{ position: 'relative' }}>
                     <CachedImage
                         style={styles.cardImage}
-                        source={{ uri: community.coverImage }}
+                        source={{ uri: generateUrlWithCloudFront(community.coverImage) }}
                     />
                     <View
                         style={{

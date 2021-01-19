@@ -2,12 +2,10 @@ import { ContractKit } from '@celo/contractkit';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import moment from 'moment';
-import { Store, CombinedState, Dispatch } from 'redux';
+import { Dispatch } from 'redux';
 import Api from 'services/api';
 
 import CommunityContractABI from '../contracts/CommunityABI.json';
-import { IStoreCombinedActionsTypes } from './types/redux';
-import { IRootState } from './types/state';
 import * as Linking from 'expo-linking';
 import {
     ICommunity,
@@ -27,6 +25,14 @@ import {
 import { setAppExchangeRatesAction } from './redux/actions/app';
 import { UserAttributes } from './types/models';
 import config from '../../config';
+
+export function generateUrlWithCloudFront(s3ContentKey: string) {
+    // for backwards support
+    if (s3ContentKey.startsWith('http')) {
+        return s3ContentKey;
+    }
+    return `${config.cloudfrontUrl}/${s3ContentKey}`;
+}
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');

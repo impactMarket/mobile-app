@@ -3,6 +3,7 @@ import { Entypo } from '@expo/vector-icons';
 import { Text, View, StyleSheet } from 'react-native';
 import { ICommunity } from 'helpers/types/endpoints';
 import CachedImage from './CacheImage';
+import { generateUrlWithCloudFront } from 'helpers/index';
 
 export default function BaseCommunity(props: {
     community: ICommunity;
@@ -25,7 +26,7 @@ export default function BaseCommunity(props: {
             >
                 <CachedImage
                     style={styles.imageBackground}
-                    source={{ uri: community.coverImage }}
+                    source={{ uri: generateUrlWithCloudFront(community.coverImage) }}
                 />
                 <View style={styles.darkerBackground} />
             </View>
