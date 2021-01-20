@@ -246,4 +246,6 @@ export default {
         'Parece que a comunidade ficou sem fundos. Tente novamente mais tarde.',
     notEnoughForTransaction:
         'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
+    claimLockedUntil:
+        'Você ainda não pode pegar novamente. Ficará disponivel em {{date}}. Se habitualmente falha, certifique-se que tem a melhor ligação á internet possivel e que a sua Valora está sincronizada.',
 };

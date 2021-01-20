@@ -249,4 +249,6 @@ export default {
         'It seems like your community run out of funds. Please try again later',
     notEnoughForTransaction:
         "You don't have enough balance to submit the request. Celo's transactions are nearly free but not completely free. Always keep a few cents in your account.",
+    claimLockedUntil:
+        "You aren't yet allowed to claim. Will be available in {{date}}. If it fails peridically, make sure to have the best internet connection possible and Valora is synced.",
 };

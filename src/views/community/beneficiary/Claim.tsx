@@ -22,22 +22,7 @@ import { getUserBalance, isOutOfTime } from 'helpers/index';
 import { setUserWalletBalance } from 'helpers/redux/actions/user';
 import { UserActionTypes } from 'helpers/types/redux';
 import { Dispatch } from 'redux';
-
-const mapStateToProps = (state: IRootState) => {
-    const { user, app } = state;
-    return { user, app };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
-    return {
-        updateUserBalance: (newBalance: string) =>
-        dispatch(setUserWalletBalance(newBalance)),
-    };
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-type Props = PropsFromRedux & IClaimProps;
+import CacheStore from 'services/cacheStore';
 
 interface IClaimProps {
     claimAmount: string;
@@ -51,7 +36,7 @@ interface IClaimState {
     claiming: boolean;
     notEnoughToClaimOnContract: boolean;
 }
-class Claim extends React.Component<Props, IClaimState> {
+class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -126,7 +111,20 @@ class Claim extends React.Component<Props, IClaimState> {
                 { cancelable: false }
             );
             return;
-        } 
+        }
+
+        const isLocked = await CacheStore.getLockClaimUntil();
+        if (isLocked !== null) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('claimLockedUntil', {
+                    date: moment(isLocked).format('lll'),
+                }),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        }
 
         this.setState({ claiming: true });
         celoWalletRequest(
@@ -186,6 +184,7 @@ class Claim extends React.Component<Props, IClaimState> {
                         return;
                     }
                 }
+                CacheStore.resetClaimFails();
                 setTimeout(async () => {
                     const newBalanceStr = (
                         await getUserBalance(app.kit, address)
@@ -201,6 +200,7 @@ class Claim extends React.Component<Props, IClaimState> {
                 analytics('claim', { device: Device.brand, success: 'true' });
             })
             .catch(async (e) => {
+                CacheStore.cacheFailedClaim();
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
                 let error = i18n.t('possibleNetworkIssues');
@@ -435,5 +435,20 @@ const styles = StyleSheet.create({
         color: iptcColors.greenishTeal,
     },
 });
+
+const mapStateToProps = (state: IRootState) => {
+    const { user, app } = state;
+    return { user, app };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
+    return {
+        updateUserBalance: (newBalance: string) =>
+            dispatch(setUserWalletBalance(newBalance)),
+    };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export default connector(Claim);
