@@ -220,8 +220,7 @@ export default {
     howManyChildren: 'Quantos filhos você tem?',
     addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
     errorAddingManager: 'Ocorreu um erro ao adicionar o gestor.',
-    errorRemovingManager:
-        'Ocorreu um erro enquanto removia o gestor.',
+    errorRemovingManager: 'Ocorreu um erro enquanto removia o gestor.',
     managerAddress: 'Conta do Gestor',
     addManager: 'Adicionar Gestor',
     managers: 'Gestores',
@@ -245,4 +244,6 @@ export default {
         'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
     communityWentOutOfFunds:
         'Parece que a comunidade ficou sem fundos. Tente novamente mais tarde.',
+    notEnoughForTransaction:
+        'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
 };

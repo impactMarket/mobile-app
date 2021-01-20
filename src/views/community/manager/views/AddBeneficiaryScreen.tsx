@@ -24,6 +24,9 @@ function AddBeneficiaryScreen() {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+    const userBalance = useSelector(
+        (state: IRootState) => state.user.wallet.balance
+    );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
     const [inputAddress, setInputAddress] = useState('');
@@ -34,6 +37,16 @@ function AddBeneficiaryScreen() {
         let addressToAdd: string;
 
         if (communityContract === undefined) {
+            return;
+        }
+
+        if (userBalance.length < 16) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('notEnoughForTransaction'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
             return;
         }
 

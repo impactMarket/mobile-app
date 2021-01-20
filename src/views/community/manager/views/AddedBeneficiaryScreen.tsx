@@ -76,6 +76,16 @@ function AddedBeneficiaryScreen() {
         beneficiary: IManagerDetailsBeneficiary,
         index: number
     ) => {
+        if (userWallet.balance.length < 16) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('notEnoughForTransaction'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        }
+
         const communityContract = community.contract;
 
         const newRemoving = removing!;

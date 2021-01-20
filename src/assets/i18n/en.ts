@@ -223,8 +223,7 @@ export default {
     howManyChildren: 'How many children do you have?',
     addedNewManager: "You've successfully added a new manager!",
     errorAddingManager: 'An error happened while adding the manager.',
-    errorRemovingManager:
-        'An error happened while removing the manager.',
+    errorRemovingManager: 'An error happened while removing the manager.',
     managerAddress: 'Manager Account No (address)',
     addManager: 'Add Manager',
     managers: 'Managers',
@@ -248,4 +247,6 @@ export default {
         'It seems like your date or time is incorrect. Please, fix it before trying again.',
     communityWentOutOfFunds:
         'It seems like your community run out of funds. Please try again later',
+    notEnoughForTransaction:
+        "You don't have enough balance to submit the request. Celo's transactions are nearly free but not completely free. Always keep a few cents in your account.",
 };

@@ -118,6 +118,16 @@ class Claim extends React.Component<Props, IClaimState> {
             return;
         }
 
+        if (user.wallet.balance.length < 16) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('notEnoughForTransaction'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        } 
+
         this.setState({ claiming: true });
         celoWalletRequest(
             address,

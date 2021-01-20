@@ -69,6 +69,16 @@ function AddedManagerScreen() {
         manager: IManagerDetailsManager,
         index: number
     ) => {
+        if (userWallet.balance.length < 16) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('notEnoughForTransaction'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        }
+
         const communityContract = community.contract;
 
         const newRemoving = removing!;
@@ -77,9 +87,7 @@ function AddedManagerScreen() {
         celoWalletRequest(
             userWallet.address,
             communityContract.options.address,
-            await communityContract.methods.removeManager(
-                manager.address
-            ),
+            await communityContract.methods.removeManager(manager.address),
             'removemanager',
             kit
         )
@@ -115,11 +123,7 @@ function AddedManagerScreen() {
                 }, 2500);
             })
             .catch((e) => {
-                Api.system.uploadError(
-                    userWallet.address,
-                    'remove_manager',
-                    e
-                );
+                Api.system.uploadError(userWallet.address, 'remove_manager', e);
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('errorRemovingManager'),
@@ -181,18 +185,20 @@ function AddedManagerScreen() {
             description={i18n.t('managerSince', {
                 date: moment(item.timestamp).format('MMM, YYYY'),
             })}
-            right={() => (
-                totalManagers > 2 && <Button
-                    modeType="gray"
-                    bold={true}
-                    disabled={removing[index]}
-                    loading={removing[index]}
-                    style={{ marginVertical: 5 }}
-                    onPress={() => handleRemoveManager(item, index)}
-                >
-                    {i18n.t('remove')}
-                </Button>
-            )}
+            right={() =>
+                totalManagers > 2 && (
+                    <Button
+                        modeType="gray"
+                        bold={true}
+                        disabled={removing[index]}
+                        loading={removing[index]}
+                        style={{ marginVertical: 5 }}
+                        onPress={() => handleRemoveManager(item, index)}
+                    >
+                        {i18n.t('remove')}
+                    </Button>
+                )
+            }
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}
             style={{ paddingLeft: 0 }}

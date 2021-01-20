@@ -45,6 +45,7 @@ class ConfirmModal extends Component<
         if (community === undefined) {
             return;
         }
+        // no need to check if enough for tx fee
         this.setState({ donating: true });
         const stableToken = await this.props.kit.contracts.getStableToken();
         const cUSDDecimals = await stableToken.decimals();

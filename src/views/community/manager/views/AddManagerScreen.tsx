@@ -21,6 +21,9 @@ function AddManagerScreen() {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+    const userBalance = useSelector(
+        (state: IRootState) => state.user.wallet.balance
+    );
     const community = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
@@ -36,6 +39,16 @@ function AddManagerScreen() {
         if (communityContract === undefined) {
             return;
         }
+
+        if (userBalance.length < 16) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('notEnoughForTransaction'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        } 
 
         try {
             addressToAdd = kit.web3.utils.toChecksumAddress(inputAddress);
