@@ -18,14 +18,24 @@ import config from '../../../../config';
 import * as Device from 'expo-device';
 import { analytics } from 'services/analytics';
 import { IRootState } from 'helpers/types/state';
-import { isOutOfTime } from 'helpers/index';
+import { getUserBalance, isOutOfTime } from 'helpers/index';
+import { setUserWalletBalance } from 'helpers/redux/actions/user';
+import { UserActionTypes } from 'helpers/types/redux';
+import { Dispatch } from 'redux';
 
 const mapStateToProps = (state: IRootState) => {
     const { user, app } = state;
     return { user, app };
 };
 
-const connector = connect(mapStateToProps);
+const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
+    return {
+        updateUserBalance: (newBalance: string) =>
+        dispatch(setUserWalletBalance(newBalance)),
+    };
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 type Props = PropsFromRedux & IClaimProps;
 
@@ -93,7 +103,7 @@ class Claim extends React.Component<Props, IClaimState> {
     // };
 
     handleClaimPress = async () => {
-        const { user, app } = this.props;
+        const { user, app, updateUserBalance } = this.props;
         const communityContract = user.community.contract;
         const { address } = user.wallet;
         const { notEnoughToClaimOnContract } = this.state;
@@ -163,8 +173,15 @@ class Claim extends React.Component<Props, IClaimState> {
                             device: Device.brand,
                             success: 'false',
                         });
+                        return;
                     }
                 }
+                setTimeout(async () => {
+                    const newBalanceStr = (
+                        await getUserBalance(app.kit, address)
+                    ).toString();
+                    updateUserBalance(newBalanceStr);
+                }, 1200);
                 this.props.updateCooldownTime().then((newCooldownTime) => {
                     this._loadAllowance(newCooldownTime).then(() => {
                         this.setState({ claiming: false });

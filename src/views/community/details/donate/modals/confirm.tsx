@@ -14,8 +14,10 @@ import * as Device from 'expo-device';
 import { celoWalletRequest } from 'services/celoWallet';
 import Api from 'services/api';
 import { modalDonateAction, Screens } from 'helpers/constants';
-import { ModalActionTypes } from 'helpers/types/redux';
+import { ModalActionTypes, UserActionTypes } from 'helpers/types/redux';
 import { navigationRef } from 'helpers/rootNavigation';
+import { getUserBalance } from 'helpers/index';
+import { setUserWalletBalance } from 'helpers/redux/actions/user';
 
 interface IConfirmModalProps {}
 interface IConfirmModalState {
@@ -33,7 +35,13 @@ class ConfirmModal extends Component<
     }
 
     donateWithCeloWallet = async () => {
-        const { kit, userAddress, amountInDollars, community } = this.props;
+        const {
+            kit,
+            userAddress,
+            amountInDollars,
+            community,
+            updateUserBalance,
+        } = this.props;
         if (community === undefined) {
             return;
         }
@@ -65,6 +73,12 @@ class ConfirmModal extends Component<
                 }
                 // TODO: wait for tx confirmation and request UI update
                 // update donated values
+                setTimeout(async () => {
+                    const newBalanceStr = (
+                        await getUserBalance(kit, userAddress)
+                    ).toString();
+                    updateUserBalance(newBalanceStr);
+                }, 1200);
                 this.props.setInProgress(false);
                 analytics('donate', { device: Device.brand, success: 'true' });
             })
@@ -215,7 +229,7 @@ const mapStateToProps = (state: IRootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes>) => {
+const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes | UserActionTypes>) => {
     return {
         goBackToDonateModal: () =>
             dispatch({ type: modalDonateAction.GO_BACK_TO_DONATE }),
@@ -225,6 +239,8 @@ const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes>) => {
                 type: modalDonateAction.IN_PROGRESS,
                 payload: inProgress,
             }),
+        updateUserBalance: (newBalance: string) =>
+            dispatch(setUserWalletBalance(newBalance)),
     };
 };
 

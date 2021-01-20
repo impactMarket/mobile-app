@@ -1,5 +1,5 @@
 import { toTxResult } from '@celo/contractkit/lib/utils/tx-result';
-import { requestTxSig, FeeCurrency, waitForSignedTxs } from '@celo/dappkit';
+import { requestTxSig, FeeCurrency, waitForSignedTxs, TxParams } from '@celo/dappkit';
 import { ContractKit } from '@celo/contractkit';
 import * as Sentry from 'sentry-expo';
 import { makeDeeplinkUrl } from 'helpers/index';
@@ -16,18 +16,18 @@ async function celoWalletRequest(
     const dappName = 'impactmarket';
     const callback = makeDeeplinkUrl();
     try {
-        const reqTxTo = {
-            from,
-            to,
-            tx: txObject,
-            feeCurrency: FeeCurrency.cUSD,
-        };
-        const reqTx = {
+        let requestTx: TxParams = {
             from,
             tx: txObject,
             feeCurrency: FeeCurrency.cUSD,
         };
-        await requestTxSig(kit, [useTo === false ? reqTx : reqTxTo], {
+        if (useTo) {
+            requestTx = {
+                ...requestTx,
+                to
+            };
+        }
+        await requestTxSig(kit, [requestTx], {
             requestId,
             dappName,
             callback,

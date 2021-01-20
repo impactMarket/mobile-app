@@ -57,23 +57,26 @@ function ProfileScreen() {
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        if (userWallet.address.length > 0) {
-            if (user.username !== null && user.username.length > 0) {
-                setName(decrypt(user.username));
+        const loadProfile = () => {
+            if (userWallet.address.length > 0) {
+                if (user.username !== null && user.username.length > 0) {
+                    setName(decrypt(user.username));
+                }
+                setCurrency(user.currency);
+                setLanguage(user.language);
+                if (user.gender !== null && user.gender !== undefined) {
+                    setGender(user.gender);
+                }
+                if (user.year !== null && user.year !== undefined) {
+                    setAge((new Date().getFullYear() - user.year).toString());
+                }
+                if (user.children !== null && user.children !== undefined) {
+                    setChildren(user.children.toString());
+                }
+                setUserCusdBalance(userWallet.balance);
             }
-            setCurrency(user.currency);
-            setLanguage(user.language);
-            if (user.gender !== null && user.gender !== undefined) {
-                setGender(user.gender);
-            }
-            if (user.year !== null && user.year !== undefined) {
-                setAge((new Date().getFullYear() - user.year).toString());
-            }
-            if (user.children !== null && user.children !== undefined) {
-                setChildren(user.children.toString());
-            }
-            setUserCusdBalance(userWallet.balance);
-        }
+        };
+        loadProfile();
     }, [userWallet, user]);
 
     const updateUserMetadataCache = () => {
@@ -94,13 +97,11 @@ function ProfileScreen() {
 
     const onRefresh = () => {
         const updateBalance = async () => {
-            dispatch(
-                setUserWalletBalance(
-                    (
-                        await getUserBalance(app.kit, userWallet.address)
-                    ).toString()
-                )
-            );
+            const newBalanceStr = (
+                await getUserBalance(app.kit, userWallet.address)
+            ).toString();
+            dispatch(setUserWalletBalance(newBalanceStr));
+            setUserCusdBalance(newBalanceStr);
             setRefreshing(false);
         };
         updateBalance();
@@ -218,8 +219,7 @@ function ProfileScreen() {
                                     opacity: 0.56,
                                 }}
                             >
-                                {humanifyCurrencyAmount(userWallet.balance)}{' '}
-                                cUSD
+                                {humanifyCurrencyAmount(userCusdBalance)} cUSD
                             </Text>
                         </Card.Content>
                     </Card>
