@@ -137,7 +137,8 @@ export default {
         'An error happened while removing the beneficiary.\n\nError: {{error}}',
     addedNewBeneficiary: "You've successfully added a new beneficiary!",
     addingInvalidAddress: 'You are trying to add an invalid address!',
-    errorAddingBeneficiary: 'An error happened while adding the beneficiary.\n\nError: {{error}}',
+    errorAddingBeneficiary:
+        'An error happened while adding the beneficiary.\n\nError: {{error}}',
     oneTimeWelcomeMessage1:
         'impactMarket enables any community to setup its own Unconditional Basic Income for their beneficiaries. Anyone can back those communities by donating directly to their UBI contracts.',
     exploreCommunities: 'Explore Communities',
@@ -222,8 +223,10 @@ export default {
     others: 'Others',
     howManyChildren: 'How many children do you have?',
     addedNewManager: "You've successfully added a new manager!",
-    errorAddingManager: 'An error happened while adding the manager.\n\nError: {{error}}',
-    errorRemovingManager: 'An error happened while removing the manager.\n\nError: {{error}}',
+    errorAddingManager:
+        'An error happened while adding the manager.\n\nError: {{error}}',
+    errorRemovingManager:
+        'An error happened while removing the manager.\n\nError: {{error}}',
     managerAddress: 'Manager Account No (address)',
     addManager: 'Add Manager',
     managers: 'Managers',
@@ -251,4 +254,7 @@ export default {
         "You don't have enough balance to submit the request. Celo's transactions are nearly free but not completely free. Always keep a few cents in your account.",
     claimLockedUntil:
         "You aren't yet allowed to claim. Will be available in {{date}}. If it fails peridically, make sure to have the best internet connection possible and Valora is synced.",
+    search: 'Search',
+    noResults: 'No results founds!',
+    tooManyResults: 'Too many results! Improve your search.',
 };

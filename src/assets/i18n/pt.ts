@@ -131,7 +131,8 @@ export default {
         'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
     addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
     addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
-    errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
+    errorAddingBeneficiary:
+        'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
     oneTimeWelcomeMessage1:
         'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
     exploreCommunities: 'Explorar Comunidades',
@@ -219,8 +220,10 @@ export default {
     others: 'Outros',
     howManyChildren: 'Quantos filhos você tem?',
     addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
-    errorAddingManager: 'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
-    errorRemovingManager: 'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
+    errorAddingManager:
+        'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
+    errorRemovingManager:
+        'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
     managerAddress: 'Conta do Gestor',
     addManager: 'Adicionar Gestor',
     managers: 'Gestores',
@@ -248,4 +251,8 @@ export default {
         'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
     claimLockedUntil:
         'Você ainda não pode pegar novamente. Ficará disponivel em {{date}}. Se habitualmente falha, certifique-se que tem a melhor ligação á internet possivel e que a sua Valora está sincronizada.',
+    search: 'Pesquisar',
+    noResults: 'Nenhum resultado!',
+    tooManyResults:
+        'Foram encontrados muitos resultados! Melhore a sua pesquisa.',
 };

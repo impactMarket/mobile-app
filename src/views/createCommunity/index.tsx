@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import countriesJSON from 'assets/countries.json';
 import BigNumber from 'bignumber.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -15,6 +16,8 @@ import {
     Alert,
     View,
     ImageBackground,
+    FlatList,
+    TextInputEndEditingEventData,
 } from 'react-native';
 import {
     Button,
@@ -28,6 +31,9 @@ import {
     TextInput,
     IconButton,
     Text,
+    Searchbar,
+    List,
+    // ActivityIndicator,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
@@ -41,7 +47,19 @@ import SubmitCommunity from '../../navigator/header/SubmitCommunity';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
+import Select from 'components/core/Select';
+import { iptcColors } from 'styles/index';
 
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        phone: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
@@ -50,6 +68,9 @@ function CreateCommunityScreen() {
     );
     const userCurrency = useSelector(
         (state: IRootState) => state.user.metadata.currency
+    );
+    const userPhoneNumber = useSelector(
+        (state: IRootState) => state.user.wallet.phoneNumber
     );
     const userLanguage = useSelector(
         (state: IRootState) => state.user.metadata.language
@@ -66,6 +87,7 @@ function CreateCommunityScreen() {
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     //
+    const [isDialogCountryOpen, setIsDialogCountryOpen] = useState(false);
     const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
     const [isDialogFrequencyOpen, setIsDialogFrequencyOpen] = useState(false);
     const [isDialogVisibilityOpen, setIsDialogVisibilityOpen] = useState(false);
@@ -88,6 +110,14 @@ function CreateCommunityScreen() {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [city, setCity] = useState('');
+    const [searchCountryQuery, setSearchCountryQuery] = useState('');
+    const [searchCountryISOResult, setSearchCountryISOResult] = useState<
+        string[]
+    >([]);
+    const [
+        tooManyResultForCountryQuery,
+        setTooManyResultForCountryQuery,
+    ] = useState(false);
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('');
@@ -135,7 +165,20 @@ function CreateCommunityScreen() {
             }
             setAvailableCurrencies(currencies);
         };
+        const setCountryBasedOnPhoneNumber = () => {
+            for (var [key, value] of Object.entries(countries)) {
+                if (
+                    value.phone ===
+                    userPhoneNumber.slice(1, value.phone.length + 1)
+                ) {
+                    setCountry(key);
+                    // setCurrency(value.currency); // needs support to all currencies
+                    break;
+                }
+            }
+        };
         getAvailableCurrencies();
+        setCountryBasedOnPhoneNumber();
     }, []);
 
     const deployPrivateCommunity = async () => {
@@ -399,6 +442,71 @@ function CreateCommunityScreen() {
         );
     };
 
+    const handleSearchCountry = (
+        e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
+    ) => {
+        if (tooManyResultForCountryQuery) {
+            setTooManyResultForCountryQuery(false);
+        }
+        const countriesResult: string[] = [];
+        for (var [key, value] of Object.entries(countries)) {
+            if (value.name.indexOf(searchCountryQuery) !== -1) {
+                countriesResult.push(key);
+            }
+        }
+        //
+        if (countriesResult.length > 7) {
+            setTooManyResultForCountryQuery(true);
+        } else {
+            setSearchCountryISOResult(countriesResult);
+        }
+    };
+
+    const handleSelectCountry = (countryISO: string) => {
+        setCountry(countryISO);
+        setIsDialogCountryOpen(false);
+        setSearchCountryQuery('');
+        setSearchCountryISOResult([]);
+    };
+
+    const renderItemCountryQuery = ({ item }: { item: string }) => (
+        <List.Item
+            title={`${countries[item].emoji} ${countries[item].name}`}
+            onPress={() => handleSelectCountry(item)}
+            // left={(props) => <List.Icon {...props} icon="folder" />}
+        />
+    );
+
+    const renderSearchResult = () => {
+        if (!isDialogCountryOpen) {
+            return;
+        }
+        // if (searchingCountry) {
+        //     return (
+        //         <ActivityIndicator
+        //             animating={true}
+        //             color={iptcColors.blueRibbon}
+        //         />
+        //     );
+        // }
+        if (tooManyResultForCountryQuery) {
+            return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
+        }
+        if (searchCountryQuery.length > 0) {
+            if (setSearchCountryISOResult.length > 0) {
+                return (
+                    <FlatList
+                        data={searchCountryISOResult}
+                        renderItem={renderItemCountryQuery}
+                        keyExtractor={(item) => item}
+                    />
+                );
+            } else {
+                return <Paragraph>{i18n.t('noResults')}</Paragraph>;
+            }
+        }
+    };
+
     return (
         <>
             <ScrollView>
@@ -504,7 +612,7 @@ function CreateCommunityScreen() {
                                 </View>
                                 <Divider />
                                 <View style={{ margin: 16 }}>
-                                    <TextInput
+                                    {/* <TextInput
                                         mode="flat"
                                         underlineColor="transparent"
                                         style={styles.inputTextField}
@@ -518,6 +626,17 @@ function CreateCommunityScreen() {
                                             setIsCountryValid(
                                                 country.length > 0
                                             )
+                                        }
+                                    />*/}
+                                    <Select
+                                        label={i18n.t('country')}
+                                        value={
+                                            country.length > 0
+                                                ? `${countries[country].emoji} ${countries[country].name}`
+                                                : 'Select Country'
+                                        }
+                                        onPress={() =>
+                                            setIsDialogCountryOpen(true)
                                         }
                                     />
                                     {!isCountryValid && (
@@ -859,6 +978,43 @@ function CreateCommunityScreen() {
                 </View>
             </ScrollView>
             <Portal>
+                <Dialog
+                    visible={isDialogCountryOpen}
+                    onDismiss={() => setIsDialogCountryOpen(false)}
+                >
+                    <Dialog.Content>
+                        <Searchbar
+                            placeholder={i18n.t('search')}
+                            style={{
+                                backgroundColor: iptcColors.ghost,
+                                shadowRadius: 0,
+                                elevation: 0,
+                                borderRadius: 6,
+                            }}
+                            clearIcon={(p) => (
+                                <IconButton
+                                    icon="close"
+                                    onPress={() => {
+                                        setSearchCountryQuery('');
+                                        setSearchCountryISOResult([]);
+                                    }}
+                                />
+                            )}
+                            onChangeText={(e) => {
+                                if (
+                                    e.length === 0 &&
+                                    searchCountryISOResult.length > 0
+                                ) {
+                                    setSearchCountryISOResult([]);
+                                }
+                                setSearchCountryQuery(e);
+                            }}
+                            value={searchCountryQuery}
+                            onEndEditing={handleSearchCountry}
+                        />
+                        {renderSearchResult()}
+                    </Dialog.Content>
+                </Dialog>
                 <Dialog
                     visible={isDialogFrequencyOpen}
                     onDismiss={() => setIsDialogFrequencyOpen(false)}
