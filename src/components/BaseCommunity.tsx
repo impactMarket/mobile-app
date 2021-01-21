@@ -4,7 +4,18 @@ import { Text, View, StyleSheet } from 'react-native';
 import { ICommunity } from 'helpers/types/endpoints';
 import CachedImage from './CacheImage';
 import { generateUrlWithCloudFront } from 'helpers/index';
+import countriesJSON from 'assets/countries.json';
 
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        phone: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 export default function BaseCommunity(props: {
     community: ICommunity;
     full?: boolean;
@@ -26,7 +37,9 @@ export default function BaseCommunity(props: {
             >
                 <CachedImage
                     style={styles.imageBackground}
-                    source={{ uri: generateUrlWithCloudFront(community.coverImage) }}
+                    source={{
+                        uri: generateUrlWithCloudFront(community.coverImage),
+                    }}
                 />
                 <View style={styles.darkerBackground} />
             </View>
@@ -44,7 +57,7 @@ export default function BaseCommunity(props: {
                     }}
                 >
                     <Entypo name="location-pin" size={14} /> {community.city},{' '}
-                    {community.country}
+                    {countries[community.country].name}
                 </Text>
                 {action}
             </View>

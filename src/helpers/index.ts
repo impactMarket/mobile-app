@@ -25,6 +25,7 @@ import {
 import { setAppExchangeRatesAction } from './redux/actions/app';
 import { UserAttributes } from './types/models';
 import config from '../../config';
+import countriesJSON from 'assets/countries.json';
 
 export function generateUrlWithCloudFront(s3ContentKey: string) {
     // for backwards support
@@ -128,30 +129,13 @@ export function calculateCommunityProgress(
 }
 
 export function getCountryFromPhoneNumber(phoneNumber: string) {
-    if (phoneNumber.slice(0, 4) === '+351') {
-        return '🇵🇹 Portugal';
-    } else if (phoneNumber.slice(0, 3) === '+55') {
-        return '🇧🇷 Brasil';
-    } else if (phoneNumber.slice(0, 2) === '+1') {
-        return '🇺🇸 United States of America';
-    } else if (phoneNumber.slice(0, 3) === '+62') {
-        return '🇮🇩 Indonesia';
-    } else if (phoneNumber.slice(0, 3) === '+91') {
-        return '🇮🇳 India';
-    } else if (phoneNumber.slice(0, 4) === '+233') {
-        return '🇬🇭 Ghana';
-    } else if (phoneNumber.slice(0, 4) === '+238') {
-        return '🇨🇻 Cabo Verde';
-    } else if (phoneNumber.slice(0, 4) === '+234') {
-        return '🇳🇬 Nigeria';
-    } else if (phoneNumber.slice(0, 3) === '+54') {
-        return '🇦🇷 Argentina';
-    } else if (phoneNumber.slice(0, 3) === '+58') {
-        return '🇻🇪 Venezuela';
-    } else if (phoneNumber.slice(0, 3) === '+63') {
-        return '🇵🇭 Philippines';
-    } else if (phoneNumber.slice(0, 4) === '+504') {
-        return '🇭🇳 Honduras';
+    for (var [key, value] of Object.entries(countriesJSON)) {
+        if (
+            value.phone ===
+            phoneNumber.slice(1, value.phone.length + 1)
+        ) {
+            return `${value.emoji} ${value.name}`
+        }
     }
     return 'Unknown';
 }

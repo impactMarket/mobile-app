@@ -15,7 +15,18 @@ import Card from 'components/core/Card';
 import { Screens } from 'helpers/constants';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import CachedImage from 'components/CacheImage';
+import countriesJSON from 'assets/countries.json';
 
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        phone: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 function CommunityCard(props: { community: ICommunityLightDetails }) {
     const navigation = useNavigation();
     const { community } = props;
@@ -49,7 +60,7 @@ function CommunityCard(props: { community: ICommunityLightDetails }) {
                         </Text>
                         <Text style={styles.cardLocation}>
                             <Entypo name="location-pin" size={15} />{' '}
-                            {community.city}, {community.country}
+                            {community.city}, {countries[community.country].name}
                         </Text>
                     </View>
                     <View style={styles.darkerBackground} />
