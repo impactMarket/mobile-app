@@ -134,10 +134,10 @@ export default {
         'An error happened while loading. Please restart the app.',
     userWasRemoved: '{{user}} was successfully removed!',
     errorRemovingBeneficiary:
-        'An error happened while removing the beneficiary.',
+        'An error happened while removing the beneficiary.\n\nError: {{error}}',
     addedNewBeneficiary: "You've successfully added a new beneficiary!",
     addingInvalidAddress: 'You are trying to add an invalid address!',
-    errorAddingBeneficiary: 'An error happened while adding the beneficiary.',
+    errorAddingBeneficiary: 'An error happened while adding the beneficiary.\n\nError: {{error}}',
     oneTimeWelcomeMessage1:
         'impactMarket enables any community to setup its own Unconditional Basic Income for their beneficiaries. Anyone can back those communities by donating directly to their UBI contracts.',
     exploreCommunities: 'Explore Communities',
@@ -222,8 +222,8 @@ export default {
     others: 'Others',
     howManyChildren: 'How many children do you have?',
     addedNewManager: "You've successfully added a new manager!",
-    errorAddingManager: 'An error happened while adding the manager.',
-    errorRemovingManager: 'An error happened while removing the manager.',
+    errorAddingManager: 'An error happened while adding the manager.\n\nError: {{error}}',
+    errorRemovingManager: 'An error happened while removing the manager.\n\nError: {{error}}',
     managerAddress: 'Manager Account No (address)',
     addManager: 'Add Manager',
     managers: 'Managers',

@@ -128,10 +128,10 @@ export default {
     errorWhileLoadingRestart: 'Ocorreu eu erro ao iniciar. Por favor reinicie.',
     userWasRemoved: '{{user}} foi removido com sucesso!',
     errorRemovingBeneficiary:
-        'Ocorreu um erro enquanto removia o beneficiário.',
+        'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
     addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
     addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
-    errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.',
+    errorAddingBeneficiary: 'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
     oneTimeWelcomeMessage1:
         'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
     exploreCommunities: 'Explorar Comunidades',
@@ -219,8 +219,8 @@ export default {
     others: 'Outros',
     howManyChildren: 'Quantos filhos você tem?',
     addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
-    errorAddingManager: 'Ocorreu um erro ao adicionar o gestor.',
-    errorRemovingManager: 'Ocorreu um erro enquanto removia o gestor.',
+    errorAddingManager: 'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
+    errorRemovingManager: 'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
     managerAddress: 'Conta do Gestor',
     addManager: 'Adicionar Gestor',
     managers: 'Gestores',

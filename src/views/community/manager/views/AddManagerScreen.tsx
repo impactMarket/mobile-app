@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
+import { isOutOfTime } from 'helpers/index';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
@@ -48,7 +49,7 @@ function AddManagerScreen() {
                 { cancelable: false }
             );
             return;
-        } 
+        }
 
         try {
             addressToAdd = kit.web3.utils.toChecksumAddress(inputAddress);
@@ -113,13 +114,37 @@ function AddManagerScreen() {
                 );
                 navigation.goBack();
             })
-            .catch((e) => {
-                Api.system.uploadError(userAddress, 'add_manager', e);
+            .catch(async (e) => {
+                let error = i18n.t('possibleNetworkIssues');
+                if (
+                    e.message.includes('nonce') ||
+                    e.message.includes('gasprice is less')
+                ) {
+                    error = i18n.t('possiblyValoraNotSynced');
+                } else if (e.message.includes('gas required exceeds')) {
+                    error = i18n.t('unknown');
+                    // verify clock time
+                    if (await isOutOfTime()) {
+                        error = i18n.t('clockNotSynced');
+                    }
+                } else if (e.message.includes('Invalid JSON RPC response:')) {
+                    if (
+                        e.message.includes('The network connection was lost.')
+                    ) {
+                        error = i18n.t('networkConnectionLost');
+                    }
+                    error = i18n.t('networkIssuesRPC');
+                }
                 Alert.alert(
                     i18n.t('failure'),
-                    i18n.t('errorAddingManager'),
+                    i18n.t('errorAddingManager', { error }),
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
+                );
+                Api.system.uploadError(
+                    userAddress,
+                    'add_manager',
+                    `${e} <Presented Error> ${error}`
                 );
             })
             .finally(() => {

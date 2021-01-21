@@ -20,6 +20,7 @@ import { ActivityIndicator, List } from 'react-native-paper';
 import { iptcColors } from 'styles/index';
 import { decrypt } from 'helpers/encryption';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { isOutOfTime } from 'helpers/index';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -130,17 +131,37 @@ function AddedBeneficiaryScreen() {
                     });
                 }, 2500);
             })
-            .catch((e) => {
+            .catch(async (e) => {
+                let error = i18n.t('possibleNetworkIssues');
+                if (
+                    e.message.includes('nonce') ||
+                    e.message.includes('gasprice is less')
+                ) {
+                    error = i18n.t('possiblyValoraNotSynced');
+                } else if (e.message.includes('gas required exceeds')) {
+                    error = i18n.t('unknown');
+                    // verify clock time
+                    if (await isOutOfTime()) {
+                        error = i18n.t('clockNotSynced');
+                    }
+                } else if (e.message.includes('Invalid JSON RPC response:')) {
+                    if (
+                        e.message.includes('The network connection was lost.')
+                    ) {
+                        error = i18n.t('networkConnectionLost');
+                    }
+                    error = i18n.t('networkIssuesRPC');
+                }
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorRemovingBeneficiary', { error }),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
                 Api.system.uploadError(
                     userWallet.address,
                     'remove_beneficiary',
-                    e
-                );
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorRemovingBeneficiary'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
+                    `${e} <Presented Error> ${error}`
                 );
             })
             .finally(() => {
