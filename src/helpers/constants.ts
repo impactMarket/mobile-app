@@ -60,3 +60,7 @@ export enum modalDonateAction {
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';
+
+export enum celoNetwork {
+    noAddress = '0x0000000000000000000000000000000000000000'
+}

@@ -4,14 +4,14 @@ import { ContractKit } from '@celo/contractkit';
 import * as Sentry from 'sentry-expo';
 import { makeDeeplinkUrl } from 'helpers/index';
 import { TransactionReceipt } from 'web3-core'; // imported from waitReceipt method
+import { celoNetwork } from 'helpers/constants';
 
 async function celoWalletRequest(
     from: string,
     to: string,
     txObject: any,
     requestId: string,
-    kit: ContractKit,
-    useTo?: boolean
+    kit: ContractKit
 ): Promise<TransactionReceipt | undefined> {
     const dappName = 'impactmarket';
     const callback = makeDeeplinkUrl();
@@ -21,7 +21,7 @@ async function celoWalletRequest(
             tx: txObject,
             feeCurrency: FeeCurrency.cUSD,
         };
-        if (useTo) {
+        if (to !== celoNetwork.noAddress) {
             requestTx = {
                 ...requestTx,
                 to

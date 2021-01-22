@@ -49,6 +49,7 @@ import { IRootState } from 'helpers/types/state';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
 import Select from 'components/core/Select';
 import { iptcColors } from 'styles/index';
+import { celoNetwork } from 'helpers/constants';
 
 const countries: {
     [key: string]: {
@@ -198,7 +199,7 @@ function CreateCommunityScreen() {
                     .toString(),
                 baseInterval,
                 (parseInt(incrementInterval, 10) * 60).toString(),
-                '0x0000000000000000000000000000000000000000',
+                celoNetwork.noAddress,
                 config.cUSDContract,
                 userAddress,
             ],
@@ -207,11 +208,10 @@ function CreateCommunityScreen() {
         // receipt as undefined is handled outside
         const receipt = await celoWalletRequest(
             userAddress,
-            '0x0000000000000000000000000000000000000000',
+            celoNetwork.noAddress,
             txObject,
             'createcommunity',
-            kit,
-            false
+            kit
         );
         return receipt;
     };
@@ -502,7 +502,16 @@ function CreateCommunityScreen() {
                     />
                 );
             } else {
-                return <Paragraph>{i18n.t('noResults')}</Paragraph>;
+                return (
+                    <Paragraph
+                        style={{
+                            textAlign: 'center',
+                            fontSize: 18,
+                        }}
+                    >
+                        {i18n.t('noResults')}
+                    </Paragraph>
+                );
             }
         }
     };
