@@ -16,7 +16,13 @@ import { celoWalletRequest } from 'services/celoWallet';
 import BackSvg from 'components/svg/header/BackSvg';
 import { IRootState } from 'helpers/types/state';
 import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
-import { ActivityIndicator, List } from 'react-native-paper';
+import {
+    ActivityIndicator,
+    IconButton,
+    List,
+    Paragraph,
+    Searchbar,
+} from 'react-native-paper';
 import { iptcColors } from 'styles/index';
 import { decrypt } from 'helpers/encryption';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
@@ -44,6 +50,11 @@ function AddedBeneficiaryScreen() {
     >(undefined as any);
     const [refreshing, setRefreshing] = React.useState(false);
     const [reachedEndList, setReachedEndList] = useState(false);
+    const [searchBeneficiary, setSearchBeneficiary] = useState('');
+    const [searchResults, setSearchResults] = useState<
+        IManagerDetailsBeneficiary[]
+    >([]);
+    const [showingSearchResults, setShowingSearchResults] = useState(false);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -246,12 +257,36 @@ function AddedBeneficiaryScreen() {
         />
     );
 
+    const handleSearchBeneficiary = () => {
+        if (beneficiaries.length > 30) {
+            flatListRef.current?.scrollToIndex({ index: 0 });
+        }
+        Api.community
+            .searchBeneficiary(true, searchBeneficiary)
+            .then((r) => {
+                setSearchResults(r);
+                if (r.length > 0) {
+                    setReachedEndList(true);
+                    setRemoving(Array(r.length).fill(false));
+                    setRefreshing(false);
+                }
+                setShowingSearchResults(true);
+            })
+            .catch((e) => {
+                // an error occurred while searching
+            });
+    };
+
     const formatAddressOrName = (from: IManagerDetailsBeneficiary) => {
         let titleMaxLength = 25;
         const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
         if (from.username !== null && fromHasName) {
-            name = decrypt(from.username);
+            try {
+                name = decrypt(from.username);
+            } catch (e) {
+                name = from.username;
+            }
         }
 
         return fromHasName
@@ -262,25 +297,77 @@ function AddedBeneficiaryScreen() {
               )}..${from.address.slice(42 - (titleMaxLength - 4) / 2, 42)}`;
     };
 
+    const renderBeneficiariesList = () => {
+        if (showingSearchResults && searchResults.length === 0) {
+            return (
+                <Paragraph
+                    style={{
+                        textAlign: 'center',
+                        fontSize: 18,
+                    }}
+                >
+                    {i18n.t('noResults')}
+                </Paragraph>
+            );
+        }
+        return (
+            <FlatList
+                data={showingSearchResults ? searchResults : beneficiaries}
+                style={{ paddingHorizontal: 15 }}
+                renderItem={listRenderItem}
+                ref={flatListRef}
+                keyExtractor={(item) => item.address}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+                onEndReachedThreshold={0.7}
+                onEndReached={handleOnEndReached}
+                // Performance settings
+                removeClippedSubviews={true} // Unmount components when outside of window
+                initialNumToRender={2} // Reduce initial render amount
+                maxToRenderPerBatch={1} // Reduce number in each render batch
+                updateCellsBatchingPeriod={100} // Increase time between renders
+                windowSize={7} // Reduce the window size
+            />
+        );
+    };
+
     return (
-        <FlatList
-            data={beneficiaries}
-            style={{ paddingHorizontal: 15 }}
-            renderItem={listRenderItem}
-            ref={flatListRef}
-            keyExtractor={(item) => item.address}
-            refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            onEndReachedThreshold={0.7}
-            onEndReached={handleOnEndReached}
-            // Performance settings
-            removeClippedSubviews={true} // Unmount components when outside of window
-            initialNumToRender={2} // Reduce initial render amount
-            maxToRenderPerBatch={1} // Reduce number in each render batch
-            updateCellsBatchingPeriod={100} // Increase time between renders
-            windowSize={7} // Reduce the window size
-        />
+        <>
+            <Searchbar
+                placeholder={i18n.t('search')}
+                style={{
+                    marginHorizontal: 22,
+                    backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                    shadowRadius: 0,
+                    elevation: 0,
+                    borderRadius: 6,
+                    marginBottom: 15,
+                }}
+                clearIcon={(p) => (
+                    <IconButton
+                        icon="close"
+                        onPress={() => {
+                            setSearchBeneficiary('');
+                            setSearchResults([]);
+                            setShowingSearchResults(false);
+                        }}
+                    />
+                )}
+                onChangeText={(e) => {
+                    if (e.length === 0 && searchResults.length > 0) {
+                        setSearchResults([]);
+                    }
+                    setSearchBeneficiary(e);
+                }}
+                value={searchBeneficiary}
+                onEndEditing={handleSearchBeneficiary}
+            />
+            {renderBeneficiariesList()}
+        </>
     );
 }
 AddedBeneficiaryScreen.navigationOptions = () => {

@@ -131,10 +131,12 @@ function AddBeneficiaryScreen() {
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
+                console.log(typeof JSON.stringify(e), error);
+                console.log(e.message, error);
                 Api.system.uploadError(
                     userAddress,
                     'add_beneficiary',
-                    `${e} <Presented Error> ${error}`
+                    `${JSON.stringify(e)} <Presented Error> ${error}`
                 );
             })
             .finally(() => {

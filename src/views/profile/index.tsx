@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import Card from 'components/core/Card';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
-import { decrypt, encrypt } from 'helpers/encryption';
+import { decrypt } from 'helpers/encryption';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
 import {
     amountToCurrency,
@@ -60,7 +60,13 @@ function ProfileScreen() {
         const loadProfile = () => {
             if (userWallet.address.length > 0) {
                 if (user.username !== null && user.username.length > 0) {
-                    setName(decrypt(user.username));
+                    let decryptedName = '';
+                    try {
+                        decryptedName = decrypt(user.username);
+                    } catch (e) {
+                        decryptedName = user.username;
+                    }
+                    setName(decryptedName);
                 }
                 setCurrency(user.currency);
                 setLanguage(user.language);
@@ -91,7 +97,7 @@ function ProfileScreen() {
             currency,
             gender,
             language,
-            username: encrypt(name),
+            username: name,
         });
     };
 
@@ -228,14 +234,10 @@ function ProfileScreen() {
                         value={name}
                         maxLength={32}
                         onEndEditing={(e) => {
-                            let eName = '';
-                            if (name.length > 0) {
-                                eName = encrypt(name);
-                            }
-                            Api.user.setUsername(userWallet.address, eName);
+                            Api.user.setUsername(userWallet.address, name);
                             updateUserMetadataCache();
                             dispatch(
-                                setUserMetadata({ ...user, username: eName })
+                                setUserMetadata({ ...user, username: name })
                             );
                         }}
                         onChangeText={(value) => setName(value)}
