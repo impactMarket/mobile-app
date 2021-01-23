@@ -568,17 +568,22 @@ export default class App extends React.Component<any, IAppState> {
             }
             if (!loggedIn) {
                 const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
-                if (new Date().getTime() - lastUpdate > 3600000) {
+                const cachedValues = await CacheStore.getExchangeRates();
+                if (
+                    new Date().getTime() - lastUpdate > 3600000 ||
+                    cachedValues === null
+                ) {
                     // 1h in ms
                     const exchangeRates = await Api.system.getExchangeRate();
-                    store.dispatch(setAppExchangeRatesAction(exchangeRates));
-                    CacheStore.cacheExchangeRates(exchangeRates);
-                } else {
-                    store.dispatch(
-                        setAppExchangeRatesAction(
-                            await CacheStore.getExchangeRates()
-                        )
+                    const userRates: { [key: string]: number } = {};
+                    Object.assign(
+                        userRates,
+                        ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
                     );
+                    store.dispatch(setAppExchangeRatesAction(userRates));
+                    CacheStore.cacheExchangeRates(userRates);
+                } else {
+                    store.dispatch(setAppExchangeRatesAction(cachedValues));
                 }
             }
             this.setState({

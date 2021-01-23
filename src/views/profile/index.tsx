@@ -12,7 +12,13 @@ import {
 import { iptcColors } from 'styles/index';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import { RefreshControl, StyleSheet, View } from 'react-native';
+import {
+    FlatList,
+    RefreshControl,
+    StyleSheet,
+    TextInputEndEditingEventData,
+    View,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Paragraph,
@@ -21,6 +27,9 @@ import {
     RadioButton,
     Text,
     Headline,
+    List,
+    Searchbar,
+    IconButton,
 } from 'react-native-paper';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
@@ -35,7 +44,15 @@ import {
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
 import CacheStore from 'services/cacheStore';
+import currenciesJSON from 'assets/currencies.json';
 
+const currencies: {
+    [key: string]: {
+        symbol: string;
+        name: string;
+        symbol_native: string;
+    };
+} = currenciesJSON;
 function ProfileScreen() {
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.user.metadata);
@@ -45,6 +62,12 @@ function ProfileScreen() {
     const rates = app.exchangeRates;
 
     const [name, setName] = useState('');
+    const [showingResults, setShowingResults] = useState(false);
+    const [searchCurrency, setSearchCurrency] = useState('');
+    const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
+        []
+    );
+    const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
     const [currency, setCurrency] = useState('usd');
     const [userCusdBalance, setUserCusdBalance] = useState('0');
     const [language, setLanguage] = useState('en');
@@ -154,10 +177,82 @@ function ProfileScreen() {
         }
     };
 
+    const handleSearchCurrency = (
+        e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
+    ) => {
+        if (tooManyResultForQuery) {
+            setTooManyResultForQuery(false);
+        }
+        const currencyResult: string[] = [];
+        for (var [key, value] of Object.entries(currencies)) {
+            if (
+                value.name.indexOf(searchCurrency) !== -1 ||
+                value.symbol.indexOf(searchCurrency) !== -1 ||
+                value.symbol_native.indexOf(searchCurrency) !== -1
+            ) {
+                currencyResult.push(key);
+            }
+        }
+        //
+        if (currencyResult.length > 7) {
+            setTooManyResultForQuery(true);
+        } else {
+            setSearchCurrencyResult(currencyResult);
+            setShowingResults(true);
+        }
+    };
+
+    const handleSelectCurrency = (currency: string) => {
+        Api.user.setCurrency(userWallet.address, currency);
+        setCurrency(currency);
+        setIsDialogCurrencyOpen(false);
+        setSearchCurrency('');
+        setSearchCurrencyResult([]);
+    };
+
+    const renderItemCurrencyQuery = ({ item }: { item: string }) => (
+        <List.Item
+            title={`[${currencies[item].symbol}] ${currencies[item].name}`}
+            onPress={() => handleSelectCurrency(item)}
+            // left={(props) => <List.Icon {...props} icon="folder" />}
+        />
+    );
+
+    const renderSearchCurrencyResult = () => {
+        if (!isDialogCurrencyOpen) {
+            return;
+        }
+        if (tooManyResultForQuery) {
+            return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
+        }
+        if (searchCurrency.length > 0) {
+            if (searchCurrencyResult.length > 0) {
+                return (
+                    <FlatList
+                        data={searchCurrencyResult}
+                        renderItem={renderItemCurrencyQuery}
+                        keyExtractor={(item) => item}
+                    />
+                );
+            } else if (showingResults) {
+                return (
+                    <Paragraph
+                        style={{
+                            textAlign: 'center',
+                            fontSize: 18,
+                        }}
+                    >
+                        {i18n.t('noResults')}
+                    </Paragraph>
+                );
+            }
+        }
+    };
+
     const userBalance = amountToCurrency(
         userCusdBalance,
         user.currency,
-        app.exchangeRates,
+        rates,
         false
     );
 
@@ -309,7 +404,7 @@ function ProfileScreen() {
                     <View style={{ marginTop: 16 }}>
                         <Select
                             label={i18n.t('currency')}
-                            value={currency}
+                            value={currencies[currency.toUpperCase()].name}
                             onPress={() => setIsDialogCurrencyOpen(true)}
                         />
                     </View>
@@ -369,23 +464,37 @@ function ProfileScreen() {
                     onDismiss={() => setIsDialogCurrencyOpen(false)}
                 >
                     <Dialog.Content>
-                        <RadioButton.Group
-                            onValueChange={(value) => {
-                                setIsDialogCurrencyOpen(false);
-                                handleChangeCurrency(value);
+                        <Searchbar
+                            placeholder={i18n.t('search')}
+                            style={{
+                                backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                                shadowRadius: 0,
+                                elevation: 0,
+                                borderRadius: 6,
                             }}
-                            value={currency}
-                        >
-                            {Object.entries(rates).map((rate) => (
-                                <RadioButton.Item
-                                    key={rate[0]}
-                                    label={`${(rate[1] as any).name} (${
-                                        rate[0]
-                                    })`}
-                                    value={rate[0]}
+                            autoFocus={true}
+                            clearIcon={(p) => (
+                                <IconButton
+                                    icon="close"
+                                    onPress={() => {
+                                        setSearchCurrency('');
+                                        setSearchCurrencyResult([]);
+                                        setTooManyResultForQuery(false);
+                                        setShowingResults(false);
+                                    }}
                                 />
-                            ))}
-                        </RadioButton.Group>
+                            )}
+                            onChangeText={(e) => {
+                                if (e.length === 0 && showingResults) {
+                                    setSearchCurrencyResult([]);
+                                    setShowingResults(false);
+                                }
+                                setSearchCurrency(e);
+                            }}
+                            value={searchCurrency}
+                            onEndEditing={handleSearchCurrency}
+                        />
+                        {renderSearchCurrencyResult()}
                     </Dialog.Content>
                 </Dialog>
                 <Dialog

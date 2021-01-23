@@ -172,7 +172,7 @@ export default class CacheStore {
 
     // exchange rates cache
 
-    static async cacheExchangeRates(exchangeRates: any) {
+    static async cacheExchangeRates(exchangeRates: { [key: string]: number }) {
         await AsyncStorage.setItem(
             CACHE_STORE_EXCHANGE_RATES,
             JSON.stringify(exchangeRates)
@@ -183,7 +183,7 @@ export default class CacheStore {
         );
     }
 
-    static async getExchangeRates(): Promise<any> {
+    static async getExchangeRates(): Promise<{ [key: string]: number } | null> {
         const exchangeRates = await AsyncStorage.getItem(
             CACHE_STORE_EXCHANGE_RATES
         );

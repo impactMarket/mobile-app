@@ -81,12 +81,17 @@ export async function welcomeUser(
             })
         );
         dispatch(setUserMetadata(userMetadata));
+        const allExchangeRates: { [key: string]: number } = {};
+        Object.assign(
+            allExchangeRates,
+            ...user.rates.map((y) => ({ [y.currency]: y.rate }))
+        );
         dispatch(
             setUserExchangeRate(
-                user.exchangeRates[userMetadata.currency.toUpperCase()].rate
+                allExchangeRates[userMetadata.currency.toUpperCase()]
             )
         );
-        dispatch(setAppExchangeRatesAction(user.exchangeRates));
+        dispatch(setAppExchangeRatesAction(allExchangeRates));
         if (user.isBeneficiary || user.isManager) {
             const c = user.community!;
             const communityContract = new kit.web3.eth.Contract(
@@ -130,11 +135,8 @@ export function calculateCommunityProgress(
 
 export function getCountryFromPhoneNumber(phoneNumber: string) {
     for (var [key, value] of Object.entries(countriesJSON)) {
-        if (
-            value.phone ===
-            phoneNumber.slice(1, value.phone.length + 1)
-        ) {
-            return `${value.emoji} ${value.name}`
+        if (value.phone === phoneNumber.slice(1, value.phone.length + 1)) {
+            return `${value.emoji} ${value.name}`;
         }
     }
     return 'Unknown';

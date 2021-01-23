@@ -69,7 +69,7 @@ export interface CommunityCreationAttributes {
 }
 
 export interface IUserHello {
-    exchangeRates: any; // TODO: this is not really an any
+    rates: { currency: string, rate: number }[];
     isBeneficiary: boolean;
     isManager: boolean;
     community?: ICommunity;

@@ -44,7 +44,7 @@ export interface IModalDonateState {
 
 export interface IAppState {
     kit: ContractKit;
-    exchangeRates: any;
+    exchangeRates: { [key: string]: number};
     suspectWrongDateTime: boolean;
     timeDiff: number;
     fromWelcomeScreen: string;

@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import config from '../../config';
+import currenciesJSON from 'assets/currencies.json';
 
 export function formatInputAmountToTransfer(inputAmount: string) {
     if (inputAmount.indexOf(',') === 0 || inputAmount.indexOf('.') === 0) {
@@ -10,22 +11,13 @@ export function formatInputAmountToTransfer(inputAmount: string) {
 }
 
 export function getCurrencySymbol(currency: string) {
-    switch (currency.toUpperCase()) {
-        case 'EUR':
-            return '€';
-        case 'BRL':
-            return 'R$';
-        case 'GHS':
-            return 'GH₵';
-        case 'CVE':
-            return '$';
-        case 'NGN':
-            return '₦';
-        case 'VES':
-            return 'BsS';
-        default:
-            return '$';
-    }
+    return (currenciesJSON as {
+        [key: string]: {
+            symbol: string;
+            name: string;
+            symbol_native: string;
+        };
+    })[currency.toUpperCase()].symbol;
 }
 
 export function humanifyCurrencyAmount(
@@ -48,16 +40,16 @@ export function humanifyCurrencyAmount(
 export function amountToCurrency(
     amount: BigNumber | string,
     currency: string,
-    exchangeRates: any,
+    exchangeRates: { [key: string]: number },
     showSymbol: boolean = true
 ): string {
-    const exchangeRate = exchangeRates[currency].rate;
+    const exchangeRate = exchangeRates[currency];
     const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
     const hValue = humanifyCurrencyAmount(bgn);
     const currencySymbol = getCurrencySymbol(currency);
-    if (currency === 'CVE') {
-        return hValue.replace('.', currencySymbol);
-    }
+    // if (currency === 'CVE') {
+    //     return hValue.replace('.', currencySymbol);
+    // }
     if (!showSymbol) {
         return hValue;
     }

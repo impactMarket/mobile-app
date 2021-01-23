@@ -268,8 +268,7 @@ class DonateModal extends Component<
                                 {`${getCurrencySymbol(community.currency)}${(
                                     Math.floor(
                                         amountInDollars *
-                                            exchangeRates[community.currency]
-                                                .rate *
+                                            exchangeRates[community.currency] *
                                             100
                                     ) / 100
                                 )

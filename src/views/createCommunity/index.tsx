@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import countriesJSON from 'assets/countries.json';
+import currenciesJSON from 'assets/currencies.json';
 import BigNumber from 'bignumber.js';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -61,6 +62,13 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
+const currencies: {
+    [key: string]: {
+        symbol: string;
+        name: string;
+        symbol_native: string;
+    };
+} = currenciesJSON;
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
@@ -82,9 +90,9 @@ function CreateCommunityScreen() {
     const kit = useSelector((state: IRootState) => state.app.kit);
     const navigation = useNavigation();
 
-    const [availableCurrencies, setAvailableCurrencies] = useState<
-        { name: string; symbol: string }[]
-    >([]);
+    // const [availableCurrencies, setAvailableCurrencies] = useState<
+    //     { name: string; symbol: string }[]
+    // >([]);
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     //
@@ -107,6 +115,11 @@ function CreateCommunityScreen() {
     ] = useState(true);
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
+    const [showingResults, setShowingResults] = useState(false);
+    const [searchCurrency, setSearchCurrency] = useState('');
+    const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
+        []
+    );
     const [currency, setCurrency] = useState<string>(userCurrency);
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -115,10 +128,7 @@ function CreateCommunityScreen() {
     const [searchCountryISOResult, setSearchCountryISOResult] = useState<
         string[]
     >([]);
-    const [
-        tooManyResultForCountryQuery,
-        setTooManyResultForCountryQuery,
-    ] = useState(false);
+    const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('');
@@ -155,31 +165,19 @@ function CreateCommunityScreen() {
     ]);
 
     useEffect(() => {
-        const getAvailableCurrencies = async () => {
-            const rates = exchangeRates;
-            const currencies: { name: string; symbol: string }[] = [];
-            for (const currency in rates) {
-                currencies.push({
-                    name: rates[currency].name,
-                    symbol: currency,
-                });
-            }
-            setAvailableCurrencies(currencies);
-        };
-        const setCountryBasedOnPhoneNumber = () => {
+        const setCountryAndCurrencyBasedOnPhoneNumber = () => {
             for (var [key, value] of Object.entries(countries)) {
                 if (
                     value.phone ===
                     userPhoneNumber.slice(1, value.phone.length + 1)
                 ) {
                     setCountry(key);
-                    // setCurrency(value.currency); // needs support to all currencies
+                    setCurrency(value.currency);
                     break;
                 }
             }
         };
-        getAvailableCurrencies();
-        setCountryBasedOnPhoneNumber();
+        setCountryAndCurrencyBasedOnPhoneNumber();
     }, []);
 
     const deployPrivateCommunity = async () => {
@@ -445,8 +443,8 @@ function CreateCommunityScreen() {
     const handleSearchCountry = (
         e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
     ) => {
-        if (tooManyResultForCountryQuery) {
-            setTooManyResultForCountryQuery(false);
+        if (tooManyResultForQuery) {
+            setTooManyResultForQuery(false);
         }
         const countriesResult: string[] = [];
         for (var [key, value] of Object.entries(countries)) {
@@ -456,9 +454,10 @@ function CreateCommunityScreen() {
         }
         //
         if (countriesResult.length > 7) {
-            setTooManyResultForCountryQuery(true);
+            setTooManyResultForQuery(true);
         } else {
             setSearchCountryISOResult(countriesResult);
+            setShowingResults(true);
         }
     };
 
@@ -477,19 +476,11 @@ function CreateCommunityScreen() {
         />
     );
 
-    const renderSearchResult = () => {
+    const renderSearchCountryResult = () => {
         if (!isDialogCountryOpen) {
             return;
         }
-        // if (searchingCountry) {
-        //     return (
-        //         <ActivityIndicator
-        //             animating={true}
-        //             color={iptcColors.blueRibbon}
-        //         />
-        //     );
-        // }
-        if (tooManyResultForCountryQuery) {
+        if (tooManyResultForQuery) {
             return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
         }
         if (searchCountryQuery.length > 0) {
@@ -501,7 +492,78 @@ function CreateCommunityScreen() {
                         keyExtractor={(item) => item}
                     />
                 );
-            } else {
+            } else if (showingResults) {
+                return (
+                    <Paragraph
+                        style={{
+                            textAlign: 'center',
+                            fontSize: 18,
+                        }}
+                    >
+                        {i18n.t('noResults')}
+                    </Paragraph>
+                );
+            }
+        }
+    };
+
+    const handleSearchCurrency = (
+        e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
+    ) => {
+        if (tooManyResultForQuery) {
+            setTooManyResultForQuery(false);
+        }
+        const currencyResult: string[] = [];
+        for (var [key, value] of Object.entries(currencies)) {
+            if (
+                value.name.indexOf(searchCurrency) !== -1 ||
+                value.symbol.indexOf(searchCurrency) !== -1 ||
+                value.symbol_native.indexOf(searchCurrency) !== -1
+            ) {
+                currencyResult.push(key);
+            }
+        }
+        //
+        if (currencyResult.length > 7) {
+            setTooManyResultForQuery(true);
+        } else {
+            setSearchCurrencyResult(currencyResult);
+            setShowingResults(true);
+        }
+    };
+
+    const handleSelectCurrency = (currency: string) => {
+        setCurrency(currency);
+        setIsDialogCurrencyOpen(false);
+        setSearchCurrency('');
+        setSearchCurrencyResult([]);
+    };
+
+    const renderItemCurrencyQuery = ({ item }: { item: string }) => (
+        <List.Item
+            title={`[${currencies[item].symbol}] ${currencies[item].name}`}
+            onPress={() => handleSelectCurrency(item)}
+            // left={(props) => <List.Icon {...props} icon="folder" />}
+        />
+    );
+
+    const renderSearchCurrencyResult = () => {
+        if (!isDialogCurrencyOpen) {
+            return;
+        }
+        if (tooManyResultForQuery) {
+            return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
+        }
+        if (searchCurrency.length > 0) {
+            if (searchCurrencyResult.length > 0) {
+                return (
+                    <FlatList
+                        data={searchCurrencyResult}
+                        renderItem={renderItemCurrencyQuery}
+                        keyExtractor={(item) => item}
+                    />
+                );
+            } else if (showingResults) {
                 return (
                     <Paragraph
                         style={{
@@ -708,17 +770,18 @@ function CreateCommunityScreen() {
                                     )}
                                 </View>
                                 <Divider />
-                                <Paragraph style={styles.inputTextFieldLabel}>
+                                {/* <Paragraph style={styles.inputTextFieldLabel}>
                                     {i18n.t('currency')}
-                                </Paragraph>
+                                </Paragraph> */}
                                 <View
                                     style={{
-                                        flex: 1,
+                                        flex: 4,
                                         flexDirection: 'row',
-                                        alignSelf: 'center',
+                                        justifyContent: 'space-between',
+                                        margin: 16,
                                     }}
                                 >
-                                    <Button
+                                    {/* <Button
                                         mode="contained"
                                         style={{
                                             width: '80%',
@@ -739,13 +802,30 @@ function CreateCommunityScreen() {
                                         >
                                             {currency}
                                         </Text>
-                                    </Button>
-                                    <IconButton
-                                        style={{ marginTop: 10 }}
-                                        icon="help-circle-outline"
-                                        size={20}
-                                        onPress={() => openHelp('currency')}
-                                    />
+                                    </Button> */}
+                                    <View style={{ flex: 3 }}>
+                                        <Select
+                                            label={i18n.t('currency')}
+                                            value={currencies[currency].name}
+                                            onPress={() =>
+                                                setIsDialogCurrencyOpen(true)
+                                            }
+                                        />
+                                    </View>
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            flexDirection: 'row-reverse',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <IconButton
+                                            style={{ marginTop: 25 }}
+                                            icon="help-circle-outline"
+                                            size={20}
+                                            onPress={() => openHelp('currency')}
+                                        />
+                                    </View>
                                 </View>
                             </View>
                         </Card.Content>
@@ -995,33 +1075,34 @@ function CreateCommunityScreen() {
                         <Searchbar
                             placeholder={i18n.t('search')}
                             style={{
-                                backgroundColor: iptcColors.ghost,
+                                backgroundColor: 'rgba(206, 212, 218, 0.27)',
                                 shadowRadius: 0,
                                 elevation: 0,
                                 borderRadius: 6,
                             }}
+                            autoFocus={true}
                             clearIcon={(p) => (
                                 <IconButton
                                     icon="close"
                                     onPress={() => {
                                         setSearchCountryQuery('');
                                         setSearchCountryISOResult([]);
+                                        setTooManyResultForQuery(false);
+                                        setShowingResults(false);
                                     }}
                                 />
                             )}
                             onChangeText={(e) => {
-                                if (
-                                    e.length === 0 &&
-                                    searchCountryISOResult.length > 0
-                                ) {
+                                if (e.length === 0 && showingResults) {
                                     setSearchCountryISOResult([]);
+                                    setShowingResults(false);
                                 }
                                 setSearchCountryQuery(e);
                             }}
                             value={searchCountryQuery}
                             onEndEditing={handleSearchCountry}
                         />
-                        {renderSearchResult()}
+                        {renderSearchCountryResult()}
                     </Dialog.Content>
                 </Dialog>
                 <Dialog
@@ -1075,21 +1156,37 @@ function CreateCommunityScreen() {
                     onDismiss={() => setIsDialogCurrencyOpen(false)}
                 >
                     <Dialog.Content>
-                        <RadioButton.Group
-                            onValueChange={(value) => {
-                                setCurrency(value);
-                                setIsDialogCurrencyOpen(false);
+                        <Searchbar
+                            placeholder={i18n.t('search')}
+                            style={{
+                                backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                                shadowRadius: 0,
+                                elevation: 0,
+                                borderRadius: 6,
                             }}
-                            value={currency}
-                        >
-                            {availableCurrencies.map((c) => (
-                                <RadioButton.Item
-                                    key={c.symbol}
-                                    label={c.name}
-                                    value={c.symbol}
+                            autoFocus={true}
+                            clearIcon={(p) => (
+                                <IconButton
+                                    icon="close"
+                                    onPress={() => {
+                                        setSearchCurrency('');
+                                        setSearchCurrencyResult([]);
+                                        setTooManyResultForQuery(false);
+                                        setShowingResults(false);
+                                    }}
                                 />
-                            ))}
-                        </RadioButton.Group>
+                            )}
+                            onChangeText={(e) => {
+                                if (e.length === 0 && showingResults) {
+                                    setSearchCurrencyResult([]);
+                                    setShowingResults(false);
+                                }
+                                setSearchCurrency(e);
+                            }}
+                            value={searchCurrency}
+                            onEndEditing={handleSearchCurrency}
+                        />
+                        {renderSearchCurrencyResult()}
                     </Dialog.Content>
                 </Dialog>
             </Portal>

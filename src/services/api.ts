@@ -86,10 +86,13 @@ async function postRequest<T>(
 class ApiRouteCommunity {
     static async searchBeneficiary(active: boolean, beneficiaryQuery: string) {
         const result = await getRequest<IManagerDetailsBeneficiary[]>(
-            '/community/beneficiaries/search/' + (active ? 'true' : 'false') + '/' + beneficiaryQuery,
+            '/community/beneficiaries/search/' +
+                (active ? 'true' : 'false') +
+                '/' +
+                beneficiaryQuery,
             true
         );
-        console.log('result', result)
+        console.log('result', result);
         if (result) {
             return result;
         }
@@ -101,7 +104,7 @@ class ApiRouteCommunity {
             '/community/managers/search/' + managerQuery,
             true
         );
-        console.log('result', result)
+        console.log('result', result);
         if (result) {
             return result;
         }
@@ -114,7 +117,12 @@ class ApiRouteCommunity {
         limit: number
     ) {
         const result = await getRequest<IManagerDetailsBeneficiary[]>(
-            '/community/beneficiaries/list/' + active + '/' + offset + '/' + limit,
+            '/community/beneficiaries/list/' +
+                active +
+                '/' +
+                offset +
+                '/' +
+                limit,
             true
         );
         if (result) {
@@ -334,9 +342,11 @@ class ApiRouteSystem {
     /**
      * Must use values from user storage and update when opening app.
      */
-    static async getExchangeRate(): Promise<any> {
-        const result = await getRequest<any>('/exchange-rates');
-        return result;
+    static async getExchangeRate(): Promise<{ currency: string, rate: number }[]> {
+        const result = await getRequest<{
+            rates: { currency: string; rate: number }[];
+        }>('/exchange-rates');
+        return result ? result.rates : [];
     }
 
     static async uploadError(

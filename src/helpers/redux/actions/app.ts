@@ -36,7 +36,9 @@ export function SetAppFromWelcomeScreen(nextScreen: string): AppActionTypes {
     };
 }
 
-export function setAppExchangeRatesAction(exchangeRates: any): AppActionTypes {
+export function setAppExchangeRatesAction(exchangeRates: {
+    [key: string]: number;
+}): AppActionTypes {
     return {
         type: SET_EXCHANGE_RATES,
         payload: exchangeRates,
