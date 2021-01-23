@@ -1,5 +1,10 @@
 import { toTxResult } from '@celo/contractkit/lib/utils/tx-result';
-import { requestTxSig, FeeCurrency, waitForSignedTxs, TxParams } from '@celo/dappkit';
+import {
+    requestTxSig,
+    FeeCurrency,
+    waitForSignedTxs,
+    TxParams,
+} from '@celo/dappkit';
 import { ContractKit } from '@celo/contractkit';
 import * as Sentry from 'sentry-expo';
 import { makeDeeplinkUrl } from 'helpers/index';
@@ -24,7 +29,7 @@ async function celoWalletRequest(
         if (to !== celoNetwork.noAddress) {
             requestTx = {
                 ...requestTx,
-                to
+                to,
             };
         }
         await requestTxSig(kit, [requestTx], {

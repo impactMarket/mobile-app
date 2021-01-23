@@ -230,7 +230,9 @@ const mapStateToProps = (state: IRootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<ModalActionTypes | UserActionTypes>) => {
+const mapDispatchToProps = (
+    dispatch: Dispatch<ModalActionTypes | UserActionTypes>
+) => {
     return {
         goBackToDonateModal: () =>
             dispatch({ type: modalDonateAction.GO_BACK_TO_DONATE }),

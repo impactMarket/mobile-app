@@ -119,7 +119,7 @@ function RemovedBeneficiaryScreen() {
         if (from.username !== null && fromHasName) {
             try {
                 name = decrypt(from.username);
-            } catch(e) {
+            } catch (e) {
                 name = from.username;
             }
         }

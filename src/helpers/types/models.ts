@@ -77,4 +77,4 @@ export interface UserAttributes {
 export interface IManagerAttributes {
     user: string;
     communityId: string;
-};
+}

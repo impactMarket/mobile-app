@@ -46,7 +46,11 @@ function CommunityCard(props: { community: ICommunityLightDetails }) {
                 <View style={{ position: 'relative' }}>
                     <CachedImage
                         style={styles.cardImage}
-                        source={{ uri: generateUrlWithCloudFront(community.coverImage) }}
+                        source={{
+                            uri: generateUrlWithCloudFront(
+                                community.coverImage
+                            ),
+                        }}
                     />
                     <View
                         style={{
@@ -60,7 +64,8 @@ function CommunityCard(props: { community: ICommunityLightDetails }) {
                         </Text>
                         <Text style={styles.cardLocation}>
                             <Entypo name="location-pin" size={15} />{' '}
-                            {community.city}, {countries[community.country].name}
+                            {community.city},{' '}
+                            {countries[community.country].name}
                         </Text>
                     </View>
                     <View style={styles.darkerBackground} />

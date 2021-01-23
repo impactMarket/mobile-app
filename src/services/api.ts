@@ -342,7 +342,9 @@ class ApiRouteSystem {
     /**
      * Must use values from user storage and update when opening app.
      */
-    static async getExchangeRate(): Promise<{ currency: string, rate: number }[]> {
+    static async getExchangeRate(): Promise<
+        { currency: string; rate: number }[]
+    > {
         const result = await getRequest<{
             rates: { currency: string; rate: number }[];
         }>('/exchange-rates');
