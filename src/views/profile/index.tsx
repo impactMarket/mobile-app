@@ -143,18 +143,6 @@ function ProfileScreen() {
         dispatch(setUserMetadata({ ...user, gender }));
     };
 
-    const handleChangeCurrency = async (text: string) => {
-        setCurrency(text);
-        Api.user.setCurrency(userWallet.address, text);
-        updateUserMetadataCache();
-        // update exchange rate!
-        const exchangeRate = (rates as any)[text.toUpperCase()].rate;
-        batch(() => {
-            dispatch(setUserMetadata({ ...user, currency: text }));
-            dispatch(setUserExchangeRate(exchangeRate));
-        });
-    };
-
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
         Api.user.setLanguage(userWallet.address, text);
@@ -201,10 +189,17 @@ function ProfileScreen() {
             setShowingResults(true);
         }
     };
-
+    
     const handleSelectCurrency = (currency: string) => {
-        Api.user.setCurrency(userWallet.address, currency);
         setCurrency(currency);
+        Api.user.setCurrency(userWallet.address, currency);
+        updateUserMetadataCache();
+        // update exchange rate!
+        const exchangeRate = (rates as any)[currency.toUpperCase()].rate;
+        batch(() => {
+            dispatch(setUserMetadata({ ...user, currency: currency }));
+            dispatch(setUserExchangeRate(exchangeRate));
+        });
         setIsDialogCurrencyOpen(false);
         setSearchCurrency('');
         setSearchCurrencyResult([]);
