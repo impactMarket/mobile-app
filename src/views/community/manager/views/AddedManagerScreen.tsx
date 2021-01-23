@@ -1,10 +1,13 @@
 import i18n from 'assets/i18n';
+import Button from 'components/core/Button';
+import BackSvg from 'components/svg/header/BackSvg';
+import { decrypt } from 'helpers/encryption';
+import { isOutOfTime } from 'helpers/index';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { IManagerDetailsManager } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
-import BackSvg from 'components/svg/header/BackSvg';
-import { IManagerDetailsManager } from 'helpers/types/endpoints';
 import {
     FlatList,
     RefreshControl,
@@ -13,13 +16,10 @@ import {
     Alert,
 } from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
-import { iptcColors } from 'styles/index';
-import Button from 'components/core/Button';
-import { decrypt } from 'helpers/encryption';
+import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
-import { IRootState } from 'helpers/types/state';
-import { isOutOfTime } from 'helpers/index';
+import { iptcColors } from 'styles/index';
 
 function AddedManagerScreen() {
     const dispatch = useDispatch();
@@ -63,7 +63,6 @@ function AddedManagerScreen() {
             });
         };
         loadActiveBeneficiaries();
-        return;
     }, []);
 
     const handleRemoveManager = async (
@@ -173,7 +172,7 @@ function AddedManagerScreen() {
                 }}
             >
                 <ActivityIndicator
-                    animating={true}
+                    animating
                     size="large"
                     color={iptcColors.softBlue}
                 />
@@ -214,7 +213,7 @@ function AddedManagerScreen() {
                 totalManagers > 2 && (
                     <Button
                         modeType="gray"
-                        bold={true}
+                        bold
                         disabled={removing[index]}
                         loading={removing[index]}
                         style={{ marginVertical: 5 }}
@@ -231,7 +230,7 @@ function AddedManagerScreen() {
     );
 
     const formatAddressOrName = (from: IManagerDetailsManager) => {
-        let titleMaxLength = 25;
+        const titleMaxLength = 25;
         const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
         if (from.username !== null && fromHasName) {
@@ -263,7 +262,7 @@ function AddedManagerScreen() {
             onEndReachedThreshold={0.7}
             onEndReached={handleOnEndReached}
             // Performance settings
-            removeClippedSubviews={true} // Unmount components when outside of window
+            removeClippedSubviews // Unmount components when outside of window
             initialNumToRender={2} // Reduce initial render amount
             maxToRenderPerBatch={1} // Reduce number in each render batch
             updateCellsBatchingPeriod={100} // Increase time between renders

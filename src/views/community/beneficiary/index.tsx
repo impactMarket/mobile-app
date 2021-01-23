@@ -1,9 +1,22 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import BaseCommunity from 'components/BaseCommunity';
+import Button from 'components/core/Button';
+import Card from 'components/core/Card';
+import ClaimSvg from 'components/svg/ClaimSvg';
+import WaitingRedSvg from 'components/svg/WaitingRedSvg';
+import * as IntentLauncher from 'expo-intent-launcher';
+import * as Location from 'expo-location';
+import { Screens } from 'helpers/constants';
 import { humanifyCurrencyAmount } from 'helpers/currency';
-import { iptcColors } from 'styles/index';
+import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/app';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { ITabBarIconProps } from 'helpers/types/common';
+import { IRootState } from 'helpers/types/state';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
 import {
     StyleSheet,
     Text,
@@ -12,6 +25,7 @@ import {
     RefreshControl,
     Dimensions,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
     ActivityIndicator,
     Headline,
@@ -23,24 +37,10 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
-import * as Location from 'expo-location';
-import * as IntentLauncher from 'expo-intent-launcher';
+import CacheStore from 'services/cacheStore';
+import { iptcColors } from 'styles/index';
 
 import Claim from './Claim';
-import { ScrollView } from 'react-native-gesture-handler';
-import moment from 'moment';
-import BaseCommunity from 'components/BaseCommunity';
-import Button from 'components/core/Button';
-import { Trans } from 'react-i18next';
-import CacheStore from 'services/cacheStore';
-import Card from 'components/core/Card';
-import WaitingRedSvg from 'components/svg/WaitingRedSvg';
-import ClaimSvg from 'components/svg/ClaimSvg';
-import { Screens } from 'helpers/constants';
-import { IRootState } from 'helpers/types/state';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
-import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/app';
-import { ITabBarIconProps } from 'helpers/types/common';
 
 function BeneficiaryScreen() {
     let timeoutTimeDiff: number | undefined;
@@ -216,7 +216,7 @@ function BeneficiaryScreen() {
                 }}
             >
                 <ActivityIndicator
-                    animating={true}
+                    animating
                     size="large"
                     color={iptcColors.softBlue}
                 />
@@ -255,11 +255,11 @@ function BeneficiaryScreen() {
             >
                 <BaseCommunity
                     community={community}
-                    full={true}
+                    full
                     action={
                         <Button
                             modeType="gray"
-                            bold={true}
+                            bold
                             style={{
                                 marginVertical: 22.5,
                                 alignSelf: 'center',
@@ -466,7 +466,7 @@ function BeneficiaryScreen() {
                                     marginTop: 20,
                                     marginHorizontal: 5,
                                 }}
-                                bold={true}
+                                bold
                                 onPress={() =>
                                     IntentLauncher.startActivityAsync(
                                         IntentLauncher.ACTION_DATE_SETTINGS
@@ -481,7 +481,7 @@ function BeneficiaryScreen() {
                                     marginTop: 8,
                                     marginHorizontal: 5,
                                 }}
-                                bold={true}
+                                bold
                                 onPress={() =>
                                     dispatch(
                                         setAppSuspectWrongDateTime(false, 0)

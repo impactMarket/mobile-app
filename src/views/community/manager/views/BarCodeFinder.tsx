@@ -8,7 +8,7 @@ interface IBarCodeFinderProps {
     borderColor: string;
 }
 // Thanks to https://github.com/react-native-camera/react-native-camera/issues/1156#issuecomment-370035072
-export class BarCodeFinder extends Component<IBarCodeFinderProps, {}> {
+export class BarCodeFinder extends Component<IBarCodeFinderProps, object> {
     constructor(props: any) {
         super(props);
     }

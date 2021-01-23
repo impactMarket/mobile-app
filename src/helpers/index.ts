@@ -1,18 +1,21 @@
 import { ContractKit } from '@celo/contractkit';
+import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import moment from 'moment';
-import { Dispatch } from 'redux';
-import Api from 'services/api';
-
-import CommunityContractABI from '../contracts/CommunityABI.json';
 import * as Linking from 'expo-linking';
 import {
     ICommunity,
     ICommunityLightDetails,
     IUserHello,
 } from 'helpers/types/endpoints';
+import moment from 'moment';
 import { batch } from 'react-redux';
+import { Dispatch } from 'redux';
+import Api from 'services/api';
+
+import config from '../../config';
+import CommunityContractABI from '../contracts/CommunityABI.json';
+import { setAppExchangeRatesAction } from './redux/actions/app';
 import {
     setCommunityContract,
     setCommunityMetadata,
@@ -22,10 +25,7 @@ import {
     setUserMetadata,
     setUserWallet,
 } from './redux/actions/user';
-import { setAppExchangeRatesAction } from './redux/actions/app';
 import { UserAttributes } from './types/models';
-import config from '../../config';
-import countriesJSON from 'assets/countries.json';
 
 export function generateUrlWithCloudFront(s3ContentKey: string) {
     // for backwards support
@@ -67,7 +67,7 @@ export async function welcomeUser(
     userMetadata: UserAttributes
 ) {
     const balance = await getUserBalance(kit, address);
-    let language = userMetadata.language;
+    const { language } = userMetadata;
     if (i18n.language !== language) {
         i18n.changeLanguage(language);
         moment.locale(language);

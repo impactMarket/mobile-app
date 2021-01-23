@@ -1,22 +1,22 @@
-import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import TabNavigator from './TabNavigator';
-
-import CommunityDetailsScreen from 'views/community/details';
-import CreateCommunityScreen from 'views/createCommunity';
-import FAQScreen from 'views/faq';
-import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
-import AddedBeneficiaryScreen from 'views/community/manager/views/AddedBeneficiaryScreen';
-import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBeneficiaryScreen';
-import AddBeneficiaryScreen from 'views/community/manager/views/AddBeneficiaryScreen';
-import AddManagerScreen from 'views/community/manager/views/AddManagerScreen';
-import WelcomeScreen from 'views/welcome/index';
-import { iptcColors } from 'styles/index';
-import { useSelector } from 'react-redux';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
-import AddedManagerScreen from 'views/community/manager/views/AddedManagerScreen';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { iptcColors } from 'styles/index';
+import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
+import CommunityDetailsScreen from 'views/community/details';
 import WaitingTxScreen from 'views/community/details/donate/waitingTx';
+import AddBeneficiaryScreen from 'views/community/manager/views/AddBeneficiaryScreen';
+import AddManagerScreen from 'views/community/manager/views/AddManagerScreen';
+import AddedBeneficiaryScreen from 'views/community/manager/views/AddedBeneficiaryScreen';
+import AddedManagerScreen from 'views/community/manager/views/AddedManagerScreen';
+import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBeneficiaryScreen';
+import CreateCommunityScreen from 'views/createCommunity';
+import FAQScreen from 'views/faq';
+import WelcomeScreen from 'views/welcome/index';
+
+import TabNavigator from './TabNavigator';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen

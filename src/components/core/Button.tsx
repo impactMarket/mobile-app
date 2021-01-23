@@ -1,7 +1,7 @@
-import { iptcColors } from 'styles/index';
 import React, { Component } from 'react';
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
-import { Button as RNPButton, Text } from 'react-native-paper';
+import { Button as RNPButton } from 'react-native-paper';
+import { iptcColors } from 'styles/index';
 
 interface IButtonProps {
     modeType: 'green' | 'gray' | 'default';

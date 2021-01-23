@@ -1,6 +1,7 @@
-import BigNumber from 'bignumber.js';
-import config from '../../config';
 import currenciesJSON from 'assets/currencies.json';
+import BigNumber from 'bignumber.js';
+
+import config from '../../config';
 
 export function formatInputAmountToTransfer(inputAmount: string) {
     if (inputAmount.indexOf(',') === 0 || inputAmount.indexOf('.') === 0) {

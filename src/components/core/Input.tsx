@@ -1,12 +1,12 @@
-import { iptcColors } from 'styles/index';
 import React, { Component } from 'react';
 import { TextInput, TextInputProps, View } from 'react-native';
 import { Paragraph } from 'react-native-paper';
+import { iptcColors } from 'styles/index';
 
 interface IInputProps extends TextInputProps {
     label: string;
 }
-export default class Input extends Component<IInputProps, {}> {
+export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
         super(props);
     }

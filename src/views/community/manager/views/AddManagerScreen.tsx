@@ -11,6 +11,7 @@ import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
+
 import ScanQR from './ScanQR';
 
 function AddManagerScreen() {

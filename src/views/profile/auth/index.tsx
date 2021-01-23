@@ -1,37 +1,39 @@
+import { newKitFromWeb3 } from '@celo/contractkit';
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
-import * as Linking from 'expo-linking';
-import { makeDeeplinkUrl } from 'helpers/index';
-import { iptcColors } from 'styles/index';
-import { welcomeUser } from 'helpers/index';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch, useSelector, useStore } from 'react-redux';
-import Api from 'services/api';
-import { registerForPushNotifications } from 'services/pushNotifications';
-import * as Device from 'expo-device';
-import * as Localization from 'expo-localization';
-import Web3 from 'web3';
-import { newKitFromWeb3 } from '@celo/contractkit';
-import config from '../../../../config';
-import * as Sentry from 'sentry-expo';
-import { analytics } from 'services/analytics';
 import Button from 'components/core/Button';
+import * as Device from 'expo-device';
+import * as Linking from 'expo-linking';
+import * as Localization from 'expo-localization';
 import {
     Screens,
     STORAGE_USER_ADDRESS,
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
-import { IRootState } from 'helpers/types/state';
-import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
-import CacheStore from 'services/cacheStore';
-import { startNotificationsListeners } from 'services/pushNotifications';
+import { makeDeeplinkUrl, welcomeUser } from 'helpers/index';
 import { setPushNotificationListeners } from 'helpers/redux/actions/app';
+import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
+import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
+import { IRootState } from 'helpers/types/state';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useDispatch, useSelector, useStore } from 'react-redux';
+import * as Sentry from 'sentry-expo';
+import { analytics } from 'services/analytics';
+import Api from 'services/api';
+import CacheStore from 'services/cacheStore';
+import {
+    registerForPushNotifications,
+    startNotificationsListeners,
+} from 'services/pushNotifications';
+import { iptcColors } from 'styles/index';
+import Web3 from 'web3';
+
+import config from '../../../../config';
 
 function Auth() {
     const insets = useSafeAreaInsets();
@@ -175,7 +177,7 @@ function Auth() {
             return (
                 <Button
                     modeType="gray"
-                    bold={true}
+                    bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(androidURL)}
@@ -189,7 +191,7 @@ function Auth() {
             return (
                 <Button
                     modeType="gray"
-                    bold={true}
+                    bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(iosURL)}
@@ -204,7 +206,7 @@ function Auth() {
             <>
                 <Button
                     modeType="gray"
-                    bold={true}
+                    bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(iosURL)}
@@ -213,7 +215,7 @@ function Auth() {
                 </Button>
                 <Button
                     modeType="gray"
-                    bold={true}
+                    bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(androidURL)}
@@ -243,7 +245,7 @@ function Auth() {
                 <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
                 <Button
                     modeType="green"
-                    bold={true}
+                    bold
                     onPress={() => login()}
                     loading={connecting}
                     style={{ width: '100%', marginTop: 16 }}

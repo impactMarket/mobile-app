@@ -1,13 +1,14 @@
 import i18n from 'assets/i18n';
+import Button from 'components/core/Button';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera } from 'expo-camera';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { StyleSheet, View, Alert, Modal } from 'react-native';
 import { Portal } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
-import { Camera } from 'expo-camera';
+
 import { BarCodeFinder } from './BarCodeFinder';
-import Button from 'components/core/Button';
 
 interface IModalScanQRProps {
     isVisible: boolean;
@@ -118,7 +119,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                             />
                             <Button
                                 modeType="default"
-                                bold={true}
+                                bold
                                 style={{
                                     position: 'absolute',
                                     bottom: '5%',

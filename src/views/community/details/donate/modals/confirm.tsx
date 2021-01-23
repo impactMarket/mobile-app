@@ -1,23 +1,23 @@
 import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
-import Modal from 'components/Modal';
-import { getCurrencySymbol } from 'helpers/currency';
-import React, { Component, Dispatch } from 'react';
-import { Text, View, StyleSheet, Alert } from 'react-native';
-import { Paragraph } from 'react-native-paper';
-import { Trans } from 'react-i18next';
-import { batch, connect, ConnectedProps } from 'react-redux';
-import { IRootState } from 'helpers/types/state';
 import { BigNumber } from 'bignumber.js';
-import { analytics } from 'services/analytics';
+import Modal from 'components/Modal';
+import Button from 'components/core/Button';
 import * as Device from 'expo-device';
-import { celoWalletRequest } from 'services/celoWallet';
-import Api from 'services/api';
 import { modalDonateAction, Screens } from 'helpers/constants';
-import { ModalActionTypes, UserActionTypes } from 'helpers/types/redux';
-import { navigationRef } from 'helpers/rootNavigation';
+import { getCurrencySymbol } from 'helpers/currency';
 import { getUserBalance } from 'helpers/index';
 import { setUserWalletBalance } from 'helpers/redux/actions/user';
+import { navigationRef } from 'helpers/rootNavigation';
+import { ModalActionTypes, UserActionTypes } from 'helpers/types/redux';
+import { IRootState } from 'helpers/types/state';
+import React, { Component, Dispatch } from 'react';
+import { Trans } from 'react-i18next';
+import { Text, View, StyleSheet, Alert } from 'react-native';
+import { Paragraph } from 'react-native-paper';
+import { batch, connect, ConnectedProps } from 'react-redux';
+import { analytics } from 'services/analytics';
+import Api from 'services/api';
+import { celoWalletRequest } from 'services/celoWallet';
 
 interface IConfirmModalProps {}
 interface IConfirmModalState {
@@ -142,7 +142,7 @@ class ConfirmModal extends Component<
                         >
                             <Button
                                 modeType="gray"
-                                bold={true}
+                                bold
                                 style={{
                                     marginRight: 14.48,
                                     flex: 1,
@@ -154,7 +154,7 @@ class ConfirmModal extends Component<
                             </Button>
                             <Button
                                 modeType="default"
-                                bold={true}
+                                bold
                                 style={{ flex: 1 }}
                                 loading={donating}
                                 labelStyle={styles.donateLabel}
@@ -226,7 +226,7 @@ const mapStateToProps = (state: IRootState) => {
         userAddress: address,
         userCurrency: currency,
         visible: modalConfirmOpen,
-        community: community,
+        community,
     };
 };
 

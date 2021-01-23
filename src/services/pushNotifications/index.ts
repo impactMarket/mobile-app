@@ -1,22 +1,23 @@
-import * as Notifications from 'expo-notifications';
 import { ContractKit } from '@celo/contractkit';
-import { navigationRef } from 'helpers/rootNavigation';
-import { Dispatch } from 'redux';
-import Api from 'services/api';
-import CommunityContractABI from '../../contracts/CommunityABI.json';
+import { Subscription } from '@unimodules/core';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+import { Screens } from 'helpers/constants';
 import {
     setCommunityContract,
     setCommunityMetadata,
     setUserIsBeneficiary,
     setUserIsCommunityManager,
 } from 'helpers/redux/actions/user';
-import { batch } from 'react-redux';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
+import { navigationRef } from 'helpers/rootNavigation';
 import { Platform } from 'react-native';
+import { batch } from 'react-redux';
+import { Dispatch } from 'redux';
 import * as Sentry from 'sentry-expo';
-import { Screens } from 'helpers/constants';
-import { Subscription } from '@unimodules/core';
+import Api from 'services/api';
+
+import CommunityContractABI from '../../contracts/CommunityABI.json';
 
 export async function registerForPushNotifications(): Promise<string> {
     let token = '';

@@ -1,6 +1,12 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
+import BackSvg from 'components/svg/header/BackSvg';
 import { amountToCurrency } from 'helpers/currency';
+import { decrypt } from 'helpers/encryption';
+import { isOutOfTime } from 'helpers/index';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -10,12 +16,6 @@ import {
     FlatList,
     RefreshControl,
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
-import { celoWalletRequest } from 'services/celoWallet';
-import BackSvg from 'components/svg/header/BackSvg';
-import { IRootState } from 'helpers/types/state';
-import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
 import {
     ActivityIndicator,
     IconButton,
@@ -23,10 +23,10 @@ import {
     Paragraph,
     Searchbar,
 } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
+import { celoWalletRequest } from 'services/celoWallet';
 import { iptcColors } from 'styles/index';
-import { decrypt } from 'helpers/encryption';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
-import { isOutOfTime } from 'helpers/index';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -81,7 +81,6 @@ function AddedBeneficiaryScreen() {
             });
         };
         loadActiveBeneficiaries();
-        return;
     }, []);
 
     const handleRemoveBeneficiary = async (
@@ -192,7 +191,7 @@ function AddedBeneficiaryScreen() {
                 }}
             >
                 <ActivityIndicator
-                    animating={true}
+                    animating
                     size="large"
                     color={iptcColors.softBlue}
                 />
@@ -242,7 +241,7 @@ function AddedBeneficiaryScreen() {
             right={() => (
                 <Button
                     modeType="gray"
-                    bold={true}
+                    bold
                     disabled={removing[index]}
                     loading={removing[index]}
                     style={{ marginVertical: 5 }}
@@ -278,7 +277,7 @@ function AddedBeneficiaryScreen() {
     };
 
     const formatAddressOrName = (from: IManagerDetailsBeneficiary) => {
-        let titleMaxLength = 25;
+        const titleMaxLength = 25;
         const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
         if (from.username !== null && fromHasName) {
@@ -326,7 +325,7 @@ function AddedBeneficiaryScreen() {
                 onEndReachedThreshold={0.7}
                 onEndReached={handleOnEndReached}
                 // Performance settings
-                removeClippedSubviews={true} // Unmount components when outside of window
+                removeClippedSubviews // Unmount components when outside of window
                 initialNumToRender={2} // Reduce initial render amount
                 maxToRenderPerBatch={1} // Reduce number in each render batch
                 updateCellsBatchingPeriod={100} // Increase time between renders

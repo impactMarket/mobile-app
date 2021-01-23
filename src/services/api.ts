@@ -1,9 +1,7 @@
-import axios from 'axios';
-import { DevSettings } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import Constants from 'expo-constants';
-
-import config from '../../config';
+import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import {
     CommunityCreationAttributes,
     ICommunity,
@@ -13,7 +11,9 @@ import {
     IManagerDetailsBeneficiary,
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
-import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
+import { DevSettings } from 'react-native';
+
+import config from '../../config';
 
 axios.defaults.baseURL = config.baseApiUrl;
 

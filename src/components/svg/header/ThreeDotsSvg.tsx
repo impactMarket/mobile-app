@@ -1,14 +1,14 @@
-import * as React from 'react';
-import { useState } from 'react';
-import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
-import { BottomSheet } from 'react-native-btr';
+import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
-import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
-import i18n from 'assets/i18n';
-import { useSelector } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
+import * as React from 'react';
+import { useState } from 'react';
+import { BottomSheet } from 'react-native-btr';
+import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
+import { useSelector } from 'react-redux';
 
 function ThreeDotsSvg(props: SvgProps) {
     const navigation = useNavigation();
@@ -65,7 +65,7 @@ function ThreeDotsSvg(props: SvgProps) {
                         </Button> */}
                         <Button
                             modeType="gray"
-                            bold={true}
+                            bold
                             style={{ marginVertical: 10 }}
                             onPress={() => {
                                 setOpenThreeDotsMenu(false);

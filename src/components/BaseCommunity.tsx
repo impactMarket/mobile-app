@@ -1,10 +1,11 @@
-import React from 'react';
 import { Entypo } from '@expo/vector-icons';
-import { Text, View, StyleSheet } from 'react-native';
-import { ICommunity } from 'helpers/types/endpoints';
-import CachedImage from './CacheImage';
-import { generateUrlWithCloudFront } from 'helpers/index';
 import countriesJSON from 'assets/countries.json';
+import { generateUrlWithCloudFront } from 'helpers/index';
+import { ICommunity } from 'helpers/types/endpoints';
+import React from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+
+import CachedImage from './CacheImage';
 
 const countries: {
     [key: string]: {

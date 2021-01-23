@@ -1,22 +1,23 @@
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
-import Button from 'components/core/Button';
 import Modal from 'components/Modal';
+import Button from 'components/core/Button';
+import Clipboard from 'expo-clipboard';
+import { modalDonateAction } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     getCurrencySymbol,
 } from 'helpers/currency';
+import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Alert, TextInput } from 'react-native';
 import { Paragraph, Snackbar } from 'react-native-paper';
-import { iptcColors } from 'styles/index';
-import Clipboard from 'expo-clipboard';
-import config from '../../../../../../config';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
-import { ModalActionTypes } from 'helpers/types/redux';
-import { modalDonateAction } from 'helpers/constants';
+import { iptcColors } from 'styles/index';
+
+import config from '../../../../../../config';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
@@ -132,7 +133,7 @@ class DonateModal extends Component<
             userAddress.length > 0 ? (
                 <Button
                     modeType="default"
-                    bold={true}
+                    bold
                     labelStyle={styles.donateLabel}
                     loading={donating}
                     disabled={
@@ -149,7 +150,7 @@ class DonateModal extends Component<
                 <Button
                     icon="alert"
                     modeType="default"
-                    bold={true}
+                    bold
                     style={{
                         backgroundColor: '#f0ad4e',
                     }}
@@ -191,7 +192,7 @@ class DonateModal extends Component<
                         <>
                             <Button
                                 modeType="gray"
-                                bold={true}
+                                bold
                                 style={{ marginBottom: 10 }}
                                 labelStyle={styles.donateLabel}
                                 onPress={this.handleCopyAddressToClipboard}
@@ -232,7 +233,7 @@ class DonateModal extends Component<
                             <TextInput
                                 keyboardType="numeric"
                                 maxLength={9}
-                                autoFocus={true}
+                                autoFocus
                                 style={{
                                     fontFamily: 'Gelion-Regular',
                                     fontSize: 50,
@@ -386,7 +387,7 @@ const mapStateToProps = (state: IRootState) => {
         userBalance: state.user.wallet.balance,
         exchangeRate,
         visible: modalDonateOpen,
-        community: community,
+        community,
         inputAmount: donationValues.inputAmount,
     };
 };

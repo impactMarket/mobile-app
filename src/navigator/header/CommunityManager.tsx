@@ -1,7 +1,7 @@
-import React from 'react';
-import { View } from 'react-native';
 import FAQSvg from 'components/svg/header/FaqSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
+import React from 'react';
+import { View } from 'react-native';
 
 function CommunityManager() {
     return (

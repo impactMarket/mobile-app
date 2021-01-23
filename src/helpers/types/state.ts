@@ -1,7 +1,8 @@
 import { ContractKit } from '@celo/contractkit';
+import { Subscription } from '@unimodules/core';
+
 import { ICommunity } from './endpoints';
 import { UserAttributes } from './models';
-import { Subscription } from '@unimodules/core';
 
 export interface IUserWallet {
     address: string;

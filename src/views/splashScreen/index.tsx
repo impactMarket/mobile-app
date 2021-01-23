@@ -1,6 +1,7 @@
 import React from 'react';
 import { StatusBar, View } from 'react-native';
 import { iptcColors } from 'styles/index';
+
 import LogoWhiteSvg from './LogoWhiteSvg';
 
 function SplashScreen() {

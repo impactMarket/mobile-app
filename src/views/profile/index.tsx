@@ -1,15 +1,25 @@
+import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import Card from 'components/core/Card';
+import Input from 'components/core/Input';
+import Select from 'components/core/Select';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
-import { decrypt } from 'helpers/encryption';
-import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
+import * as Linking from 'expo-linking';
 import {
     amountToCurrency,
     getCurrencySymbol,
     humanifyCurrencyAmount,
 } from 'helpers/currency';
-import { iptcColors } from 'styles/index';
+import { decrypt } from 'helpers/encryption';
+import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
+import {
+    setUserExchangeRate,
+    setUserLanguage,
+    setUserMetadata,
+    setUserWalletBalance,
+} from 'helpers/redux/actions/user';
+import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
 import {
@@ -33,18 +43,8 @@ import {
 } from 'react-native-paper';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
-import * as Linking from 'expo-linking';
-import Input from 'components/core/Input';
-import Select from 'components/core/Select';
-import { IRootState } from 'helpers/types/state';
-import {
-    setUserExchangeRate,
-    setUserLanguage,
-    setUserMetadata,
-    setUserWalletBalance,
-} from 'helpers/redux/actions/user';
 import CacheStore from 'services/cacheStore';
-import currenciesJSON from 'assets/currencies.json';
+import { iptcColors } from 'styles/index';
 
 const currencies: {
     [key: string]: {
@@ -472,7 +472,7 @@ function ProfileScreen() {
                                 elevation: 0,
                                 borderRadius: 6,
                             }}
-                            autoFocus={true}
+                            autoFocus
                             clearIcon={(p) => (
                                 <IconButton
                                     icon="close"

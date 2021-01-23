@@ -1,6 +1,6 @@
 import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
 import Modal from 'components/Modal';
+import Button from 'components/core/Button';
 import { modalDonateAction } from 'helpers/constants';
 import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
@@ -10,7 +10,7 @@ import { Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 
 interface IErrorModalProps {}
-class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, {}> {
+class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
     render() {
         const {
             visible,
@@ -28,7 +28,7 @@ class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, {}> {
                 buttons={
                     <Button
                         modeType="gray"
-                        bold={true}
+                        bold
                         labelStyle={styles.donateLabel}
                         onPress={goBackToDonateModal}
                     >

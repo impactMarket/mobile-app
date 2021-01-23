@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import React from 'react';
-import { Alert, View } from 'react-native';
-import { Headline } from 'react-native-paper';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import { Screens } from 'helpers/constants';
+import React from 'react';
+import { Alert, View } from 'react-native';
+import { Headline } from 'react-native-paper';
 
 interface IBeneficiariesProps {
     beneficiaries: number;
@@ -40,7 +40,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     </Headline>
                     <Button
                         modeType="gray"
-                        bold={true}
+                        bold
                         disabled={beneficiaries === 0}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
@@ -51,7 +51,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     </Button>
                     <Button
                         modeType="gray"
-                        bold={true}
+                        bold
                         disabled={removedBeneficiaries === 0}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
@@ -64,7 +64,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         {hasFundsToNewBeneficiary ? (
                             <Button
                                 modeType="green"
-                                bold={true}
+                                bold
                                 style={{
                                     marginVertical: 5,
                                 }}

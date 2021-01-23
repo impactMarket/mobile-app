@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import { IRootState } from 'helpers/types/state';
-import i18n from 'assets/i18n';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Image } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -85,7 +85,7 @@ function WaitingTxScreen() {
                 </View>
                 <Button
                     modeType="default"
-                    bold={true}
+                    bold
                     style={{
                         margin: 40,
                         display: inProgress ? 'none' : 'flex',

@@ -1,9 +1,9 @@
 import { StackNavigationProp } from '@react-navigation/stack';
+import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
 import React from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
-import i18n from 'assets/i18n';
 
 function CreateCommunity(props: { navigation: StackNavigationProp<any, any> }) {
     return (

@@ -1,3 +1,5 @@
+import * as Crypto from 'expo-crypto';
+import * as FileSystem from 'expo-file-system';
 import React, { Component } from 'react';
 import {
     View,
@@ -6,8 +8,6 @@ import {
     ImageProps,
     ImageURISource,
 } from 'react-native';
-import * as FileSystem from 'expo-file-system';
-import * as Crypto from 'expo-crypto';
 
 interface ICachedImageProps extends ImageProps {
     isBackground?: boolean;
@@ -16,7 +16,7 @@ interface ICachedImageProps extends ImageProps {
 /**
  * The `uri`always exists as this is intended to be for cache web images
  */
-export default class CachedImage extends Component<ICachedImageProps, {}> {
+export default class CachedImage extends Component<ICachedImageProps, object> {
     state = {
         imgURI: '',
     };

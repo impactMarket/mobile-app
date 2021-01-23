@@ -1,21 +1,21 @@
-import React from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import CachedImage from 'components/CacheImage';
+import Card from 'components/core/Card';
+import { Screens } from 'helpers/constants';
+import { humanifyCurrencyAmount } from 'helpers/currency';
 import {
     calculateCommunityProgress,
     claimFrequencyToText,
     generateUrlWithCloudFront,
 } from 'helpers/index';
-import { humanifyCurrencyAmount } from 'helpers/currency';
-import { iptcColors } from 'styles/index';
+import { ICommunityLightDetails } from 'helpers/types/endpoints';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
-import Card from 'components/core/Card';
-import { Screens } from 'helpers/constants';
-import { ICommunityLightDetails } from 'helpers/types/endpoints';
-import CachedImage from 'components/CacheImage';
-import countriesJSON from 'assets/countries.json';
+import { iptcColors } from 'styles/index';
 
 const countries: {
     [key: string]: {

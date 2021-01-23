@@ -1,15 +1,22 @@
 import { useNavigation } from '@react-navigation/native';
-import i18n from 'assets/i18n';
 import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
+import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import Card from 'components/core/Card';
+import Select from 'components/core/Select';
+import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { validateEmail, updateCommunityInfo } from 'helpers/index';
+import { celoNetwork } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     amountToCurrency,
 } from 'helpers/currency';
+import { validateEmail, updateCommunityInfo } from 'helpers/index';
+import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
+import { CommunityCreationAttributes } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     StyleSheet,
@@ -34,23 +41,15 @@ import {
     Text,
     Searchbar,
     List,
-    // ActivityIndicator,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
-import config from '../../../config';
 import { celoWalletRequest } from 'services/celoWallet';
+
+import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
-import Card from 'components/core/Card';
-import BackSvg from 'components/svg/header/BackSvg';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
-import { CommunityCreationAttributes } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
-import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
-import Select from 'components/core/Select';
-import { iptcColors } from 'styles/index';
-import { celoNetwork } from 'helpers/constants';
 
 const countries: {
     [key: string]: {
@@ -382,7 +381,6 @@ function CreateCommunityScreen() {
             );
             setSending(false);
             Api.system.uploadError(userAddress, 'create_community', e);
-            return;
         }
     };
 
@@ -610,7 +608,7 @@ function CreateCommunityScreen() {
                                     </Button>
                                 </ImageBackground>
                                 {!isCoverImageValid && (
-                                    <HelperText type="error" visible={true}>
+                                    <HelperText type="error" visible>
                                         {i18n.t('coverImageRequired')}
                                     </HelperText>
                                 )}
@@ -628,7 +626,7 @@ function CreateCommunityScreen() {
                                         }
                                     />
                                     {!isNameValid && (
-                                        <HelperText type="error" visible={true}>
+                                        <HelperText type="error" visible>
                                             {i18n.t('communityNameRequired')}
                                         </HelperText>
                                     )}
@@ -654,7 +652,7 @@ function CreateCommunityScreen() {
                                         numberOfLines={6}
                                     />
                                     {!isDescriptionValid && (
-                                        <HelperText type="error" visible={true}>
+                                        <HelperText type="error" visible>
                                             {i18n.t(
                                                 'communityDescriptionRequired'
                                             )}
@@ -676,7 +674,7 @@ function CreateCommunityScreen() {
                                         }
                                     />
                                     {!isCityValid && (
-                                        <HelperText type="error" visible={true}>
+                                        <HelperText type="error" visible>
                                             {i18n.t('cityRequired')}
                                         </HelperText>
                                     )}
@@ -711,7 +709,7 @@ function CreateCommunityScreen() {
                                         }
                                     />
                                     {!isCountryValid && (
-                                        <HelperText type="error" visible={true}>
+                                        <HelperText type="error" visible>
                                             {i18n.t('countryRequired')}
                                         </HelperText>
                                     )}
@@ -727,10 +725,7 @@ function CreateCommunityScreen() {
                                             {i18n.t('getGPSLocation')}
                                         </Button>
                                         {!isEnabledGPS && (
-                                            <HelperText
-                                                type="error"
-                                                visible={true}
-                                            >
+                                            <HelperText type="error" visible>
                                                 {i18n.t('enablingGPSRequired')}
                                             </HelperText>
                                         )}
@@ -764,7 +759,7 @@ function CreateCommunityScreen() {
                                         }
                                     />
                                     {!isEmailValid && (
-                                        <HelperText type="error" visible={true}>
+                                        <HelperText type="error" visible>
                                             {i18n.t('emailRequired')}
                                         </HelperText>
                                     )}
@@ -857,7 +852,7 @@ function CreateCommunityScreen() {
                                     }
                                 />
                                 {!isClaimAmountValid && (
-                                    <HelperText type="error" visible={true}>
+                                    <HelperText type="error" visible>
                                         {i18n.t('claimAmountRequired')}
                                     </HelperText>
                                 )}
@@ -912,7 +907,7 @@ function CreateCommunityScreen() {
                                     }
                                 />
                                 {!isMaxClaimValid && (
-                                    <HelperText type="error" visible={true}>
+                                    <HelperText type="error" visible>
                                         {i18n.t('maxClaimAmountRequired')}
                                     </HelperText>
                                 )}
@@ -1003,7 +998,7 @@ function CreateCommunityScreen() {
                                     }
                                 />
                                 {!isIncrementalIntervalValid && (
-                                    <HelperText type="error" visible={true}>
+                                    <HelperText type="error" visible>
                                         {i18n.t('incrementalIntervalRequired')}
                                     </HelperText>
                                 )}
@@ -1080,7 +1075,7 @@ function CreateCommunityScreen() {
                                 elevation: 0,
                                 borderRadius: 6,
                             }}
-                            autoFocus={true}
+                            autoFocus
                             clearIcon={(p) => (
                                 <IconButton
                                     icon="close"
@@ -1164,7 +1159,7 @@ function CreateCommunityScreen() {
                                 elevation: 0,
                                 borderRadius: 6,
                             }}
-                            autoFocus={true}
+                            autoFocus
                             clearIcon={(p) => (
                                 <IconButton
                                     icon="close"

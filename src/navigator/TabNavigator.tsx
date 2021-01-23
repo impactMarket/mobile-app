@@ -1,30 +1,28 @@
-import React, { useLayoutEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import i18n from 'assets/i18n';
-
-import ManageSvg from 'components/svg/ManageSvg';
-import ProfileSvg from 'components/svg/ProfileSvg';
-
-import CommunitiesScreen from 'views/communities';
-import BeneficiaryScreen from 'views/community/beneficiary';
-import CommunityManagerScreen from 'views/community/manager';
-import ProfileScreen from 'views/profile';
 import {
     getFocusedRouteNameFromRoute,
     RouteProp,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import i18n from 'assets/i18n';
+import ManageSvg from 'components/svg/ManageSvg';
+import ProfileSvg from 'components/svg/ProfileSvg';
 import { Screens } from 'helpers/constants';
-
-import { useSelector } from 'react-redux';
-import Logout from './header/Logout';
-import Login from 'views/profile/auth';
-import CreateCommunity from './header/CreateCommunity';
-import CommunityManager from './header/CommunityManager';
-import Beneficiary from './header/Beneficiary';
-import { IRootState } from 'helpers/types/state';
 import { ITabBarIconProps } from 'helpers/types/common';
+import { IRootState } from 'helpers/types/state';
+import React, { useLayoutEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
+import CommunitiesScreen from 'views/communities';
+import BeneficiaryScreen from 'views/community/beneficiary';
+import CommunityManagerScreen from 'views/community/manager';
+import ProfileScreen from 'views/profile';
+import Login from 'views/profile/auth';
+
+import Beneficiary from './header/Beneficiary';
+import CommunityManager from './header/CommunityManager';
+import CreateCommunity from './header/CreateCommunity';
+import Logout from './header/Logout';
 
 function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
     let routeName = getFocusedRouteNameFromRoute(route);
@@ -97,12 +95,11 @@ function TabNavigator({
                     ? Screens.CommunityManager
                     : Screens.Communities
             ),
-            headerShown:
+            headerShown: !(
                 (routeName === undefined &&
                     fromWelcomeScreen === Screens.Auth) ||
                 routeName === Screens.Auth
-                    ? false
-                    : true,
+            ),
             headerRight: () =>
                 getHeaderRight(
                     route,

@@ -1,3 +1,4 @@
+import { ContractKit } from '@celo/contractkit';
 import { toTxResult } from '@celo/contractkit/lib/utils/tx-result';
 import {
     requestTxSig,
@@ -5,11 +6,10 @@ import {
     waitForSignedTxs,
     TxParams,
 } from '@celo/dappkit';
-import { ContractKit } from '@celo/contractkit';
-import * as Sentry from 'sentry-expo';
-import { makeDeeplinkUrl } from 'helpers/index';
-import { TransactionReceipt } from 'web3-core'; // imported from waitReceipt method
 import { celoNetwork } from 'helpers/constants';
+import { makeDeeplinkUrl } from 'helpers/index';
+import * as Sentry from 'sentry-expo';
+import { TransactionReceipt } from 'web3-core'; // imported from waitReceipt method
 
 async function celoWalletRequest(
     from: string,

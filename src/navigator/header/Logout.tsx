@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { batch, useDispatch } from 'react-redux';
 import i18n from 'assets/i18n';
-import { Button } from 'react-native-paper';
 import {
     resetUserApp,
     setUserIsBeneficiary,
     setUserIsCommunityManager,
 } from 'helpers/redux/actions/user';
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import { Button } from 'react-native-paper';
+import { batch, useDispatch } from 'react-redux';
 
 function Logout() {
     const dispatch = useDispatch();

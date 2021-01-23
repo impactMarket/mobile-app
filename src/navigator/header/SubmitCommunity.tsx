@@ -1,6 +1,6 @@
+import i18n from 'assets/i18n';
 import React from 'react';
 import { View } from 'react-native';
-import i18n from 'assets/i18n';
 import { Button } from 'react-native-paper';
 
 function SubmitCommunity(props: { submit: () => void; submitting: boolean }) {

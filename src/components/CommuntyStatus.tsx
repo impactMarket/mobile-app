@@ -1,15 +1,16 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import { calculateCommunityProgress } from 'helpers/index';
 import { amountToCurrency } from 'helpers/currency';
-import { iptcColors } from 'styles/index';
+import { calculateCommunityProgress } from 'helpers/index';
+import { ICommunity } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Title, ProgressBar, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
+import { iptcColors } from 'styles/index';
+
 import Card from './core/Card';
-import { ICommunity } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes

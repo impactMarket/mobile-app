@@ -1,15 +1,15 @@
 import i18n from 'assets/i18n';
+import Button from 'components/core/Button';
+import { modalDonateAction } from 'helpers/constants';
+import { ICommunity } from 'helpers/types/endpoints';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Portal } from 'react-native-paper';
-
 import { useDispatch, Provider, useStore } from 'react-redux';
-import Button from 'components/core/Button';
-import { ICommunity } from 'helpers/types/endpoints';
-import DonateModal from '../donate/modals/donate';
+
 import ConfirmModal from '../donate/modals/confirm';
+import DonateModal from '../donate/modals/donate';
 import ErrorModal from '../donate/modals/error';
-import { modalDonateAction } from 'helpers/constants';
 
 interface IDonateProps {
     community: ICommunity;
@@ -21,7 +21,7 @@ export default function Donate(props: IDonateProps) {
         <>
             <Button
                 modeType="green"
-                bold={true}
+                bold
                 style={styles.donate}
                 labelStyle={{
                     fontSize: 20,

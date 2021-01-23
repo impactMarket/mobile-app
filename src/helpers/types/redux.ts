@@ -1,4 +1,5 @@
 import { ContractKit } from '@celo/contractkit';
+import { Subscription } from '@unimodules/core';
 import {
     SET_USER_CELO_INFO,
     SET_USER_INFO,
@@ -21,10 +22,10 @@ import {
     appAction,
     modalDonateAction,
 } from 'helpers/constants';
+
 import { ICommunity } from './endpoints';
 import { UserAttributes } from './models';
 import { IUserWallet } from './state';
-import { Subscription } from '@unimodules/core';
 
 // action
 interface UserWalletAction {

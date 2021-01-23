@@ -1,9 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import i18n from 'assets/i18n';
+import ClaimSvg from 'components/svg/ClaimSvg';
+import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import ManageSvg from 'components/svg/ManageSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
-import CommunitiesSvg from 'components/svg/CommunitiesSvg';
-import ClaimSvg from 'components/svg/ClaimSvg';
+import { ITabBarIconProps } from 'helpers/types/common';
+import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -11,8 +13,6 @@ import CommunitiesScreen from './communities';
 import BeneficiaryView from './community/beneficiary';
 import CommunityManagerView from './community/manager';
 import ProfileScreen from './profile';
-import { IRootState } from 'helpers/types/state';
-import { ITabBarIconProps } from 'helpers/types/common';
 
 const Tab = createBottomTabNavigator();
 

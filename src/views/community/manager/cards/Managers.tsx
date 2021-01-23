@@ -1,13 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
-import { IRootState } from 'helpers/types/state';
-// import ListManagers from 'components/ListManagers';
+import { Screens } from 'helpers/constants';
 import React from 'react';
 import { View } from 'react-native';
 import { Headline } from 'react-native-paper';
-import i18n from 'assets/i18n';
-import { useNavigation } from '@react-navigation/native';
-import { Screens } from 'helpers/constants';
 
 interface IManagersProps {
     managers: number;
@@ -35,7 +33,7 @@ function Managers(props: IManagersProps) {
                     </Headline>
                     <Button
                         modeType="gray"
-                        bold={true}
+                        bold
                         disabled={managers === 0}
                         style={{ marginVertical: 5 }}
                         onPress={() =>
@@ -46,7 +44,7 @@ function Managers(props: IManagersProps) {
                     </Button>
                     <Button
                         modeType="green"
-                        bold={true}
+                        bold
                         style={{
                             marginVertical: 5,
                         }}

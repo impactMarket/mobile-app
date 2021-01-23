@@ -7,6 +7,7 @@ import { BottomSheet } from 'react-native-btr';
 import { Appbar, Headline } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
 import { connect, ConnectedProps } from 'react-redux';
+
 import Card from './core/Card';
 
 const mapStateToProps = (state: IRootState) => {

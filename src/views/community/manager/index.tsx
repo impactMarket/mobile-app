@@ -1,33 +1,23 @@
-// import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
+import CachedImage from 'components/CacheImage';
 import CommuntyStatus from 'components/CommuntyStatus';
 import * as Linking from 'expo-linking';
 import { updateCommunityInfo } from 'helpers/index';
-import { iptcColors } from 'styles/index';
+import { ICommunity } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import {
-    // Button,
-    // Dialog,
-    // Portal,
-    Headline,
-    ActivityIndicator,
-} from 'react-native-paper';
+import { Headline, ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import { iptcColors } from 'styles/index';
 
 import Beneficiaries from './cards/Beneficiaries';
-// import { Screens } from 'helpers/constants';
-import { IRootState } from 'helpers/types/state';
-import { ICommunity, IManagers } from 'helpers/types/endpoints';
-import Api from 'services/api';
 import Managers from './cards/Managers';
-import CachedImage from 'components/CacheImage';
 
 function CommunityManagerScreen() {
-    // const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const kit = useSelector((state: IRootState) => state.app.kit);
@@ -38,15 +28,7 @@ function CommunityManagerScreen() {
         (state: IRootState) => state.user.community.metadata
     );
 
-    // const [openModalMore, setOpenModalMore] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    // const [detailsForManagers, setDetailsForManagers] = useState<IManagers>({
-    //     managers: 0,
-    //     beneficiaries: {
-    //         active: 0,
-    //         inactive: 0,
-    //     },
-    // });
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
     );
@@ -67,12 +49,6 @@ function CommunityManagerScreen() {
             };
             loadCommunityBalance();
         }
-        // const loadDetailsForManagers = () => {
-        //     if (community.status === 'valid') {
-        //         Api.community.managers().then(setDetailsForManagers);
-        //     }
-        // };
-        // loadDetailsForManagers();
     }, [community, kit]);
 
     const onRefresh = () => {
@@ -123,7 +99,7 @@ function CommunityManagerScreen() {
         }
         return (
             <View style={{ flex: 1 }}>
-                <BaseCommunity community={_community} full={true}>
+                <BaseCommunity community={_community} full>
                     <View
                         style={{
                             marginHorizontal: 20,
@@ -187,7 +163,7 @@ function CommunityManagerScreen() {
                 }}
             >
                 <ActivityIndicator
-                    animating={true}
+                    animating
                     size="large"
                     color={iptcColors.softBlue}
                 />
@@ -195,44 +171,7 @@ function CommunityManagerScreen() {
         );
     }
 
-    return (
-        <>
-            {communityStatus(community)}
-            {/* <Portal>
-                <Dialog
-                    visible={openModalMore}
-                    onDismiss={() => setOpenModalMore(false)}
-                >
-                    <Dialog.Content>
-                        <Button
-                            mode="outlined"
-                            style={{ marginVertical: 10 }}
-                            onPress={() => {
-                                setOpenModalMore(false);
-                                navigation.navigate(Screens.CreateCommunity, {
-                                    community,
-                                });
-                            }}
-                        >
-                            {i18n.t('editCommunityDetails')}
-                        </Button>
-                        <Button
-                            mode="outlined"
-                            style={{ marginVertical: 10 }}
-                            onPress={() => {
-                                setOpenModalMore(false);
-                                navigation.navigate(Screens.CommunityDetails, {
-                                    communityId: community.publicId,
-                                });
-                            }}
-                        >
-                            {i18n.t('viewAsPublic')}
-                        </Button>
-                    </Dialog.Content>
-                </Dialog>
-            </Portal> */}
-        </>
-    );
+    return communityStatus(community);
 }
 
 const styles = StyleSheet.create({

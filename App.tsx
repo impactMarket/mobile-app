@@ -15,7 +15,10 @@ import {
 } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
+import { gt as semverGt, gte as semverGte } from 'semver';
 import * as Sentry from 'sentry-expo';
+import CacheStore from 'services/cacheStore';
+import { startNotificationsListeners } from 'services/pushNotifications';
 import Web3 from 'web3';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import * as Font from 'expo-font';
@@ -31,25 +34,22 @@ import {
 import config from './config';
 import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
 import { welcomeUser } from './src/helpers';
-import { iptcColors } from './src/styles';
 import combinedReducer from './src/helpers/redux/reducers';
-
-import BigNumber from 'bignumber.js';
-
+import Navigator from './src/navigator';
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
+import { iptcColors } from './src/styles';
+
+import BigNumber from 'bignumber.js';
 import Button from 'components/core/Button';
-import CacheStore from 'services/cacheStore';
 import NetInfo from '@react-native-community/netinfo';
 import Card from 'components/core/Card';
 import NoConnectionSvg from 'components/svg/NoConnectionSvg';
 import DownloadSvg from 'components/svg/DownloadSvg';
-import { gt as semverGt, gte as semverGte } from 'semver';
 import * as Linking from 'expo-linking';
 import * as Device from 'expo-device';
 import * as Localization from 'expo-localization';
 import moment from 'moment';
-import Navigator from './src/navigator';
 import * as Analytics from 'expo-firebase-analytics';
 import * as SplashScreen from 'expo-splash-screen';
 import { resetUserApp, setUserLanguage } from 'helpers/redux/actions/user';
@@ -65,7 +65,6 @@ import {
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
 import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
-import { startNotificationsListeners } from 'services/pushNotifications';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -235,7 +234,7 @@ export default class App extends React.Component<any, IAppState> {
             return (
                 <PaperProvider theme={theme}>
                     <Portal>
-                        <Modal visible={true} dismissable={false}>
+                        <Modal visible dismissable={false}>
                             <Card
                                 style={{
                                     marginHorizontal: 20,
@@ -272,7 +271,7 @@ export default class App extends React.Component<any, IAppState> {
             return (
                 <PaperProvider theme={theme}>
                     <Portal>
-                        <Modal visible={true} dismissable={false}>
+                        <Modal visible dismissable={false}>
                             <Card style={{ marginHorizontal: 20 }}>
                                 <Card.Content>
                                     <View
@@ -313,7 +312,7 @@ export default class App extends React.Component<any, IAppState> {
                                             marginTop: 20,
                                             marginHorizontal: 5,
                                         }}
-                                        bold={true}
+                                        bold
                                         onPress={this.handleUpdateClick}
                                     >
                                         {i18n.t('update')}
@@ -441,7 +440,6 @@ export default class App extends React.Component<any, IAppState> {
             return Asset.fromModule(image).downloadAsync();
         });
         await Promise.all(cacheImages);
-        return;
     };
 
     _cacheResourcesAsync = async () => {

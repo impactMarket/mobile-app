@@ -1,16 +1,16 @@
+import { RouteProp } from '@react-navigation/native';
+import i18n from 'assets/i18n';
+import Button from 'components/core/Button';
+import DiversitySvg from 'components/svg/welcome/DiversitySvg';
+import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
+import { Screens } from 'helpers/constants';
+import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
-import i18n from 'assets/i18n';
-import { iptcColors } from 'styles/index';
-import Button from 'components/core/Button';
-import { RouteProp } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Screens } from 'helpers/constants';
-import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
-import DiversitySvg from 'components/svg/welcome/DiversitySvg';
 import { useDispatch } from 'react-redux';
-import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
+import { iptcColors } from 'styles/index';
 
 function Welcome() {
     const insets = useSafeAreaInsets();
@@ -56,7 +56,7 @@ function Welcome() {
             >
                 <Button
                     modeType="green"
-                    bold={true}
+                    bold
                     style={{
                         width: '100%',
                     }}
@@ -74,7 +74,7 @@ function Welcome() {
                 </Button>
                 <Button
                     modeType="gray"
-                    bold={true}
+                    bold
                     style={{
                         marginTop: 16,
                         marginBottom: 41,

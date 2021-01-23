@@ -49,7 +49,6 @@ function RemovedBeneficiaryScreen() {
             });
         };
         loadActiveBeneficiaries();
-        return;
     }, []);
 
     if (beneficiaries === undefined) {
@@ -62,7 +61,7 @@ function RemovedBeneficiaryScreen() {
                 }}
             >
                 <ActivityIndicator
-                    animating={true}
+                    animating
                     size="large"
                     color={iptcColors.softBlue}
                 />
@@ -113,7 +112,7 @@ function RemovedBeneficiaryScreen() {
     );
 
     const formatAddressOrName = (from: IManagerDetailsBeneficiary) => {
-        let titleMaxLength = 25;
+        const titleMaxLength = 25;
         const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
         if (from.username !== null && fromHasName) {
@@ -144,7 +143,7 @@ function RemovedBeneficiaryScreen() {
             onEndReachedThreshold={0.7}
             onEndReached={handleOnEndReached}
             // Performance settings
-            removeClippedSubviews={true} // Unmount components when outside of window
+            removeClippedSubviews // Unmount components when outside of window
             initialNumToRender={2} // Reduce initial render amount
             maxToRenderPerBatch={1} // Reduce number in each render batch
             updateCellsBatchingPeriod={100} // Increase time between renders

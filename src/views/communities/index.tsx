@@ -1,15 +1,16 @@
 import i18n from 'assets/i18n';
+import Select from 'components/core/Select';
+import CommunitiesSvg from 'components/svg/CommunitiesSvg';
+import * as Location from 'expo-location';
+import { ITabBarIconProps } from 'helpers/types/common';
+import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import React, { useState, useEffect, useRef } from 'react';
 import { Alert, FlatList, View } from 'react-native';
-import Api from 'services/api';
-import CommunitiesSvg from 'components/svg/CommunitiesSvg';
-import { ICommunityLightDetails } from 'helpers/types/endpoints';
-import { ITabBarIconProps } from 'helpers/types/common';
-import CommunityCard from './CommunityCard';
-import Select from 'components/core/Select';
 import { ActivityIndicator, Dialog, RadioButton } from 'react-native-paper';
+import Api from 'services/api';
 import { iptcColors } from 'styles/index';
-import * as Location from 'expo-location';
+
+import CommunityCard from './CommunityCard';
 
 function CommunitiesScreen() {
     const flatListRef = useRef<FlatList<ICommunityLightDetails> | null>(null);
@@ -145,7 +146,7 @@ function CommunitiesScreen() {
             {refreshing && (
                 <ActivityIndicator
                     style={{ marginBottom: 22 }}
-                    animating={true}
+                    animating
                     color={iptcColors.blueRibbon}
                 />
             )}
@@ -159,7 +160,7 @@ function CommunitiesScreen() {
                 onEndReachedThreshold={0.7}
                 onEndReached={handleOnEndReached}
                 // Performance settings
-                removeClippedSubviews={true} // Unmount components when outside of window
+                removeClippedSubviews // Unmount components when outside of window
                 initialNumToRender={2} // Reduce initial render amount
                 maxToRenderPerBatch={1} // Reduce number in each render batch
                 updateCellsBatchingPeriod={100} // Increase time between renders

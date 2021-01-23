@@ -1,9 +1,17 @@
 import i18n from 'assets/i18n';
+import BaseCommunity from 'components/BaseCommunity';
 import CommuntyStatus from 'components/CommuntyStatus';
+import Button from 'components/core/Button';
+import Card from 'components/core/Card';
+import BackSvg from 'components/svg/header/BackSvg';
+import FaqSvg from 'components/svg/header/FaqSvg';
+import * as shape from 'd3-shape';
 import * as WebBrowser from 'expo-web-browser';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
-import { iptcColors } from 'styles/index';
+import { ICommunity } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
+import { Trans } from 'react-i18next';
 import { View, StyleSheet, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
@@ -13,23 +21,13 @@ import {
     Text,
     ActivityIndicator,
 } from 'react-native-paper';
+import { LineChart } from 'react-native-svg-charts';
+import { useSelector } from 'react-redux';
+import Api from 'services/api';
+import { iptcColors } from 'styles/index';
 
 import config from '../../../../config';
 import Donate from './donate';
-import Api from 'services/api';
-import { useSelector } from 'react-redux';
-import Button from 'components/core/Button';
-import Card from 'components/core/Card';
-
-import { LineChart } from 'react-native-svg-charts';
-import * as shape from 'd3-shape';
-import BaseCommunity from 'components/BaseCommunity';
-import { Trans } from 'react-i18next';
-
-import BackSvg from 'components/svg/header/BackSvg';
-import FaqSvg from 'components/svg/header/FaqSvg';
-import { ICommunity } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
 
 interface ICommunityDetailsScreen {
     route: {
@@ -59,7 +57,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         Api.community
             .getHistoricalSSI(props.route.params.communityId)
             .then(setHistoricalSSI);
-        return;
     }, []);
 
     const onRefresh = () => {
@@ -94,7 +91,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 strokeWidth: 4,
                                 stroke: 'rgba(45,206,137,1)',
                             }}
-                        ></LineChart>
+                        />
                         <View
                             style={{
                                 ...styles.ssiView,
@@ -149,7 +146,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 }}
             >
                 <ActivityIndicator
-                    animating={true}
+                    animating
                     size="large"
                     color={iptcColors.softBlue}
                 />
@@ -196,7 +193,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     <View style={{ paddingTop: 16 }}>
                                         <Button
                                             modeType="gray"
-                                            bold={true}
+                                            bold
                                             style={{
                                                 backgroundColor:
                                                     'rgba(206, 212, 218, .27)',
@@ -268,7 +265,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         <CommuntyStatus community={community}>
                             <Button
                                 modeType="gray"
-                                bold={true}
+                                bold
                                 style={{ marginTop: '5%' }}
                                 onPress={() =>
                                     WebBrowser.openBrowserAsync(

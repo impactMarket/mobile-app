@@ -1,4 +1,3 @@
-import { iptcColors } from 'styles/index';
 import React, { Component } from 'react';
 import {
     GestureResponderEvent,
@@ -7,13 +6,14 @@ import {
 } from 'react-native';
 import { Paragraph, Text } from 'react-native-paper';
 import Svg, { Path } from 'react-native-svg';
+import { iptcColors } from 'styles/index';
 
 interface ISelectProps {
     label: string;
     value: string;
     onPress?: (event: GestureResponderEvent) => void;
 }
-export default class Select extends Component<ISelectProps, {}> {
+export default class Select extends Component<ISelectProps, object> {
     constructor(props: any) {
         super(props);
     }

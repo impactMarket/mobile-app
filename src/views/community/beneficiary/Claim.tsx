@@ -1,28 +1,29 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import * as Device from 'expo-device';
 import * as Location from 'expo-location';
 import {
     humanifyCurrencyAmount,
     amountToCurrency,
     getCurrencySymbol,
 } from 'helpers/currency';
-import { iptcColors } from 'styles/index';
+import { getUserBalance, isOutOfTime } from 'helpers/index';
+import { setUserWalletBalance } from 'helpers/redux/actions/user';
+import { UserActionTypes } from 'helpers/types/redux';
+import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React from 'react';
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
-import Api from 'services/api';
-import { celoWalletRequest } from 'services/celoWallet';
-import config from '../../../../config';
-import * as Device from 'expo-device';
-import { analytics } from 'services/analytics';
-import { IRootState } from 'helpers/types/state';
-import { getUserBalance, isOutOfTime } from 'helpers/index';
-import { setUserWalletBalance } from 'helpers/redux/actions/user';
-import { UserActionTypes } from 'helpers/types/redux';
 import { Dispatch } from 'redux';
+import { analytics } from 'services/analytics';
+import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
+import { celoWalletRequest } from 'services/celoWallet';
+import { iptcColors } from 'styles/index';
+
+import config from '../../../../config';
 
 interface IClaimProps {
     claimAmount: string;
@@ -335,7 +336,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 {claiming && (
                     <ActivityIndicator
                         style={{ marginRight: 13 }}
-                        animating={true}
+                        animating
                         color="white"
                     />
                 )}

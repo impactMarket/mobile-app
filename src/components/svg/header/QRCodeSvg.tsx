@@ -1,14 +1,14 @@
+import i18n from 'assets/i18n';
+import Card from 'components/core/Card';
+import { IRootState } from 'helpers/types/state';
 import * as React from 'react';
 import { useState } from 'react';
-import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
-import i18n from 'assets/i18n';
+import { View } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
 import { Headline } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
-import { View } from 'react-native';
+import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 import { useSelector } from 'react-redux';
-import Card from 'components/core/Card';
-import { IRootState } from 'helpers/types/state';
 
 function QRCodeSvg(props: SvgProps) {
     const [openQR, setOpenQR] = useState(false);

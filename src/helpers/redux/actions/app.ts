@@ -1,4 +1,5 @@
 import { ContractKit } from '@celo/contractkit';
+import { Subscription } from '@unimodules/core';
 import {
     appAction,
     SET_APP_FROM_WELCOME_SCREEN,
@@ -7,7 +8,6 @@ import {
     SET_EXCHANGE_RATES,
 } from 'helpers/constants';
 import { AppActionTypes } from 'helpers/types/redux';
-import { Subscription } from '@unimodules/core';
 
 export function setCeloKit(kit: ContractKit): AppActionTypes {
     return {
