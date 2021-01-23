@@ -68,14 +68,17 @@ export interface CommunityCreationAttributes {
     };
 }
 
-export interface IUserHello {
-    rates: { currency: string; rate: number }[];
+export interface IUserBaseAuth {
     isBeneficiary: boolean;
     isManager: boolean;
     community?: ICommunity;
 }
 
-export interface IUserAuth extends IUserHello {
+export interface IUserHello extends IUserBaseAuth {
+    rates: { currency: string; rate: number }[];
+}
+
+export interface IUserAuth extends IUserBaseAuth {
     user: UserAttributes;
     token: string;
 }

@@ -6,7 +6,7 @@ import * as Linking from 'expo-linking';
 import {
     ICommunity,
     ICommunityLightDetails,
-    IUserHello,
+    IUserBaseAuth,
 } from 'helpers/types/endpoints';
 import moment from 'moment';
 import { batch } from 'react-redux';
@@ -61,7 +61,8 @@ export async function isOutOfTime() {
 export async function welcomeUser(
     address: string,
     phoneNumber: string,
-    user: IUserHello,
+    user: IUserBaseAuth,
+    rates: { [key: string]: number },
     kit: ContractKit,
     dispatch: Dispatch<any>,
     userMetadata: UserAttributes
@@ -81,17 +82,17 @@ export async function welcomeUser(
             })
         );
         dispatch(setUserMetadata(userMetadata));
-        const allExchangeRates: { [key: string]: number } = {};
-        Object.assign(
-            allExchangeRates,
-            ...user.rates.map((y) => ({ [y.currency]: y.rate }))
-        );
+        // const allExchangeRates: { [key: string]: number } = {};
+        // Object.assign(
+        //     allExchangeRates,
+        //     ...user.rates.map((y) => ({ [y.currency]: y.rate }))
+        // );
         dispatch(
             setUserExchangeRate(
-                allExchangeRates[userMetadata.currency.toUpperCase()]
+                rates[userMetadata.currency.toUpperCase()]
             )
         );
-        dispatch(setAppExchangeRatesAction(allExchangeRates));
+        // dispatch(setAppExchangeRatesAction(allExchangeRates));
         if (user.isBeneficiary || user.isManager) {
             const c = user.community!;
             const communityContract = new kit.web3.eth.Contract(

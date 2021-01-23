@@ -553,10 +553,18 @@ export default class App extends React.Component<any, IAppState> {
                         store.dispatch(resetUserApp());
                         return;
                     }
+                    const exchangeRates = userWelcome.rates;
+                    const userRates: { [key: string]: number } = {};
+                    Object.assign(
+                        userRates,
+                        ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
+                    );
+                    store.dispatch(setAppExchangeRatesAction(userRates));
                     await welcomeUser(
                         address,
                         phoneNumber,
                         userWelcome,
+                        userRates,
                         kit,
                         store.dispatch,
                         userMetadata

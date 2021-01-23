@@ -162,6 +162,7 @@ function Auth() {
                 userAddress,
                 dappkitResponse.phoneNumber,
                 user,
+                store.getState().app.exchangeRates,
                 newKitFromWeb3(new Web3(config.jsonRpc)),
                 dispatch,
                 user.user
