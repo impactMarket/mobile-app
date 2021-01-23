@@ -1,3 +1,4 @@
+import countriesJSON from 'assets/countries.json';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,6 +36,16 @@ import Web3 from 'web3';
 
 import config from '../../../../config';
 
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        phone: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 function Auth() {
     const insets = useSafeAreaInsets();
     const navigation = useNavigation();
@@ -87,10 +98,21 @@ function Auth() {
         if (!supportedLanguages.includes(language)) {
             language = 'en';
         }
+        let currency = '';
+        for (var [, value] of Object.entries(countries)) {
+            if (
+                value.phone ===
+                dappkitResponse.phoneNumber.slice(1, value.phone.length + 1)
+            ) {
+                currency = value.currency;
+                break;
+            }
+        }
 
         const user = await Api.user.auth(
             userAddress,
             language,
+            currency,
             pushNotificationToken
         );
         if (user === undefined) {

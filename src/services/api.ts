@@ -207,11 +207,13 @@ class ApiRouteUser {
     static async auth(
         address: string,
         language: string,
+        currency: string,
         pushNotificationToken: string
     ): Promise<IUserAuth | undefined> {
         return await postRequest<IUserAuth>('/user/authenticate', {
             address,
             language,
+            currency,
             pushNotificationToken,
         });
     }
