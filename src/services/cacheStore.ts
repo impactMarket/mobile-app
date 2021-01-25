@@ -7,6 +7,7 @@ const CACHE_STORE_LOCKED_CLAIM_UNTIL = '@CacheStore:lockedClaimUntil';
 const CACHE_STORE_LAST_LOCKED_CLAIM_AT = '@CacheStore:lastLockedClaimAt';
 const CACHE_STORE_FAILED_CLAIM_TRIES = '@CacheStore:failedClaimTries';
 const CACHE_STORE_LAST_FAILED_CLAIM_TRY = '@CacheStore:lastFailedClaimTry';
+const CACHE_STORE_COMMUNITY_HAD_NO_FUNDS = '@CacheStore:communityHadNoFunds';
 //
 const CACHE_STORE_EXCHANGE_RATES = '@CacheStore:exchangeRates';
 const CACHE_STORE_LAST_EXCHANGE_RATES = '@CacheStore:lastExchangeRates';
@@ -51,6 +52,24 @@ export default class CacheStore {
             return null;
         }
         return JSON.parse(beneficiaryClaim);
+    }
+
+    static async cacheCommunityHadNoFunds() {
+        await AsyncStorage.setItem(CACHE_STORE_COMMUNITY_HAD_NO_FUNDS, 'true');
+    }
+
+    static async getCommunityHadNoFunds(): Promise<boolean | null> {
+        const communityHadNoFunds = await AsyncStorage.getItem(
+            CACHE_STORE_COMMUNITY_HAD_NO_FUNDS
+        );
+        if (communityHadNoFunds === null) {
+            return null;
+        }
+        return communityHadNoFunds === 'true';
+    }
+
+    static async removeCommunityHadNoFunds() {
+        await AsyncStorage.removeItem(CACHE_STORE_COMMUNITY_HAD_NO_FUNDS);
     }
 
     /**

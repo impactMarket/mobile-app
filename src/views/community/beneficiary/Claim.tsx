@@ -49,49 +49,62 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
     }
 
     componentDidMount = async () => {
-        await this._loadAllowance(this.props.cooldownTime);
+        const {
+            communityMetadata,
+            cooldownTime,
+            communityContract,
+            kit,
+        } = this.props;
+        const { state, contract } = communityMetadata;
+        await this._loadAllowance(cooldownTime);
         // check if there's enough funds to enable/disable claim button
-        const { state, contract } = this.props.user.community.metadata;
-        // const notEnoughToClaimOnContract = new BigNumber(state.raised)
-        //     .minus(state.claimed)
-        //     .lt(contract.claimAmount);
-        // don't forget the 5 cents being sent for every new beneficiary
 
         const claimedRatio = new BigNumber(state.claimed).dividedBy(
             state.raised
         );
-        const notEnoughToClaimOnContract = !(
-            state.raised !== '0' &&
-            claimedRatio.lte(new BigNumber(0.989)) &&
+        let notEnoughToClaimOnContract = false;
+        if (
+            claimedRatio.gt(new BigNumber(0.97)) ||
+            (await CacheStore.getCommunityHadNoFunds()) !== null
+        ) {
+            // if it's above 97, check from contract
+            // because the values aren't 100% correct,
+            // as we send 5 cents when a beneficiary is added
+            const stableToken = await kit.contracts.getStableToken();
+            const cUSDBalanceBig = await stableToken.balanceOf(
+                communityContract._address
+            );
+            notEnoughToClaimOnContract = new BigNumber(
+                cUSDBalanceBig.toString()
+            ).lt(contract.claimAmount);
+            if (!notEnoughToClaimOnContract) {
+                CacheStore.removeCommunityHadNoFunds();
+            }
+        } else if (
             new BigNumber(state.raised)
                 .minus(state.claimed)
-                .gt(contract.claimAmount)
-        );
+                .lt(contract.claimAmount)
+        ) {
+            notEnoughToClaimOnContract = true;
+        }
+
         this.setState({ notEnoughToClaimOnContract });
     };
 
-    // componentDidUpdate = (prevProps: Props) => {
-    //     console.log('componentDidUpdate new values, out', prevProps.user.community.metadata.state.raised, this.props.user.community.metadata.state.raised);
-    //     if (
-    //         prevProps.user.community.metadata.state.raised !==
-    //         this.props.user.community.metadata.state.raised
-    //     ) {
-    //         console.log('componentDidUpdate new values');
-    //         const { state } = this.props.user.community.metadata;
-    //         const notEnoughToClaimOnContract =
-    //             state.claimed === '0'
-    //                 ? true
-    //                 : new BigNumber(state.claimed)
-    //                       .dividedBy(state.raised)
-    //                       .gt(new BigNumber(0.989));
-    //         this.setState({ notEnoughToClaimOnContract });
-    //     }
-    // };
-
     handleClaimPress = async () => {
-        const { user, app, updateUserBalance } = this.props;
-        const communityContract = user.community.contract;
-        const { address } = user.wallet;
+        const {
+            updateUserBalance,
+            updateCooldownTime,
+            updateClaimedAmount,
+            communityContract,
+            userAddress,
+            communityMetadata,
+            kit,
+            isManager,
+            userBalance,
+        } = this.props;
+        // const communityContract = user.community.contract;
+        // const { address } = user.wallet;
         const { notEnoughToClaimOnContract } = this.state;
 
         if (notEnoughToClaimOnContract) {
@@ -104,7 +117,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             return;
         }
 
-        if (user.wallet.balance.length < 16) {
+        if (userBalance.length < 16) {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('notEnoughForTransaction'),
@@ -129,11 +142,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
 
         this.setState({ claiming: true });
         celoWalletRequest(
-            address,
+            userAddress,
             communityContract.options.address,
             await communityContract.methods.claim(),
             'beneficiaryclaim',
-            app.kit
+            kit
         )
             .then(async (tx) => {
                 if (tx === undefined) {
@@ -141,8 +154,8 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 }
                 // do not collect manager claim location nor private communities
                 if (
-                    user.community.metadata.visibility === 'public' &&
-                    user.community.isManager === false
+                    communityMetadata.visibility === 'public' &&
+                    isManager === false
                 ) {
                     try {
                         let loc:
@@ -161,7 +174,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                         }
                         if (loc !== undefined) {
                             await Api.user.addClaimLocation(
-                                user.community.metadata.publicId,
+                                communityMetadata.publicId,
                                 {
                                     latitude:
                                         loc.coords.latitude +
@@ -177,7 +190,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             success: 'true',
                         });
                     } catch (e) {
-                        Api.system.uploadError(address, 'claim', e);
+                        Api.system.uploadError(userAddress, 'claim', e);
                         analytics('claim_location', {
                             device: Device.brand,
                             success: 'false',
@@ -188,14 +201,14 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 CacheStore.resetClaimFails();
                 setTimeout(async () => {
                     const newBalanceStr = (
-                        await getUserBalance(app.kit, address)
+                        await getUserBalance(kit, userAddress)
                     ).toString();
                     updateUserBalance(newBalanceStr);
                 }, 1200);
-                this.props.updateCooldownTime().then((newCooldownTime) => {
+                updateCooldownTime().then((newCooldownTime) => {
                     this._loadAllowance(newCooldownTime).then(() => {
                         this.setState({ claiming: false });
-                        this.props.updateClaimedAmount();
+                        updateClaimedAmount();
                     });
                 });
                 analytics('claim', { device: Device.brand, success: 'true' });
@@ -217,7 +230,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                         error = i18n.t('clockNotSynced');
                     } else {
                         // verify remaining time to claim
-                        const newCooldownTime = await this.props.updateCooldownTime();
+                        const newCooldownTime = await updateCooldownTime();
                         const claimDisabled =
                             newCooldownTime * 1000 > new Date().getTime();
                         if (claimDisabled) {
@@ -225,26 +238,51 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             error = i18n.t('transactionPossiblyNotAllowed');
                             this._loadAllowance(newCooldownTime).then(() => {
                                 this.setState({ claiming: false });
-                                this.props.updateClaimedAmount();
+                                updateClaimedAmount();
                             });
                         } else {
                             // verify contract funds :/
                             const communityUpdated = await Api.community.getByPublicId(
-                                this.props.user.community.metadata.publicId
+                                communityMetadata.publicId
                             );
                             if (communityUpdated) {
                                 const { state, contract } = communityUpdated;
                                 const claimedRatio = new BigNumber(
                                     state.claimed
                                 ).dividedBy(state.raised);
-                                const notEnoughToClaimOnContract = !(
-                                    state.raised !== '0' &&
-                                    claimedRatio.lte(new BigNumber(0.989)) &&
+                                let notEnoughToClaimOnContract = false;
+                                if (claimedRatio.gt(new BigNumber(0.97))) {
+                                    // if it's above 97, check from contract
+                                    // because the values aren't 100% correct,
+                                    // as we send 5 cents when a beneficiary is added
+                                    const stableToken = await kit.contracts.getStableToken();
+                                    const cUSDBalanceBig = await stableToken.balanceOf(
+                                        communityContract._address
+                                    );
+                                    notEnoughToClaimOnContract = new BigNumber(
+                                        cUSDBalanceBig.toString()
+                                    ).lt(contract.claimAmount);
+                                } else if (
                                     new BigNumber(state.raised)
                                         .minus(state.claimed)
-                                        .gt(contract.claimAmount)
-                                );
-                                error = i18n.t('communityWentOutOfFunds');
+                                        .lt(contract.claimAmount)
+                                ) {
+                                    notEnoughToClaimOnContract = true;
+                                } else {
+                                    // very rare cases when the two prior conditions don't have a match
+                                    // this is the same code has the first condition
+                                    const stableToken = await kit.contracts.getStableToken();
+                                    const cUSDBalanceBig = await stableToken.balanceOf(
+                                        communityContract._address
+                                    );
+                                    notEnoughToClaimOnContract = new BigNumber(
+                                        cUSDBalanceBig.toString()
+                                    ).lt(contract.claimAmount);
+                                }
+                                if (notEnoughToClaimOnContract) {
+                                    CacheStore.cacheCommunityHadNoFunds();
+                                    error = i18n.t('communityWentOutOfFunds');
+                                }
                                 this.setState({ notEnoughToClaimOnContract });
                             }
                         }
@@ -264,7 +302,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     { cancelable: false }
                 );
                 Api.system.uploadError(
-                    address,
+                    userAddress,
                     'claim',
                     `${e} <Presented Error> ${error}`
                 );
@@ -278,6 +316,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             claiming,
             notEnoughToClaimOnContract,
         } = this.state;
+        const { claimAmount, userCurrency, exchangeRates } = this.props;
 
         const formatedTimeNextClaim = () => {
             let next = '';
@@ -298,9 +337,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     <Text style={styles.mainPageContent}>
                         {i18n.t('youCanClaimXin', {
                             amount: amountToCurrency(
-                                this.props.claimAmount,
-                                this.props.user.metadata.currency,
-                                this.props.app.exchangeRates
+                                claimAmount,
+                                userCurrency,
+                                exchangeRates
                             ),
                         })}
                     </Text>
@@ -350,21 +389,19 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     <View style={{ flexDirection: 'row' }}>
                         <Text style={styles.claimText}>{i18n.t('claimX')}</Text>
                         <Text style={styles.claimTextCurrency}>
-                            {getCurrencySymbol(
-                                this.props.user.metadata.currency
-                            )}
+                            {getCurrencySymbol(userCurrency)}
                         </Text>
                         <Text style={styles.claimText}>
                             {amountToCurrency(
-                                this.props.claimAmount,
-                                this.props.user.metadata.currency,
-                                this.props.app.exchangeRates,
+                                claimAmount,
+                                userCurrency,
+                                exchangeRates,
                                 false
                             )}
                         </Text>
                     </View>
                     <Text style={styles.claimTextCUSD}>
-                        ${humanifyCurrencyAmount(this.props.claimAmount)} cUSD
+                        ${humanifyCurrencyAmount(claimAmount)} cUSD
                     </Text>
                 </View>
             </TouchableOpacity>
@@ -438,8 +475,21 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: IRootState) => {
-    const { user, app } = state;
-    return { user, app };
+    const { metadata, contract } = state.user.community;
+    const { currency, address } = state.user.metadata;
+    const { balance } = state.user.wallet;
+    const { isManager } = state.user.community;
+    const { exchangeRates, kit } = state.app;
+    return {
+        communityMetadata: metadata,
+        communityContract: contract,
+        userCurrency: currency,
+        userAddress: address,
+        userBalance: balance,
+        exchangeRates,
+        kit,
+        isManager,
+    };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
