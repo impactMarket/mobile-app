@@ -29,12 +29,7 @@ const commonConfig = {
     /**
      * CloudFront CDN url for images
      */
-    cloudfrontUrl: process.env.EXPO_CLOUDFRONT_URL!,
-
-    /**
-     * The default API URL
-     */
-    baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
+    cloudfrontUrl: 'https://d1u0m1dl1ef2fx.cloudfront.net',
 };
 const ENV = {
     dev: {
@@ -42,6 +37,11 @@ const ENV = {
          * Block explorer base URL. Contract address is added at the end.
          */
         blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
+
+        /**
+         * The default API URL
+         */
+        baseApiUrl: process.env.EXPO_API_BASE_URL! + '/api',
 
         /**
          * JSON RPC url
@@ -65,6 +65,11 @@ const ENV = {
         blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
 
         /**
+         * The default API URL
+         */
+        baseApiUrl: 'https://impactmarket-api-staging.herokuapp.com/api',
+
+        /**
          * JSON RPC url
          */
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
@@ -84,6 +89,11 @@ const ENV = {
          * Block explorer base URL. Contract address is added at the end.
          */
         blockExplorer: 'https://explorer.celo.org/address/',
+
+        /**
+         * The default API URL
+         */
+        baseApiUrl: 'https://impactmarket-api-production.herokuapp.com/api',
 
         /**
          * JSON RPC url
