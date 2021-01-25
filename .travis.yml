@@ -28,7 +28,7 @@ jobs:
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
         - export PATH="$HOME/.yarn/bin:$PATH"
         - sudo apt-get update
-        - sudo apt-get -y install libsecret-1-0
+        - sudo apt-get -y install libsecret-1-dev
       install:
         - yarn global add expo-cli
       script:
@@ -54,7 +54,7 @@ jobs:
         - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
         - export PATH="$HOME/.yarn/bin:$PATH"
         - sudo apt-get update
-        - sudo apt-get -y install libsecret-1-0
+        - sudo apt-get -y install libsecret-1-dev
         - gem install fastlane
       install:
         - pip install --user awscli
