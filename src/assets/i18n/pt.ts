@@ -236,7 +236,7 @@ export default {
     thankYou: 'Obrigado!',
     donationBeingProcessed: 'O seu donativo está a ser processado...',
     beneficiaryCommunityNoFunds:
-        'Infelizmente, a sua comunidade não tem fundos!',
+        'Infelizmente, a sua comunidade não tem fundos de momento! Por favor, tente mais tarde.',
     possibleNetworkIssues: 'Posivelmente problemas de conexão.',
     networkConnectionLost: 'A ligação à internet foi perdida.',
     networkIssuesRPC: 'Serviço RPC indisponivel. Tente novamente mais tarde.',
