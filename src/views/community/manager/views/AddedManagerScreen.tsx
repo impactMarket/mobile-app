@@ -1,7 +1,6 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
-import { decrypt } from 'helpers/encryption';
 import { isOutOfTime } from 'helpers/index';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { IManagerDetailsManager } from 'helpers/types/endpoints';
@@ -234,11 +233,7 @@ function AddedManagerScreen() {
         const fromHasName = from.username !== null && from.username.length > 0;
         let name = '';
         if (from.username !== null && fromHasName) {
-            try {
-                name = decrypt(from.username);
-            } catch (e) {
-                name = from.username;
-            }
+            name = from.username;
         }
 
         return fromHasName
