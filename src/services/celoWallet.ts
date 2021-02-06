@@ -1,5 +1,5 @@
 import { ContractKit } from '@celo/contractkit';
-// import { toTxResult } from '@celo/contractkit/lib/utils/tx-result';
+import { toTxResult } from '@celo/connect';
 import {
     requestTxSig,
     FeeCurrency,
@@ -9,19 +9,7 @@ import {
 import { celoNetwork } from 'helpers/constants';
 import { makeDeeplinkUrl } from 'helpers/index';
 import * as Sentry from 'sentry-expo';
-import { TransactionReceipt, PromiEvent } from 'web3-core';
-
-function waitForReceipt(
-    tx: PromiEvent<TransactionReceipt>
-): Promise<TransactionReceipt> {
-    return new Promise((resolve, reject) => {
-        tx.once('receipt', (receipt) => {
-            resolve(receipt);
-        }).on('error', (error) => {
-            reject(error);
-        });
-    });
-}
+import { TransactionReceipt } from 'web3-core';
 
 async function celoWalletRequest(
     from: string,
@@ -51,7 +39,7 @@ async function celoWalletRequest(
         });
         const dappkitResponse = await waitForSignedTxs(requestId);
         const tx = dappkitResponse.rawTxs[0];
-        return waitForReceipt(kit.web3.eth.sendSignedTransaction(tx));
+        return toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt();
     } catch (e) {
         if (!__DEV__) {
             // as transaction requests get pending, they then resume all at once
