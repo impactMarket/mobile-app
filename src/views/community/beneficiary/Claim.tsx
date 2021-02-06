@@ -217,17 +217,17 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 CacheStore.cacheFailedClaim();
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
-                let error = i18n.t('possibleNetworkIssues');
+                let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = i18n.t('possiblyValoraNotSynced');
+                    error = 'possiblyValoraNotSynced';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = i18n.t('unknown');
+                    error = 'unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = i18n.t('clockNotSynced');
+                        error = 'clockNotSynced';
                     } else {
                         // verify remaining time to claim
                         const newCooldownTime = await updateCooldownTime();
@@ -235,7 +235,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             newCooldownTime * 1000 > new Date().getTime();
                         if (claimDisabled) {
                             // time to claim was wrong :/
-                            error = i18n.t('transactionPossiblyNotAllowed');
+                            error = 'syncIssues';
                             this._loadAllowance(newCooldownTime).then(() => {
                                 this.setState({ claiming: false });
                                 updateClaimedAmount();
@@ -281,7 +281,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                                 }
                                 if (notEnoughToClaimOnContract) {
                                     CacheStore.cacheCommunityHadNoFunds();
-                                    error = i18n.t('communityWentOutOfFunds');
+                                    error = 'communityWentOutOfFunds';
                                 }
                                 this.setState({ notEnoughToClaimOnContract });
                             }
@@ -291,21 +291,17 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = i18n.t('networkConnectionLost');
+                        error = 'networkConnectionLost';
                     }
-                    error = i18n.t('networkIssuesRPC');
+                    error = 'networkIssuesRPC';
                 }
                 Alert.alert(
                     i18n.t('failure'),
-                    i18n.t('errorClaiming', { error }),
+                    i18n.t('errorClaiming', { error: i18n.t(error) }),
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
-                Api.system.uploadError(
-                    userAddress,
-                    'claim',
-                    `${e} <Presented Error> ${error}`
-                );
+                Api.system.uploadError(userAddress, 'claim', e, error);
             });
     };
 

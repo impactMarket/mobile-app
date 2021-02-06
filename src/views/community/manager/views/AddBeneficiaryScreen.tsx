@@ -106,29 +106,29 @@ function AddBeneficiaryScreen() {
                 navigation.goBack();
             })
             .catch(async (e) => {
-                let error = i18n.t('possibleNetworkIssues');
+                let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = i18n.t('possiblyValoraNotSynced');
+                    error = 'possiblyValoraNotSynced';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = i18n.t('unknown');
+                    error = 'unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = i18n.t('clockNotSynced');
+                        error = 'clockNotSynced';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = i18n.t('networkConnectionLost');
+                        error = 'networkConnectionLost';
                     }
-                    error = i18n.t('networkIssuesRPC');
+                    error = 'networkIssuesRPC';
                 }
                 Alert.alert(
                     i18n.t('failure'),
-                    i18n.t('errorAddingBeneficiary', { error }),
+                    i18n.t('errorAddingBeneficiary', { error: i18n.t(error) }),
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
@@ -137,7 +137,8 @@ function AddBeneficiaryScreen() {
                 Api.system.uploadError(
                     userAddress,
                     'add_beneficiary',
-                    `${JSON.stringify(e)} <Presented Error> ${error}`
+                    e,
+                    error
                 );
             })
             .finally(() => {

@@ -356,7 +356,8 @@ class ApiRouteSystem {
     static async uploadError(
         address: string,
         action: string,
-        error: any
+        error: any,
+        errorShown: string = ''
     ): Promise<boolean> {
         const requestBody = {
             version: Constants.manifest.version,
@@ -365,6 +366,7 @@ class ApiRouteSystem {
             error: JSON.stringify({
                 reason: error.reason,
                 message: error.message,
+                errorShown,
             }),
         };
         const result = await postRequest<boolean>('/mobile/error', requestBody);

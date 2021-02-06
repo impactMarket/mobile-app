@@ -243,6 +243,7 @@ export default {
     possibleNetworkIssues: 'Possible network issues.',
     networkConnectionLost: 'The network connection was lost.',
     networkIssuesRPC: 'RPC service unavailable. Please try again later.',
+    syncIssues: 'Seems like there were syncing issues. Please, try again.',
     possiblyValoraNotSynced:
         "It seems like your valora isn't synced with the network. Please, open Valora and make sure you don't see any message similar to 'Connecting...'",
     unknown: 'Unkown.',

@@ -122,36 +122,37 @@ function AddedManagerScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
-                let error = i18n.t('possibleNetworkIssues');
+                let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = i18n.t('possiblyValoraNotSynced');
+                    error = 'possiblyValoraNotSynced';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = i18n.t('unknown');
+                    error = 'unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = i18n.t('clockNotSynced');
+                        error = 'clockNotSynced';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = i18n.t('networkConnectionLost');
+                        error = 'networkConnectionLost';
                     }
-                    error = i18n.t('networkIssuesRPC');
+                    error = 'networkIssuesRPC';
                 }
                 Alert.alert(
                     i18n.t('failure'),
-                    i18n.t('errorRemovingManager'),
+                    i18n.t('errorRemovingManager', { error: i18n.t(error) }),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
                 Api.system.uploadError(
                     userWallet.address,
                     'remove_manager',
-                    `${e} <Presented Error> ${error}`
+                    e,
+                    error
                 );
             })
             .finally(() => {

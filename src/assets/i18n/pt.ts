@@ -240,6 +240,8 @@ export default {
     possibleNetworkIssues: 'Posivelmente problemas de conexão.',
     networkConnectionLost: 'A ligação à internet foi perdida.',
     networkIssuesRPC: 'Serviço RPC indisponivel. Tente novamente mais tarde.',
+    syncIssues:
+        'Parece que ocorreu um problema de sincronização. Por favor tente novamente.',
     possiblyValoraNotSynced:
         "Parece que a sua valora não está sincronizada com a rede. Por favor, abra a Valora e certifique-se que não tem nenhuma mensagem como 'Connecting...'",
     unknown: 'Desconhecido.',
