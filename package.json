@@ -15,7 +15,7 @@
         "node": "14.15.1"
     },
     "dependencies": {
-        "@celo/dappkit": "0.10.0",
+        "@celo/dappkit": "1.0.1",
         "@react-native-async-storage/async-storage": "1.13.2",
         "@react-native-community/masked-view": "0.1.10",
         "@react-native-community/netinfo": "5.9.7",
