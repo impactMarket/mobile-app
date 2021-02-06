@@ -1,13 +1,15 @@
-import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CachedImage from 'components/CacheImage';
 import CommuntyStatus from 'components/CommuntyStatus';
+import ManageSvg from 'components/svg/ManageSvg';
 import * as Linking from 'expo-linking';
 import { updateCommunityInfo } from 'helpers/index';
+import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunity } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Headline, ActivityIndicator } from 'react-native-paper';
@@ -20,6 +22,7 @@ import Managers from './cards/Managers';
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
 
+    const { i18n } = useTranslation();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
@@ -173,6 +176,16 @@ function CommunityManagerScreen() {
 
     return communityStatus(community);
 }
+
+CommunityManagerScreen.navigationOptions = () => {
+    const { i18n } = useTranslation();
+    return {
+        title: i18n.t('manage'),
+        tabBarIcon: (props: ITabBarIconProps) => (
+            <ManageSvg focused={props.focused} />
+        ),
+    };
+};
 
 const styles = StyleSheet.create({
     container: {

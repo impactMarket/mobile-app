@@ -5,10 +5,7 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'assets/i18n';
-import ManageSvg from 'components/svg/ManageSvg';
-import ProfileSvg from 'components/svg/ProfileSvg';
 import { Screens } from 'helpers/constants';
-import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -124,12 +121,7 @@ function TabNavigator({
         <Tab.Screen
             name={Screens.CommunityManager}
             component={CommunityManagerScreen}
-            options={{
-                title: i18n.t('manage'),
-                tabBarIcon: (props: ITabBarIconProps) => (
-                    <ManageSvg focused={props.focused} />
-                ),
-            }}
+            options={CommunityManagerScreen.navigationOptions}
         />
     );
     const tabCommunities = (
@@ -143,24 +135,14 @@ function TabNavigator({
         <Tab.Screen
             name={Screens.Profile}
             component={ProfileScreen}
-            options={{
-                title: i18n.t('profile'),
-                tabBarIcon: (props: ITabBarIconProps) => (
-                    <ProfileSvg focused={props.focused} />
-                ),
-            }}
+            options={ProfileScreen.navigationOptions}
         />
     );
     const tabAuth = (
         <Tab.Screen
             name={Screens.Auth}
             component={Login}
-            options={{
-                title: i18n.t('profile'),
-                tabBarIcon: (props: ITabBarIconProps) => (
-                    <ProfileSvg focused={props.focused} />
-                ),
-            }}
+            options={ProfileScreen.navigationOptions}
         />
     );
     return (
@@ -186,23 +168,5 @@ function TabNavigator({
         </Tab.Navigator>
     );
 }
-
-// TabNavigator.navigationOptions = (props: {
-//     route: Route<'TabNavigator', object | undefined>;
-//     navigation: any;
-// }): StackNavigationOptions => {
-//     let routeName = getFocusedRouteNameFromRoute(props.route);
-//     console.log(
-//         'TabNavigator.navigationOptions',
-//         routeName,
-//         props.navigation.dangerouslyGetState()
-//     );
-//     if (routeName === Screens.Auth) {
-//         return {
-//             headerShown: false,
-//         };
-//     }
-//     return {};
-// };
 
 export default TabNavigator;

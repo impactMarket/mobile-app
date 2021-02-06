@@ -1,8 +1,8 @@
 import currenciesJSON from 'assets/currencies.json';
-import i18n from 'assets/i18n';
 import Card from 'components/core/Card';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
+import ProfileSvg from 'components/svg/ProfileSvg';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
@@ -18,9 +18,11 @@ import {
     setUserMetadata,
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
+import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     FlatList,
     RefreshControl,
@@ -54,6 +56,7 @@ const currencies: {
 } = currenciesJSON;
 function ProfileScreen() {
     const dispatch = useDispatch();
+    const { i18n } = useTranslation();
     const user = useSelector((state: IRootState) => state.user.metadata);
     const userWallet = useSelector((state: IRootState) => state.user.wallet);
     const app = useSelector((state: IRootState) => state.app);
@@ -544,6 +547,16 @@ function ProfileScreen() {
         </>
     );
 }
+
+ProfileScreen.navigationOptions = () => {
+    const { i18n } = useTranslation();
+    return {
+        title: i18n.t('profile'),
+        tabBarIcon: (props: ITabBarIconProps) => (
+            <ProfileSvg focused={props.focused} />
+        ),
+    };
+};
 
 const styles = StyleSheet.create({
     scrollView: {},
