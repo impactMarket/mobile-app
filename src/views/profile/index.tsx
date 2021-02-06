@@ -11,7 +11,6 @@ import {
     getCurrencySymbol,
     humanifyCurrencyAmount,
 } from 'helpers/currency';
-import { decrypt } from 'helpers/encryption';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
 import {
     setUserExchangeRate,
@@ -83,13 +82,7 @@ function ProfileScreen() {
         const loadProfile = () => {
             if (userWallet.address.length > 0) {
                 if (user.username !== null && user.username.length > 0) {
-                    let decryptedName = '';
-                    try {
-                        decryptedName = decrypt(user.username);
-                    } catch (e) {
-                        decryptedName = user.username;
-                    }
-                    setName(decryptedName);
+                    setName(user.username);
                 }
                 setCurrency(user.currency);
                 setLanguage(user.language);
@@ -189,7 +182,7 @@ function ProfileScreen() {
             setShowingResults(true);
         }
     };
-    
+
     const handleSelectCurrency = (currency: string) => {
         setCurrency(currency);
         Api.user.setCurrency(userWallet.address, currency);
