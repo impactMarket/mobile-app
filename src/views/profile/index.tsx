@@ -178,7 +178,7 @@ function ProfileScreen() {
             }
         }
         //
-        if (currencyResult.length > 7) {
+        if (currencyResult.length > 15) {
             setTooManyResultForQuery(true);
         } else {
             setSearchCurrencyResult(currencyResult);
