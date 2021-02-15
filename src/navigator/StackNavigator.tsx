@@ -17,6 +17,8 @@ import FAQScreen from 'views/faq';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
+import StoriesScreen from 'views/stories';
+import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -37,6 +39,16 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.WaitingTx}
             component={WaitingTxScreen}
             options={WaitingTxScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.Stories}
+            component={StoriesScreen}
+            options={StoriesScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.StoriesCarousel}
+            component={StoriesCarouselScreen}
+            options={StoriesCarouselScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.CommunityDetails}

@@ -161,9 +161,9 @@ function TabNavigator({
             }}
             initialRouteName={fromWelcomeScreen}
         >
+            {tabCommunities}
             {isBeneficiary && tabBeneficiary}
             {isManager && tabManager}
-            {!isBeneficiary && !isManager && tabCommunities}
             {userWallet.address.length === 0 ? tabAuth : tabProfile}
         </Tab.Navigator>
     );

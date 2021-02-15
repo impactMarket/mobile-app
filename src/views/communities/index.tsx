@@ -11,6 +11,7 @@ import Api from 'services/api';
 import { iptcColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
+import Stories from './Stories';
 
 function CommunitiesScreen() {
     const flatListRef = useRef<FlatList<ICommunityLightDetails> | null>(null);
@@ -137,6 +138,7 @@ function CommunitiesScreen() {
 
     return (
         <>
+            <Stories />
             <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
                 <Select
                     label={i18n.t('order')}
