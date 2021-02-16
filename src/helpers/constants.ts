@@ -17,6 +17,7 @@ export enum Screens {
     Beneficiary = 'Beneficiary',
     CommunityManager = 'CommunityManager',
     Communities = 'Communities',
+    CommunitiesList = 'CommunitiesList',
     Profile = 'Profile',
     Auth = 'Auth',
 }
