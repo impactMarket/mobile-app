@@ -1,12 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-    View,
-    Text,
-    Image,
-    Pressable,
-    FlatList,
-    useWindowDimensions,
-} from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { View, Text, Image, FlatList, useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +11,17 @@ function StoriesCarouselScreen() {
     const dimensions = useWindowDimensions();
 
     const [index, setIndex] = useState(0);
+    const [stories, setStories] = useState(
+        Array.from({ length: 5 }).map((_, i) => {
+            return {
+                id: i,
+                image: `https://picsum.photos/1440/2842?random=${i}`,
+                title: `This is the title! ${i + 1}`,
+                subtitle: `This is the subtitle ${i + 1}!`,
+            };
+        })
+    );
+
     const indexRef = useRef(index);
     indexRef.current = index;
     const onScroll = useCallback((event) => {
@@ -56,70 +60,6 @@ function StoriesCarouselScreen() {
                     }}
                 ></Image>
                 {/* {/* <Text style={{ fontSize: 24 }}>{data.title}</Text> */}
-                <View
-                    style={{
-                        position: 'absolute',
-                        width: '100%',
-                        alignSelf: 'flex-end',
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 20,
-                            lineHeight: 24,
-                            color: 'white',
-                            textAlign: 'center',
-                            marginHorizontal: 22,
-                            // backgroundColor: 'blue',
-                        }}
-                    >
-                        {data.subtitle}
-                    </Text>
-                    <View
-                        style={{
-                            marginVertical: 27,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <View style={{ flexDirection: 'row' }}>
-                            <StoryLoveSvg style={{ marginLeft: 54 }} />
-                            <Text
-                                style={{
-                                    marginLeft: 8,
-                                    fontFamily: 'Gelion-Regular',
-                                    fontSize: 16,
-                                    lineHeight: 19,
-                                    color: 'white',
-                                }}
-                            >
-                                34 Loves
-                            </Text>
-                        </View>
-                        <Button
-                            modeType="green"
-                            bold
-                            style={{ marginRight: 22, width: 158 }}
-                        >
-                            Donate
-                        </Button>
-                    </View>
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 20,
-                            lineHeight: 24,
-                            color: 'white',
-                            textAlign: 'center',
-                            marginHorizontal: 22,
-                            // backgroundColor: 'blue',
-                        }}
-                    >
-                        {index + 1}/5
-                    </Text>
-                </View>
             </View>
         );
     }
@@ -235,14 +175,7 @@ function StoriesCarouselScreen() {
                 }}
             /> */}
             <FlatList
-                data={Array.from({ length: 5 }).map((_, i) => {
-                    return {
-                        id: i,
-                        image: `https://picsum.photos/1440/2842?random=${i}`,
-                        title: `This is the title! ${i + 1}`,
-                        subtitle: `This is the subtitle ${i + 1}!`,
-                    };
-                })}
+                data={stories}
                 style={{ flex: 1, backgroundColor: 'green' }}
                 renderItem={({ item }) => {
                     return <Slide data={item} />;
@@ -252,6 +185,85 @@ function StoriesCarouselScreen() {
                 showsHorizontalScrollIndicator={false}
                 onScroll={onScroll}
             />
+            <View
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+                    alignSelf: 'flex-end',
+                }}
+            >
+                <Text
+                    style={{
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 20,
+                        lineHeight: 24,
+                        color: 'white',
+                        textAlign: 'center',
+                        marginHorizontal: 22,
+                        // backgroundColor: 'blue',
+                    }}
+                >
+                    {stories[index].subtitle}
+                </Text>
+                <View
+                    style={{
+                        marginVertical: 27,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                    }}
+                >
+                    <View style={{ flexDirection: 'row' }}>
+                        <StoryLoveSvg style={{ marginLeft: 54 }} />
+                        <Text
+                            style={{
+                                marginLeft: 8,
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 16,
+                                lineHeight: 19,
+                                color: 'white',
+                            }}
+                        >
+                            34 Loves
+                        </Text>
+                    </View>
+                    <Button
+                        modeType="green"
+                        bold
+                        style={{ marginRight: 22, width: 158 }}
+                    >
+                        Donate
+                    </Button>
+                </View>
+                <Text
+                    style={{
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 20,
+                        lineHeight: 24,
+                        color: 'white',
+                        textAlign: 'center',
+                        marginHorizontal: 22,
+                        // backgroundColor: 'blue',
+                    }}
+                >
+                    {index + 1}/5
+                </Text>
+                <View style={{ flexDirection: 'row' }}>
+                    {Array(stories.length)
+                        .fill(0)
+                        .map((_, _index) => (
+                            <View
+                                style={{
+                                    flex: 1,
+                                    marginHorizontal: 2,
+                                    backgroundColor: '#E9ECEF',
+                                    opacity: _index === index ? 1 : 0.37,
+                                    height: 4,
+                                }}
+                            />
+                        ))}
+                </View>
+            </View>
         </View>
     );
 }
