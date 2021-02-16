@@ -159,7 +159,13 @@ function TabNavigator({
                 },
                 style: { height: 84 + insets.bottom },
             }}
-            initialRouteName={fromWelcomeScreen}
+            initialRouteName={
+                isBeneficiary
+                    ? Screens.Beneficiary
+                    : isManager
+                    ? Screens.CommunityManager
+                    : Screens.Communities
+            }
         >
             {tabCommunities}
             {isBeneficiary && tabBeneficiary}
