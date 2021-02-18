@@ -1,0 +1,48 @@
+import { useNavigation } from '@react-navigation/native';
+import { Screens } from 'helpers/constants';
+import React from 'react';
+import { View, Text, Pressable, Image } from 'react-native';
+import { iptcColors } from 'styles/index';
+
+export default function StoriesCard() {
+    const navigation = useNavigation();
+    return (
+        <View style={{ flexDirection: 'column' }}>
+            <Pressable
+                style={{
+                    backgroundColor: 'blue',
+                    width: 98.16,
+                    height: 167,
+                    borderRadius: 8,
+                    marginRight: 11.84,
+                    // flexDirection: 'row',
+                    // alignItems: 'flex-end',
+                }}
+                onPress={(e) => navigation.navigate(Screens.StoriesCarousel)}
+            >
+                <Image
+                    source={{ uri: 'https://reactjs.org/logo-og.png' }}
+                    style={{
+                        flex: 1,
+                        // resizeMode: 'cover',
+                        justifyContent: 'center',
+                        // alignItems: 'flex-end',
+                        borderRadius: 8,
+                    }}
+                />
+            </Pressable>
+            <Text
+                style={{
+                    fontFamily: 'Gelion-Bold',
+                    fontSize: 13,
+                    lineHeight: 16,
+                    color: iptcColors.almostBlack,
+                    marginTop: 8,
+                    // marginHorizontal: 12,
+                }}
+            >
+                Toze
+            </Text>
+        </View>
+    );
+}
