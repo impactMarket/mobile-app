@@ -1,30 +1,34 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
-import config from '../../../config';
-import ApiRouteCommunity from './routes/community';
-import ApiRouteStory from './routes/story';
-import ApiRouteSystem from './routes/system';
-import ApiRouteUser from './routes/user';
+import { ICommunityStories } from 'helpers/types/endpoints';
+import config from '../../../../config';
+import { getRequest } from '../base';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
-class ApiRouteUpload {
-    static async uploadCommunityCoverImage(communityId: string, uri: string) {
+class ApiRouteStory {
+    static async add(
+        mediaURI: string,
+        communityId: number,
+        message: string,
+        userAddress: string
+    ): Promise<any> {
         let response;
         try {
             // handle success
-            const uriParts = uri.split('.');
+            const uriParts = mediaURI.split('.');
             const fileType = uriParts[uriParts.length - 1];
 
             const formData = new FormData();
             formData.append('imageFile', {
-                uri,
+                uri: mediaURI,
                 name: `photo.${fileType}`,
                 type: `image/${fileType}`,
             } as any);
-            formData.append('pictureContext', 'community');
-            formData.append('communityId', communityId);
+            formData.append('byAddress', userAddress);
+            formData.append('communityId', communityId.toString());
+            formData.append('message', message);
             const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
             const requestHeaders = {
                 headers: {
@@ -33,25 +37,23 @@ class ApiRouteUpload {
                     'Content-Type': 'multipart/form-data',
                 },
             };
+            console.log(formData);
             const result = await axios.post(
-                '/storage/upload',
+                '/stories/add',
                 formData,
                 requestHeaders
             );
             response = result;
         } catch (error) {
-            Api.system.uploadError('', 'uploadCommunityCoverImage', error);
+            // Api.system.uploadError('', 'uploadCommunityCoverImage', error);
         }
         return response;
     }
+
+    static async get<T extends ICommunityStories[]>(): Promise<T> {
+        const result = await getRequest<T>('/stories/get');
+        return result ? result : ([] as any);
+    }
 }
 
-class Api {
-    public static community = ApiRouteCommunity;
-    public static user = ApiRouteUser;
-    public static upload = ApiRouteUpload;
-    public static system = ApiRouteSystem;
-    public static story = ApiRouteStory;
-}
-
-export default Api;
+export default ApiRouteStory;
