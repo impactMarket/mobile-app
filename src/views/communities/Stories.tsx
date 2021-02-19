@@ -34,9 +34,18 @@ export default class Stories extends Component<{}, {}> {
                     contentContainerStyle={{ padding: 18 }}
                 >
                     <NewStoryCard />
-                    <StoriesCard />
-                    <StoriesCard />
-                    <StoriesCard />
+                    <StoriesCard
+                        communityName="toze"
+                        imageURI="https://reactjs.org/logo-og.png"
+                    />
+                    <StoriesCard
+                        communityName="toze"
+                        imageURI="https://reactjs.org/logo-og.png"
+                    />
+                    <StoriesCard
+                        communityName="toze"
+                        imageURI="https://reactjs.org/logo-og.png"
+                    />
                 </ScrollView>
             </View>
         );

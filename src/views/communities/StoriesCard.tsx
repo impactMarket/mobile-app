@@ -4,7 +4,10 @@ import React from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import { ipctColors } from 'styles/index';
 
-export default function StoriesCard() {
+export default function StoriesCard(props: {
+    imageURI: string;
+    communityName: string;
+}) {
     const navigation = useNavigation();
     return (
         <View style={{ flexDirection: 'column' }}>
@@ -21,7 +24,7 @@ export default function StoriesCard() {
                 onPress={(e) => navigation.navigate(Screens.StoriesCarousel)}
             >
                 <Image
-                    source={{ uri: 'https://reactjs.org/logo-og.png' }}
+                    source={{ uri: props.imageURI }}
                     style={{
                         flex: 1,
                         // resizeMode: 'cover',
@@ -41,7 +44,7 @@ export default function StoriesCard() {
                     // marginHorizontal: 12,
                 }}
             >
-                Toze
+                {props.communityName}
             </Text>
         </View>
     );

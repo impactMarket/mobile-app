@@ -1,25 +1,35 @@
 import BackSvg from 'components/svg/header/BackSvg';
-import React, { useState } from 'react';
+import { ICommunityStories } from 'helpers/types/endpoints';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import Api from 'services/api';
+import StoriesCard from 'views/communities/StoriesCard';
 
+interface ICommunityStoriesBox extends ICommunityStories {
+    empty: boolean;
+}
 function StoriesScreen() {
-    const [storyCommunity, setStoryCommunity] = useState([
-        { id: '00', name: 'Relâmpago McQueen' },
-        { id: '01', name: 'Agente Tom Mate' },
-        { id: '02', name: 'Doc Hudson' },
-        { id: '03', name: 'Cruz Ramirez' },
-    ]);
+    const [storiesCommunity, setStoriesCommunity] = useState<
+        ICommunityStoriesBox[]
+    >([]);
 
-    function createRows(data: any[], columns: number) {
+    useEffect(() => {
+        Api.story
+            .get<ICommunityStoriesBox[]>()
+            .then((s) => setStoriesCommunity(s));
+    }, []);
+
+    function createRows(data: ICommunityStoriesBox[], columns: number) {
         const rows = Math.floor(data.length / columns); // [A]
         let lastRowElements = data.length - rows * columns; // [B]
         while (lastRowElements !== columns) {
             // [C]
             data.push({
                 // [D]
-                id: `empty-${lastRowElements}`,
+                id: lastRowElements,
                 name: `empty-${lastRowElements}`,
                 empty: true,
+                stories: [],
             });
             lastRowElements += 1; // [E]
         }
@@ -28,18 +38,19 @@ function StoriesScreen() {
 
     return (
         <FlatList
-            data={createRows(storyCommunity, 3)}
+            data={createRows(storiesCommunity, 3)}
             style={{ marginHorizontal: 12 }}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.name}
             numColumns={3} // Número de colunas
             renderItem={({ item }) => {
                 if (item.empty) {
                     return <View style={[styles.item, styles.itemEmpty]} />;
                 }
                 return (
-                    <View style={styles.item}>
-                        <Text style={styles.text}>{item.name}</Text>
-                    </View>
+                    <StoriesCard
+                        communityName={item.name}
+                        imageURI={item.stories[0].media}
+                    />
                 );
             }}
         />

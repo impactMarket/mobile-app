@@ -5,7 +5,7 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ipctColors } from 'styles/index';
 
-export default function StoriesCard() {
+export default function NewStoriesCard() {
     const navigation = useNavigation();
     return (
         <Pressable
