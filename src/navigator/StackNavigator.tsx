@@ -19,6 +19,7 @@ import WelcomeScreen from 'views/welcome/index';
 import TabNavigator from './TabNavigator';
 import StoriesScreen from 'views/stories';
 import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
+import NewStoryScreen from 'views/stories/NewStory';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -44,6 +45,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.Stories}
             component={StoriesScreen}
             options={StoriesScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.NewStory}
+            component={NewStoryScreen}
+            options={NewStoryScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.StoriesCarousel}

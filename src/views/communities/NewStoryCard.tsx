@@ -16,7 +16,7 @@ export default function StoriesCard() {
                 // flexDirection: 'row',
                 // alignItems: 'flex-end',
             }}
-            onPress={(e) => navigation.navigate(Screens.StoriesCarousel)}
+            onPress={(e) => navigation.navigate(Screens.NewStory)}
         >
             <View
                 style={{

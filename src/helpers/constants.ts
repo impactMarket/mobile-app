@@ -5,6 +5,7 @@ export enum Screens {
     CreateCommunity = 'CreateCommunity',
     WaitingTx = 'WaitingTx',
     Stories = 'Stories',
+    NewStory = 'NewStory',
     StoriesCarousel = 'StoriesCarousel',
     //
     ClaimExplained = 'ClaimExplained',
