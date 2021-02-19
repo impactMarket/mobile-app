@@ -88,7 +88,7 @@ const theme = {
     roundness: 4,
     colors: {
         ...DefaultTheme.colors,
-        primary: iptcColors.softBlue,
+        primary: iptcColors.blueRibbon,
         text: iptcColors.almostBlack,
     },
     fonts: configureFonts({
@@ -101,7 +101,7 @@ const navigationTheme = {
     ...NavigationDefaultTheme,
     colors: {
         ...NavigationDefaultTheme.colors,
-        primary: iptcColors.softBlue,
+        primary: iptcColors.blueRibbon,
         background: '#ffffff',
     },
 };

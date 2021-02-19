@@ -140,7 +140,7 @@ function CommunityManagerScreen() {
                         >
                             {i18n.t('pendingApprovalMessage')}{' '}
                             <Text
-                                style={{ color: iptcColors.softBlue }}
+                                style={{ color: iptcColors.blueRibbon }}
                                 onPress={() =>
                                     Linking.openURL(
                                         'mailto:hello@impactmarket.com'
@@ -168,7 +168,7 @@ function CommunityManagerScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={iptcColors.blueRibbon}
                 />
             </View>
         );

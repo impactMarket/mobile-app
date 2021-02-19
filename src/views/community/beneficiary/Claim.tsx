@@ -363,7 +363,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                         ? '#E9ECEF'
                         : notEnoughToClaimOnContract
                         ? '#f0ad4e'
-                        : iptcColors.softBlue,
+                        : iptcColors.blueRibbon,
                     alignSelf: 'center',
                     alignItems: 'center',
                     paddingTop: 11,

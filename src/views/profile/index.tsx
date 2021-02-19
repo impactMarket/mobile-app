@@ -561,7 +561,7 @@ ProfileScreen.navigationOptions = () => {
 const styles = StyleSheet.create({
     scrollView: {},
     card: {
-        backgroundColor: iptcColors.softBlue,
+        backgroundColor: iptcColors.blueRibbon,
         marginTop: 10,
         marginBottom: 45,
     },

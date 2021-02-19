@@ -148,7 +148,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={iptcColors.blueRibbon}
                 />
             </View>
         );

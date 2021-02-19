@@ -195,7 +195,7 @@ function AddedBeneficiaryScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={iptcColors.blueRibbon}
                 />
             </View>
         );

@@ -118,7 +118,7 @@ class CommuntyStatus extends Component<Props, object> {
                                 'raised',
                                 community
                             )}
-                            color={iptcColors.softBlue}
+                            color={iptcColors.blueRibbon}
                         />
                         <ProgressBar
                             key="claimed"
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: iptcColors.softBlue,
+        backgroundColor: iptcColors.blueRibbon,
         marginRight: 5,
     },
 });

@@ -44,7 +44,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
             } else {
                 buttonStyle = {
                     ...buttonStyle,
-                    backgroundColor: iptcColors.softBlue,
+                    backgroundColor: iptcColors.blueRibbon,
                 };
             }
         }

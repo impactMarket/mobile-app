@@ -218,7 +218,7 @@ function BeneficiaryScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={iptcColors.blueRibbon}
                 />
             </View>
         );
@@ -568,7 +568,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '500',
         letterSpacing: 0.3,
-        color: iptcColors.softBlue,
+        color: iptcColors.blueRibbon,
         height: 25,
     },
     haveClaimed: {
