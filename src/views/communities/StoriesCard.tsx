@@ -7,6 +7,7 @@ import { ipctColors } from 'styles/index';
 export default function StoriesCard(props: {
     imageURI: string;
     communityName: string;
+    communityId: number;
 }) {
     const navigation = useNavigation();
     return (
@@ -21,7 +22,11 @@ export default function StoriesCard(props: {
                     // flexDirection: 'row',
                     // alignItems: 'flex-end',
                 }}
-                onPress={(e) => navigation.navigate(Screens.StoriesCarousel)}
+                onPress={(e) =>
+                    navigation.navigate(Screens.StoriesCarousel, {
+                        communityId: props.communityId,
+                    })
+                }
             >
                 <Image
                     source={{ uri: props.imageURI }}

@@ -1,26 +1,39 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, Text, Image, FlatList, useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import { useNavigation } from '@react-navigation/native';
 import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import Button from 'components/core/Button';
+import Api from 'services/api';
+import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
 
-function StoriesCarouselScreen() {
+interface IStoriesCarouselScreen {
+    route: {
+        params: {
+            communityId: number;
+        };
+    };
+}
+function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     const navigation = useNavigation();
     const dimensions = useWindowDimensions();
 
     const [index, setIndex] = useState(0);
-    const [stories, setStories] = useState(
-        Array.from({ length: 5 }).map((_, i) => {
-            return {
-                id: i,
-                image: `https://picsum.photos/1440/2842?random=${i}`,
-                title: `This is the title! ${i + 1}`,
-                subtitle: `This is the subtitle ${i + 1}!`,
-            };
-        })
-    );
+    const [stories, setStories] = useState<ICommunityStory[]>([]);
+    const [country, setCountry] = useState('');
+    const [city, setCity] = useState('');
+    const [name, setName] = useState('');
+
+    useEffect(() => {
+        Api.story.getByCommunity(props.route.params.communityId).then((s) => {
+            console.log(s, s.stories);
+            setStories(s.stories);
+            setName(s.name);
+            setCity(s.city);
+            setCountry(s.country);
+        });
+    }, []);
 
     const indexRef = useRef(index);
     indexRef.current = index;
@@ -41,7 +54,7 @@ function StoriesCarouselScreen() {
         }
     }, []);
 
-    function Slide({ data }: { data: any }) {
+    function Slide({ data }: { data: ICommunityStory }) {
         return (
             <View
                 style={{
@@ -53,15 +66,22 @@ function StoriesCarouselScreen() {
                 }}
             >
                 <Image
-                    source={{ uri: data.image }}
+                    source={{ uri: data.media }}
                     style={{
                         width: dimensions.width,
-                        height: dimensions.height,
+                        // height: dimensions.height,
+                        resizeMode: 'contain',
                     }}
                 ></Image>
                 {/* {/* <Text style={{ fontSize: 24 }}>{data.title}</Text> */}
             </View>
         );
+    }
+
+    console.log('stories', stories);
+
+    if (stories.length === 0) {
+        return <Text>Loading</Text>;
     }
 
     return (
@@ -123,7 +143,7 @@ function StoriesCarouselScreen() {
                                     color: '#FAFAFA',
                                 }}
                             >
-                                Fehsolna
+                                {name}
                             </Text>
                             <Text
                                 style={{
@@ -133,7 +153,7 @@ function StoriesCarouselScreen() {
                                     color: '#FAFAFA',
                                 }}
                             >
-                                Brazil
+                                {country}, {city}
                             </Text>
                         </View>
                     </View>
@@ -203,7 +223,7 @@ function StoriesCarouselScreen() {
                         // backgroundColor: 'blue',
                     }}
                 >
-                    {stories[index].subtitle}
+                    {stories[index].message}
                 </Text>
                 <View
                     style={{
@@ -235,7 +255,7 @@ function StoriesCarouselScreen() {
                         Donate
                     </Button>
                 </View>
-                <Text
+                {/* <Text
                     style={{
                         fontFamily: 'Gelion-Regular',
                         fontSize: 20,
@@ -246,8 +266,8 @@ function StoriesCarouselScreen() {
                         // backgroundColor: 'blue',
                     }}
                 >
-                    {index + 1}/5
-                </Text>
+                    {index + 1}/{stories.length}
+                </Text> */}
                 <View style={{ flexDirection: 'row' }}>
                     {Array(stories.length)
                         .fill(0)

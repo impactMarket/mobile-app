@@ -1,11 +1,11 @@
 import BackSvg from 'components/svg/header/BackSvg';
-import { ICommunityStories } from 'helpers/types/endpoints';
+import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import Api from 'services/api';
 import StoriesCard from 'views/communities/StoriesCard';
 
-interface ICommunityStoriesBox extends ICommunityStories {
+interface ICommunityStoriesBox extends ICommunitiesListStories {
     empty: boolean;
 }
 function StoriesScreen() {
@@ -15,7 +15,7 @@ function StoriesScreen() {
 
     useEffect(() => {
         Api.story
-            .get<ICommunityStoriesBox[]>()
+            .list<ICommunityStoriesBox[]>()
             .then((s) => setStoriesCommunity(s));
     }, []);
 
@@ -49,6 +49,7 @@ function StoriesScreen() {
                 return (
                     <StoriesCard
                         communityName={item.name}
+                        communityId={item.id}
                         imageURI={item.stories[0].media}
                     />
                 );

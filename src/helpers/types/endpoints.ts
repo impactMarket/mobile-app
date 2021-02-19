@@ -89,8 +89,16 @@ export interface ICommunityStory {
     message: string;
 }
 
+export interface ICommunitiesListStories {
+    id: number;
+    name: string;
+    stories: ICommunityStory[];
+}
+
 export interface ICommunityStories {
     id: number;
     name: string;
+    city: string;
+    country: string;
     stories: ICommunityStory[];
 }

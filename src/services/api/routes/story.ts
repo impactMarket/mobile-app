@@ -1,7 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
-import { ICommunityStories } from 'helpers/types/endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunityStories,
+} from 'helpers/types/endpoints';
 import config from '../../../../config';
 import { getRequest } from '../base';
 
@@ -50,9 +53,18 @@ class ApiRouteStory {
         return response;
     }
 
-    static async get<T extends ICommunityStories[]>(): Promise<T> {
-        const result = await getRequest<T>('/stories/get');
+    static async list<T extends ICommunitiesListStories[]>(): Promise<T> {
+        const result = await getRequest<T>('/stories/list');
         return result ? result : ([] as any);
+    }
+
+    static async getByCommunity(
+        communityId: number
+    ): Promise<ICommunityStories> {
+        const result = await getRequest<ICommunityStories>(
+            '/stories/community/' + communityId
+        );
+        return result!; // TODO: don't!
     }
 }
 
