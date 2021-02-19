@@ -20,6 +20,8 @@ export default class Input extends Component<IInputProps, object> {
             onChangeText,
             editable,
             style,
+            multiline,
+            numberOfLines,
         } = this.props;
         return (
             <View style={style}>
@@ -55,6 +57,8 @@ export default class Input extends Component<IInputProps, object> {
                     onEndEditing={onEndEditing}
                     onChangeText={onChangeText}
                     editable={editable}
+                    multiline={multiline}
+                    numberOfLines={numberOfLines}
                 />
             </View>
         );
