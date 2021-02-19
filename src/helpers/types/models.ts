@@ -1,6 +1,7 @@
 // same as in api/types/models
 
 export interface CommunityAttributes {
+    id: number;
     publicId: string;
     requestByAddress: string;
     contractAddress: string | null;
