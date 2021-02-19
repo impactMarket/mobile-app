@@ -15,7 +15,7 @@ import { Text, View, StyleSheet, Alert, TextInput } from 'react-native';
 import { Paragraph, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import config from '../../../../../../config';
 
@@ -224,7 +224,7 @@ class DonateModal extends Component<
                                     lineHeight: 60,
                                     height: 60,
                                     textAlign: 'center',
-                                    color: iptcColors.almostBlack,
+                                    color: ipctColors.almostBlack,
                                     textAlignVertical: 'center',
                                 }}
                             >
@@ -240,7 +240,7 @@ class DonateModal extends Component<
                                     lineHeight: 60,
                                     height: 60,
                                     textAlign: 'center',
-                                    color: iptcColors.almostBlack,
+                                    color: ipctColors.almostBlack,
                                 }}
                                 value={amountDonate}
                                 onChangeText={(text) =>
@@ -290,7 +290,7 @@ class DonateModal extends Component<
                                 height: 19 * 2 /** TODO: fix height */,
                                 textAlign: 'center',
                                 fontStyle: 'italic',
-                                color: iptcColors.textGray,
+                                color: ipctColors.regentGray,
                                 display:
                                     amountDonate.length === 0 ||
                                     isNaN(parseInt(amountDonate, 10)) ||

@@ -14,7 +14,7 @@ import { StyleSheet, View, Text, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Headline, ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
@@ -140,7 +140,7 @@ function CommunityManagerScreen() {
                         >
                             {i18n.t('pendingApprovalMessage')}{' '}
                             <Text
-                                style={{ color: iptcColors.blueRibbon }}
+                                style={{ color: ipctColors.blueRibbon }}
                                 onPress={() =>
                                     Linking.openURL(
                                         'mailto:hello@impactmarket.com'
@@ -168,7 +168,7 @@ function CommunityManagerScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.blueRibbon}
+                    color={ipctColors.blueRibbon}
                 />
             </View>
         );

@@ -8,7 +8,7 @@ import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { Alert, FlatList, View } from 'react-native';
 import { ActivityIndicator, Dialog, RadioButton } from 'react-native-paper';
 import Api from 'services/api';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
 import Stories from './Stories';
@@ -151,7 +151,7 @@ function CommunitiesScreen() {
                     <ActivityIndicator
                         style={{ marginBottom: 22 }}
                         animating
-                        color={iptcColors.blueRibbon}
+                        color={ipctColors.blueRibbon}
                     />
                 )}
             </>
@@ -179,6 +179,7 @@ function CommunitiesScreen() {
                 keyExtractor={(item) => item.publicId}
                 onEndReachedThreshold={0.7}
                 onEndReached={handleOnEndReached}
+                showsVerticalScrollIndicator={false}
                 // Performance settings
                 removeClippedSubviews // Unmount components when outside of window
                 initialNumToRender={2} // Reduce initial render amount

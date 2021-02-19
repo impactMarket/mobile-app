@@ -31,7 +31,7 @@ import {
     registerForPushNotifications,
     startNotificationsListeners,
 } from 'services/pushNotifications';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 import Web3 from 'web3';
 
 import config from '../../../../config';
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
         lineHeight: 31,
         letterSpacing: 0.7,
         textAlign: 'center',
-        color: iptcColors.almostBlack,
+        color: ipctColors.almostBlack,
         marginTop: 16,
     },
     descriptionTop: {
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: 19,
         textAlign: 'center',
-        color: iptcColors.baliHai,
+        color: ipctColors.baliHai,
         marginTop: 16,
     },
     description: {
@@ -330,7 +330,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: 23,
         textAlign: 'center',
-        color: iptcColors.baliHai,
+        color: ipctColors.baliHai,
         marginTop: 27,
         marginBottom: 73,
     },
@@ -339,14 +339,14 @@ const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: 23,
         textAlign: 'center',
-        color: iptcColors.nileBlue,
+        color: ipctColors.nileBlue,
     },
     stepText2: {
         fontFamily: 'Gelion-Bold',
         fontSize: 19,
         lineHeight: 23,
         textAlign: 'center',
-        color: iptcColors.nileBlue,
+        color: ipctColors.nileBlue,
         marginTop: 22,
     },
     instructionText: {
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         lineHeight: 23,
         textAlign: 'center',
-        color: iptcColors.nileBlue,
+        color: ipctColors.nileBlue,
         marginTop: 8,
     },
 });

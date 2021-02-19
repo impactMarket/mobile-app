@@ -45,7 +45,7 @@ import {
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 const currencies: {
     [key: string]: {
@@ -561,7 +561,7 @@ ProfileScreen.navigationOptions = () => {
 const styles = StyleSheet.create({
     scrollView: {},
     card: {
-        backgroundColor: iptcColors.blueRibbon,
+        backgroundColor: ipctColors.blueRibbon,
         marginTop: 10,
         marginBottom: 45,
     },
@@ -594,7 +594,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         lineHeight: 17,
         letterSpacing: 0.245455,
-        color: iptcColors.textGray,
+        color: ipctColors.regentGray,
         marginVertical: 8,
     },
 });

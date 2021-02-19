@@ -7,7 +7,7 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 function WaitingTxScreen() {
     const navigation = useNavigation();
@@ -59,7 +59,7 @@ function WaitingTxScreen() {
                             fontSize: 24,
                             lineHeight: 29,
                             textAlign: 'center',
-                            color: iptcColors.almostBlack,
+                            color: ipctColors.almostBlack,
                         }}
                     >
                         {inProgress ? i18n.t('pleaseWait') : i18n.t('thankYou')}
@@ -71,7 +71,7 @@ function WaitingTxScreen() {
                             fontSize: 18,
                             lineHeight: 22,
                             textAlign: 'center',
-                            color: iptcColors.almostBlack,
+                            color: ipctColors.almostBlack,
                         }}
                     >
                         {inProgress

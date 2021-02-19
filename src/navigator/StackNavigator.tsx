@@ -3,7 +3,7 @@ import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
 import CommunityDetailsScreen from 'views/community/details';
 import WaitingTxScreen from 'views/community/details/donate/waitingTx';
@@ -150,7 +150,7 @@ function StackNavigator() {
                     fontFamily: 'Gelion-Bold',
                     fontSize: 30,
                     lineHeight: 36,
-                    color: iptcColors.almostBlack,
+                    color: ipctColors.almostBlack,
                 },
             }}
             initialRouteName={fromWelcomeScreen}

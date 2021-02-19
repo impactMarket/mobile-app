@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
 import React from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 export default function StoriesCard() {
     const navigation = useNavigation();
@@ -36,7 +36,7 @@ export default function StoriesCard() {
                     fontFamily: 'Gelion-Bold',
                     fontSize: 13,
                     lineHeight: 16,
-                    color: iptcColors.almostBlack,
+                    color: ipctColors.almostBlack,
                     marginTop: 8,
                     // marginHorizontal: 12,
                 }}

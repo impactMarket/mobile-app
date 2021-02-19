@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Svg, { Circle, Path } from 'react-native-svg';
+import { ipctColors } from 'styles/index';
 
 function ProfileSvg(props: { focused: boolean }) {
     return (
@@ -9,7 +10,11 @@ function ProfileSvg(props: { focused: boolean }) {
                 cy={11.973}
                 r={5.429}
                 fill="#fff"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
             />
             <Path
@@ -20,7 +25,11 @@ function ProfileSvg(props: { focused: boolean }) {
             />
             <Path
                 d="M25 25.092a9.5 9.5 0 00-19 0"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
                 strokeLinecap="round"
             />
@@ -28,7 +37,11 @@ function ProfileSvg(props: { focused: boolean }) {
                 cx={15.5}
                 cy={15.5}
                 r={14.5}
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={2}
             />
         </Svg>

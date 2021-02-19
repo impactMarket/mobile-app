@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { Paragraph, Text } from 'react-native-paper';
 import Svg, { Path } from 'react-native-svg';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 interface ISelectProps {
     label: string;
@@ -27,7 +27,7 @@ export default class Select extends Component<ISelectProps, object> {
                         fontSize: 17,
                         lineHeight: 17,
                         letterSpacing: 0.245455,
-                        color: iptcColors.textGray,
+                        color: ipctColors.regentGray,
                         marginBottom: 10,
                     }}
                 >
@@ -48,7 +48,7 @@ export default class Select extends Component<ISelectProps, object> {
                     >
                         <Text
                             style={{
-                                color: iptcColors.almostBlack,
+                                color: ipctColors.almostBlack,
                                 opacity: 1,
                                 fontSize: 20,
                                 lineHeight: 24,

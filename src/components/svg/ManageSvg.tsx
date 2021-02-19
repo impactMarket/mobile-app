@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Svg, { Path, Circle } from 'react-native-svg';
+import { ipctColors } from 'styles/index';
 
 function ManageSvg(props: { focused: boolean }) {
     return (
@@ -12,7 +13,11 @@ function ManageSvg(props: { focused: boolean }) {
             />
             <Path
                 d="M26.973 25.993c0-5.684-4.608-10.291-10.291-10.291-5.684 0-10.291 4.607-10.291 10.29"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
                 strokeLinecap="round"
             />
@@ -24,7 +29,11 @@ function ManageSvg(props: { focused: boolean }) {
             />
             <Path
                 d="M32.363 21.092c0-5.683-4.607-10.291-10.29-10.291-5.684 0-10.292 4.607-10.292 10.291"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
                 strokeLinecap="round"
             />
@@ -33,7 +42,11 @@ function ManageSvg(props: { focused: boolean }) {
                 cy={6.881}
                 r={5.881}
                 fill="#fff"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
             />
             <Path
@@ -44,7 +57,11 @@ function ManageSvg(props: { focused: boolean }) {
             />
             <Path
                 d="M21.582 21.092c0-5.683-4.607-10.291-10.291-10.291S1 15.408 1 21.092"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
                 strokeLinecap="round"
             />
@@ -53,7 +70,11 @@ function ManageSvg(props: { focused: boolean }) {
                 cy={6.881}
                 r={5.881}
                 fill="#fff"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
             />
             <Path
@@ -64,7 +85,11 @@ function ManageSvg(props: { focused: boolean }) {
             />
             <Path
                 d="M26.973 25.993c0-5.684-4.608-10.291-10.291-10.291-5.684 0-10.291 4.607-10.291 10.29"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
                 strokeLinecap="round"
             />
@@ -73,7 +98,11 @@ function ManageSvg(props: { focused: boolean }) {
                 cy={11.781}
                 r={5.881}
                 fill="#fff"
-                stroke={props.focused ? '#5E72E4' : '#7E8DA6'}
+                stroke={
+                    props.focused
+                        ? ipctColors.blueRibbon
+                        : ipctColors.regentGray
+                }
                 strokeWidth={1.96}
             />
         </Svg>

@@ -24,7 +24,7 @@ import {
 import { LineChart } from 'react-native-svg-charts';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import config from '../../../../config';
 import Donate from './donate';
@@ -148,7 +148,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.blueRibbon}
+                    color={ipctColors.blueRibbon}
                 />
             </View>
         );
@@ -343,7 +343,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         lineHeight: 18,
         letterSpacing: 0.245455,
-        color: iptcColors.textGray,
+        color: ipctColors.regentGray,
     },
     ssiHeadline: {
         fontFamily: 'Gelion-Bold',

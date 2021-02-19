@@ -21,7 +21,7 @@ import { analytics } from 'services/analytics';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 import * as Sentry from 'sentry-expo';
 
 import config from '../../../../config';
@@ -363,7 +363,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                         ? '#E9ECEF'
                         : notEnoughToClaimOnContract
                         ? '#f0ad4e'
-                        : iptcColors.blueRibbon,
+                        : ipctColors.blueRibbon,
                     alignSelf: 'center',
                     alignItems: 'center',
                     paddingTop: 11,
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
         fontSize: 37,
         letterSpacing: 0.61,
         textAlign: 'center',
-        color: iptcColors.greenishTeal,
+        color: ipctColors.greenishTeal,
     },
 });
 

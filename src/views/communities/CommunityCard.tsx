@@ -15,7 +15,7 @@ import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 const countries: {
     [key: string]: {
@@ -113,29 +113,29 @@ function CommunityCard(props: { community: ICommunityLightDetails }) {
                         <ProgressBar
                             key="raised"
                             style={{
-                                backgroundColor: iptcColors.softGray,
+                                backgroundColor: ipctColors.softGray,
                                 position: 'absolute',
                                 borderRadius: 6.5,
-                                height: 8.12,
+                                height: 6.32,
                             }}
                             progress={calculateCommunityProgress(
                                 'raised',
                                 community
                             )}
-                            color="#5289ff"
+                            color={ipctColors.blueRibbon}
                         />
                         <ProgressBar
                             key="claimed"
                             style={{
                                 backgroundColor: 'rgba(255,255,255,0)',
                                 borderRadius: 6.5,
-                                height: 8.12,
+                                height: 6.32,
                             }}
                             progress={calculateCommunityProgress(
                                 'claimed',
                                 community
                             )}
-                            color="#50ad53"
+                            color={ipctColors.greenishTeal}
                         />
                     </View>
                 </View>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         lineHeight: 24,
         textAlign: 'center',
-        color: iptcColors.nileBlue,
+        color: ipctColors.nileBlue,
     },
     cellDescription: {
         fontFamily: 'Gelion-Regular',
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
         lineHeight: 16,
         opacity: 0.7,
         textAlign: 'center',
-        color: iptcColors.nileBlue,
+        color: ipctColors.nileBlue,
         marginTop: 6,
     },
 });
