@@ -1,14 +1,54 @@
 import Button from 'components/core/Button';
 import Input from 'components/core/Input';
 import BackSvg from 'components/svg/header/BackSvg';
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { View, Text, Image, ImageBackground } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
+import { useNavigation } from '@react-navigation/native';
+import SubmitStory from 'navigator/header/SubmitStory';
+import Api from 'services/api';
+import { useSelector } from 'react-redux';
+import { IRootState } from 'helpers/types/state';
 
 function NewStoryScreen() {
+    const navigation = useNavigation();
     const [storyText, setStoryText] = useState('');
     const [storyMedia, setStoryMedia] = useState('');
+    const [submitting, setSubmitting] = useState(false);
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
+    const userCommunityId = useSelector(
+        (state: IRootState) => state.user.community.metadata.id
+    );
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <SubmitStory submit={submitNewStory} submitting={submitting} />
+            ),
+        });
+        // TODO: this next line should change though.
+    }, [navigation, storyText, storyMedia, submitting]);
+
+    const submitNewStory = () => {
+        setSubmitting(true);
+        Api.story
+            .add(storyMedia, userCommunityId, storyText, userAddress)
+            .then((r) => {
+                navigation.goBack();
+                console.log(r);
+                // show success message
+            })
+            .catch((e) => {
+                console.log(e);
+                // error submitting
+            })
+            .finally(() => {
+                setSubmitting(false);
+            });
+    };
 
     const pickImage = async () => {
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
