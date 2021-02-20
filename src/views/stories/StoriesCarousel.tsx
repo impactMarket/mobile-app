@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import Button from 'components/core/Button';
 import Api from 'services/api';
-import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
+import { ICommunityStory } from 'helpers/types/endpoints';
 
 interface IStoriesCarouselScreen {
     route: {
@@ -27,7 +27,6 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
 
     useEffect(() => {
         Api.story.getByCommunity(props.route.params.communityId).then((s) => {
-            console.log(s, s.stories);
             setStories(s.stories);
             setName(s.name);
             setCity(s.city);
@@ -60,8 +59,6 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                 style={{
                     height: dimensions.height,
                     width: dimensions.width,
-                    // justifyContent: 'center',
-                    // alignItems: 'center',
                     flexDirection: 'row',
                 }}
             >
@@ -69,11 +66,9 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                     source={{ uri: data.media }}
                     style={{
                         width: dimensions.width,
-                        // height: dimensions.height,
                         resizeMode: 'contain',
                     }}
                 ></Image>
-                {/* {/* <Text style={{ fontSize: 24 }}>{data.title}</Text> */}
             </View>
         );
     }

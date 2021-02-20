@@ -48,9 +48,10 @@ function StoriesScreen() {
                 }
                 return (
                     <StoriesCard
-                        communityName={item.name}
+                        key={item.id}
                         communityId={item.id}
-                        imageURI={item.stories[0].media}
+                        communityName={item.name}
+                        imageURI={item.stories[item.stories.length - 1].media}
                     />
                 );
             }}

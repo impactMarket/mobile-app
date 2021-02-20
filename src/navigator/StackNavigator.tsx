@@ -37,6 +37,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             // options={TabNavigator.navigationOptions}
         />
         <Navigator.Screen
+            name={Screens.CreateCommunity}
+            component={CreateCommunityScreen}
+            options={CreateCommunityScreen.navigationOptions}
+        />
+        <Navigator.Screen
             name={Screens.WaitingTx}
             component={WaitingTxScreen}
             options={WaitingTxScreen.navigationOptions}
@@ -68,17 +73,6 @@ const commonScreens = (Navigator: typeof Stack) => (
         />
     </>
 );
-
-const nonBeneficiaryManagerScreens = (Navigator: typeof Stack) => (
-    <>
-        <Navigator.Screen
-            name={Screens.CreateCommunity}
-            component={CreateCommunityScreen}
-            options={CreateCommunityScreen.navigationOptions}
-        />
-    </>
-);
-
 const beneficiaryScreens = (Navigator: typeof Stack) => (
     <>
         <Navigator.Screen
@@ -160,9 +154,6 @@ function StackNavigator() {
                 : welcomeScreen(Stack)}
             {isBeneficiary && beneficiaryScreens(Stack)}
             {isManager && managerScreens(Stack)}
-            {!isBeneficiary &&
-                !isManager &&
-                nonBeneficiaryManagerScreens(Stack)}
         </Stack.Navigator>
     );
 }
