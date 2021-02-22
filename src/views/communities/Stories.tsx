@@ -1,22 +1,28 @@
 import { Screens } from 'helpers/constants';
 import { navigationRef } from 'helpers/rootNavigation';
-import { ICommunityStories } from 'helpers/types/endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunityStories,
+} from 'helpers/types/endpoints';
 import React, { Component, useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import { Headline } from 'react-native-paper';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Headline } from 'react-native-paper';
 import Api from 'services/api';
+import { ipctColors } from 'styles/index';
 import NewStoryCard from './NewStoryCard';
 import StoriesCard from './StoriesCard';
 
 export default function Stories() {
     const [storiesCommunity, setStoriesCommunity] = useState<
-        ICommunityStories[]
+        ICommunitiesListStories[]
     >([]);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        Api.story.list<ICommunityStories[]>().then((s) => {
+        setRefreshing(true);
+        Api.story.list<ICommunitiesListStories[]>().then((s) => {
             setStoriesCommunity(s);
-            console.log(s);
+            setRefreshing(false);
         });
     }, []);
 
@@ -32,13 +38,14 @@ export default function Stories() {
                 }}
             >
                 <Headline>Stories</Headline>
-                <Text
+                <Pressable
+                    hitSlop={10}
                     onPress={(e) =>
                         navigationRef.current?.navigate(Screens.Stories)
                     }
                 >
-                    View All
-                </Text>
+                    <Text>View All</Text>
+                </Pressable>
             </View>
             <ScrollView
                 horizontal={true}
@@ -46,12 +53,21 @@ export default function Stories() {
                 contentContainerStyle={{ padding: 18 }}
             >
                 <NewStoryCard key="newStory" />
+                {refreshing && (
+                    <ActivityIndicator
+                        style={{ marginBottom: 22 }}
+                        animating
+                        color={ipctColors.blueRibbon}
+                    />
+                )}
                 {storiesCommunity.map((s) => (
                     <StoriesCard
                         key={s.id}
                         communityId={s.id}
                         communityName={s.name}
-                        imageURI={s.stories[s.stories.length - 1].media}
+                        imageURI={
+                            s.stories.media ? s.stories.media : s.coverImage
+                        }
                     />
                 ))}
             </ScrollView>

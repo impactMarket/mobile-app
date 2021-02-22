@@ -7,12 +7,13 @@ import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import * as shape from 'd3-shape';
 import * as WebBrowser from 'expo-web-browser';
+import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
 import { ICommunity } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
-import { View, StyleSheet, RefreshControl } from 'react-native';
+import { View, StyleSheet, RefreshControl, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Paragraph,
@@ -22,7 +23,7 @@ import {
     ActivityIndicator,
 } from 'react-native-paper';
 import { LineChart } from 'react-native-svg-charts';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
@@ -33,10 +34,13 @@ interface ICommunityDetailsScreen {
     route: {
         params: {
             communityId: string;
+            openDonate?: boolean;
+            fromStories?: boolean;
         };
     };
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
+    const dispatch = useDispatch();
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
     const language = useSelector(
         (state: IRootState) => state.user.metadata.language
@@ -52,7 +56,15 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     useEffect(() => {
         Api.community
             .getByPublicId(props.route.params.communityId)
-            .then((c) => setCommunity(c!))
+            .then((c) => {
+                setCommunity(c!);
+                if (props.route.params.openDonate === true) {
+                    dispatch({
+                        type: modalDonateAction.OPEN,
+                        payload: c,
+                    });
+                }
+            })
             .finally(() => setRefreshing(false));
         Api.community
             .getHistoricalSSI(props.route.params.communityId)
@@ -169,6 +181,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     return (
         <>
+            <StatusBar hidden={false} />
             <ScrollView
                 refreshControl={
                     <RefreshControl

@@ -161,7 +161,9 @@ function CommunitiesScreen() {
     return (
         <>
             <FlatList
-                data={[{} as any].concat(communities)}
+                data={[
+                    { publicId: 'for-compliance-sake-really' } as any,
+                ].concat(communities)}
                 renderItem={({
                     item,
                     index,

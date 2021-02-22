@@ -2,7 +2,9 @@ import BackSvg from 'components/svg/header/BackSvg';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import Api from 'services/api';
+import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
 
 interface ICommunityStoriesBox extends ICommunitiesListStories {
@@ -12,11 +14,14 @@ function StoriesScreen() {
     const [storiesCommunity, setStoriesCommunity] = useState<
         ICommunityStoriesBox[]
     >([]);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        Api.story
-            .list<ICommunityStoriesBox[]>()
-            .then((s) => setStoriesCommunity(s));
+        setRefreshing(true);
+        Api.story.list<ICommunityStoriesBox[]>().then((s) => {
+            setStoriesCommunity(s);
+            setRefreshing(false);
+        });
     }, []);
 
     function createRows(data: ICommunityStoriesBox[], columns: number) {
@@ -28,12 +33,23 @@ function StoriesScreen() {
                 // [D]
                 id: lastRowElements,
                 name: `empty-${lastRowElements}`,
+                coverImage: '',
                 empty: true,
-                stories: [],
+                stories: {} as any,
             });
             lastRowElements += 1; // [E]
         }
         return data; // [F]
+    }
+
+    if (refreshing) {
+        return (
+            <ActivityIndicator
+                style={{ marginBottom: 22 }}
+                animating
+                color={ipctColors.blueRibbon}
+            />
+        );
     }
 
     return (
@@ -51,7 +67,11 @@ function StoriesScreen() {
                         key={item.id}
                         communityId={item.id}
                         communityName={item.name}
-                        imageURI={item.stories[item.stories.length - 1].media}
+                        imageURI={
+                            item.stories.media
+                                ? item.stories.media
+                                : item.coverImage
+                        }
                     />
                 );
             }}
