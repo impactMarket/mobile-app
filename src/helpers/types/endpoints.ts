@@ -87,14 +87,19 @@ export interface ICommunityStory {
     id: number;
     media: string | null;
     message: string | null;
-    love: number;
+    loves: number;
+    userLoved: boolean;
 }
 
 export interface ICommunitiesListStories {
     id: number;
     name: string;
     coverImage: string;
-    story: ICommunityStory; // most recent
+    story: {
+        id: number;
+        media: string | null;
+        message: string | null;
+    }; // most recent
 }
 
 export interface ICommunityStories {

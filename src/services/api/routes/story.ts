@@ -42,7 +42,7 @@ class ApiRouteStory {
             };
             console.log(formData);
             const result = await axios.post(
-                '/stories/add',
+                '/story/add',
                 formData,
                 requestHeaders
             );
@@ -54,7 +54,7 @@ class ApiRouteStory {
     }
 
     static async list<T extends ICommunitiesListStories[]>(): Promise<T> {
-        const result = await getRequest<T>('/stories/list');
+        const result = await getRequest<T>('/story/list');
         return result ? result : ([] as any);
     }
 
@@ -62,13 +62,13 @@ class ApiRouteStory {
         communityId: number
     ): Promise<ICommunityStories> {
         const result = await getRequest<ICommunityStories>(
-            '/stories/community/' + communityId
+            '/story/community/' + communityId
         );
         return result!; // TODO: don't!
     }
 
     static async love(contentId: number): Promise<void> {
-        await postRequest('/stories/love', { contentId });
+        await postRequest('/story/love', { contentId });
         return;
     }
 }
