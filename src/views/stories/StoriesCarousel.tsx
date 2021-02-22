@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, Image, FlatList, useWindowDimensions } from 'react-native';
+import { View, Text, Image, FlatList, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import { useNavigation } from '@react-navigation/native';
@@ -7,7 +7,22 @@ import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import Button from 'components/core/Button';
 import Api from 'services/api';
 import { ICommunityStory } from 'helpers/types/endpoints';
+import CarouselSlide from './CarouselSlide';
+import countriesJSON from 'assets/countries.json';
+import { Screens } from 'helpers/constants';
+import { ActivityIndicator } from 'react-native-paper';
+import { ipctColors } from 'styles/index';
 
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        phone: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 interface IStoriesCarouselScreen {
     route: {
         params: {
@@ -17,20 +32,25 @@ interface IStoriesCarouselScreen {
 }
 function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     const navigation = useNavigation();
-    const dimensions = useWindowDimensions();
 
     const [index, setIndex] = useState(0);
     const [stories, setStories] = useState<ICommunityStory[]>([]);
+    const [lovedStories, setLovedStories] = useState<boolean[]>([]);
     const [country, setCountry] = useState('');
     const [city, setCity] = useState('');
     const [name, setName] = useState('');
+    const [coverImage, setCoverImage] = useState('');
+    const [communityPublicId, setCommunityPublicId] = useState('');
 
     useEffect(() => {
         Api.story.getByCommunity(props.route.params.communityId).then((s) => {
-            setStories(s.stories);
             setName(s.name);
             setCity(s.city);
             setCountry(s.country);
+            setCoverImage(s.coverImage);
+            setCommunityPublicId(s.publicId);
+            setStories(s.stories);
+            setLovedStories(Array(s.stories.length).fill(false));
         });
     }, []);
 
@@ -53,30 +73,24 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
         }
     }, []);
 
-    function Slide({ data }: { data: ICommunityStory }) {
+    if (stories.length === 0) {
         return (
             <View
                 style={{
-                    height: dimensions.height,
-                    width: dimensions.width,
+                    flex: 1,
                     flexDirection: 'row',
+                    alignItems: 'center',
+                    alignSelf: 'center',
                 }}
             >
-                <Image
-                    source={{ uri: data.media }}
-                    style={{
-                        width: dimensions.width,
-                        resizeMode: 'contain',
-                    }}
-                ></Image>
+                <ActivityIndicator
+                    size={35}
+                    style={{ marginBottom: 22 }}
+                    animating
+                    color={ipctColors.blueRibbon}
+                />
             </View>
         );
-    }
-
-    console.log('stories', stories);
-
-    if (stories.length === 0) {
-        return <Text>Loading</Text>;
     }
 
     return (
@@ -113,8 +127,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                     >
                         <Image
                             source={{
-                                uri:
-                                    'https://yt3.ggpht.com/ytc/AAUvwnigEMrvOIpqlF23fLXCsdjUnb6yfQShZayTwM3bVQ=s900-c-k-c0x00ffffff-no-rj',
+                                uri: coverImage,
                             }}
                             style={{
                                 height: 48,
@@ -148,52 +161,27 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                                     color: '#FAFAFA',
                                 }}
                             >
-                                {country}, {city}
+                                {countries[country].name}, {city}
                             </Text>
                         </View>
                     </View>
-                    <View
+                    <Pressable
+                        hitSlop={15}
+                        onPress={(e) => navigation.goBack()}
                         style={{
                             right: 0,
-                            // backgroundColor: 'green'
                         }}
                     >
-                        <CloseStorySvg onPress={(e) => navigation.goBack()} />
-                    </View>
+                        <CloseStorySvg />
+                    </Pressable>
                 </View>
-                {/* <View
-                    style={{
-                        backgroundColor: 'blue',
-                        // position: 'absolute',
-                        width: '100%',
-                        height: 100,
-                        flex: 2,
-                        flexDirection: 'row',
-                    }}
-                >
-                    <Pressable style={{ flex: 1, backgroundColor: 'yellow' }} />
-                    <Pressable style={{ flex: 1, backgroundColor: 'green' }} />
-                </View> */}
             </View>
-            {/* <Text>StoriesCarouselScreen</Text> */}
-            {/* <Image
-                source={{
-                    uri:
-                        'https://s3.amazonaws.com/mobilecause-avatar-production/shared_img/shared_imgs/220827/original/NGO_Volunteers_and_Kids_6.jpg?1548269069',
-                }}
-                style={{
-                    flex: 1,
-                    // resizeMode: 'cover',
-                    justifyContent: 'center',
-                    // alignItems: 'flex-end',
-                    // borderRadius: 8,
-                }}
-            /> */}
             <FlatList
                 data={stories}
-                style={{ flex: 1, backgroundColor: 'green' }}
+                style={{ flex: 1 }}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => {
-                    return <Slide data={item} />;
+                    return <CarouselSlide data={item} />;
                 }}
                 pagingEnabled
                 horizontal
@@ -228,46 +216,54 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                         alignItems: 'center',
                     }}
                 >
-                    <View style={{ flexDirection: 'row' }}>
-                        <StoryLoveSvg style={{ marginLeft: 54 }} />
+                    <Pressable
+                        style={{ flexDirection: 'row' }}
+                        hitSlop={15}
+                        onPress={() => {
+                            const l = lovedStories;
+                            l[index] = !l[index];
+                            setLovedStories([...l]);
+                            Api.story.love(stories[index].id);
+                        }}
+                    >
+                        <StoryLoveSvg
+                            style={{ marginLeft: 54 }}
+                            loved={lovedStories[index]}
+                        />
                         <Text
                             style={{
                                 marginLeft: 8,
                                 fontFamily: 'Gelion-Regular',
                                 fontSize: 16,
                                 lineHeight: 19,
-                                color: 'white',
+                                color: lovedStories[index] ? 'red' : 'white',
                             }}
                         >
-                            34 Loves
+                            {stories[index].love +
+                                (lovedStories[index] ? 1 : 0)}{' '}
+                            Loves
                         </Text>
-                    </View>
+                    </Pressable>
                     <Button
                         modeType="green"
                         bold
                         style={{ marginRight: 22, width: 158 }}
+                        onPress={() =>
+                            navigation.navigate(Screens.CommunityDetails, {
+                                communityId: communityPublicId,
+                                openDonate: true,
+                            })
+                        }
                     >
                         Donate
                     </Button>
                 </View>
-                {/* <Text
-                    style={{
-                        fontFamily: 'Gelion-Regular',
-                        fontSize: 20,
-                        lineHeight: 24,
-                        color: 'white',
-                        textAlign: 'center',
-                        marginHorizontal: 22,
-                        // backgroundColor: 'blue',
-                    }}
-                >
-                    {index + 1}/{stories.length}
-                </Text> */}
                 <View style={{ flexDirection: 'row' }}>
                     {Array(stories.length)
                         .fill(0)
                         .map((_, _index) => (
                             <View
+                                key={_index}
                                 style={{
                                     flex: 1,
                                     marginHorizontal: 2,
