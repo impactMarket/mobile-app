@@ -85,20 +85,24 @@ export interface IUserAuth extends IUserBaseAuth {
 
 export interface ICommunityStory {
     id: number;
-    media: string;
-    message: string;
+    media: string | null;
+    message: string | null;
+    love: number;
 }
 
 export interface ICommunitiesListStories {
     id: number;
     name: string;
-    stories: ICommunityStory[];
+    coverImage: string;
+    stories: ICommunityStory;
 }
 
 export interface ICommunityStories {
     id: number;
+    publicId: string; // temporary
     name: string;
     city: string;
     country: string;
+    coverImage: string;
     stories: ICommunityStory[];
 }

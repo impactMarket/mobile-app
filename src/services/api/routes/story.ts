@@ -6,7 +6,7 @@ import {
     ICommunityStories,
 } from 'helpers/types/endpoints';
 import config from '../../../../config';
-import { getRequest } from '../base';
+import { getRequest, postRequest } from '../base';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -65,6 +65,11 @@ class ApiRouteStory {
             '/stories/community/' + communityId
         );
         return result!; // TODO: don't!
+    }
+
+    static async love(contentId: number): Promise<void> {
+        await postRequest('/stories/love', { contentId });
+        return;
     }
 }
 
