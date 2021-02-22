@@ -82,22 +82,17 @@ export default class CachedImage extends Component<ICachedImageProps, object> {
                 <View style={{ height: (this.props.style as any).height }} />
             );
         }
-        return (
-            <View>
-                {this.props.isBackground ? (
-                    <ImageBackground
-                        {...this.props}
-                        source={{ uri: this.state.imgURI }}
-                    >
-                        {this.props.children}
-                    </ImageBackground>
-                ) : (
-                    <Image
-                        {...this.props}
-                        source={{ uri: this.state.imgURI }}
-                    />
-                )}
-            </View>
-        );
+
+        if (this.props.isBackground) {
+            return (
+                <ImageBackground
+                    {...this.props}
+                    source={{ uri: this.state.imgURI }}
+                >
+                    {this.props.children}
+                </ImageBackground>
+            );
+        }
+        return <Image {...this.props} source={{ uri: this.state.imgURI }} />;
     }
 }
