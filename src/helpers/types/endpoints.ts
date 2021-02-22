@@ -94,7 +94,7 @@ export interface ICommunitiesListStories {
     id: number;
     name: string;
     coverImage: string;
-    stories: ICommunityStory;
+    story: ICommunityStory; // most recent
 }
 
 export interface ICommunityStories {

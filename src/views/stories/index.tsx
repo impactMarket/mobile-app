@@ -35,7 +35,7 @@ function StoriesScreen() {
                 name: `empty-${lastRowElements}`,
                 coverImage: '',
                 empty: true,
-                stories: {} as any,
+                story: {} as any,
             });
             lastRowElements += 1; // [E]
         }
@@ -68,8 +68,8 @@ function StoriesScreen() {
                         communityId={item.id}
                         communityName={item.name}
                         imageURI={
-                            item.stories.media
-                                ? item.stories.media
+                            item.story.media
+                                ? item.story.media
                                 : item.coverImage
                         }
                     />
