@@ -22,6 +22,9 @@ function NewStoryScreen() {
     const userCommunityId = useSelector(
         (state: IRootState) => state.user.community.metadata?.id
     );
+    const userCommunityStatus = useSelector(
+        (state: IRootState) => state.user.community.metadata?.status
+    );
 
     useLayoutEffect(() => {
         if (userCommunityId !== undefined) {
@@ -75,7 +78,7 @@ function NewStoryScreen() {
         }
     };
 
-    if (userCommunityId === undefined) {
+    if (userCommunityId === undefined || userCommunityStatus !== 'valid') {
         return <Text>Not in a community!</Text>;
     }
 

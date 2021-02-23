@@ -166,7 +166,9 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                                     color: '#FAFAFA',
                                 }}
                             >
-                                {name}
+                                {name.length > 23
+                                    ? name.substr(0, 22) + '...'
+                                    : name}
                             </Text>
                             <Text
                                 style={{
@@ -176,7 +178,10 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                                     color: '#FAFAFA',
                                 }}
                             >
-                                {countries[country].name}, {city}
+                                {countries[country].name},{' '}
+                                {city.length > 15
+                                    ? city.substr(0, 13) + '...'
+                                    : city}
                             </Text>
                         </View>
                     </View>

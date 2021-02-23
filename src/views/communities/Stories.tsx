@@ -4,9 +4,11 @@ import {
     ICommunitiesListStories,
     ICommunityStories,
 } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import React, { Component, useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator, Headline } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import NewStoryCard from './NewStoryCard';
@@ -17,6 +19,9 @@ export default function Stories() {
         ICommunitiesListStories[]
     >([]);
     const [refreshing, setRefreshing] = useState(false);
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
 
     useEffect(() => {
         setRefreshing(true);
@@ -44,7 +49,18 @@ export default function Stories() {
                         navigationRef.current?.navigate(Screens.Stories)
                     }
                 >
-                    <Text>View All</Text>
+                    <Text
+                        style={{
+                            color: ipctColors.blueRibbon,
+                            fontFamily: 'Gelion-Regular',
+                            fontSize: 16,
+                            lineHeight: 19,
+                            textAlign: 'center',
+                            letterSpacing: 0.366667,
+                        }}
+                    >
+                        View All
+                    </Text>
                 </Pressable>
             </View>
             <ScrollView
@@ -52,7 +68,7 @@ export default function Stories() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ padding: 18 }}
             >
-                <NewStoryCard key="newStory" />
+                {userAddress.length > 0 && <NewStoryCard key="newStory" />}
                 {refreshing && (
                     <ActivityIndicator
                         style={{ marginBottom: 22 }}

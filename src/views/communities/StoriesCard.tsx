@@ -49,7 +49,9 @@ export default function StoriesCard(props: {
                     // marginHorizontal: 12,
                 }}
             >
-                {props.communityName}
+                {props.communityName.length > 18
+                    ? props.communityName.substr(0, 17) + '...'
+                    : props.communityName}
             </Text>
         </View>
     );
