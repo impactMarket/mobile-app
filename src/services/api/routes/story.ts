@@ -59,10 +59,12 @@ class ApiRouteStory {
     }
 
     static async getByCommunity(
-        communityId: number
+        communityId: number,
+        isUserLogged: boolean // TODO: this must change
     ): Promise<ICommunityStories> {
         const result = await getRequest<ICommunityStories>(
-            '/story/community/' + communityId
+            '/story/community/' + communityId,
+            isUserLogged
         );
         return result!; // TODO: don't!
     }

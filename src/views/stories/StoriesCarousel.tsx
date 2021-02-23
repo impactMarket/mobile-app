@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, Image, FlatList, Pressable } from 'react-native';
+import { View, Text, Image, FlatList, Pressable, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +12,9 @@ import countriesJSON from 'assets/countries.json';
 import { Screens } from 'helpers/constants';
 import { ActivityIndicator } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
+import { useSelector } from 'react-redux';
+import { IRootState } from 'helpers/types/state';
+import i18n from 'assets/i18n';
 
 const countries: {
     [key: string]: {
@@ -33,6 +36,9 @@ interface IStoriesCarouselScreen {
 function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     const navigation = useNavigation();
 
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
     const [index, setIndex] = useState(0);
     const [stories, setStories] = useState<ICommunityStory[]>([]);
     const [lovedStories, setLovedStories] = useState<boolean[]>([]);
@@ -43,15 +49,24 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     const [communityPublicId, setCommunityPublicId] = useState('');
 
     useEffect(() => {
-        Api.story.getByCommunity(props.route.params.communityId).then((s) => {
-            setName(s.name);
-            setCity(s.city);
-            setCountry(s.country);
-            setCoverImage(s.coverImage);
-            setCommunityPublicId(s.publicId);
-            setStories(s.stories);
-            setLovedStories(Array(s.stories.length).fill(false));
-        });
+        Api.story
+            .getByCommunity(
+                props.route.params.communityId,
+                userAddress.length > 0
+            )
+            .then((s) => {
+                setName(s.name);
+                setCity(s.city);
+                setCountry(s.country);
+                setCoverImage(s.coverImage);
+                setCommunityPublicId(s.publicId);
+                setStories(s.stories);
+                if (userAddress.length > 0) {
+                    setLovedStories(s.stories.map((ss) => ss.userLoved));
+                } else {
+                    setLovedStories(Array(s.stories.length).fill(false));
+                }
+            });
     }, []);
 
     const indexRef = useRef(index);
@@ -220,10 +235,24 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                         style={{ flexDirection: 'row' }}
                         hitSlop={15}
                         onPress={() => {
-                            const l = lovedStories;
-                            l[index] = !l[index];
-                            setLovedStories([...l]);
-                            Api.story.love(stories[index].id);
+                            if (userAddress.length > 0) {
+                                const l = lovedStories;
+                                l[index] = !l[index];
+                                setLovedStories([...l]);
+                                Api.story.love(stories[index].id);
+                                let previousStoriesValues = stories;
+                                previousStoriesValues[index].loves += l[index]
+                                    ? 1
+                                    : -1;
+                                setStories([...previousStoriesValues]);
+                            } else {
+                                Alert.alert(
+                                    i18n.t('failure'),
+                                    'You need to be authenticated!',
+                                    [{ text: i18n.t('close') }],
+                                    { cancelable: false }
+                                );
+                            }
                         }}
                     >
                         <StoryLoveSvg
@@ -236,12 +265,10 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                                 fontFamily: 'Gelion-Regular',
                                 fontSize: 16,
                                 lineHeight: 19,
-                                color: lovedStories[index] ? 'red' : 'white',
+                                color: 'white',
                             }}
                         >
-                            {stories[index].love +
-                                (lovedStories[index] ? 1 : 0)}{' '}
-                            Loves
+                            {stories[index].loves} Loves
                         </Text>
                     </Pressable>
                     <Button

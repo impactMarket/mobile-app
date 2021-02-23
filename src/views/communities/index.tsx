@@ -1,7 +1,6 @@
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import { ITabBarIconProps } from 'helpers/types/common';
 import React, { useState, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import Select from 'components/core/Select';
 import * as Location from 'expo-location';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
@@ -12,10 +11,10 @@ import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
 import Stories from './Stories';
+import i18n from 'assets/i18n';
 
 function CommunitiesScreen() {
     const flatListRef = useRef<FlatList<ICommunityLightDetails> | null>(null);
-    const { i18n } = useTranslation();
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
     const [userLocation, setUserLocation] = useState<
@@ -216,7 +215,6 @@ function CommunitiesScreen() {
 }
 
 CommunitiesScreen.navigationOptions = () => {
-    const { i18n } = useTranslation();
     return {
         headerTitle: i18n.t('communities'),
         tabBarIcon: (props: ITabBarIconProps) => (

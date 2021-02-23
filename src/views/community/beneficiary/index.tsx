@@ -1,4 +1,5 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
@@ -15,7 +16,7 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import {
     StyleSheet,
     Text,
@@ -46,7 +47,6 @@ function BeneficiaryScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const { i18n } = useTranslation();
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
     );
@@ -503,7 +503,6 @@ BeneficiaryScreen.navigationOptions = ({
 }: {
     route: RouteProp<any, any>;
 }) => {
-    const { i18n } = useTranslation();
     return {
         title: i18n.t('claim'),
         tabBarIcon: (props: ITabBarIconProps) => (

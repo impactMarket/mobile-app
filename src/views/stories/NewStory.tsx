@@ -20,17 +20,22 @@ function NewStoryScreen() {
         (state: IRootState) => state.user.wallet.address
     );
     const userCommunityId = useSelector(
-        (state: IRootState) => state.user.community.metadata.id
+        (state: IRootState) => state.user.community.metadata?.id
     );
 
     useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <SubmitStory submit={submitNewStory} submitting={submitting} />
-            ),
-        });
-        // TODO: this next line should change though.
-    }, [navigation, storyText, storyMedia, submitting]);
+        if (userCommunityId !== undefined) {
+            navigation.setOptions({
+                headerRight: () => (
+                    <SubmitStory
+                        submit={submitNewStory}
+                        submitting={submitting}
+                    />
+                ),
+            });
+            // TODO: this next line should change though.
+        }
+    }, [navigation, storyText, storyMedia, submitting, userCommunityId]);
 
     const submitNewStory = () => {
         setSubmitting(true);
@@ -69,6 +74,10 @@ function NewStoryScreen() {
             setStoryMedia(result.uri);
         }
     };
+
+    if (userCommunityId === undefined) {
+        return <Text>Not in a community!</Text>;
+    }
 
     return (
         <View style={{ marginHorizontal: 18 }}>

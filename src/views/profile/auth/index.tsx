@@ -143,21 +143,21 @@ function Auth() {
             );
             await CacheStore.cacheUser(user.user);
 
-            const unsubscribe = store.subscribe(() => {
-                const state = store.getState();
-                if (state.user.wallet.address.length > 0) {
-                    unsubscribe();
-                    setConnecting(false);
-                    // navigation.goBack();
-                    if (state.user.community.isBeneficiary) {
-                        navigation.navigate(Screens.Beneficiary);
-                    } else if (state.user.community.isManager) {
-                        navigation.navigate(Screens.CommunityManager);
-                    } else {
-                        navigation.navigate(Screens.Communities);
-                    }
-                }
-            });
+            // const unsubscribe = store.subscribe(() => {
+            //     const state = store.getState();
+            //     if (state.user.wallet.address.length > 0) {
+            //         unsubscribe();
+            //         setConnecting(false);
+            //         // navigation.goBack();
+            //         if (state.user.community.isBeneficiary) {
+            //             navigation.navigate(Screens.Beneficiary);
+            //         } else if (state.user.community.isManager) {
+            //             navigation.navigate(Screens.CommunityManager);
+            //         } else {
+            //             navigation.navigate(Screens.Communities);
+            //         }
+            //     }
+            // });
             await welcomeUser(
                 userAddress,
                 dappkitResponse.phoneNumber,
