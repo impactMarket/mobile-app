@@ -62,6 +62,11 @@ export enum modalDonateAction {
     CLOSE = 'donateModal/close',
 }
 
+export enum storiesAction {
+    INIT = 'stories/init',
+    CONCAT = 'stories/concat',
+}
+
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';
 
 export enum celoNetwork {
