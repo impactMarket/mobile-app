@@ -1,20 +1,19 @@
 import { Screens } from 'helpers/constants';
+import { addStoriesToState } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
-import {
-    ICommunitiesListStories,
-    ICommunityStories,
-} from 'helpers/types/endpoints';
+import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator, Headline } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import NewStoryCard from './NewStoryCard';
 import StoriesCard from './StoriesCard';
 
 export default function Stories() {
+    const dispatch = useDispatch();
     const [storiesCommunity, setStoriesCommunity] = useState<
         ICommunitiesListStories[]
     >([]);
@@ -27,6 +26,7 @@ export default function Stories() {
         setRefreshing(true);
         Api.story.list<ICommunitiesListStories[]>().then((s) => {
             setStoriesCommunity(s);
+            dispatch(addStoriesToState(s));
             setRefreshing(false);
         });
     }, []);

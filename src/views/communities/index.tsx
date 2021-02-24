@@ -141,7 +141,7 @@ function CommunitiesScreen() {
                 <Stories />
                 <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
                     <Select
-                        label={i18n.t('order')}
+                        label={''}
                         value={textCommunitiesOrder(communtiesOrder)}
                         onPress={() => setIsDialogOrderOpen(true)}
                     />
