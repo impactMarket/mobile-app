@@ -32,7 +32,10 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
-function Carousel(props: { communityId: number }) {
+function Carousel(props: {
+    communityId: number;
+    goToOtherCommunity: (next: boolean) => void;
+}) {
     const navigation = useNavigation();
     const dimensions = useWindowDimensions();
 
@@ -66,6 +69,22 @@ function Carousel(props: { communityId: number }) {
             });
     }, []);
 
+    const handlePressPrevious = () => {
+        if (index === 0) {
+            props.goToOtherCommunity(false);
+        } else {
+            setIndex(index - 1);
+        }
+    };
+
+    const handlePressNext = () => {
+        if (index === stories.length - 1) {
+            props.goToOtherCommunity(true);
+        } else {
+            setIndex(index + 1);
+        }
+    };
+
     // if (true) {
     if (stories.length === 0) {
         return (
@@ -93,19 +112,30 @@ function Carousel(props: { communityId: number }) {
     }
 
     return (
-        <View style={{ flex: 1, flexDirection: 'row' }}>
+        <View
+            style={{
+                flex: 1,
+                flexDirection: 'column',
+                // backgroundColor: 'blue',
+                width: dimensions.width,
+                justifyContent: 'space-between',
+            }}
+        >
+            <CarouselSlide data={stories[index]} />
             <View
                 style={{
-                    position: 'absolute',
-                    zIndex: 1,
+                    // position: 'absolute',
+                    // zIndex: 1,
                     width: '100%',
+                    // backgroundColor: 'pink',
+                    // height: 98,
                 }}
             >
                 <View
                     style={{
                         marginTop: 26,
                         marginHorizontal: 19,
-                        flex: 1,
+                        // flex: 1,
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -171,12 +201,25 @@ function Carousel(props: { communityId: number }) {
                     </Pressable>
                 </View>
             </View>
-            <CarouselSlide data={stories[index]} />
+            {/* <CarouselSlide data={stories[index]} /> */}
             <View
                 style={{
-                    position: 'absolute',
+                    // backgroundColor: 'yellow',
                     width: '100%',
-                    alignSelf: 'flex-end',
+                    flex: 1,
+                    flexDirection: 'row',
+                }}
+            >
+                <Pressable style={{ flex: 1 }} onPress={handlePressPrevious} />
+                <Pressable style={{ flex: 1 }} onPress={handlePressNext} />
+            </View>
+            <View
+                style={{
+                    // position: 'absolute',
+                    width: '100%',
+                    // alignSelf: 'flex-end',
+                    // backgroundColor: 'purple',
+                    // height: 200,
                 }}
             >
                 <Text

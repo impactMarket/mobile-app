@@ -13,6 +13,7 @@ export default function CarouselSlide({ data }: { data: ICommunityStory }) {
                 width: dimensions.width,
                 flexDirection: 'row',
                 zIndex: -1,
+                position: 'absolute',
             }}
         >
             {data.media && (
