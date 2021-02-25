@@ -2,6 +2,7 @@ import CacheImage from 'components/CacheImage';
 import { ICommunityStory } from 'helpers/types/endpoints';
 import React from 'react';
 import { useWindowDimensions, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function CarouselSlide({ data }: { data: ICommunityStory }) {
     const dimensions = useWindowDimensions();

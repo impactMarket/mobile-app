@@ -21,6 +21,7 @@ import { ipctColors } from 'styles/index';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const countries: {
     [key: string]: {
@@ -313,6 +314,32 @@ function Carousel(props: {
                         ))}
                 </View>
             </View>
+            <LinearGradient
+                style={{
+                    height: 98,
+                    // backgroundColor: 'green',
+                    width: dimensions.width,
+                    // flexDirection: 'row',
+                    zIndex: -1,
+                    position: 'absolute',
+                }}
+                colors={[
+                    'rgba(11, 11, 11, 0.4) 49.44%',
+                    'rgba(196, 196, 196, 0) 98.96%',
+                ]}
+            />
+            <LinearGradient
+                style={{
+                    height: 354,
+                    // backgroundColor: 'green',
+                    width: dimensions.width,
+                    // flexDirection: 'row',
+                    zIndex: -1,
+                    position: 'absolute',
+                    bottom: 0,
+                }}
+                colors={['rgba(196, 196, 196, 0)', '#0B0B0B']}
+            />
         </View>
     );
 }

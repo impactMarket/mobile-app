@@ -24,11 +24,14 @@ class ApiRouteStory {
             const fileType = uriParts[uriParts.length - 1];
 
             const formData = new FormData();
-            formData.append('imageFile', {
-                uri: mediaURI,
-                name: `photo.${fileType}`,
-                type: `image/${fileType}`,
-            } as any);
+            console.log(mediaURI.length);
+            if (mediaURI.length > 0) {
+                formData.append('imageFile', {
+                    uri: mediaURI,
+                    name: `photo.${fileType}`,
+                    type: `image/${fileType}`,
+                } as any);
+            }
             formData.append('byAddress', userAddress);
             formData.append('communityId', communityId.toString());
             formData.append('message', message);

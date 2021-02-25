@@ -46,11 +46,11 @@ function NewStoryScreen() {
             .add(storyMedia, userCommunityId, storyText, userAddress)
             .then((r) => {
                 navigation.goBack();
-                console.log(r);
+                console.log('success', r);
                 // show success message
             })
             .catch((e) => {
-                console.log(e);
+                console.log('fail', e);
                 // error submitting
             })
             .finally(() => {
