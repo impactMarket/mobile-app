@@ -1,10 +1,8 @@
 import CacheImage from 'components/CacheImage';
-import { ICommunityStory } from 'helpers/types/endpoints';
 import React from 'react';
 import { useWindowDimensions, View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 
-export default function CarouselSlide({ data }: { data: ICommunityStory }) {
+export default function CarouselSlide({ media }: { media: string | null }) {
     const dimensions = useWindowDimensions();
 
     return (
@@ -17,11 +15,11 @@ export default function CarouselSlide({ data }: { data: ICommunityStory }) {
                 position: 'absolute',
             }}
         >
-            {data.media && (
+            {media && (
                 <View style={{ flexDirection: 'row' }}>
                     <CacheImage
                         source={{
-                            uri: data.media,
+                            uri: media,
                         }}
                         style={{
                             width: dimensions.width,
@@ -34,7 +32,7 @@ export default function CarouselSlide({ data }: { data: ICommunityStory }) {
                     />
                     <CacheImage
                         source={{
-                            uri: data.media,
+                            uri: media,
                         }}
                         style={{
                             width: dimensions.width,

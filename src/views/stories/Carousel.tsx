@@ -122,7 +122,7 @@ function Carousel(props: {
                 justifyContent: 'space-between',
             }}
         >
-            <CarouselSlide data={stories[index]} />
+            <CarouselSlide media={stories[index].media} />
             <View
                 style={{
                     // position: 'absolute',
