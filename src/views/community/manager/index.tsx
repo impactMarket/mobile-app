@@ -1,3 +1,4 @@
+import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CachedImage from 'components/CacheImage';
@@ -9,12 +10,11 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunity } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { StyleSheet, View, Text, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Headline, ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
@@ -22,7 +22,6 @@ import Managers from './cards/Managers';
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
 
-    const { i18n } = useTranslation();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
@@ -140,7 +139,7 @@ function CommunityManagerScreen() {
                         >
                             {i18n.t('pendingApprovalMessage')}{' '}
                             <Text
-                                style={{ color: iptcColors.softBlue }}
+                                style={{ color: ipctColors.blueRibbon }}
                                 onPress={() =>
                                     Linking.openURL(
                                         'mailto:hello@impactmarket.com'
@@ -168,7 +167,7 @@ function CommunityManagerScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={ipctColors.blueRibbon}
                 />
             </View>
         );
@@ -178,7 +177,6 @@ function CommunityManagerScreen() {
 }
 
 CommunityManagerScreen.navigationOptions = () => {
-    const { i18n } = useTranslation();
     return {
         title: i18n.t('manage'),
         tabBarIcon: (props: ITabBarIconProps) => (

@@ -25,7 +25,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -195,7 +195,7 @@ function AddedBeneficiaryScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={ipctColors.blueRibbon}
                 />
             </View>
         );

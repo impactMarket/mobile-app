@@ -1,7 +1,7 @@
 import { ContractKit } from '@celo/contractkit';
 import { Subscription } from '@unimodules/core';
 
-import { ICommunity } from './endpoints';
+import { ICommunitiesListStories, ICommunity } from './endpoints';
 import { UserAttributes } from './models';
 
 export interface IUserWallet {
@@ -42,6 +42,9 @@ export interface IModalDonateState {
     modalErrorOpen: boolean;
     submitting: boolean;
 }
+export interface IStoriesState {
+    stories: ICommunitiesListStories[];
+}
 
 export interface IAppState {
     kit: ContractKit;
@@ -60,4 +63,5 @@ export interface IRootState {
     auth: IAuthState;
     app: IAppState;
     modalDonate: IModalDonateState;
+    stories: IStoriesState;
 }

@@ -82,3 +82,32 @@ export interface IUserAuth extends IUserBaseAuth {
     user: UserAttributes;
     token: string;
 }
+
+export interface ICommunityStory {
+    id: number;
+    media: string | null;
+    message: string | null;
+    loves: number;
+    userLoved: boolean;
+}
+
+export interface ICommunitiesListStories {
+    id: number;
+    name: string;
+    coverImage: string;
+    story: {
+        id: number;
+        media: string | null;
+        message: string | null;
+    }; // most recent
+}
+
+export interface ICommunityStories {
+    id: number;
+    publicId: string; // temporary
+    name: string;
+    city: string;
+    country: string;
+    coverImage: string;
+    stories: ICommunityStory[];
+}

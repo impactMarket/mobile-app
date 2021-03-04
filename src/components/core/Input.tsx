@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TextInput, TextInputProps, View } from 'react-native';
 import { Paragraph } from 'react-native-paper';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 interface IInputProps extends TextInputProps {
     label: string;
@@ -20,6 +20,8 @@ export default class Input extends Component<IInputProps, object> {
             onChangeText,
             editable,
             style,
+            multiline,
+            numberOfLines,
         } = this.props;
         return (
             <View style={style}>
@@ -28,7 +30,7 @@ export default class Input extends Component<IInputProps, object> {
                         fontSize: 17,
                         lineHeight: 17,
                         letterSpacing: 0.245455,
-                        color: iptcColors.textGray,
+                        color: ipctColors.regentGray,
                         marginBottom: 10,
                     }}
                 >
@@ -43,7 +45,7 @@ export default class Input extends Component<IInputProps, object> {
                         borderRadius: 6,
                         fontSize: 20,
                         lineHeight: 24,
-                        color: iptcColors.almostBlack,
+                        color: ipctColors.almostBlack,
                         paddingVertical:
                             editable === undefined || editable ? 9 : 2,
                         paddingHorizontal:
@@ -55,6 +57,8 @@ export default class Input extends Component<IInputProps, object> {
                     onEndEditing={onEndEditing}
                     onChangeText={onChangeText}
                     editable={editable}
+                    multiline={multiline}
+                    numberOfLines={numberOfLines}
                 />
             </View>
         );

@@ -9,7 +9,7 @@ import { FlatList, RefreshControl, View, StyleSheet } from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 function RemovedBeneficiaryScreen() {
     const userCurrency = useSelector(
         (state: IRootState) => state.user.metadata.currency
@@ -62,7 +62,7 @@ function RemovedBeneficiaryScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={ipctColors.blueRibbon}
                 />
             </View>
         );

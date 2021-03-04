@@ -38,7 +38,7 @@ import combinedReducer from './src/helpers/redux/reducers';
 import Navigator from './src/navigator';
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
-import { iptcColors } from './src/styles';
+import { ipctColors } from './src/styles';
 
 import BigNumber from 'bignumber.js';
 import Button from 'components/core/Button';
@@ -88,8 +88,8 @@ const theme = {
     roundness: 4,
     colors: {
         ...DefaultTheme.colors,
-        primary: iptcColors.softBlue,
-        text: iptcColors.almostBlack,
+        primary: ipctColors.blueRibbon,
+        text: ipctColors.almostBlack,
     },
     fonts: configureFonts({
         default: fonts,
@@ -101,7 +101,7 @@ const navigationTheme = {
     ...NavigationDefaultTheme,
     colors: {
         ...NavigationDefaultTheme.colors,
-        primary: iptcColors.softBlue,
+        primary: ipctColors.blueRibbon,
         background: '#ffffff',
     },
 };
@@ -252,7 +252,7 @@ export default class App extends React.Component<any, IAppState> {
                                             fontFamily: 'Gelion-Regular',
                                             fontSize: 21,
                                             lineHeight: 25,
-                                            color: iptcColors.almostBlack,
+                                            color: ipctColors.almostBlack,
                                             width: '70%',
                                             textAlign: 'center',
                                         }}
@@ -286,7 +286,7 @@ export default class App extends React.Component<any, IAppState> {
                                                 fontSize: 24,
                                                 lineHeight: 24,
                                                 textAlign: 'center',
-                                                color: iptcColors.almostBlack,
+                                                color: ipctColors.almostBlack,
                                                 marginVertical: 16,
                                             }}
                                         >
@@ -297,7 +297,7 @@ export default class App extends React.Component<any, IAppState> {
                                                 fontFamily: 'Gelion-Regular',
                                                 fontSize: 16,
                                                 lineHeight: 19,
-                                                color: iptcColors.almostBlack,
+                                                color: ipctColors.almostBlack,
                                                 textAlign: 'center',
                                             }}
                                         >

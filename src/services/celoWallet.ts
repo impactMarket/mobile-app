@@ -41,11 +41,11 @@ async function celoWalletRequest(
         const tx = dappkitResponse.rawTxs[0];
         return toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt();
     } catch (e) {
+        // as transaction requests get pending, they then resume all at once
+        if (e.toLowerCase().includes('known transaction')) {
+            return;
+        }
         if (!__DEV__) {
-            // as transaction requests get pending, they then resume all at once
-            if (e.toLowerCase().includes('known transaction')) {
-                return;
-            }
             Sentry.captureException(e);
         }
         throw new Error(e);

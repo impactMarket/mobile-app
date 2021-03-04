@@ -1,4 +1,5 @@
 import currenciesJSON from 'assets/currencies.json';
+import i18n from 'assets/i18n';
 import Card from 'components/core/Card';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
@@ -22,7 +23,6 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
     FlatList,
     RefreshControl,
@@ -45,7 +45,7 @@ import {
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 const currencies: {
     [key: string]: {
@@ -56,7 +56,6 @@ const currencies: {
 } = currenciesJSON;
 function ProfileScreen() {
     const dispatch = useDispatch();
-    const { i18n } = useTranslation();
     const user = useSelector((state: IRootState) => state.user.metadata);
     const userWallet = useSelector((state: IRootState) => state.user.wallet);
     const app = useSelector((state: IRootState) => state.app);
@@ -549,7 +548,6 @@ function ProfileScreen() {
 }
 
 ProfileScreen.navigationOptions = () => {
-    const { i18n } = useTranslation();
     return {
         title: i18n.t('profile'),
         tabBarIcon: (props: ITabBarIconProps) => (
@@ -561,7 +559,7 @@ ProfileScreen.navigationOptions = () => {
 const styles = StyleSheet.create({
     scrollView: {},
     card: {
-        backgroundColor: iptcColors.softBlue,
+        backgroundColor: ipctColors.blueRibbon,
         marginTop: 10,
         marginBottom: 45,
     },
@@ -594,7 +592,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         lineHeight: 17,
         letterSpacing: 0.245455,
-        color: iptcColors.textGray,
+        color: ipctColors.regentGray,
         marginVertical: 8,
     },
 });

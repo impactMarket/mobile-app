@@ -21,9 +21,10 @@ import {
     SET_EXCHANGE_RATES,
     appAction,
     modalDonateAction,
+    storiesAction,
 } from 'helpers/constants';
 
-import { ICommunity } from './endpoints';
+import { ICommunitiesListStories, ICommunity } from './endpoints';
 import { UserAttributes } from './models';
 import { IUserWallet } from './state';
 
@@ -141,6 +142,16 @@ interface CloseModalDonateAction {
     type: typeof modalDonateAction.CLOSE;
 }
 
+interface InitLoadStoriesAction {
+    type: typeof storiesAction.INIT;
+    payload: ICommunitiesListStories[];
+}
+
+interface LoadMoreStoriesAction {
+    type: typeof storiesAction.CONCAT;
+    payload: ICommunitiesListStories[];
+}
+
 interface SetAppPushNotificationListeners {
     type: typeof appAction.SET_PUSH_NOTIFICATION_LISTENERS;
     payload: {
@@ -180,7 +191,11 @@ export type ModalActionTypes =
     | InProgressModalDonateAction
     | CloseModalDonateAction;
 
+export type StoriesActionTypes = InitLoadStoriesAction | LoadMoreStoriesAction;
+
 export type IStoreCombinedActionsTypes =
     | UserActionTypes
     | AuthActionTypes
-    | AppActionTypes;
+    | AppActionTypes
+    | ModalActionTypes
+    | StoriesActionTypes;

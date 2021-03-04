@@ -1,4 +1,5 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
@@ -15,7 +16,7 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 import {
     StyleSheet,
     Text,
@@ -37,7 +38,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
 
@@ -46,7 +47,6 @@ function BeneficiaryScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const { i18n } = useTranslation();
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
     );
@@ -218,7 +218,7 @@ function BeneficiaryScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={ipctColors.blueRibbon}
                 />
             </View>
         );
@@ -305,7 +305,7 @@ function BeneficiaryScreen() {
                                     key="claimedbybeneficiary"
                                     style={styles.claimedProgress}
                                     progress={claimedProgress}
-                                    color="#5289ff"
+                                    color={ipctColors.blueRibbon}
                                 />
                             </View>
                         </View>
@@ -434,7 +434,7 @@ function BeneficiaryScreen() {
                                         fontSize: 24,
                                         lineHeight: 24,
                                         textAlign: 'center',
-                                        color: iptcColors.almostBlack,
+                                        color: ipctColors.almostBlack,
                                         marginVertical: 16,
                                     }}
                                 >
@@ -445,7 +445,7 @@ function BeneficiaryScreen() {
                                         fontFamily: 'Gelion-Regular',
                                         fontSize: 16,
                                         lineHeight: 19,
-                                        color: iptcColors.almostBlack,
+                                        color: ipctColors.almostBlack,
                                         textAlign: 'center',
                                     }}
                                 >
@@ -503,7 +503,6 @@ BeneficiaryScreen.navigationOptions = ({
 }: {
     route: RouteProp<any, any>;
 }) => {
-    const { i18n } = useTranslation();
     return {
         title: i18n.t('claim'),
         tabBarIcon: (props: ITabBarIconProps) => (
@@ -535,8 +534,8 @@ const styles = StyleSheet.create({
     claimedProgress: {
         backgroundColor: '#d6d6d6',
         marginTop: 16.16,
-        height: 6.32,
         borderRadius: 6.5,
+        height: 6.32,
     },
     foregroundView: {
         width: '100%',
@@ -559,7 +558,7 @@ const styles = StyleSheet.create({
     howClaimsWorks: {
         fontFamily: 'Gelion-Regular',
         fontSize: 18,
-        color: '#7E8DA6',
+        color: ipctColors.regentGray,
         letterSpacing: 0.3,
         textAlign: 'center',
     },
@@ -568,7 +567,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '500',
         letterSpacing: 0.3,
-        color: iptcColors.softBlue,
+        color: ipctColors.blueRibbon,
         height: 25,
     },
     haveClaimed: {
@@ -577,7 +576,7 @@ const styles = StyleSheet.create({
         lineHeight: 14,
         letterSpacing: 0.25,
         textAlign: 'center',
-        color: '#7e8da6',
+        color: ipctColors.regentGray,
         marginTop: 53,
     },
 });

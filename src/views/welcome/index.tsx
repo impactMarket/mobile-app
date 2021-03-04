@@ -10,7 +10,7 @@ import { ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 function Welcome() {
     const insets = useSafeAreaInsets();
@@ -42,7 +42,7 @@ function Welcome() {
                         fontSize: 17,
                         lineHeight: 24,
                         textAlign: 'center',
-                        color: iptcColors.nileBlue,
+                        color: ipctColors.nileBlue,
                     }}
                 >
                     {i18n.t('oneTimeWelcomeMessage1')}

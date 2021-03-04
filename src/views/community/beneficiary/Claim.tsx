@@ -21,7 +21,8 @@ import { analytics } from 'services/analytics';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
+import * as Sentry from 'sentry-expo';
 
 import config from '../../../../config';
 
@@ -152,52 +153,6 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 if (tx === undefined) {
                     return;
                 }
-                // do not collect manager claim location nor private communities
-                if (
-                    communityMetadata.visibility === 'public' &&
-                    isManager === false
-                ) {
-                    try {
-                        let loc:
-                            | Location.LocationObject
-                            | undefined = undefined;
-                        const availableGPSToRequest =
-                            (await Location.hasServicesEnabledAsync()) &&
-                            (await Location.getPermissionsAsync()).status ===
-                                'granted' &&
-                            (await Location.getProviderStatusAsync())
-                                .locationServicesEnabled;
-                        if (availableGPSToRequest) {
-                            loc = await Location.getCurrentPositionAsync({
-                                accuracy: Location.Accuracy.Low,
-                            });
-                        }
-                        if (loc !== undefined) {
-                            await Api.user.addClaimLocation(
-                                communityMetadata.publicId,
-                                {
-                                    latitude:
-                                        loc.coords.latitude +
-                                        config.locationErrorMargin,
-                                    longitude:
-                                        loc.coords.longitude +
-                                        config.locationErrorMargin,
-                                }
-                            );
-                        }
-                        analytics('claim_location', {
-                            device: Device.brand,
-                            success: 'true',
-                        });
-                    } catch (e) {
-                        Api.system.uploadError(userAddress, 'claim', e);
-                        analytics('claim_location', {
-                            device: Device.brand,
-                            success: 'false',
-                        });
-                        return;
-                    }
-                }
                 CacheStore.resetClaimFails();
                 setTimeout(async () => {
                     const newBalanceStr = (
@@ -212,12 +167,66 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     });
                 });
                 analytics('claim', { device: Device.brand, success: 'true' });
+                // do not collect manager claim location nor private communities
+                if (
+                    communityMetadata.visibility === 'public' &&
+                    isManager === false
+                ) {
+                    try {
+                        if (!(await Location.hasServicesEnabledAsync())) {
+                            return;
+                        }
+                        if (
+                            (await Location.getPermissionsAsync()).status !==
+                            'granted'
+                        ) {
+                            return;
+                        }
+                        if (
+                            (await Location.getProviderStatusAsync())
+                                .locationServicesEnabled
+                        ) {
+                            return;
+                        }
+
+                        const loc = await Location.getCurrentPositionAsync({
+                            accuracy: Location.Accuracy.Low,
+                        });
+                        await Api.user.addClaimLocation(
+                            communityMetadata.publicId,
+                            {
+                                latitude:
+                                    loc.coords.latitude +
+                                    config.locationErrorMargin,
+                                longitude:
+                                    loc.coords.longitude +
+                                    config.locationErrorMargin,
+                            }
+                        );
+                        analytics('claim_location', {
+                            device: Device.brand,
+                            success: 'true',
+                        });
+                    } catch (e) {
+                        Api.system.uploadError(
+                            userAddress,
+                            'claim_location',
+                            e
+                        );
+                        analytics('claim_location', {
+                            device: Device.brand,
+                            success: 'false',
+                        });
+                        return;
+                    }
+                }
             })
             .catch(async (e) => {
+                Sentry.captureException(e);
                 CacheStore.cacheFailedClaim();
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
-                let error = 'possibleNetworkIssues';
+                let error = 'unknown';
                 if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
@@ -354,7 +363,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                         ? '#E9ECEF'
                         : notEnoughToClaimOnContract
                         ? '#f0ad4e'
-                        : iptcColors.softBlue,
+                        : ipctColors.blueRibbon,
                     alignSelf: 'center',
                     alignItems: 'center',
                     paddingTop: 11,
@@ -466,7 +475,7 @@ const styles = StyleSheet.create({
         fontSize: 37,
         letterSpacing: 0.61,
         textAlign: 'center',
-        color: iptcColors.greenishTeal,
+        color: ipctColors.greenishTeal,
     },
 });
 

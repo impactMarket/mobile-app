@@ -4,6 +4,9 @@ export enum Screens {
     Welcome = 'Welcome',
     CreateCommunity = 'CreateCommunity',
     WaitingTx = 'WaitingTx',
+    Stories = 'Stories',
+    NewStory = 'NewStory',
+    StoriesCarousel = 'StoriesCarousel',
     //
     ClaimExplained = 'ClaimExplained',
     AddedBeneficiary = 'AddedBeneficiary',
@@ -57,6 +60,11 @@ export enum modalDonateAction {
     GO_BACK_TO_DONATE = 'donateModal/goBackToDonate',
     IN_PROGRESS = 'donateModal/inProgress',
     CLOSE = 'donateModal/close',
+}
+
+export enum storiesAction {
+    INIT = 'stories/init',
+    CONCAT = 'stories/concat',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

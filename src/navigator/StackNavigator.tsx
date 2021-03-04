@@ -3,7 +3,7 @@ import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
 import CommunityDetailsScreen from 'views/community/details';
 import WaitingTxScreen from 'views/community/details/donate/waitingTx';
@@ -17,6 +17,9 @@ import FAQScreen from 'views/faq';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
+import StoriesScreen from 'views/stories';
+import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
+import NewStoryScreen from 'views/stories/NewStory';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -34,9 +37,29 @@ const commonScreens = (Navigator: typeof Stack) => (
             // options={TabNavigator.navigationOptions}
         />
         <Navigator.Screen
+            name={Screens.CreateCommunity}
+            component={CreateCommunityScreen}
+            options={CreateCommunityScreen.navigationOptions}
+        />
+        <Navigator.Screen
             name={Screens.WaitingTx}
             component={WaitingTxScreen}
             options={WaitingTxScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.Stories}
+            component={StoriesScreen}
+            options={StoriesScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.NewStory}
+            component={NewStoryScreen}
+            options={NewStoryScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.StoriesCarousel}
+            component={StoriesCarouselScreen}
+            options={StoriesCarouselScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.CommunityDetails}
@@ -50,17 +73,6 @@ const commonScreens = (Navigator: typeof Stack) => (
         />
     </>
 );
-
-const nonBeneficiaryManagerScreens = (Navigator: typeof Stack) => (
-    <>
-        <Navigator.Screen
-            name={Screens.CreateCommunity}
-            component={CreateCommunityScreen}
-            options={CreateCommunityScreen.navigationOptions}
-        />
-    </>
-);
-
 const beneficiaryScreens = (Navigator: typeof Stack) => (
     <>
         <Navigator.Screen
@@ -132,7 +144,7 @@ function StackNavigator() {
                     fontFamily: 'Gelion-Bold',
                     fontSize: 30,
                     lineHeight: 36,
-                    color: iptcColors.almostBlack,
+                    color: ipctColors.almostBlack,
                 },
             }}
             initialRouteName={fromWelcomeScreen}
@@ -142,9 +154,6 @@ function StackNavigator() {
                 : welcomeScreen(Stack)}
             {isBeneficiary && beneficiaryScreens(Stack)}
             {isManager && managerScreens(Stack)}
-            {!isBeneficiary &&
-                !isManager &&
-                nonBeneficiaryManagerScreens(Stack)}
         </Stack.Navigator>
     );
 }

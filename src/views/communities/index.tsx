@@ -1,20 +1,20 @@
-import Select from 'components/core/Select';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
-import * as Location from 'expo-location';
 import { ITabBarIconProps } from 'helpers/types/common';
-import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import React, { useState, useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import Select from 'components/core/Select';
+import * as Location from 'expo-location';
+import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { Alert, FlatList, View } from 'react-native';
 import { ActivityIndicator, Dialog, RadioButton } from 'react-native-paper';
 import Api from 'services/api';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
+import Stories from './Stories';
+import i18n from 'assets/i18n';
 
 function CommunitiesScreen() {
     const flatListRef = useRef<FlatList<ICommunityLightDetails> | null>(null);
-    const { i18n } = useTranslation();
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
     const [userLocation, setUserLocation] = useState<
@@ -135,31 +135,52 @@ function CommunitiesScreen() {
         }
     };
 
+    const filterHeader = () => {
+        return (
+            <>
+                <Stories />
+                <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
+                    <Select
+                        label={''}
+                        value={textCommunitiesOrder(communtiesOrder)}
+                        onPress={() => setIsDialogOrderOpen(true)}
+                    />
+                </View>
+                {refreshing && (
+                    <ActivityIndicator
+                        style={{ marginBottom: 22 }}
+                        animating
+                        color={ipctColors.blueRibbon}
+                    />
+                )}
+            </>
+        );
+    };
+
     return (
         <>
-            <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
-                <Select
-                    label={i18n.t('order')}
-                    value={textCommunitiesOrder(communtiesOrder)}
-                    onPress={() => setIsDialogOrderOpen(true)}
-                />
-            </View>
-            {refreshing && (
-                <ActivityIndicator
-                    style={{ marginBottom: 22 }}
-                    animating
-                    color={iptcColors.blueRibbon}
-                />
-            )}
             <FlatList
-                data={communities}
-                renderItem={({ item }: { item: ICommunityLightDetails }) => (
-                    <CommunityCard community={item} />
-                )}
+                data={[
+                    { publicId: 'for-compliance-sake-really' } as any,
+                ].concat(communities)}
+                renderItem={({
+                    item,
+                    index,
+                }: {
+                    item: ICommunityLightDetails;
+                    index: number;
+                }) =>
+                    index === 0 ? (
+                        filterHeader()
+                    ) : (
+                        <CommunityCard community={item} />
+                    )
+                }
                 ref={flatListRef}
                 keyExtractor={(item) => item.publicId}
                 onEndReachedThreshold={0.7}
                 onEndReached={handleOnEndReached}
+                showsVerticalScrollIndicator={false}
                 // Performance settings
                 removeClippedSubviews // Unmount components when outside of window
                 initialNumToRender={2} // Reduce initial render amount
@@ -194,7 +215,6 @@ function CommunitiesScreen() {
 }
 
 CommunitiesScreen.navigationOptions = () => {
-    const { i18n } = useTranslation();
     return {
         headerTitle: i18n.t('communities'),
         tabBarIcon: (props: ITabBarIconProps) => (

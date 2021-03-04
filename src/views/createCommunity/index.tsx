@@ -45,6 +45,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
+import { ipctColors } from 'styles/index';
 
 import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
@@ -1257,7 +1258,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         lineHeight: 15,
         letterSpacing: 0.25,
-        color: '#7e8da6',
+        color: ipctColors.regentGray,
     },
     communityDetailsHeadline: {
         opacity: 0.48,

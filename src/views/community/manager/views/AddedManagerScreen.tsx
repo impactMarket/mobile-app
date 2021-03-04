@@ -18,7 +18,7 @@ import { ActivityIndicator, List } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 function AddedManagerScreen() {
     const dispatch = useDispatch();
@@ -174,7 +174,7 @@ function AddedManagerScreen() {
                 <ActivityIndicator
                     animating
                     size="large"
-                    color={iptcColors.softBlue}
+                    color={ipctColors.blueRibbon}
                 />
             </View>
         );

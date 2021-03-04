@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar, View } from 'react-native';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import LogoWhiteSvg from './LogoWhiteSvg';
 
@@ -13,7 +13,7 @@ function SplashScreen() {
                     flex: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    backgroundColor: iptcColors.blueRibbon,
+                    backgroundColor: ipctColors.blueRibbon,
                     // height: '100%',
                 }}
             >

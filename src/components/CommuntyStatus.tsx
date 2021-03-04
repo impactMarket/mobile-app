@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Title, ProgressBar, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
-import { iptcColors } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 import Card from './core/Card';
 
@@ -70,7 +70,7 @@ class CommuntyStatus extends Component<Props, object> {
                             </Title>
                             <Text
                                 style={{
-                                    color: iptcColors.textGray,
+                                    color: ipctColors.regentGray,
                                     fontSize: 14,
                                     lineHeight: 15,
                                 }}
@@ -96,7 +96,7 @@ class CommuntyStatus extends Component<Props, object> {
                             </Title>
                             <Text
                                 style={{
-                                    color: iptcColors.textGray,
+                                    color: ipctColors.regentGray,
                                     fontSize: 14,
                                     lineHeight: 15,
                                 }}
@@ -109,7 +109,7 @@ class CommuntyStatus extends Component<Props, object> {
                         <ProgressBar
                             key="raised"
                             style={{
-                                backgroundColor: '#d6d6d6', // gray
+                                backgroundColor: ipctColors.softGray,
                                 position: 'absolute',
                                 borderRadius: 6.5,
                                 height: 6.32,
@@ -118,7 +118,7 @@ class CommuntyStatus extends Component<Props, object> {
                                 'raised',
                                 community
                             )}
-                            color={iptcColors.softBlue}
+                            color={ipctColors.blueRibbon}
                         />
                         <ProgressBar
                             key="claimed"
@@ -131,7 +131,7 @@ class CommuntyStatus extends Component<Props, object> {
                                 'claimed',
                                 community
                             )}
-                            color={iptcColors.greenishTeal}
+                            color={ipctColors.greenishTeal}
                         />
                     </View>
                     <View
@@ -152,7 +152,7 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     fontFamily: 'Gelion-Bold',
-                                    color: iptcColors.almostBlack,
+                                    color: ipctColors.almostBlack,
                                     fontSize: 15,
                                     lineHeight: 15,
                                     letterSpacing: 0.245455,
@@ -162,7 +162,7 @@ class CommuntyStatus extends Component<Props, object> {
                             </Text>
                             <Text
                                 style={{
-                                    color: iptcColors.textGray,
+                                    color: ipctColors.regentGray,
                                     fontSize: 15,
                                     lineHeight: 15,
                                     letterSpacing: 0.245455,
@@ -181,7 +181,7 @@ class CommuntyStatus extends Component<Props, object> {
                             <Text
                                 style={{
                                     fontFamily: 'Gelion-Bold',
-                                    color: iptcColors.almostBlack,
+                                    color: ipctColors.almostBlack,
                                     fontSize: 15,
                                     lineHeight: 15,
                                     letterSpacing: 0.245455,
@@ -195,7 +195,7 @@ class CommuntyStatus extends Component<Props, object> {
                             </Text>
                             <Text
                                 style={{
-                                    color: iptcColors.textGray,
+                                    color: ipctColors.regentGray,
                                     fontSize: 15,
                                     lineHeight: 15,
                                     letterSpacing: 0.245455,
@@ -217,14 +217,14 @@ const styles = StyleSheet.create({
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: iptcColors.greenishTeal,
+        backgroundColor: ipctColors.greenishTeal,
         marginRight: 5,
     },
     sphereRaised: {
         width: 8,
         height: 8,
         borderRadius: 4,
-        backgroundColor: iptcColors.softBlue,
+        backgroundColor: ipctColors.blueRibbon,
         marginRight: 5,
     },
 });
