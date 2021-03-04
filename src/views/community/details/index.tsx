@@ -190,6 +190,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     return (
         <>
             <StatusBar hidden={false} />
+            <Snackbar
+                visible={showCopiedToClipboard}
+                onDismiss={() => setShowCopiedToClipboard(false)}
+                action={{
+                    label: i18n.t('close'),
+                    onPress: () => setShowCopiedToClipboard(false),
+                }}
+            >
+                {i18n.t('descriptionCopiedClipboard')}
+            </Snackbar>
             <ScrollView
                 refreshControl={
                     <RefreshControl
