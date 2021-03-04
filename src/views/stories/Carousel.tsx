@@ -101,6 +101,7 @@ function Carousel(props: {
         );
     }
     const story = { coverImage, name, country, city };
+    console.log(stories[index]);
     return (
         <SafeAreaView
             style={{
@@ -108,9 +109,26 @@ function Carousel(props: {
                 flexDirection: 'column',
                 width: dimensions.width,
                 justifyContent: 'space-between',
+                backgroundColor: '#73839D',
             }}
         >
-            <Container media={stories[index].media} story={story} />
+            {stories[index].media ? (
+                <Container media={stories[index].media} story={story} />
+            ) : (
+                <Text
+                    style={{
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 20,
+                        lineHeight: 24,
+                        color: 'white',
+                        textAlign: 'center',
+                        marginHorizontal: 22,
+                        top: dimensions.height * 0.25,
+                    }}
+                >
+                    {stories[index].message}
+                </Text>
+            )}
 
             <View
                 style={{
@@ -128,18 +146,20 @@ function Carousel(props: {
                     width: '100%',
                 }}
             >
-                <Text
-                    style={{
-                        fontFamily: 'Gelion-Regular',
-                        fontSize: 20,
-                        lineHeight: 24,
-                        color: 'white',
-                        textAlign: 'left',
-                        marginHorizontal: 22,
-                    }}
-                >
-                    {stories[index].message}
-                </Text>
+                {stories[index].media && (
+                    <Text
+                        style={{
+                            fontFamily: 'Gelion-Regular',
+                            fontSize: 20,
+                            lineHeight: 24,
+                            color: 'white',
+                            textAlign: 'left',
+                            marginHorizontal: 22,
+                        }}
+                    >
+                        {stories[index].message}
+                    </Text>
+                )}
                 <View
                     style={{
                         marginVertical: 27,
@@ -221,29 +241,32 @@ function Carousel(props: {
             </View>
             <LinearGradient
                 style={{
-                    height: 98,
-                    // backgroundColor: 'green',
+                    height: 240,
                     width: dimensions.width,
-                    // flexDirection: 'row',
                     zIndex: -1,
+                    bottom: 0,
                     position: 'absolute',
                 }}
-                colors={[
-                    'rgba(11, 11, 11, 0.4) 49.44%',
-                    'rgba(196, 196, 196, 0) 98.96%',
-                ]}
+                colors={['#73839D30', '#0B0B0B']}
             />
             <LinearGradient
                 style={{
-                    height: 354,
-                    // backgroundColor: 'green',
+                    height: 98,
                     width: dimensions.width,
-                    // flexDirection: 'row',
+                    zIndex: -1,
+                    top: 0,
+                    position: 'absolute',
+                }}
+                colors={['#0B0B0B', '#73839D30']}
+            />
+            <LinearGradient
+                style={{
+                    flex: 1,
+                    width: dimensions.width,
                     zIndex: -1,
                     position: 'absolute',
-                    bottom: 0,
                 }}
-                colors={['rgba(196, 196, 196, 0)', '#0B0B0B']}
+                colors={['#73839D', '#1E3252']}
             />
         </SafeAreaView>
     );

@@ -183,7 +183,7 @@ function NewStoryScreen() {
                 value={storyText}
                 maxLength={256}
                 onChangeText={(value) => setStoryText(value)}
-                big
+                isBig
             />
             <Button
                 modeType="default"
