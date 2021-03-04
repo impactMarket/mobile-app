@@ -4,6 +4,7 @@ import {
     Text,
     Image,
     Pressable,
+    StyleSheet,
     Alert,
     useWindowDimensions,
 } from 'react-native';
@@ -229,7 +230,7 @@ function Carousel(props: {
                         fontSize: 20,
                         lineHeight: 24,
                         color: 'white',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         marginHorizontal: 22,
                     }}
                 >

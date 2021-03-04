@@ -125,6 +125,7 @@ function Auth() {
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
                 Sentry.Severity.Critical
             );
+
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
@@ -182,6 +183,7 @@ function Auth() {
                 }),
                 Sentry.Severity.Critical
             );
+
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('anErroHappenedTryAgain'),
