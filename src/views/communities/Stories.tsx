@@ -11,6 +11,7 @@ import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import NewStoryCard from './NewStoryCard';
 import StoriesCard from './StoriesCard';
+import i18n from 'assets/i18n';
 
 export default function Stories() {
     const dispatch = useDispatch();
@@ -42,7 +43,7 @@ export default function Stories() {
                     marginBottom: 9,
                 }}
             >
-                <Headline>Stories</Headline>
+                <Headline>{i18n.t('stories')}</Headline>
                 <Pressable
                     hitSlop={10}
                     onPress={(e) =>
@@ -59,7 +60,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        View All
+                        {i18n.t('viewAll')}
                     </Text>
                 </Pressable>
             </View>
