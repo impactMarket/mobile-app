@@ -258,4 +258,5 @@ export default {
     search: 'Search',
     noResults: 'No results founds!',
     tooManyResults: 'Too many results! Improve your search.',
+    descriptionCopiedClipboard: 'Description copied to clipboard!',
 };
