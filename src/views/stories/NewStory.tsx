@@ -5,11 +5,9 @@ import React, { useLayoutEffect, useState } from 'react';
 import {
     View,
     Text,
-    Image,
     ImageBackground,
     Alert,
     useWindowDimensions,
-    Pressable,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
@@ -20,19 +18,8 @@ import { useSelector } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
 import { StatusBar } from 'expo-status-bar';
-import CarouselSlide from './CarouselSlide';
-import countriesJSON from 'assets/countries.json';
+import Container from './Container';
 
-const countries: {
-    [key: string]: {
-        name: string;
-        native: string;
-        phone: string;
-        currency: string;
-        languages: string[];
-        emoji: string;
-    };
-} = countriesJSON;
 function NewStoryScreen() {
     const dimensions = useWindowDimensions();
     const navigation = useNavigation();
@@ -79,7 +66,7 @@ function NewStoryScreen() {
             .then((r) => {
                 Alert.alert(
                     i18n.t('success'),
-                    'Congratulations, your story was submitted!',
+                    i18n.t('storyCongrat'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -88,7 +75,7 @@ function NewStoryScreen() {
             .catch((e) => {
                 Alert.alert(
                     i18n.t('failure'),
-                    'Error uploading story!',
+                    i18n.t('storyFailure'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -102,7 +89,7 @@ function NewStoryScreen() {
         let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
-            alert('Permission to access camera roll is required!');
+            alert(i18n.t('storyPermissionCamera'));
             return;
         }
 
@@ -119,12 +106,11 @@ function NewStoryScreen() {
     };
 
     if (userCommunity?.id === undefined || userCommunityStatus !== 'valid') {
-        return <Text>Not in a community!</Text>;
+        return <Text>{i18n.t('notInComunity')}</Text>;
     }
 
     // TODO: most of the code above is repeated from Carousel
     // make it reusable!
-    console.log('submittedWithSuccess', submittedWithSuccess);
     if (submittedWithSuccess) {
         return (
             <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -138,88 +124,7 @@ function NewStoryScreen() {
                         justifyContent: 'space-between',
                     }}
                 >
-                    <CarouselSlide media={storyMedia} />
-                    <View
-                        style={{
-                            // position: 'absolute',
-                            // zIndex: 1,
-                            width: '100%',
-                            // backgroundColor: 'pink',
-                            // height: 98,
-                        }}
-                    >
-                        <View
-                            style={{
-                                marginTop: 26,
-                                marginHorizontal: 19,
-                                // flex: 1,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                            }}
-                        >
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <Image
-                                    source={{
-                                        uri: userCommunity.coverImage,
-                                    }}
-                                    style={{
-                                        height: 48,
-                                        width: 48,
-                                        borderRadius: 24,
-                                    }}
-                                />
-                                <View
-                                    style={{
-                                        flexDirection: 'column',
-                                        marginLeft: 12,
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            fontFamily: 'Gelion-Bold',
-                                            fontSize: 19,
-                                            lineHeight: 22,
-                                            color: '#FAFAFA',
-                                        }}
-                                    >
-                                        {userCommunity.name.length > 23
-                                            ? userCommunity.name.substr(0, 22) +
-                                              '...'
-                                            : userCommunity.name}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontFamily: 'Gelion-Bold',
-                                            fontSize: 15,
-                                            lineHeight: 18,
-                                            color: '#FAFAFA',
-                                        }}
-                                    >
-                                        {countries[userCommunity.country].name},{' '}
-                                        {userCommunity.city.length > 15
-                                            ? userCommunity.city.substr(0, 13) +
-                                              '...'
-                                            : userCommunity.city}
-                                    </Text>
-                                </View>
-                            </View>
-                            <Pressable
-                                hitSlop={15}
-                                onPress={(e) => navigation.goBack()}
-                                style={{
-                                    right: 0,
-                                }}
-                            >
-                                <CloseStorySvg />
-                            </Pressable>
-                        </View>
-                    </View>
+                    <Container media={storyMedia} story={userCommunity} />
                     <View
                         style={{
                             // position: 'absolute',

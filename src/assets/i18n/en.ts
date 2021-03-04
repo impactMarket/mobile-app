@@ -260,4 +260,8 @@ export default {
     tooManyResults: 'Too many results! Improve your search.',
     stories: 'Stories',
     viewAll: 'View All',
+    notInComunity: 'Not in a community!',
+    storyCongrat: 'Congratulations, your story was submitted!',
+    storyFailure: 'Error uploading story!',
+    storyPermissionCamera: 'Permission to access camera roll is required!',
 };

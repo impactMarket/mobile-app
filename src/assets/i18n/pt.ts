@@ -259,4 +259,8 @@ export default {
         'Foram encontrados muitos resultados! Melhore a sua pesquisa.',
     stories: 'Stories',
     viewAll: 'Ver Todas',
+    notInComunity: 'Não estás associado a nenhuma comunidade!',
+    storyCongrat: 'Parabéns, sua story foi submetida!',
+    storyFailure: 'Erro ao submeter sua story!',
+    storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
 };
