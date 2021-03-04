@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     View,
+    SafeAreaView,
     Text,
     Pressable,
     Alert,
@@ -101,7 +102,7 @@ function Carousel(props: {
     }
     const story = { coverImage, name, country, city };
     return (
-        <View
+        <SafeAreaView
             style={{
                 flex: 1,
                 flexDirection: 'column',
@@ -244,7 +245,7 @@ function Carousel(props: {
                 }}
                 colors={['rgba(196, 196, 196, 0)', '#0B0B0B']}
             />
-        </View>
+        </SafeAreaView>
     );
 }
 
