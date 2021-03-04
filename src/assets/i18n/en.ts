@@ -111,6 +111,7 @@ export default {
     addressCopiedClipboard:
         'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
     donate: 'Donate',
+    attach: 'Attach',
     donateWithValora: 'Donate with Valora',
     amountSymbol: 'Amount ({{symbol}})',
     donateSymbol: 'Donate ({{symbol}})',

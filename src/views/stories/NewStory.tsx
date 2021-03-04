@@ -125,15 +125,7 @@ function NewStoryScreen() {
                     }}
                 >
                     <Container media={storyMedia} story={userCommunity} />
-                    <View
-                        style={{
-                            // position: 'absolute',
-                            width: '100%',
-                            // alignSelf: 'flex-end',
-                            // backgroundColor: 'purple',
-                            // height: 200,
-                        }}
-                    >
+                    <View style={{ width: '100%' }}>
                         <Text
                             style={{
                                 fontFamily: 'Gelion-Regular',
@@ -173,7 +165,7 @@ function NewStoryScreen() {
                                 disabled={true}
                                 style={{ marginRight: 22, width: 158 }}
                             >
-                                Donate
+                                {i18n.t('donate')}
                             </Button>
                         </View>
                     </View>
@@ -191,6 +183,7 @@ function NewStoryScreen() {
                 value={storyText}
                 maxLength={256}
                 onChangeText={(value) => setStoryText(value)}
+                big
             />
             <Button
                 modeType="default"
@@ -198,7 +191,7 @@ function NewStoryScreen() {
                 onPress={() => pickImage()}
                 style={{ width: '100%', marginVertical: 24 }}
             >
-                Attach
+                {i18n.t('attach')}
             </Button>
             {storyMedia.length > 0 && (
                 <ImageBackground

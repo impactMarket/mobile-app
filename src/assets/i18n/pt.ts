@@ -110,6 +110,7 @@ export default {
     addressCopiedClipboard:
         'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
     donate: 'Contribuir',
+    attach: 'Anexar',
     donateWithValora: 'Doar com Valora',
     amountSymbol: 'Montante em {{symbol}}',
     donateSymbol: 'Contribuir ({{symbol}})',

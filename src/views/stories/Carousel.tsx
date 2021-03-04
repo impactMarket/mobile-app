@@ -198,7 +198,7 @@ function Carousel(props: {
                             })
                         }
                     >
-                        Donate
+                        {i18n.t('donate')}
                     </Button>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
