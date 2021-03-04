@@ -140,7 +140,7 @@ function NewStoryScreen() {
                                 fontSize: 20,
                                 lineHeight: 24,
                                 color: 'white',
-                                textAlign: 'center',
+                                textAlign: 'left',
                                 marginHorizontal: 22,
                             }}
                         >

@@ -2,20 +2,16 @@ import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
-    Image,
     Pressable,
-    StyleSheet,
     Alert,
     useWindowDimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
 import { useNavigation } from '@react-navigation/native';
 import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import Button from 'components/core/Button';
 import Api from 'services/api';
 import { ICommunityStory } from 'helpers/types/endpoints';
-import CarouselSlide from './CarouselSlide';
 import { Screens } from 'helpers/constants';
 import { ActivityIndicator } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
