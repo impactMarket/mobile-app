@@ -257,4 +257,6 @@ export default {
     noResults: 'Nenhum resultado!',
     tooManyResults:
         'Foram encontrados muitos resultados! Melhore a sua pesquisa.',
+    descriptionCopiedClipboard:
+        'Descrição copiada para a área de transferência!',
 };
