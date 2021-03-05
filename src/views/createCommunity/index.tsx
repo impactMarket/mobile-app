@@ -875,7 +875,7 @@ function CreateCommunityScreen() {
                                     {i18n.t('aroundValue', {
                                         amount: amountToCurrency(
                                             new BigNumber(
-                                                claimAmount
+                                                claimAmount.replace(/,/g, '.')
                                             ).multipliedBy(
                                                 new BigNumber(10).pow(
                                                     config.cUSDDecimals
@@ -932,7 +932,7 @@ function CreateCommunityScreen() {
                                     {i18n.t('aroundValue', {
                                         amount: amountToCurrency(
                                             new BigNumber(
-                                                maxClaim
+                                                maxClaim.replace(/,/g, '.')
                                             ).multipliedBy(
                                                 new BigNumber(10).pow(
                                                     config.cUSDDecimals
