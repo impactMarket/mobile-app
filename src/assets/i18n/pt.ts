@@ -264,4 +264,6 @@ export default {
     storyCongrat: 'Parabéns, sua story foi submetida!',
     storyFailure: 'Erro ao submeter sua story!',
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
+    descriptionCopiedClipboard:
+        'Descrição copiada para a área de transferência!',
 };

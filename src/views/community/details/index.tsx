@@ -21,6 +21,7 @@ import {
     Headline,
     Text,
     ActivityIndicator,
+    Snackbar,
 } from 'react-native-paper';
 import { LineChart } from 'react-native-svg-charts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +30,7 @@ import { ipctColors } from 'styles/index';
 
 import config from '../../../../config';
 import Donate from './donate';
+import Clipboard from 'expo-clipboard';
 
 interface ICommunityDetailsScreen {
     route: {
@@ -52,6 +54,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const [community, setCommunity] = useState<ICommunity | undefined>(
         undefined
     );
+    const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
         Api.community
@@ -166,6 +169,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         );
     }
 
+    const handleCopyToClipboard = () => {
+        Clipboard.setString(community.contractAddress!);
+        setShowCopiedToClipboard(true);
+    };
+
     let description;
     const cDescription =
         language === community.language
@@ -182,6 +190,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     return (
         <>
             <StatusBar hidden={false} />
+            <Snackbar
+                visible={showCopiedToClipboard}
+                onDismiss={() => setShowCopiedToClipboard(false)}
+                action={{
+                    label: i18n.t('close'),
+                    onPress: () => setShowCopiedToClipboard(false),
+                }}
+            >
+                {i18n.t('descriptionCopiedClipboard')}
+            </Snackbar>
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -199,6 +217,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                         fontSize: 17,
                                         lineHeight: 22,
                                     }}
+                                    onPress={handleCopyToClipboard}
                                 >
                                     {description}
                                 </Paragraph>

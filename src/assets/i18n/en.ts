@@ -265,4 +265,5 @@ export default {
     storyCongrat: 'Congratulations, your story was submitted!',
     storyFailure: 'Error uploading story!',
     storyPermissionCamera: 'Permission to access camera roll is required!',
+    descriptionCopiedClipboard: 'Description copied to clipboard!',
 };
