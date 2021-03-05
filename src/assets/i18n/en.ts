@@ -111,6 +111,7 @@ export default {
     addressCopiedClipboard:
         'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
     donate: 'Donate',
+    attach: 'Attach',
     donateWithValora: 'Donate with Valora',
     amountSymbol: 'Amount ({{symbol}})',
     donateSymbol: 'Donate ({{symbol}})',
@@ -258,5 +259,11 @@ export default {
     search: 'Search',
     noResults: 'No results founds!',
     tooManyResults: 'Too many results! Improve your search.',
+    stories: 'Stories',
+    viewAll: 'View All',
+    notInComunity: 'Not in a community!',
+    storyCongrat: 'Congratulations, your story was submitted!',
+    storyFailure: 'Error uploading story!',
+    storyPermissionCamera: 'Permission to access camera roll is required!',
     descriptionCopiedClipboard: 'Description copied to clipboard!',
 };

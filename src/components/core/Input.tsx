@@ -5,6 +5,7 @@ import { ipctColors } from 'styles/index';
 
 interface IInputProps extends TextInputProps {
     label: string;
+    isBig: boolean;
 }
 export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
@@ -19,6 +20,7 @@ export default class Input extends Component<IInputProps, object> {
             onEndEditing,
             onChangeText,
             editable,
+            isBig,
             style,
             multiline,
             numberOfLines,
@@ -45,6 +47,7 @@ export default class Input extends Component<IInputProps, object> {
                         borderRadius: 6,
                         fontSize: 20,
                         lineHeight: 24,
+                        height: isBig ? 200 : null,
                         color: ipctColors.almostBlack,
                         paddingVertical:
                             editable === undefined || editable ? 9 : 2,

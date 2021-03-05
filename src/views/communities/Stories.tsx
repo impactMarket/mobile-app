@@ -4,13 +4,14 @@ import { navigationRef } from 'helpers/rootNavigation';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator, Headline } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import NewStoryCard from './NewStoryCard';
 import StoriesCard from './StoriesCard';
+import i18n from 'assets/i18n';
 
 export default function Stories() {
     const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default function Stories() {
     }, []);
 
     return (
-        <View>
+        <SafeAreaView>
             <View
                 style={{
                     marginHorizontal: 18,
@@ -42,7 +43,7 @@ export default function Stories() {
                     marginBottom: 9,
                 }}
             >
-                <Headline>Stories</Headline>
+                <Headline>{i18n.t('stories')}</Headline>
                 <Pressable
                     hitSlop={10}
                     onPress={(e) =>
@@ -59,7 +60,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        View All
+                        {i18n.t('viewAll')}
                     </Text>
                 </Pressable>
             </View>
@@ -85,6 +86,6 @@ export default function Stories() {
                     />
                 ))}
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
