@@ -6,6 +6,7 @@ import { ipctColors } from 'styles/index';
 interface IInputProps extends TextInputProps {
     label?: string;
     isBig: boolean;
+    isReportInput?: boolean;
 }
 export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
@@ -21,6 +22,7 @@ export default class Input extends Component<IInputProps, object> {
             onChangeText,
             editable,
             placeholder,
+            isReportInput,
             isBig,
             style,
             multiline,
@@ -46,7 +48,7 @@ export default class Input extends Component<IInputProps, object> {
                                 ? 'rgba(206, 212, 218, 0.27)'
                                 : 'white',
                         borderRadius: 6,
-                        fontSize: 20,
+                        fontSize: isReportInput ? 14 : 20,
                         lineHeight: 24,
                         height: isBig ? 200 : null,
                         color: ipctColors.almostBlack,

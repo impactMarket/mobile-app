@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { View, Text, Pressable, Alert } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { IRootState } from 'helpers/types/state';
@@ -81,6 +81,7 @@ function AnonymousReportScreen() {
                 maxLength={256}
                 onChangeText={(value) => setReportInput(value)}
                 isBig
+                isReportInput
             />
         </View>
     );
