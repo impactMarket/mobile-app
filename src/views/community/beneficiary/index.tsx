@@ -1,5 +1,6 @@
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
@@ -15,7 +16,8 @@ import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
+import { SHOW_REPORT_CARD } from 'helpers/constants';
 import { Trans } from 'react-i18next';
 import {
     StyleSheet,
@@ -39,6 +41,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
+import ReportCard from 'components/svg/header/ReportCard';
 
 import Claim from './Claim';
 
@@ -46,6 +49,8 @@ function BeneficiaryScreen() {
     let timeoutTimeDiff: number | undefined;
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const [openModal, setOpenModal] = useState(false);
+    const [showReportCard, setShowReportCard] = useState<string | null>('');
 
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
@@ -155,8 +160,15 @@ function BeneficiaryScreen() {
                     .locationServicesEnabled;
             setAskLocationOnOpen(!availableGPSToRequest);
         };
+        const checkFirstTime = async () => {
+            const isFirstTime = await AsyncStorage.getItem(SHOW_REPORT_CARD);
+            setShowReportCard(isFirstTime);
+        };
+        checkFirstTime();
         isLocationAvailable();
     }, []);
+
+    console.log({ showReportCard });
 
     const getNewCooldownTime = async () => {
         return parseInt(
@@ -366,6 +378,9 @@ function BeneficiaryScreen() {
                         </View>
                     </View>
                 </BaseCommunity>
+                {showReportCard !== 'false' && (
+                    <ReportCard setOpenModal={setOpenModal} />
+                )}
             </ScrollView>
             <Snackbar
                 visible={askLocationOnOpen}

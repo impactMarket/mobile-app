@@ -10,20 +10,18 @@ import Svg, {
     ClipPath,
 } from 'react-native-svg';
 
-import ReportCard from './ReportCard';
-
 function ReportSvg(props: { isLink: boolean }) {
-    const [openModal, setOpenModal] = React.useState(false);
+    const navigation = useNavigation();
 
-    function toggleModal() {
-        setOpenModal(!openModal);
-    }
+    const goToReportView = () => {
+        navigation.navigate(Screens.AnonymousReport);
+    };
 
     return (
         <>
             {props.isLink ? (
                 <Svg
-                    onPress={toggleModal}
+                    onPress={goToReportView}
                     width={34}
                     height={34}
                     viewBox="0 0 34 34"
@@ -75,8 +73,6 @@ function ReportSvg(props: { isLink: boolean }) {
                     </Defs>
                 </Svg>
             )}
-
-            {openModal && <ReportCard setOpenModal={setOpenModal} />}
         </>
     );
 }

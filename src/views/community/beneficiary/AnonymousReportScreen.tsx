@@ -72,7 +72,9 @@ function AnonymousReportScreen() {
                 padding: 22,
             }}
         >
-            <Text>{i18n.t('reportIlegal.message')}</Text>
+            <Text style={{ fontFamily: 'Gelion-Regular', fontSize: 17 }}>
+                {i18n.t('reportIlegal.message')}
+            </Text>
             <Input
                 placeholder={i18n.t('reportIlegal.label')}
                 multiline={true}
@@ -82,6 +84,7 @@ function AnonymousReportScreen() {
                 onChangeText={(value) => setReportInput(value)}
                 isBig
                 isReportInput
+                style={{ fontFamily: 'Gelion-Regular', fontSize: 17 }}
             />
         </View>
     );
