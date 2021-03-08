@@ -5,6 +5,7 @@ import {
     IManagerDetailsBeneficiary,
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
+import { UbiRequestChangeParams } from 'helpers/types/models';
 import { getRequest, postRequest } from '../base';
 
 class ApiRouteCommunity {
@@ -114,6 +115,15 @@ class ApiRouteCommunity {
         details: CommunityCreationAttributes
     ): Promise<ICommunity | undefined> {
         return await postRequest<ICommunity>('/community/add', details);
+    }
+
+    static async getRequestChangeUbi(
+        publicId: string
+    ): Promise<UbiRequestChangeParams | undefined> {
+        const result = await getRequest<UbiRequestChangeParams>(
+            '/community/ubiparams/' + publicId
+        );
+        return result;
     }
 }
 
