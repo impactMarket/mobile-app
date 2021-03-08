@@ -17,8 +17,12 @@ const ReportCard = ({ setOpenModal }) => {
     const registerFirstAccessReport = async () => {
         await AsyncStorage.setItem(SHOW_REPORT_CARD, 'false');
     };
-    const goToReportView = () => {
+
+    React.useEffect(() => {
         registerFirstAccessReport();
+    });
+
+    const goToReportView = () => {
         setOpenModal(false);
         navigation.navigate(Screens.AnonymousReport);
     };
@@ -49,6 +53,7 @@ const ReportCard = ({ setOpenModal }) => {
                             onPress={() => setOpenModal(false)}
                         />
                     )}
+                    titleStyle={{ fontFamily: 'Gelion-Bold', fontSize: 18 }}
                 />
                 <View
                     style={{
@@ -62,7 +67,14 @@ const ReportCard = ({ setOpenModal }) => {
                             display: 'flex',
                         }}
                     >
-                        <Text>{i18n.t('reportIlegal.message')}</Text>
+                        <Text
+                            style={{
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 15,
+                            }}
+                        >
+                            {i18n.t('reportIlegal.message')}
+                        </Text>
                     </View>
                     <View
                         style={{
@@ -76,7 +88,10 @@ const ReportCard = ({ setOpenModal }) => {
                 </View>
 
                 <Card.Actions>
-                    <Button onPress={goToReportView}>
+                    <Button
+                        onPress={goToReportView}
+                        style={{ fontFamily: 'Gelion-Bold', fontSize: 18 }}
+                    >
                         {i18n.t('reportIlegal.btnText')}
                     </Button>
                 </Card.Actions>

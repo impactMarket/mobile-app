@@ -168,8 +168,6 @@ function BeneficiaryScreen() {
         isLocationAvailable();
     }, []);
 
-    console.log({ showReportCard });
-
     const getNewCooldownTime = async () => {
         return parseInt(
             (
@@ -378,7 +376,7 @@ function BeneficiaryScreen() {
                         </View>
                     </View>
                 </BaseCommunity>
-                {showReportCard !== 'false' && (
+                {showReportCard !== 'false' && !openModal && (
                     <ReportCard setOpenModal={setOpenModal} />
                 )}
             </ScrollView>
