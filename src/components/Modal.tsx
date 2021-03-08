@@ -13,7 +13,7 @@ import { Modal as ModalRNP, Headline } from 'react-native-paper';
 
 interface IModalProps {
     visible: boolean;
-    onDismiss: () => void;
+    onDismiss?: () => void;
     title: string;
     buttons?: ReactNode;
     children?: ReactNode;
@@ -81,7 +81,11 @@ export default class Modal extends Component<IModalProps, IModalState> {
         }
 
         return (
-            <ModalRNP visible={visible} onDismiss={onDismiss}>
+            <ModalRNP
+                visible={visible}
+                dismissable={onDismiss !== undefined}
+                onDismiss={onDismiss}
+            >
                 <Card
                     style={{
                         marginHorizontal: 20,
@@ -113,9 +117,11 @@ export default class Modal extends Component<IModalProps, IModalState> {
                                 >
                                     {title}
                                 </Headline>
-                                <Pressable hitSlop={15} onPress={onDismiss}>
-                                    <CloseSvg />
-                                </Pressable>
+                                {onDismiss !== undefined && (
+                                    <Pressable hitSlop={15} onPress={onDismiss}>
+                                        <CloseSvg />
+                                    </Pressable>
+                                )}
                             </View>
                         </View>
                         {children}

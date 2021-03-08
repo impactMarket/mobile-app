@@ -3,17 +3,29 @@ import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CachedImage from 'components/CacheImage';
 import CommuntyStatus from 'components/CommuntyStatus';
+import Button from 'components/core/Button';
+import Modal from 'components/Modal';
 import ManageSvg from 'components/svg/ManageSvg';
 import * as Linking from 'expo-linking';
+import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunity } from 'helpers/types/endpoints';
+import { UbiRequestChangeParams } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, RefreshControl } from 'react-native';
+import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Headline, ActivityIndicator } from 'react-native-paper';
+import {
+    Headline,
+    ActivityIndicator,
+    Portal,
+    Paragraph,
+} from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
+import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 import Beneficiaries from './cards/Beneficiaries';
@@ -23,6 +35,13 @@ function CommunityManagerScreen() {
     const dispatch = useDispatch();
 
     const kit = useSelector((state: IRootState) => state.app.kit);
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
+    const rates = useSelector((state: IRootState) => state.app.exchangeRates);
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
     );
@@ -34,6 +53,10 @@ function CommunityManagerScreen() {
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
     );
+    const [requiredUbiToChange, setRequiredUbiToChange] = useState<
+        UbiRequestChangeParams | undefined
+    >();
+    const [editInProgress, setEditInProgress] = useState(false);
 
     useEffect(() => {
         if (kit !== undefined && community.status === 'valid') {
@@ -49,7 +72,13 @@ function CommunityManagerScreen() {
                     )
                 );
             };
+            const verifyRequestToChangeUbiParams = () => {
+                Api.community
+                    .getRequestChangeUbi(community.publicId)
+                    .then(setRequiredUbiToChange);
+            };
             loadCommunityBalance();
+            verifyRequestToChangeUbiParams();
         }
     }, [community, kit]);
 
@@ -69,34 +98,140 @@ function CommunityManagerScreen() {
         });
     };
 
+    const handleAcceptNewUbiParams = async () => {
+        if (requiredUbiToChange === undefined) {
+            return;
+        }
+        celoWalletRequest(
+            userAddress,
+            communityContract.options.address,
+            await communityContract.methods.edit(
+                requiredUbiToChange.claimAmount,
+                requiredUbiToChange.maxClaim,
+                requiredUbiToChange.baseInterval,
+                requiredUbiToChange.incrementInterval
+            ),
+            'editcommunity',
+            kit
+        )
+            .then((tx) => {
+                if (tx === undefined) {
+                    return;
+                }
+                // refresh community details
+                setTimeout(() => {
+                    Api.community
+                        .getByPublicId(community.publicId)
+                        .then((c) => dispatch(setCommunityMetadata(c!)));
+                }, 2500);
+
+                Alert.alert(
+                    i18n.t('success'),
+                    'Community UBI parameters were updated!',
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+            })
+            .catch((e) => {
+                Alert.alert(
+                    i18n.t('failure'),
+                    'There was an error, please try again.',
+                    [{ text: i18n.t('close') }],
+                    { cancelable: false }
+                );
+                Api.system.uploadError(userAddress, 'edit_ubi_params', e);
+            })
+            .finally(() => {
+                setEditInProgress(false);
+            });
+    };
+
     const communityStatus = (_community: ICommunity) => {
         if (_community.status === 'valid') {
             return (
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            //refresh control used for the Pull to Refresh
-                            refreshing={refreshing}
-                            onRefresh={onRefresh}
-                        />
-                    }
-                >
-                    <BaseCommunity community={community}>
-                        <View style={styles.container}>
-                            <Beneficiaries
-                                beneficiaries={_community.state.beneficiaries}
-                                removedBeneficiaries={
-                                    _community.state.removedBeneficiaries
-                                }
-                                hasFundsToNewBeneficiary={
-                                    hasFundsToNewBeneficiary
-                                }
+                <>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                                //refresh control used for the Pull to Refresh
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
                             />
-                            <Managers managers={_community.state.managers} />
-                            <CommuntyStatus community={_community} />
-                        </View>
-                    </BaseCommunity>
-                </ScrollView>
+                        }
+                    >
+                        <BaseCommunity community={community}>
+                            <View style={styles.container}>
+                                <Beneficiaries
+                                    beneficiaries={
+                                        _community.state.beneficiaries
+                                    }
+                                    removedBeneficiaries={
+                                        _community.state.removedBeneficiaries
+                                    }
+                                    hasFundsToNewBeneficiary={
+                                        hasFundsToNewBeneficiary
+                                    }
+                                />
+                                <Managers
+                                    managers={_community.state.managers}
+                                />
+                                <CommuntyStatus community={_community} />
+                            </View>
+                        </BaseCommunity>
+                    </ScrollView>
+                    {requiredUbiToChange !== undefined && (
+                        <Portal>
+                            <Modal
+                                title="UBI Params"
+                                visible={true}
+                                buttons={
+                                    <>
+                                        <Button
+                                            modeType="green"
+                                            bold
+                                            onPress={handleAcceptNewUbiParams}
+                                            loading={editInProgress}
+                                        >
+                                            Accept New Paramenters
+                                        </Button>
+                                    </>
+                                }
+                            >
+                                <Paragraph style={styles.ubiChangeModalText}>
+                                    Your community UBI contract parameters have
+                                    changed.
+                                </Paragraph>
+                                <Paragraph style={styles.ubiChangeModalText}>
+                                    Daily Claim:{' '}
+                                    {amountToCurrency(
+                                        requiredUbiToChange.claimAmount,
+                                        userCurrency,
+                                        rates
+                                    )}
+                                </Paragraph>
+                                <Paragraph style={styles.ubiChangeModalText}>
+                                    Max Claim:{' '}
+                                    {amountToCurrency(
+                                        requiredUbiToChange.maxClaim,
+                                        userCurrency,
+                                        rates
+                                    )}
+                                </Paragraph>
+                                <Paragraph style={styles.ubiChangeModalText}>
+                                    Base Interval:{' '}
+                                    {requiredUbiToChange.baseInterval === 86400
+                                        ? i18n.t('day')
+                                        : i18n.t('week')}
+                                </Paragraph>
+                                <Paragraph style={styles.ubiChangeModalText}>
+                                    Increment Interval:{' '}
+                                    {requiredUbiToChange.incrementInterval / 60}{' '}
+                                    minutes
+                                </Paragraph>
+                            </Modal>
+                        </Portal>
+                    )}
+                </>
             );
         }
         return (
@@ -186,6 +321,11 @@ CommunityManagerScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
+    ubiChangeModalText: {
+        marginBottom: 8,
+        fontSize: 16,
+        lineHeight: 24,
+    },
     container: {
         marginHorizontal: 16,
         marginBottom: 30,

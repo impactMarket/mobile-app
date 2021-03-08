@@ -79,3 +79,12 @@ export interface IManagerAttributes {
     user: string;
     communityId: string;
 }
+
+export interface UbiRequestChangeParams {
+    id: number;
+    communityId: string;
+    claimAmount: string;
+    maxClaim: string;
+    baseInterval: number;
+    incrementInterval: number;
+}
