@@ -26,6 +26,8 @@ import {
     setUserWallet,
 } from './redux/actions/user';
 import { UserAttributes } from './types/models';
+import * as Device from 'expo-device';
+import * as Network from 'expo-network';
 
 export function generateUrlWithCloudFront(s3ContentKey: string) {
     // for backwards support
@@ -73,6 +75,18 @@ export async function welcomeUser(
         i18n.changeLanguage(language);
         moment.locale(language);
     }
+    let identifier = '';
+    if (Device.osName?.toLowerCase() === 'android') {
+        identifier = Device.osBuildFingerprint!;
+    } else {
+        identifier = Device.osBuildId!;
+    }
+    Api.user.device(
+        phoneNumber,
+        identifier,
+        Device.osInternalBuildId!,
+        await Network.getIpAddressAsync()
+    );
     batch(() => {
         dispatch(
             setUserWallet({
@@ -88,9 +102,7 @@ export async function welcomeUser(
         //     ...user.rates.map((y) => ({ [y.currency]: y.rate }))
         // );
         dispatch(
-            setUserExchangeRate(
-                rates[userMetadata.currency.toUpperCase()]
-            )
+            setUserExchangeRate(rates[userMetadata.currency.toUpperCase()])
         );
         // dispatch(setAppExchangeRatesAction(allExchangeRates));
         if (user.isBeneficiary || user.isManager) {
