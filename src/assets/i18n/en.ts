@@ -266,6 +266,16 @@ export default {
     storyFailure: 'Error uploading story!',
     storyPermissionCamera: 'Permission to access camera roll is required!',
     descriptionCopiedClipboard: 'Description copied to clipboard!',
+    report: 'Report',
+    reportIlegal: {
+        title: 'Report illegal activity',
+        message:
+            'If you think there is something suspicious with your community, money distribution, or behavior, like potential fraud or corruption, let us know in an anonymous way.',
+        btnText: 'Report',
+        label: 'Describe the potential  ilegal activity...',
+        alertCongrat: 'Congratulations, your report was submitted!',
+        alertFailure: 'Error uploading report!',
+    },
     ubiParamsUpdated: 'Community UBI parameters were updated!',
     ubiParams: 'UBI Params',
     ubiParamsChanged:

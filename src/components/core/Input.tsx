@@ -4,8 +4,8 @@ import { Paragraph } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
 
 interface IInputProps extends TextInputProps {
-    label: string;
-    isBig: boolean;
+    label?: string;
+    isBig?: boolean;
 }
 export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
@@ -20,6 +20,7 @@ export default class Input extends Component<IInputProps, object> {
             onEndEditing,
             onChangeText,
             editable,
+            placeholder,
             isBig,
             style,
             multiline,
@@ -54,6 +55,7 @@ export default class Input extends Component<IInputProps, object> {
                         paddingHorizontal:
                             editable === undefined || editable ? 14 : 0,
                         // marginBottom: 8,
+                        ...(this.props.style as any), // improve this
                     }}
                     value={value}
                     maxLength={maxLength}
@@ -62,6 +64,7 @@ export default class Input extends Component<IInputProps, object> {
                     editable={editable}
                     multiline={multiline}
                     numberOfLines={numberOfLines}
+                    placeholder={placeholder}
                 />
             </View>
         );

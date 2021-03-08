@@ -2,6 +2,16 @@ import { IUserHello, IUserAuth } from 'helpers/types/endpoints';
 import { getRequest, postRequest } from '../base';
 
 class ApiRouteUser {
+    static async report(
+        communityId: string,
+        message: string
+    ): Promise<boolean> {
+        return !!postRequest<boolean>(`/user/report`, {
+            communityId,
+            message,
+        });
+    }
+
     static async hello(
         address: string,
         token: string

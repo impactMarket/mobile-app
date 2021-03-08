@@ -1,5 +1,6 @@
 import FAQSvg from 'components/svg/header/FaqSvg';
 import QRCodeSvg from 'components/svg/header/QRCodeSvg';
+import ReportSvg from 'components/svg/header/ReportSvg';
 import React from 'react';
 import { View } from 'react-native';
 
@@ -13,6 +14,7 @@ function Beneficiary() {
             }}
         >
             <FAQSvg />
+            <ReportSvg isLink style={{ marginLeft: 8.4 }} />
             <QRCodeSvg style={{ marginLeft: 8.4, marginRight: 16 }} />
         </View>
     );

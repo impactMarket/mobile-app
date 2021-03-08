@@ -20,6 +20,7 @@ import TabNavigator from './TabNavigator';
 import StoriesScreen from 'views/stories';
 import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import NewStoryScreen from 'views/stories/NewStory';
+import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -79,6 +80,11 @@ const beneficiaryScreens = (Navigator: typeof Stack) => (
             name={Screens.ClaimExplained}
             component={ClaimExplainedScreen}
             options={ClaimExplainedScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.AnonymousReport}
+            component={AnonymousReportScreen}
+            options={AnonymousReportScreen.navigationOptions}
         />
     </>
 );

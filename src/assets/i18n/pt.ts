@@ -266,6 +266,16 @@ export default {
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
     descriptionCopiedClipboard:
         'Descrição copiada para a área de transferência!',
+    report: 'Relatório',
+    reportIlegal: {
+        title: 'Denunciar atividade ilegal',
+        message:
+            'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
+        btnText: 'Reportar',
+        label: 'Descreva a potencial atividade ilegal ...',
+        alertCongrat: 'Parabéns, seu relatório foi submetido!',
+        alertFailure: 'Erro ao submeter seu relatório!',
+    },
     ubiParamsUpdated:
         'Parâmetros UBI da sua comunidade foram atualizados com sucesso!',
     ubiParams: 'Parâmetros UBI',
