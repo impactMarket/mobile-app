@@ -266,4 +266,5 @@ export default {
     storyFailure: 'Error uploading story!',
     storyPermissionCamera: 'Permission to access camera roll is required!',
     descriptionCopiedClipboard: 'Description copied to clipboard!',
+    report: 'Report',
 };

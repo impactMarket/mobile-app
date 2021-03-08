@@ -266,4 +266,5 @@ export default {
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
     descriptionCopiedClipboard:
         'Descrição copiada para a área de transferência!',
+    report: 'Relatório',
 };

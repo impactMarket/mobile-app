@@ -9,6 +9,7 @@ export enum Screens {
     StoriesCarousel = 'StoriesCarousel',
     //
     ClaimExplained = 'ClaimExplained',
+    AnonymousReport = 'AnonymousReport',
     AddedBeneficiary = 'AddedBeneficiary',
     RemovedBeneficiary = 'RemovedBeneficiary',
     AddBeneficiary = 'AddBeneficiary',
