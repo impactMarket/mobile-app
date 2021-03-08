@@ -3,15 +3,20 @@ import { Screens } from 'helpers/constants';
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Card, Text, Button, IconButton } from 'react-native-paper';
+import { Card, Text, IconButton } from 'react-native-paper';
 import { View, Dimensions } from 'react-native';
 import { SHOW_REPORT_CARD } from 'helpers/constants';
 
 import ReportSvg from './ReportSvg';
 
 import i18n from 'assets/i18n';
+import AnonymousIconCardSvg from '../AnonymousIconCardSvg';
 
-const ReportCard = ({ setOpenModal }) => {
+const ReportCard = ({
+    setOpenModal,
+}: {
+    setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
     const navigation = useNavigation();
 
     const registerFirstAccessReport = async () => {
@@ -21,11 +26,6 @@ const ReportCard = ({ setOpenModal }) => {
     React.useEffect(() => {
         registerFirstAccessReport();
     });
-
-    const goToReportView = () => {
-        setOpenModal(false);
-        navigation.navigate(Screens.AnonymousReport);
-    };
 
     return (
         <View
@@ -83,18 +83,9 @@ const ReportCard = ({ setOpenModal }) => {
                             alignItems: 'flex-end',
                         }}
                     >
-                        <ReportSvg isLink={false} />
+                        <AnonymousIconCardSvg />
                     </View>
                 </View>
-
-                <Card.Actions>
-                    <Button
-                        onPress={goToReportView}
-                        style={{ fontFamily: 'Gelion-Bold', fontSize: 18 }}
-                    >
-                        {i18n.t('reportIlegal.btnText')}
-                    </Button>
-                </Card.Actions>
             </Card>
         </View>
     );

@@ -160,11 +160,11 @@ function BeneficiaryScreen() {
                     .locationServicesEnabled;
             setAskLocationOnOpen(!availableGPSToRequest);
         };
-        const checkFirstTime = async () => {
-            const isFirstTime = await AsyncStorage.getItem(SHOW_REPORT_CARD);
-            setShowReportCard(isFirstTime);
-        };
-        checkFirstTime();
+        // const checkFirstTime = async () => {
+        //     const isFirstTime = await AsyncStorage.getItem(SHOW_REPORT_CARD);
+        //     setShowReportCard(isFirstTime);
+        // };
+        // checkFirstTime();
         isLocationAvailable();
     }, []);
 
@@ -376,9 +376,9 @@ function BeneficiaryScreen() {
                         </View>
                     </View>
                 </BaseCommunity>
-                {showReportCard !== 'false' && !openModal && (
+                {/* {showReportCard !== 'false' && !openModal && (
                     <ReportCard setOpenModal={setOpenModal} />
-                )}
+                )} */}
             </ScrollView>
             <Snackbar
                 visible={askLocationOnOpen}

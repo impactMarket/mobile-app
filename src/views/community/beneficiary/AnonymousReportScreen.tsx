@@ -9,6 +9,8 @@ import Input from 'components/core/Input';
 import BackSvg from 'components/svg/header/BackSvg';
 import SubmitStory from 'navigator/header/SubmitStory';
 import Api from 'services/api';
+import { ipctColors } from 'styles/index';
+import { Paragraph } from 'react-native-paper';
 
 function AnonymousReportScreen() {
     const navigation = useNavigation();
@@ -72,7 +74,14 @@ function AnonymousReportScreen() {
                 padding: 22,
             }}
         >
-            <Text style={{ fontFamily: 'Gelion-Regular', fontSize: 17 }}>
+            <Text
+                style={{
+                    fontFamily: 'Gelion-Regular',
+                    fontSize: 17,
+                    lineHeight: 21,
+                    color: ipctColors.nileBlue,
+                }}
+            >
                 {i18n.t('reportIlegal.message')}
             </Text>
             <Input
@@ -83,14 +92,20 @@ function AnonymousReportScreen() {
                 maxLength={256}
                 onChangeText={(value) => setReportInput(value)}
                 isBig
-                isReportInput
+                // isReportInput
                 style={{ fontFamily: 'Gelion-Regular', fontSize: 17 }}
             />
         </View>
     );
 }
 
-AnonymousReportScreen.navigationOptions = ({ submitReport, submitting }) => {
+AnonymousReportScreen.navigationOptions = ({
+    submitReport,
+    submitting,
+}: {
+    submitReport: () => void;
+    submitting: boolean;
+}) => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('report'),
