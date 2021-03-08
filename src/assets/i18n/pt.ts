@@ -267,4 +267,10 @@ export default {
     descriptionCopiedClipboard:
         'Descrição copiada para a área de transferência!',
     report: 'Relatório',
+    reportIlegal: {
+        title: 'Denunciar atividade ilegal',
+        message:
+            'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
+        btnText: 'Reportar',
+    },
 };
