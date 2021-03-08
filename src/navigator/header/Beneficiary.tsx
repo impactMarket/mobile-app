@@ -14,7 +14,7 @@ function Beneficiary() {
             }}
         >
             <FAQSvg />
-            <ReportSvg style={{ marginLeft: 8.4 }} />
+            <ReportSvg isLink style={{ marginLeft: 8.4 }} />
             <QRCodeSvg style={{ marginLeft: 8.4, marginRight: 16 }} />
         </View>
     );
