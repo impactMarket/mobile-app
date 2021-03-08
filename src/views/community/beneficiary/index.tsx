@@ -310,10 +310,7 @@ function BeneficiaryScreen() {
                             </View>
                         </View>
                         <Claim
-                            claimAmount={community.contract.claimAmount.replace(
-                                /,/g,
-                                '.'
-                            )}
+                            claimAmount={community.contract.claimAmount}
                             updateClaimedAmount={updateClaimedAmountAndCache}
                             cooldownTime={cooldownTime}
                             updateCooldownTime={getNewCooldownTime}
