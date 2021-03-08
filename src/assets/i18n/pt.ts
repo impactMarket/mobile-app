@@ -272,5 +272,8 @@ export default {
         message:
             'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
         btnText: 'Reportar',
+        label: 'Descreva a potencial atividade ilegal ...',
+        alertCongrat: 'Parabéns, seu relatório foi submetido!',
+        alertFailure: 'Erro ao submeter seu relatório!',
     },
 };

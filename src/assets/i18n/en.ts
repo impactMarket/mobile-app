@@ -272,5 +272,8 @@ export default {
         message:
             'If you think there is something suspicious with your community, money distribution, or behavior, like potential fraud or corruption, let us know in an anonymous way.',
         btnText: 'Report',
+        label: 'Describe the potential  ilegal activity...',
+        alertCongrat: 'Congratulations, your report was submitted!',
+        alertFailure: 'Error uploading report!',
     },
 };
