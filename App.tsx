@@ -347,11 +347,13 @@ export default class App extends React.Component<any, IAppState> {
                     style={{
                         flex: 1,
                         alignItems: 'center',
-                        justifyContent: 'center',
+                        flexDirection: 'row',
+                        backgroundColor: ipctColors.blueRibbon,
                     }}
                 >
                     <Image
-                        source={require('./src/assets/images/splash.png')}
+                        style={{ flex: 1, resizeMode: 'contain' }}
+                        source={require('./src/assets/images/splash2.png')}
                         onLoad={this._cacheResourcesAsync}
                     />
                 </View>
@@ -434,7 +436,7 @@ export default class App extends React.Component<any, IAppState> {
     }
 
     _cacheSplashResourcesAsync = async () => {
-        const images = [require('./src/assets/images/splash.png')];
+        const images = [require('./src/assets/images/splash2.png')];
 
         const cacheImages = images.map((image) => {
             return Asset.fromModule(image).downloadAsync();
@@ -443,7 +445,6 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     _cacheResourcesAsync = async () => {
-        SplashScreen.hideAsync();
         await Font.loadAsync({
             // Load a font `Montserrat` from a static resource
             // Montserrat: require('assets/fonts/Montserrat.ttf'),
@@ -489,6 +490,8 @@ export default class App extends React.Component<any, IAppState> {
         await this._checkForNewVersion();
         await this._authUser();
         this.setState({ isAppReady: true });
+        // just at the end, so when we hide, app is ready!
+        SplashScreen.hideAsync();
     };
 
     _checkForNewVersion = async () => {
