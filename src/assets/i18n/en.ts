@@ -266,4 +266,9 @@ export default {
     storyFailure: 'Error uploading story!',
     storyPermissionCamera: 'Permission to access camera roll is required!',
     descriptionCopiedClipboard: 'Description copied to clipboard!',
+    ubiParamsUpdated: 'Community UBI parameters were updated!',
+    ubiParams: 'UBI Params',
+    ubiParamsChanged:
+        'Your community UBI contract parameters have changed. The new parameters will be the following:',
+    acceptNewUbiParams: 'Accept New Paramenters',
 };

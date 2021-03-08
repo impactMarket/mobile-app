@@ -127,7 +127,7 @@ function CommunityManagerScreen() {
 
                 Alert.alert(
                     i18n.t('success'),
-                    'Community UBI parameters were updated!',
+                    i18n.t('ubiParamsUpdated'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -135,7 +135,7 @@ function CommunityManagerScreen() {
             .catch((e) => {
                 Alert.alert(
                     i18n.t('failure'),
-                    'There was an error, please try again.',
+                    i18n.t('anErroHappenedTryAgain'),
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
@@ -182,7 +182,7 @@ function CommunityManagerScreen() {
                     {requiredUbiToChange !== undefined && (
                         <Portal>
                             <Modal
-                                title="UBI Params"
+                                title={i18n.t('ubiParams')}
                                 visible={true}
                                 buttons={
                                     <>
@@ -192,17 +192,16 @@ function CommunityManagerScreen() {
                                             onPress={handleAcceptNewUbiParams}
                                             loading={editInProgress}
                                         >
-                                            Accept New Paramenters
+                                            {i18n.t('acceptNewUbiParams')}
                                         </Button>
                                     </>
                                 }
                             >
                                 <Paragraph style={styles.ubiChangeModalText}>
-                                    Your community UBI contract parameters have
-                                    changed.
+                                    {i18n.t('ubiParamsChanged')}
                                 </Paragraph>
                                 <Paragraph style={styles.ubiChangeModalText}>
-                                    Daily Claim:{' '}
+                                    {i18n.t('claimAmount')}:{' '}
                                     {amountToCurrency(
                                         requiredUbiToChange.claimAmount,
                                         userCurrency,
@@ -210,7 +209,7 @@ function CommunityManagerScreen() {
                                     )}
                                 </Paragraph>
                                 <Paragraph style={styles.ubiChangeModalText}>
-                                    Max Claim:{' '}
+                                    {i18n.t('totalClaimPerBeneficiary')}:{' '}
                                     {amountToCurrency(
                                         requiredUbiToChange.maxClaim,
                                         userCurrency,
@@ -218,15 +217,15 @@ function CommunityManagerScreen() {
                                     )}
                                 </Paragraph>
                                 <Paragraph style={styles.ubiChangeModalText}>
-                                    Base Interval:{' '}
+                                    {i18n.t('frequency')}:{' '}
                                     {requiredUbiToChange.baseInterval === 86400
                                         ? i18n.t('day')
                                         : i18n.t('week')}
                                 </Paragraph>
                                 <Paragraph style={styles.ubiChangeModalText}>
-                                    Increment Interval:{' '}
+                                    {i18n.t('timeIncrementAfterClaim')} (
+                                    {i18n.t('timeInMinutes')}):{' '}
                                     {requiredUbiToChange.incrementInterval / 60}{' '}
-                                    minutes
                                 </Paragraph>
                             </Modal>
                         </Portal>

@@ -266,4 +266,10 @@ export default {
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
     descriptionCopiedClipboard:
         'Descrição copiada para a área de transferência!',
+    ubiParamsUpdated:
+        'Parâmetros UBI da sua comunidade foram atualizados com sucesso!',
+    ubiParams: 'Parâmetros UBI',
+    ubiParamsChanged:
+        'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
+    acceptNewUbiParams: 'Aceitar novos parâmetros',
 };
