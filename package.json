@@ -41,6 +41,7 @@
         "expo-intent-launcher": "~8.4.0",
         "expo-linking": "~2.0.1",
         "expo-localization": "~9.1.0",
+        "expo-network": "~2.4.0",
         "expo-notifications": "~0.8.2",
         "expo-splash-screen": "~0.8.1",
         "expo-status-bar": "1.0.3",
