@@ -276,4 +276,10 @@ export default {
         alertCongrat: 'Parabéns, seu relatório foi submetido!',
         alertFailure: 'Erro ao submeter seu relatório!',
     },
+    ubiParamsUpdated:
+        'Parâmetros UBI da sua comunidade foram atualizados com sucesso!',
+    ubiParams: 'Parâmetros UBI',
+    ubiParamsChanged:
+        'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
+    acceptNewUbiParams: 'Aceitar novos parâmetros',
 };

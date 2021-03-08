@@ -114,6 +114,21 @@ class ApiRouteUser {
         });
         return !!result;
     }
+
+    static async device(
+        phone: string,
+        identifier: string,
+        device: string,
+        network: string
+    ): Promise<boolean> {
+        const result = await postRequest<boolean>('/user/device', {
+            phone,
+            identifier,
+            device,
+            network,
+        });
+        return !!result;
+    }
 }
 
 export default ApiRouteUser;

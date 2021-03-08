@@ -276,4 +276,9 @@ export default {
         alertCongrat: 'Congratulations, your report was submitted!',
         alertFailure: 'Error uploading report!',
     },
+    ubiParamsUpdated: 'Community UBI parameters were updated!',
+    ubiParams: 'UBI Params',
+    ubiParamsChanged:
+        'Your community UBI contract parameters have changed. The new parameters will be the following:',
+    acceptNewUbiParams: 'Accept New Paramenters',
 };

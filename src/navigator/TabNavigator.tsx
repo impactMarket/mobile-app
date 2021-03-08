@@ -160,7 +160,9 @@ function TabNavigator({
                 style: { height: 84 + insets.bottom },
             }}
             initialRouteName={
-                isBeneficiary
+                fromWelcomeScreen.length > 0 // if fromWelcomeScreen is valid, use it
+                    ? fromWelcomeScreen
+                    : isBeneficiary
                     ? Screens.Beneficiary
                     : isManager
                     ? Screens.CommunityManager
