@@ -599,7 +599,7 @@ export default class App extends React.Component<any, IAppState> {
                 loggedIn,
             });
         } catch (error) {
-            Api.system.uploadError('', 'auth_user', error);
+            Api.system.uploadError(address ? address : '', 'auth_user', error);
         }
     };
 }
