@@ -201,6 +201,7 @@ function FAQScreen() {
             <ScrollView style={styles.contentView}>
                 {faq.map((faq) => (
                     <List.Accordion
+                        key={faq.title}
                         title={faq.title}
                         titleNumberOfLines={4}
                         expanded={expanded.indexOf(faq.title) !== -1}
