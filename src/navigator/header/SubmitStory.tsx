@@ -4,11 +4,16 @@ import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
 
-function SubmitStory(props: { submit: () => void; submitting: boolean }) {
+function SubmitStory(props: {
+    submit: () => void;
+    submitting: boolean;
+    disabled: boolean;
+}) {
     return (
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <Button
                 mode="text"
+                disabled={props.disabled}
                 uppercase={false}
                 labelStyle={{
                     fontFamily: 'Gelion-Bold',

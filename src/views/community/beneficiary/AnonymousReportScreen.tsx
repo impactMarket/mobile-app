@@ -27,6 +27,7 @@ function AnonymousReportScreen() {
             navigation.setOptions({
                 headerRight: () => (
                     <SubmitStory
+                        disabled={reportInput.length === 0}
                         submit={submitReport}
                         submitting={submitting}
                     />
@@ -42,6 +43,9 @@ function AnonymousReportScreen() {
     ]);
 
     const submitReport = () => {
+        if (reportInput.length === 0) {
+            return;
+        }
         setSubmitting(true);
         Api.user
             .report(userCommunity.publicId, reportInput)
@@ -102,15 +106,21 @@ function AnonymousReportScreen() {
 AnonymousReportScreen.navigationOptions = ({
     submitReport,
     submitting,
+    disabled,
 }: {
     submitReport: () => void;
     submitting: boolean;
+    disabled: boolean;
 }) => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('report'),
         headerRight: () => (
-            <SubmitStory submit={submitReport} submitting={submitting} />
+            <SubmitStory
+                submit={submitReport}
+                submitting={submitting}
+                disabled={disabled}
+            />
         ),
     };
 };
