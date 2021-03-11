@@ -63,7 +63,6 @@
         "react-native-paper": "4.5.0",
         "react-native-qrcode-svg": "6.0.6",
         "react-native-screens": "~2.15.0",
-        "react-native-share": "^5.1.4",
         "react-native-svg": "12.1.0",
         "react-native-svg-charts": "5.4.0",
         "react-native-tcp": "4.0.0",

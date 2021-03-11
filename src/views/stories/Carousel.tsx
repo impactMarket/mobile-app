@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import Share from 'react-native-share';
 
 import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import Button from 'components/core/Button';
@@ -73,38 +72,38 @@ function Carousel(props: {
     const title = 'ImpactMarket';
     const message = 'Please check this story out.';
 
-    const options = Platform.select({
-        ios: {
-            activityItemSources: [
-                {
-                    // For sharing url with custom title.
-                    placeholderItem: { type: 'url', content: url },
-                    item: {
-                        default: { type: 'url', content: url },
-                    },
-                    subject: {
-                        default: title,
-                    },
-                    linkMetadata: { originalUrl: url, url, title },
-                },
-            ],
-        },
-        default: {
-            title,
-            subject: title,
-            message: `${message} ${url}`,
-        },
-    });
+    // const options = Platform.select({
+    //     ios: {
+    //         activityItemSources: [
+    //             {
+    //                 // For sharing url with custom title.
+    //                 placeholderItem: { type: 'url', content: url },
+    //                 item: {
+    //                     default: { type: 'url', content: url },
+    //                 },
+    //                 subject: {
+    //                     default: title,
+    //                 },
+    //                 linkMetadata: { originalUrl: url, url, title },
+    //             },
+    //         ],
+    //     },
+    //     default: {
+    //         title,
+    //         subject: title,
+    //         message: `${message} ${url}`,
+    //     },
+    // });
 
-    const handleShare = async () => {
-        Share.open(options)
-            .then(() => {
-                setIsVisible(!isVisible);
-            })
-            .catch((err) => {
-                err && console.log(err);
-            });
-    };
+    // const handleShare = async () => {
+    //     Share.open(options)
+    //         .then(() => {
+    //             setIsVisible(!isVisible);
+    //         })
+    //         .catch((err) => {
+    //             err && console.log(err);
+    //         });
+    // };
 
     const handlePressPrevious = () => {
         if (index === 0) {
@@ -320,7 +319,13 @@ function Carousel(props: {
                 setIsVisible={togglePopup}
                 title={i18n.t('story')}
             >
-                <View>
+                <View
+                    style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                    }}
+                >
                     <Pressable
                         style={{ flexDirection: 'row' }}
                         hitSlop={15}
@@ -348,7 +353,7 @@ function Carousel(props: {
                         <Text>{i18n.t('delete')}</Text>
                     </Pressable>
                     {/* TODO: Adjust to use storyId as params */}
-                    <Pressable
+                    {/* <Pressable
                         style={{ flexDirection: 'row' }}
                         hitSlop={15}
                         onPress={() => {
@@ -357,7 +362,7 @@ function Carousel(props: {
                     >
                         <ShareSvg />
                         <Text>{i18n.t('share')}</Text>
-                    </Pressable>
+                    </Pressable> */}
                 </View>
             </BottomPopup>
         </SafeAreaView>
