@@ -4,6 +4,7 @@ import {
     SafeAreaView,
     Text,
     Pressable,
+    Platform,
     Alert,
     useWindowDimensions,
 } from 'react-native';
@@ -19,6 +20,9 @@ import { ipctColors } from 'styles/index';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
+import BottomPopup from 'components/core/BottomPopup';
+import DeleteSvg from 'components/svg/DeleteSvg';
+import ShareSvg from 'components/svg/ShareSvg';
 
 import Container from './Container';
 
@@ -40,6 +44,10 @@ function Carousel(props: {
     const [name, setName] = useState('');
     const [coverImage, setCoverImage] = useState('');
     const [communityPublicId, setCommunityPublicId] = useState('');
+    const [openPopup, setOpenPopup] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+
+    const togglePopup = () => setOpenPopup(!openPopup);
 
     useEffect(() => {
         Api.story
@@ -268,6 +276,57 @@ function Carousel(props: {
                 }}
                 colors={['#73839D', '#1E3252']}
             />
+            <BottomPopup
+                isVisible={openPopup}
+                setIsVisible={togglePopup}
+                title={i18n.t('story')}
+            >
+                <View
+                    style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Pressable
+                        style={{ flexDirection: 'row' }}
+                        hitSlop={15}
+                        onPress={() => {
+                            Alert.alert(
+                                i18n.t('delete'),
+                                i18n.t('deleteWarning'),
+                                [
+                                    {
+                                        text: i18n.t('cancel'),
+                                        onPress: () =>
+                                            console.log('Cancel Pressed'),
+                                        style: 'cancel',
+                                    },
+                                    {
+                                        text: i18n.t('confirm'),
+                                        onPress: () =>
+                                            Api.story.delete(stories[index].id),
+                                    },
+                                ]
+                            );
+                        }}
+                    >
+                        <DeleteSvg />
+                        <Text>{i18n.t('delete')}</Text>
+                    </Pressable>
+                    {/* TODO: Adjust to use storyId as params */}
+                    {/* <Pressable
+                        style={{ flexDirection: 'row' }}
+                        hitSlop={15}
+                        onPress={() => {
+                            handleShare;
+                        }}
+                    >
+                        <ShareSvg />
+                        <Text>{i18n.t('share')}</Text>
+                    </Pressable> */}
+                </View>
+            </BottomPopup>
         </SafeAreaView>
     );
 }
