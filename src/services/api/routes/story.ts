@@ -66,7 +66,7 @@ class ApiRouteStory {
         isUserLogged: boolean
     ): Promise<ICommunityStories> {
         const result = await getRequest<ICommunityStories>(
-            '/story/comunity/user/' + publicId, // TODO: change to the right endpoint
+            '/story/comunity/user/' + publicId, // TODO: change to the right non-fake endpoint
             isUserLogged
         );
         return result!; // TODO: don't!

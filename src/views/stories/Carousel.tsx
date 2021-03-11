@@ -5,10 +5,13 @@ import {
     Text,
     Pressable,
     Alert,
+    Platform,
     useWindowDimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import Share from 'react-native-share';
+
 import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import Button from 'components/core/Button';
 import Api from 'services/api';
@@ -21,6 +24,7 @@ import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
 import BottomPopup from 'components/core/BottomPopup';
 import DeleteSvg from 'components/svg/DeleteSvg';
+import ShareSvg from 'components/svg/ShareSvg';
 
 import Container from './Container';
 
@@ -43,6 +47,7 @@ function Carousel(props: {
     const [coverImage, setCoverImage] = useState('');
     const [communityPublicId, setCommunityPublicId] = useState('');
     const [openPopup, setOpenPopup] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     const togglePopup = () => setOpenPopup(!openPopup);
 
@@ -63,6 +68,43 @@ function Carousel(props: {
                 }
             });
     }, []);
+
+    const url = 'https://www.impactmarket.com/';
+    const title = 'ImpactMarket';
+    const message = 'Please check this story out.';
+
+    const options = Platform.select({
+        ios: {
+            activityItemSources: [
+                {
+                    // For sharing url with custom title.
+                    placeholderItem: { type: 'url', content: url },
+                    item: {
+                        default: { type: 'url', content: url },
+                    },
+                    subject: {
+                        default: title,
+                    },
+                    linkMetadata: { originalUrl: url, url, title },
+                },
+            ],
+        },
+        default: {
+            title,
+            subject: title,
+            message: `${message} ${url}`,
+        },
+    });
+
+    const handleShare = async () => {
+        Share.open(options)
+            .then(() => {
+                setIsVisible(!isVisible);
+            })
+            .catch((err) => {
+                err && console.log(err);
+            });
+    };
 
     const handlePressPrevious = () => {
         if (index === 0) {
@@ -278,27 +320,45 @@ function Carousel(props: {
                 setIsVisible={togglePopup}
                 title={i18n.t('story')}
             >
-                <Pressable
-                    style={{ flexDirection: 'row' }}
-                    hitSlop={15}
-                    onPress={() => {
-                        Alert.alert(i18n.t('delete'), i18n.t('deleteWarning'), [
-                            {
-                                text: i18n.t('cancel'),
-                                onPress: () => console.log('Cancel Pressed'),
-                                style: 'cancel',
-                            },
-                            {
-                                text: i18n.t('confirm'),
-                                onPress: () =>
-                                    Api.story.delete(stories[index].id),
-                            },
-                        ]);
-                    }}
-                >
-                    <DeleteSvg />
-                    <Text>{i18n.t('delete')}</Text>
-                </Pressable>
+                <View>
+                    <Pressable
+                        style={{ flexDirection: 'row' }}
+                        hitSlop={15}
+                        onPress={() => {
+                            Alert.alert(
+                                i18n.t('delete'),
+                                i18n.t('deleteWarning'),
+                                [
+                                    {
+                                        text: i18n.t('cancel'),
+                                        onPress: () =>
+                                            console.log('Cancel Pressed'),
+                                        style: 'cancel',
+                                    },
+                                    {
+                                        text: i18n.t('confirm'),
+                                        onPress: () =>
+                                            Api.story.delete(stories[index].id),
+                                    },
+                                ]
+                            );
+                        }}
+                    >
+                        <DeleteSvg />
+                        <Text>{i18n.t('delete')}</Text>
+                    </Pressable>
+                    {/* TODO: Adjust to use storyId as params */}
+                    <Pressable
+                        style={{ flexDirection: 'row' }}
+                        hitSlop={15}
+                        onPress={() => {
+                            handleShare;
+                        }}
+                    >
+                        <ShareSvg />
+                        <Text>{i18n.t('share')}</Text>
+                    </Pressable>
+                </View>
             </BottomPopup>
         </SafeAreaView>
     );
