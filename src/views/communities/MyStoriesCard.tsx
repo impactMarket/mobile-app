@@ -10,7 +10,7 @@ export default function MyStoriesCard() {
         <Pressable
             style={{
                 width: 98.16,
-                height: 44.84,
+                height: 53.0,
                 marginRight: 11.84,
             }}
             onPress={(e) =>
