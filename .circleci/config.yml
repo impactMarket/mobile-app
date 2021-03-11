@@ -1,0 +1,32 @@
+version: 2.1
+publish: &publish
+  working_directory: ~/my-app
+  docker:
+    - image: circleci/node:14.15.1
+  steps:
+    - checkout
+
+    - run:
+        name: Installing dependencies
+        command: npm ci
+
+    - run:
+        name: Login into Expo
+        command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+
+    - run:
+        name: Publish to Expo
+        command: npx expo-cli publish --non-interactive
+
+jobs:
+  publish_to_expo:
+    <<: *publish
+
+workflows:
+  version: 2.1
+  my_app:
+    jobs:
+      - publish_to_expo:
+          filters:
+            branches:
+              only: staging
