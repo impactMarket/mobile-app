@@ -61,6 +61,16 @@ class ApiRouteStory {
         return result ? result : ([] as any);
     }
 
+    static async getByUser(
+        publicId: number,
+        isUserLogged: boolean
+    ): Promise<ICommunityStories> {
+        const result = await getRequest<ICommunityStories>(
+            '/story/comunity/user/' + publicId, // TODO: change to the right endpoint
+            isUserLogged
+        );
+        return result!; // TODO: don't!
+    }
     static async getByCommunity(
         communityId: number,
         isUserLogged: boolean // TODO: this must change
