@@ -6,6 +6,7 @@ export enum Screens {
     WaitingTx = 'WaitingTx',
     Stories = 'Stories',
     NewStory = 'NewStory',
+    MyStories = 'MyStories',
     StoriesCarousel = 'StoriesCarousel',
     //
     ClaimExplained = 'ClaimExplained',

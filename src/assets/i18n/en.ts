@@ -281,4 +281,6 @@ export default {
     ubiParamsChanged:
         'Your community UBI contract parameters have changed. The new parameters will be the following:',
     acceptNewUbiParams: 'Accept New Paramenters',
+    createStory: 'Create Story',
+    myStories: 'My Stories',
 };
