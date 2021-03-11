@@ -34,6 +34,7 @@ function StoriesScreen() {
         Api.story.list<ICommunityStoriesBox[]>().then((s) => {
             if (caller === 'MY_STORIES') {
                 const userStories = s.filter(
+                    //TODO: Use the correct user attribute
                     (s) => s?.author.address === userAddress
                 );
                 setStories(userStories);
