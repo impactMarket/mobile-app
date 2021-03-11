@@ -282,4 +282,6 @@ export default {
     ubiParamsChanged:
         'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
     acceptNewUbiParams: 'Aceitar novos parâmetros',
+    createStory: 'Criar Story',
+    myStories: 'Minhas Stories',
 };
