@@ -10,10 +10,14 @@ export default function MyStoriesCard() {
         <Pressable
             style={{
                 width: 98.16,
-                height: 76.84,
+                height: 44.84,
                 marginRight: 11.84,
             }}
-            onPress={(e) => navigation.navigate(Screens.MyStories)}
+            onPress={(e) =>
+                navigation.navigate(Screens.Stories, {
+                    caller: 'MY_STORIES',
+                })
+            }
         >
             <View
                 style={{
@@ -39,7 +43,6 @@ export default function MyStoriesCard() {
                         fontSize: 13,
                         lineHeight: 16,
                         color: '#E1E4E7',
-                        marginTop: 8,
                     }}
                 >
                     {i18n.t('myStories')}

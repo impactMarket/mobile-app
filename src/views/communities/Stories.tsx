@@ -4,17 +4,20 @@ import { navigationRef } from 'helpers/rootNavigation';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
+
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator, Headline } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import NewStoryCard from './NewStoryCard';
+import MyStoriesCard from './MyStoriesCard';
 import StoriesCard from './StoriesCard';
 import i18n from 'assets/i18n';
 
 export default function Stories() {
     const dispatch = useDispatch();
+
     const [storiesCommunity, setStoriesCommunity] = useState<
         ICommunitiesListStories[]
     >([]);
@@ -47,7 +50,9 @@ export default function Stories() {
                 <Pressable
                     hitSlop={10}
                     onPress={(e) =>
-                        navigationRef.current?.navigate(Screens.Stories)
+                        navigationRef.current?.navigate(Screens.Stories, {
+                            caller: 'VIEW_ALL',
+                        })
                     }
                 >
                     <Text
@@ -69,7 +74,12 @@ export default function Stories() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ padding: 18 }}
             >
-                {userAddress.length > 0 && <NewStoryCard key="newStory" />}
+                {userAddress.length > 0 && (
+                    <View style={{ flexDirection: 'column' }}>
+                        <NewStoryCard key="newStory" />
+                        <MyStoriesCard />
+                    </View>
+                )}
                 {refreshing && (
                     <ActivityIndicator
                         style={{ marginBottom: 22 }}

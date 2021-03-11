@@ -65,3 +65,7 @@ export interface IRootState {
     modalDonate: IModalDonateState;
     stories: IStoriesState;
 }
+
+export interface IStoriesRouteParams {
+    caller: string;
+}
