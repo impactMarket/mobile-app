@@ -262,6 +262,7 @@ export default {
     stories: 'Stories',
     viewAll: 'View All',
     notInComunity: 'Not in a community!',
+    story: 'Story',
     storyCongrat: 'Congratulations, your story was submitted!',
     storyFailure: 'Error uploading story!',
     storyPermissionCamera: 'Permission to access camera roll is required!',

@@ -1,14 +1,11 @@
 import i18n from 'assets/i18n';
-import Card from 'components/core/Card';
 import { IRootState } from 'helpers/types/state';
 import * as React from 'react';
 import { useState } from 'react';
-import { View } from 'react-native';
-import { BottomSheet } from 'react-native-btr';
-import { Headline } from 'react-native-paper';
 import SvgQRCode from 'react-native-qrcode-svg';
 import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 import { useSelector } from 'react-redux';
+import BottomPopup from 'components/core/BottomPopup';
 
 function QRCodeSvg(props: SvgProps) {
     const [openQR, setOpenQR] = useState(false);
@@ -64,33 +61,13 @@ function QRCodeSvg(props: SvgProps) {
                     fill="#172B4D"
                 />
             </Svg>
-            <BottomSheet
-                visible={openQR}
-                onBackButtonPress={toggleQR}
-                onBackdropPress={toggleQR}
+            <BottomPopup
+                isVisible={openQR}
+                setIsVisible={toggleQR}
+                title={i18n.t('yourQRCode')}
             >
-                <Card
-                    style={{
-                        borderBottomEndRadius: 0,
-                        borderBottomStartRadius: 0,
-                    }}
-                >
-                    <Card.Content>
-                        <Headline style={{ textAlign: 'center' }}>
-                            {i18n.t('yourQRCode')}
-                        </Headline>
-                        <View
-                            style={{
-                                alignItems: 'center',
-                                marginTop: 20,
-                                marginBottom: 10,
-                            }}
-                        >
-                            <SvgQRCode value={userAddress} size={200} />
-                        </View>
-                    </Card.Content>
-                </Card>
-            </BottomSheet>
+                <SvgQRCode value={userAddress} size={200} />
+            </BottomPopup>
         </>
     );
 }

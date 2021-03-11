@@ -19,6 +19,7 @@ import { ipctColors } from 'styles/index';
 import { useSelector } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
+import BottomPopup from 'components/core/BottomPopup';
 
 import Container from './Container';
 
@@ -40,6 +41,9 @@ function Carousel(props: {
     const [name, setName] = useState('');
     const [coverImage, setCoverImage] = useState('');
     const [communityPublicId, setCommunityPublicId] = useState('');
+    const [openPopup, setOpenPopup] = useState(false);
+
+    const togglePopup = () => setOpenPopup(!openPopup);
 
     useEffect(() => {
         Api.story
@@ -268,6 +272,15 @@ function Carousel(props: {
                 }}
                 colors={['#73839D', '#1E3252']}
             />
+            <BottomPopup
+                isVisible={openPopup}
+                setIsVisible={togglePopup}
+                title={i18n.t('story')}
+            >
+                <View>
+                    <Text>Ola</Text>
+                </View>
+            </BottomPopup>
         </SafeAreaView>
     );
 }

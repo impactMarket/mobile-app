@@ -261,6 +261,7 @@ export default {
     stories: 'Stories',
     viewAll: 'Ver Todas',
     notInComunity: 'Não estás associado a nenhuma comunidade!',
+    story: 'Story',
     storyCongrat: 'Parabéns, sua story foi submetida!',
     storyFailure: 'Erro ao submeter sua story!',
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
