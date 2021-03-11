@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
 import BottomPopup from 'components/core/BottomPopup';
+import DeleteSvg from 'components/svg/DeleteSvg';
 
 import Container from './Container';
 
@@ -277,9 +278,27 @@ function Carousel(props: {
                 setIsVisible={togglePopup}
                 title={i18n.t('story')}
             >
-                <View>
-                    <Text>Ola</Text>
-                </View>
+                <Pressable
+                    style={{ flexDirection: 'row' }}
+                    hitSlop={15}
+                    onPress={() => {
+                        Alert.alert(i18n.t('delete'), i18n.t('deleteWarning'), [
+                            {
+                                text: i18n.t('cancel'),
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                            },
+                            {
+                                text: i18n.t('confirm'),
+                                onPress: () =>
+                                    Api.story.delete(stories[index].id),
+                            },
+                        ]);
+                    }}
+                >
+                    <DeleteSvg />
+                    <Text>{i18n.t('delete')}</Text>
+                </Pressable>
             </BottomPopup>
         </SafeAreaView>
     );
