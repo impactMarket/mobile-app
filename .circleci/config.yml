@@ -18,13 +18,29 @@ publish: &publish
         name: Publish to Expo
         command: npx expo-cli publish --non-interactive
 
+test: &test
+  working_directory: ~/my-app
+  docker:
+    - image: circleci/node:14.15.1
+  steps:
+    - checkout
+
+    - run:
+        name: test
+        command: yarn test
+
 jobs:
   publish_to_expo:
     <<: *publish
+  test_app:
+    <<: *test
 
 workflows:
-  version: 2.1
-  my_app:
+  version: 2
+  test:
+    jobs:
+      - test_app
+  build:
     jobs:
       - publish_to_expo:
           filters:
