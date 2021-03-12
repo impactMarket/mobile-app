@@ -79,8 +79,13 @@ class ApiRouteStory {
 
     // TODO: change to the non-fake api endpoint
     static async delete(contentId: number): Promise<void> {
-        await postRequest('/story/delete', { contentId });
+        await postRequest('/story/remove', { contentId });
         return;
+    }
+
+    static async me<T extends ICommunitiesListStories[]>(): Promise<T> {
+        const result = await getRequest<T>('/story/me');
+        return result ? result : ([] as any);
     }
 }
 
