@@ -126,6 +126,7 @@ export default function Container({ story, media }) {
                                         {
                                             text: i18n.t('confirm'),
                                             onPress: () =>
+                                                // console.log(story.id),
                                                 Api.story.remove(story.id),
                                         },
                                     ]
