@@ -1,14 +1,22 @@
 import React, { ReactElement } from 'react';
-import { GestureResponderEvent, View } from 'react-native';
+import {
+    GestureResponderEvent,
+    View,
+    TextStyle,
+    StyleProp,
+} from 'react-native';
 import { BottomSheet } from 'react-native-btr';
 import Card from './Card';
 import { Headline } from 'react-native-paper';
 import i18n from '../../assets/i18n';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 
 interface IBottomPopupProps {
     children: ReactElement;
     isVisible: boolean;
+    hasCloseBtn?: boolean;
     title?: string;
+    titleStyle?: StyleProp<TextStyle>;
     setIsVisible?: (event: GestureResponderEvent) => void;
 }
 export default class BottomPopup extends React.Component<
@@ -20,7 +28,14 @@ export default class BottomPopup extends React.Component<
     }
 
     render() {
-        const { children, isVisible, setIsVisible, title } = this.props;
+        const {
+            children,
+            isVisible,
+            setIsVisible,
+            title,
+            titleStyle,
+            hasCloseBtn,
+        } = this.props;
         return (
             <BottomSheet
                 visible={isVisible}
@@ -34,11 +49,40 @@ export default class BottomPopup extends React.Component<
                     }}
                 >
                     <Card.Content>
-                        {title && (
-                            <Headline style={{ textAlign: 'center' }}>
-                                {i18n.t(title)}
-                            </Headline>
-                        )}
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            {title && (
+                                <Headline
+                                    style={
+                                        titleStyle
+                                            ? [
+                                                  {
+                                                      fontWeight: '800',
+                                                      fontFamily:
+                                                          'Manrope-Bold',
+                                                  },
+                                                  titleStyle,
+                                              ]
+                                            : {
+                                                  fontWeight: '500',
+                                                  textAlign: 'center',
+                                                  fontFamily: 'Manrope-Bold',
+                                              }
+                                    }
+                                >
+                                    {i18n.t(title)}
+                                </Headline>
+                            )}
+                            {hasCloseBtn && (
+                                <CloseStorySvg
+                                    onPress={() => setIsVisible(!isVisible)}
+                                />
+                            )}
+                        </View>
                         <View
                             style={{
                                 alignItems: 'center',

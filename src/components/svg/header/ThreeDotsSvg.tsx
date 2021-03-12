@@ -1,21 +1,25 @@
-import { useNavigation } from '@react-navigation/native';
-import i18n from 'assets/i18n';
-import { IRootState } from 'helpers/types/state';
 import React, { ReactElement } from 'react';
-import { useState } from 'react';
-import { GestureResponderEvent, View } from 'react-native';
 import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
-import { useSelector } from 'react-redux';
 import BottomPopup from 'components/core/BottomPopup';
+import { TextStyle, StyleProp } from 'react-native';
 interface IThreeDotsProps extends SvgProps {
     children: ReactElement;
     openThreeDotsMenu: boolean;
+    hasCloseBtn: boolean;
     title?: string;
+    titleStyle?: StyleProp<TextStyle>;
     setOpenThreeDotsMenu: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function ThreeDotsSvg(props: IThreeDotsProps) {
-    const { setOpenThreeDotsMenu, openThreeDotsMenu, title, children } = props;
+    const {
+        setOpenThreeDotsMenu,
+        openThreeDotsMenu,
+        title,
+        children,
+        titleStyle,
+        hasCloseBtn,
+    } = props;
 
     const toggleThreeDotsMenu = () => setOpenThreeDotsMenu(!openThreeDotsMenu);
 
@@ -41,6 +45,8 @@ function ThreeDotsSvg(props: IThreeDotsProps) {
                 isVisible={openThreeDotsMenu}
                 setIsVisible={toggleThreeDotsMenu}
                 title={title}
+                titleStyle={titleStyle}
+                hasCloseBtn={hasCloseBtn}
             >
                 {children}
             </BottomPopup>
