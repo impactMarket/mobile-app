@@ -4,7 +4,7 @@ import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 function CloseStorySvg(props: SvgProps) {
     return (
         <Svg width={34} height={34} viewBox="0 0 34 34" fill="none" {...props}>
-            <Circle cx={16.8} cy={17} r={16.8} fill="#fff" />
+            <Circle cx={16.8} cy={17} r={16.8} fill="#EAEDF0" />
             <Path
                 stroke="#1E3252"
                 strokeWidth={2}

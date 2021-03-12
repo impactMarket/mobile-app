@@ -77,9 +77,9 @@ class ApiRouteStory {
         return;
     }
 
-    // TODO: change to the non-fake api endpoint
-    static async remove(contentId: number): Promise<void> {
-        await postRequest('/story/remove', { contentId });
+    // TODO: adjust endpoint
+    static async remove(storyId: number): Promise<void> {
+        await postRequest('/story/remove', { storyId });
         return;
     }
 
