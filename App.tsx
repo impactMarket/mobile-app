@@ -468,6 +468,9 @@ export default class App extends React.Component<any, IAppState> {
             'Gelion-Thin': {
                 uri: require('./src/assets/fonts/FontGelion/Gelion-Thin.ttf'),
             },
+            'Manrope-Bold': {
+                uri: require('./src/assets/fonts/FontManrope/Manrope-Bold.ttf'),
+            },
         });
         // wait to load langiages
         await loadi18n;
