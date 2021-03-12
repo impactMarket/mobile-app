@@ -31,18 +31,16 @@ function StoriesScreen() {
 
     useEffect(() => {
         setRefreshing(true);
-        Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-            if (caller === 'MY_STORIES') {
-                const userStories = s.filter(
-                    //TODO: Use the correct user attribute
-                    (s) => s?.author.address === userAddress
-                );
-                setStories(userStories);
-            } else {
+        if (caller !== 'MY_STORIES') {
+            Api.story.list<ICommunityStoriesBox[]>().then((s) => {
                 setStories(s);
-            }
-            setRefreshing(false);
-        });
+            });
+        } else {
+            Api.story.me<ICommunityStoriesBox[]>().then((s) => {
+                setStories(s);
+            });
+        }
+        setRefreshing(false);
     }, []);
 
     function createRows(data: ICommunityStoriesBox[], columns: number) {
