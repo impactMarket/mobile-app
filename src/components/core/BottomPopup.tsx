@@ -8,7 +8,7 @@ import i18n from '../../assets/i18n';
 interface IBottomPopupProps {
     children: ReactElement;
     isVisible: boolean;
-    title: string;
+    title?: string;
     setIsVisible?: (event: GestureResponderEvent) => void;
 }
 export default class BottomPopup extends React.Component<
@@ -34,9 +34,11 @@ export default class BottomPopup extends React.Component<
                     }}
                 >
                     <Card.Content>
-                        <Headline style={{ textAlign: 'center' }}>
-                            {i18n.t(title)}
-                        </Headline>
+                        {title && (
+                            <Headline style={{ textAlign: 'center' }}>
+                                {i18n.t(title)}
+                            </Headline>
+                        )}
                         <View
                             style={{
                                 alignItems: 'center',
