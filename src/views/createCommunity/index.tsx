@@ -17,6 +17,7 @@ import { validateEmail, updateCommunityInfo } from 'helpers/index';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
+import { deployPrivateCommunity } from 'helpers/methods/deployPrivateCommunity';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     StyleSheet,
@@ -72,6 +73,8 @@ const currencies: {
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
+
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
@@ -88,7 +91,6 @@ function CreateCommunityScreen() {
         (state: IRootState) => state.app.exchangeRates
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
-    const navigation = useNavigation();
 
     // const [availableCurrencies, setAvailableCurrencies] = useState<
     //     { name: string; symbol: string }[]
@@ -179,40 +181,6 @@ function CreateCommunityScreen() {
         };
         setCountryAndCurrencyBasedOnPhoneNumber();
     }, []);
-
-    const deployPrivateCommunity = async () => {
-        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        const CommunityContract = new kit.web3.eth.Contract(
-            CommunityContractABI as any
-        );
-        const txObject = await CommunityContract.deploy({
-            data: CommunityBytecode.bytecode,
-            arguments: [
-                userAddress,
-                new BigNumber(formatInputAmountToTransfer(claimAmount))
-                    .multipliedBy(decimals)
-                    .toString(),
-                new BigNumber(formatInputAmountToTransfer(maxClaim))
-                    .multipliedBy(decimals)
-                    .toString(),
-                baseInterval,
-                (parseInt(incrementInterval, 10) * 60).toString(),
-                celoNetwork.noAddress,
-                config.cUSDContract,
-                userAddress,
-            ],
-        });
-        // exception is handled outside
-        // receipt as undefined is handled outside
-        const receipt = await celoWalletRequest(
-            userAddress,
-            celoNetwork.noAddress,
-            txObject,
-            'createcommunity',
-            kit
-        );
-        return receipt;
-    };
 
     const submitNewCommunity = async () => {
         const _isCoverImageValid = coverImage.length > 0;
@@ -320,8 +288,15 @@ function CreateCommunityScreen() {
                 incrementInterval: parseInt(incrementInterval, 10) * 60,
             };
             let privateParamsIfAvailable = {};
-            if (visibility === 'private') {
-                txReceipt = await deployPrivateCommunity();
+            let privateCommunity = {
+                userAddress,
+                claimAmount,
+                maxClaim,
+                baseInterval,
+                incrementInterval,
+            };
+            if (visibility === 'private' && privateCommunity) {
+                txReceipt = await deployPrivateCommunity(privateCommunity);
                 if (txReceipt === undefined) {
                     return;
                 }

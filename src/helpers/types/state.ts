@@ -65,3 +65,11 @@ export interface IRootState {
     modalDonate: IModalDonateState;
     stories: IStoriesState;
 }
+
+export interface IPrivateCommunity {
+    userAddress: string;
+    claimAmount: string;
+    maxClaim: string;
+    baseInterval: string;
+    incrementInterval: string;
+}
