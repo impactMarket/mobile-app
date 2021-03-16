@@ -15,7 +15,6 @@ import Api from 'services/api';
 
 import config from '../../config';
 import CommunityContractABI from '../contracts/CommunityABI.json';
-import { setAppExchangeRatesAction } from './redux/actions/app';
 import {
     setCommunityContract,
     setCommunityMetadata,
@@ -60,6 +59,17 @@ export async function isOutOfTime() {
     );
 }
 
+export function linkDeviceInfo(phoneNumber: string, identifier: string) {
+    const buildId = Device.osInternalBuildId; // null only on web
+    Network.getIpAddressAsync()
+        .then((ip) =>
+            Api.user.device(phoneNumber, identifier, buildId ? buildId : '', ip)
+        )
+        .catch(() =>
+            Api.user.device(phoneNumber, identifier, buildId ? buildId : '', '')
+        );
+}
+
 export async function welcomeUser(
     address: string,
     phoneNumber: string,
@@ -81,12 +91,7 @@ export async function welcomeUser(
     } else {
         identifier = Device.osBuildId!;
     }
-    Api.user.device(
-        phoneNumber,
-        identifier,
-        Device.osInternalBuildId!,
-        await Network.getIpAddressAsync()
-    );
+    linkDeviceInfo(phoneNumber, identifier);
     batch(() => {
         dispatch(
             setUserWallet({
