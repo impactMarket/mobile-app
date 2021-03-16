@@ -73,6 +73,7 @@ export interface IPrivateCommunity {
     maxClaim: string;
     baseInterval: string;
     incrementInterval: string;
+    kit: ;
 }
 
 export interface IComunityDetails {
@@ -106,4 +107,5 @@ export interface ISubmitNewCommunity {
     userLanguage: string;
     currency: string;
     comunityDetails: IComunityDetails;
+    kit: ContractKit;
 }

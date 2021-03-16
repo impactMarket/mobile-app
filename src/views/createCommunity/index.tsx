@@ -12,7 +12,7 @@ import {
     amountToCurrency,
 } from 'helpers/currency';
 import { submitNewCommunity } from './methods/submitNewCommunity';
-import { validateEmail, updateCommunityInfo } from 'helpers/index';
+import { validateEmail } from 'helpers/index';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
@@ -166,6 +166,7 @@ function CreateCommunityScreen() {
             userLanguage,
             currency,
             comunityDetails,
+            kit,
         };
         submitNewCommunity(newCommunityInput);
     };

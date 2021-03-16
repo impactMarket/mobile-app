@@ -27,6 +27,7 @@ export const submitNewCommunity = async ({
     userLanguage,
     currency,
     comunityDetails,
+    kit,
 }: ISubmitNewCommunity) => {
     const {
         userAddress,
@@ -43,8 +44,6 @@ export const submitNewCommunity = async ({
         incrementInterval,
         maxClaim,
     } = comunityDetails;
-
-    console.log({comunityDetails})
 
 
     const _isCoverImageValid = coverImage.length > 0;
@@ -101,8 +100,6 @@ export const submitNewCommunity = async ({
         _isMaxClaimValid &&
         _isCoverImageValid;
 
-        console.log({isSubmitAvailable})
-
     if (!isSubmitAvailable) {
         return;
     }
@@ -148,7 +145,7 @@ export const submitNewCommunity = async ({
             baseInterval: parseInt(baseInterval),
             incrementInterval: parseInt(incrementInterval, 10) * 60,
         };
-        console.log({contractParams})
+
         let privateParamsIfAvailable = {};
         let privateCommunity = {
             userAddress,
@@ -156,8 +153,8 @@ export const submitNewCommunity = async ({
             maxClaim,
             baseInterval,
             incrementInterval,
+            kit,
         };
-        console.log({visibility})
 
         if (visibility === 'private' && privateCommunity) {
             txReceipt = await deployPrivateCommunity(privateCommunity);
@@ -190,30 +187,33 @@ export const submitNewCommunity = async ({
             ...privateParamsIfAvailable,
         };
 
-        console.log({communityDetails})
+        Api.community.create(communityDetails)
+        .then((response) => {
+            console.log(response)
 
-        const apiRequestResult = await Api.community.create(communityDetails);
+            const apiRequestResult = response
 
-        console.log({apiRequestResult})
+            if (apiRequestResult) {
+                Api.upload.uploadCommunityCoverImage(
+                    apiRequestResult.publicId,
+                    coverImage
+                ).then((r) => 
+                {updateCommunityInfo(apiRequestResult.publicId, dispatch);
+                    dispatch(setUserIsCommunityManager(true));
+                    console.log(r)});
+            } else {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorCreatingCommunity'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                setSending(false);
+            }
+        });
 
-
-        if (apiRequestResult) {
-            await Api.upload.uploadCommunityCoverImage(
-                apiRequestResult.publicId,
-                coverImage
-            );
-            await updateCommunityInfo(apiRequestResult.publicId, dispatch);
-            dispatch(setUserIsCommunityManager(true));
-        } else {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('errorCreatingCommunity'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            setSending(false);
-        }
     } catch (e) {
+        console.log(e)
         Alert.alert(
             i18n.t('failure'),
             i18n.t('errorCreatingCommunity'),

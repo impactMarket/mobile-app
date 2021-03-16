@@ -1,11 +1,10 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import BigNumber from 'bignumber.js';
 import { celoWalletRequest } from 'services/celoWallet';
 
 import config from '../../../config';
 import { celoNetwork } from 'helpers/constants';
-import { IRootState, IPrivateCommunity } from 'helpers/types/state';
+import { IPrivateCommunity } from 'helpers/types/state';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 
@@ -20,9 +19,8 @@ export const deployPrivateCommunity = async (
         maxClaim,
         baseInterval,
         incrementInterval,
+        kit,
     } = privateCommunity;
-
-    const kit = useSelector((state: IRootState) => state.app.kit);
 
     const decimals = new BigNumber(10).pow(config.cUSDDecimals);
     const CommunityContract = new kit.web3.eth.Contract(
