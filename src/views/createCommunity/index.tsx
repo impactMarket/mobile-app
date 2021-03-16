@@ -8,16 +8,12 @@ import Select from 'components/core/Select';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { celoNetwork } from 'helpers/constants';
 import {
-    formatInputAmountToTransfer,
     amountToCurrency,
 } from 'helpers/currency';
+import { submitNewCommunity } from './methods/submitNewCommunity';
 import { validateEmail, updateCommunityInfo } from 'helpers/index';
-import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
-import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import { deployPrivateCommunity } from 'helpers/methods/deployPrivateCommunity';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     StyleSheet,
@@ -44,13 +40,11 @@ import {
     List,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
-import { celoWalletRequest } from 'services/celoWallet';
+
 import { ipctColors } from 'styles/index';
 
 import config from '../../../config';
-import CommunityContractABI from '../../contracts/CommunityABI.json';
-import CommunityBytecode from '../../contracts/CommunityBytecode.json';
+
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
 
 const countries: {
@@ -140,13 +134,46 @@ function CreateCommunityScreen() {
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisivility] = useState('public');
 
+    const handleSubmit = () => {
+        const comunityDetails = {
+            userAddress,
+            baseInterval,
+            visibility,
+            coverImage,
+            name,
+            description,
+            city,
+            country,
+            email,
+            gpsLocation,
+            claimAmount,
+            incrementInterval,
+            maxClaim,
+        };
+        const newCommunityInput = {
+            dispatch,
+            setIsCoverImageValid,
+            setIsNameValid,
+            setIsDescriptionValid,
+            setIsCityValid,
+            setIsCountryValid,
+            setIsEmailValid,
+            setIsEnabledGPS,
+            setIsClaimAmountValid,
+            setIsIncrementalIntervalValid,
+            setIsMaxClaimValid,
+            setSending,
+            userLanguage,
+            currency,
+            comunityDetails,
+        };
+        submitNewCommunity(newCommunityInput);
+    };
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <SubmitCommunity
-                    submit={submitNewCommunity}
-                    submitting={sending}
-                />
+                <SubmitCommunity submit={handleSubmit} submitting={sending} />
             ),
         });
         // TODO: this next line should change though.
@@ -181,184 +208,6 @@ function CreateCommunityScreen() {
         };
         setCountryAndCurrencyBasedOnPhoneNumber();
     }, []);
-
-    const submitNewCommunity = async () => {
-        const _isCoverImageValid = coverImage.length > 0;
-        if (!_isCoverImageValid) {
-            setIsCoverImageValid(false);
-        }
-        const _isNameValid = name.length > 0;
-        if (!_isNameValid) {
-            setIsNameValid(false);
-        }
-        const _isDescriptionValid = description.length > 0;
-        if (!_isDescriptionValid) {
-            setIsDescriptionValid(false);
-        }
-        const _isCityValid = city.length > 0;
-        if (!_isCityValid) {
-            setIsCityValid(false);
-        }
-        const _isCountryValid = country.length > 0;
-        if (!_isCountryValid) {
-            setIsCountryValid(false);
-        }
-        const _isEmailValid = validateEmail(email);
-        if (!_isEmailValid) {
-            setIsEmailValid(false);
-        }
-        const _isEnabledGPS = gpsLocation !== undefined;
-        if (!_isEnabledGPS) {
-            setIsEnabledGPS(false);
-        }
-        const _isClaimAmountValid =
-            claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
-        if (!_isClaimAmountValid) {
-            setIsClaimAmountValid(false);
-        }
-        const _isIncrementalIntervalValid = incrementInterval.length > 0;
-        if (!_isIncrementalIntervalValid) {
-            setIsIncrementalIntervalValid(false);
-        }
-        const _isMaxClaimValid =
-            maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
-        if (!_isMaxClaimValid) {
-            setIsMaxClaimValid(false);
-        }
-
-        const isSubmitAvailable =
-            _isNameValid &&
-            _isDescriptionValid &&
-            _isCityValid &&
-            _isCountryValid &&
-            _isEmailValid &&
-            _isClaimAmountValid &&
-            _isIncrementalIntervalValid &&
-            _isMaxClaimValid &&
-            _isCoverImageValid;
-
-        if (!isSubmitAvailable) {
-            return;
-        }
-        if (new BigNumber(maxClaim).lte(claimAmount)) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('claimBiggerThanMax'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            return;
-        }
-        if (new BigNumber(claimAmount).eq(0)) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('claimNotZero'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            return;
-        }
-        if (new BigNumber(maxClaim).eq(0)) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('maxNotZero'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            return;
-        }
-
-        //
-        setSending(true);
-        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        let txReceipt = null;
-        let communityAddress = null;
-
-        try {
-            const contractParams = {
-                claimAmount: new BigNumber(
-                    formatInputAmountToTransfer(claimAmount)
-                )
-                    .multipliedBy(decimals)
-                    .toString(),
-                maxClaim: new BigNumber(formatInputAmountToTransfer(maxClaim))
-                    .multipliedBy(decimals)
-                    .toString(),
-                baseInterval: parseInt(baseInterval),
-                incrementInterval: parseInt(incrementInterval, 10) * 60,
-            };
-            let privateParamsIfAvailable = {};
-            let privateCommunity = {
-                userAddress,
-                claimAmount,
-                maxClaim,
-                baseInterval,
-                incrementInterval,
-            };
-            if (visibility === 'private' && privateCommunity) {
-                txReceipt = await deployPrivateCommunity(privateCommunity);
-                if (txReceipt === undefined) {
-                    return;
-                }
-                communityAddress = txReceipt.contractAddress;
-                privateParamsIfAvailable = {
-                    contractAddress: communityAddress,
-                    txReceipt,
-                };
-            }
-            const communityDetails: CommunityCreationAttributes = {
-                requestByAddress: userAddress,
-                name,
-                description,
-                language: userLanguage,
-                currency,
-                city,
-                country,
-                gps: {
-                    latitude:
-                        gpsLocation!.coords.latitude +
-                        config.locationErrorMargin,
-                    longitude:
-                        gpsLocation!.coords.longitude +
-                        config.locationErrorMargin,
-                },
-                email,
-                // coverImage: uploadImagePath,
-                contractParams,
-                ...privateParamsIfAvailable,
-            };
-
-            const apiRequestResult = await Api.community.create(
-                communityDetails
-            );
-
-            if (apiRequestResult) {
-                await Api.upload.uploadCommunityCoverImage(
-                    apiRequestResult.publicId,
-                    coverImage
-                );
-                await updateCommunityInfo(apiRequestResult.publicId, dispatch);
-                dispatch(setUserIsCommunityManager(true));
-            } else {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorCreatingCommunity'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                setSending(false);
-            }
-        } catch (e) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('errorCreatingCommunity'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            setSending(false);
-            Api.system.uploadError(userAddress, 'create_community', e);
-        }
-    };
 
     const enableGPSLocation = async () => {
         setIsEnablingGPS(true);
@@ -446,7 +295,6 @@ function CreateCommunityScreen() {
         <List.Item
             title={`${countries[item].emoji} ${countries[item].name}`}
             onPress={() => handleSelectCountry(item)}
-            // left={(props) => <List.Icon {...props} icon="folder" />}
         />
     );
 
@@ -517,7 +365,6 @@ function CreateCommunityScreen() {
         <List.Item
             title={`[${currencies[item].symbol}] ${currencies[item].name}`}
             onPress={() => handleSelectCurrency(item)}
-            // left={(props) => <List.Icon {...props} icon="folder" />}
         />
     );
 

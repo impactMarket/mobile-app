@@ -1,6 +1,7 @@
 import { ContractKit } from '@celo/contractkit';
 import { Subscription } from '@unimodules/core';
-
+import * as Location from 'expo-location';
+import { Dispatch } from 'redux';
 import { ICommunitiesListStories, ICommunity } from './endpoints';
 import { UserAttributes } from './models';
 
@@ -72,4 +73,37 @@ export interface IPrivateCommunity {
     maxClaim: string;
     baseInterval: string;
     incrementInterval: string;
+}
+
+export interface IComunityDetails {
+    userAddress: string;
+    baseInterval: string;
+    visibility: string;
+    coverImage: string;
+    name: string;
+    description: string;
+    city: string;
+    country: string;
+    email: string;
+    gpsLocation: Location.LocationObject | undefined;
+    claimAmount: string;
+    incrementInterval: string;
+    maxClaim: string;
+}
+export interface ISubmitNewCommunity {
+    dispatch: Dispatch<any>;
+    setIsCoverImageValid: React.SetStateAction<any>;
+    setIsNameValid: React.SetStateAction<any>;
+    setIsDescriptionValid: React.SetStateAction<any>;
+    setIsCityValid: React.SetStateAction<any>;
+    setIsCountryValid: React.SetStateAction<any>;
+    setIsEmailValid: React.SetStateAction<any>;
+    setIsEnabledGPS: React.SetStateAction<any>;
+    setIsClaimAmountValid: React.SetStateAction<any>;
+    setIsIncrementalIntervalValid: React.SetStateAction<any>;
+    setIsMaxClaimValid: React.SetStateAction<any>;
+    setSending: React.SetStateAction<any>;
+    userLanguage: string;
+    currency: string;
+    comunityDetails: IComunityDetails;
 }
