@@ -55,6 +55,8 @@ export default {
     communityDetails: 'Detalhes da Comunidade',
     createCommunityDescription:
         'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
+    editCommunityDescription:
+        'Use este formulário para editar detalhes básicos de sua comunidade, como nome, descrição e informações de contato.',
     selectCoverImage: 'Selecione Imagem de Capa',
     changeCoverImage: 'Altere a Imagem de Capa',
     communityName: 'Nome da Comunidade',
@@ -92,6 +94,8 @@ export default {
         'Ocorreu um erro enquanto atualizava os dados da comunidade!',
     errorCreatingCommunity:
         'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
+    errorEditingCommunity:
+        'Ocorreu um erro enquanto era registado o pedido para editar uma comunidade!',
     anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',
     toContinuePlease: 'Para continuar, deverá',
     loginDescription:

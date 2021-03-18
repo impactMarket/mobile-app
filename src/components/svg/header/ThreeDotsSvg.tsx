@@ -76,6 +76,20 @@ function ThreeDotsSvg(props: SvgProps) {
                         >
                             {i18n.t('viewAsPublic')}
                         </Button>
+                        <Button
+                            modeType="gray"
+                            bold
+                            style={{ marginVertical: 10 }}
+                            onPress={() => {
+                                setOpenThreeDotsMenu(false);
+                                navigation.navigate(Screens.CreateCommunity, {
+                                    community: community,
+                                    caller: 'EDIT_COMMUNITY',
+                                });
+                            }}
+                        >
+                            {i18n.t('editCommunityDetails')}
+                        </Button>
                     </Card.Content>
                 </Card>
             </BottomSheet>

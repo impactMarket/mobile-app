@@ -68,6 +68,13 @@ export interface CommunityCreationAttributes {
     };
 }
 
+export interface CommunityEditAttributes {
+    requestByAddress: string;
+    name: string;
+    description: string;
+    email: string;
+}
+
 export interface IUserBaseAuth {
     isBeneficiary: boolean;
     isManager: boolean;

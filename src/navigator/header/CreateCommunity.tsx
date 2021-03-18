@@ -30,7 +30,9 @@ function CreateCommunity(props: { navigation: StackNavigationProp<any, any> }) {
                     marginRight: 16,
                 }}
                 onPress={() =>
-                    props.navigation.navigate(Screens.CreateCommunity)
+                    props.navigation.navigate(Screens.CreateCommunity, {
+                        caller: 'CREATE_COMMUNITY',
+                    })
                 }
             >
                 {i18n.t('create')}

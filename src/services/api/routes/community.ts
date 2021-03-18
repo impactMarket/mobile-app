@@ -1,5 +1,6 @@
 import {
     CommunityCreationAttributes,
+    CommunityEditAttributes,
     ICommunity,
     ICommunityLightDetails,
     IManagerDetailsBeneficiary,
@@ -115,6 +116,12 @@ class ApiRouteCommunity {
         details: CommunityCreationAttributes
     ): Promise<ICommunity | undefined> {
         return await postRequest<ICommunity>('/community/add', details);
+    }
+    //TODO: Bernardo needs to created the endpoint on backend.
+    static async edit(
+        details: CommunityEditAttributes
+    ): Promise<ICommunity | undefined> {
+        return await postRequest<ICommunity>('/community/edit', details);
     }
 
     static async getRequestChangeUbi(

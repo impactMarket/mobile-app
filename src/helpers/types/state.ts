@@ -73,19 +73,24 @@ export interface IPrivateCommunity {
     maxClaim: string;
     baseInterval: string;
     incrementInterval: string;
-    kit: ;
+    kit: ContractKit;
+}
+
+export interface IRouteParams {
+    caller: string;
+    community: string;
 }
 
 export interface IComunityDetails {
     userAddress: string;
+    name: string;
+    description: string;
+    email: string;
     baseInterval: string;
     visibility: string;
     coverImage: string;
-    name: string;
-    description: string;
     city: string;
     country: string;
-    email: string;
     gpsLocation: Location.LocationObject | undefined;
     claimAmount: string;
     incrementInterval: string;
@@ -108,4 +113,18 @@ export interface ISubmitNewCommunity {
     currency: string;
     comunityDetails: IComunityDetails;
     kit: ContractKit;
+}
+
+export interface IComunityEditDetails {
+    userAddress: string;
+    name: string;
+    description: string;
+    email: string;
+}
+export interface ISubmitEditCommunity {
+    setIsNameValid: React.SetStateAction<any>;
+    setIsDescriptionValid: React.SetStateAction<any>;
+    setIsEmailValid: React.SetStateAction<any>;
+    setSending: React.SetStateAction<any>;
+    comunityDetails: IComunityEditDetails;
 }

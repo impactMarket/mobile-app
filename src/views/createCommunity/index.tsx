@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
@@ -8,12 +8,12 @@ import Select from 'components/core/Select';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import {
-    amountToCurrency,
-} from 'helpers/currency';
+import { amountToCurrency } from 'helpers/currency';
 import { submitNewCommunity } from './methods/submitNewCommunity';
+import { submitEditCommunity } from './methods/submitEditCommunity';
 import { validateEmail } from 'helpers/index';
-import { IRootState } from 'helpers/types/state';
+import { ICommunity } from 'helpers/types/endpoints';
+import { IRootState, IRouteParams } from 'helpers/types/state';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import {
     StyleSheet,
@@ -68,6 +68,9 @@ BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const route = useRoute<RouteProp<Record<string, IRouteParams>, string>>();
+
+    const { caller, community: existingCommunity } = route.params;
 
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
@@ -86,9 +89,6 @@ function CreateCommunityScreen() {
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
-    // const [availableCurrencies, setAvailableCurrencies] = useState<
-    //     { name: string; symbol: string }[]
-    // >([]);
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     //
@@ -117,8 +117,6 @@ function CreateCommunityScreen() {
         []
     );
     const [currency, setCurrency] = useState<string>(userCurrency);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
     const [city, setCity] = useState('');
     const [searchCountryQuery, setSearchCountryQuery] = useState('');
     const [searchCountryISOResult, setSearchCountryISOResult] = useState<
@@ -126,7 +124,6 @@ function CreateCommunityScreen() {
     >([]);
     const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
     const [country, setCountry] = useState('');
-    const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('');
     const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
@@ -134,7 +131,11 @@ function CreateCommunityScreen() {
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisivility] = useState('public');
 
-    const handleSubmit = () => {
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [email, setEmail] = useState('');
+
+    const handleCommunityCreation = () => {
         const comunityDetails = {
             userAddress,
             baseInterval,
@@ -171,12 +172,51 @@ function CreateCommunityScreen() {
         submitNewCommunity(newCommunityInput);
     };
 
+    const handleCommunityEdit = () => {
+        const comunityDetails = {
+            userAddress,
+            name,
+            description,
+            email,
+        };
+        const editCommunityInput = {
+            setIsNameValid,
+            setIsDescriptionValid,
+            setIsEmailValid,
+            setSending,
+            comunityDetails,
+        };
+        submitEditCommunity(editCommunityInput);
+    };
+
+    useEffect(() => {
+        setName(existingCommunity?.name);
+        setDescription(existingCommunity?.description);
+        setEmail(existingCommunity?.email);
+    }, [navigation]);
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <SubmitCommunity submit={handleSubmit} submitting={sending} />
+                <SubmitCommunity
+                    submit={
+                        caller !== 'EDIT_COMMUNITY'
+                            ? handleCommunityCreation
+                            : handleCommunityEdit
+                    }
+                    submitting={sending}
+                />
             ),
         });
+        if (caller !== 'EDIT_COMMUNITY') {
+            navigation.setOptions({
+                headerTitle: i18n.t('create'),
+            });
+        } else {
+            navigation.setOptions({
+                headerTitle: i18n.t('edit'),
+            });
+        }
         // TODO: this next line should change though.
     }, [
         navigation,
@@ -207,6 +247,7 @@ function CreateCommunityScreen() {
                 }
             }
         };
+
         setCountryAndCurrencyBasedOnPhoneNumber();
     }, []);
 
@@ -410,27 +451,32 @@ function CreateCommunityScreen() {
                                 {i18n.t('communityDetails').toUpperCase()}
                             </Headline>
                             <Text style={styles.createCommunityDescription}>
-                                {i18n.t('createCommunityDescription')}
+                                {caller !== 'EDIT_COMMUNITY'
+                                    ? i18n.t('createCommunityDescription')
+                                    : i18n.t('editCommunityDescription')}
                             </Text>
                             <View>
-                                <ImageBackground
-                                    source={
-                                        coverImage.length === 0
-                                            ? require('assets/images/placeholder.png')
-                                            : { uri: coverImage }
-                                    }
-                                    style={styles.imageCover}
-                                >
-                                    <Button
-                                        mode="contained"
-                                        style={{ margin: 16 }}
-                                        onPress={pickImage}
+                                {caller !== 'EDIT_COMMUNITY' && (
+                                    <ImageBackground
+                                        source={
+                                            coverImage.length === 0
+                                                ? require('assets/images/placeholder.png')
+                                                : { uri: coverImage }
+                                        }
+                                        style={styles.imageCover}
                                     >
-                                        {coverImage.length === 0
-                                            ? i18n.t('selectCoverImage')
-                                            : i18n.t('changeCoverImage')}
-                                    </Button>
-                                </ImageBackground>
+                                        <Button
+                                            mode="contained"
+                                            style={{ margin: 16 }}
+                                            onPress={pickImage}
+                                        >
+                                            {coverImage.length === 0
+                                                ? i18n.t('selectCoverImage')
+                                                : i18n.t('changeCoverImage')}
+                                        </Button>
+                                    </ImageBackground>
+                                )}
+
                                 {!isCoverImageValid && (
                                     <HelperText type="error" visible>
                                         {i18n.t('coverImageRequired')}
@@ -484,86 +530,94 @@ function CreateCommunityScreen() {
                                     )}
                                 </View>
                                 <Divider />
-                                <View style={{ margin: 16 }}>
-                                    <TextInput
-                                        mode="flat"
-                                        underlineColor="transparent"
-                                        style={styles.inputTextField}
-                                        label={i18n.t('city')}
-                                        value={city}
-                                        maxLength={32}
-                                        onChangeText={(value) => setCity(value)}
-                                        onEndEditing={() =>
-                                            setIsCityValid(city.length > 0)
-                                        }
-                                    />
-                                    {!isCityValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t('cityRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                <Divider />
-                                <View style={{ margin: 16 }}>
-                                    {/* <TextInput
-                                        mode="flat"
-                                        underlineColor="transparent"
-                                        style={styles.inputTextField}
-                                        label={i18n.t('country')}
-                                        value={country}
-                                        maxLength={32}
-                                        onChangeText={(value) =>
-                                            setCountry(value)
-                                        }
-                                        onEndEditing={() =>
-                                            setIsCountryValid(
-                                                country.length > 0
-                                            )
-                                        }
-                                    />*/}
-                                    <Select
-                                        label={i18n.t('country')}
-                                        value={
-                                            country.length > 0
-                                                ? `${countries[country].emoji} ${countries[country].name}`
-                                                : 'Select Country'
-                                        }
-                                        onPress={() =>
-                                            setIsDialogCountryOpen(true)
-                                        }
-                                    />
-                                    {!isCountryValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t('countryRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                {gpsLocation === undefined ? (
-                                    <View>
-                                        <Button
-                                            mode="outlined"
-                                            style={{ marginHorizontal: 16 }}
-                                            onPress={() => enableGPSLocation()}
-                                            loading={isEnablingGPS}
-                                        >
-                                            {i18n.t('getGPSLocation')}
-                                        </Button>
-                                        {!isEnabledGPS && (
-                                            <HelperText type="error" visible>
-                                                {i18n.t('enablingGPSRequired')}
-                                            </HelperText>
+                                {caller !== 'EDIT_COMMUNITY' && (
+                                    <>
+                                        <View style={{ margin: 16 }}>
+                                            <TextInput
+                                                mode="flat"
+                                                underlineColor="transparent"
+                                                style={styles.inputTextField}
+                                                label={i18n.t('city')}
+                                                value={city}
+                                                maxLength={32}
+                                                onChangeText={(value) =>
+                                                    setCity(value)
+                                                }
+                                                onEndEditing={() =>
+                                                    setIsCityValid(
+                                                        city.length > 0
+                                                    )
+                                                }
+                                            />
+                                            {!isCityValid && (
+                                                <HelperText
+                                                    type="error"
+                                                    visible
+                                                >
+                                                    {i18n.t('cityRequired')}
+                                                </HelperText>
+                                            )}
+                                        </View>
+                                        <Divider />
+                                        <View style={{ margin: 16 }}>
+                                            <Select
+                                                label={i18n.t('country')}
+                                                value={
+                                                    country.length > 0
+                                                        ? `${countries[country].emoji} ${countries[country].name}`
+                                                        : 'Select Country'
+                                                }
+                                                onPress={() =>
+                                                    setIsDialogCountryOpen(true)
+                                                }
+                                            />
+                                            {!isCountryValid && (
+                                                <HelperText
+                                                    type="error"
+                                                    visible
+                                                >
+                                                    {i18n.t('countryRequired')}
+                                                </HelperText>
+                                            )}
+                                        </View>
+                                        {gpsLocation === undefined ? (
+                                            <View>
+                                                <Button
+                                                    mode="outlined"
+                                                    style={{
+                                                        marginHorizontal: 16,
+                                                    }}
+                                                    onPress={() =>
+                                                        enableGPSLocation()
+                                                    }
+                                                    loading={isEnablingGPS}
+                                                >
+                                                    {i18n.t('getGPSLocation')}
+                                                </Button>
+                                                {!isEnabledGPS && (
+                                                    <HelperText
+                                                        type="error"
+                                                        visible
+                                                    >
+                                                        {i18n.t(
+                                                            'enablingGPSRequired'
+                                                        )}
+                                                    </HelperText>
+                                                )}
+                                            </View>
+                                        ) : (
+                                            <Button
+                                                icon="check"
+                                                mode="outlined"
+                                                style={{ marginHorizontal: 16 }}
+                                                disabled
+                                            >
+                                                {i18n.t('validCoordinates')}
+                                            </Button>
                                         )}
-                                    </View>
-                                ) : (
-                                    <Button
-                                        icon="check"
-                                        mode="outlined"
-                                        style={{ marginHorizontal: 16 }}
-                                        disabled
-                                    >
-                                        {i18n.t('validCoordinates')}
-                                    </Button>
+                                    </>
                                 )}
+
                                 <View style={{ margin: 16 }}>
                                     <TextInput
                                         mode="flat"
@@ -588,19 +642,211 @@ function CreateCommunityScreen() {
                                         </HelperText>
                                     )}
                                 </View>
+                                {caller !== 'EDIT_COMMUNITY' && (
+                                    <>
+                                        <Divider />
+                                        <View
+                                            style={{
+                                                flex: 4,
+                                                flexDirection: 'row',
+                                                justifyContent: 'space-between',
+                                                margin: 16,
+                                            }}
+                                        >
+                                            <View style={{ flex: 3 }}>
+                                                <Select
+                                                    label={i18n.t('currency')}
+                                                    value={
+                                                        currencies[currency]
+                                                            .name
+                                                    }
+                                                    onPress={() =>
+                                                        setIsDialogCurrencyOpen(
+                                                            true
+                                                        )
+                                                    }
+                                                />
+                                            </View>
+
+                                            <View
+                                                style={{
+                                                    flex: 1,
+                                                    flexDirection:
+                                                        'row-reverse',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <IconButton
+                                                    style={{ marginTop: 25 }}
+                                                    icon="help-circle-outline"
+                                                    size={20}
+                                                    onPress={() =>
+                                                        openHelp('currency')
+                                                    }
+                                                />
+                                            </View>
+                                        </View>
+                                    </>
+                                )}
+                            </View>
+                        </Card.Content>
+                    </Card>
+                    {caller !== 'EDIT_COMMUNITY' && (
+                        <>
+                            <Headline style={styles.contractDetailsHeadline}>
+                                {i18n.t('contractDetails')}
+                            </Headline>
+
+                            <View style={{ marginBottom: 15 }}>
+                                <View>
+                                    <View style={{ margin: 10 }}>
+                                        <TextInput
+                                            mode="flat"
+                                            underlineColor="transparent"
+                                            style={styles.inputTextField}
+                                            label={i18n.t('claimAmount')}
+                                            placeholder="$0"
+                                            value={claimAmount}
+                                            keyboardType="numeric"
+                                            onChangeText={(value) =>
+                                                setClaimAmount(value)
+                                            }
+                                            onEndEditing={() =>
+                                                setIsClaimAmountValid(
+                                                    claimAmount.length > 0 &&
+                                                        /^\d*[\.\,]?\d*$/.test(
+                                                            claimAmount
+                                                        )
+                                                )
+                                            }
+                                        />
+                                        {!isClaimAmountValid && (
+                                            <HelperText type="error" visible>
+                                                {i18n.t('claimAmountRequired')}
+                                            </HelperText>
+                                        )}
+                                    </View>
+                                    {claimAmount.length === 0 && (
+                                        <IconButton
+                                            style={{
+                                                position: 'absolute',
+                                                top: 30,
+                                                right: 0,
+                                            }}
+                                            icon="help-circle-outline"
+                                            size={20}
+                                            onPress={() =>
+                                                openHelp('claimAmount')
+                                            }
+                                        />
+                                    )}
+                                    {claimAmount.length > 0 && (
+                                        <Text
+                                            style={styles.aroundCurrencyValue}
+                                        >
+                                            {i18n.t('aroundValue', {
+                                                amount: amountToCurrency(
+                                                    new BigNumber(
+                                                        claimAmount.replace(
+                                                            /,/g,
+                                                            '.'
+                                                        )
+                                                    ).multipliedBy(
+                                                        new BigNumber(10).pow(
+                                                            config.cUSDDecimals
+                                                        )
+                                                    ),
+                                                    currency,
+                                                    exchangeRates
+                                                ),
+                                            })}
+                                        </Text>
+                                    )}
+                                </View>
                                 <Divider />
-                                {/* <Paragraph style={styles.inputTextFieldLabel}>
-                                    {i18n.t('currency')}
-                                </Paragraph> */}
+                                <View>
+                                    <View style={{ margin: 10 }}>
+                                        <TextInput
+                                            mode="flat"
+                                            underlineColor="transparent"
+                                            style={styles.inputTextField}
+                                            label={i18n.t(
+                                                'totalClaimPerBeneficiary'
+                                            )}
+                                            placeholder="$0"
+                                            value={maxClaim}
+                                            keyboardType="numeric"
+                                            onChangeText={(value) =>
+                                                setMaxClaim(value)
+                                            }
+                                            onEndEditing={() =>
+                                                setIsMaxClaimValid(
+                                                    maxClaim.length > 0 &&
+                                                        /^\d*[\.\,]?\d*$/.test(
+                                                            maxClaim
+                                                        )
+                                                )
+                                            }
+                                        />
+                                        {!isMaxClaimValid && (
+                                            <HelperText type="error" visible>
+                                                {i18n.t(
+                                                    'maxClaimAmountRequired'
+                                                )}
+                                            </HelperText>
+                                        )}
+                                    </View>
+                                    {maxClaim.length === 0 && (
+                                        <IconButton
+                                            style={{
+                                                position: 'absolute',
+                                                top: 30,
+                                                right: 0,
+                                            }}
+                                            icon="help-circle-outline"
+                                            size={20}
+                                            onPress={() =>
+                                                openHelp(
+                                                    'totalClaimPerBeneficiary'
+                                                )
+                                            }
+                                        />
+                                    )}
+                                    {maxClaim.length > 0 && (
+                                        <Text
+                                            style={styles.aroundCurrencyValue}
+                                        >
+                                            {i18n.t('aroundValue', {
+                                                amount: amountToCurrency(
+                                                    new BigNumber(
+                                                        maxClaim.replace(
+                                                            /,/g,
+                                                            '.'
+                                                        )
+                                                    ).multipliedBy(
+                                                        new BigNumber(10).pow(
+                                                            config.cUSDDecimals
+                                                        )
+                                                    ),
+                                                    currency,
+                                                    exchangeRates
+                                                ),
+                                            })}
+                                        </Text>
+                                    )}
+                                </View>
+                                <Divider />
+                                <Paragraph style={styles.inputTextFieldLabel}>
+                                    {i18n.t('frequency')}
+                                </Paragraph>
                                 <View
                                     style={{
-                                        flex: 4,
+                                        flex: 1,
                                         flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        margin: 16,
+                                        alignSelf: 'center',
                                     }}
                                 >
-                                    {/* <Button
+                                    <Button
                                         mode="contained"
                                         style={{
                                             width: '80%',
@@ -610,7 +856,7 @@ function CreateCommunityScreen() {
                                                 'rgba(206,212,218,0.27)',
                                         }}
                                         onPress={() =>
-                                            setIsDialogCurrencyOpen(true)
+                                            setIsDialogFrequencyOpen(true)
                                         }
                                     >
                                         <Text
@@ -619,270 +865,123 @@ function CreateCommunityScreen() {
                                                 opacity: 1,
                                             }}
                                         >
-                                            {currency}
+                                            {baseInterval === '86400'
+                                                ? i18n.t('daily')
+                                                : i18n.t('weekly')}
                                         </Text>
-                                    </Button> */}
-                                    <View style={{ flex: 3 }}>
-                                        <Select
-                                            label={i18n.t('currency')}
-                                            value={currencies[currency].name}
-                                            onPress={() =>
-                                                setIsDialogCurrencyOpen(true)
+                                    </Button>
+                                    <IconButton
+                                        style={{ marginTop: 10 }}
+                                        icon="help-circle-outline"
+                                        size={20}
+                                        onPress={() => openHelp('frequency')}
+                                    />
+                                </View>
+                                <View>
+                                    <View style={{ margin: 10 }}>
+                                        <TextInput
+                                            mode="flat"
+                                            underlineColor="transparent"
+                                            style={styles.inputTextField}
+                                            label={i18n.t(
+                                                'timeIncrementAfterClaim'
+                                            )}
+                                            placeholder={i18n.t(
+                                                'timeInMinutes'
+                                            )}
+                                            value={incrementInterval}
+                                            keyboardType="numeric"
+                                            onChangeText={(value) =>
+                                                setIncrementalInterval(value)
+                                            }
+                                            onEndEditing={() =>
+                                                setIsIncrementalIntervalValid(
+                                                    incrementInterval.length > 0
+                                                )
                                             }
                                         />
+                                        {!isIncrementalIntervalValid && (
+                                            <HelperText type="error" visible>
+                                                {i18n.t(
+                                                    'incrementalIntervalRequired'
+                                                )}
+                                            </HelperText>
+                                        )}
                                     </View>
-                                    <View
-                                        style={{
-                                            flex: 1,
-                                            flexDirection: 'row-reverse',
-                                            alignItems: 'center',
-                                        }}
-                                    >
+                                    {incrementInterval.length === 0 && (
                                         <IconButton
-                                            style={{ marginTop: 25 }}
+                                            style={{
+                                                position: 'absolute',
+                                                top: 30,
+                                                right: 0,
+                                            }}
                                             icon="help-circle-outline"
                                             size={20}
-                                            onPress={() => openHelp('currency')}
+                                            onPress={() =>
+                                                openHelp(
+                                                    'timeIncrementAfterClaim'
+                                                )
+                                            }
                                         />
-                                    </View>
+                                    )}
+                                </View>
+                                <Divider />
+                                <Paragraph style={styles.inputTextFieldLabel}>
+                                    {i18n.t('visibility')}
+                                </Paragraph>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: 'row',
+                                        alignSelf: 'center',
+                                    }}
+                                >
+                                    <Button
+                                        mode="contained"
+                                        style={{
+                                            width: '80%',
+                                            borderRadius: 6,
+                                            margin: 10,
+                                            backgroundColor:
+                                                'rgba(206,212,218,0.27)',
+                                        }}
+                                        onPress={() =>
+                                            setIsDialogVisibilityOpen(true)
+                                        }
+                                    >
+                                        <Text
+                                            style={{
+                                                color: 'black',
+                                                opacity: 1,
+                                            }}
+                                        >
+                                            {visibility === 'public'
+                                                ? i18n.t('public')
+                                                : i18n.t('private')}
+                                        </Text>
+                                    </Button>
+                                    <IconButton
+                                        style={{ marginTop: 10 }}
+                                        icon="help-circle-outline"
+                                        size={20}
+                                        onPress={() => openHelp('visibility')}
+                                    />
                                 </View>
                             </View>
-                        </Card.Content>
-                    </Card>
-                    <Headline style={styles.contractDetailsHeadline}>
-                        {i18n.t('contractDetails')}
-                    </Headline>
-                    <View style={{ marginBottom: 15 }}>
-                        <View>
-                            <View style={{ margin: 10 }}>
-                                <TextInput
-                                    mode="flat"
-                                    underlineColor="transparent"
-                                    style={styles.inputTextField}
-                                    label={i18n.t('claimAmount')}
-                                    placeholder="$0"
-                                    value={claimAmount}
-                                    keyboardType="numeric"
-                                    onChangeText={(value) =>
-                                        setClaimAmount(value)
-                                    }
-                                    onEndEditing={() =>
-                                        setIsClaimAmountValid(
-                                            claimAmount.length > 0 &&
-                                                /^\d*[\.\,]?\d*$/.test(
-                                                    claimAmount
-                                                )
-                                        )
-                                    }
-                                />
-                                {!isClaimAmountValid && (
-                                    <HelperText type="error" visible>
-                                        {i18n.t('claimAmountRequired')}
-                                    </HelperText>
-                                )}
-                            </View>
-                            {claimAmount.length === 0 && (
-                                <IconButton
-                                    style={{
-                                        position: 'absolute',
-                                        top: 30,
-                                        right: 0,
-                                    }}
-                                    icon="help-circle-outline"
-                                    size={20}
-                                    onPress={() => openHelp('claimAmount')}
-                                />
-                            )}
-                            {claimAmount.length > 0 && (
-                                <Text style={styles.aroundCurrencyValue}>
-                                    {i18n.t('aroundValue', {
-                                        amount: amountToCurrency(
-                                            new BigNumber(
-                                                claimAmount.replace(/,/g, '.')
-                                            ).multipliedBy(
-                                                new BigNumber(10).pow(
-                                                    config.cUSDDecimals
-                                                )
-                                            ),
-                                            currency,
-                                            exchangeRates
-                                        ),
-                                    })}
-                                </Text>
-                            )}
-                        </View>
-                        <Divider />
-                        <View>
-                            <View style={{ margin: 10 }}>
-                                <TextInput
-                                    mode="flat"
-                                    underlineColor="transparent"
-                                    style={styles.inputTextField}
-                                    label={i18n.t('totalClaimPerBeneficiary')}
-                                    placeholder="$0"
-                                    value={maxClaim}
-                                    keyboardType="numeric"
-                                    onChangeText={(value) => setMaxClaim(value)}
-                                    onEndEditing={() =>
-                                        setIsMaxClaimValid(
-                                            maxClaim.length > 0 &&
-                                                /^\d*[\.\,]?\d*$/.test(maxClaim)
-                                        )
-                                    }
-                                />
-                                {!isMaxClaimValid && (
-                                    <HelperText type="error" visible>
-                                        {i18n.t('maxClaimAmountRequired')}
-                                    </HelperText>
-                                )}
-                            </View>
-                            {maxClaim.length === 0 && (
-                                <IconButton
-                                    style={{
-                                        position: 'absolute',
-                                        top: 30,
-                                        right: 0,
-                                    }}
-                                    icon="help-circle-outline"
-                                    size={20}
-                                    onPress={() =>
-                                        openHelp('totalClaimPerBeneficiary')
-                                    }
-                                />
-                            )}
-                            {maxClaim.length > 0 && (
-                                <Text style={styles.aroundCurrencyValue}>
-                                    {i18n.t('aroundValue', {
-                                        amount: amountToCurrency(
-                                            new BigNumber(
-                                                maxClaim.replace(/,/g, '.')
-                                            ).multipliedBy(
-                                                new BigNumber(10).pow(
-                                                    config.cUSDDecimals
-                                                )
-                                            ),
-                                            currency,
-                                            exchangeRates
-                                        ),
-                                    })}
-                                </Text>
-                            )}
-                        </View>
-                        <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>
-                            {i18n.t('frequency')}
-                        </Paragraph>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: 'row',
-                                alignSelf: 'center',
-                            }}
-                        >
-                            <Button
-                                mode="contained"
+
+                            <Text
                                 style={{
-                                    width: '80%',
-                                    borderRadius: 6,
-                                    margin: 10,
-                                    backgroundColor: 'rgba(206,212,218,0.27)',
+                                    ...styles.textNote,
+                                    marginVertical: 20,
                                 }}
-                                onPress={() => setIsDialogFrequencyOpen(true)}
                             >
-                                <Text style={{ color: 'black', opacity: 1 }}>
-                                    {baseInterval === '86400'
-                                        ? i18n.t('daily')
-                                        : i18n.t('weekly')}
-                                </Text>
-                            </Button>
-                            <IconButton
-                                style={{ marginTop: 10 }}
-                                icon="help-circle-outline"
-                                size={20}
-                                onPress={() => openHelp('frequency')}
-                            />
-                        </View>
-                        <View>
-                            <View style={{ margin: 10 }}>
-                                <TextInput
-                                    mode="flat"
-                                    underlineColor="transparent"
-                                    style={styles.inputTextField}
-                                    label={i18n.t('timeIncrementAfterClaim')}
-                                    placeholder={i18n.t('timeInMinutes')}
-                                    value={incrementInterval}
-                                    keyboardType="numeric"
-                                    onChangeText={(value) =>
-                                        setIncrementalInterval(value)
-                                    }
-                                    onEndEditing={() =>
-                                        setIsIncrementalIntervalValid(
-                                            incrementInterval.length > 0
-                                        )
-                                    }
-                                />
-                                {!isIncrementalIntervalValid && (
-                                    <HelperText type="error" visible>
-                                        {i18n.t('incrementalIntervalRequired')}
-                                    </HelperText>
-                                )}
-                            </View>
-                            {incrementInterval.length === 0 && (
-                                <IconButton
-                                    style={{
-                                        position: 'absolute',
-                                        top: 30,
-                                        right: 0,
-                                    }}
-                                    icon="help-circle-outline"
-                                    size={20}
-                                    onPress={() =>
-                                        openHelp('timeIncrementAfterClaim')
-                                    }
-                                />
-                            )}
-                        </View>
-                        <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>
-                            {i18n.t('visibility')}
-                        </Paragraph>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: 'row',
-                                alignSelf: 'center',
-                            }}
-                        >
-                            <Button
-                                mode="contained"
-                                style={{
-                                    width: '80%',
-                                    borderRadius: 6,
-                                    margin: 10,
-                                    backgroundColor: 'rgba(206,212,218,0.27)',
-                                }}
-                                onPress={() => setIsDialogVisibilityOpen(true)}
-                            >
-                                <Text style={{ color: 'black', opacity: 1 }}>
-                                    {visibility === 'public'
-                                        ? i18n.t('public')
-                                        : i18n.t('private')}
-                                </Text>
-                            </Button>
-                            <IconButton
-                                style={{ marginTop: 10 }}
-                                icon="help-circle-outline"
-                                size={20}
-                                onPress={() => openHelp('visibility')}
-                            />
-                        </View>
-                    </View>
-                    <Text style={{ ...styles.textNote, marginVertical: 20 }}>
-                        {i18n.t('createCommunityNote1')}
-                    </Text>
-                    <Text style={styles.textNote}>
-                        {i18n.t('createCommunityNote2')}
-                    </Text>
+                                {i18n.t('createCommunityNote1')}
+                            </Text>
+                            <Text style={styles.textNote}>
+                                {i18n.t('createCommunityNote2')}
+                            </Text>
+                        </>
+                    )}
                 </View>
             </ScrollView>
             <Portal>
@@ -1015,7 +1114,6 @@ function CreateCommunityScreen() {
 CreateCommunityScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('create'), // editing ? i18n.t('edit') : i18n.t('create'),
     };
 };
 

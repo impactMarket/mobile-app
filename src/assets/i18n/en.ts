@@ -56,6 +56,8 @@ export default {
     communityDetails: 'Community Details',
     createCommunityDescription:
         'By creating a new community, you are initiating a new basic income mechanism for your community where each beneficiary you add will have equal access to claim a recurring amount defined by you in this form.',
+    editCommunityDescription:
+        'Use this form to edit basic details of your community, like name, description, and contact information.',
     selectCoverImage: 'Select Cover Image',
     changeCoverImage: 'Change Cover Image',
     communityName: 'Community Name',
@@ -93,6 +95,8 @@ export default {
     errorUpdatingCommunity: 'An error happened while updating your community!',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
+    errorEditingCommunity:
+        'An error happened while placing the request to edit a community!',
     anErroHappenedTryAgain: 'An error happened, please, try again.',
     toContinuePlease: 'To continue please',
     loginDescription:
