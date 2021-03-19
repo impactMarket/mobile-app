@@ -9,7 +9,6 @@ import { View, StyleSheet } from 'react-native';
 import { Title, ProgressBar, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { ipctColors } from 'styles/index';
-
 import Card from './core/Card';
 
 interface ICommuntyStatusProps {

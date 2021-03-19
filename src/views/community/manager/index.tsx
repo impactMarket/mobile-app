@@ -14,9 +14,13 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunity } from 'helpers/types/endpoints';
 import { UbiRequestChangeParams } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import NewManagerRules from './cards/NewManagerRules';
+
+// services
+import CacheStore from 'services/cacheStore';
 
 import {
     Headline,
@@ -58,6 +62,7 @@ function CommunityManagerScreen() {
         UbiRequestChangeParams | undefined
     >();
     const [editInProgress, setEditInProgress] = useState(false);
+    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
     useEffect(() => {
         if (kit !== undefined && community.status === 'valid') {
@@ -82,6 +87,17 @@ function CommunityManagerScreen() {
             verifyRequestToChangeUbiParams();
         }
     }, [community, kit]);
+
+    useEffect(() => {
+        async function loadCommunityRulesStats() {
+            const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+
+            if (_hasAcceptedRulesAlready) {
+                setHasAcceptedTerms(true);
+            }
+        }
+        loadCommunityRulesStats();
+    }, [hasAcceptedTerms]);
 
     const onRefresh = () => {
         updateCommunityInfo(community.publicId, dispatch).then(async () => {
@@ -161,23 +177,28 @@ function CommunityManagerScreen() {
                         }
                     >
                         <BaseCommunity community={community}>
-                            <View style={styles.container}>
-                                <Beneficiaries
-                                    beneficiaries={
-                                        _community.state.beneficiaries
-                                    }
-                                    removedBeneficiaries={
-                                        _community.state.removedBeneficiaries
-                                    }
-                                    hasFundsToNewBeneficiary={
-                                        hasFundsToNewBeneficiary
-                                    }
-                                />
-                                <Managers
-                                    managers={_community.state.managers}
-                                />
-                                <CommuntyStatus community={_community} />
-                            </View>
+                            {hasAcceptedTerms ? (
+                                <View style={styles.container}>
+                                    <Beneficiaries
+                                        beneficiaries={
+                                            _community.state.beneficiaries
+                                        }
+                                        removedBeneficiaries={
+                                            _community.state
+                                                .removedBeneficiaries
+                                        }
+                                        hasFundsToNewBeneficiary={
+                                            hasFundsToNewBeneficiary
+                                        }
+                                    />
+                                    <Managers
+                                        managers={_community.state.managers}
+                                    />
+                                    <CommuntyStatus community={_community} />
+                                </View>
+                            ) : (
+                                <NewManagerRules />
+                            )}
                         </BaseCommunity>
                     </ScrollView>
                     {requiredUbiToChange !== undefined && (

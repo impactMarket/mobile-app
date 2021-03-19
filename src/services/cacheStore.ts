@@ -8,6 +8,8 @@ const CACHE_STORE_LAST_LOCKED_CLAIM_AT = '@CacheStore:lastLockedClaimAt';
 const CACHE_STORE_FAILED_CLAIM_TRIES = '@CacheStore:failedClaimTries';
 const CACHE_STORE_LAST_FAILED_CLAIM_TRY = '@CacheStore:lastFailedClaimTry';
 const CACHE_STORE_COMMUNITY_HAD_NO_FUNDS = '@CacheStore:communityHadNoFunds';
+const CACHE_STORE_COMMUNITY_RULES_ACCEPTED =
+    '@CacheStore:communityRulesAccepted';
 //
 const CACHE_STORE_EXCHANGE_RATES = '@CacheStore:exchangeRates';
 const CACHE_STORE_LAST_EXCHANGE_RATES = '@CacheStore:lastExchangeRates';
@@ -70,6 +72,23 @@ export default class CacheStore {
 
     static async removeCommunityHadNoFunds() {
         await AsyncStorage.removeItem(CACHE_STORE_COMMUNITY_HAD_NO_FUNDS);
+    }
+
+    static async cacheAcceptCommunityRules() {
+        await AsyncStorage.setItem(
+            CACHE_STORE_COMMUNITY_RULES_ACCEPTED,
+            'true'
+        );
+    }
+
+    static async getAcceptCommunityRules() {
+        const accepteCommunityRules = await AsyncStorage.getItem(
+            CACHE_STORE_COMMUNITY_RULES_ACCEPTED
+        );
+        if (accepteCommunityRules === null) {
+            return null;
+        }
+        return accepteCommunityRules === 'true';
     }
 
     /**

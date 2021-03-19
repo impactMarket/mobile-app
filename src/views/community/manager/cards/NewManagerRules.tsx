@@ -7,18 +7,20 @@ import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import WarningRedCircle from 'components/svg/WarningRedCircle';
 
+// services
+import CacheStore from 'services/cacheStore';
+
 // translation
 import i18n from 'assets/i18n';
 
 // colors
 import { ipctColors } from 'styles/index';
 
-// usage
-// ----------------
-// import NewManagerRules from '../cards/NewManagerRules';
-// <NewManagerRules />
-
 function NewManagerRules() {
+    const handleAcceptRules = async () => {
+        await CacheStore.cacheAcceptCommunityRules();
+    };
+
     return (
         <View>
             <Card style={styles.cardContainer}>
@@ -66,7 +68,12 @@ function NewManagerRules() {
                     </Paragraph>
                 </Card.Content>
             </Card>
-            <Button modeType="blue" bold style={styles.btnAccept}>
+            <Button
+                modeType="blue"
+                bold
+                style={styles.btnAccept}
+                onPress={handleAcceptRules}
+            >
                 {i18n.t('newManagerRules.btnText')}
             </Button>
         </View>
