@@ -1,61 +1,115 @@
-import { useNavigation } from '@react-navigation/native';
-import i18n from 'assets/i18n';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Headline, Text, Paragraph } from 'react-native-paper';
+
+// components
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
-import { Screens } from 'helpers/constants';
-import React from 'react';
-import { View } from 'react-native';
-import { Headline } from 'react-native-paper';
+import WarningRedCircle from 'components/svg/WarningRedCircle';
 
-interface IManagersProps {
-    managers: number;
-}
-function NewManagerRules(props: IManagersProps) {
-    const navigation = useNavigation();
+// translation
+import i18n from 'assets/i18n';
 
-    const { managers } = props;
+// colors
+import { ipctColors } from 'styles/index';
 
+function NewManagerRules() {
     return (
         <View>
-            <Card style={{ marginTop: 16 }}>
+            <Card style={styles.cardContainer}>
                 <Card.Content>
-                    <Headline
-                        style={{
-                            opacity: 0.48,
-                            fontFamily: 'Gelion-Bold',
-                            fontSize: 13,
-                            fontWeight: '500',
-                            lineHeight: 12,
-                            letterSpacing: 0.7,
-                        }}
+                    <View style={styles.headlineContainer}>
+                        <WarningRedCircle style={{ width: 16, height: 16 }} />
+                        <Headline style={styles.headerTitle}>
+                            {i18n.t('newManagerRules.title')}
+                        </Headline>
+                    </View>
+                    <Paragraph style={styles.paragraphContent}>
+                        <Text style={styles.ordering}>1 -</Text>{' '}
+                        {i18n.t('newManagerRules.first')}
+                    </Paragraph>
+                    <Paragraph style={styles.paragraphContent}>
+                        <Text style={styles.ordering}>2 -</Text>{' '}
+                        {i18n.t('newManagerRules.second')}
+                    </Paragraph>
+                    <Paragraph style={styles.paragraphContent}>
+                        <Text style={styles.ordering}>3 -</Text>{' '}
+                        {i18n.t('newManagerRules.third')}
+                    </Paragraph>
+                    <Paragraph style={styles.paragraphContent}>
+                        <Text style={styles.ordering}>4 -</Text>{' '}
+                        {i18n.t('newManagerRules.fourth')}
+                    </Paragraph>
+                    <Paragraph style={styles.paragraphContent}>
+                        <Text style={styles.ordering}>6 -</Text>{' '}
+                        {i18n.t('newManagerRules.fifth')}
+                    </Paragraph>
+                    <Paragraph style={styles.paragraphContent}>
+                        <Text style={styles.ordering}>7 -</Text>{' '}
+                        {i18n.t('newManagerRules.sixth')}
+                    </Paragraph>
+                    <Paragraph style={styles.paragraphContent}>
+                        {i18n.t('newManagerRules.seventh')}
+                    </Paragraph>
+                    <Paragraph
+                        style={[
+                            styles.paragraphContent,
+                            { fontFamily: 'Inter-Bold' },
+                        ]}
                     >
-                        {i18n.t('managers').toUpperCase()}
-                    </Headline>
-                    <Button
-                        modeType="gray"
-                        bold
-                        disabled={managers === 0}
-                        style={{ marginVertical: 5 }}
-                        onPress={() =>
-                            navigation.navigate(Screens.AddedManager)
-                        }
-                    >
-                        {i18n.t('added')} ({managers})
-                    </Button>
-                    <Button
-                        modeType="green"
-                        bold
-                        style={{
-                            marginVertical: 5,
-                        }}
-                        onPress={() => navigation.navigate(Screens.AddManager)}
-                    >
-                        {i18n.t('addManager')}
-                    </Button>
+                        {i18n.t('newManagerRules.warning')}
+                    </Paragraph>
                 </Card.Content>
             </Card>
+            <Button modeType="blue" bold style={styles.btnAccept}>
+                {i18n.t('newManagerRules.btnText')}
+            </Button>
         </View>
     );
 }
 
 export default NewManagerRules;
+
+const styles = StyleSheet.create({
+    cardContainer: {
+        padding: 16,
+        margin: 16,
+        borderStyle: 'solid',
+        borderColor: '#EB5757',
+        borderWidth: 2,
+        borderRadius: 8,
+    },
+    headlineContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    headerTitle: {
+        color: ipctColors.nileBlue,
+        fontFamily: 'Manrope-Bold',
+        fontSize: 16,
+        lineHeight: 22,
+        letterSpacing: 0.7,
+        marginLeft: 10,
+    },
+    ordering: {
+        fontFamily: 'Inter-Bold',
+    },
+    paragraphContent: {
+        textAlign: 'left',
+        marginTop: 16,
+
+        color: ipctColors.nileBlue,
+        fontFamily: 'Inter-Regular',
+        fontSize: 15,
+        lineHeight: 24,
+        letterSpacing: 0.7,
+    },
+    btnAccept: {
+        fontFamily: 'Manrope-Medium',
+        fontSize: 14,
+        lineHeight: 20,
+        letterSpacing: 0.7,
+        margin: 16,
+        borderRadius: 8,
+    },
+});

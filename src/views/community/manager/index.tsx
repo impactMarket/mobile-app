@@ -17,6 +17,7 @@ import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+
 import {
     Headline,
     ActivityIndicator,

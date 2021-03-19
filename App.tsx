@@ -468,6 +468,54 @@ export default class App extends React.Component<any, IAppState> {
             'Gelion-Thin': {
                 uri: require('./src/assets/fonts/FontGelion/Gelion-Thin.ttf'),
             },
+            'Inter-Thin': {
+                uri: require('./src/assets/fonts/Inter/Inter-Thin.ttf'),
+            },
+            'Inter-SemiBold': {
+                uri: require('./src/assets/fonts/Inter/Inter-SemiBold.ttf'),
+            },
+            'Inter-Regular': {
+                uri: require('./src/assets/fonts/Inter/Inter-Regular.ttf'),
+            },
+            'Inter-Medium': {
+                uri: require('./src/assets/fonts/Inter/Inter-Medium.ttf'),
+            },
+            'Inter-Light': {
+                uri: require('./src/assets/fonts/Inter/Inter-Light.ttf'),
+            },
+            'Inter-ExtraLight': {
+                uri: require('./src/assets/fonts/Inter/Inter-ExtraLight.ttf'),
+            },
+            'Inter-ExtraBold': {
+                uri: require('./src/assets/fonts/Inter/Inter-ExtraBold.ttf'),
+            },
+            'Inter-Bold': {
+                uri: require('./src/assets/fonts/Inter/Inter-Bold.ttf'),
+            },
+            'Inter-Black': {
+                uri: require('./src/assets/fonts/Inter/Inter-Black.ttf'),
+            },
+            'Manrope-Bold': {
+                uri: require('./src/assets/fonts/Manrope/Manrope-Bold.ttf'),
+            },
+            'Manrope-ExtraBold': {
+                uri: require('./src/assets/fonts/Manrope/Manrope-ExtraBold.ttf'),
+            },
+            'Manrope-ExtraLight': {
+                uri: require('./src/assets/fonts/Manrope/Manrope-ExtraLight.ttf'),
+            },
+            'Manrope-Light': {
+                uri: require('./src/assets/fonts/Manrope/Manrope-Light.ttf'),
+            },
+            'Manrope-Medium': {
+                uri: require('./src/assets/fonts/Manrope/Manrope-Medium.ttf'),
+            },
+            'Manrope-Regular': {
+                uri: require('./src/assets/fonts/Manrope/Manrope-Regular.ttf'),
+            },
+            'Manrope-SemiBold': {
+                uri: require('./src/assets/fonts/Manrope/Manrope-SemiBold.ttf'),
+            },
         });
         // wait to load langiages
         await loadi18n;

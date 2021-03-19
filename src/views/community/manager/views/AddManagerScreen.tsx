@@ -6,12 +6,11 @@ import { isOutOfTime } from 'helpers/index';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
-import { Alert, View } from 'react-native';
+import { Alert, View, ScrollView } from 'react-native';
 import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-
 import ScanQR from './ScanQR';
 
 function AddManagerScreen() {

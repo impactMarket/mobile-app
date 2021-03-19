@@ -282,17 +282,18 @@ export default {
         'Your community UBI contract parameters have changed. The new parameters will be the following:',
     acceptNewUbiParams: 'Accept New Paramenters',
     newManagerRules: {
+        title: 'Important Rules',
+        btnText: 'I read and understand',
         first:
-            '1 - As a manager, you will have the responsibility of selecting which beneficiaries have access to a basic income. As more people have access in your community, more difficult will be to have funds available for everyone all the time, so be careful choosing who can/should benefit and really needs it.',
+            'As a manager, you will have the responsibility of selecting which beneficiaries have access to a basic income. As more people have access in your community, more difficult will be to have funds available for everyone all the time, so be careful choosing who can/should benefit and really needs it.',
         second:
-            '2 - This app uses blockchain technology to identify potential fraud and suspicious funds usage., so everything that happens, including all transactions, are public and transparent.',
+            'This app uses blockchain technology to identify potential fraud and suspicious funds usage, so everything that happens, including all transactions, are public and transparent.',
         third:
-            '3 - Your profile can be blocked and funds can be prevented from being distributed to the beneficiaries if suspicious activity is found or reported. This can result in having your community and organization removed from the system.',
-        fourth: '4 - Do not add beneficiaries that were already removed.',
-        fifth: '5 - Do not ask beneficiaries for money.',
-        sixth: '6 - Do not add more than one account per person and device.',
-        seventh:
-            '7 - Your profile information should be completed and accurate.',
+            'Your profile can be blocked and funds can be prevented from being distributed to the beneficiaries if suspicious activity is found or reported. This can result in having your community and organization removed from the system.',
+        fourth: 'Do not add beneficiaries that were already removed.',
+        fifth: 'Do not ask beneficiaries for money.',
+        sixth: 'Do not add more than one account per person and device.',
+        seventh: 'Your profile information should be completed and accurate.',
         warning:
             'If you find suspicious activity among beneficiaries, let us know, as it will be regarded as a good-faith action that can prevent all the community to be affected because of a few bad actors.',
     },
