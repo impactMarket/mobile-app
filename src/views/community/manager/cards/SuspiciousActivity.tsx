@@ -22,7 +22,7 @@ function SuspiciousActivity() {
         <Card style={styles.cardContainer}>
             <Card.Content>
                 <View style={styles.headlineContainer}>
-                    <WarningRedTriangle style={{ width: 16, height: 16 }} />
+                    <WarningRedTriangle />
                     <Headline style={styles.headerTitle}>
                         {i18n.t('suspiciousActivityDetected')}
                     </Headline>

@@ -11,6 +11,7 @@ import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
+import SuspiciousActivity from '../cards/SuspiciousActivity';
 
 import ScanQR from './ScanQR';
 
@@ -34,6 +35,9 @@ function AddBeneficiaryScreen() {
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
+
+    // TODO: need to be adjusted regarding the API response
+    const [isSuspeciousDetected, setIsSuspeciousDetected] = useState(false);
 
     const handleModalScanQR = async () => {
         let addressToAdd: string;
@@ -218,6 +222,7 @@ function AddBeneficiaryScreen() {
                 >
                     {i18n.t('addBeneficiary')}
                 </Button>
+                {isSuspeciousDetected && <SuspiciousActivity />}
             </View>
             <ScanQR
                 isVisible={usingCamera}
