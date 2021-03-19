@@ -13,6 +13,11 @@ import i18n from 'assets/i18n';
 // colors
 import { ipctColors } from 'styles/index';
 
+// usage
+// ----------------
+// import NewManagerRules from '../cards/NewManagerRules';
+// <NewManagerRules />
+
 function NewManagerRules() {
     return (
         <View>

@@ -297,4 +297,7 @@ export default {
         warning:
             'If you find suspicious activity among beneficiaries, let us know, as it will be regarded as a good-faith action that can prevent all the community to be affected because of a few bad actors.',
     },
+    suspiciousActivityDetected: 'Suspicious Activity Detected',
+    suspiciousDescription:
+        'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',
 };

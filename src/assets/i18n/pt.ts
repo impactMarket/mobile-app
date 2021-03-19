@@ -298,4 +298,7 @@ export default {
         warning:
             'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
     },
+    suspiciousActivityDetected: 'Atividade suspeita detectada',
+    suspiciousDescription:
+        'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
 };
