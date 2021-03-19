@@ -282,4 +282,19 @@ export default {
     ubiParamsChanged:
         'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
     acceptNewUbiParams: 'Aceitar novos parâmetros',
+    newManagerRules: {
+        first:
+            '1 - Como gestor, você terá a responsabilidade de selecionar quais beneficiários terão acesso à renda básica. Quanto mais pessoas tiverem acesso em sua comunidade, mais difícil será ter fundos disponíveis para todos o tempo todo, então tome cuidado ao escolher quem pode / deve se beneficiar e realmente precisa disso. ',
+        second:
+            '2 - Este aplicativo usa tecnologia blockchain para identificar fraude em potencial e uso de fundos suspeitos., Para que tudo o que aconteça, incluindo todas as transações, seja público e transparente.',
+        third:
+            '3 - O seu perfil pode ser bloqueado e os fundos podem ser impedidos de serem distribuídos aos beneficiários se atividades suspeitas forem encontradas ou relatadas. Isso pode resultar na remoção de sua comunidade e organização do sistema. ',
+        fourth: '4 - Não adicione beneficiários que já foram removidos.',
+        fifth: '5 - Não peça dinheiro aos beneficiários.',
+        sixth: '6 - Não adicione mais de uma conta por pessoa e dispositivo.',
+        seventh:
+            '7 - As informações do seu perfil devem ser completas e precisas.',
+        warning:
+            'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
+    },
 };
