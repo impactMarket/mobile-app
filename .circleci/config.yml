@@ -1,6 +1,6 @@
 version: 2.1
 publish: &publish
-  working_directory: ~/my-app
+  working_directory: ~/publish-to-expo
   docker:
     - image: circleci/node:14.15.1
   steps:
@@ -8,20 +8,20 @@ publish: &publish
 
     - run:
         name: Installing dependencies
-        command: npm ci
+        command: yarn
 
     - run:
         name: Login into Expo
-        command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        command: yarn expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
     - run:
         name: Publish to Expo
-        command: npx expo-cli publish --non-interactive
+        command: yarn expo-cli publish --non-interactive
 
 deploy: &deploy
-  working_directory: ~/my-app
-  docker:
-    - image: circleci/node:14.15.1
+  working_directory: ~/deploy-ios
+  macos:
+      xcode: "11.3"
   steps:
     - checkout
 
