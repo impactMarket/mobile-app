@@ -7,8 +7,20 @@ publish: &publish
     - checkout
 
     - run:
+        name: decrypt google-services.json
+        command: openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+
+    - run:
+        name: decrypt GoogleService-Info.plist
+        command: openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+
+    - run:
         name: Installing dependencies
         command: yarn
+
+    - run:
+        name: Add global expo-cli
+        command: yarn global add expo-cli
 
     - run:
         name: Login into Expo
