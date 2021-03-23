@@ -18,6 +18,20 @@ publish: &publish
         name: Publish to Expo
         command: npx expo-cli publish --non-interactive
 
+deploy: &deploy
+  working_directory: ~/my-app
+  docker:
+    - image: circleci/node:14.15.1
+  steps:
+    - checkout
+
+    - run:
+        name: Install fastlane
+        command: bundle install
+    - run:
+        name: Execute fastlane
+        command: bundle exec fastlane playstore
+
 test: &test
   working_directory: ~/my-app
   docker:
@@ -32,6 +46,8 @@ test: &test
 jobs:
   publish_to_expo:
     <<: *publish
+  deploy_to_store:
+    <<: *deploy
   test_app:
     <<: *test
 
@@ -42,7 +58,7 @@ workflows:
       - test_app
   build:
     jobs:
-      - publish_to_expo:
-          filters:
-            branches:
-              only: staging
+      - publish_to_expo
+  deploy:
+    jobs:
+      - deploy_to_store
