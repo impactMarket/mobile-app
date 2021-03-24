@@ -16,7 +16,7 @@ import i18n from 'assets/i18n';
 // colors
 import { ipctColors } from 'styles/index';
 
-function NewManagerRules() {
+function NewCommunityRules() {
     const handleAcceptRules = async () => {
         await CacheStore.cacheAcceptCommunityRules();
     };
@@ -80,7 +80,7 @@ function NewManagerRules() {
     );
 }
 
-export default NewManagerRules;
+export default NewCommunityRules;
 
 const styles = StyleSheet.create({
     cardContainer: {

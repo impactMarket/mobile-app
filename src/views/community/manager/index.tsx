@@ -17,7 +17,7 @@ import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import NewManagerRules from './cards/NewManagerRules';
+import NewCommunityRules from './cards/NewCommunityRules';
 
 // services
 import CacheStore from 'services/cacheStore';
@@ -200,7 +200,7 @@ function CommunityManagerScreen() {
                                     <CommuntyStatus community={_community} />
                                 </View>
                             ) : (
-                                <NewManagerRules />
+                                <NewCommunityRules />
                             )}
                         </BaseCommunity>
                     </ScrollView>
