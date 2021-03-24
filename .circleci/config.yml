@@ -8,7 +8,7 @@ publish: &publish
 
     - run:
         name: helpcmd
-        command: openssl aes-256-cbc -help
+        command: openssl aes-256-cbc -ciphers
 
     - run:
         name: helpcmd2
