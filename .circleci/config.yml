@@ -8,11 +8,11 @@ publish: &publish
 
     - run:
         name: decrypt google-services.json
-        command: openssl aes-256-cbc -pbkdf2 -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json
+        command: openssl aes-256-cbc -salt -pbkdf2 -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json
 
     - run:
         name: decrypt GoogleService-Info.plist
-        command: openssl aes-256-cbc -pbkdf2 -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist
+        command: openssl aes-256-cbc -salt -pbkdf2 -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist
 
     - run:
         name: Installing dependencies
@@ -29,20 +29,6 @@ publish: &publish
     - run:
         name: Publish to Expo
         command: yarn expo-cli publish --non-interactive
-
-deploy: &deploy
-  working_directory: ~/deploy-ios
-  macos:
-      xcode: "11.3"
-  steps:
-    - checkout
-
-    - run:
-        name: Install fastlane
-        command: bundle install
-    - run:
-        name: Execute fastlane
-        command: bundle exec fastlane playstore
 
 test: &test
   working_directory: ~/my-app
@@ -62,7 +48,14 @@ jobs:
     <<: *test
   fastlane_release:
     executor: rn/linux_js
+    docker:
+      - image: circleci/ruby:2.7.2
     steps:
+      - run:
+          name: "Update Node.js and npm"
+          command: |
+            curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
+            curl https://www.npmjs.com/install.sh | sudo bash
       - attach_workspace:
           at: .
       - rn/yarn_install
