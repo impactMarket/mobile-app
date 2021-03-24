@@ -4,7 +4,7 @@ import { Headline, Paragraph } from 'react-native-paper';
 
 // components
 import Card from 'components/core/Card';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import LockSvg from 'components/svg/LockSvg';
 
 // translation
 import i18n from 'assets/i18n';
@@ -22,7 +22,7 @@ function BlockedAccount() {
         <Card style={styles.cardContainer}>
             <Card.Content>
                 <View style={styles.headlineContainer}>
-                    <WarningRedTriangle />
+                    <LockSvg />
                     <Headline style={styles.headerTitle}>
                         {i18n.t('blockedAccountTitle')}
                     </Headline>
