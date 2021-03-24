@@ -8,11 +8,11 @@ publish: &publish
 
     - run:
         name: decrypt google-services.json
-        command: openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+        command: openssl aes-256-cbc -pbkdf2 -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json
 
     - run:
         name: decrypt GoogleService-Info.plist
-        command: openssl aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+        command: openssl aes-256-cbc -pbkdf2 -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist
 
     - run:
         name: Installing dependencies
@@ -58,10 +58,20 @@ test: &test
 jobs:
   publish_to_expo:
     <<: *publish
-  deploy_to_store:
-    <<: *deploy
   test_app:
     <<: *test
+  fastlane_release:
+    executor: rn/linux_js
+    steps:
+      - attach_workspace:
+          at: .
+      - rn/yarn_install
+      - run:
+          command: bundle exec fastlane android release
+          name: Run Fastlane
+
+orbs:
+  rn: react-native-community/react-native@1.0.0
 
 workflows:
   version: 2
@@ -73,4 +83,5 @@ workflows:
       - publish_to_expo
   deploy:
     jobs:
-      - deploy_to_store
+      - fastlane_release
+  
