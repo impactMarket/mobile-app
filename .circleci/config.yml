@@ -7,6 +7,10 @@ publish: &publish
     - checkout
 
     - run:
+        name: helpcmd
+        command: openssl help
+
+    - run:
         name: decrypt google-services.json
         command: openssl aes-256-cbc -salt -pbkdf2 -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json
 
