@@ -32,11 +32,11 @@ publish: &publish
 
     - run:
         name: Login into Expo
-        command: yarn expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
     - run:
         name: Publish to Expo
-        command: yarn expo-cli publish --non-interactive
+        command: npx expo-cli publish --non-interactive
 
 test: &test
   working_directory: ~/my-app
