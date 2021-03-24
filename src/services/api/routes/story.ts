@@ -78,7 +78,7 @@ class ApiRouteStory {
     }
 
     static async remove(storyId: number): Promise<void> {
-        await deleteRequest('/story/' + storyId);
+        await deleteRequest('/story/', { storyId });
         return;
     }
 
