@@ -69,7 +69,10 @@ jobs:
           at: .
       - rn/yarn_install
       - run:
-          command: bundle exec fastlane android beta
+          name: Install fastlane
+          command: sudo gem install fastlane
+      - run:
+          command: fastlane android beta
           name: Run Fastlane
 
 orbs:
