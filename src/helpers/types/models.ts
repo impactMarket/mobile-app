@@ -84,6 +84,7 @@ export interface UserAttributes {
     gender: string | null;
     year: number | null;
     children: number | null;
+    blocked: boolean;
 }
 
 export interface IManagerAttributes {

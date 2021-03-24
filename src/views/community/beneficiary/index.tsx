@@ -16,7 +16,7 @@ import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SHOW_REPORT_CARD } from 'helpers/constants';
 import { Trans } from 'react-i18next';
 import {
@@ -42,6 +42,7 @@ import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
 import ReportCard from 'components/svg/header/ReportCard';
+import BlockedAccount from './cards/BlockedAccount';
 
 import Claim from './Claim';
 
@@ -60,6 +61,10 @@ function BeneficiaryScreen() {
     );
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
+    );
+
+    const isUserBlocked = useSelector(
+        (state: IRootState) => state.user.metadata.blocked
     );
     const suspectWrongDateTime = useSelector(
         (state: IRootState) => state.app.suspectWrongDateTime
@@ -505,6 +510,11 @@ function BeneficiaryScreen() {
                             </Button>
                         </Card.Content>
                     </Card>
+                </Modal>
+            </Portal>
+            <Portal>
+                <Modal visible={isUserBlocked} dismissable={false}>
+                    <BlockedAccount />
                 </Modal>
             </Portal>
         </>
