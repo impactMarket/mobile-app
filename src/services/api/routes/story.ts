@@ -6,7 +6,7 @@ import {
     ICommunityStories,
 } from 'helpers/types/endpoints';
 import config from '../../../../config';
-import { getRequest, postRequest } from '../base';
+import { getRequest, postRequest, deleteRequest } from '../base';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -77,9 +77,8 @@ class ApiRouteStory {
         return;
     }
 
-    // TODO: adjust endpoint
     static async remove(storyId: number): Promise<void> {
-        await postRequest('/story/remove', { storyId });
+        await deleteRequest('/story/' + storyId);
         return;
     }
 

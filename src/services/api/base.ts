@@ -73,4 +73,36 @@ async function postRequest<T>(
     return response;
 }
 
-export { getRequest, postRequest };
+async function deleteRequest<T>(
+    endpoint: string,
+    id?: any
+): Promise<T | undefined> {
+    let response: T | undefined;
+    try {
+        // handle success
+        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+        const requestOptions = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            },
+            data: { id },
+        };
+        const result = await axios.delete(endpoint, requestOptions);
+        if (result.status === 401) {
+            await AsyncStorage.clear();
+            DevSettings.reload();
+            return undefined;
+        }
+        if (result.status >= 400) {
+            return undefined;
+        }
+        response = result.data as T;
+    } catch (error) {
+        // Api.system.uploadError('', 'post_request', error);
+    }
+    return response;
+}
+
+export { getRequest, postRequest, deleteRequest };
