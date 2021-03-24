@@ -64,7 +64,7 @@ jobs:
           command: |
             curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
             curl https://www.npmjs.com/install.sh | sudo bash
-            npm install --global yarn
+            sudo npm install --global yarn
       - attach_workspace:
           at: .
       - rn/yarn_install
