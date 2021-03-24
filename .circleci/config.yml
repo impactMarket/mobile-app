@@ -72,7 +72,7 @@ jobs:
           name: Install fastlane
           command: sudo gem install fastlane
       - run:
-          command: fastlane android beta
+          command: fastlane supply --track 'internal'
           name: Run Fastlane
 
 orbs:
