@@ -64,11 +64,12 @@ jobs:
           command: |
             curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
             curl https://www.npmjs.com/install.sh | sudo bash
+            npm install --global yarn
       - attach_workspace:
           at: .
       - rn/yarn_install
       - run:
-          command: bundle exec fastlane android release
+          command: bundle exec fastlane android beta
           name: Run Fastlane
 
 orbs:
@@ -76,12 +77,6 @@ orbs:
 
 workflows:
   version: 2
-  test:
-    jobs:
-      - test_app
-  build:
-    jobs:
-      - publish_to_expo
   deploy:
     jobs:
       - fastlane_release
