@@ -301,4 +301,7 @@ export default {
     suspiciousActivityDetected: 'Atividade suspeita detectada',
     suspiciousDescription:
         'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
+    blockedAccountTitle: 'Conta Bloqueada',
+    blockedAccountDescription:
+        'Sua conta foi bloqueada. Entre em contato com seu gerente se achar que foi um engano.',
 };

@@ -300,4 +300,7 @@ export default {
     suspiciousActivityDetected: 'Suspicious Activity Detected',
     suspiciousDescription:
         'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',
+    blockedAccountTitle: 'Blocked Account',
+    blockedAccountDescription:
+        'Your account has been blocked. Please contact your manager if you think it was a mistake.',
 };
