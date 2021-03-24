@@ -257,10 +257,10 @@ function AddedBeneficiaryScreen() {
                     {i18n.t('remove')}
                 </Button>
             )}
-            left={() => isSuspeciousDetected && <WarningRedTriangle />}
+            left={() => item.suspect && <WarningRedTriangle />}
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}
-            style={{ paddingLeft: isSuspeciousDetected ? 8 : 0 }}
+            style={{ paddingLeft: item.suspect ? 8 : 0 }}
         />
     );
 

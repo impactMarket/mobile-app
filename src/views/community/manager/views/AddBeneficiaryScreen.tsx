@@ -36,9 +36,6 @@ function AddBeneficiaryScreen() {
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
 
-    // TODO: need to be adjusted regarding the API response
-    const [isSuspeciousDetected, setIsSuspeciousDetected] = useState(false);
-
     const handleModalScanQR = async () => {
         let addressToAdd: string;
 
@@ -153,6 +150,7 @@ function AddBeneficiaryScreen() {
     const personalAddressWarningMessageCondition =
         inputAddress.toLowerCase() === userAddress.toLowerCase();
 
+    console.log('suspect', communityMetadata.suspect);
     return (
         <>
             {personalAddressWarningMessageCondition && (
@@ -222,7 +220,10 @@ function AddBeneficiaryScreen() {
                 >
                     {i18n.t('addBeneficiary')}
                 </Button>
-                {isSuspeciousDetected && <SuspiciousActivity />}
+                {/* Accessing community details to check suspicious activity */}
+                {communityMetadata.suspect?.length > 0 && (
+                    <SuspiciousActivity />
+                )}
             </View>
             <ScanQR
                 isVisible={usingCamera}

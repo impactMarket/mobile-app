@@ -1,5 +1,11 @@
 // same as in api/types/models
 
+export interface UbiCommunitySuspect {
+    id: number;
+    communityId: number;
+    suspect: number;
+    createdAt: boolean;
+}
 export interface CommunityAttributes {
     id: number;
     publicId: string;
@@ -21,12 +27,15 @@ export interface CommunityAttributes {
     coverImage: string;
     status: 'pending' | 'valid' | 'removed';
     started: Date;
+    suspect: UbiCommunitySuspect[] | null;
+    beneficiaries: BeneficiaryAttributes[] | null;
 }
 
 export interface CommunityStateAttributes {
     claimed: string;
     claims: number;
     beneficiaries: number;
+    suspect: number;
     removedBeneficiaries: number;
     managers: number;
     raised: string;
@@ -55,6 +64,8 @@ export interface BeneficiaryAttributes {
     tx: string;
     txAt: Date;
     claims: number;
+    claimed: string;
+    blocked: boolean;
     lastClaimAt: Date | null;
     penultimateClaimAt: Date | null;
 }

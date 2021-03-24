@@ -190,6 +190,9 @@ function CommunityManagerScreen() {
                                         hasFundsToNewBeneficiary={
                                             hasFundsToNewBeneficiary
                                         }
+                                        isSuspeciousDetected={
+                                            _community.state.suspect > 0
+                                        }
                                     />
                                     <Managers
                                         managers={_community.state.managers}
