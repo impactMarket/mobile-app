@@ -96,7 +96,13 @@ jobs:
           name: Install fastlane
           command: sudo gem install fastlane
       - run:
-          command: fastlane supply --track 'internal'
+          name: Install fastlane
+          command: echo $GOOGLE_API_ACCESS_UPLOAD > google-api-access.json.base64
+      - run:
+          name: Install fastlane
+          command: base64 --decode google-api-access.json.base64 > google-api-access.json
+      - run:
+          command: fastlane supply --track 'internal' --aab $ARTIFACT_PATH --json_key google-api-access.json --skip_upload_images  --skip_upload_screenshots
           name: Run Fastlane
 
 orbs:
