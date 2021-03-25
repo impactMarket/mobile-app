@@ -78,9 +78,6 @@ jobs:
           command: export ARTIFACT_PATH="/home/travis/expo-project-$CIRCLE_SHA1-`date +%s`.aab"
       - run:
           name: Install fastlane
-          command: turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null || travis_terminate 1
-      - run:
-          name: Install fastlane
           command: echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
       - run:
           name: Install fastlane
@@ -88,6 +85,9 @@ jobs:
       - run:
           name: Install fastlane
           command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+      - run:
+          name: Install fastlane
+          command: turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null || travis_terminate 1
       - run:
           name: Install fastlane
           command: turtle build:android
