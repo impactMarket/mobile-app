@@ -88,11 +88,6 @@ jobs:
               curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
               curl https://www.npmjs.com/install.sh | sudo bash
               npm install --prefix=$HOME/.local --global --legacy-peer-deps yarn gulp-cli turtle-cli@$TURTLE_VERSION
-              gpg --import gpgkey1.key
-              gpg --import gpgkey2.key
-              curl -sSL https://get.rvm.io | bash -s stable --ruby
-              source /home/circleci/.rvm/scripts/rvm
-              gem install fastlane
       - run:
           name: Install dependencies
           command: yarn
@@ -104,7 +99,13 @@ jobs:
           command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o "expo-project-$CIRCLE_SHA1-`date +%s`.aab"
       - run:
           name: Build and Supply
-          command: fastlane supply --track 'internal' --aab "expo-project-$CIRCLE_SHA1-`date +%s`.aab" --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
+          command: |
+              gpg --import gpgkey1.key
+              gpg --import gpgkey2.key
+              curl -sSL https://get.rvm.io | bash -s stable --ruby
+              source /home/circleci/.rvm/scripts/rvm
+              gem install fastlane
+              fastlane supply --track 'internal' --aab "expo-project-$CIRCLE_SHA1-`date +%s`.aab" --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
 
 orbs:
   openjdk-install: cloudesire/openjdk-install@1.2.3
