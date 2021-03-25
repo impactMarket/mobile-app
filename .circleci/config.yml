@@ -102,8 +102,10 @@ jobs:
           command: |
               gpg --import gpgkey1.key
               gpg --import gpgkey2.key
-              curl -sSL https://get.rvm.io | bash -s stable --ruby
+              curl -sSL https://get.rvm.io | bash
               source /home/circleci/.rvm/scripts/rvm
+              rvm install 2.4
+              rvm use 2.4
               bundle install
               fastlane supply --track 'internal' --aab "expo-project-$CIRCLE_SHA1-`date +%s`.aab" --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
 
