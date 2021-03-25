@@ -4,7 +4,7 @@ import { Button as RNPButton } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
 
 interface IButtonProps {
-    modeType: 'green' | 'gray' | 'blue' | 'default';
+    modeType: 'green' | 'gray' | 'default';
     bold?: boolean;
     icon?: string;
     children?: any;
@@ -41,7 +41,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
                     ...buttonStyle,
                     backgroundColor: ipctColors.softGray,
                 };
-            } else if (modeType === 'blue') {
+            } else if (modeType === 'default') {
                 buttonStyle = {
                     ...buttonStyle,
                     backgroundColor: ipctColors.blueRibbon,

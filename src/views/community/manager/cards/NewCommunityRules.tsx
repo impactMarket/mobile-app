@@ -69,7 +69,7 @@ function NewCommunityRules() {
                 </Card.Content>
             </Card>
             <Button
-                modeType="blue"
+                modeType="default"
                 bold
                 style={styles.btnAccept}
                 onPress={handleAcceptRules}
