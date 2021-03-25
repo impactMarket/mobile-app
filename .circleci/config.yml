@@ -40,7 +40,7 @@ publish: &publish
 
     - run:
         name: Publish to Expo
-        command: curl -X POST -H 'Content-type: application/json' --data '{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}' $SLACK_WEBHOOK_DEPLOY_EXPO
+        command: "curl -X POST -H \"Content-type: application/json\" --data '{\"text\":\"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market\"}' $SLACK_WEBHOOK_DEPLOY_EXPO"
 
 test: &test
   working_directory: ~/my-app
