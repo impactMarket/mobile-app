@@ -50,6 +50,7 @@ export interface IAppState {
     kit: ContractKit;
     exchangeRates: { [key: string]: number };
     suspectWrongDateTime: boolean;
+    hasAcceptedRulesAlready: boolean;
     timeDiff: number;
     fromWelcomeScreen: string;
     notificationsListeners?: {

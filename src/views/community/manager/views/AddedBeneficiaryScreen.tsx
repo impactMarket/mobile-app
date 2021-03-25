@@ -1,11 +1,3 @@
-import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
-import BackSvg from 'components/svg/header/BackSvg';
-import { amountToCurrency } from 'helpers/currency';
-import { isOutOfTime } from 'helpers/index';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
-import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -23,6 +15,16 @@ import {
     Searchbar,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import i18n from 'assets/i18n';
+import Button from 'components/core/Button';
+import BackSvg from 'components/svg/header/BackSvg';
+import { amountToCurrency } from 'helpers/currency';
+import { isOutOfTime } from 'helpers/index';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import { IRootState } from 'helpers/types/state';
+
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
@@ -54,6 +56,9 @@ function AddedBeneficiaryScreen() {
         IManagerDetailsBeneficiary[]
     >([]);
     const [showingSearchResults, setShowingSearchResults] = useState(false);
+
+    // TODO: need to be adjusted regarding the API response and index identifier to beneficiary
+    const [isSuspeciousDetected, setIsSuspeciousDetected] = useState(false);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -252,9 +257,10 @@ function AddedBeneficiaryScreen() {
                     {i18n.t('remove')}
                 </Button>
             )}
+            left={() => item.suspect && <WarningRedTriangle />}
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}
-            style={{ paddingLeft: 0 }}
+            style={{ paddingLeft: item.suspect ? 8 : 0 }}
         />
     );
 

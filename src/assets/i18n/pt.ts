@@ -286,6 +286,33 @@ export default {
     ubiParamsChanged:
         'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
     acceptNewUbiParams: 'Aceitar novos parâmetros',
+    newManagerRules: {
+        title: 'Regras Importantes',
+        btnText: 'Eu li e compreendo',
+        first:
+            'Como gestor, você terá a responsabilidade de selecionar quais beneficiários terão acesso à renda básica. Quanto mais pessoas tiverem acesso em sua comunidade, mais difícil será ter fundos disponíveis para todos o tempo todo, então tome cuidado ao escolher quem pode / deve se beneficiar e realmente precisa disso. ',
+        second:
+            'Este aplicativo usa tecnologia blockchain para identificar fraude em potencial e uso de fundos suspeitos, Para que tudo o que aconteça, incluindo todas as transações, seja público e transparente.',
+        third:
+            'O seu perfil pode ser bloqueado e os fundos podem ser impedidos de serem distribuídos aos beneficiários se atividades suspeitas forem encontradas ou relatadas. Isso pode resultar na remoção de sua comunidade e organização do sistema. ',
+        fourth: 'Não adicione beneficiários que já foram removidos.',
+        fifth: 'Não peça dinheiro aos beneficiários.',
+        sixth: 'Não adicione mais de uma conta por pessoa e dispositivo.',
+        seventh: 'As informações do seu perfil devem ser completas e precisas.',
+        warning:
+            'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
+    },
+    suspiciousActivityDetected: 'Atividade suspeita detectada',
+    suspiciousDescription:
+        'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
+    blockedAccountTitle: 'Conta Bloqueada',
+    blockedAccountDescription:
+        'Sua conta foi bloqueada. Entre em contato com seu gerente se achar que foi um engano.',
+    welcome: 'Bem Vindo!',
+    welcomeBeneficiayTitle:
+        'Você agora é um beneficiário da {{ communityName }}',
+    welcomeBeneficiaryDecription:
+        'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
     createStory: 'Criar Story',
     myStories: 'Minhas Stories',
 };

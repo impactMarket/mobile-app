@@ -17,6 +17,7 @@ export enum Screens {
     AddedManager = 'AddedManager',
     //
     Beneficiary = 'Beneficiary',
+    WelcomeBeneficiaryScreen = 'WelcomeBeneficiaryScreen',
     CommunityManager = 'CommunityManager',
     Communities = 'Communities',
     Profile = 'Profile',
@@ -50,6 +51,7 @@ export const SHOW_REPORT_CARD = 'SHOW_REPORT_CARD';
 
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
+export const SET_APP_HAS_ACCEPTED_TERMS = 'app/hasAcceptedRulesAlready';
 
 export enum appAction {
     SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners',

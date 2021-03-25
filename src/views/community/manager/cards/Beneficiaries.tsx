@@ -6,11 +6,12 @@ import { Screens } from 'helpers/constants';
 import React from 'react';
 import { Alert, View } from 'react-native';
 import { Headline } from 'react-native-paper';
-
+import SuspiciousActivity from './SuspiciousActivity';
 interface IBeneficiariesProps {
     beneficiaries: number;
     removedBeneficiaries: number;
     hasFundsToNewBeneficiary: boolean;
+    isSuspeciousDetected: boolean;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
@@ -20,6 +21,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
         beneficiaries,
         removedBeneficiaries,
         hasFundsToNewBeneficiary,
+        isSuspeciousDetected,
     } = props;
 
     return (
@@ -94,6 +96,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                 {i18n.t('addBeneficiary')}
                             </Button>
                         )}
+                        {isSuspeciousDetected && <SuspiciousActivity />}
                     </View>
                 </Card.Content>
             </Card>

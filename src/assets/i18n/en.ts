@@ -285,6 +285,32 @@ export default {
     ubiParamsChanged:
         'Your community UBI contract parameters have changed. The new parameters will be the following:',
     acceptNewUbiParams: 'Accept New Paramenters',
+    newManagerRules: {
+        title: 'Important Rules',
+        btnText: 'I read and understand',
+        first:
+            'As a manager, you will have the responsibility of selecting which beneficiaries have access to a basic income. As more people have access in your community, more difficult will be to have funds available for everyone all the time, so be careful choosing who can/should benefit and really needs it.',
+        second:
+            'This app uses blockchain technology to identify potential fraud and suspicious funds usage, so everything that happens, including all transactions, are public and transparent.',
+        third:
+            'Your profile can be blocked and funds can be prevented from being distributed to the beneficiaries if suspicious activity is found or reported. This can result in having your community and organization removed from the system.',
+        fourth: 'Do not add beneficiaries that were already removed.',
+        fifth: 'Do not ask beneficiaries for money.',
+        sixth: 'Do not add more than one account per person and device.',
+        seventh: 'Your profile information should be completed and accurate.',
+        warning:
+            'If you find suspicious activity among beneficiaries, let us know, as it will be regarded as a good-faith action that can prevent all the community to be affected because of a few bad actors.',
+    },
+    suspiciousActivityDetected: 'Suspicious Activity Detected',
+    suspiciousDescription:
+        'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',
+    blockedAccountTitle: 'Blocked Account',
+    blockedAccountDescription:
+        'Your account has been blocked. Please contact your manager if you think it was a mistake.',
+    welcome: 'Welcome!',
+    welcomeBeneficiayTitle: 'You are now a beneficiary of {{ communityName }}',
+    welcomeBeneficiaryDecription:
+        'Every day, you can claim ~{{claimXCCurrency}}. After claiming, you need to wait for {{interval}} + {{minIncrement}} minutes.',
     createStory: 'Create Story',
     myStories: 'My Stories',
 };

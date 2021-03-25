@@ -16,8 +16,11 @@ import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SHOW_REPORT_CARD } from 'helpers/constants';
+
+// redux Actions
+import { setAppHasAcceptedTerms } from 'helpers/redux/actions/app';
 import { Trans } from 'react-i18next';
 import {
     StyleSheet,
@@ -42,6 +45,7 @@ import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
 import ReportCard from 'components/svg/header/ReportCard';
+import BlockedAccount from './cards/BlockedAccount';
 
 import Claim from './Claim';
 
@@ -61,6 +65,15 @@ function BeneficiaryScreen() {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+
+    const isUserBlocked = useSelector(
+        (state: IRootState) => state.user.metadata.blocked
+    );
+
+    const hasAcceptedRulesAlready = useSelector(
+        (state: IRootState) => state.app.hasAcceptedRulesAlready
+    );
+
     const suspectWrongDateTime = useSelector(
         (state: IRootState) => state.app.suspectWrongDateTime
     );
@@ -73,6 +86,7 @@ function BeneficiaryScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(false);
     const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
+    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
     useEffect(() => {
         const loadCommunity = async () => {
@@ -150,6 +164,18 @@ function BeneficiaryScreen() {
             clearInterval(timeoutTimeDiff);
         };
     }, [suspectWrongDateTime]);
+
+    useEffect(() => {
+        async function loadCommunityRulesStats() {
+            const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+
+            if (!_hasAcceptedRulesAlready) {
+                dispatch(setAppHasAcceptedTerms(false));
+                navigation.navigate(Screens.WelcomeBeneficiaryScreen);
+            }
+        }
+        loadCommunityRulesStats();
+    }, [hasAcceptedRulesAlready]);
 
     useEffect(() => {
         const isLocationAvailable = async () => {
@@ -505,6 +531,11 @@ function BeneficiaryScreen() {
                             </Button>
                         </Card.Content>
                     </Card>
+                </Modal>
+            </Portal>
+            <Portal>
+                <Modal visible={isUserBlocked} dismissable={false}>
+                    <BlockedAccount />
                 </Modal>
             </Portal>
         </>

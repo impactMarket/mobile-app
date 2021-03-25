@@ -15,6 +15,9 @@ export interface ICommunityLightDetails {
     coverImage: string;
     state: CommunityStateAttributes;
     contract: CommunityContractAttributes;
+    blocked: boolean;
+    verifiedPN: boolean | undefined;
+    suspect: boolean | undefined;
 }
 export interface ICommunity extends CommunityAttributes {
     state: CommunityStateAttributes;
@@ -41,6 +44,9 @@ export interface IManagerDetailsBeneficiary {
     username: string | null;
     timestamp: number;
     claimed: string;
+    blocked: boolean;
+    verifiedPN: boolean | undefined;
+    suspect: boolean | undefined;
 }
 
 //
@@ -76,6 +82,9 @@ export interface IUserBaseAuth {
 
 export interface IUserHello extends IUserBaseAuth {
     rates: { currency: string; rate: number }[];
+    blocked: boolean;
+    verifiedPN: boolean | undefined;
+    suspect: boolean | undefined;
 }
 
 export interface IUserAuth extends IUserBaseAuth {

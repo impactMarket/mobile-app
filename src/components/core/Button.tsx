@@ -41,6 +41,11 @@ export default class Button extends Component<IButtonProps, IButtonState> {
                     ...buttonStyle,
                     backgroundColor: ipctColors.softGray,
                 };
+            } else if (modeType === 'default') {
+                buttonStyle = {
+                    ...buttonStyle,
+                    backgroundColor: ipctColors.blueRibbon,
+                };
             } else {
                 buttonStyle = {
                     ...buttonStyle,
