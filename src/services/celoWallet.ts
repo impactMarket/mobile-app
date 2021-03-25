@@ -42,7 +42,7 @@ async function celoWalletRequest(
         return toTxResult(kit.web3.eth.sendSignedTransaction(tx)).waitReceipt();
     } catch (e) {
         // as transaction requests get pending, they then resume all at once
-        if (e.toLowerCase().includes('failing transaction')) {
+        if (e.toLowerCase().includes('known transaction')) {
             return;
         }
         if (!__DEV__) {
