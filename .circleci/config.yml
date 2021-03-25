@@ -84,7 +84,7 @@ jobs:
           command: base64 --decode expo-project.jks.base64 > expo-project.jks
       - run:
           name: Install fastlane
-          command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+          command: npm install --global gulp-cli turtle-cli@$TURTLE_VERSION
       - run:
           name: Install fastlane
           command: turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
