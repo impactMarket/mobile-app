@@ -38,6 +38,10 @@ publish: &publish
         name: Publish to Expo
         command: npx expo-cli publish --non-interactive
 
+    - run:
+        name: Publish to Expo
+        command: curl -X POST -H 'Content-type: application/json' --data '{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}' $SLACK_WEBHOOK_DEPLOY_EXPO
+
 test: &test
   working_directory: ~/my-app
   docker:
@@ -57,7 +61,7 @@ jobs:
   fastlane_release:
     working_directory: ~/deploy-app
     docker:
-      - image: circleci/node:14.15.1
+      - image: cimg/openjdk:8-node
         environment:
             EXPO_SDK_VERSION: 40.0.1
             TURTLE_VERSION: 0.20.7
@@ -80,7 +84,6 @@ jobs:
       - run:
           name: Install packages
           command: |
-              sudo apt-get install openjdk-8-jdk
               npm install --prefix=$HOME/.local --global gulp-cli turtle-cli@$TURTLE_VERSION
               gpg --import gpgkey1.key
               gpg --import gpgkey2.key
