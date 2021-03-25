@@ -73,6 +73,7 @@ jobs:
           name: Prepare keys
           command: |
               export ARTIFACT_PATH="expo-project-$CIRCLE_SHA1-`date +%s`.aab"
+              echo $ARTIFACT_PATH
               echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
               base64 --decode expo-project.jks.base64 > expo-project.jks
               echo $GOOGLE_API_ACCESS_UPLOAD > google-api-access.json.base64
@@ -100,10 +101,10 @@ jobs:
           command: turtle setup:android --sdk-version $EXPO_SDK_VERSION
       - run:
           name: Build and Supply
-          command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o $ARTIFACT_PATH
+          command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o "expo-project-$CIRCLE_SHA1-`date +%s`.aab"
       - run:
           name: Build and Supply
-          command: fastlane supply --track 'internal' --aab $ARTIFACT_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
+          command: fastlane supply --track 'internal' --aab "expo-project-$CIRCLE_SHA1-`date +%s`.aab" --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
 
 orbs:
   openjdk-install: cloudesire/openjdk-install@1.2.3
