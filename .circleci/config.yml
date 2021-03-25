@@ -69,7 +69,8 @@ jobs:
           name: Install packages
           command: |
               yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
-              sudo apt-get install ruby-full
+              curl -sSL https://get.rvm.io | bash -s stable --ruby
+              rvm install 2.4
               sudo gem install fastlane
       - run:
           name: Install dependencies
