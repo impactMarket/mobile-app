@@ -91,7 +91,7 @@ jobs:
           command: yarn
       - run:
           name: Build and Supply
-          command: turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
+          command: turtle setup:android --sdk-version 40.0.1
       - run:
           name: Build and Supply
           command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o $ARTIFACT_PATH
