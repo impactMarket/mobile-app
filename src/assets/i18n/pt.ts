@@ -304,4 +304,9 @@ export default {
     blockedAccountTitle: 'Conta Bloqueada',
     blockedAccountDescription:
         'Sua conta foi bloqueada. Entre em contato com seu gerente se achar que foi um engano.',
+    welcome: 'Bem Vindo!',
+    welcomeBeneficiayTitle:
+        'Você agora é um beneficiário da {{ communityName }}',
+    welcomeBeneficiaryDecription:
+        'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
 };

@@ -12,6 +12,7 @@ import {
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
     RESET_USER_APP,
+    SET_APP_HAS_ACCEPTED_TERMS,
     // RESET_NETWORK_APP,
     SET_PUSH_NOTIFICATION_TOKEN,
     SET_AUTH_TOKEN,
@@ -100,6 +101,11 @@ interface SetAppSuspectWrongDateTime {
         timeDiff: number;
     };
 }
+
+interface SetAppHasAcceptedTerms {
+    type: typeof SET_APP_HAS_ACCEPTED_TERMS;
+    payload: boolean;
+}
 interface SetAppFromWelcomeScreen {
     type: typeof SET_APP_FROM_WELCOME_SCREEN;
     payload: string;
@@ -181,6 +187,7 @@ export type AppActionTypes =
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime
     | SetAppFromWelcomeScreen
+    | SetAppHasAcceptedTerms
     | SetAppPushNotificationListeners;
 
 export type ModalActionTypes =

@@ -14,10 +14,10 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunity } from 'helpers/types/endpoints';
 import { UbiRequestChangeParams } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import NewCommunityRules from './cards/NewCommunityRules';
+import CommunityRules from 'components/core/CommunityRules';
 
 // services
 import CacheStore from 'services/cacheStore';
@@ -200,7 +200,7 @@ function CommunityManagerScreen() {
                                     <CommuntyStatus community={_community} />
                                 </View>
                             ) : (
-                                <NewCommunityRules />
+                                <CommunityRules />
                             )}
                         </BaseCommunity>
                     </ScrollView>

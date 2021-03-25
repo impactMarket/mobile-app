@@ -1,11 +1,14 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Headline, Text, Paragraph } from 'react-native-paper';
-
+import { useDispatch } from 'react-redux';
 // components
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import WarningRedCircle from 'components/svg/WarningRedCircle';
+
+// redux Actions
+import { setAppHasAcceptedTerms } from 'helpers/redux/actions/app';
 
 // services
 import CacheStore from 'services/cacheStore';
@@ -16,9 +19,11 @@ import i18n from 'assets/i18n';
 // colors
 import { ipctColors } from 'styles/index';
 
-function NewCommunityRules() {
+function CommunityRules() {
+    const dispatch = useDispatch();
     const handleAcceptRules = async () => {
         await CacheStore.cacheAcceptCommunityRules();
+        dispatch(setAppHasAcceptedTerms(true));
     };
 
     return (
@@ -80,7 +85,7 @@ function NewCommunityRules() {
     );
 }
 
-export default NewCommunityRules;
+export default CommunityRules;
 
 const styles = StyleSheet.create({
     cardContainer: {

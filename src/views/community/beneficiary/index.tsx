@@ -18,6 +18,9 @@ import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { SHOW_REPORT_CARD } from 'helpers/constants';
+
+// redux Actions
+import { setAppHasAcceptedTerms } from 'helpers/redux/actions/app';
 import { Trans } from 'react-i18next';
 import {
     StyleSheet,
@@ -66,6 +69,13 @@ function BeneficiaryScreen() {
     const isUserBlocked = useSelector(
         (state: IRootState) => state.user.metadata.blocked
     );
+
+    const hasAcceptedRulesAlready = useSelector(
+        (state: IRootState) => state.app.hasAcceptedRulesAlready
+    );
+
+    console.log({ hasAcceptedRulesAlready });
+
     const suspectWrongDateTime = useSelector(
         (state: IRootState) => state.app.suspectWrongDateTime
     );
@@ -78,6 +88,7 @@ function BeneficiaryScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(false);
     const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
+    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
     useEffect(() => {
         const loadCommunity = async () => {
@@ -155,6 +166,18 @@ function BeneficiaryScreen() {
             clearInterval(timeoutTimeDiff);
         };
     }, [suspectWrongDateTime]);
+
+    useEffect(() => {
+        async function loadCommunityRulesStats() {
+            const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+
+            if (!_hasAcceptedRulesAlready) {
+                dispatch(setAppHasAcceptedTerms(false));
+                navigation.navigate(Screens.WelcomeBeneficiaryScreen);
+            }
+        }
+        loadCommunityRulesStats();
+    }, [hasAcceptedRulesAlready]);
 
     useEffect(() => {
         const isLocationAvailable = async () => {

@@ -303,4 +303,8 @@ export default {
     blockedAccountTitle: 'Blocked Account',
     blockedAccountDescription:
         'Your account has been blocked. Please contact your manager if you think it was a mistake.',
+    welcome: 'Welcome!',
+    welcomeBeneficiayTitle: 'You are now a beneficiary of {{ communityName }}',
+    welcomeBeneficiaryDecription:
+        'Every day, you can claim ~{{claimXCCurrency}}. After claiming, you need to wait for {{interval}} + {{minIncrement}} minutes.',
 };
