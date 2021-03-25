@@ -55,7 +55,7 @@ jobs:
   test_app:
     <<: *test
   fastlane_release:
-    executor: rn/linux_js
+    working_directory: ~/deploy-app
     docker:
       - image: circleci/ruby:2.7.2
         environment:
@@ -64,52 +64,32 @@ jobs:
             NODE_VERSION: 14.15.1
             YARN_VERSION: 1.22.5
     steps:
+      - checkout
       - run:
-          name: "Update Node.js and npm"
+          name: Install packages
           command: |
-            curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
-            curl https://www.npmjs.com/install.sh | sudo bash
-            sudo npm install --global yarn
-      - attach_workspace:
-          at: .
-      - rn/yarn_install
+              curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
+              curl https://www.npmjs.com/install.sh | sudo bash
+              curl -o- -L https://yarnpkg.com/install.sh | bash
+              yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+              sudo gem install fastlane
       - run:
-          name: Install fastlane
-          command: export ARTIFACT_PATH="/home/travis/expo-project-$CIRCLE_SHA1-`date +%s`.aab"
+          name: Install dependencies
+          command: yarn
       - run:
-          name: Install fastlane
-          command: echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+          name: Prepare keys
+          command: |
+              export ARTIFACT_PATH="/home/travis/expo-project-$CIRCLE_SHA1-`date +%s`.aab"
+              echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+              base64 --decode expo-project.jks.base64 > expo-project.jks
+              echo $GOOGLE_API_ACCESS_UPLOAD > google-api-access.json.base64
+              base64 --decode google-api-access.json.base64 > google-api-access.json
       - run:
-          name: Install fastlane
-          command: base64 --decode expo-project.jks.base64 > expo-project.jks
-      - run:
-          name: Install fastlane
-          command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
-      - run:
-          name: Install fastlane
-          command: npx turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
-      - run:
-          name: Install fastlane
-          command: npx turtle build:android
-            --keystore-path ./expo-project.jks
-            --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS
-            --type app-bundle
-            -o $ARTIFACT_PATH
-      - run:
-          name: Install fastlane
-          command: sudo gem install fastlane
-      - run:
-          name: Install fastlane
-          command: echo $GOOGLE_API_ACCESS_UPLOAD > google-api-access.json.base64
-      - run:
-          name: Install fastlane
-          command: base64 --decode google-api-access.json.base64 > google-api-access.json
-      - run:
-          command: fastlane supply --track 'internal' --aab $ARTIFACT_PATH --json_key google-api-access.json --skip_upload_images  --skip_upload_screenshots
-          name: Run Fastlane
-
-orbs:
-  rn: react-native-community/react-native@1.0.0
+          name: Build and Supply
+          command: |
+              turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
+              turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o $ARTIFACT_PATH
+              fastlane supply --track 'internal' --aab $ARTIFACT_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
 
 workflows:
   version: 2
