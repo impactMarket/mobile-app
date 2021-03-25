@@ -74,8 +74,6 @@ function BeneficiaryScreen() {
         (state: IRootState) => state.app.hasAcceptedRulesAlready
     );
 
-    console.log({ hasAcceptedRulesAlready });
-
     const suspectWrongDateTime = useSelector(
         (state: IRootState) => state.app.suspectWrongDateTime
     );
