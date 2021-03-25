@@ -66,18 +66,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install packages
-          command: |
-              npm install --prefix=$HOME/.local --global gulp-cli turtle-cli@$TURTLE_VERSION
-              turtle -V
-              gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
-              curl -sSL https://get.rvm.io | bash -s stable --ruby
-              source /home/circleci/.rvm/scripts/rvm
-              gem install fastlane
-      - run:
-          name: Install dependencies
-          command: yarn
-      - run:
           name: Prepare keys
           command: |
               export ARTIFACT_PATH="/home/travis/expo-project-$CIRCLE_SHA1-`date +%s`.aab"
@@ -85,12 +73,31 @@ jobs:
               base64 --decode expo-project.jks.base64 > expo-project.jks
               echo $GOOGLE_API_ACCESS_UPLOAD > google-api-access.json.base64
               base64 --decode google-api-access.json.base64 > google-api-access.json
+              echo $GPG_KEY_1 > gpgkey1.key.base64
+              base64 --decode gpgkey1.key.base64 > gpgkey1.key
+              echo $GPG_KEY_2 > gpgkey2.key.base64
+              base64 --decode gpgkey2.key.base64 > gpgkey2.key
+      - run:
+          name: Install packages
+          command: |
+              npm install --prefix=$HOME/.local --global gulp-cli turtle-cli@$TURTLE_VERSION
+              gpg --import gpgkey1.key
+              gpg --import gpgkey2.key
+              curl -sSL https://get.rvm.io | bash -s stable --ruby
+              source /home/circleci/.rvm/scripts/rvm
+              gem install fastlane
+      - run:
+          name: Install dependencies
+          command: yarn
       - run:
           name: Build and Supply
-          command: |
-              turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
-              turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o $ARTIFACT_PATH
-              fastlane supply --track 'internal' --aab $ARTIFACT_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
+          command: turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
+      - run:
+          name: Build and Supply
+          command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o $ARTIFACT_PATH
+      - run:
+          name: Build and Supply
+          command: fastlane supply --track 'internal' --aab $ARTIFACT_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
 
 workflows:
   version: 2
