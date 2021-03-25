@@ -1,21 +1,25 @@
-import { useNavigation } from '@react-navigation/native';
-import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
-import Card from 'components/core/Card';
-import { Screens } from 'helpers/constants';
-import { IRootState } from 'helpers/types/state';
-import * as React from 'react';
-import { useState } from 'react';
-import { BottomSheet } from 'react-native-btr';
+import React, { ReactElement } from 'react';
 import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
-import { useSelector } from 'react-redux';
+import BottomPopup from 'components/core/BottomPopup';
+import { TextStyle, StyleProp } from 'react-native';
+interface IThreeDotsProps extends SvgProps {
+    children: ReactElement;
+    openThreeDotsMenu: boolean;
+    hasCloseBtn: boolean;
+    title?: string;
+    titleStyle?: StyleProp<TextStyle>;
+    setOpenThreeDotsMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-function ThreeDotsSvg(props: SvgProps) {
-    const navigation = useNavigation();
-    const community = useSelector(
-        (state: IRootState) => state.user.community.metadata
-    );
-    const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
+function ThreeDotsSvg(props: IThreeDotsProps) {
+    const {
+        setOpenThreeDotsMenu,
+        openThreeDotsMenu,
+        title,
+        children,
+        titleStyle,
+        hasCloseBtn,
+    } = props;
 
     const toggleThreeDotsMenu = () => setOpenThreeDotsMenu(!openThreeDotsMenu);
 
@@ -37,48 +41,15 @@ function ThreeDotsSvg(props: SvgProps) {
                     fill="#161515"
                 />
             </Svg>
-            <BottomSheet
-                visible={openThreeDotsMenu}
-                onBackButtonPress={toggleThreeDotsMenu}
-                onBackdropPress={toggleThreeDotsMenu}
+            <BottomPopup
+                isVisible={openThreeDotsMenu}
+                setIsVisible={toggleThreeDotsMenu}
+                title={title}
+                titleStyle={titleStyle}
+                hasCloseBtn={hasCloseBtn}
             >
-                <Card
-                    style={{
-                        borderBottomEndRadius: 0,
-                        borderBottomStartRadius: 0,
-                    }}
-                >
-                    <Card.Content>
-                        {/* <Button
-                            modeType="gray"
-                            bold={true}
-                            disabled={true}
-                            style={{ marginVertical: 10 }}
-                            onPress={() => {
-                                setOpenThreeDotsMenu(false);
-                                navigation.navigate(Screens.CreateCommunity, {
-                                    communityId: community.publicId,
-                                });
-                            }}
-                        >
-                            {i18n.t('editCommunityDetails')}
-                        </Button> */}
-                        <Button
-                            modeType="gray"
-                            bold
-                            style={{ marginVertical: 10 }}
-                            onPress={() => {
-                                setOpenThreeDotsMenu(false);
-                                navigation.navigate(Screens.CommunityDetails, {
-                                    communityId: community.publicId,
-                                });
-                            }}
-                        >
-                            {i18n.t('viewAsPublic')}
-                        </Button>
-                    </Card.Content>
-                </Card>
-            </BottomSheet>
+                {children}
+            </BottomPopup>
         </>
     );
 }

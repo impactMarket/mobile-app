@@ -15,6 +15,7 @@ export default {
     addBeneficiary: 'Add Beneficiary',
     add: 'Add',
     cancel: 'Cancel',
+    confirm: 'Confirm',
     claimed: 'Claimed',
     raised: 'Raised',
     claim: 'Claim',
@@ -262,6 +263,9 @@ export default {
     stories: 'Stories',
     viewAll: 'View All',
     notInComunity: 'Not in a community!',
+    story: 'Story',
+    delete: 'Delete',
+    deleteWarning: 'Are you sure you want to delete this story?',
     storyCongrat: 'Congratulations, your story was submitted!',
     storyFailure: 'Error uploading story!',
     storyPermissionCamera: 'Permission to access camera roll is required!',
@@ -307,4 +311,6 @@ export default {
     welcomeBeneficiayTitle: 'You are now a beneficiary of {{ communityName }}',
     welcomeBeneficiaryDecription:
         'Every day, you can claim ~{{claimXCCurrency}}. After claiming, you need to wait for {{interval}} + {{minIncrement}} minutes.',
+    createStory: 'Create Story',
+    myStories: 'My Stories',
 };

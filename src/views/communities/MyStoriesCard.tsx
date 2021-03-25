@@ -1,26 +1,27 @@
 import { useNavigation } from '@react-navigation/native';
-import BluePlusSvg from 'components/svg/BluePlusSvg';
 import { Screens } from 'helpers/constants';
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { ipctColors } from 'styles/index';
 import i18n from 'assets/i18n';
 
-export default function NewStoriesCard() {
+export default function MyStoriesCard() {
     const navigation = useNavigation();
     return (
         <Pressable
             style={{
                 width: 98.16,
-                height: 102.16,
+                height: 53.0,
                 marginRight: 11.84,
-                marginBottom: 11.84,
             }}
-            onPress={(e) => navigation.navigate(Screens.NewStory)}
+            onPress={(e) =>
+                navigation.navigate(Screens.Stories, {
+                    caller: 'MY_STORIES',
+                })
+            }
         >
             <View
                 style={{
-                    backgroundColor: 'white',
+                    backgroundColor: '#2362FB',
                     borderRadius: 8,
                     shadowColor: '#E1E4E7',
                     shadowOffset: {
@@ -32,22 +33,19 @@ export default function NewStoriesCard() {
                     width: '100%',
                     height: '100%',
                     flex: 1,
-                    flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}
             >
-                <BluePlusSvg />
                 <Text
                     style={{
                         fontFamily: 'Gelion-Bold',
                         fontSize: 13,
                         lineHeight: 16,
-                        color: ipctColors.almostBlack,
-                        marginTop: 8,
+                        color: '#E1E4E7',
                     }}
                 >
-                    {i18n.t('createStory')}
+                    {i18n.t('myStories')}
                 </Text>
             </View>
         </Pressable>

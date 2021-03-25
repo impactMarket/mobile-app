@@ -15,6 +15,7 @@ export default {
     addBeneficiary: 'Adicionar Beneficiário',
     add: 'Adicionar',
     cancel: 'Fechar',
+    confirm: 'Confirmar',
     claimed: 'Distribuído',
     raised: 'Angariado',
     claim: 'Pegar',
@@ -262,6 +263,9 @@ export default {
     viewAll: 'Ver Todas',
     notInComunity: 'Não estás associado a nenhuma comunidade!',
     storyCongrat: 'Parabéns, sua story foi submetida!',
+    story: 'Story',
+    delete: 'Apagar',
+    deleteWarning: 'Tens certeza que quer apagar esta story?',
     storyFailure: 'Erro ao submeter sua story!',
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
     descriptionCopiedClipboard:
@@ -309,4 +313,6 @@ export default {
         'Você agora é um beneficiário da {{ communityName }}',
     welcomeBeneficiaryDecription:
         'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
+    createStory: 'Criar Story',
+    myStories: 'Minhas Stories',
 };

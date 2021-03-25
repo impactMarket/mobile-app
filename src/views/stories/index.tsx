@@ -1,7 +1,10 @@
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import BackSvg from 'components/svg/header/BackSvg';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { IRootState, IStoriesRouteParams } from 'helpers/types/state';
+import { View, FlatList, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
@@ -10,18 +13,34 @@ import StoriesCard from 'views/communities/StoriesCard';
 interface ICommunityStoriesBox extends ICommunitiesListStories {
     empty: boolean;
 }
+
 function StoriesScreen() {
-    const [storiesCommunity, setStoriesCommunity] = useState<
-        ICommunityStoriesBox[]
-    >([]);
+    const route = useRoute<
+        RouteProp<Record<string, IStoriesRouteParams>, string>
+    >();
+
+    const { caller } = route.params;
+
+    const [stories, setStories] = useState<ICommunityStoriesBox[]>([]);
+
     const [refreshing, setRefreshing] = useState(false);
+
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
 
     useEffect(() => {
         setRefreshing(true);
-        Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-            setStoriesCommunity(s);
-            setRefreshing(false);
-        });
+        if (caller !== 'MY_STORIES') {
+            Api.story.list<ICommunityStoriesBox[]>().then((s) => {
+                setStories(s);
+            });
+        } else {
+            Api.story.me<ICommunityStoriesBox[]>().then((s) => {
+                setStories(s);
+            });
+        }
+        setRefreshing(false);
     }, []);
 
     function createRows(data: ICommunityStoriesBox[], columns: number) {
@@ -54,7 +73,7 @@ function StoriesScreen() {
 
     return (
         <FlatList
-            data={createRows(storiesCommunity, 3)}
+            data={createRows(stories, 3)}
             style={{ marginHorizontal: 12 }}
             keyExtractor={(item) => item.name}
             numColumns={3} // Número de colunas

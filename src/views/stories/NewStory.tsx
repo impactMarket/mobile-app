@@ -4,6 +4,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import React, { useLayoutEffect, useState } from 'react';
 import {
     View,
+    SafeAreaView,
     Text,
     ImageBackground,
     Alert,
@@ -113,7 +114,7 @@ function NewStoryScreen() {
     // make it reusable!
     if (submittedWithSuccess) {
         return (
-            <View style={{ flex: 1, flexDirection: 'row' }}>
+            <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
                 <StatusBar hidden={true} />
                 <View
                     style={{
@@ -170,7 +171,7 @@ function NewStoryScreen() {
                         </View>
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
         );
     }
 

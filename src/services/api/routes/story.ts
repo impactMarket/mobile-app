@@ -6,7 +6,7 @@ import {
     ICommunityStories,
 } from 'helpers/types/endpoints';
 import config from '../../../../config';
-import { getRequest, postRequest } from '../base';
+import { getRequest, postRequest, deleteRequest } from '../base';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -75,6 +75,16 @@ class ApiRouteStory {
     static async love(contentId: number): Promise<void> {
         await postRequest('/story/love', { contentId });
         return;
+    }
+
+    static async remove(storyId: number): Promise<void> {
+        await deleteRequest('/story/', { storyId });
+        return;
+    }
+
+    static async me<T extends ICommunitiesListStories[]>(): Promise<T> {
+        const result = await getRequest<T>('/story/me');
+        return result ? result : ([] as any);
     }
 }
 
