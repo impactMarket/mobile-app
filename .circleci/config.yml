@@ -80,6 +80,7 @@ jobs:
       - run:
           name: Install packages
           command: |
+              openjdk-install
               npm install --prefix=$HOME/.local --global gulp-cli turtle-cli@$TURTLE_VERSION
               gpg --import gpgkey1.key
               gpg --import gpgkey2.key
@@ -98,6 +99,9 @@ jobs:
       - run:
           name: Build and Supply
           command: fastlane supply --track 'internal' --aab $ARTIFACT_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
+
+orbs:
+  openjdk-install: cloudesire/openjdk-install@1.2.3
 
 workflows:
   version: 2
