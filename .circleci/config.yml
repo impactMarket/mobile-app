@@ -87,7 +87,7 @@ jobs:
           command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
       - run:
           name: Install fastlane
-          command: turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
+          command: npx turtle setup:android --sdk-version $EXPO_SDK_VERSION > /dev/null
       - run:
           name: Install fastlane
           command: npx turtle build:android
