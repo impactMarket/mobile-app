@@ -61,7 +61,7 @@ jobs:
   fastlane_release:
     working_directory: ~/deploy-app
     docker:
-      - image: circleci/openjdk:8
+      - image: circleci/openjdk:8-jdk
         environment:
             EXPO_SDK_VERSION: 40.0.1
             TURTLE_VERSION: 0.20.7
