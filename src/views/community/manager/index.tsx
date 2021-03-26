@@ -97,7 +97,7 @@ function CommunityManagerScreen() {
             }
         }
         loadCommunityRulesStats();
-    }, [hasAcceptedTerms]);
+    }, []);
 
     const onRefresh = () => {
         updateCommunityInfo(community.publicId, dispatch).then(async () => {
