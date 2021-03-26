@@ -85,6 +85,7 @@ export interface UserAttributes {
     year: number | null;
     children: number | null;
     blocked: boolean;
+    suspect: boolean;
 }
 
 export interface IManagerAttributes {

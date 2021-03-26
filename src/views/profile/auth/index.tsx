@@ -35,7 +35,7 @@ import { ipctColors } from 'styles/index';
 import Web3 from 'web3';
 
 import config from '../../../../config';
-import { setUserIsBlocked } from 'helpers/redux/actions/user';
+import { setUserIsBlocked, setUserIsSuspect } from 'helpers/redux/actions/user';
 
 const countries: {
     [key: string]: {
@@ -175,6 +175,7 @@ function Auth() {
             );
 
             dispatch(setUserIsBlocked(user.user.blocked));
+            dispatch(setUserIsSuspect(user.user.suspect));
             dispatch(setPushNotificationsToken(pushNotificationToken));
             setPushNotificationListeners(
                 startNotificationsListeners(kit, dispatch)

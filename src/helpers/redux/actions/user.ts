@@ -6,6 +6,7 @@ import {
     SET_USER_WALLET_BALANCE,
     SET_USER_IS_BENEFICIARY,
     SET_USER_IS_BLOCKED,
+    SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
@@ -62,6 +63,13 @@ export function setUserIsBlocked(isBlocked: boolean): UserActionTypes {
     return {
         type: SET_USER_IS_BLOCKED,
         payload: isBlocked,
+    };
+}
+
+export function setUserIsSuspect(isSuspect: boolean): UserActionTypes {
+    return {
+        type: SET_USER_IS_SUSPECT,
+        payload: isSuspect,
     };
 }
 
