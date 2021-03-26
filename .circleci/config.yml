@@ -105,8 +105,7 @@ jobs:
               rvm use 2.5
               gem install bundler:2.1.4
               bundle install
-              ls -l ~
-              ls -l ~/expo-apps
+              ls -l ~/deploy-app
               fastlane supply --track 'internal' --aab $BUILD_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
 
 orbs:
