@@ -35,7 +35,7 @@ export interface CommunityStateAttributes {
     claimed: string;
     claims: number;
     beneficiaries: number;
-    suspect: number;
+    suspect: Array<any>;
     removedBeneficiaries: number;
     managers: number;
     raised: string;

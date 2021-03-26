@@ -6,6 +6,7 @@ import {
     SET_USER_EXCHANGE_RATE,
     SET_USER_INFO,
     SET_USER_IS_BENEFICIARY,
+    SET_USER_IS_BLOCKED,
     SET_USER_IS_COMMUNITY_MANAGER,
     SET_USER_LANGUAGE,
     SET_USER_WALLET_BALANCE,
@@ -27,6 +28,7 @@ const INITIAL_STATE_USER: IUserState = {
         gender: null,
         year: null,
         children: null,
+        blocked: false,
     },
     exchangeRate: 1,
     community: {
@@ -61,6 +63,9 @@ export const userReducer = (
             return { ...state, metadata };
         case SET_USER_IS_BENEFICIARY:
             community.isBeneficiary = action.payload;
+            return { ...state, community };
+        case SET_USER_IS_BLOCKED:
+            metadata.blocked = action.payload;
             return { ...state, community };
         case SET_USER_IS_COMMUNITY_MANAGER:
             community.isManager = action.payload;

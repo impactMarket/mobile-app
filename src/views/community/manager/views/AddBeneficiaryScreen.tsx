@@ -150,7 +150,6 @@ function AddBeneficiaryScreen() {
     const personalAddressWarningMessageCondition =
         inputAddress.toLowerCase() === userAddress.toLowerCase();
 
-    console.log('suspect', communityMetadata.suspect);
     return (
         <>
             {personalAddressWarningMessageCondition && (
@@ -221,7 +220,7 @@ function AddBeneficiaryScreen() {
                     {i18n.t('addBeneficiary')}
                 </Button>
                 {/* Accessing community details to check suspicious activity */}
-                {communityMetadata.suspect?.length > 0 && (
+                {communityMetadata?.suspect.length > 0 && (
                     <SuspiciousActivity />
                 )}
             </View>

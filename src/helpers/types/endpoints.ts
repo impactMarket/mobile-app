@@ -37,6 +37,7 @@ export interface IManagerDetailsManager {
     address: string;
     username: string | null;
     timestamp: number;
+    // suspect: boolean | undefined;
 }
 
 export interface IManagerDetailsBeneficiary {

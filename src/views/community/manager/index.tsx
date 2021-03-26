@@ -191,7 +191,7 @@ function CommunityManagerScreen() {
                                             hasFundsToNewBeneficiary
                                         }
                                         isSuspeciousDetected={
-                                            _community.state.suspect > 0
+                                            _community?.suspect.length > 0
                                         }
                                     />
                                     <Managers

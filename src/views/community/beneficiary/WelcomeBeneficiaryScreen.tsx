@@ -91,13 +91,9 @@ function WelcomeBeneficiaryScreen() {
     );
 }
 
-WelcomeBeneficiaryScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+WelcomeBeneficiaryScreen.navigationOptions = () => {
     return {
-        title: i18n.t('welcome'),
+        headerTitle: i18n.t('welcome'),
     };
 };
 
