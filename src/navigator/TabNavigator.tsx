@@ -41,7 +41,8 @@ function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
 function getHeaderRight(
     route: RouteProp<any, any>,
     navigation: StackNavigationProp<any, any>,
-    defaultValue: string
+    defaultValue: string,
+    isManagerOrBeneficiary: boolean
 ) {
     let routeName = getFocusedRouteNameFromRoute(route);
     if (routeName === undefined) {
@@ -54,7 +55,10 @@ function getHeaderRight(
         case Screens.CommunityManager:
             return <CommunityManager />;
         case Screens.Communities:
-            return <CreateCommunity navigation={navigation} />;
+            if (!isManagerOrBeneficiary) {
+                return <CreateCommunity navigation={navigation} />;
+            }
+            return;
         case Screens.Profile:
             return <Logout />;
     }
@@ -105,7 +109,8 @@ function TabNavigator({
                         ? Screens.Beneficiary
                         : isManager
                         ? Screens.CommunityManager
-                        : Screens.Communities
+                        : Screens.Communities,
+                    isBeneficiary || isBeneficiary
                 ),
         });
     }, [navigation, route]);
