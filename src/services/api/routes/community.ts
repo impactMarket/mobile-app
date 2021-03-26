@@ -9,15 +9,14 @@ import { UbiRequestChangeParams } from 'helpers/types/models';
 import { getRequest, postRequest } from '../base';
 
 class ApiRouteCommunity {
-    static async searchBeneficiary(active: boolean, beneficiaryQuery: string) {
+    static async findBeneficiary(beneficiaryQuery: string, active?: boolean) {
         const result = await getRequest<IManagerDetailsBeneficiary[]>(
-            '/community/beneficiaries/search/' +
-                (active ? 'true' : 'false') +
+            '/community/beneficiaries/find/' +
+                beneficiaryQuery +
                 '/' +
-                beneficiaryQuery,
+                (active === undefined ? '' : active ? 'true' : 'false'),
             true
         );
-        console.log('result', result);
         if (result) {
             return result;
         }
@@ -29,7 +28,6 @@ class ApiRouteCommunity {
             '/community/managers/search/' + managerQuery,
             true
         );
-        console.log('result', result);
         if (result) {
             return result;
         }
