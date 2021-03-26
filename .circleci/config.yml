@@ -96,7 +96,7 @@ jobs:
           command: turtle setup:android --sdk-version $EXPO_SDK_VERSION
       - run:
           name: Build and Supply
-          command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o "expo-project-$CIRCLE_SHA1-`date +%s`.aab"
+          command: turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o "expo-project-$CIRCLE_SHA1-`date +%s`.aab" -u $EXPO_USERNAME -p $EXPO_PASSWORD
       - run:
           name: Build and Supply
           command: |
