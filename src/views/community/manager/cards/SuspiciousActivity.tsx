@@ -39,7 +39,9 @@ export default SuspiciousActivity;
 
 const styles = StyleSheet.create({
     cardContainer: {
-        paddingHorizontal: 16,
+        padding: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
         borderStyle: 'solid',
         borderColor: '#EB5757',
         borderWidth: 2,
@@ -55,17 +57,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Manrope-Bold',
         fontSize: 16,
         lineHeight: 22,
-        letterSpacing: 0.7,
         marginLeft: 10,
     },
     paragraphContent: {
-        textAlign: 'left',
-        marginTop: 16,
-
+        textAlign: 'auto',
+        marginTop: 8,
         color: ipctColors.nileBlue,
         fontFamily: 'Inter-Regular',
-        fontSize: 15,
+        fontSize: 14,
         lineHeight: 24,
-        letterSpacing: 0.7,
     },
 });

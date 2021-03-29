@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import Api from 'services/api';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';

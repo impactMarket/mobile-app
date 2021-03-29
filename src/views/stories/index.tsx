@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import BackSvg from 'components/svg/header/BackSvg';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState, IStoriesRouteParams } from 'helpers/types/state';
@@ -15,6 +15,7 @@ interface ICommunityStoriesBox extends ICommunitiesListStories {
 }
 
 function StoriesScreen() {
+    const navigation = useNavigation();
     const route = useRoute<
         RouteProp<Record<string, IStoriesRouteParams>, string>
     >();
@@ -36,6 +37,9 @@ function StoriesScreen() {
                 setStories(s);
             });
         } else {
+            navigation.setOptions({
+                headerTitle: 'My Stories',
+            });
             Api.story.me<ICommunityStoriesBox[]>().then((s) => {
                 setStories(s);
             });

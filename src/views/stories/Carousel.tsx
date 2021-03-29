@@ -106,9 +106,9 @@ function Carousel(props: {
         );
     }
     const story = { coverImage, name, country, city };
-    console.log(stories[index]);
+
     return (
-        <SafeAreaView
+        <View
             style={{
                 flex: 1,
                 flexDirection: 'column',
@@ -286,7 +286,7 @@ function Carousel(props: {
                     }}
                 ></View>
             </BottomPopup>
-        </SafeAreaView>
+        </View>
     );
 }
 
