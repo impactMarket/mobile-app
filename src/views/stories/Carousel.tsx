@@ -248,7 +248,7 @@ function Carousel(props: {
                 style={{
                     height: 240,
                     width: dimensions.width,
-                    zIndex: -1,
+                    zIndex: 2,
                     bottom: 0,
                     position: 'absolute',
                 }}
@@ -258,7 +258,7 @@ function Carousel(props: {
                 style={{
                     height: 98,
                     width: dimensions.width,
-                    zIndex: -1,
+                    zIndex: 2,
                     top: 0,
                     position: 'absolute',
                 }}
