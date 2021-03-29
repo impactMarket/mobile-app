@@ -9,21 +9,25 @@ import {
     ImageBackground,
     Alert,
     useWindowDimensions,
+    StyleSheet,
 } from 'react-native';
+import { Screens } from 'helpers/constants';
+import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import { useNavigation } from '@react-navigation/native';
 import SubmitStory from 'navigator/header/SubmitStory';
 import Api from 'services/api';
-import { useSelector } from 'react-redux';
 import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
 import { StatusBar } from 'expo-status-bar';
 import Container from './Container';
+import { modalDonateAction } from 'helpers/constants';
 
 function NewStoryScreen() {
     const dimensions = useWindowDimensions();
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [storyText, setStoryText] = useState('');
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
@@ -109,12 +113,12 @@ function NewStoryScreen() {
     if (userCommunity?.id === undefined || userCommunityStatus !== 'valid') {
         return <Text>{i18n.t('notInComunity')}</Text>;
     }
-
+    console.log({ userCommunity });
     // TODO: most of the code above is repeated from Carousel
     // make it reusable!
     if (submittedWithSuccess) {
         return (
-            <SafeAreaView style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
                 <StatusBar hidden={true} />
                 <View
                     style={{
@@ -123,6 +127,7 @@ function NewStoryScreen() {
                         // backgroundColor: 'blue',
                         width: dimensions.width,
                         justifyContent: 'space-between',
+                        paddingTop: 20,
                     }}
                 >
                     <Container media={storyMedia} story={userCommunity} />
@@ -143,35 +148,34 @@ function NewStoryScreen() {
                             style={{
                                 marginVertical: 27,
                                 flexDirection: 'row',
-                                justifyContent: 'space-between',
+                                justifyContent: 'space-around',
                                 alignItems: 'center',
                             }}
                         >
                             <View style={{ flexDirection: 'row' }}>
-                                <Text
-                                    style={{
-                                        marginLeft: 8,
-                                        fontFamily: 'Gelion-Regular',
-                                        fontSize: 16,
-                                        lineHeight: 19,
-                                        color: 'white',
-                                    }}
-                                >
-                                    -- Loves
-                                </Text>
+                                <Text style={styles.donateLabel}>-- Loves</Text>
                             </View>
                             <Button
                                 modeType="green"
                                 bold
-                                disabled={true}
-                                style={{ marginRight: 22, width: 158 }}
+                                style={styles.donate}
+                                labelStyle={styles.donateLabel}
+                                onPress={() =>
+                                    navigation.navigate(
+                                        Screens.CommunityDetails,
+                                        {
+                                            communityId: userCommunity.publicId,
+                                            openDonate: true,
+                                        }
+                                    )
+                                }
                             >
                                 {i18n.t('donate')}
                             </Button>
                         </View>
                     </View>
                 </View>
-            </SafeAreaView>
+            </View>
         );
     }
 
@@ -218,6 +222,21 @@ function NewStoryScreen() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    donate: {
+        borderRadius: 5,
+        width: 158,
+        height: 39,
+    },
+    donateLabel: {
+        fontFamily: 'Gelion-Regular',
+        fontSize: 16,
+        lineHeight: 19,
+        color: 'white',
+        letterSpacing: 0.3,
+    },
+});
 
 NewStoryScreen.navigationOptions = () => {
     return {
