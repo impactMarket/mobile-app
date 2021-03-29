@@ -313,4 +313,5 @@ export default {
         'Every day, you can claim ~{{claimXCCurrency}}. After claiming, you need to wait for {{interval}} + {{minIncrement}} minutes.',
     createStory: 'Create Story',
     myStories: 'My Stories',
+    userNotRegistered: "The user isn't registered!",
 };

@@ -315,4 +315,6 @@ export default {
         'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
     createStory: 'Criar Story',
     myStories: 'Minhas Stories',
+    userNotRegistered:
+        'O utilizador que está a tentar adicionar, não está registado!',
 };

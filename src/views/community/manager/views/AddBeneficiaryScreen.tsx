@@ -65,14 +65,22 @@ function AddBeneficiaryScreen() {
             return;
         }
 
-        const searchResult = await Api.community.searchBeneficiary(
-            true,
-            addressToAdd
-        );
+        const searchResult = await Api.community.findBeneficiary(addressToAdd);
         if (searchResult.length !== 0) {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('alreadyInCommunity'),
+                [{ text: i18n.t('close') }],
+                { cancelable: false }
+            );
+            return;
+        }
+
+        const userExist = await Api.user.exists(addressToAdd);
+        if (!userExist) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('userNotRegistered'),
                 [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
@@ -221,9 +229,10 @@ function AddBeneficiaryScreen() {
                     {i18n.t('addBeneficiary')}
                 </Button>
                 {/* Accessing community details to check suspicious activity */}
-                {communityMetadata.suspect?.length > 0 && (
-                    <SuspiciousActivity />
-                )}
+                {communityMetadata.suspect &&
+                    communityMetadata.suspect.length > 0 && (
+                        <SuspiciousActivity />
+                    )}
             </View>
             <ScanQR
                 isVisible={usingCamera}
