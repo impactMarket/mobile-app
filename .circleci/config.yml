@@ -107,14 +107,14 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - fastlane_release
+      - fastlane_release:
           filters:
               branches:
                 only:
                   - production
   expo:
     jobs:
-      - publish_to_expo
+      - publish_to_expo:
           filters:
               branches:
                 only:
