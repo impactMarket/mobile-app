@@ -1,4 +1,5 @@
 import { IUserHello, IUserAuth } from 'helpers/types/endpoints';
+
 import { getRequest, postRequest } from '../base';
 
 class ApiRouteUser {
@@ -14,11 +15,13 @@ class ApiRouteUser {
 
     static async hello(
         address: string,
-        token: string
+        token: string,
+        phone: string
     ): Promise<IUserHello | undefined> {
         return postRequest<IUserHello>(`/user/hello`, {
             address,
             token,
+            phone,
         });
     }
 
@@ -26,13 +29,15 @@ class ApiRouteUser {
         address: string,
         language: string,
         currency: string,
-        pushNotificationToken: string
+        pushNotificationToken: string,
+        phone: string
     ): Promise<IUserAuth | undefined> {
         return await postRequest<IUserAuth>('/user/authenticate', {
             address,
             language,
             currency,
             pushNotificationToken,
+            phone,
         });
     }
 
