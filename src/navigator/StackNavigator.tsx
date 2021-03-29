@@ -145,6 +145,7 @@ function StackNavigator() {
         <Stack.Navigator
             screenOptions={{
                 headerTitleAlign: 'left',
+                headerLeft: () => null,
                 headerStyle: {
                     elevation: 0, // remove shadow on Android
                     shadowOpacity: 0, // remove shadow on iOS

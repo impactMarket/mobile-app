@@ -85,7 +85,6 @@ export interface IUserHello extends IUserBaseAuth {
     rates: { currency: string; rate: number }[];
     blocked: boolean;
     verifiedPN: boolean | undefined;
-    suspect: boolean | undefined;
 }
 
 export interface IUserAuth extends IUserBaseAuth {

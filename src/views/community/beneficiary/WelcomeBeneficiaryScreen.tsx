@@ -93,6 +93,7 @@ function WelcomeBeneficiaryScreen() {
 
 WelcomeBeneficiaryScreen.navigationOptions = () => {
     return {
+        headerLeft: () => null,
         headerTitle: i18n.t('welcome'),
     };
 };

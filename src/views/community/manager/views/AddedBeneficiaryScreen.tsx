@@ -258,7 +258,9 @@ function AddedBeneficiaryScreen() {
                 </Button>
             )}
             left={() =>
-                item.suspect && <WarningRedTriangle style={{ marginTop: 14 }} />
+                item.suspect && (
+                    <WarningRedTriangle style={{ marginVertical: 14 }} />
+                )
             }
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}

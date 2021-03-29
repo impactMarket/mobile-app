@@ -23,6 +23,8 @@ import {
     setUserIsCommunityManager,
     setUserMetadata,
     setUserWallet,
+    setUserIsBlocked,
+    setUserIsSuspect,
 } from './redux/actions/user';
 import { UserAttributes } from './types/models';
 import * as Device from 'expo-device';
@@ -120,6 +122,8 @@ export async function welcomeUser(
             dispatch(setCommunityContract(communityContract));
             dispatch(setUserIsBeneficiary(user.isBeneficiary));
             dispatch(setUserIsCommunityManager(user.isManager));
+            dispatch(setUserIsBlocked(userMetadata.blocked));
+            dispatch(setUserIsSuspect(userMetadata.suspect));
         }
     });
 }

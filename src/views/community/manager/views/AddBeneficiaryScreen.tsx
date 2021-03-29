@@ -35,6 +35,7 @@ function AddBeneficiaryScreen() {
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
+    const [isBeneficiarySuspect, setIsBeneficiarySuspect] = useState(false);
 
     const handleModalScanQR = async () => {
         let addressToAdd: string;
@@ -70,6 +71,8 @@ function AddBeneficiaryScreen() {
             addressToAdd
         );
         if (searchResult.length !== 0) {
+            setIsBeneficiarySuspect(true);
+
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('alreadyInCommunity'),
@@ -219,10 +222,8 @@ function AddBeneficiaryScreen() {
                 >
                     {i18n.t('addBeneficiary')}
                 </Button>
-                {/* Accessing community details to check suspicious activity */}
-                {communityMetadata?.suspect.length > 0 && (
-                    <SuspiciousActivity />
-                )}
+                {/* If there is an attempt to add the same user/address we trigger suspicious activity */}
+                {isBeneficiarySuspect && <SuspiciousActivity />}
             </View>
             <ScanQR
                 isVisible={usingCamera}
