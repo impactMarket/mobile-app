@@ -58,6 +58,7 @@ import {
     setAppSuspectWrongDateTime,
     setCeloKit,
     setPushNotificationListeners,
+    setAppHasAcceptedTerms,
 } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import {
@@ -537,6 +538,7 @@ export default class App extends React.Component<any, IAppState> {
         }
         await this._checkForNewVersion();
         await this._authUser();
+        await this._checkAcceptanceOfRules();
         this.setState({ isAppReady: true });
         // just at the end, so when we hide, app is ready!
         SplashScreen.hideAsync();
@@ -574,6 +576,14 @@ export default class App extends React.Component<any, IAppState> {
             !semverGte(currentVersion, version.minimal)
         ) {
             this.setState({ blockUserToUpdateApp: true });
+        }
+    };
+
+    _checkAcceptanceOfRules = async () => {
+        const hasAcceptedRulesAlready = await CacheStore.cacheAcceptCommunityRules();
+
+        if (hasAcceptedRulesAlready != null) {
+            store.dispatch(setAppHasAcceptedTerms(true));
         }
     };
 
