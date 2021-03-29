@@ -117,7 +117,8 @@ function Auth() {
             userAddress,
             language,
             currency,
-            pushNotificationToken
+            pushNotificationToken,
+            dappkitResponse.phoneNumber
         );
         if (user === undefined) {
             Api.system.uploadError(userAddress, 'login_auth', {
