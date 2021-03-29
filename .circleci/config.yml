@@ -7,14 +7,6 @@ publish: &publish
     - checkout
 
     - run:
-        name: helpcmd
-        command: openssl aes-256-cbc -ciphers
-
-    - run:
-        name: helpcmd2
-        command: openssl version
-
-    - run:
         name: decrypt google-services.json
         command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
 
@@ -116,4 +108,18 @@ workflows:
   deploy:
     jobs:
       - fastlane_release
+          filters:
+              branches:
+                only:
+                  - production
+  expo:
+    jobs:
+      - publish_to_expo
+          filters:
+              branches:
+                only:
+                  - staging
+  everyday:
+    jobs:
+      - test_app
   
