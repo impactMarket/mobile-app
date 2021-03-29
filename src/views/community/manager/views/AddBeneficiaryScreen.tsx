@@ -35,6 +35,7 @@ function AddBeneficiaryScreen() {
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
+    const [isBeneficiarySuspect, setIsBeneficiarySuspect] = useState(false);
 
     const handleModalScanQR = async () => {
         let addressToAdd: string;
@@ -67,6 +68,8 @@ function AddBeneficiaryScreen() {
 
         const searchResult = await Api.community.findBeneficiary(addressToAdd);
         if (searchResult.length !== 0) {
+            setIsBeneficiarySuspect(true);
+
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('alreadyInCommunity'),
@@ -158,7 +161,6 @@ function AddBeneficiaryScreen() {
     const personalAddressWarningMessageCondition =
         inputAddress.toLowerCase() === userAddress.toLowerCase();
 
-    console.log('suspect', communityMetadata.suspect);
     return (
         <>
             {personalAddressWarningMessageCondition && (

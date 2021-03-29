@@ -7,6 +7,8 @@ import {
     // INIT_USER,
     SET_USER_WALLET_BALANCE,
     SET_USER_IS_BENEFICIARY,
+    SET_USER_IS_BLOCKED,
+    SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
     SET_CELO_KIT,
     SET_COMMUNITY_CONTRACT,
@@ -52,6 +54,16 @@ interface UserSetBalanceAction {
 
 interface UserSetIsBeneficiaryAction {
     type: typeof SET_USER_IS_BENEFICIARY;
+    payload: boolean;
+}
+
+interface UserSetIsBlockedAction {
+    type: typeof SET_USER_IS_BLOCKED;
+    payload: boolean;
+}
+
+interface UserSetIsSuspectAction {
+    type: typeof SET_USER_IS_SUSPECT;
     payload: boolean;
 }
 
@@ -170,6 +182,8 @@ export type UserActionTypes =
     | UserWalletAction
     | UserSetBalanceAction
     | UserSetIsBeneficiaryAction
+    | UserSetIsBlockedAction
+    | UserSetIsSuspectAction
     | UserSetIsCommunityManagerAction
     | ResetUserAction
     | UserMetadataAction

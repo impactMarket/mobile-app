@@ -86,7 +86,6 @@ function BeneficiaryScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(false);
     const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
-    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
     useEffect(() => {
         const loadCommunity = async () => {
@@ -167,15 +166,17 @@ function BeneficiaryScreen() {
 
     useEffect(() => {
         async function loadCommunityRulesStats() {
-            const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+            if (hasAcceptedRulesAlready == null) {
+                const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
 
-            if (!_hasAcceptedRulesAlready) {
-                dispatch(setAppHasAcceptedTerms(false));
-                navigation.navigate(Screens.WelcomeBeneficiaryScreen);
+                if (!_hasAcceptedRulesAlready) {
+                    dispatch(setAppHasAcceptedTerms(false));
+                    navigation.navigate(Screens.WelcomeBeneficiaryScreen);
+                }
             }
         }
         loadCommunityRulesStats();
-    }, [hasAcceptedRulesAlready]);
+    }, []);
 
     useEffect(() => {
         const isLocationAvailable = async () => {

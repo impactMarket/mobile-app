@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 
 function AddedManagerScreen() {
     const dispatch = useDispatch();
@@ -223,6 +224,9 @@ function AddedManagerScreen() {
                     </Button>
                 )
             }
+            // left={() =>
+            //     item.suspect && <WarningRedTriangle style={{ marginTop: 14 }} />
+            // }
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}
             style={{ paddingLeft: 0 }}

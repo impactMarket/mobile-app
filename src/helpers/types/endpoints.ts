@@ -37,6 +37,7 @@ export interface IManagerDetailsManager {
     address: string;
     username: string | null;
     timestamp: number;
+    // suspect: boolean | undefined;
 }
 
 export interface IManagerDetailsBeneficiary {
@@ -78,13 +79,13 @@ export interface IUserBaseAuth {
     isBeneficiary: boolean;
     isManager: boolean;
     community?: ICommunity;
+    suspect: UserAttributes['suspect'];
+    blocked: boolean;
 }
 
 export interface IUserHello extends IUserBaseAuth {
     rates: { currency: string; rate: number }[];
-    blocked: boolean;
     verifiedPN: boolean | undefined;
-    suspect: boolean | undefined;
 }
 
 export interface IUserAuth extends IUserBaseAuth {

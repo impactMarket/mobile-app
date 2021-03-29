@@ -40,6 +40,7 @@ export default BlockedAccount;
 const styles = StyleSheet.create({
     cardContainer: {
         paddingHorizontal: 16,
+        marginHorizontal: 16,
         borderStyle: 'solid',
         borderColor: '#EB5757',
         borderWidth: 2,
