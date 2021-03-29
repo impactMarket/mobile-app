@@ -95,6 +95,8 @@ const styles = StyleSheet.create({
         borderColor: '#EB5757',
         borderWidth: 2,
         borderRadius: 8,
+        elevation: 0,
+        boxShadow: 'none',
     },
     headlineContainer: {
         flexDirection: 'row',
