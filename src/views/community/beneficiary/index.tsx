@@ -176,7 +176,7 @@ function BeneficiaryScreen() {
             }
         }
         loadCommunityRulesStats();
-    }, [hasAcceptedRulesAlready]);
+    }, []);
 
     useEffect(() => {
         const isLocationAvailable = async () => {

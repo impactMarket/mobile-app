@@ -122,8 +122,9 @@ export async function welcomeUser(
             dispatch(setCommunityContract(communityContract));
             dispatch(setUserIsBeneficiary(user.isBeneficiary));
             dispatch(setUserIsCommunityManager(user.isManager));
-            dispatch(setUserIsBlocked(userMetadata.blocked));
-            dispatch(setUserIsSuspect(userMetadata.suspect));
+            // Setting suspicious activity
+            dispatch(setUserIsBlocked(user.blocked));
+            dispatch(setUserIsSuspect(user.suspect));
         }
     });
 }

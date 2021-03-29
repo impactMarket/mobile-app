@@ -593,10 +593,12 @@ export default class App extends React.Component<any, IAppState> {
                 setPushNotificationListeners(
                     startNotificationsListeners(kit, store.dispatch)
                 );
+
                 const userWelcome = await Api.user.hello(
                     address,
                     pushNotificationToken
                 );
+
                 if (userWelcome !== undefined) {
                     const userMetadata = await CacheStore.getUser();
                     if (userMetadata === null) {

@@ -163,6 +163,7 @@ function Auth() {
             //         }
             //     }
             // });
+
             await welcomeUser(
                 userAddress,
                 dappkitResponse.phoneNumber,

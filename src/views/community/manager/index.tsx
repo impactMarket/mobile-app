@@ -33,6 +33,9 @@ import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
+// redux Actions
+import { setAppHasAcceptedTerms } from 'helpers/redux/actions/app';
+
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
 
@@ -54,6 +57,10 @@ function CommunityManagerScreen() {
         (state: IRootState) => state.user.community.metadata
     );
 
+    const hasAcceptedRulesAlready = useSelector(
+        (state: IRootState) => state.app.hasAcceptedRulesAlready
+    );
+
     const [refreshing, setRefreshing] = useState(false);
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
@@ -61,8 +68,8 @@ function CommunityManagerScreen() {
     const [requiredUbiToChange, setRequiredUbiToChange] = useState<
         UbiRequestChangeParams | undefined
     >();
+
     const [editInProgress, setEditInProgress] = useState(false);
-    const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
     useEffect(() => {
         if (kit !== undefined && community.status === 'valid') {
@@ -88,12 +95,25 @@ function CommunityManagerScreen() {
         }
     }, [community, kit]);
 
+    // useEffect(() => {
+    //     async function loadCommunityRulesStats() {
+    //         const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+
+    //         if (_hasAcceptedRulesAlready) {
+    //             setHasAcceptedTerms(true);
+    //         }
+    //     }
+    //     loadCommunityRulesStats();
+    // }, []);
+
     useEffect(() => {
         async function loadCommunityRulesStats() {
-            const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+            if (hasAcceptedRulesAlready == null) {
+                const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
 
-            if (_hasAcceptedRulesAlready) {
-                setHasAcceptedTerms(true);
+                if (!_hasAcceptedRulesAlready) {
+                    dispatch(setAppHasAcceptedTerms(false));
+                }
             }
         }
         loadCommunityRulesStats();
@@ -177,7 +197,7 @@ function CommunityManagerScreen() {
                         }
                     >
                         <BaseCommunity community={community}>
-                            {hasAcceptedTerms ? (
+                            {hasAcceptedRulesAlready ? (
                                 <View style={styles.container}>
                                     <Beneficiaries
                                         beneficiaries={
