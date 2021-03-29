@@ -1,0 +1,125 @@
+version: 2.1
+publish: &publish
+  working_directory: ~/publish-to-expo
+  docker:
+    - image: circleci/node:14.15.1
+  steps:
+    - checkout
+
+    - run:
+        name: decrypt google-services.json
+        command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+
+    - run:
+        name: decrypt GoogleService-Info.plist
+        command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+
+    - run:
+        name: Installing dependencies
+        command: yarn
+
+    - run:
+        name: Add global expo-cli
+        command: yarn global add expo-cli
+
+    - run:
+        name: Login into Expo
+        command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+
+    - run:
+        name: Publish to Expo
+        command: npx expo-cli publish --non-interactive
+
+    - run:
+        name: Publish to Expo
+        command: "curl -X POST -H \"Content-type: application/json\" --data '{\"text\":\"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market\"}' $SLACK_WEBHOOK_DEPLOY_EXPO"
+
+test: &test
+  working_directory: ~/my-app
+  docker:
+    - image: circleci/node:14.15.1
+  steps:
+    - checkout
+
+    - run:
+        name: test
+        command: yarn test
+
+jobs:
+  publish_to_expo:
+    <<: *publish
+  test_app:
+    <<: *test
+  fastlane_release:
+    working_directory: ~/deploy-app
+    docker:
+      - image: circleci/openjdk:8-jdk
+        environment:
+            EXPO_SDK_VERSION: 40.0.1
+            TURTLE_VERSION: 0.20.7
+            NODE_VERSION: 14.15.1
+            YARN_VERSION: 1.22.5
+    steps:
+      - checkout
+      - run:
+          name: Prepare keys
+          command: |
+              export ARTIFACT_PATH="expo-project-$CIRCLE_SHA1-`date +%s`.aab"
+              echo $ARTIFACT_PATH
+              echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+              base64 --decode expo-project.jks.base64 > expo-project.jks
+              echo $GOOGLE_API_ACCESS_UPLOAD > google-api-access.json.base64
+              base64 --decode google-api-access.json.base64 > google-api-access.json
+              echo $GPG_KEY_1 > gpgkey1.key.base64
+              base64 --decode gpgkey1.key.base64 > gpgkey1.key
+              echo $GPG_KEY_2 > gpgkey2.key.base64
+              base64 --decode gpgkey2.key.base64 > gpgkey2.key
+      - run:
+          name: Install packages
+          command: |
+              curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
+              curl https://www.npmjs.com/install.sh | sudo bash
+              npm install --prefix=$HOME/.local --global --legacy-peer-deps yarn gulp-cli turtle-cli@$TURTLE_VERSION
+      - run:
+          name: Install dependencies
+          command: yarn
+      - run:
+          name: Build and Supply
+          command: |
+              export BUILD_PATH=expo-project-$CIRCLE_SHA1-`date +%s`.aab
+              turtle setup:android --sdk-version $EXPO_SDK_VERSION
+              turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o $BUILD_PATH -u $EXPO_USERNAME -p $EXPO_PASSWORD
+              gpg --import gpgkey1.key
+              gpg --import gpgkey2.key
+              curl -sSL https://get.rvm.io | bash
+              source /home/circleci/.rvm/scripts/rvm
+              rvm install 2.5
+              rvm use 2.5
+              gem install bundler:2.1.4
+              bundle install
+              ls -l ~/deploy-app
+              fastlane supply --track 'internal' --aab $BUILD_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
+
+orbs:
+  openjdk-install: cloudesire/openjdk-install@1.2.3
+
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - fastlane_release:
+          filters:
+              branches:
+                only:
+                  - production
+  expo:
+    jobs:
+      - publish_to_expo:
+          filters:
+              branches:
+                only:
+                  - staging
+  everyday:
+    jobs:
+      - test_app
+  
