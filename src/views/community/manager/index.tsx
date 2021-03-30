@@ -98,9 +98,9 @@ function CommunityManagerScreen() {
         }
     }, [community, kit]);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         async function loadCommunityRulesStats() {
-            if (hasAcceptedRulesAlready == null) {
+            if (!hasAcceptedRulesAlready == null) {
                 const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
 
                 if (_hasAcceptedRulesAlready) {
@@ -113,8 +113,6 @@ function CommunityManagerScreen() {
         }
         loadCommunityRulesStats();
     }, []);
-
-    console.log({ hasAcceptedRulesAlready });
 
     const onRefresh = () => {
         updateCommunityInfo(community.publicId, dispatch).then(async () => {
