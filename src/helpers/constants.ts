@@ -17,7 +17,7 @@ export enum Screens {
     AddedManager = 'AddedManager',
     //
     Beneficiary = 'Beneficiary',
-    WelcomeBeneficiaryScreen = 'WelcomeBeneficiaryScreen',
+    WelcomeRulesScreen = 'WelcomeRulesScreen',
     CommunityManager = 'CommunityManager',
     Communities = 'Communities',
     Profile = 'Profile',

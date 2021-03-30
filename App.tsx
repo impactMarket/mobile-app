@@ -580,11 +580,10 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     _checkAcceptanceOfRules = async () => {
-        const hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
-        console.log({ hasAcceptedRulesAlready });
-        if (hasAcceptedRulesAlready != null) {
-            store.dispatch(setAppHasAcceptedTerms(true));
-        }
+        // const hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+        // if (hasAcceptedRulesAlready != null) {
+        //     store.dispatch(setAppHasAcceptedTerms(true));
+        // }
     };
 
     _authUser = async () => {

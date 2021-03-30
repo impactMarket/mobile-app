@@ -10,7 +10,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import CommunitiesScreen from './communities';
-import BeneficiaryView from './community/beneficiary/WelcomeBeneficiaryScreen';
+import BeneficiaryView from './community/beneficiary/WelcomeRulesScreen';
 import CommunityManagerView from './community/manager';
 import ProfileScreen from './profile';
 

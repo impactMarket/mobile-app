@@ -171,7 +171,9 @@ function BeneficiaryScreen() {
 
                 if (!_hasAcceptedRulesAlready) {
                     dispatch(setAppHasAcceptedTerms(false));
-                    navigation.navigate(Screens.WelcomeBeneficiaryScreen);
+                    navigation.navigate(Screens.WelcomeRulesScreen, {
+                        caller: 'BENEFICIARY',
+                    });
                 }
             }
         }
@@ -187,11 +189,7 @@ function BeneficiaryScreen() {
                     .locationServicesEnabled;
             setAskLocationOnOpen(!availableGPSToRequest);
         };
-        // const checkFirstTime = async () => {
-        //     const isFirstTime = await AsyncStorage.getItem(SHOW_REPORT_CARD);
-        //     setShowReportCard(isFirstTime);
-        // };
-        // checkFirstTime();
+
         isLocationAvailable();
     }, []);
 
