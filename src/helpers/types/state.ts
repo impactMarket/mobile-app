@@ -67,6 +67,6 @@ export interface IRootState {
     stories: IStoriesState;
 }
 
-export interface IStoriesRouteParams {
+export interface ICallerRouteParams {
     caller: string;
 }

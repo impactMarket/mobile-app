@@ -7,6 +7,7 @@ import Button from 'components/core/Button';
 import Modal from 'components/Modal';
 import ManageSvg from 'components/svg/ManageSvg';
 import * as Linking from 'expo-linking';
+import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
@@ -14,10 +15,11 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunity } from 'helpers/types/endpoints';
 import { UbiRequestChangeParams } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import CommunityRules from 'components/core/CommunityRules';
+
+import { useNavigation } from '@react-navigation/native';
 
 // services
 import CacheStore from 'services/cacheStore';
@@ -41,6 +43,7 @@ import Managers from './cards/Managers';
 
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userCurrency = useSelector(
@@ -95,29 +98,23 @@ function CommunityManagerScreen() {
         }
     }, [community, kit]);
 
-    // useEffect(() => {
-    //     async function loadCommunityRulesStats() {
-    //         const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
-
-    //         if (_hasAcceptedRulesAlready) {
-    //             setHasAcceptedTerms(true);
-    //         }
-    //     }
-    //     loadCommunityRulesStats();
-    // }, []);
-
-    useEffect(() => {
+    useLayoutEffect(() => {
         async function loadCommunityRulesStats() {
             if (hasAcceptedRulesAlready == null) {
                 const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
 
-                if (!_hasAcceptedRulesAlready) {
+                if (_hasAcceptedRulesAlready) {
                     dispatch(setAppHasAcceptedTerms(false));
+                    navigation.navigate(Screens.WelcomeRulesScreen, {
+                        caller: 'MANAGER',
+                    });
                 }
             }
         }
         loadCommunityRulesStats();
     }, []);
+
+    console.log({ hasAcceptedRulesAlready });
 
     const onRefresh = () => {
         updateCommunityInfo(community.publicId, dispatch).then(async () => {
@@ -197,33 +194,26 @@ function CommunityManagerScreen() {
                         }
                     >
                         <BaseCommunity community={community}>
-                            {hasAcceptedRulesAlready ? (
-                                <View style={styles.container}>
-                                    <Beneficiaries
-                                        beneficiaries={
-                                            _community.state.beneficiaries
-                                        }
-                                        removedBeneficiaries={
-                                            _community.state
-                                                .removedBeneficiaries
-                                        }
-                                        hasFundsToNewBeneficiary={
-                                            hasFundsToNewBeneficiary
-                                        }
-                                        isSuspeciousDetected={
-                                            _community?.suspect.length > 0
-                                        }
-                                    />
-                                    <Managers
-                                        managers={_community.state.managers}
-                                    />
-                                    <CommuntyStatus community={_community} />
-                                </View>
-                            ) : (
-                                <View style={styles.container}>
-                                    <CommunityRules />
-                                </View>
-                            )}
+                            <View style={styles.container}>
+                                <Beneficiaries
+                                    beneficiaries={
+                                        _community.state.beneficiaries
+                                    }
+                                    removedBeneficiaries={
+                                        _community.state.removedBeneficiaries
+                                    }
+                                    hasFundsToNewBeneficiary={
+                                        hasFundsToNewBeneficiary
+                                    }
+                                    isSuspeciousDetected={
+                                        _community?.suspect.length > 0
+                                    }
+                                />
+                                <Managers
+                                    managers={_community.state.managers}
+                                />
+                                <CommuntyStatus community={_community} />
+                            </View>
                         </BaseCommunity>
                     </ScrollView>
                     {requiredUbiToChange !== undefined && (

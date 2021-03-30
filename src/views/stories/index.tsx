@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import BackSvg from 'components/svg/header/BackSvg';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
-import { IRootState, IStoriesRouteParams } from 'helpers/types/state';
+import { IRootState, ICallerRouteParams } from 'helpers/types/state';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import Api from 'services/api';
@@ -17,7 +17,7 @@ interface ICommunityStoriesBox extends ICommunitiesListStories {
 function StoriesScreen() {
     const navigation = useNavigation();
     const route = useRoute<
-        RouteProp<Record<string, IStoriesRouteParams>, string>
+        RouteProp<Record<string, ICallerRouteParams>, string>
     >();
 
     const { caller } = route.params;

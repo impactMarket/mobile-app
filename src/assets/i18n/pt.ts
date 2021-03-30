@@ -309,6 +309,7 @@ export default {
     blockedAccountDescription:
         'Sua conta foi bloqueada. Entre em contato com seu gerente se achar que foi um engano.',
     welcome: 'Bem Vindo!',
+    welcomeManagerTitle: 'Você agora é um gestor da {{ communityName }}',
     welcomeBeneficiayTitle:
         'Você agora é um beneficiário da {{ communityName }}',
     welcomeBeneficiaryDecription:

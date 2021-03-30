@@ -5,7 +5,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
-import WelcomeBeneficiaryScreen from 'views/community/beneficiary/WelcomeBeneficiaryScreen';
+import WelcomeRulesScreen from 'views/community/beneficiary/WelcomeRulesScreen';
 import CommunityDetailsScreen from 'views/community/details';
 import WaitingTxScreen from 'views/community/details/donate/waitingTx';
 import AddBeneficiaryScreen from 'views/community/manager/views/AddBeneficiaryScreen';
@@ -78,9 +78,9 @@ const commonScreens = (Navigator: typeof Stack) => (
 const beneficiaryScreens = (Navigator: typeof Stack) => (
     <>
         <Navigator.Screen
-            name={Screens.WelcomeBeneficiaryScreen}
-            component={WelcomeBeneficiaryScreen}
-            options={WelcomeBeneficiaryScreen.navigationOptions}
+            name={Screens.WelcomeRulesScreen}
+            component={WelcomeRulesScreen}
+            options={WelcomeRulesScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.ClaimExplained}
