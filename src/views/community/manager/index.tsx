@@ -220,7 +220,9 @@ function CommunityManagerScreen() {
                                     <CommuntyStatus community={_community} />
                                 </View>
                             ) : (
-                                <CommunityRules />
+                                <View style={styles.container}>
+                                    <CommunityRules />
+                                </View>
                             )}
                         </BaseCommunity>
                     </ScrollView>

@@ -134,7 +134,6 @@ function Carousel(props: {
                     {stories[index].message}
                 </Text>
             )}
-
             <View
                 style={{
                     // backgroundColor: 'yellow',
@@ -246,23 +245,28 @@ function Carousel(props: {
             </View>
             <LinearGradient
                 style={{
-                    height: 240,
+                    flex: 1,
+                    height: '80%',
                     width: dimensions.width,
-                    zIndex: 2,
+                    zIndex: -1,
                     bottom: 0,
                     position: 'absolute',
                 }}
-                colors={['#73839D30', '#0B0B0B']}
+                colors={['#00000001', '#73839D30', '#0B0B0B']}
+                locations={[0.3, 0.6, 1]}
             />
+            {/* TODO: Fix a shadow line that is still there. */}
             <LinearGradient
                 style={{
-                    height: 98,
+                    flex: 1,
+                    height: '20%',
                     width: dimensions.width,
-                    zIndex: 2,
+                    zIndex: -1,
                     top: 0,
                     position: 'absolute',
                 }}
-                colors={['#0B0B0B', '#73839D30']}
+                colors={['#0B0B0B', '#73839D30', '#00000001']}
+                locations={[0.05, 0.9, 1]}
             />
             <LinearGradient
                 style={{
