@@ -29,49 +29,47 @@ function CommunityRules() {
     return (
         <View>
             <Card style={styles.cardContainer}>
-                <Card.Content>
-                    <View style={styles.headlineContainer}>
-                        <WarningRedCircle style={{ width: 16, height: 16 }} />
-                        <Headline style={styles.headerTitle}>
-                            {i18n.t('newManagerRules.title')}
-                        </Headline>
-                    </View>
-                    <Paragraph style={styles.paragraphContent}>
-                        <Text style={styles.ordering}>1 -</Text>{' '}
-                        {i18n.t('newManagerRules.first')}
-                    </Paragraph>
-                    <Paragraph style={styles.paragraphContent}>
-                        <Text style={styles.ordering}>2 -</Text>{' '}
-                        {i18n.t('newManagerRules.second')}
-                    </Paragraph>
-                    <Paragraph style={styles.paragraphContent}>
-                        <Text style={styles.ordering}>3 -</Text>{' '}
-                        {i18n.t('newManagerRules.third')}
-                    </Paragraph>
-                    <Paragraph style={styles.paragraphContent}>
-                        <Text style={styles.ordering}>4 -</Text>{' '}
-                        {i18n.t('newManagerRules.fourth')}
-                    </Paragraph>
-                    <Paragraph style={styles.paragraphContent}>
-                        <Text style={styles.ordering}>6 -</Text>{' '}
-                        {i18n.t('newManagerRules.fifth')}
-                    </Paragraph>
-                    <Paragraph style={styles.paragraphContent}>
-                        <Text style={styles.ordering}>7 -</Text>{' '}
-                        {i18n.t('newManagerRules.sixth')}
-                    </Paragraph>
-                    <Paragraph style={styles.paragraphContent}>
-                        {i18n.t('newManagerRules.seventh')}
-                    </Paragraph>
-                    <Paragraph
-                        style={[
-                            styles.paragraphContent,
-                            { fontFamily: 'Inter-Bold' },
-                        ]}
-                    >
-                        {i18n.t('newManagerRules.warning')}
-                    </Paragraph>
-                </Card.Content>
+                <View style={styles.headlineContainer}>
+                    <WarningRedCircle style={{ width: 16, height: 16 }} />
+                    <Headline style={styles.headerTitle}>
+                        {i18n.t('newManagerRules.title')}
+                    </Headline>
+                </View>
+                <Paragraph style={styles.paragraphContent}>
+                    <Text style={styles.ordering}>1 -</Text>{' '}
+                    {i18n.t('newManagerRules.first')}
+                </Paragraph>
+                <Paragraph style={styles.paragraphContent}>
+                    <Text style={styles.ordering}>2 -</Text>{' '}
+                    {i18n.t('newManagerRules.second')}
+                </Paragraph>
+                <Paragraph style={styles.paragraphContent}>
+                    <Text style={styles.ordering}>3 -</Text>{' '}
+                    {i18n.t('newManagerRules.third')}
+                </Paragraph>
+                <Paragraph style={styles.paragraphContent}>
+                    <Text style={styles.ordering}>4 -</Text>{' '}
+                    {i18n.t('newManagerRules.fourth')}
+                </Paragraph>
+                <Paragraph style={styles.paragraphContent}>
+                    <Text style={styles.ordering}>6 -</Text>{' '}
+                    {i18n.t('newManagerRules.fifth')}
+                </Paragraph>
+                <Paragraph style={styles.paragraphContent}>
+                    <Text style={styles.ordering}>7 -</Text>{' '}
+                    {i18n.t('newManagerRules.sixth')}
+                </Paragraph>
+                <Paragraph style={styles.paragraphContent}>
+                    {i18n.t('newManagerRules.seventh')}
+                </Paragraph>
+                <Paragraph
+                    style={[
+                        styles.paragraphContent,
+                        { fontFamily: 'Inter-Bold' },
+                    ]}
+                >
+                    {i18n.t('newManagerRules.warning')}
+                </Paragraph>
             </Card>
             <Button
                 modeType="default"
