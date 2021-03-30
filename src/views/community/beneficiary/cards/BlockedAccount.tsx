@@ -20,17 +20,15 @@ import { ipctColors } from 'styles/index';
 function BlockedAccount() {
     return (
         <Card style={styles.cardContainer}>
-            <Card.Content>
-                <View style={styles.headlineContainer}>
-                    <LockSvg />
-                    <Headline style={styles.headerTitle}>
-                        {i18n.t('blockedAccountTitle')}
-                    </Headline>
-                </View>
-                <Paragraph style={styles.paragraphContent}>
-                    {i18n.t('blockedAccountDescription')}
-                </Paragraph>
-            </Card.Content>
+            <View style={styles.headlineContainer}>
+                <LockSvg />
+                <Headline style={styles.headerTitle}>
+                    {i18n.t('blockedAccountTitle')}
+                </Headline>
+            </View>
+            <Paragraph style={styles.paragraphContent}>
+                {i18n.t('blockedAccountDescription')}
+            </Paragraph>
         </Card>
     );
 }
@@ -39,10 +37,8 @@ export default BlockedAccount;
 
 const styles = StyleSheet.create({
     cardContainer: {
-        paddingHorizontal: 16,
-        marginHorizontal: 16,
+        padding: 16,
         borderRadius: 8,
-        marginTop: 6,
     },
     headlineContainer: {
         flexDirection: 'row',
