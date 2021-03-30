@@ -12,25 +12,18 @@ import i18n from 'assets/i18n';
 // colors
 import { ipctColors } from 'styles/index';
 
-// usage
-// ----------------
-// import SuspiciousActivity from '../cards/SuspiciousActivity';
-// <SuspiciousActivity />
-
 function SuspiciousActivity() {
     return (
         <Card style={styles.cardContainer}>
-            <Card.Content>
-                <View style={styles.headlineContainer}>
-                    <WarningRedTriangle />
-                    <Headline style={styles.headerTitle}>
-                        {i18n.t('suspiciousActivityDetected')}
-                    </Headline>
-                </View>
-                <Paragraph style={styles.paragraphContent}>
-                    {i18n.t('suspiciousDescription')}
-                </Paragraph>
-            </Card.Content>
+            <View style={styles.headlineContainer}>
+                <WarningRedTriangle />
+                <Headline style={styles.headerTitle}>
+                    {i18n.t('suspiciousActivityDetected')}
+                </Headline>
+            </View>
+            <Paragraph style={styles.paragraphContent}>
+                {i18n.t('suspiciousDescription')}
+            </Paragraph>
         </Card>
     );
 }
