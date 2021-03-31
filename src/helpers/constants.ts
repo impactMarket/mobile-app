@@ -53,7 +53,10 @@ export const SHOW_REPORT_CARD = 'SHOW_REPORT_CARD';
 
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
-export const SET_APP_HAS_ACCEPTED_TERMS = 'app/hasAcceptedRulesAlready';
+export const SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS =
+    'app/hasBeneficiaryAcceptedRulesAlready';
+export const SET_APP_MANAGER_HAS_ACCEPTED_TERMS =
+    'app/hasManagerAcceptedRulesAlready';
 
 export enum appAction {
     SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners',

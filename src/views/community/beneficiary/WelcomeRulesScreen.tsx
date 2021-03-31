@@ -30,17 +30,21 @@ function WelcomeRulesScreen() {
 
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
 
-    const hasAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasAcceptedRulesAlready
+    const hasBeneficiaryAcceptedRulesAlready = useSelector(
+        (state: IRootState) => state.app.hasBeneficiaryAcceptedRulesAlready
+    );
+
+    const hasManagerAcceptedRulesAlready = useSelector(
+        (state: IRootState) => state.app.hasManagerAcceptedRulesAlready
     );
 
     useEffect(() => {
-        if (hasAcceptedRulesAlready) {
-            caller === 'BENEFICIARY'
-                ? navigation.navigate(Screens.Beneficiary)
-                : navigation.navigate(Screens.CommunityManager);
+        if (caller === 'BENEFICIARY' && hasBeneficiaryAcceptedRulesAlready) {
+            navigation.navigate(Screens.Beneficiary);
+        } else if (caller === 'MANAGER' && hasManagerAcceptedRulesAlready) {
+            navigation.navigate(Screens.CommunityManager);
         }
-    }, [hasAcceptedRulesAlready]);
+    }, [hasBeneficiaryAcceptedRulesAlready, hasManagerAcceptedRulesAlready]);
 
     if (community === undefined) {
         return (
@@ -101,7 +105,7 @@ function WelcomeRulesScreen() {
                             </Text>
                         )}
                     </View>
-                    <CommunityRules />
+                    <CommunityRules caller={caller} />
                 </View>
             </BaseCommunity>
         </ScrollView>

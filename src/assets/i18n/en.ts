@@ -301,6 +301,25 @@ export default {
         warning:
             'If you find suspicious activity among beneficiaries, let us know, as it will be regarded as a good-faith action that can prevent all the community to be affected because of a few bad actors.',
     },
+    newBeneficiaryRules: {
+        title: 'Important Rules',
+        btnText: 'I read and understand',
+        first:
+            'This money is only yours and unconditional to use in whatever you need.',
+        second:
+            'Only use 1 account per person. Using more accounts per person/device will make you blocked and your community will be identified as a risk for donors to send funds.',
+        third:
+            'We recommend you have your profile completed with true information.',
+        fourth: 'Do not share your Valora Account Key with anyone.',
+        fifth:
+            'All activity and transactions are public and transparent, so it’s easier for anyone to identify and verify potential fraud. Once the system detects potential fraudulent activity, funds can be cut for all the community.',
+        sixth:
+            'Funds are allocated and prioritized to communities based on their risk and suspicious activity levels.',
+        seventh:
+            'If your managers ask you for money to be in the program, please let us know. Once again, this is unconditional money for you to use in what you need.',
+        warning:
+            'If you find some suspicious activity, let us know, as it will be regarded as a good faith action that can prevent all the community to be affected because of a few bad actors.',
+    },
     suspiciousActivityDetected: 'Suspicious activities detected',
     suspiciousDescription:
         'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',
