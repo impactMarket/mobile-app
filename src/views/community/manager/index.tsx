@@ -100,15 +100,11 @@ function CommunityManagerScreen() {
 
     useEffect(() => {
         async function loadCommunityRulesStats() {
-            if (!hasAcceptedRulesAlready == null) {
-                const _hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
-
-                if (_hasAcceptedRulesAlready) {
-                    dispatch(setAppHasAcceptedTerms(false));
-                    navigation.navigate(Screens.WelcomeRulesScreen, {
-                        caller: 'MANAGER',
-                    });
-                }
+            if (!hasAcceptedRulesAlready) {
+                dispatch(setAppHasAcceptedTerms(false));
+                navigation.navigate(Screens.WelcomeRulesScreen, {
+                    caller: 'MANAGER',
+                });
             }
         }
         loadCommunityRulesStats();
