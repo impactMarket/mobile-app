@@ -10,7 +10,7 @@ import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
-import Stories from './Stories';
+// import Stories from './Stories';
 import i18n from 'assets/i18n';
 
 function CommunitiesScreen() {
@@ -138,10 +138,10 @@ function CommunitiesScreen() {
     const filterHeader = () => {
         return (
             <>
-                <Stories />
+                {/* <Stories /> */}
                 <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
                     <Select
-                        label={''}
+                        label={i18n.t('order')}
                         value={textCommunitiesOrder(communtiesOrder)}
                         onPress={() => setIsDialogOrderOpen(true)}
                     />
