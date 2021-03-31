@@ -175,14 +175,13 @@ jobs:
       - restore_yarn_cache:
           platform: linux
       - run:
-          name: Installing expo-cli
-          command: yarn global add expo-cli
-      - run:
-          name: Publishing Expo app
+          name: Installing expo-cli and dependencies
           command: |
-            expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
+            yarn global add expo-cli
             yarn
-            expo publish
+      - run:
+          name: Login
+          command: expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
       - save_yarn_cache:
           platform: linux
   build_android_aab:
