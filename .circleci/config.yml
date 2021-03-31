@@ -205,6 +205,8 @@ jobs:
       - run:
           name: Building Expo standalone app
           command: |
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
             echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
             base64 --decode expo-project.jks.base64 > expo-project.jks
             turtle build:android \
