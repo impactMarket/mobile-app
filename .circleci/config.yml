@@ -30,7 +30,7 @@ publish: &publish
         name: Publish to Expo
         command: npx expo-cli publish --non-interactive
         environment:
-            NODE_OPTIONS: --max_old_space_size=4096
+            NODE_OPTIONS: --max_old_space_size=3072
 
     - run:
         name: Publish to Expo
