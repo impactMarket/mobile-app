@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
         fontSize: 15,
         letterSpacing: 0.3,
         color: ipctColors.almostBlack,
-        marginBottom: 22,
     },
     welcomeBeneficiayTitle: {
         fontFamily: 'Manrope-Bold',
