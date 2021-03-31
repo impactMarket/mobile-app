@@ -2,7 +2,8 @@ import {
     appAction,
     SET_APP_FROM_WELCOME_SCREEN,
     SET_APP_SUSPECT_WRONG_DATETIME,
-    SET_APP_HAS_ACCEPTED_TERMS,
+    SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS,
+    SET_APP_MANAGER_HAS_ACCEPTED_TERMS,
     SET_CELO_KIT,
     SET_EXCHANGE_RATES,
 } from 'helpers/constants';
@@ -33,10 +34,15 @@ export const appReducer = (
                 suspectWrongDateTime: action.payload.suspect,
                 timeDiff: action.payload.timeDiff,
             };
-        case SET_APP_HAS_ACCEPTED_TERMS:
+        case SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS:
             return {
                 ...state,
-                hasAcceptedRulesAlready: action.payload,
+                hasBeneficiaryAcceptedRulesAlready: action.payload,
+            };
+        case SET_APP_MANAGER_HAS_ACCEPTED_TERMS:
+            return {
+                ...state,
+                hasManagerAcceptedRulesAlready: action.payload,
             };
         case SET_APP_FROM_WELCOME_SCREEN:
             return {

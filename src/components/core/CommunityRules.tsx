@@ -8,7 +8,10 @@ import Card from 'components/core/Card';
 import WarningRedCircle from 'components/svg/WarningRedCircle';
 
 // redux Actions
-import { setAppHasAcceptedTerms } from 'helpers/redux/actions/app';
+import {
+    setAppHasManagerAcceptedTerms,
+    setAppHasBeneficiaryAcceptedTerms,
+} from 'helpers/redux/actions/app';
 
 // services
 import CacheStore from 'services/cacheStore';
@@ -19,11 +22,16 @@ import i18n from 'assets/i18n';
 // colors
 import { ipctColors } from 'styles/index';
 
-function CommunityRules() {
+function CommunityRules({ caller }) {
     const dispatch = useDispatch();
     const handleAcceptRules = async () => {
-        await CacheStore.cacheAcceptCommunityRules();
-        dispatch(setAppHasAcceptedTerms(true));
+        if (caller === 'MANAGER') {
+            await CacheStore.cacheManagerAcceptCommunityRules();
+            dispatch(setAppHasManagerAcceptedTerms(true));
+        } else {
+            await CacheStore.cacheBeneficiaryAcceptCommunityRules();
+            dispatch(setAppHasBeneficiaryAcceptedTerms(true));
+        }
     };
 
     return (
@@ -32,35 +40,51 @@ function CommunityRules() {
                 <View style={styles.headlineContainer}>
                     <WarningRedCircle style={{ width: 16, height: 16 }} />
                     <Headline style={styles.headerTitle}>
-                        {i18n.t('newManagerRules.title')}
+                        {caller === 'MANAGER'
+                            ? i18n.t('newManagerRules.title')
+                            : i18n.t('newBeneficiaryRules.title')}
                     </Headline>
                 </View>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>1 -</Text>{' '}
-                    {i18n.t('newManagerRules.first')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.first')
+                        : i18n.t('newBeneficiaryRules.first')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>2 -</Text>{' '}
-                    {i18n.t('newManagerRules.second')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.second')
+                        : i18n.t('newBeneficiaryRules.second')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>3 -</Text>{' '}
-                    {i18n.t('newManagerRules.third')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.third')
+                        : i18n.t('newBeneficiaryRules.third')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>4 -</Text>{' '}
-                    {i18n.t('newManagerRules.fourth')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.fourth')
+                        : i18n.t('newBeneficiaryRules.fourth')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>6 -</Text>{' '}
-                    {i18n.t('newManagerRules.fifth')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.fifth')
+                        : i18n.t('newBeneficiaryRules.fifth')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>7 -</Text>{' '}
-                    {i18n.t('newManagerRules.sixth')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.sixth')
+                        : i18n.t('newBeneficiaryRules.sixth')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
-                    {i18n.t('newManagerRules.seventh')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.seventh')
+                        : i18n.t('newBeneficiaryRules.seventh')}
                 </Paragraph>
                 <Paragraph
                     style={[
@@ -68,7 +92,9 @@ function CommunityRules() {
                         { fontFamily: 'Inter-Bold' },
                     ]}
                 >
-                    {i18n.t('newManagerRules.warning')}
+                    {caller === 'MANAGER'
+                        ? i18n.t('newManagerRules.warning')
+                        : i18n.t('newBeneficiaryRules.warning')}
                 </Paragraph>
             </Card>
             <Button

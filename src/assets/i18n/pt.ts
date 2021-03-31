@@ -302,6 +302,25 @@ export default {
         warning:
             'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
     },
+    newBeneficiaryRules: {
+        title: 'Regras importantes',
+        btnText: 'Eu li e entendo',
+        first:
+            'Este dinheiro é só seu e incondicional para usar no que você precisar.',
+        second:
+            'Use apenas 1 conta por pessoa. Usar mais contas por pessoa / dispositivo irá bloqueá-lo e sua comunidade será identificada como um risco para os doadores enviarem fundos. ',
+        third:
+            'Recomendamos que você tenha seu perfil preenchido com informações verdadeiras.',
+        fourth: 'Não compartilhe sua chave de conta Valora com ninguém.',
+        fifth:
+            'Todas as atividades e transações são públicas e transparentes, então é mais fácil para qualquer pessoa identificar e verificar possíveis fraudes. Uma vez que o sistema detecta uma atividade fraudulenta em potencial, os fundos podem ser cortados para toda a comunidade. ',
+        sixth:
+            'Os fundos são alocados e priorizados para as comunidades com base em seus níveis de risco e atividades suspeitas.',
+        seventh:
+            'Se seus gerentes lhe pedirem dinheiro para participar do programa, informe-nos. Mais uma vez, este é um dinheiro incondicional para você usar no que precisar. ',
+        warning:
+            'Se você encontrar alguma atividade suspeita, avise-nos, pois será considerada uma ação de boa fé que pode evitar que toda a comunidade seja afetada por causa de alguns atores mal-intencionados.',
+    },
     suspiciousActivityDetected: 'Atividade suspeita detectada',
     suspiciousDescription:
         'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',

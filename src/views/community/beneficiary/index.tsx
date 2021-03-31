@@ -20,7 +20,7 @@ import React, { useEffect, useState } from 'react';
 import { SHOW_REPORT_CARD } from 'helpers/constants';
 
 // redux Actions
-import { setAppHasAcceptedTerms } from 'helpers/redux/actions/app';
+import { setAppHasBeneficiaryAcceptedTerms } from 'helpers/redux/actions/app';
 import { Trans } from 'react-i18next';
 import {
     StyleSheet,
@@ -70,8 +70,8 @@ function BeneficiaryScreen() {
         (state: IRootState) => state.user.metadata.blocked
     );
 
-    const hasAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasAcceptedRulesAlready
+    const hasBeneficiaryAcceptedRulesAlready = useSelector(
+        (state: IRootState) => state.app.hasBeneficiaryAcceptedRulesAlready
     );
 
     const suspectWrongDateTime = useSelector(
@@ -166,8 +166,8 @@ function BeneficiaryScreen() {
 
     useEffect(() => {
         async function loadCommunityRulesStats() {
-            if (!hasAcceptedRulesAlready) {
-                dispatch(setAppHasAcceptedTerms(false));
+            if (!hasBeneficiaryAcceptedRulesAlready) {
+                dispatch(setAppHasBeneficiaryAcceptedTerms(false));
                 navigation.navigate(Screens.WelcomeRulesScreen, {
                     caller: 'BENEFICIARY',
                 });

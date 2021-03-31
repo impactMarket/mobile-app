@@ -58,7 +58,8 @@ import {
     setAppSuspectWrongDateTime,
     setCeloKit,
     setPushNotificationListeners,
-    setAppHasAcceptedTerms,
+    setAppHasBeneficiaryAcceptedTerms,
+    setAppHasManagerAcceptedTerms,
 } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import {
@@ -580,12 +581,19 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     _checkAcceptanceOfRules = async () => {
-        const hasAcceptedRulesAlready = await CacheStore.getAcceptCommunityRules();
+        const hasBeneficiaryAcceptedRulesAlready = await CacheStore.getBeneficiaryAcceptCommunityRules();
+        const hasManagerAcceptedRulesAlready = await CacheStore.getManagerAcceptCommunityRules();
 
-        if (hasAcceptedRulesAlready) {
-            store.dispatch(setAppHasAcceptedTerms(true));
+        if (hasBeneficiaryAcceptedRulesAlready) {
+            store.dispatch(setAppHasBeneficiaryAcceptedTerms(true));
         } else {
-            store.dispatch(setAppHasAcceptedTerms(false));
+            store.dispatch(setAppHasBeneficiaryAcceptedTerms(false));
+        }
+
+        if (hasManagerAcceptedRulesAlready) {
+            store.dispatch(setAppHasManagerAcceptedTerms(true));
+        } else {
+            store.dispatch(setAppHasManagerAcceptedTerms(false));
         }
     };
 

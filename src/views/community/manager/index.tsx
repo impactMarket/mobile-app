@@ -36,7 +36,7 @@ import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 // redux Actions
-import { setAppHasAcceptedTerms } from 'helpers/redux/actions/app';
+import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
 
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
@@ -60,8 +60,8 @@ function CommunityManagerScreen() {
         (state: IRootState) => state.user.community.metadata
     );
 
-    const hasAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasAcceptedRulesAlready
+    const hasManagerAcceptedRulesAlready = useSelector(
+        (state: IRootState) => state.app.hasManagerAcceptedRulesAlready
     );
 
     const [refreshing, setRefreshing] = useState(false);
@@ -100,8 +100,8 @@ function CommunityManagerScreen() {
 
     useEffect(() => {
         async function loadCommunityRulesStats() {
-            if (!hasAcceptedRulesAlready) {
-                dispatch(setAppHasAcceptedTerms(false));
+            if (!hasManagerAcceptedRulesAlready) {
+                dispatch(setAppHasManagerAcceptedTerms(false));
                 navigation.navigate(Screens.WelcomeRulesScreen, {
                     caller: 'MANAGER',
                 });
