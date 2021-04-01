@@ -167,7 +167,6 @@ jobs:
               bundle install
               ls -l ~/deploy-app
               fastlane supply --track 'internal' --aab $BUILD_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
-          environment:
   publish_app:
     executor: js
     steps:
@@ -180,6 +179,8 @@ jobs:
           command: |
             npm install --prefix=$HOME/.local --global --legacy-peer-deps expo-cli@2.19.4
             yarn
+          environment:
+            EXPO_IMAGE_UTILS_NO_SHARP: true
       - run:
           name: Login
           command: expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
