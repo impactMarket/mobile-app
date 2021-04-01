@@ -190,6 +190,11 @@ jobs:
       - checkout
       - restore_yarn_cache:
           platform: linux
+      - run:
+          name: Install packages
+          command: |
+              curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
+              curl https://www.npmjs.com/install.sh | sudo bash
       - run: yarn
       - save_yarn_cache:
           platform: linux
