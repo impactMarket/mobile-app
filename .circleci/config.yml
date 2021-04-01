@@ -177,7 +177,7 @@ jobs:
       - run:
           name: Installing expo-cli and dependencies
           command: |
-            sudo npm install -g expo-cli@2.14.0 --unsafe-perm
+            npm install --prefix=$HOME/.local --global --legacy-peer-deps expo-cli
             yarn
           environment:
             EXPO_IMAGE_UTILS_NO_SHARP: true
