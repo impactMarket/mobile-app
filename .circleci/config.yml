@@ -178,7 +178,7 @@ jobs:
       - run:
           name: Installing expo-cli and dependencies
           command: |
-            yarn global add expo-cli@2.14.0
+            yarn global add expo-cli@2.14.0 --unsafe-perm
             yarn
       - run:
           name: Login
