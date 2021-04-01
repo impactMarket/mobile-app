@@ -51,10 +51,10 @@ commands:
   install_macos_deps:
     steps:
       - run:
-          name: Installing jq & node@12
+          name: Installing jq & node@14.15.1
           command: |
-            brew install jq node@12
-            brew link --overwrite --force node@12
+            brew install jq node@14.15.1
+            brew link --overwrite --force node@14.15.1
   add_yarn_binaries_to_path:
     steps:
       - run:
@@ -124,7 +124,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
         environment:
             EXPO_SDK_VERSION: 40.0.1
-            TURTLE_VERSION: 0.20.7
+            TURTLE_VERSION: 0.21.0
             NODE_VERSION: 14.15.1
             YARN_VERSION: 1.22.5
     steps:
@@ -167,6 +167,7 @@ jobs:
               bundle install
               ls -l ~/deploy-app
               fastlane supply --track 'internal' --aab $BUILD_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
+          environment:
   publish_app:
     executor: js
     steps:
@@ -218,6 +219,8 @@ jobs:
               --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
               --type app-bundle \
               -o ~/expo-project.aab
+          environment:
+            NODE_OPTIONS: --max_old_space_size=3072
       - store_artifacts:
           path: ~/expo-project.aab
 
@@ -245,7 +248,7 @@ executors:
     working_directory: ~/expo-project
     environment:
       EXPO_SDK_VERSION: 40.0.0
-      TURTLE_VERSION: 0.20.7
+      TURTLE_VERSION: 0.21.0
       NODE_VERSION: 14.15.1
       YARN_VERSION: 1.22.5
       PLATFORM: android
