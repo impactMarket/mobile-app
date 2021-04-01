@@ -178,7 +178,7 @@ jobs:
       - run:
           name: Installing expo-cli and dependencies
           command: |
-            yarn global add expo-cli@2.19.4 --unsafe-perm
+            npm install --prefix=$HOME/.local --global --legacy-peer-deps --unsafe-perm expo-cli@2.19.4
             yarn
       - run:
           name: Login
