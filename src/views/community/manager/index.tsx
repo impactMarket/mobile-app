@@ -40,6 +40,7 @@ import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
 
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
+import * as Sentry from 'sentry-expo';
 
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
@@ -161,13 +162,13 @@ function CommunityManagerScreen() {
                 );
             })
             .catch((e) => {
+                Sentry.captureException(e);
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('anErroHappenedTryAgain'),
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
-                Api.system.uploadError(userAddress, 'edit_ubi_params', e);
             })
             .finally(() => {
                 setEditInProgress(false);

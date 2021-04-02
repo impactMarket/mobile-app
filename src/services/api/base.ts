@@ -3,6 +3,7 @@ import axios from 'axios';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import { DevSettings } from 'react-native';
 import config from '../../../config';
+import * as Sentry from 'sentry-expo';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -34,8 +35,8 @@ async function getRequest<T>(
         } else {
             response = result.data as T;
         }
-    } catch (error) {
-        // Api.system.uploadError('', 'get_request', error);
+    } catch (e) {
+        Sentry.captureException(e);
     }
     return response;
 }
@@ -67,8 +68,8 @@ async function postRequest<T>(
             return undefined;
         }
         response = result.data as T;
-    } catch (error) {
-        // Api.system.uploadError('', 'post_request', error);
+    } catch (e) {
+        Sentry.captureException(e);
     }
     return response;
 }
@@ -99,8 +100,8 @@ async function deleteRequest<T>(
             return undefined;
         }
         response = result.data as T;
-    } catch (error) {
-        // Api.system.uploadError('', 'post_request', error);
+    } catch (e) {
+        Sentry.captureException(e);
     }
     return response;
 }

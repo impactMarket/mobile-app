@@ -28,6 +28,7 @@ import { IRootState } from 'helpers/types/state';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
+import * as Sentry from 'sentry-expo';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -146,6 +147,7 @@ function AddedBeneficiaryScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
+                Sentry.captureException(e);
                 let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||
@@ -173,12 +175,6 @@ function AddedBeneficiaryScreen() {
                     }),
                     [{ text: 'OK' }],
                     { cancelable: false }
-                );
-                Api.system.uploadError(
-                    userWallet.address,
-                    'remove_beneficiary',
-                    e,
-                    error
                 );
             })
             .finally(() => {

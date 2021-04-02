@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import SuspiciousActivity from '../cards/SuspiciousActivity';
+import * as Sentry from 'sentry-expo';
 
 import ScanQR from './ScanQR';
 
@@ -118,6 +119,7 @@ function AddBeneficiaryScreen() {
                 navigation.goBack();
             })
             .catch(async (e) => {
+                Sentry.captureException(e);
                 let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||
@@ -143,14 +145,6 @@ function AddBeneficiaryScreen() {
                     i18n.t('errorAddingBeneficiary', { error: i18n.t(error) }),
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
-                );
-                console.log(typeof JSON.stringify(e), error);
-                console.log(e.message, error);
-                Api.system.uploadError(
-                    userAddress,
-                    'add_beneficiary',
-                    e,
-                    error
                 );
             })
             .finally(() => {

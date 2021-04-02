@@ -18,6 +18,7 @@ import { batch, connect, ConnectedProps } from 'react-redux';
 import { analytics } from 'services/analytics';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
+import * as Sentry from 'sentry-expo';
 
 interface IConfirmModalProps {}
 interface IConfirmModalState {
@@ -84,7 +85,7 @@ class ConfirmModal extends Component<
                 analytics('donate', { device: Device.brand, success: 'true' });
             })
             .catch((e) => {
-                Api.system.uploadError(userAddress, 'donate', e);
+                Sentry.captureException(e);
                 analytics('donate', { device: Device.brand, success: 'false' });
                 // TODO: 'nonce too low' have happened here!
                 navigationRef.current?.goBack();

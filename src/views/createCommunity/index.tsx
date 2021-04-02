@@ -51,6 +51,7 @@ import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
+import * as Sentry from 'sentry-expo';
 
 const countries: {
     [key: string]: {
@@ -374,6 +375,7 @@ function CreateCommunityScreen() {
                 setSending(false);
             }
         } catch (e) {
+            Sentry.captureException(e);
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('errorCreatingCommunity'),
@@ -381,7 +383,6 @@ function CreateCommunityScreen() {
                 { cancelable: false }
             );
             setSending(false);
-            Api.system.uploadError(userAddress, 'create_community', e);
         }
     };
 
