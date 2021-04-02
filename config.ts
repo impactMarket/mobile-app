@@ -12,24 +12,14 @@ const commonConfig = {
     locationErrorMargin: 0.003,
 
     /**
-     * Encryption key
-     */
-    encryptionKey: process.env.EXPO_ENCRYPTION_KEY!,
-
-    /**
-     * Encryption IV (this should be random in the future)
-     */
-    encryptionIV: process.env.EXPO_ENCRYPTION_IV!,
-
-    /**
      * Out of time threshold in milliseconds used to verify phones time
      */
     outOfTimeThreshold: 10000,
 
     /**
-     * CloudFront CDN url for images
+     * The default API URL
      */
-    cloudfrontUrl: 'https://d1u0m1dl1ef2fx.cloudfront.net',
+    baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
 };
 const ENV = {
     dev: {
@@ -37,11 +27,6 @@ const ENV = {
          * Block explorer base URL. Contract address is added at the end.
          */
         blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
-
-        /**
-         * The default API URL
-         */
-        baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
 
         /**
          * JSON RPC url
@@ -65,11 +50,6 @@ const ENV = {
         blockExplorer: 'https://alfajores-blockscout.celo-testnet.org/address/',
 
         /**
-         * The default API URL
-         */
-        baseApiUrl: 'https://impactmarket-api-staging.herokuapp.com/api',
-
-        /**
          * JSON RPC url
          */
         jsonRpc: 'https://alfajores-forno.celo-testnet.org',
@@ -89,11 +69,6 @@ const ENV = {
          * Block explorer base URL. Contract address is added at the end.
          */
         blockExplorer: 'https://explorer.celo.org/address/',
-
-        /**
-         * The default API URL
-         */
-        baseApiUrl: 'https://impactmarket-api-production.herokuapp.com/api',
 
         /**
          * JSON RPC url
