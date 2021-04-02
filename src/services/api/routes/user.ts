@@ -60,61 +60,43 @@ class ApiRouteUser {
         return !!(await getRequest<boolean>('/user/exists/' + address));
     }
 
-    static async setUsername(
-        address: string,
-        username: string
-    ): Promise<boolean> {
+    static async setUsername(username: string): Promise<boolean> {
         const result = await postRequest<boolean>('/user/username', {
-            address,
             username,
         });
         return !!result;
     }
 
-    static async setCurrency(
-        address: string,
-        currency: string
-    ): Promise<boolean> {
+    static async setCurrency(currency: string): Promise<boolean> {
         const result = await postRequest<boolean>('/user/currency', {
-            address,
             currency,
         });
         return !!result;
     }
 
-    static async setLanguage(
-        address: string,
-        language: string
-    ): Promise<boolean> {
+    static async setLanguage(language: string): Promise<boolean> {
         const result = await postRequest<boolean>('/user/language', {
-            address,
             language,
         });
         return !!result;
     }
 
-    static async setGender(address: string, gender: string): Promise<boolean> {
+    static async setGender(gender: string): Promise<boolean> {
         const result = await postRequest<boolean>('/user/gender', {
-            address,
             gender,
         });
         return !!result;
     }
 
-    static async setAge(address: string, age: number): Promise<boolean> {
+    static async setAge(age: number): Promise<boolean> {
         const result = await postRequest<boolean>('/user/age', {
-            address,
             age,
         });
         return !!result;
     }
 
-    static async setChildren(
-        address: string,
-        children: number | null
-    ): Promise<boolean> {
+    static async setChildren(children: number | null): Promise<boolean> {
         const result = await postRequest<boolean>('/user/children', {
-            address,
             children,
         });
         return !!result;
