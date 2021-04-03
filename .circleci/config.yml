@@ -244,7 +244,7 @@ executors:
     #    xcode: 10.1.0
     working_directory: ~/expo-project
     environment:
-      EXPO_SDK_VERSION: 40.0.0
+      EXPO_SDK_VERSION: 40.0.1
       TURTLE_VERSION: 0.21.1
       NODE_VERSION: 14.15.1
       YARN_VERSION: 1.22.5
