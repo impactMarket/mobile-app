@@ -6,6 +6,7 @@ import ApiRouteCommunity from './routes/community';
 import ApiRouteStory from './routes/story';
 import ApiRouteSystem from './routes/system';
 import ApiRouteUser from './routes/user';
+import * as Sentry from 'sentry-expo';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -39,8 +40,8 @@ class ApiRouteUpload {
                 requestHeaders
             );
             response = result;
-        } catch (error) {
-            Api.system.uploadError('', 'uploadCommunityCoverImage', error);
+        } catch (e) {
+            Sentry.captureException(e);
         }
         return response;
     }

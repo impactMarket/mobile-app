@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import ScanQR from './ScanQR';
+import * as Sentry from 'sentry-expo';
 
 function AddManagerScreen() {
     const dispatch = useDispatch();
@@ -115,6 +116,7 @@ function AddManagerScreen() {
                 navigation.goBack();
             })
             .catch(async (e) => {
+                Sentry.captureException(e);
                 let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||
@@ -141,7 +143,6 @@ function AddManagerScreen() {
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
-                Api.system.uploadError(userAddress, 'add_manager', e, error);
             })
             .finally(() => {
                 setAddInProgress(false);
