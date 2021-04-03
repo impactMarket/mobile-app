@@ -46,7 +46,7 @@ async function celoWalletRequest(
             return;
         }
         if (!__DEV__) {
-            Sentry.captureException(e);
+            Sentry.Native.captureException(e);
         }
         throw new Error(e);
     }

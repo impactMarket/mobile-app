@@ -375,7 +375,7 @@ function CreateCommunityScreen() {
                 setSending(false);
             }
         } catch (e) {
-            Sentry.captureException(e);
+            Sentry.Native.captureException(e);
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('errorCreatingCommunity'),

@@ -36,7 +36,7 @@ async function getRequest<T>(
             response = result.data as T;
         }
     } catch (e) {
-        Sentry.captureException(e);
+        Sentry.Native.captureException(e);
     }
     return response;
 }
@@ -69,7 +69,7 @@ async function postRequest<T>(
         }
         response = result.data as T;
     } catch (e) {
-        Sentry.captureException(e);
+        Sentry.Native.captureException(e);
     }
     return response;
 }
@@ -101,7 +101,7 @@ async function deleteRequest<T>(
         }
         response = result.data as T;
     } catch (e) {
-        Sentry.captureException(e);
+        Sentry.Native.captureException(e);
     }
     return response;
 }

@@ -208,7 +208,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             success: 'true',
                         });
                     } catch (e) {
-                        Sentry.captureException(e);
+                        Sentry.Native.captureException(e);
                         analytics('claim_location', {
                             device: Device.brand,
                             success: 'false',
@@ -217,7 +217,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 }
             })
             .catch(async (e) => {
-                Sentry.captureException(e);
+                Sentry.Native.captureException(e);
                 CacheStore.cacheFailedClaim();
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
