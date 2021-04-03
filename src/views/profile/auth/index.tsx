@@ -56,7 +56,7 @@ function Auth() {
 
     const login = async () => {
         const requestId = 'login';
-        const dappName = 'impactmarket';
+        const dappName = 'impactMarket';
         const callback = makeDeeplinkUrl();
         setConnecting(true);
 
