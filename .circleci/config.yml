@@ -71,7 +71,7 @@ commands:
     steps:
       - restore_cache:
           keys:
-          - cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
+          - cache-turtle-cli-{{ .Environment.CACHE_VERSION }}-{{ checksum "/tmp/turtle-version-platform" }}
 
   save_turtle_cache:
     steps:
@@ -79,7 +79,7 @@ commands:
           paths:
             - ~/.turtle
             - ~/yarn_cache
-          key: cache-turtle-cli-{{ checksum "/tmp/turtle-version-platform" }}
+          key: cache-turtle-cli-{{ .Environment.CACHE_VERSION }}-{{ checksum "/tmp/turtle-version-platform" }}
 
   install_turtle_ios:
     steps:
@@ -101,7 +101,7 @@ commands:
     steps:
       - restore_cache:
           keys:
-          - cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
+          - cache-yarn-<< parameters.platform >>-{{ .Environment.CACHE_VERSION }}-{{ checksum "package.json" }}
 
   save_yarn_cache:
     parameters:
@@ -111,7 +111,7 @@ commands:
       - save_cache:
           paths:
             - ~/yarn_cache
-          key: cache-yarn-<< parameters.platform >>-{{ checksum "package.json" }}
+          key: cache-yarn-<< parameters.platform >>-{{ .Environment.CACHE_VERSION }}-{{ checksum "package.json" }}
 
 jobs:
   publish_to_expo:
@@ -124,7 +124,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
         environment:
             EXPO_SDK_VERSION: 40.0.1
-            TURTLE_VERSION: 0.21.0
+            TURTLE_VERSION: 0.21.1
             NODE_VERSION: 14.15.1
             YARN_VERSION: 1.22.5
     steps:
