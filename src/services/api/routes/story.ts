@@ -7,6 +7,7 @@ import {
 } from 'helpers/types/endpoints';
 import config from '../../../../config';
 import { getRequest, postRequest, deleteRequest } from '../base';
+import * as Sentry from 'sentry-expo';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -50,8 +51,8 @@ class ApiRouteStory {
                 requestHeaders
             );
             response = result;
-        } catch (error) {
-            // Api.system.uploadError('', 'uploadCommunityCoverImage', error);
+        } catch (e) {
+            Sentry.captureException(e);
         }
         return response;
     }

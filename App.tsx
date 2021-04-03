@@ -125,6 +125,8 @@ Notifications.setNotificationHandler({
 
 Sentry.init({
     dsn: process.env.EXPO_SENTRY_DNS,
+    enableInExpoDevelopment: true,
+    debug: true,
 });
 
 const prefix = Linking.makeUrl('/');
@@ -669,8 +671,8 @@ export default class App extends React.Component<any, IAppState> {
             this.setState({
                 loggedIn,
             });
-        } catch (error) {
-            Api.system.uploadError(address ? address : '', 'auth_user', error);
+        } catch (e) {
+            Sentry.captureException(e);
         }
     };
 }

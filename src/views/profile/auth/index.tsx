@@ -76,13 +76,8 @@ function Auth() {
                 .getState()
                 .app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
         } catch (e) {
-            Api.system.uploadError(
-                dappkitResponse ? dappkitResponse?.address : '',
-                'login_valora',
-                e
-            );
-            analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureException(e);
+            analytics('login', { device: Device.brand, success: 'false' });
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('errorConnectToValora'),
@@ -121,15 +116,11 @@ function Auth() {
             dappkitResponse.phoneNumber
         );
         if (user === undefined) {
-            Api.system.uploadError(userAddress, 'login_auth', {
-                reason: '',
-                message: 'undefined user',
-            });
-            analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureMessage(
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
                 Sentry.Severity.Critical
             );
+            analytics('login', { device: Device.brand, success: 'false' });
 
             Alert.alert(
                 i18n.t('failure'),
@@ -180,7 +171,6 @@ function Auth() {
             );
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
-            Api.system.uploadError(userAddress, 'login_wu', error);
             analytics('login', { device: Device.brand, success: 'false' });
             Sentry.captureMessage(
                 JSON.stringify({

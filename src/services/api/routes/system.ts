@@ -19,26 +19,6 @@ class ApiRouteSystem {
         return result ? result.rates : [];
     }
 
-    static async uploadError(
-        address: string,
-        action: string,
-        error: any,
-        errorShown: string = ''
-    ): Promise<boolean> {
-        const requestBody = {
-            version: Constants.manifest.version,
-            address,
-            action,
-            error: JSON.stringify({
-                reason: error.reason,
-                message: error.message,
-                errorShown,
-            }),
-        };
-        const result = await postRequest<boolean>('/mobile/error', requestBody);
-        return !!result;
-    }
-
     /**
      * if undefined here happens, it means there's a connection problem
      */

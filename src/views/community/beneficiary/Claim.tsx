@@ -208,16 +208,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             success: 'true',
                         });
                     } catch (e) {
-                        Api.system.uploadError(
-                            userAddress,
-                            'claim_location',
-                            e
-                        );
+                        Sentry.captureException(e);
                         analytics('claim_location', {
                             device: Device.brand,
                             success: 'false',
                         });
-                        return;
                     }
                 }
             })
@@ -310,7 +305,6 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
-                Api.system.uploadError(userAddress, 'claim', e, error);
             });
     };
 

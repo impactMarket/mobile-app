@@ -20,6 +20,7 @@ import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import * as Sentry from 'sentry-expo';
 
 function AddedManagerScreen() {
     const dispatch = useDispatch();
@@ -123,6 +124,7 @@ function AddedManagerScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
+                Sentry.captureException(e);
                 let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||
@@ -148,12 +150,6 @@ function AddedManagerScreen() {
                     i18n.t('errorRemovingManager', { error: i18n.t(error) }),
                     [{ text: 'OK' }],
                     { cancelable: false }
-                );
-                Api.system.uploadError(
-                    userWallet.address,
-                    'remove_manager',
-                    e,
-                    error
                 );
             })
             .finally(() => {
