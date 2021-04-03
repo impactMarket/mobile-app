@@ -133,14 +133,14 @@ function ProfileScreen() {
 
     const handleChangeGender = async (gender: string) => {
         setGender(gender);
-        Api.user.setGender(userWallet.address, gender);
+        Api.user.setGender(gender);
         updateUserMetadataCache();
         dispatch(setUserMetadata({ ...user, gender }));
     };
 
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
-        Api.user.setLanguage(userWallet.address, text);
+        Api.user.setLanguage(text);
         updateUserMetadataCache();
         dispatch(setUserLanguage(text));
         i18n.changeLanguage(text);
@@ -187,7 +187,7 @@ function ProfileScreen() {
 
     const handleSelectCurrency = (currency: string) => {
         setCurrency(currency);
-        Api.user.setCurrency(userWallet.address, currency);
+        Api.user.setCurrency(currency);
         updateUserMetadataCache();
         // update exchange rate!
         const exchangeRate = (rates as any)[currency.toUpperCase()].rate;
@@ -319,7 +319,7 @@ function ProfileScreen() {
                         value={name}
                         maxLength={32}
                         onEndEditing={(e) => {
-                            Api.user.setUsername(userWallet.address, name);
+                            Api.user.setUsername(name);
                             updateUserMetadataCache();
                             dispatch(
                                 setUserMetadata({ ...user, username: name })
@@ -344,10 +344,7 @@ function ProfileScreen() {
                                 maxLength={4}
                                 keyboardType="numeric"
                                 onEndEditing={(e) => {
-                                    Api.user.setAge(
-                                        userWallet.address,
-                                        parseInt(age, 10)
-                                    );
+                                    Api.user.setAge(parseInt(age, 10));
                                     updateUserMetadataCache();
                                     dispatch(
                                         setUserMetadata({
@@ -372,7 +369,6 @@ function ProfileScreen() {
                             keyboardType="numeric"
                             onEndEditing={(e) => {
                                 Api.user.setChildren(
-                                    userWallet.address,
                                     children.length > 0
                                         ? parseInt(children, 10)
                                         : null
