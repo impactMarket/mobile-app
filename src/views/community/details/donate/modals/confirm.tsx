@@ -85,7 +85,7 @@ class ConfirmModal extends Component<
                 analytics('donate', { device: Device.brand, success: 'true' });
             })
             .catch((e) => {
-                Sentry.captureException(e);
+                Sentry.Native.captureException(e);
                 analytics('donate', { device: Device.brand, success: 'false' });
                 // TODO: 'nonce too low' have happened here!
                 navigationRef.current?.goBack();

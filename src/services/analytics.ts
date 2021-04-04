@@ -5,7 +5,7 @@ async function analytics(action: string, details: any): Promise<void> {
     try {
         await Analytics.logEvent(action, details);
     } catch (e) {
-        Sentry.captureException(e);
+        Sentry.Native.captureException(e);
     }
 }
 

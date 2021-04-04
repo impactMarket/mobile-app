@@ -1,6 +1,5 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera } from 'expo-camera';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
@@ -106,9 +105,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                             type={Camera.Constants.Type.back}
                             style={StyleSheet.absoluteFillObject}
                             barCodeScannerSettings={{
-                                barCodeTypes: [
-                                    BarCodeScanner.Constants.BarCodeType.qr,
-                                ],
+                                barCodeTypes: ['qr'],
                             }}
                         >
                             <BarCodeFinder

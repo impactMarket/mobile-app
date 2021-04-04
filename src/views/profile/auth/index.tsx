@@ -76,7 +76,7 @@ function Auth() {
                 .getState()
                 .app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
         } catch (e) {
-            Sentry.captureException(e);
+            Sentry.Native.captureException(e);
             analytics('login', { device: Device.brand, success: 'false' });
             Alert.alert(
                 i18n.t('failure'),
@@ -116,9 +116,9 @@ function Auth() {
             dappkitResponse.phoneNumber
         );
         if (user === undefined) {
-            Sentry.captureMessage(
+            Sentry.Native.captureMessage(
                 JSON.stringify({ action: 'login', details: 'undefined user' }),
-                Sentry.Severity.Critical
+                Sentry.Native.Severity.Critical
             );
             analytics('login', { device: Device.brand, success: 'false' });
 
@@ -172,12 +172,12 @@ function Auth() {
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             analytics('login', { device: Device.brand, success: 'false' });
-            Sentry.captureMessage(
+            Sentry.Native.captureMessage(
                 JSON.stringify({
                     action: 'login',
                     details: `config user - ${error.message}`,
                 }),
-                Sentry.Severity.Critical
+                Sentry.Native.Severity.Critical
             );
 
             Alert.alert(
