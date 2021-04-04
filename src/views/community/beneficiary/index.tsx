@@ -528,11 +528,14 @@ function BeneficiaryScreen() {
                     </Card>
                 </Modal>
             </Portal>
-            <Portal>
-                <Modal visible={isUserBlocked} dismissable={false}>
-                    <BlockedAccount />
-                </Modal>
-            </Portal>
+
+            {hasBeneficiaryAcceptedRulesAlready && (
+                <Portal>
+                    <Modal visible={isUserBlocked} dismissable={false}>
+                        <BlockedAccount />
+                    </Modal>
+                </Portal>
+            )}
         </>
     );
 }
