@@ -41,7 +41,7 @@ class ApiRouteUpload {
             );
             response = result;
         } catch (e) {
-            Sentry.captureException(e);
+            Sentry.Native.captureException(e);
         }
         return response;
     }

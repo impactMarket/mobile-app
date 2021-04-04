@@ -147,7 +147,7 @@ function AddedBeneficiaryScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
-                Sentry.captureException(e);
+                Sentry.Native.captureException(e);
                 let error = 'possibleNetworkIssues';
                 if (
                     e.message.includes('nonce') ||

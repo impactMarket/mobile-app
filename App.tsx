@@ -672,7 +672,7 @@ export default class App extends React.Component<any, IAppState> {
                 loggedIn,
             });
         } catch (e) {
-            Sentry.captureException(e);
+            Sentry.Native.captureException(e);
         }
     };
 }

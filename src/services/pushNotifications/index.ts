@@ -50,7 +50,7 @@ export async function registerForPushNotifications(): Promise<string> {
             });
         }
     } catch (e) {
-        Sentry.captureException(e);
+        Sentry.Native.captureException(e);
     }
 
     return token;
