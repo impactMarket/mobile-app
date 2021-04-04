@@ -15,7 +15,6 @@ async function getRequest<T>(
     try {
         let result;
         if (useAuthToken) {
-            console.log('enter here');
             const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
             const requestOptions = {
                 headers: {

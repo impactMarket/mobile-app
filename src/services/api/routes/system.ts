@@ -13,10 +13,10 @@ class ApiRouteSystem {
     static async getExchangeRate(): Promise<
         { currency: string; rate: number }[]
     > {
-        const result = await getRequest<{
-            rates: { currency: string; rate: number }[];
-        }>('/exchange-rates');
-        return result ? result.rates : [];
+        const result = await getRequest<{ currency: string; rate: number }[]>(
+            '/exchange-rates'
+        );
+        return result ? result : [];
     }
 
     /**
