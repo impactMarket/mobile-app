@@ -18,7 +18,7 @@ async function celoWalletRequest(
     requestId: string,
     kit: ContractKit
 ): Promise<TransactionReceipt | undefined> {
-    const dappName = 'impactmarket';
+    const dappName = 'impactMarket';
     const callback = makeDeeplinkUrl();
     try {
         let requestTx: TxParams = {
