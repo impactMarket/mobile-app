@@ -120,7 +120,9 @@ function AddBeneficiaryScreen() {
             })
             .catch(async (e) => {
                 let error = 'unknown';
-                if (
+                if (e.message.includes('has been reverted')) {
+                    error = 'syncIssues';
+                } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
