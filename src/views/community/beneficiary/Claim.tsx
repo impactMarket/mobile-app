@@ -221,7 +221,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
                 let error = 'unknown';
-                if (
+                if (e.message.includes('has been reverted')) {
+                    error = 'syncIssues';
+                } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
