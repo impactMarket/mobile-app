@@ -119,8 +119,7 @@ function AddBeneficiaryScreen() {
                 navigation.goBack();
             })
             .catch(async (e) => {
-                Sentry.Native.captureException(e);
-                let error = 'possibleNetworkIssues';
+                let error = 'unknown';
                 if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
@@ -139,6 +138,10 @@ function AddBeneficiaryScreen() {
                         error = 'networkConnectionLost';
                     }
                     error = 'networkIssuesRPC';
+                }
+                if (error === 'unknown') {
+                    //only submit to sentry if it's unknown
+                    Sentry.Native.captureException(e);
                 }
                 Alert.alert(
                     i18n.t('failure'),

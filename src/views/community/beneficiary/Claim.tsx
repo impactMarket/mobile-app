@@ -217,7 +217,6 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 }
             })
             .catch(async (e) => {
-                Sentry.Native.captureException(e);
                 CacheStore.cacheFailedClaim();
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
@@ -298,6 +297,10 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                         error = 'networkConnectionLost';
                     }
                     error = 'networkIssuesRPC';
+                }
+                if (error === 'unknown') {
+                    //only submit to sentry if it's unknown
+                    Sentry.Native.captureException(e);
                 }
                 Alert.alert(
                     i18n.t('failure'),
