@@ -276,7 +276,7 @@ function AddedBeneficiaryScreen() {
             flatListRef.current?.scrollToIndex({ index: 0 });
         }
         Api.community
-            .searchBeneficiary(true, searchBeneficiary)
+            .findBeneficiary(searchBeneficiary, true)
             .then((r) => {
                 setSearchResults(r);
                 if (r.length > 0) {
