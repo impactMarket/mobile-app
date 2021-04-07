@@ -50,7 +50,9 @@ export async function registerForPushNotifications(): Promise<string> {
             });
         }
     } catch (e) {
-        Sentry.Native.captureException(e);
+        // TODO: improve this
+        // do not catch like "Network Error"; "Fetching the token failed: SERVICE_NOT_AVAILABLE"; "Fetching the token failed: TIMEOUT"; "Error encountered while fetching Expo token: TypeError: Network request failed." etc
+        // Sentry.Native.captureException(e);
     }
 
     return token;
