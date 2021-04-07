@@ -116,10 +116,11 @@ function Auth() {
             dappkitResponse.phoneNumber
         );
         if (user === undefined) {
-            Sentry.Native.captureMessage(
-                JSON.stringify({ action: 'login', details: 'undefined user' }),
-                Sentry.Native.Severity.Critical
-            );
+            // TODO: needs to be improved
+            // Sentry.Native.captureMessage(
+            //     JSON.stringify({ action: 'login', details: 'undefined user' }),
+            //     Sentry.Native.Severity.Critical
+            // );
             analytics('login', { device: Device.brand, success: 'false' });
 
             Alert.alert(
@@ -172,13 +173,14 @@ function Auth() {
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             analytics('login', { device: Device.brand, success: 'false' });
-            Sentry.Native.captureMessage(
-                JSON.stringify({
-                    action: 'login',
-                    details: `config user - ${error.message}`,
-                }),
-                Sentry.Native.Severity.Critical
-            );
+            // TODO: improve this
+            // Sentry.Native.captureMessage(
+            //     JSON.stringify({
+            //         action: 'login',
+            //         details: `config user - ${error.message}`,
+            //     }),
+            //     Sentry.Native.Severity.Critical
+            // );
 
             Alert.alert(
                 i18n.t('failure'),
