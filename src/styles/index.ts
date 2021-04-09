@@ -10,6 +10,7 @@ export const ipctColors = {
     nileBlue: '#172B4D',
     blueRibbon: '#2362FB',
     ghost: '#CED4DA',
+    borderGray: '#8A9FC2',
 };
 
 export default StyleSheet.create({});
