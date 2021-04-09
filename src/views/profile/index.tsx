@@ -19,6 +19,8 @@ import {
     setUserMetadata,
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
+import BackSvg from 'components/svg/header/BackSvg';
+
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
@@ -418,29 +420,38 @@ function ProfileScreen() {
                     <View
                         style={{
                             flex: 1,
-                            flexDirection: 'column',
+                            flexDirection: 'row',
                             marginTop: 36,
                             marginBottom: 31,
+                            justifyContent: 'center',
                         }}
                     >
-                        <Paragraph
+                        <Text
                             style={{
-                                fontSize: 14,
+                                fontSize: 15,
                                 lineHeight: 17,
-                                color: 'rgba(30, 50, 82, 0.59)',
+                                color: 'rgba(51,50,57,1)',
+                                marginRight: 8,
+                                fontWeight: '400',
                             }}
                         >
-                            Build: {Constants.manifest.version}
-                        </Paragraph>
-                        <Paragraph
+                            <Text style={{ fontWeight: '700' }}>Build: </Text>
+                            {Constants.manifest.version}
+                        </Text>
+                        <Text
                             style={{
-                                fontSize: 14,
+                                fontSize: 15,
                                 lineHeight: 17,
-                                color: 'rgba(30, 50, 82, 0.59)',
+                                color: 'rgba(51,50,57,1)',
+                                marginLeft: 8,
+                                fontWeight: '400',
                             }}
                         >
-                            OS version: {Device.osVersion}
-                        </Paragraph>
+                            <Text style={{ fontWeight: '700' }}>
+                                OS version:{' '}
+                            </Text>
+                            {Device.osVersion}
+                        </Text>
                     </View>
                 </View>
             </ScrollView>
@@ -545,7 +556,8 @@ function ProfileScreen() {
 
 ProfileScreen.navigationOptions = () => {
     return {
-        title: i18n.t('profile'),
+        headerTitle: i18n.t('profile'),
+        headerLeft: () => <BackSvg />,
         tabBarIcon: (props: ITabBarIconProps) => (
             <ProfileSvg focused={props.focused} />
         ),
