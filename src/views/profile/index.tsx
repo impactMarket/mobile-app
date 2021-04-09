@@ -1,17 +1,12 @@
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
-import Card from 'components/core/Card';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
-import {
-    amountToCurrency,
-    getCurrencySymbol,
-    humanifyCurrencyAmount,
-} from 'helpers/currency';
+import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
 import {
     setUserExchangeRate,
@@ -20,6 +15,7 @@ import {
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
 import BackSvg from 'components/svg/header/BackSvg';
+import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
@@ -31,6 +27,7 @@ import {
     StyleSheet,
     TextInputEndEditingEventData,
     View,
+    Dimensions,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
@@ -61,7 +58,7 @@ function ProfileScreen() {
     const user = useSelector((state: IRootState) => state.user.metadata);
     const userWallet = useSelector((state: IRootState) => state.user.wallet);
     const app = useSelector((state: IRootState) => state.app);
-
+    const screen = Dimensions.get('screen');
     const rates = app.exchangeRates;
 
     const [name, setName] = useState('');
@@ -260,62 +257,70 @@ function ProfileScreen() {
                 }
             >
                 <View style={styles.container}>
-                    <Card
-                        elevation={0}
+                    <View
                         style={styles.card}
                         onPress={() => Linking.openURL('celo://wallet')}
                     >
-                        <Card.Content style={{ alignItems: 'center' }}>
+                        <Text
+                            style={{
+                                color: ipctColors.regentGray,
+                                fontSize: 16,
+                                fontFamily: 'Inter',
+                                lineHeight: 16,
+                                letterSpacing: 0.7,
+                                opacity: 0.48,
+                            }}
+                        >
+                            {i18n.t('balance')}
+                        </Text>
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignItems: 'flex-end',
+                                marginTop: 8,
+                            }}
+                        >
+                            <Headline style={styles.headlineBalanceCurrency}>
+                                {getCurrencySymbol(user.currency)}
+                            </Headline>
+                            <Headline
+                                style={{
+                                    fontSize: 25,
+                                    lineHeight: 24,
+                                    ...styles.headlineBalance,
+                                }}
+                            >
+                                {userBalance}
+                            </Headline>
+                        </View>
+                    </View>
+                    <View style={styles.avatarContainer}>
+                        <View style={styles.avatar}>
+                            <AvatarPlaceholderSvg />
+                            <IconButton
+                                style={styles.addAvatar}
+                                icon="close"
+                                size={14}
+                                onPress={() => {}}
+                            />
+                        </View>
+                        <View style={styles.avatarText}>
                             <Text
                                 style={{
-                                    color: '#FFFFFF',
+                                    // fontFamily: 'Inter',
                                     fontSize: 16,
-                                    lineHeight: 16,
-                                    letterSpacing: 0.7,
-                                    opacity: 0.48,
+                                    fontWeight: '400',
+                                    lineHeight: 23,
+                                    letterSpacing: 0,
+                                    textAlign: 'left',
+                                    color: ipctColors.blueRibbon,
                                 }}
                             >
-                                {i18n.t('balance').toUpperCase()}
+                                {i18n.t('uploadProfile')}
                             </Text>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: 'row',
-                                    alignItems: 'flex-end',
-                                    marginTop: 19,
-                                    marginBottom: 8,
-                                }}
-                            >
-                                <Headline
-                                    style={styles.headlineBalanceCurrency}
-                                >
-                                    {getCurrencySymbol(user.currency)}
-                                </Headline>
-                                <Headline
-                                    style={{
-                                        fontSize:
-                                            userBalance.length > 12 ? 43 : 56,
-                                        lineHeight:
-                                            userBalance.length > 12 ? 43 : 56,
-                                        ...styles.headlineBalance,
-                                    }}
-                                >
-                                    {userBalance}
-                                </Headline>
-                            </View>
-                            <Text
-                                style={{
-                                    color: '#FFFFFF',
-                                    fontSize: 17,
-                                    lineHeight: 20,
-                                    letterSpacing: 0.7,
-                                    opacity: 0.56,
-                                }}
-                            >
-                                {humanifyCurrencyAmount(userCusdBalance)} cUSD
-                            </Text>
-                        </Card.Content>
-                    </Card>
+                        </View>
+                    </View>
                     <Input
                         label={i18n.t('name')}
                         value={name}
@@ -567,19 +572,25 @@ ProfileScreen.navigationOptions = () => {
 const styles = StyleSheet.create({
     scrollView: {},
     card: {
-        backgroundColor: ipctColors.blueRibbon,
+        borderTopWidth: 1,
+        borderTopColor: '#E1E4E7',
+        borderBottomWidth: 1,
+        borderBottomColor: '#E1E4E7',
         marginTop: 10,
-        marginBottom: 45,
+
+        paddingVertical: 16,
+        paddingHorizontal: 22,
+        width: Dimensions.get('screen').width,
+        left: -20,
     },
     headlineBalanceCurrency: {
-        fontFamily: 'Gelion-Bold',
-        color: 'white',
-        paddingVertical: 6,
-        // backgroundColor: 'green',
+        fontFamily: 'Inter-Bold',
+        fontSize: 25,
+        color: ipctColors.almostBlack,
     },
     headlineBalance: {
-        fontFamily: 'Gelion-Bold',
-        color: 'white',
+        fontFamily: 'Inter-Bold',
+        color: ipctColors.almostBlack,
     },
     container: {
         marginHorizontal: 20,
@@ -602,6 +613,33 @@ const styles = StyleSheet.create({
         letterSpacing: 0.245455,
         color: ipctColors.regentGray,
         marginVertical: 8,
+    },
+    avatarContainer: {
+        flexDirection: 'row',
+        height: 50,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 44,
+    },
+    addAvatar: {
+        position: 'absolute',
+        right: -4,
+        zIndex: 2,
+        height: 22,
+        width: 22,
+        borderRadius: 11,
+        backgroundColor: 'white',
+    },
+    avatar: {
+        height: 80,
+        width: 81,
+        borderRadius: 40,
+    },
+    avatarText: {
+        height: 46,
+        width: 140,
+        paddingHorizontal: 16,
     },
 });
 
