@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { TextInput, Text, TextInputProps, StyleSheet } from 'react-native';
 import {
     GestureResponderEvent,
     TouchableWithoutFeedback,
     View,
 } from 'react-native';
-import { Paragraph, Text } from 'react-native-paper';
+import { Paragraph } from 'react-native-paper';
 import Svg, { Path } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
 
@@ -21,42 +22,16 @@ export default class Select extends Component<ISelectProps, object> {
     render() {
         const { label, value, onPress } = this.props;
         return (
-            <View style={{ flexDirection: 'column' }}>
-                <Paragraph
-                    style={{
-                        fontSize: 17,
-                        lineHeight: 17,
-                        letterSpacing: 0.245455,
-                        color: ipctColors.regentGray,
-                        marginBottom: 10,
-                    }}
-                >
-                    {label}
-                </Paragraph>
+            <View
+                style={{
+                    width: '100%',
+                    height: 48,
+                }}
+            >
+                <Text style={styles.label}>{label}</Text>
                 <TouchableWithoutFeedback onPress={onPress}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            paddingVertical: 8,
-                            paddingHorizontal: 15,
-                            elevation: 0,
-                            height: 46,
-                            backgroundColor: 'rgba(206,212,218,0.27)',
-                            borderRadius: 6,
-                        }}
-                    >
-                        <Text
-                            style={{
-                                color: ipctColors.almostBlack,
-                                opacity: 1,
-                                fontSize: 20,
-                                lineHeight: 24,
-                                textAlignVertical: 'center',
-                            }}
-                        >
-                            {value}
-                        </Text>
+                    <View style={styles.outline}>
+                        <Text style={styles.textInput}>{value}</Text>
                         <Svg
                             width={14}
                             height={9}
@@ -76,3 +51,40 @@ export default class Select extends Component<ISelectProps, object> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    outline: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        borderWidth: 0.5,
+        borderColor: ipctColors.borderGray,
+    },
+    //TODO: add font inter
+    textInput: {
+        flexGrow: 1,
+        marginTop: 12,
+        zIndex: 1,
+        fontSize: 15,
+        lineHeight: 24,
+        color: ipctColors.almostBlack,
+    },
+    label: {
+        position: 'absolute',
+        left: 12,
+        top: -8,
+        paddingHorizontal: 4,
+        color: ipctColors.regentGray,
+        backgroundColor: '#FFFFFF',
+        zIndex: 1,
+        fontWeight: '400',
+        fontSize: 17,
+        lineHeight: 17,
+        letterSpacing: 0.245455,
+    },
+});
