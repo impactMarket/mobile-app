@@ -28,7 +28,7 @@ function Tabs() {
             name="claim"
             component={BeneficiaryView}
             options={{
-                title: i18n.t('claim'),
+                title: i18n.t('ubi'),
                 tabBarIcon: (props: ITabBarIconProps) => (
                     <ClaimSvg focused={props.focused} />
                 ),

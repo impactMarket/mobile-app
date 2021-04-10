@@ -7,6 +7,7 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
+import { BottomSheet } from 'react-native-btr';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
 import {
     setUserExchangeRate,
@@ -28,6 +29,7 @@ import {
     TextInputEndEditingEventData,
     View,
     Dimensions,
+    TouchableOpacity,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
@@ -257,7 +259,7 @@ function ProfileScreen() {
                 }
             >
                 <View style={styles.container}>
-                    <View
+                    <TouchableOpacity
                         style={styles.card}
                         onPress={() => Linking.openURL('celo://wallet')}
                     >
@@ -294,7 +296,7 @@ function ProfileScreen() {
                                 {userBalance}
                             </Headline>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     <View style={styles.avatarContainer}>
                         <View style={styles.avatar}>
                             <AvatarPlaceholderSvg />
@@ -461,7 +463,12 @@ function ProfileScreen() {
                 </View>
             </ScrollView>
             <Portal>
-                <Dialog
+                {/* <BottomSheet
+                    visible={isDialogCurrencyOpen}
+                    onBackButtonPress={isDialogCurrencyOpen}
+                    onBackdropPress={isDialogCurrencyOpen}
+                > */}
+                    <Dialog
                     visible={isDialogCurrencyOpen}
                     onDismiss={() => setIsDialogCurrencyOpen(false)}
                 >
@@ -473,6 +480,7 @@ function ProfileScreen() {
                                 shadowRadius: 0,
                                 elevation: 0,
                                 borderRadius: 6,
+                                flex: 1
                             }}
                             autoFocus
                             clearIcon={(p) => (
@@ -498,7 +506,9 @@ function ProfileScreen() {
                         />
                         {renderSearchCurrencyResult()}
                     </Dialog.Content>
+                
                 </Dialog>
+                {/* </BottomSheet> */}
                 <Dialog
                     visible={isDialogLanguageOpen}
                     onDismiss={() => setIsDialogLanguageOpen(false)}

@@ -19,6 +19,7 @@ export default {
     claimed: 'Claimed',
     raised: 'Raised',
     claim: 'Claim',
+    ubi: 'UBI',
     manage: 'Manage',
     communities: 'Communities',
     pay: 'Send',

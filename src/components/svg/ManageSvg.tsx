@@ -8,15 +8,11 @@ function ManageSvg(props: { focused: boolean }) {
             <Mask id="prefix__a" x={0} y={0} width={36} height={32}>
                 <Path
                     d="M35 16c0 8.177-7.497 15-17 15S1 24.177 1 16 8.497 1 18 1s17 6.823 17 15z"
-                    fill={
-                        props.focused
-                            ? ipctColors.blueRibbon
-                            : ipctColors.almostBlack
-                    }
+                    fill="#FFFFFF"
                     stroke={
                         props.focused
                             ? ipctColors.blueRibbon
-                            : ipctColors.almostBlack
+                            : ipctColors.regentGray
                     }
                     strokeWidth={2}
                 />
@@ -27,12 +23,12 @@ function ManageSvg(props: { focused: boolean }) {
                     fill={
                         props.focused
                             ? ipctColors.blueRibbon
-                            : ipctColors.almostBlack
+                            : ipctColors.regentGray
                     }
                     stroke={
                         props.focused
                             ? ipctColors.blueRibbon
-                            : ipctColors.almostBlack
+                            : ipctColors.regentGray
                     }
                     strokeWidth={0.4}
                 />
@@ -100,7 +96,7 @@ function ManageSvg(props: { focused: boolean }) {
                     stroke={
                         props.focused
                             ? ipctColors.blueRibbon
-                            : ipctColors.almostBlack
+                            : ipctColors.regentGray
                     }
                 />
                 <Circle
