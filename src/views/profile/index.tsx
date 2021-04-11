@@ -1,27 +1,3 @@
-import currenciesJSON from 'assets/currencies.json';
-import i18n from 'assets/i18n';
-import Input from 'components/core/Input';
-import Select from 'components/core/Select';
-import ProfileSvg from 'components/svg/ProfileSvg';
-import Constants from 'expo-constants';
-import * as Device from 'expo-device';
-import * as Linking from 'expo-linking';
-import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
-import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
-import {
-    setUserExchangeRate,
-    setUserLanguage,
-    setUserMetadata,
-    setUserWalletBalance,
-} from 'helpers/redux/actions/user';
-import BackSvg from 'components/svg/header/BackSvg';
-import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
-
-import { Modalize } from 'react-native-modalize';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
-
-import { ITabBarIconProps } from 'helpers/types/common';
-import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -39,16 +15,48 @@ import {
     RadioButton,
     Text,
     Headline,
-    List,
     Searchbar,
     IconButton,
 } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Feather';
+import { Modalize } from 'react-native-modalize';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as Linking from 'expo-linking';
+
+// Assets
+import currenciesJSON from 'assets/currencies.json';
+import i18n from 'assets/i18n';
+
+// Components
+import Input from 'components/core/Input';
+import Select from 'components/core/Select';
+import ProfileSvg from 'components/svg/ProfileSvg';
+import BackSvg from 'components/svg/header/BackSvg';
+import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
+
+// Helpers
+import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
+import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
+import {
+    setUserExchangeRate,
+    setUserLanguage,
+    setUserMetadata,
+    setUserWalletBalance,
+} from 'helpers/redux/actions/user';
+import { ITabBarIconProps } from 'helpers/types/common';
+import { IRootState } from 'helpers/types/state';
+
+// Services
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
+
+// Styles
 import { ipctColors } from 'styles/index';
 
+// Constants
 const currencies: {
     [key: string]: {
         symbol: string;
@@ -171,12 +179,12 @@ function ProfileScreen() {
         }
     };
 
-    const renderHeader = (title: string) => (
+    const renderHeader = (title: string, ref: React.RefObject<any>) => (
         <View style={styles.bottomSheetHeaderContainer}>
             <Text style={styles.bottomSheetHeaderText}>{title}</Text>
             <CloseStorySvg
                 onPress={() => {
-                    modalizeCurrencyRef.current?.close();
+                    ref.current?.close();
                     setSearchCurrency('');
                 }}
             />
@@ -278,11 +286,10 @@ function ProfileScreen() {
         false
     );
 
-    const bottomSheetLanguageContent = () => (
-        <View style={{ flex: 1, backgroundColor: 'red', height: '50%' }}>
+    const renderLanguageContent = () => (
+        <View style={{ flex: 1, height: '50%' }}>
             <RadioButton.Group
                 onValueChange={(value) => {
-                    setIsDialogLanguageOpen(false);
                     handleChangeLanguage(value);
                 }}
                 value={language}
@@ -329,10 +336,9 @@ function ProfileScreen() {
         </View>
     );
 
-    const bottomSheetGenderContent = () => (
+    const renderGenderContent = () => (
         <RadioButton.Group
             onValueChange={(value) => {
-                setIsDialogGenderOpen(false);
                 handleChangeGender(value);
             }}
             value={gender ? gender : ''}
@@ -480,7 +486,6 @@ function ProfileScreen() {
                         <Select
                             label={i18n.t('currency')}
                             value={currencies[currency.toUpperCase()].name}
-                            // onPress={() => setIsDialogCurrencyOpen(true)}
                             onPress={() => modalizeCurrencyRef.current?.open()}
                         />
                     </View>
@@ -488,7 +493,6 @@ function ProfileScreen() {
                         <Select
                             label={i18n.t('language')}
                             value={language === 'en' ? 'English' : ' Português'}
-                            // onPress={() => setIsDialogLanguageOpen(true)}
                             onPress={() => modalizeLanguageRef.current?.open()}
                         />
                     </View>
@@ -546,24 +550,35 @@ function ProfileScreen() {
             </ScrollView>
             <Modalize
                 ref={modalizeCurrencyRef}
-                HeaderComponent={renderHeader('Currency')}
+                HeaderComponent={renderHeader(
+                    i18n.t('currency'),
+                    modalizeCurrencyRef
+                )}
                 adjustToContentHeight={true}
             >
                 {renderCurrencyContent()}
             </Modalize>
 
-            {/* <BottomSheet
-                ref={bottomSheetLanguageRef}
-                snapPoints={[450, 300, 50]}
-                borderRadius={10}
-                renderContent={bottomSheetLanguageContent}
-            />
-            <BottomSheet
-                ref={bottomSheetGenderRef}
-                snapPoints={[800, 300, 50]}
-                borderRadius={10}
-                renderContent={bottomSheetGenderContent}
-            /> */}
+            <Modalize
+                ref={modalizeLanguageRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('language'),
+                    modalizeLanguageRef
+                )}
+                adjustToContentHeight={true}
+            >
+                {renderLanguageContent()}
+            </Modalize>
+            <Modalize
+                ref={modalizeGenderRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('gender'),
+                    modalizeGenderRef
+                )}
+                adjustToContentHeight={true}
+            >
+                {renderGenderContent()}
+            </Modalize>
         </>
     );
 }
