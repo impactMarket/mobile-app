@@ -5,9 +5,13 @@ import Select from 'components/core/Select';
 import * as Location from 'expo-location';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { Alert, FlatList, View } from 'react-native';
-import { ActivityIndicator, Dialog, RadioButton } from 'react-native-paper';
+import { ActivityIndicator, RadioButton } from 'react-native-paper';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
+
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
+
+import { Modalize } from 'react-native-modalize';
 
 import CommunityCard from './CommunityCard';
 // import Stories from './Stories';
@@ -26,6 +30,7 @@ function CommunitiesScreen() {
         []
     );
     const [reachedEndList, setReachedEndList] = useState(false);
+    const modalizeOrderRef = useRef<Modalize>(null);
 
     useEffect(() => {
         Api.community
@@ -139,11 +144,11 @@ function CommunitiesScreen() {
         return (
             <>
                 {/* <Stories /> */}
-                <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
+                <View style={{ marginHorizontal: 16, marginVertical: 22 }}>
                     <Select
                         label={i18n.t('order')}
                         value={textCommunitiesOrder(communtiesOrder)}
-                        onPress={() => setIsDialogOrderOpen(true)}
+                        onPress={() => modalizeOrderRef.current?.open()}
                     />
                 </View>
                 {refreshing && (
@@ -188,28 +193,30 @@ function CommunitiesScreen() {
                 updateCellsBatchingPeriod={100} // Increase time between renders
                 windowSize={7} // Reduce the window size
             />
-            <Dialog
-                visible={isDialogOrderOpen}
-                onDismiss={() => setIsDialogOrderOpen(false)}
+            <Modalize
+                ref={modalizeOrderRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('order'),
+                    modalizeOrderRef
+                )}
+                adjustToContentHeight={true}
             >
-                <Dialog.Content>
-                    <RadioButton.Group
-                        onValueChange={(value) => handleChangeOrder(value)}
-                        value={communtiesOrder}
-                    >
-                        <RadioButton.Item
-                            key="bigger"
-                            label={i18n.t('bigger')}
-                            value="bigger"
-                        />
-                        <RadioButton.Item
-                            key="nearest"
-                            label={i18n.t('nearest')}
-                            value="nearest"
-                        />
-                    </RadioButton.Group>
-                </Dialog.Content>
-            </Dialog>
+                <RadioButton.Group
+                    onValueChange={(value) => handleChangeOrder(value)}
+                    value={communtiesOrder}
+                >
+                    <RadioButton.Item
+                        key="bigger"
+                        label={i18n.t('bigger')}
+                        value="bigger"
+                    />
+                    <RadioButton.Item
+                        key="nearest"
+                        label={i18n.t('nearest')}
+                        value="nearest"
+                    />
+                </RadioButton.Group>
+            </Modalize>
         </>
     );
 }

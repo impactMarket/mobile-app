@@ -36,6 +36,7 @@ import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 
 // Helpers
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
@@ -178,18 +179,6 @@ function ProfileScreen() {
                 return i18n.t('select');
         }
     };
-
-    const renderHeader = (title: string, ref: React.RefObject<any>) => (
-        <View style={styles.bottomSheetHeaderContainer}>
-            <Text style={styles.bottomSheetHeaderText}>{title}</Text>
-            <CloseStorySvg
-                onPress={() => {
-                    ref.current?.close();
-                    setSearchCurrency('');
-                }}
-            />
-        </View>
-    );
 
     const handleSearchCurrency = (
         e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
@@ -555,7 +544,8 @@ function ProfileScreen() {
                 ref={modalizeCurrencyRef}
                 HeaderComponent={renderHeader(
                     i18n.t('currency'),
-                    modalizeCurrencyRef
+                    modalizeCurrencyRef,
+                    () => setSearchCurrency('')
                 )}
                 adjustToContentHeight={true}
             >
