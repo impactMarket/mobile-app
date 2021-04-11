@@ -393,12 +393,15 @@ function ProfileScreen() {
                     <View style={styles.avatarContainer}>
                         <View style={styles.avatar}>
                             <AvatarPlaceholderSvg />
-                            <IconButton
-                                style={styles.addAvatar}
-                                icon="close"
-                                size={14}
-                                onPress={() => {}}
-                            />
+                            {/* TODO: Integrate avatar feature with API */}
+                            {/* {user.avatar && (
+                                <IconButton
+                                    style={styles.addAvatar}
+                                    icon="close"
+                                    size={14}
+                                    onPress={() => {}}
+                                />
+                            )} */}
                         </View>
                         <View style={styles.avatarText}>
                             <Text style={styles.avatarCallToAction}>

@@ -32,14 +32,13 @@ function Logout() {
                 mode="text"
                 uppercase={false}
                 labelStyle={{
-                    fontFamily: 'Inter',
+                    fontFamily: 'Inter-Regular',
                     fontSize: 15,
                     lineHeight: 28,
                     height: 26,
                     textAlign: 'center',
                     letterSpacing: 0.366667,
                     color: ipctColors.blueRibbon,
-                    // marginLeft: 8.4,
                     marginRight: 16,
                 }}
                 onPress={handleLogout}
