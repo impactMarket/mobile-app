@@ -337,4 +337,6 @@ export default {
     myStories: 'Minhas Stories',
     userNotRegistered:
         'O utilizador que está a tentar adicionar, não está registado!',
+    unexpectedError:
+        'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
 };
