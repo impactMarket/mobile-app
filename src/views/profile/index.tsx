@@ -7,7 +7,6 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
-import { BottomSheet } from 'react-native-btr';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
 import {
     setUserExchangeRate,
@@ -18,10 +17,13 @@ import {
 import BackSvg from 'components/svg/header/BackSvg';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 
+import { Modalize } from 'react-native-modalize';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
+
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     FlatList,
     RefreshControl,
@@ -34,8 +36,6 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Paragraph,
-    Portal,
-    Dialog,
     RadioButton,
     Text,
     Headline,
@@ -43,6 +43,7 @@ import {
     Searchbar,
     IconButton,
 } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
@@ -60,8 +61,12 @@ function ProfileScreen() {
     const user = useSelector((state: IRootState) => state.user.metadata);
     const userWallet = useSelector((state: IRootState) => state.user.wallet);
     const app = useSelector((state: IRootState) => state.app);
-    const screen = Dimensions.get('screen');
+
     const rates = app.exchangeRates;
+
+    const modalizeCurrencyRef = useRef<Modalize>(null);
+    const modalizeLanguageRef = useRef<Modalize>(null);
+    const modalizeGenderRef = useRef<Modalize>(null);
 
     const [name, setName] = useState('');
     const [showingResults, setShowingResults] = useState(false);
@@ -74,11 +79,13 @@ function ProfileScreen() {
     const [userCusdBalance, setUserCusdBalance] = useState('0');
     const [language, setLanguage] = useState('en');
     const [gender, setGender] = useState<string | null>(null);
-    const [isDialogGenderOpen, setIsDialogGenderOpen] = useState(false);
+
+    const [selectedCurrencyId, setSelectedCurrencyId] = useState<string | null>(
+        null
+    );
+
     const [age, setAge] = useState('');
     const [children, setChildren] = useState('');
-    const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
-    const [isDialogLanguageOpen, setIsDialogLanguageOpen] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
@@ -117,6 +124,9 @@ function ProfileScreen() {
             gender,
             language,
             username: name,
+            //TODO: Change these props below to be optional
+            blocked: false,
+            suspect: false,
         });
     };
 
@@ -161,6 +171,18 @@ function ProfileScreen() {
         }
     };
 
+    const renderHeader = (title: string) => (
+        <View style={styles.bottomSheetHeaderContainer}>
+            <Text style={styles.bottomSheetHeaderText}>{title}</Text>
+            <CloseStorySvg
+                onPress={() => {
+                    modalizeCurrencyRef.current?.close();
+                    setSearchCurrency('');
+                }}
+            />
+        </View>
+    );
+
     const handleSearchCurrency = (
         e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
     ) => {
@@ -196,21 +218,28 @@ function ProfileScreen() {
             dispatch(setUserMetadata({ ...user, currency: currency }));
             dispatch(setUserExchangeRate(exchangeRate));
         });
-        setIsDialogCurrencyOpen(false);
-        setSearchCurrency('');
-        setSearchCurrencyResult([]);
+        setSelectedCurrencyId(currency);
     };
 
     const renderItemCurrencyQuery = ({ item }: { item: string }) => (
-        <List.Item
-            title={`[${currencies[item].symbol}] ${currencies[item].name}`}
-            onPress={() => handleSelectCurrency(item)}
-            // left={(props) => <List.Icon {...props} icon="folder" />}
-        />
+        <TouchableOpacity onPress={() => handleSelectCurrency(item)}>
+            <View style={styles.itemContainer}>
+                <Text
+                    style={styles.itemTitle}
+                >{`[${currencies[item].symbol}] ${currencies[item].name}`}</Text>
+                {item === selectedCurrencyId && (
+                    <Icon
+                        name="check"
+                        color={ipctColors.greenishTeal}
+                        size={22}
+                    />
+                )}
+            </View>
+        </TouchableOpacity>
     );
 
     const renderSearchCurrencyResult = () => {
-        if (!isDialogCurrencyOpen) {
+        if (!modalizeCurrencyRef.current?.open) {
             return;
         }
         if (tooManyResultForQuery) {
@@ -223,6 +252,8 @@ function ProfileScreen() {
                         data={searchCurrencyResult}
                         renderItem={renderItemCurrencyQuery}
                         keyExtractor={(item) => item}
+                        extraData={selectedCurrencyId}
+                        showsVerticalScrollIndicator={false}
                     />
                 );
             } else if (showingResults) {
@@ -247,6 +278,71 @@ function ProfileScreen() {
         false
     );
 
+    const bottomSheetLanguageContent = () => (
+        <View style={{ flex: 1, backgroundColor: 'red', height: '50%' }}>
+            <RadioButton.Group
+                onValueChange={(value) => {
+                    setIsDialogLanguageOpen(false);
+                    handleChangeLanguage(value);
+                }}
+                value={language}
+            >
+                <RadioButton.Item key="en" label="English" value="en" />
+                <RadioButton.Item key="pt" label="Português" value="pt" />
+            </RadioButton.Group>
+        </View>
+    );
+
+    const renderCurrencyContent = () => (
+        <View
+            style={{
+                paddingHorizontal: 22,
+                height: Dimensions.get('screen').height * 0.5,
+            }}
+        >
+            <Searchbar
+                placeholder={i18n.t('search')}
+                style={styles.searchBarContainer}
+                autoFocus
+                clearIcon={(p) => (
+                    <IconButton
+                        icon="close"
+                        onPress={() => {
+                            setSearchCurrency('');
+                            setSearchCurrencyResult([]);
+                            setTooManyResultForQuery(false);
+                            setShowingResults(false);
+                        }}
+                    />
+                )}
+                onChangeText={(e) => {
+                    if (e.length === 0 && showingResults) {
+                        setSearchCurrencyResult([]);
+                        setShowingResults(false);
+                    }
+                    setSearchCurrency(e);
+                }}
+                value={searchCurrency}
+                onEndEditing={handleSearchCurrency}
+            />
+            {renderSearchCurrencyResult()}
+        </View>
+    );
+
+    const bottomSheetGenderContent = () => (
+        <RadioButton.Group
+            onValueChange={(value) => {
+                setIsDialogGenderOpen(false);
+                handleChangeGender(value);
+            }}
+            value={gender ? gender : ''}
+        >
+            <RadioButton.Item key="f" label={i18n.t('female')} value="f" />
+            <RadioButton.Item key="m" label={i18n.t('male')} value="m" />
+            <RadioButton.Item key="o" label={i18n.t('others')} value="o" />
+        </RadioButton.Group>
+    );
+
     return (
         <>
             <ScrollView
@@ -263,16 +359,7 @@ function ProfileScreen() {
                         style={styles.card}
                         onPress={() => Linking.openURL('celo://wallet')}
                     >
-                        <Text
-                            style={{
-                                color: ipctColors.regentGray,
-                                fontSize: 16,
-                                fontFamily: 'Inter',
-                                lineHeight: 16,
-                                letterSpacing: 0.7,
-                                opacity: 0.48,
-                            }}
-                        >
+                        <Text style={styles.balanceValue}>
                             {i18n.t('balance')}
                         </Text>
                         <View
@@ -308,17 +395,7 @@ function ProfileScreen() {
                             />
                         </View>
                         <View style={styles.avatarText}>
-                            <Text
-                                style={{
-                                    // fontFamily: 'Inter',
-                                    fontSize: 16,
-                                    fontWeight: '400',
-                                    lineHeight: 23,
-                                    letterSpacing: 0,
-                                    textAlign: 'left',
-                                    color: ipctColors.blueRibbon,
-                                }}
-                            >
+                            <Text style={styles.avatarCallToAction}>
                                 {i18n.t('uploadProfile')}
                             </Text>
                         </View>
@@ -343,7 +420,10 @@ function ProfileScreen() {
                             <Select
                                 label={i18n.t('gender')}
                                 value={textGender(gender)}
-                                onPress={() => setIsDialogGenderOpen(true)}
+                                // onPress={() => setIsDialogGenderOpen(true)}
+                                onPress={() => {
+                                    modalizeGenderRef.current?.open();
+                                }}
                             />
                         </View>
                         <View style={{ flex: 1, marginLeft: 10 }}>
@@ -400,14 +480,16 @@ function ProfileScreen() {
                         <Select
                             label={i18n.t('currency')}
                             value={currencies[currency.toUpperCase()].name}
-                            onPress={() => setIsDialogCurrencyOpen(true)}
+                            // onPress={() => setIsDialogCurrencyOpen(true)}
+                            onPress={() => modalizeCurrencyRef.current?.open()}
                         />
                     </View>
                     <View style={{ marginTop: 16 }}>
                         <Select
                             label={i18n.t('language')}
                             value={language === 'en' ? 'English' : ' Português'}
-                            onPress={() => setIsDialogLanguageOpen(true)}
+                            // onPress={() => setIsDialogLanguageOpen(true)}
+                            onPress={() => modalizeLanguageRef.current?.open()}
                         />
                     </View>
                     <Input
@@ -462,109 +544,26 @@ function ProfileScreen() {
                     </View>
                 </View>
             </ScrollView>
-            <Portal>
-                {/* <BottomSheet
-                    visible={isDialogCurrencyOpen}
-                    onBackButtonPress={isDialogCurrencyOpen}
-                    onBackdropPress={isDialogCurrencyOpen}
-                > */}
-                    <Dialog
-                    visible={isDialogCurrencyOpen}
-                    onDismiss={() => setIsDialogCurrencyOpen(false)}
-                >
-                    <Dialog.Content>
-                        <Searchbar
-                            placeholder={i18n.t('search')}
-                            style={{
-                                backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                                shadowRadius: 0,
-                                elevation: 0,
-                                borderRadius: 6,
-                                flex: 1
-                            }}
-                            autoFocus
-                            clearIcon={(p) => (
-                                <IconButton
-                                    icon="close"
-                                    onPress={() => {
-                                        setSearchCurrency('');
-                                        setSearchCurrencyResult([]);
-                                        setTooManyResultForQuery(false);
-                                        setShowingResults(false);
-                                    }}
-                                />
-                            )}
-                            onChangeText={(e) => {
-                                if (e.length === 0 && showingResults) {
-                                    setSearchCurrencyResult([]);
-                                    setShowingResults(false);
-                                }
-                                setSearchCurrency(e);
-                            }}
-                            value={searchCurrency}
-                            onEndEditing={handleSearchCurrency}
-                        />
-                        {renderSearchCurrencyResult()}
-                    </Dialog.Content>
-                
-                </Dialog>
-                {/* </BottomSheet> */}
-                <Dialog
-                    visible={isDialogLanguageOpen}
-                    onDismiss={() => setIsDialogLanguageOpen(false)}
-                >
-                    <Dialog.Content>
-                        <RadioButton.Group
-                            onValueChange={(value) => {
-                                setIsDialogLanguageOpen(false);
-                                handleChangeLanguage(value);
-                            }}
-                            value={language}
-                        >
-                            <RadioButton.Item
-                                key="en"
-                                label="English"
-                                value="en"
-                            />
-                            <RadioButton.Item
-                                key="pt"
-                                label="Português"
-                                value="pt"
-                            />
-                        </RadioButton.Group>
-                    </Dialog.Content>
-                </Dialog>
-                <Dialog
-                    visible={isDialogGenderOpen}
-                    onDismiss={() => setIsDialogGenderOpen(false)}
-                >
-                    <Dialog.Content>
-                        <RadioButton.Group
-                            onValueChange={(value) => {
-                                setIsDialogGenderOpen(false);
-                                handleChangeGender(value);
-                            }}
-                            value={gender ? gender : ''}
-                        >
-                            <RadioButton.Item
-                                key="f"
-                                label={i18n.t('female')}
-                                value="f"
-                            />
-                            <RadioButton.Item
-                                key="m"
-                                label={i18n.t('male')}
-                                value="m"
-                            />
-                            <RadioButton.Item
-                                key="o"
-                                label={i18n.t('others')}
-                                value="o"
-                            />
-                        </RadioButton.Group>
-                    </Dialog.Content>
-                </Dialog>
-            </Portal>
+            <Modalize
+                ref={modalizeCurrencyRef}
+                HeaderComponent={renderHeader('Currency')}
+                adjustToContentHeight={true}
+            >
+                {renderCurrencyContent()}
+            </Modalize>
+
+            {/* <BottomSheet
+                ref={bottomSheetLanguageRef}
+                snapPoints={[450, 300, 50]}
+                borderRadius={10}
+                renderContent={bottomSheetLanguageContent}
+            />
+            <BottomSheet
+                ref={bottomSheetGenderRef}
+                snapPoints={[800, 300, 50]}
+                borderRadius={10}
+                renderContent={bottomSheetGenderContent}
+            /> */}
         </>
     );
 }
@@ -650,6 +649,57 @@ const styles = StyleSheet.create({
         height: 46,
         width: 140,
         paddingHorizontal: 16,
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingVertical: 16,
+        paddingRight: 16,
+    },
+    itemTitle: {
+        fontSize: 15,
+        lineHeight: 24,
+        fontFamily: 'Inter-Regular',
+    },
+    bottomSheetHeaderContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 15,
+        paddingHorizontal: 22,
+    },
+    bottomSheetHeaderText: {
+        fontSize: 22,
+        lineHeight: 28,
+        fontFamily: 'Manrope-Bold',
+    },
+    balanceValue: {
+        color: ipctColors.regentGray,
+        fontSize: 16,
+        fontFamily: 'Inter-Regular',
+        lineHeight: 16,
+        letterSpacing: 0.7,
+        opacity: 0.48,
+    },
+    avatarCallToAction: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 16,
+        fontWeight: '400',
+        lineHeight: 23,
+        letterSpacing: 0,
+        textAlign: 'left',
+        color: ipctColors.blueRibbon,
+    },
+    searchBarContainer: {
+        borderColor: ipctColors.borderGray,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        shadowRadius: 0,
+        elevation: 0,
+        borderRadius: 6,
     },
 });
 

@@ -259,7 +259,7 @@ export default {
         "You don't have enough balance to submit the request. Celo's transactions are nearly free but not completely free. Always keep a few cents in your account.",
     claimLockedUntil:
         "You aren't yet allowed to claim. Will be available in {{date}}. If it fails peridically, make sure to have the best internet connection possible and Valora is synced.",
-    search: 'Search',
+    search: 'Search by currency name',
     noResults: 'No results founds!',
     tooManyResults: 'Too many results! Improve your search.',
     stories: 'Stories',
