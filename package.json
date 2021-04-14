@@ -114,7 +114,6 @@
             "bash -c tsc --noEmit"
         ],
         "*.{js,ts,tsx,css,md}": "prettier --write",
-        "*.js": "eslint --cache --fix",
-        "*.{js,css,md}": "prettier --write"
+        "*.js": "eslint --cache --fix"
     }
 }
