@@ -2,34 +2,17 @@
     "compilerOptions": {
         "baseUrl": "src",
         "paths": {
-            "assets": [
-                "./src/assets"
-            ],
-            "components": [
-                "./src/components"
-            ],
-            "helpers": [
-                "./src/helpers"
-            ],
-            "navigator": [
-                "./src/navigator"
-            ],
-            "services": [
-                "src/helpers/reduxces"
-            ],
-            "styles": [
-                "./src/styles"
-            ],
-            "views": [
-                "./src/views"
-            ],
+            "assets": ["./src/assets"],
+            "components": ["./src/components"],
+            "helpers": ["./src/helpers"],
+            "navigator": ["./src/navigator"],
+            "services": ["src/helpers/reduxces"],
+            "styles": ["./src/styles"],
+            "views": ["./src/views"]
         },
         "allowSyntheticDefaultImports": true,
         "jsx": "react-native",
-        "lib": [
-            "dom",
-            "esnext"
-        ],
+        "lib": ["dom", "esnext"],
         "moduleResolution": "node",
         "noEmit": true,
         "skipLibCheck": true,
@@ -37,6 +20,8 @@
         "strict": true,
         "sourceMap": true,
         "inlineSources": true,
-        "sourceRoot": "/"
+        "sourceRoot": "/",
+        "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+        "exclude": ["node_modules"]
     }
 }
