@@ -109,8 +109,12 @@
         "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz"
     },
     "lint-staged": {
+        "*.{js,jsx,ts,tsx}": [
+            "yarn eslint --quiet --fix",
+            "bash -c tsc --noEmit"
+        ],
+        "*.{js,ts,tsx,css,md}": "prettier --write",
         "*.js": "eslint --cache --fix",
         "*.{js,css,md}": "prettier --write"
     }
-    
 }
