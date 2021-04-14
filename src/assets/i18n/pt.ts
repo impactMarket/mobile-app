@@ -54,6 +54,7 @@ export default {
     needLoginToCreateCommunity:
         'É necessário estar conectado com a app Valora para criar uma comunidade.',
     communityDetails: 'Detalhes da Comunidade',
+    applyCommunity: 'Criar Comunidade',
     createCommunityDescription:
         'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
     selectCoverImage: 'Selecione Imagem de Capa',

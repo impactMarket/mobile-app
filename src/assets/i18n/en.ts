@@ -53,6 +53,7 @@ export default {
     exploreCommunityContract: 'See Community Contract',
     edit: 'Edit',
     create: 'Create',
+    applyCommunity: 'Apply Community',
     submit: 'Submit',
     needLoginToCreateCommunity:
         'You need to connect with Valora to create a community.',

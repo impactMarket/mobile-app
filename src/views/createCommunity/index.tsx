@@ -5,6 +5,7 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Card from 'components/core/Card';
 import Select from 'components/core/Select';
+import Input from 'components/core/Input';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -582,108 +583,96 @@ function CreateCommunityScreen() {
         <>
             <ScrollView>
                 <View style={styles.container}>
-                    <Card>
-                        <Card.Content style={{ margin: -16 }}>
-                            <Headline style={styles.communityDetailsHeadline}>
-                                {i18n.t('communityDetails').toUpperCase()}
-                            </Headline>
-                            <Text style={styles.createCommunityDescription}>
-                                {i18n.t('createCommunityDescription')}
-                            </Text>
-                            <View>
-                                <ImageBackground
-                                    source={
-                                        coverImage.length === 0
-                                            ? require('assets/images/placeholder.png')
-                                            : { uri: coverImage }
-                                    }
-                                    style={styles.imageCover}
-                                >
-                                    <Button
-                                        mode="contained"
-                                        style={{ margin: 16 }}
-                                        onPress={pickImage}
-                                    >
-                                        {coverImage.length === 0
-                                            ? i18n.t('selectCoverImage')
-                                            : i18n.t('changeCoverImage')}
-                                    </Button>
-                                </ImageBackground>
-                                {!isCoverImageValid && (
-                                    <HelperText type="error" visible>
-                                        {i18n.t('coverImageRequired')}
-                                    </HelperText>
-                                )}
-                                <View style={{ margin: 16 }}>
-                                    <TextInput
-                                        mode="flat"
-                                        underlineColor="transparent"
-                                        style={styles.inputTextField}
-                                        label={i18n.t('communityName')}
-                                        value={name}
-                                        maxLength={32}
-                                        onChangeText={(value) => setName(value)}
-                                        onEndEditing={() =>
-                                            setIsNameValid(name.length > 0)
-                                        }
-                                    />
-                                    {!isNameValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t('communityNameRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                <Divider />
-                                <View style={{ margin: 16 }}>
-                                    <TextInput
-                                        mode="flat"
-                                        underlineColor="transparent"
-                                        style={styles.inputTextField}
-                                        label={i18n.t('shortDescription')}
-                                        value={description}
-                                        maxLength={1024}
-                                        onChangeText={(value) =>
-                                            setDescription(value)
-                                        }
-                                        onEndEditing={() =>
-                                            setIsDescriptionValid(
-                                                description.length > 0
-                                            )
-                                        }
-                                        multiline
-                                        numberOfLines={6}
-                                    />
-                                    {!isDescriptionValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t(
-                                                'communityDescriptionRequired'
-                                            )}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                <Divider />
-                                <View style={{ margin: 16 }}>
-                                    <TextInput
-                                        mode="flat"
-                                        underlineColor="transparent"
-                                        style={styles.inputTextField}
-                                        label={i18n.t('city')}
-                                        value={city}
-                                        maxLength={32}
-                                        onChangeText={(value) => setCity(value)}
-                                        onEndEditing={() =>
-                                            setIsCityValid(city.length > 0)
-                                        }
-                                    />
-                                    {!isCityValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t('cityRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                <Divider />
-                                <View style={{ margin: 16 }}>
-                                    {/* <TextInput
+                    <Headline style={styles.communityDetailsHeadline}>
+                        {i18n.t('communityDetails')}
+                    </Headline>
+                    {/* <Text style={styles.createCommunityDescription}>
+                        {i18n.t('createCommunityDescription')}
+                    </Text> */}
+                    <View>
+                        <ImageBackground
+                            source={
+                                coverImage.length === 0
+                                    ? require('assets/images/placeholder.png')
+                                    : { uri: coverImage }
+                            }
+                            style={styles.imageCover}
+                        >
+                            <Button
+                                mode="contained"
+                                style={{ margin: 16 }}
+                                onPress={pickImage}
+                            >
+                                {coverImage.length === 0
+                                    ? i18n.t('selectCoverImage')
+                                    : i18n.t('changeCoverImage')}
+                            </Button>
+                        </ImageBackground>
+                        {!isCoverImageValid && (
+                            <HelperText type="error" visible>
+                                {i18n.t('coverImageRequired')}
+                            </HelperText>
+                        )}
+                        <View style={{ marginTop: 16 }}>
+                            <Input
+                                style={styles.inputTextField}
+                                label={i18n.t('communityName')}
+                                value={name}
+                                maxLength={32}
+                                onChangeText={(value) => setName(value)}
+                                onEndEditing={() =>
+                                    setIsNameValid(name.length > 0)
+                                }
+                            />
+                            {!isNameValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('communityNameRequired')}
+                                </HelperText>
+                            )}
+                        </View>
+
+                        <View style={{ marginTop: 16 }}>
+                            <Input
+                                style={styles.inputTextField}
+                                label={i18n.t('shortDescription')}
+                                value={description}
+                                maxLength={1024}
+                                onChangeText={(value) => setDescription(value)}
+                                onEndEditing={() =>
+                                    setIsDescriptionValid(
+                                        description.length > 0
+                                    )
+                                }
+                                multiline
+                                numberOfLines={6}
+                            />
+                            {!isDescriptionValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('communityDescriptionRequired')}
+                                </HelperText>
+                            )}
+                        </View>
+
+                        <View style={{ marginTop: 16 }}>
+                            <Input
+                                style={styles.inputTextField}
+                                label={i18n.t('city')}
+                                value={city}
+                                maxLength={32}
+                                onChangeText={(value) => setCity(value)}
+                                onEndEditing={() =>
+                                    setIsCityValid(city.length > 0)
+                                }
+                            />
+                            {!isCityValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('cityRequired')}
+                                </HelperText>
+                            )}
+                        </View>
+
+                        <View style={{ marginTop: 16 }}>
+                            {/* <TextInput
                                         mode="flat"
                                         underlineColor="transparent"
                                         style={styles.inputTextField}
@@ -699,86 +688,80 @@ function CreateCommunityScreen() {
                                             )
                                         }
                                     />*/}
-                                    <Select
-                                        label={i18n.t('country')}
-                                        value={
-                                            country.length > 0
-                                                ? `${countries[country].emoji} ${countries[country].name}`
-                                                : 'Select Country'
-                                        }
-                                        onPress={() =>
-                                            setIsDialogCountryOpen(true)
-                                        }
-                                    />
-                                    {!isCountryValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t('countryRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                {gpsLocation === undefined ? (
-                                    <View>
-                                        <Button
-                                            mode="outlined"
-                                            style={{ marginHorizontal: 16 }}
-                                            onPress={() => enableGPSLocation()}
-                                            loading={isEnablingGPS}
-                                        >
-                                            {i18n.t('getGPSLocation')}
-                                        </Button>
-                                        {!isEnabledGPS && (
-                                            <HelperText type="error" visible>
-                                                {i18n.t('enablingGPSRequired')}
-                                            </HelperText>
-                                        )}
-                                    </View>
-                                ) : (
-                                    <Button
-                                        icon="check"
-                                        mode="outlined"
-                                        style={{ marginHorizontal: 16 }}
-                                        disabled
-                                    >
-                                        {i18n.t('validCoordinates')}
-                                    </Button>
+                            <Select
+                                label={i18n.t('country')}
+                                value={
+                                    country.length > 0
+                                        ? `${countries[country].emoji} ${countries[country].name}`
+                                        : 'Select Country'
+                                }
+                                onPress={() => setIsDialogCountryOpen(true)}
+                            />
+                            {!isCountryValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('countryRequired')}
+                                </HelperText>
+                            )}
+                        </View>
+                        {gpsLocation === undefined ? (
+                            <View>
+                                <Button
+                                    mode="contained"
+                                    style={{ marginHorizontal: 16 }}
+                                    onPress={() => enableGPSLocation()}
+                                    loading={isEnablingGPS}
+                                >
+                                    {i18n.t('getGPSLocation')}
+                                </Button>
+                                {!isEnabledGPS && (
+                                    <HelperText type="error" visible>
+                                        {i18n.t('enablingGPSRequired')}
+                                    </HelperText>
                                 )}
-                                <View style={{ margin: 16 }}>
-                                    <TextInput
-                                        mode="flat"
-                                        underlineColor="transparent"
-                                        style={styles.inputTextField}
-                                        label={i18n.t('email')}
-                                        value={email}
-                                        maxLength={64}
-                                        keyboardType="email-address"
-                                        onChangeText={(value) =>
-                                            setEmail(value)
-                                        }
-                                        onEndEditing={() =>
-                                            setIsEmailValid(
-                                                validateEmail(email)
-                                            )
-                                        }
-                                    />
-                                    {!isEmailValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t('emailRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                <Divider />
-                                {/* <Paragraph style={styles.inputTextFieldLabel}>
+                            </View>
+                        ) : (
+                            <Button
+                                icon="check"
+                                mode="outlined"
+                                style={{ marginHorizontal: 16 }}
+                                disabled
+                            >
+                                {i18n.t('validCoordinates')}
+                            </Button>
+                        )}
+                        <View style={{ marginTop: 16 }}>
+                            <TextInput
+                                mode="flat"
+                                underlineColor="transparent"
+                                style={styles.inputTextField}
+                                label={i18n.t('email')}
+                                value={email}
+                                maxLength={64}
+                                keyboardType="email-address"
+                                onChangeText={(value) => setEmail(value)}
+                                onEndEditing={() =>
+                                    setIsEmailValid(validateEmail(email))
+                                }
+                            />
+                            {!isEmailValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('emailRequired')}
+                                </HelperText>
+                            )}
+                        </View>
+                        <Divider />
+                        {/* <Paragraph style={styles.inputTextFieldLabel}>
                                     {i18n.t('currency')}
                                 </Paragraph> */}
-                                <View
-                                    style={{
-                                        flex: 4,
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        margin: 16,
-                                    }}
-                                >
-                                    {/* <Button
+                        <View
+                            style={{
+                                flex: 4,
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                margin: 16,
+                            }}
+                        >
+                            {/* <Button
                                         mode="contained"
                                         style={{
                                             width: '80%',
@@ -800,33 +783,32 @@ function CreateCommunityScreen() {
                                             {currency}
                                         </Text>
                                     </Button> */}
-                                    <View style={{ flex: 3 }}>
-                                        <Select
-                                            label={i18n.t('currency')}
-                                            value={currencies[currency].name}
-                                            onPress={() =>
-                                                setIsDialogCurrencyOpen(true)
-                                            }
-                                        />
-                                    </View>
-                                    <View
-                                        style={{
-                                            flex: 1,
-                                            flexDirection: 'row-reverse',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <IconButton
-                                            style={{ marginTop: 25 }}
-                                            icon="help-circle-outline"
-                                            size={20}
-                                            onPress={() => openHelp('currency')}
-                                        />
-                                    </View>
-                                </View>
+                            <View style={{ flex: 3 }}>
+                                <Select
+                                    label={i18n.t('currency')}
+                                    value={currencies[currency].name}
+                                    onPress={() =>
+                                        setIsDialogCurrencyOpen(true)
+                                    }
+                                />
                             </View>
-                        </Card.Content>
-                    </Card>
+                            <View
+                                style={{
+                                    flex: 1,
+                                    flexDirection: 'row-reverse',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <IconButton
+                                    style={{ marginTop: 25 }}
+                                    icon="help-circle-outline"
+                                    size={20}
+                                    onPress={() => openHelp('currency')}
+                                />
+                            </View>
+                        </View>
+                    </View>
+
                     <Headline style={styles.contractDetailsHeadline}>
                         {i18n.t('contractDetails')}
                     </Headline>
@@ -1193,7 +1175,7 @@ function CreateCommunityScreen() {
 CreateCommunityScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('create'), // editing ? i18n.t('edit') : i18n.t('create'),
+        headerTitle: i18n.t('applyCommunity'), // editing ? i18n.t('edit') : i18n.t('create'),
     };
 };
 
@@ -1262,22 +1244,16 @@ const styles = StyleSheet.create({
         color: ipctColors.regentGray,
     },
     communityDetailsHeadline: {
-        opacity: 0.48,
-        fontFamily: 'Gelion-Regular',
-        fontSize: 13,
-        fontWeight: '500',
-        lineHeight: 12,
-        letterSpacing: 0.7,
+        fontFamily: 'Manrope-Bold',
+        fontSize: 18,
+        lineHeight: 28,
         paddingHorizontal: 16,
         paddingVertical: 10,
     },
     contractDetailsHeadline: {
-        opacity: 0.48,
-        fontFamily: 'Gelion-Regular',
-        fontSize: 13,
-        fontWeight: '500',
-        lineHeight: 13,
-        letterSpacing: 0.7,
+        fontFamily: 'Manrope-Bold',
+        fontSize: 18,
+        lineHeight: 28,
         marginTop: 20,
         marginHorizontal: 10,
     },
