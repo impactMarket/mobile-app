@@ -166,6 +166,13 @@ function ProfileScreen() {
         dispatch(setUserMetadata({ ...user, gender }));
     };
 
+    const handleChangeAge = async (age: number) => {
+        setAge((new Date().getFullYear() - age).toString());
+        Api.user.setAge(age);
+        updateUserMetadataCache();
+        dispatch(setUserMetadata({ ...user, year: age }));
+    };
+
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
         Api.user.setLanguage(text);
