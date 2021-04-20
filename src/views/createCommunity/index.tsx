@@ -1,11 +1,12 @@
+/* eslint handle-callback-err: "warn" */
 import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import Card from 'components/core/Card';
-import Select from 'components/core/Select';
 import Input from 'components/core/Input';
+import Select from 'components/core/Select';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -18,15 +19,16 @@ import { validateEmail, updateCommunityInfo } from 'helpers/index';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, Dispatch } from 'react';
 import {
     StyleSheet,
     ScrollView,
     Alert,
     View,
-    ImageBackground,
+    Image,
     FlatList,
     TextInputEndEditingEventData,
+    TouchableOpacity,
 } from 'react-native';
 import {
     Button,
@@ -44,6 +46,7 @@ import {
     List,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
@@ -52,7 +55,6 @@ import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
-import * as Sentry from 'sentry-expo';
 
 const countries: {
     [key: string]: {
@@ -104,6 +106,7 @@ function CreateCommunityScreen() {
     const [isDialogVisibilityOpen, setIsDialogVisibilityOpen] = useState(false);
     const [isNameValid, setIsNameValid] = useState(true);
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
+    const [isProfileImageValid, setIsProfileImageValid] = useState(true);
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
     const [isCountryValid, setIsCountryValid] = useState(true);
@@ -134,6 +137,9 @@ function CreateCommunityScreen() {
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('');
+    const [profileImage, setProfileImage] = useState('');
+    const [communityLogo, setCommunityLogo] = useState('');
+
     const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementInterval, setIncrementalInterval] = useState('');
@@ -168,7 +174,7 @@ function CreateCommunityScreen() {
 
     useEffect(() => {
         const setCountryAndCurrencyBasedOnPhoneNumber = () => {
-            for (var [key, value] of Object.entries(countries)) {
+            for (const [key, value] of Object.entries(countries)) {
                 if (
                     value.phone ===
                     userPhoneNumber.slice(1, value.phone.length + 1)
@@ -221,6 +227,10 @@ function CreateCommunityScreen() {
         if (!_isCoverImageValid) {
             setIsCoverImageValid(false);
         }
+        const _isProfileImageValid = profileImage.length > 0;
+        if (!_isProfileImageValid) {
+            setIsProfileImageValid(false);
+        }
         const _isNameValid = name.length > 0;
         if (!_isNameValid) {
             setIsNameValid(false);
@@ -269,7 +279,8 @@ function CreateCommunityScreen() {
             _isClaimAmountValid &&
             _isIncrementalIntervalValid &&
             _isMaxClaimValid &&
-            _isCoverImageValid;
+            _isCoverImageValid &&
+            _isProfileImageValid;
 
         if (!isSubmitAvailable) {
             return;
@@ -418,7 +429,10 @@ function CreateCommunityScreen() {
         }
     };
 
-    const pickImage = async () => {
+    const pickImage = async (
+        cb: Dispatch<React.SetStateAction<string>>,
+        cbv: Dispatch<React.SetStateAction<boolean>>
+    ) => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -427,8 +441,8 @@ function CreateCommunityScreen() {
         });
 
         if (!result.cancelled) {
-            setCoverImage(result.uri);
-            setIsCoverImageValid(true);
+            cb(result.uri);
+            cbv(true);
         }
     };
 
@@ -448,7 +462,7 @@ function CreateCommunityScreen() {
             setTooManyResultForQuery(false);
         }
         const countriesResult: string[] = [];
-        for (var [key, value] of Object.entries(countries)) {
+        for (const [key, value] of Object.entries(countries)) {
             if (value.name.indexOf(searchCountryQuery) !== -1) {
                 countriesResult.push(key);
             }
@@ -515,7 +529,7 @@ function CreateCommunityScreen() {
             setTooManyResultForQuery(false);
         }
         const currencyResult: string[] = [];
-        for (var [key, value] of Object.entries(currencies)) {
+        for (const [key, value] of Object.entries(currencies)) {
             if (
                 value.name.indexOf(searchCurrency) !== -1 ||
                 value.symbol.indexOf(searchCurrency) !== -1 ||
@@ -586,33 +600,10 @@ function CreateCommunityScreen() {
                     <Headline style={styles.communityDetailsHeadline}>
                         {i18n.t('communityDetails')}
                     </Headline>
-                    {/* <Text style={styles.createCommunityDescription}>
-                        {i18n.t('createCommunityDescription')}
-                    </Text> */}
+                    <Text style={styles.createCommunityDescription}>
+                        {i18n.t('communityDescriptionLabel')}
+                    </Text>
                     <View>
-                        <ImageBackground
-                            source={
-                                coverImage.length === 0
-                                    ? require('assets/images/placeholder.png')
-                                    : { uri: coverImage }
-                            }
-                            style={styles.imageCover}
-                        >
-                            <Button
-                                mode="contained"
-                                style={{ margin: 16 }}
-                                onPress={pickImage}
-                            >
-                                {coverImage.length === 0
-                                    ? i18n.t('selectCoverImage')
-                                    : i18n.t('changeCoverImage')}
-                            </Button>
-                        </ImageBackground>
-                        {!isCoverImageValid && (
-                            <HelperText type="error" visible>
-                                {i18n.t('coverImageRequired')}
-                            </HelperText>
-                        )}
                         <View style={{ marginTop: 16 }}>
                             <Input
                                 style={styles.inputTextField}
@@ -630,10 +621,146 @@ function CreateCommunityScreen() {
                                 </HelperText>
                             )}
                         </View>
+                        {coverImage ? (
+                            <Image
+                                style={{
+                                    height: 331,
+                                    width: '100%',
+                                    borderRadius: 12,
+                                    marginVertical: 22,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                                source={{ uri: coverImage }}
+                            />
+                        ) : (
+                            <View
+                                style={[
+                                    { marginTop: 12 },
+                                    styles.uploadContainer,
+                                ]}
+                            >
+                                <View
+                                    style={{
+                                        flexDirection: 'column',
+                                    }}
+                                >
+                                    <Headline
+                                        style={styles.communityDetailsHeadline}
+                                    >
+                                        Cover Image
+                                        {/* {i18n.t('Cover Image')} */}
+                                    </Headline>
+                                    <Text
+                                        style={[
+                                            { color: '#73839D' },
+                                            styles.createCommunityDescription,
+                                        ]}
+                                    >
+                                        Min. 784px by 784px
+                                    </Text>
+                                </View>
+                                <TouchableOpacity
+                                    style={styles.uploadBtn}
+                                    onPress={() =>
+                                        pickImage(
+                                            setCoverImage,
+                                            setIsCoverImageValid
+                                        )
+                                    }
+                                >
+                                    <Text
+                                        style={{
+                                            color: '#333239',
+                                            fontFamily: 'Inter-Regular',
+                                            fontSize: 15,
+                                            lineHeight: 28,
+                                        }}
+                                    >
+                                        Upload
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
 
-                        <View style={{ marginTop: 16 }}>
+                        {/* <View
+                            style={{
+                                height: 331,
+                                width: '100%',
+                                borderRadius: 12,
+                                backgroundColor: '#DCDFE4',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        ></View> */}
+                        {profileImage ? (
+                            <Image
+                                style={{
+                                    height: 112,
+                                    width: '100%',
+                                    borderRadius: 12,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                                source={{ uri: profileImage }}
+                            />
+                        ) : (
+                            <View style={styles.uploadContainer}>
+                                <View
+                                    style={{
+                                        flexDirection: 'column',
+                                    }}
+                                >
+                                    <Headline
+                                        style={styles.communityDetailsHeadline}
+                                    >
+                                        Your Profile Photo
+                                        {/* {i18n.t('Cover Image')} */}
+                                    </Headline>
+                                    <Text
+                                        style={[
+                                            { color: '#73839D' },
+                                            styles.createCommunityDescription,
+                                        ]}
+                                    >
+                                        Min. 300px by 300px
+                                    </Text>
+                                </View>
+                                <TouchableOpacity
+                                    style={styles.uploadBtn}
+                                    onPress={() =>
+                                        pickImage(
+                                            setProfileImage,
+                                            setIsProfileImageValid
+                                        )
+                                    }
+                                >
+                                    <Text
+                                        style={{
+                                            color: '#333239',
+                                            fontFamily: 'Inter-Regular',
+                                            fontSize: 15,
+                                            lineHeight: 28,
+                                        }}
+                                    >
+                                        Upload
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            // <Text>Uploading file ...</Text>
+                        )}
+
+                        {!isCoverImageValid && (
+                            <HelperText type="error" visible>
+                                {i18n.t('coverImageRequired')}
+                            </HelperText>
+                        )}
+                        <View style={{ marginTop: 16, minHeight: 115 }}>
                             <Input
-                                style={styles.inputTextField}
+                                style={[
+                                    { minHeight: 115 },
+                                    styles.inputTextField,
+                                ]}
                                 label={i18n.t('shortDescription')}
                                 value={description}
                                 maxLength={1024}
@@ -1247,8 +1374,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Manrope-Bold',
         fontSize: 18,
         lineHeight: 28,
-        paddingHorizontal: 16,
-        paddingVertical: 10,
     },
     contractDetailsHeadline: {
         fontFamily: 'Manrope-Bold',
@@ -1258,13 +1383,26 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     createCommunityDescription: {
-        fontFamily: 'Gelion-Regular',
-        backgroundColor: '#f0f0f0',
-        padding: 16,
-        borderTopColor: '#d8d8d8',
-        borderTopWidth: 1,
-        borderBottomColor: '#d8d8d8',
-        borderBottomWidth: 1,
+        fontFamily: 'Inter-Regular',
+        fontSize: 15,
+        lineHeight: 24,
+    },
+    uploadContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        marginBottom: 24,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    uploadBtn: {
+        width: 98,
+        height: 44,
+        paddingHorizontal: 23,
+        paddingVertical: 8,
+        backgroundColor: '#E9EDF4',
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 

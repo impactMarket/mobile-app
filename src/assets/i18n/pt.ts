@@ -58,6 +58,8 @@ export default {
     createCommunityDescription:
         'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
     selectCoverImage: 'Selecione Imagem de Capa',
+    communityDescriptionLabel:
+        'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
     changeCoverImage: 'Altere a Imagem de Capa',
     communityName: 'Nome da Comunidade',
     shortDescription: 'Descrição',

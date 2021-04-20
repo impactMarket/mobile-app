@@ -58,6 +58,8 @@ export default {
     needLoginToCreateCommunity:
         'You need to connect with Valora to create a community.',
     communityDetails: 'Community Details',
+    communityDescriptionLabel:
+        'Tell more about your community and why access to a basic income could be important for its members.',
     createCommunityDescription:
         'By creating a new community, you are initiating a new basic income mechanism for your community where each beneficiary you add will have equal access to claim a recurring amount defined by you in this form.',
     selectCoverImage: 'Select Cover Image',
