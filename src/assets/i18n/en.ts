@@ -97,12 +97,16 @@ export default {
     errorUpdatingCommunity: 'An error happened while updating your community!',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
+    errorUploadingAvatar:
+        'An error happened while uploading your image, try again later!',
     anErroHappenedTryAgain: 'An error happened, please, try again.',
     toContinuePlease: 'To continue please',
+    impactMarketDescription:
+        'ImpactMarket operates on top of Celo network, an open and global financial platform.',
     loginDescription:
-        'impactMarket operates on top of Celo network, an open and global financial platform.\n\nWith Valora you can easily send and receive money.',
-    step1: 'Step 1',
-    step2: 'Step 2',
+        'With Valora you can easily send and receive money with just a mobile phone.',
+    step1: 'Step 1 of 2',
+    step2: 'Step 2 of 2',
     installAndCreateValoraAccount: 'Install and create Valora Account',
     connectWithValora: 'Connect with Valora',
     notNow: 'Not now',

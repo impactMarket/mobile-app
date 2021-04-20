@@ -1,15 +1,15 @@
-import countriesJSON from 'assets/countries.json';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RouteProp, useNavigation } from '@react-navigation/native';
+import countriesJSON from 'assets/countries.json';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import * as Localization from 'expo-localization';
 import {
-    Screens,
     STORAGE_USER_ADDRESS,
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
@@ -19,8 +19,16 @@ import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Alert,
+    ScrollView,
+    Dimensions,
+} from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import * as Sentry from 'sentry-expo';
@@ -53,7 +61,7 @@ function Auth() {
     const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
-
+    const modalizeWelcomeRef = useRef<Modalize>(null);
     const login = async () => {
         const requestId = 'login';
         const dappName = 'impactMarket';
@@ -98,7 +106,7 @@ function Auth() {
             language = 'en';
         }
         let currency = '';
-        for (var [, value] of Object.entries(countries)) {
+        for (const [, value] of Object.entries(countries)) {
             if (
                 value.phone ===
                 dappkitResponse.phoneNumber.slice(1, value.phone.length + 1)
@@ -115,6 +123,7 @@ function Auth() {
             pushNotificationToken,
             dappkitResponse.phoneNumber
         );
+
         if (user === undefined) {
             // TODO: needs to be improved
             // Sentry.Native.captureMessage(
@@ -192,6 +201,45 @@ function Auth() {
         }
     };
 
+    useEffect(() => {
+        modalizeWelcomeRef.current?.open();
+    }, []);
+
+    const renderWelcome = () => {
+        if (!modalizeWelcomeRef.current?.open) {
+        } else {
+            return (
+                <View style={{ height: Dimensions.get('window').height * 0.5 }}>
+                    <View style={{ width: '100%', paddingHorizontal: 16 }}>
+                        <Text style={styles.descriptionTop}>
+                            {i18n.t('impactMarketDescription')}
+                        </Text>
+                        <Text style={styles.description}>
+                            {i18n.t('loginDescription')}
+                        </Text>
+                    </View>
+                    <View style={{ width: '100%', paddingHorizontal: 31 }}>
+                        <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
+                        <View style={{ width: '100%', marginTop: 16 }}>
+                            {buttonStoreLink()}
+                        </View>
+                        <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
+                        <Button
+                            modeType="green"
+                            bold
+                            onPress={() => login()}
+                            loading={connecting}
+                            style={{ width: '100%', marginTop: 16 }}
+                            labelStyle={styles.buttomConnectValoraText}
+                        >
+                            {i18n.t('connectWithValora')}
+                        </Button>
+                    </View>
+                </View>
+            );
+        }
+    };
+
     const buttonStoreLink = () => {
         const androidURL =
             'https://play.google.com/store/apps/details?id=co.clabs.valora';
@@ -199,13 +247,13 @@ function Auth() {
         if (Device.osName === 'Android') {
             return (
                 <Button
-                    modeType="gray"
+                    modeType="default"
                     bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(androidURL)}
                 >
-                    <Text style={{ color: 'black' }}>
+                    <Text style={styles.buttomStoreText}>
                         {i18n.t('installAndCreateValoraAccount')}
                     </Text>
                 </Button>
@@ -213,13 +261,13 @@ function Auth() {
         } else if (Device.osName === 'iOS') {
             return (
                 <Button
-                    modeType="gray"
+                    modeType="default"
                     bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(iosURL)}
                 >
-                    <Text style={{ color: 'black' }}>
+                    <Text style={styles.buttomStoreText}>
                         {i18n.t('installAndCreateValoraAccount')}
                     </Text>
                 </Button>
@@ -228,7 +276,7 @@ function Auth() {
         return (
             <>
                 <Button
-                    modeType="gray"
+                    modeType="default"
                     bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
@@ -237,47 +285,30 @@ function Auth() {
                     iOS
                 </Button>
                 <Button
-                    modeType="gray"
+                    modeType="default"
                     bold
                     style={{ width: '100%' }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(androidURL)}
                 >
-                    <Text style={{ color: 'black' }}>Android</Text>
+                    <Text style={styles.buttomStoreText}>Android</Text>
                 </Button>
             </>
         );
     };
 
     return (
-        <View style={{ paddingTop: insets.top + 10, ...styles.mainView }}>
-            <ScrollView style={{ width: '100%', paddingHorizontal: 16 }}>
-                <Text style={styles.descriptionTop}>
-                    {i18n.t('toContinuePlease')}
-                </Text>
-                <Text style={styles.title}>{i18n.t('connectWithValora')}</Text>
-                <Text style={styles.description}>
-                    {i18n.t('loginDescription')}
-                </Text>
-            </ScrollView>
-            <View style={{ width: '100%', paddingHorizontal: 31 }}>
-                <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
-                <View style={{ width: '100%', marginTop: 16 }}>
-                    {buttonStoreLink()}
-                </View>
-                <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
-                <Button
-                    modeType="green"
-                    bold
-                    onPress={() => login()}
-                    loading={connecting}
-                    style={{ width: '100%', marginTop: 16 }}
-                    labelStyle={styles.buttomConnectValoraText}
-                >
-                    {i18n.t('connectWithValora')}
-                </Button>
-            </View>
-        </View>
+        <Modalize
+            ref={modalizeWelcomeRef}
+            HeaderComponent={renderHeader(
+                i18n.t('connectWithValora'),
+                modalizeWelcomeRef,
+                () => {}
+            )}
+            adjustToContentHeight
+        >
+            {renderWelcome()}
+        </Modalize>
     );
 }
 
@@ -291,22 +322,24 @@ export default Auth;
 
 const styles = StyleSheet.create({
     mainView: {
-        flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-        // marginHorizontal: 32,
-        // marginTop: 20,
         paddingBottom: 38,
     },
     buttomStoreText: {
-        fontSize: 18,
-        lineHeight: 18,
-        letterSpacing: 0.3,
+        fontSize: 14,
+        lineHeight: 20,
+        color: ipctColors.white,
+        fontFamily: 'Manrope-Bold',
+        fontWeight: '700',
     },
     buttomConnectValoraText: {
-        fontSize: 20,
+        fontSize: 14,
         lineHeight: 20,
+        color: ipctColors.white,
+        fontFamily: 'Manrope-Bold',
+        fontWeight: '700',
     },
     title: {
         fontFamily: 'Gelion-Bold',
@@ -318,35 +351,39 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     descriptionTop: {
-        fontFamily: 'Gelion-Regular',
-        fontSize: 19,
-        lineHeight: 19,
-        textAlign: 'center',
-        color: ipctColors.baliHai,
-        marginTop: 16,
+        fontFamily: 'Manrope-Bold',
+        fontSize: 16,
+        fontWeight: '800',
+        lineHeight: 24,
+        textAlign: 'left',
+        color: ipctColors.darBlue,
+        marginTop: 8,
     },
     description: {
-        fontFamily: 'Gelion-Regular',
-        fontSize: 19,
-        lineHeight: 23,
-        textAlign: 'center',
-        color: ipctColors.baliHai,
-        marginTop: 27,
+        fontFamily: 'Inter-Regular',
+        fontSize: 15,
+        fontWeight: '400',
+        lineHeight: 24,
+        textAlign: 'left',
+        color: ipctColors.darBlue,
+        marginTop: 8,
         marginBottom: 73,
     },
     stepText1: {
-        fontFamily: 'Gelion-Bold',
-        fontSize: 19,
-        lineHeight: 23,
-        textAlign: 'center',
-        color: ipctColors.nileBlue,
+        fontFamily: 'Manrope-Bold',
+        fontSize: 14,
+        fontWeight: '800',
+        lineHeight: 24,
+        textAlign: 'left',
+        color: ipctColors.darBlue,
     },
     stepText2: {
-        fontFamily: 'Gelion-Bold',
-        fontSize: 19,
-        lineHeight: 23,
-        textAlign: 'center',
-        color: ipctColors.nileBlue,
+        fontFamily: 'Manrope-Bold',
+        fontSize: 14,
+        fontWeight: '800',
+        lineHeight: 24,
+        textAlign: 'left',
+        color: ipctColors.darBlue,
         marginTop: 22,
     },
     instructionText: {

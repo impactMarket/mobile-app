@@ -94,12 +94,16 @@ export default {
         'Ocorreu um erro enquanto atualizava os dados da comunidade!',
     errorCreatingCommunity:
         'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
+    errorUploadingAvatar:
+        'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente!',
     anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',
     toContinuePlease: 'Para continuar, deverá',
+    impactMarketDescription:
+        'ImpactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.',
     loginDescription:
-        'impactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.\n\nCom a carteira Valora, pode enviar e receber dinheiro usando apenas um telemóvel.',
-    step1: 'Step 1',
-    step2: 'Step 2',
+        'Com a carteira Valora, pode enviar e receber dinheiro usando apenas um telemóvel.',
+    step1: 'Step 1 de 2',
+    step2: 'Step 2 de 2',
     installAndCreateValoraAccount: 'Instalar Valora e criar conta',
     connectWithValora: 'Conectar com Valora',
     notNow: 'Agora não',

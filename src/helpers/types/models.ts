@@ -35,7 +35,7 @@ export interface CommunityStateAttributes {
     claimed: string;
     claims: number;
     beneficiaries: number;
-    suspect: Array<any>;
+    suspect: any[];
     removedBeneficiaries: number;
     managers: number;
     raised: string;
@@ -80,6 +80,7 @@ export interface UserAttributes {
     username: string | null;
     language: string;
     currency: string;
+    avatar: string | null;
     // pushNotificationToken: string | null;
     gender: string | null;
     year: number | null;

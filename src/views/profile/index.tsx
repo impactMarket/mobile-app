@@ -35,6 +35,7 @@ import {
     Image,
     Dimensions,
     TouchableOpacity,
+    Alert,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
@@ -81,7 +82,6 @@ function ProfileScreen() {
     );
     const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
 
-    const [isAvatarImageValid, setIsAvatarImageValid] = useState(true);
     const [name, setName] = useState('');
     const [avatarImage, setAvatarImage] = useState('');
     const [currency, setCurrency] = useState('usd');
@@ -90,6 +90,7 @@ function ProfileScreen() {
     const [gender, setGender] = useState<string | null>(null);
     const [age, setAge] = useState('');
     const [children, setChildren] = useState('');
+    const [sending, setSending] = useState(false);
 
     const [selectedCurrencyId, setSelectedCurrencyId] = useState<string | null>(
         null
@@ -99,7 +100,6 @@ function ProfileScreen() {
 
     useEffect(() => {
         const loadProfile = () => {
-            console.log({ user });
             if (userWallet.address.length > 0) {
                 if (user.username !== null && user.username.length > 0) {
                     setName(user.username);
@@ -159,6 +159,26 @@ function ProfileScreen() {
         dispatch(setUserMetadata({ ...user, gender }));
     };
 
+    const handleChangeAvatar = async (avatar: string) => {
+        try {
+            setSending(true);
+            setAvatarImage(avatar);
+            //TODO: Discuss w/ Bernardo
+            await Api.upload.uploadUserAvatarImage(avatar);
+            setSending(false);
+        } catch (e) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('errorUploadingAvatar'),
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
+            setSending(false);
+        }
+        updateUserMetadataCache();
+        dispatch(setUserMetadata({ ...user, avatar }));
+    };
+
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
         Api.user.setLanguage(text);
@@ -185,13 +205,12 @@ function ProfileScreen() {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [1, 1],
+            aspect: [4, 3],
             quality: 1,
         });
 
         if (!result.cancelled) {
-            setAvatarImage(result.uri);
-            setIsAvatarImageValid(true);
+            handleChangeAvatar(result.uri);
         }
     };
 
@@ -396,20 +415,23 @@ function ProfileScreen() {
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>
                         {avatarImage.length > 0 ? (
-                            <Image source={{ uri: avatarImage }} />
+                            <Image
+                                source={{ uri: avatarImage }}
+                                style={styles.avatar}
+                            />
                         ) : (
-                            <AvatarPlaceholderSvg />
+                            <AvatarPlaceholderSvg style={styles.avatar} />
                         )}
 
                         {/* TODO: Integrate avatar feature with API */}
-                        {user.avatar && (
+                        {/* {user.avatar && (
                             <IconButton
                                 style={styles.addAvatar}
                                 icon="close"
                                 size={14}
                                 onPress={() => {}}
                             />
-                        )}
+                        )} */}
 
                         <TouchableOpacity
                             style={styles.avatar}
@@ -675,11 +697,15 @@ const styles = StyleSheet.create({
         height: 80,
         width: 81,
         borderRadius: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 16,
+        marginRight: 16,
     },
     avatarText: {
         height: 46,
         width: 140,
-        paddingHorizontal: 16,
+        marginLeft: 16,
     },
     itemContainer: {
         flexDirection: 'row',
