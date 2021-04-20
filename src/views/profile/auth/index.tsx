@@ -7,7 +7,6 @@ import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import * as Device from 'expo-device';
-import * as Linking from 'expo-linking';
 import * as Localization from 'expo-localization';
 import {
     STORAGE_USER_ADDRESS,
@@ -20,16 +19,9 @@ import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useRef, useEffect } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Alert,
-    ScrollView,
-    Dimensions,
-} from 'react-native';
+import { StyleSheet, Text, View, Alert, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
@@ -55,13 +47,13 @@ const countries: {
     };
 } = countriesJSON;
 function Auth() {
-    const insets = useSafeAreaInsets();
-    const navigation = useNavigation();
     const dispatch = useDispatch();
     const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
+    const modalizeWebViewRef = useRef<Modalize>(null);
+
     const login = async () => {
         const requestId = 'login';
         const dappName = 'impactMarket';
@@ -150,22 +142,6 @@ function Auth() {
             );
             await CacheStore.cacheUser(user.user);
 
-            // const unsubscribe = store.subscribe(() => {
-            //     const state = store.getState();
-            //     if (state.user.wallet.address.length > 0) {
-            //         unsubscribe();
-            //         setConnecting(false);
-            //         // navigation.goBack();
-            //         if (state.user.community.isBeneficiary) {
-            //             navigation.navigate(Screens.Beneficiary);
-            //         } else if (state.user.community.isManager) {
-            //             navigation.navigate(Screens.CommunityManager);
-            //         } else {
-            //             navigation.navigate(Screens.Communities);
-            //         }
-            //     }
-            // });
-
             await welcomeUser(
                 userAddress,
                 dappkitResponse.phoneNumber,
@@ -201,15 +177,43 @@ function Auth() {
         }
     };
 
-    useEffect(() => {
-        modalizeWelcomeRef.current?.open();
-    }, []);
+    const buttonStoreLink = () => {
+        return (
+            <Button
+                modeType="default"
+                bold
+                style={{ width: '100%' }}
+                labelStyle={styles.buttomStoreText}
+                onPress={() => {
+                    modalizeWebViewRef.current?.open();
+                    modalizeWelcomeRef.current?.close();
+                }}
+            >
+                <Text style={styles.buttomStoreText}>
+                    {i18n.t('installAndCreateValoraAccount')}
+                </Text>
+            </Button>
+        );
+    };
 
-    const renderWelcome = () => {
-        if (!modalizeWelcomeRef.current?.open) {
-        } else {
-            return (
-                <View style={{ height: Dimensions.get('window').height * 0.5 }}>
+    modalizeWelcomeRef.current?.open();
+
+    return (
+        <>
+            <Modalize
+                ref={modalizeWelcomeRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('connectWithValora'),
+                    modalizeWelcomeRef,
+                    () => {}
+                )}
+                adjustToContentHeight
+            >
+                <View
+                    style={{
+                        height: Dimensions.get('screen').height * 0.6,
+                    }}
+                >
                     <View style={{ width: '100%', paddingHorizontal: 16 }}>
                         <Text style={styles.descriptionTop}>
                             {i18n.t('impactMarketDescription')}
@@ -236,79 +240,25 @@ function Auth() {
                         </Button>
                     </View>
                 </View>
-            );
-        }
-    };
+            </Modalize>
 
-    const buttonStoreLink = () => {
-        const androidURL =
-            'https://play.google.com/store/apps/details?id=co.clabs.valora';
-        const iosURL = 'https://apps.apple.com/app/id1520414263';
-        if (Device.osName === 'Android') {
-            return (
-                <Button
-                    modeType="default"
-                    bold
-                    style={{ width: '100%' }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() => Linking.openURL(androidURL)}
-                >
-                    <Text style={styles.buttomStoreText}>
-                        {i18n.t('installAndCreateValoraAccount')}
-                    </Text>
-                </Button>
-            );
-        } else if (Device.osName === 'iOS') {
-            return (
-                <Button
-                    modeType="default"
-                    bold
-                    style={{ width: '100%' }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() => Linking.openURL(iosURL)}
-                >
-                    <Text style={styles.buttomStoreText}>
-                        {i18n.t('installAndCreateValoraAccount')}
-                    </Text>
-                </Button>
-            );
-        }
-        return (
-            <>
-                <Button
-                    modeType="default"
-                    bold
-                    style={{ width: '100%' }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() => Linking.openURL(iosURL)}
-                >
-                    iOS
-                </Button>
-                <Button
-                    modeType="default"
-                    bold
-                    style={{ width: '100%' }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() => Linking.openURL(androidURL)}
-                >
-                    <Text style={styles.buttomStoreText}>Android</Text>
-                </Button>
-            </>
-        );
-    };
-
-    return (
-        <Modalize
-            ref={modalizeWelcomeRef}
-            HeaderComponent={renderHeader(
-                i18n.t('connectWithValora'),
-                modalizeWelcomeRef,
-                () => {}
-            )}
-            adjustToContentHeight
-        >
-            {renderWelcome()}
-        </Modalize>
+            <Modalize
+                ref={modalizeWebViewRef}
+                HeaderComponent={renderHeader(
+                    '',
+                    modalizeWebViewRef,
+                    () => modalizeWelcomeRef.current?.open(),
+                    true
+                )}
+                adjustToContentHeight
+            >
+                <WebView
+                    originWhitelist={['*']}
+                    source={{ uri: 'https://valoraapp.com/' }}
+                    style={{ height: Dimensions.get('screen').height * 0.7 }}
+                />
+            </Modalize>
+        </>
     );
 }
 

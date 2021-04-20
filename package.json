@@ -68,6 +68,7 @@
         "react-native-svg": "12.1.0",
         "react-native-svg-charts": "5.4.0",
         "react-native-tcp": "4.0.0",
+        "react-native-webview": "11.0.0",
         "react-redux": "7.2.3",
         "readable-stream": "3.6.0",
         "redux": "4.0.5",

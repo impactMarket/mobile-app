@@ -1,22 +1,33 @@
+import BackSvg from 'components/svg/BackSvg';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-
-import CloseStorySvg from 'components/svg/CloseStorySvg';
 
 const renderHeader = (
     title: string,
     ref: React.RefObject<any>,
-    cb?: React.SetStateAction<any>
+    cb?: React.SetStateAction<any>,
+    leftIcon?: boolean
 ) => {
     return (
         <View style={styles.bottomSheetHeaderContainer}>
+            {leftIcon && (
+                <BackSvg
+                    onPress={() => {
+                        ref.current?.close();
+                        cb && cb();
+                    }}
+                />
+            )}
             <Text style={styles.bottomSheetHeaderText}>{title}</Text>
-            <CloseStorySvg
-                onPress={() => {
-                    ref.current?.close();
-                    cb && cb();
-                }}
-            />
+            {!leftIcon && (
+                <CloseStorySvg
+                    onPress={() => {
+                        ref.current?.close();
+                        cb && cb();
+                    }}
+                />
+            )}
         </View>
     );
 };
