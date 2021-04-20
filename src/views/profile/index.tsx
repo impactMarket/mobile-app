@@ -1,43 +1,18 @@
-import moment from 'moment';
-import React, { useState, useEffect, useRef } from 'react';
-import {
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    TextInputEndEditingEventData,
-    View,
-    Dimensions,
-    TouchableOpacity,
-} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import {
-    Paragraph,
-    RadioButton,
-    Text,
-    Headline,
-    Searchbar,
-    IconButton,
-} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Feather';
-import { Modalize } from 'react-native-modalize';
-import { batch, useDispatch, useSelector } from 'react-redux';
-import Constants from 'expo-constants';
-import * as Device from 'expo-device';
-import * as Linking from 'expo-linking';
-
+/* eslint handle-callback-err: "warn" */
 // Assets
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
-
 // Components
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
+import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
-import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
-import renderHeader from 'components/core/HeaderBottomSheetTitle';
-
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as ImagePicker from 'expo-image-picker';
+import * as Linking from 'expo-linking';
 // Helpers
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
@@ -49,11 +24,33 @@ import {
 } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
-
+import moment from 'moment';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+    FlatList,
+    RefreshControl,
+    StyleSheet,
+    TextInputEndEditingEventData,
+    View,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Modalize } from 'react-native-modalize';
+import {
+    Paragraph,
+    RadioButton,
+    Text,
+    Headline,
+    Searchbar,
+    IconButton,
+} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/Feather';
+import { batch, useDispatch, useSelector } from 'react-redux';
 // Services
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-
 // Styles
 import { ipctColors } from 'styles/index';
 
@@ -77,28 +74,32 @@ function ProfileScreen() {
     const modalizeLanguageRef = useRef<Modalize>(null);
     const modalizeGenderRef = useRef<Modalize>(null);
 
-    const [name, setName] = useState('');
     const [showingResults, setShowingResults] = useState(false);
     const [searchCurrency, setSearchCurrency] = useState('');
     const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
         []
     );
     const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
+
+    const [isAvatarImageValid, setIsAvatarImageValid] = useState(true);
+    const [name, setName] = useState('');
+    const [avatarImage, setAvatarImage] = useState('');
     const [currency, setCurrency] = useState('usd');
     const [userCusdBalance, setUserCusdBalance] = useState('0');
     const [language, setLanguage] = useState('en');
     const [gender, setGender] = useState<string | null>(null);
+    const [age, setAge] = useState('');
+    const [children, setChildren] = useState('');
 
     const [selectedCurrencyId, setSelectedCurrencyId] = useState<string | null>(
         null
     );
 
-    const [age, setAge] = useState('');
-    const [children, setChildren] = useState('');
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         const loadProfile = () => {
+            console.log({ user });
             if (userWallet.address.length > 0) {
                 if (user.username !== null && user.username.length > 0) {
                     setName(user.username);
@@ -151,6 +152,13 @@ function ProfileScreen() {
         updateBalance();
     };
 
+    const handleChangeUsername = async (username: string) => {
+        setName(username);
+        Api.user.setUsername(username);
+        updateUserMetadataCache();
+        dispatch(setUserMetadata({ ...user, username }));
+    };
+
     const handleChangeGender = async (gender: string) => {
         setGender(gender);
         Api.user.setGender(gender);
@@ -180,6 +188,20 @@ function ProfileScreen() {
         }
     };
 
+    const pickImage = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.cancelled) {
+            setAvatarImage(result.uri);
+            setIsAvatarImageValid(true);
+        }
+    };
+
     const handleSearchCurrency = (
         e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
     ) => {
@@ -187,7 +209,7 @@ function ProfileScreen() {
             setTooManyResultForQuery(false);
         }
         const currencyResult: string[] = [];
-        for (var [key, value] of Object.entries(currencies)) {
+        for (const [key, value] of Object.entries(currencies)) {
             if (
                 value.name.indexOf(searchCurrency) !== -1 ||
                 value.symbol.indexOf(searchCurrency) !== -1 ||
@@ -212,7 +234,7 @@ function ProfileScreen() {
         // update exchange rate!
         const exchangeRate = (rates as any)[currency.toUpperCase()].rate;
         batch(() => {
-            dispatch(setUserMetadata({ ...user, currency: currency }));
+            dispatch(setUserMetadata({ ...user, currency }));
             dispatch(setUserExchangeRate(exchangeRate));
         });
         setSelectedCurrencyId(currency);
@@ -380,23 +402,32 @@ function ProfileScreen() {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>
-                        <View style={styles.avatar}>
+                        {avatarImage.length > 0 ? (
+                            <Image source={{ uri: avatarImage }} />
+                        ) : (
                             <AvatarPlaceholderSvg />
-                            {/* TODO: Integrate avatar feature with API */}
-                            {/* {user.avatar && (
-                                <IconButton
-                                    style={styles.addAvatar}
-                                    icon="close"
-                                    size={14}
-                                    onPress={() => {}}
-                                />
-                            )} */}
-                        </View>
-                        <View style={styles.avatarText}>
-                            <Text style={styles.avatarCallToAction}>
-                                {i18n.t('uploadProfile')}
-                            </Text>
-                        </View>
+                        )}
+
+                        {/* TODO: Integrate avatar feature with API */}
+                        {user.avatar && (
+                            <IconButton
+                                style={styles.addAvatar}
+                                icon="close"
+                                size={14}
+                                onPress={() => {}}
+                            />
+                        )}
+
+                        <TouchableOpacity
+                            style={styles.avatar}
+                            onPress={pickImage}
+                        >
+                            <View style={styles.avatarText}>
+                                <Text style={styles.avatarCallToAction}>
+                                    {i18n.t('uploadProfile')}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
                     <Input
                         label={i18n.t('name')}
@@ -547,7 +578,7 @@ function ProfileScreen() {
                     modalizeCurrencyRef,
                     () => setSearchCurrency('')
                 )}
-                adjustToContentHeight={true}
+                adjustToContentHeight
             >
                 {renderCurrencyContent()}
             </Modalize>
@@ -558,7 +589,7 @@ function ProfileScreen() {
                     i18n.t('language'),
                     modalizeLanguageRef
                 )}
-                adjustToContentHeight={true}
+                adjustToContentHeight
             >
                 {renderLanguageContent()}
             </Modalize>
@@ -568,7 +599,7 @@ function ProfileScreen() {
                     i18n.t('gender'),
                     modalizeGenderRef
                 )}
-                adjustToContentHeight={true}
+                adjustToContentHeight
             >
                 {renderGenderContent()}
             </Modalize>
