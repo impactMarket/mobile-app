@@ -152,25 +152,11 @@ function ProfileScreen() {
         updateBalance();
     };
 
-    const handleChangeUsername = async (username: string) => {
-        setName(username);
-        Api.user.setUsername(username);
-        updateUserMetadataCache();
-        dispatch(setUserMetadata({ ...user, username }));
-    };
-
     const handleChangeGender = async (gender: string) => {
         setGender(gender);
         Api.user.setGender(gender);
         updateUserMetadataCache();
         dispatch(setUserMetadata({ ...user, gender }));
-    };
-
-    const handleChangeAge = async (age: number) => {
-        setAge((new Date().getFullYear() - age).toString());
-        Api.user.setAge(age);
-        updateUserMetadataCache();
-        dispatch(setUserMetadata({ ...user, year: age }));
     };
 
     const handleChangeLanguage = async (text: string) => {
@@ -456,7 +442,6 @@ function ProfileScreen() {
                             <Select
                                 label={i18n.t('gender')}
                                 value={textGender(gender)}
-                                // onPress={() => setIsDialogGenderOpen(true)}
                                 onPress={() => {
                                     modalizeGenderRef.current?.open();
                                 }}
