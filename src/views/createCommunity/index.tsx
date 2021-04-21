@@ -4,7 +4,7 @@ import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import Card from 'components/core/Card';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -19,7 +19,13 @@ import { validateEmail, updateCommunityInfo } from 'helpers/index';
 import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect, useLayoutEffect, Dispatch } from 'react';
+import React, {
+    useState,
+    useEffect,
+    useRef,
+    useLayoutEffect,
+    Dispatch,
+} from 'react';
 import {
     StyleSheet,
     ScrollView,
@@ -29,12 +35,14 @@ import {
     FlatList,
     TextInputEndEditingEventData,
     TouchableOpacity,
+    Dimensions,
+    KeyboardAvoidingView,
 } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import {
     Button,
     Paragraph,
     Headline,
-    Divider,
     Portal,
     Dialog,
     RadioButton,
@@ -45,6 +53,7 @@ import {
     Searchbar,
     List,
 } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
@@ -94,19 +103,12 @@ function CreateCommunityScreen() {
     const kit = useSelector((state: IRootState) => state.app.kit);
     const navigation = useNavigation();
 
-    // const [availableCurrencies, setAvailableCurrencies] = useState<
-    //     { name: string; symbol: string }[]
-    // >([]);
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
-    //
-    const [isDialogCountryOpen, setIsDialogCountryOpen] = useState(false);
-    const [isDialogCurrencyOpen, setIsDialogCurrencyOpen] = useState(false);
-    const [isDialogFrequencyOpen, setIsDialogFrequencyOpen] = useState(false);
-    const [isDialogVisibilityOpen, setIsDialogVisibilityOpen] = useState(false);
     const [isNameValid, setIsNameValid] = useState(true);
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
+    const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
     const [isCountryValid, setIsCountryValid] = useState(true);
@@ -145,6 +147,11 @@ function CreateCommunityScreen() {
     const [incrementInterval, setIncrementalInterval] = useState('');
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisivility] = useState('public');
+
+    const modalizeCurrencyRef = useRef<Modalize>(null);
+    const modalizeCountryRef = useRef<Modalize>(null);
+    const modalizeFrequencyRef = useRef<Modalize>(null);
+    const modalizeVisibilityRef = useRef<Modalize>(null);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -231,6 +238,12 @@ function CreateCommunityScreen() {
         if (!_isProfileImageValid) {
             setIsProfileImageValid(false);
         }
+
+        const _isCommunityLogoValid = communityLogo.length > 0;
+        if (!_isCommunityLogoValid) {
+            setIsCommunityLogoValid(false);
+        }
+
         const _isNameValid = name.length > 0;
         if (!_isNameValid) {
             setIsNameValid(false);
@@ -280,6 +293,7 @@ function CreateCommunityScreen() {
             _isIncrementalIntervalValid &&
             _isMaxClaimValid &&
             _isCoverImageValid &&
+            _isCommunityLogoValid &&
             _isProfileImageValid;
 
         if (!isSubmitAvailable) {
@@ -478,7 +492,7 @@ function CreateCommunityScreen() {
 
     const handleSelectCountry = (countryISO: string) => {
         setCountry(countryISO);
-        setIsDialogCountryOpen(false);
+        modalizeCountryRef.current?.close();
         setSearchCountryQuery('');
         setSearchCountryISOResult([]);
     };
@@ -492,7 +506,7 @@ function CreateCommunityScreen() {
     );
 
     const renderSearchCountryResult = () => {
-        if (!isDialogCountryOpen) {
+        if (!modalizeCountryRef.current?.open) {
             return;
         }
         if (tooManyResultForQuery) {
@@ -549,7 +563,7 @@ function CreateCommunityScreen() {
 
     const handleSelectCurrency = (currency: string) => {
         setCurrency(currency);
-        setIsDialogCurrencyOpen(false);
+        modalizeCurrencyRef.current?.close();
         setSearchCurrency('');
         setSearchCurrencyResult([]);
     };
@@ -563,7 +577,7 @@ function CreateCommunityScreen() {
     );
 
     const renderSearchCurrencyResult = () => {
-        if (!isDialogCurrencyOpen) {
+        if (!modalizeCurrencyRef.current?.open) {
             return;
         }
         if (tooManyResultForQuery) {
@@ -595,361 +609,404 @@ function CreateCommunityScreen() {
 
     return (
         <>
-            <ScrollView>
-                <View style={styles.container}>
-                    <Headline style={styles.communityDetailsHeadline}>
-                        {i18n.t('communityDetails')}
-                    </Headline>
-                    <Text style={styles.createCommunityDescription}>
-                        {i18n.t('communityDescriptionLabel')}
-                    </Text>
-                    <View>
-                        <View style={{ marginTop: 16 }}>
-                            <Input
-                                style={styles.inputTextField}
-                                label={i18n.t('communityName')}
-                                value={name}
-                                maxLength={32}
-                                onChangeText={(value) => setName(value)}
-                                onEndEditing={() =>
-                                    setIsNameValid(name.length > 0)
-                                }
-                            />
-                            {!isNameValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('communityNameRequired')}
-                                </HelperText>
+            <KeyboardAvoidingView
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                }}
+                behavior="padding"
+                enabled
+                keyboardVerticalOffset={140}
+            >
+                <ScrollView>
+                    <View style={styles.container}>
+                        <Headline style={styles.communityDetailsHeadline}>
+                            {i18n.t('communityDetails')}
+                        </Headline>
+                        <Text style={styles.createCommunityDescription}>
+                            {i18n.t('communityDescriptionLabel')}
+                        </Text>
+                        <View>
+                            <View style={{ marginTop: 28 }}>
+                                <Input
+                                    style={styles.inputTextField}
+                                    label={i18n.t('communityName')}
+                                    value={name}
+                                    maxLength={32}
+                                    onChangeText={(value) => setName(value)}
+                                    onEndEditing={() =>
+                                        setIsNameValid(name.length > 0)
+                                    }
+                                />
+                                {!isNameValid && (
+                                    <HelperText type="error" visible>
+                                        {i18n.t('communityNameRequired')}
+                                    </HelperText>
+                                )}
+                            </View>
+                            {coverImage ? (
+                                <Image
+                                    style={{
+                                        height: 331,
+                                        width: '100%',
+                                        borderRadius: 12,
+                                        marginVertical: 22,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                    source={{ uri: coverImage }}
+                                />
+                            ) : (
+                                <View
+                                    style={[
+                                        { marginTop: 12 },
+                                        styles.uploadContainer,
+                                    ]}
+                                >
+                                    <View
+                                        style={{
+                                            flexDirection: 'column',
+                                        }}
+                                    >
+                                        <Headline
+                                            style={
+                                                styles.communityDetailsHeadline
+                                            }
+                                        >
+                                            {i18n.t('changeCoverImage')}
+                                        </Headline>
+                                        <Text
+                                            style={[
+                                                { color: '#73839D' },
+                                                styles.createCommunityDescription,
+                                            ]}
+                                        >
+                                            Min. 784px by 784px
+                                        </Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.uploadBtn}
+                                        onPress={() =>
+                                            pickImage(
+                                                setCoverImage,
+                                                setIsCoverImageValid
+                                            )
+                                        }
+                                    >
+                                        <Text
+                                            style={{
+                                                color: '#333239',
+                                                fontFamily: 'Inter-Regular',
+                                                fontSize: 15,
+                                                lineHeight: 28,
+                                            }}
+                                        >
+                                            Upload
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                             )}
-                        </View>
-                        {coverImage ? (
-                            <Image
-                                style={{
-                                    height: 331,
-                                    width: '100%',
-                                    borderRadius: 12,
-                                    marginVertical: 22,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                                source={{ uri: coverImage }}
-                            />
-                        ) : (
-                            <View
-                                style={[
-                                    { marginTop: 12 },
-                                    styles.uploadContainer,
-                                ]}
-                            >
-                                <View
+                            {profileImage ? (
+                                <Image
                                     style={{
-                                        flexDirection: 'column',
+                                        height: 112,
+                                        width: '100%',
+                                        borderRadius: 12,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
                                     }}
-                                >
-                                    <Headline
-                                        style={styles.communityDetailsHeadline}
-                                    >
-                                        Cover Image
-                                        {/* {i18n.t('Cover Image')} */}
-                                    </Headline>
-                                    <Text
-                                        style={[
-                                            { color: '#73839D' },
-                                            styles.createCommunityDescription,
-                                        ]}
-                                    >
-                                        Min. 784px by 784px
-                                    </Text>
-                                </View>
-                                <TouchableOpacity
-                                    style={styles.uploadBtn}
-                                    onPress={() =>
-                                        pickImage(
-                                            setCoverImage,
-                                            setIsCoverImageValid
-                                        )
-                                    }
-                                >
-                                    <Text
+                                    source={{ uri: profileImage }}
+                                />
+                            ) : (
+                                <View style={styles.uploadContainer}>
+                                    <View
                                         style={{
-                                            color: '#333239',
-                                            fontFamily: 'Inter-Regular',
-                                            fontSize: 15,
-                                            lineHeight: 28,
+                                            flexDirection: 'column',
                                         }}
                                     >
-                                        Upload
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-
-                        {/* <View
-                            style={{
-                                height: 331,
-                                width: '100%',
-                                borderRadius: 12,
-                                backgroundColor: '#DCDFE4',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                        ></View> */}
-                        {profileImage ? (
-                            <Image
-                                style={{
-                                    height: 112,
-                                    width: '100%',
-                                    borderRadius: 12,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}
-                                source={{ uri: profileImage }}
-                            />
-                        ) : (
-                            <View style={styles.uploadContainer}>
-                                <View
-                                    style={{
-                                        flexDirection: 'column',
-                                    }}
-                                >
-                                    <Headline
-                                        style={styles.communityDetailsHeadline}
+                                        <Headline
+                                            style={
+                                                styles.communityDetailsHeadline
+                                            }
+                                        >
+                                            {i18n.t('changeLogoImage')}
+                                        </Headline>
+                                        <Text
+                                            style={[
+                                                { color: '#73839D' },
+                                                styles.createCommunityDescription,
+                                            ]}
+                                        >
+                                            Min. 300px by 300px
+                                        </Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.uploadBtn}
+                                        onPress={() =>
+                                            pickImage(
+                                                setProfileImage,
+                                                setIsProfileImageValid
+                                            )
+                                        }
                                     >
-                                        Your Profile Photo
-                                        {/* {i18n.t('Cover Image')} */}
-                                    </Headline>
-                                    <Text
-                                        style={[
-                                            { color: '#73839D' },
-                                            styles.createCommunityDescription,
-                                        ]}
-                                    >
-                                        Min. 300px by 300px
-                                    </Text>
+                                        <Text
+                                            style={{
+                                                color: '#333239',
+                                                fontFamily: 'Inter-Regular',
+                                                fontSize: 15,
+                                                lineHeight: 28,
+                                            }}
+                                        >
+                                            Upload
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity
-                                    style={styles.uploadBtn}
-                                    onPress={() =>
-                                        pickImage(
-                                            setProfileImage,
-                                            setIsProfileImageValid
-                                        )
-                                    }
-                                >
-                                    <Text
+                                // <Text>Uploading file ...</Text>
+                            )}
+
+                            {/* {!isProfileImageValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('profileImageRequired')}
+                                </HelperText>
+                            )} */}
+
+                            {communityLogo ? (
+                                <Image
+                                    style={{
+                                        height: 112,
+                                        width: '100%',
+                                        borderRadius: 12,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                    source={{ uri: communityLogo }}
+                                />
+                            ) : (
+                                <View style={styles.uploadContainer}>
+                                    <View
                                         style={{
-                                            color: '#333239',
-                                            fontFamily: 'Inter-Regular',
-                                            fontSize: 15,
-                                            lineHeight: 28,
+                                            flexDirection: 'column',
                                         }}
                                     >
-                                        Upload
-                                    </Text>
-                                </TouchableOpacity>
-                            </View>
-                            // <Text>Uploading file ...</Text>
-                        )}
+                                        <Headline
+                                            style={
+                                                styles.communityDetailsHeadline
+                                            }
+                                        >
+                                            {i18n.t('changeProfileImage')}
+                                        </Headline>
+                                        <Text
+                                            style={[
+                                                { color: '#73839D' },
+                                                styles.createCommunityDescription,
+                                            ]}
+                                        >
+                                            Min. 160px by 160px - Optional
+                                        </Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={styles.uploadBtn}
+                                        onPress={() =>
+                                            pickImage(
+                                                setCommunityLogo,
+                                                setIsCommunityLogoValid
+                                            )
+                                        }
+                                    >
+                                        <Text
+                                            style={{
+                                                color: '#333239',
+                                                fontFamily: 'Inter-Regular',
+                                                fontSize: 15,
+                                                lineHeight: 28,
+                                            }}
+                                        >
+                                            Upload
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                                // <Text>Uploading file ...</Text>
+                            )}
 
-                        {!isCoverImageValid && (
-                            <HelperText type="error" visible>
-                                {i18n.t('coverImageRequired')}
-                            </HelperText>
-                        )}
-                        <View style={{ marginTop: 16, minHeight: 115 }}>
-                            <Input
-                                style={[
-                                    { minHeight: 115 },
-                                    styles.inputTextField,
-                                ]}
-                                label={i18n.t('shortDescription')}
-                                value={description}
-                                maxLength={1024}
-                                onChangeText={(value) => setDescription(value)}
-                                onEndEditing={() =>
-                                    setIsDescriptionValid(
-                                        description.length > 0
-                                    )
-                                }
-                                multiline
-                                numberOfLines={6}
-                            />
+                            {/* {!isCommunityLogoValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('communityLogoRequired')}
+                                </HelperText>
+                            )} */}
+                            <View style={{ marginTop: 16, minHeight: 115 }}>
+                                <Input
+                                    style={[
+                                        { minHeight: 115 },
+                                        styles.inputTextField,
+                                    ]}
+                                    label={i18n.t('shortDescription')}
+                                    value={description}
+                                    maxLength={1024}
+                                    onChangeText={(value) =>
+                                        setDescription(value)
+                                    }
+                                    onEndEditing={() =>
+                                        setIsDescriptionValid(
+                                            description.length > 0
+                                        )
+                                    }
+                                    multiline
+                                    numberOfLines={6}
+                                />
+                            </View>
                             {!isDescriptionValid && (
                                 <HelperText type="error" visible>
                                     {i18n.t('communityDescriptionRequired')}
                                 </HelperText>
                             )}
-                        </View>
 
-                        <View style={{ marginTop: 16 }}>
-                            <Input
-                                style={styles.inputTextField}
-                                label={i18n.t('city')}
-                                value={city}
-                                maxLength={32}
-                                onChangeText={(value) => setCity(value)}
-                                onEndEditing={() =>
-                                    setIsCityValid(city.length > 0)
-                                }
-                            />
-                            {!isCityValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('cityRequired')}
-                                </HelperText>
-                            )}
-                        </View>
-
-                        <View style={{ marginTop: 16 }}>
-                            {/* <TextInput
-                                        mode="flat"
-                                        underlineColor="transparent"
-                                        style={styles.inputTextField}
-                                        label={i18n.t('country')}
-                                        value={country}
-                                        maxLength={32}
-                                        onChangeText={(value) =>
-                                            setCountry(value)
-                                        }
-                                        onEndEditing={() =>
-                                            setIsCountryValid(
-                                                country.length > 0
-                                            )
-                                        }
-                                    />*/}
-                            <Select
-                                label={i18n.t('country')}
-                                value={
-                                    country.length > 0
-                                        ? `${countries[country].emoji} ${countries[country].name}`
-                                        : 'Select Country'
-                                }
-                                onPress={() => setIsDialogCountryOpen(true)}
-                            />
-                            {!isCountryValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('countryRequired')}
-                                </HelperText>
-                            )}
-                        </View>
-                        {gpsLocation === undefined ? (
-                            <View>
-                                <Button
-                                    mode="contained"
-                                    style={{ marginHorizontal: 16 }}
-                                    onPress={() => enableGPSLocation()}
-                                    loading={isEnablingGPS}
-                                >
-                                    {i18n.t('getGPSLocation')}
-                                </Button>
-                                {!isEnabledGPS && (
+                            <View style={{ marginTop: 28 }}>
+                                <Input
+                                    style={styles.inputTextField}
+                                    label={i18n.t('city')}
+                                    value={city}
+                                    maxLength={32}
+                                    onChangeText={(value) => setCity(value)}
+                                    onEndEditing={() =>
+                                        setIsCityValid(city.length > 0)
+                                    }
+                                />
+                                {!isCityValid && (
                                     <HelperText type="error" visible>
-                                        {i18n.t('enablingGPSRequired')}
+                                        {i18n.t('cityRequired')}
                                     </HelperText>
                                 )}
                             </View>
-                        ) : (
-                            <Button
-                                icon="check"
-                                mode="outlined"
-                                style={{ marginHorizontal: 16 }}
-                                disabled
-                            >
-                                {i18n.t('validCoordinates')}
-                            </Button>
-                        )}
-                        <View style={{ marginTop: 16 }}>
-                            <TextInput
-                                mode="flat"
-                                underlineColor="transparent"
-                                style={styles.inputTextField}
-                                label={i18n.t('email')}
-                                value={email}
-                                maxLength={64}
-                                keyboardType="email-address"
-                                onChangeText={(value) => setEmail(value)}
-                                onEndEditing={() =>
-                                    setIsEmailValid(validateEmail(email))
-                                }
-                            />
-                            {!isEmailValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('emailRequired')}
-                                </HelperText>
-                            )}
-                        </View>
-                        <Divider />
-                        {/* <Paragraph style={styles.inputTextFieldLabel}>
-                                    {i18n.t('currency')}
-                                </Paragraph> */}
-                        <View
-                            style={{
-                                flex: 4,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                margin: 16,
-                            }}
-                        >
-                            {/* <Button
+
+                            <View style={{ marginTop: 28 }}>
+                                <Select
+                                    label={i18n.t('country')}
+                                    value={
+                                        country.length > 0
+                                            ? `${countries[country].emoji} ${countries[country].name}`
+                                            : 'Select Country'
+                                    }
+                                    onPress={() =>
+                                        modalizeCountryRef.current?.open()
+                                    }
+                                />
+                                {!isCountryValid && (
+                                    <HelperText type="error" visible>
+                                        {i18n.t('countryRequired')}
+                                    </HelperText>
+                                )}
+                            </View>
+                            {gpsLocation === undefined ? (
+                                <View>
+                                    <Button
                                         mode="contained"
-                                        style={{
-                                            width: '80%',
-                                            borderRadius: 6,
-                                            margin: 10,
-                                            backgroundColor:
-                                                'rgba(206,212,218,0.27)',
-                                        }}
-                                        onPress={() =>
-                                            setIsDialogCurrencyOpen(true)
-                                        }
+                                        style={styles.gpsBtn}
+                                        onPress={() => enableGPSLocation()}
+                                        loading={isEnablingGPS}
+                                        uppercase={false}
                                     >
                                         <Text
-                                            style={{
-                                                color: 'black',
-                                                opacity: 1,
-                                            }}
+                                            style={[
+                                                { color: ipctColors.white },
+                                                styles.gpsBtnText,
+                                            ]}
                                         >
-                                            {currency}
+                                            {i18n.t('getGPSLocation')}
                                         </Text>
-                                    </Button> */}
-                            <View style={{ flex: 3 }}>
+                                    </Button>
+                                    {!isEnabledGPS && (
+                                        <HelperText type="error" visible>
+                                            {i18n.t('enablingGPSRequired')}
+                                        </HelperText>
+                                    )}
+                                </View>
+                            ) : (
+                                <Button
+                                    mode="outlined"
+                                    uppercase={false}
+                                    style={[
+                                        {
+                                            backgroundColor: '#E9EDF4',
+                                            borderWidth: 0,
+                                        },
+                                        styles.gpsBtn,
+                                    ]}
+                                    disabled
+                                >
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Icon
+                                            name="check-circle-outline"
+                                            size={22}
+                                            color={ipctColors.greenishTeal}
+                                        />
+                                        <Text
+                                            style={[
+                                                {
+                                                    color: ipctColors.darBlue,
+                                                    marginLeft: 10,
+                                                },
+                                                styles.gpsBtnText,
+                                            ]}
+                                        >
+                                            {i18n.t('validCoordinates')}
+                                        </Text>
+                                    </View>
+                                </Button>
+                            )}
+                            <View>
+                                <Input
+                                    style={styles.inputTextField}
+                                    label={i18n.t('email')}
+                                    value={email}
+                                    maxLength={64}
+                                    keyboardType="email-address"
+                                    onChangeText={(value) => setEmail(value)}
+                                    onEndEditing={() =>
+                                        setIsEmailValid(validateEmail(email))
+                                    }
+                                />
+                                {!isEmailValid && (
+                                    <HelperText type="error" visible>
+                                        {i18n.t('emailRequired')}
+                                    </HelperText>
+                                )}
+                            </View>
+                            <View style={{ marginTop: 28 }}>
                                 <Select
                                     label={i18n.t('currency')}
                                     value={currencies[currency].name}
                                     onPress={() =>
-                                        setIsDialogCurrencyOpen(true)
+                                        modalizeCurrencyRef.current?.open()
                                     }
                                 />
                             </View>
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: 'row-reverse',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <IconButton
-                                    style={{ marginTop: 25 }}
-                                    icon="help-circle-outline"
-                                    size={20}
-                                    onPress={() => openHelp('currency')}
-                                />
-                            </View>
                         </View>
-                    </View>
 
-                    <Headline style={styles.contractDetailsHeadline}>
-                        {i18n.t('contractDetails')}
-                    </Headline>
-                    <View style={{ marginBottom: 15 }}>
+                        <Headline
+                            style={[
+                                { marginTop: 50 },
+                                styles.communityDetailsHeadline,
+                            ]}
+                        >
+                            {i18n.t('contractDetails')}
+                        </Headline>
+                        <Text style={styles.createCommunityDescription}>
+                            {i18n.t('contractDescriptionLabel')}
+                        </Text>
+
                         <View>
-                            <View style={{ margin: 10 }}>
-                                <TextInput
-                                    mode="flat"
-                                    underlineColor="transparent"
+                            <View style={{ marginTop: 28 }}>
+                                <Input
                                     style={styles.inputTextField}
                                     label={i18n.t('claimAmount')}
-                                    placeholder="$0"
                                     value={claimAmount}
-                                    keyboardType="numeric"
+                                    placeholder="$0"
                                     onChangeText={(value) =>
                                         setClaimAmount(value)
                                     }
@@ -968,20 +1025,13 @@ function CreateCommunityScreen() {
                                     </HelperText>
                                 )}
                             </View>
-                            {claimAmount.length === 0 && (
-                                <IconButton
-                                    style={{
-                                        position: 'absolute',
-                                        top: 30,
-                                        right: 0,
-                                    }}
-                                    icon="help-circle-outline"
-                                    size={20}
-                                    onPress={() => openHelp('claimAmount')}
-                                />
-                            )}
                             {claimAmount.length > 0 && (
-                                <Text style={styles.aroundCurrencyValue}>
+                                <Text
+                                    style={[
+                                        { marginTop: 42 },
+                                        styles.aroundCurrencyValue,
+                                    ]}
+                                >
                                     {i18n.t('aroundValue', {
                                         amount: amountToCurrency(
                                             new BigNumber(
@@ -998,47 +1048,46 @@ function CreateCommunityScreen() {
                                 </Text>
                             )}
                         </View>
-                        <Divider />
-                        <View>
-                            <View style={{ margin: 10 }}>
-                                <TextInput
-                                    mode="flat"
-                                    underlineColor="transparent"
-                                    style={styles.inputTextField}
-                                    label={i18n.t('totalClaimPerBeneficiary')}
-                                    placeholder="$0"
-                                    value={maxClaim}
-                                    keyboardType="numeric"
-                                    onChangeText={(value) => setMaxClaim(value)}
-                                    onEndEditing={() =>
-                                        setIsMaxClaimValid(
-                                            maxClaim.length > 0 &&
-                                                /^\d*[\.\,]?\d*$/.test(maxClaim)
-                                        )
-                                    }
-                                />
-                                {!isMaxClaimValid && (
-                                    <HelperText type="error" visible>
-                                        {i18n.t('maxClaimAmountRequired')}
-                                    </HelperText>
-                                )}
-                            </View>
-                            {maxClaim.length === 0 && (
-                                <IconButton
-                                    style={{
-                                        position: 'absolute',
-                                        top: 30,
-                                        right: 0,
-                                    }}
-                                    icon="help-circle-outline"
-                                    size={20}
-                                    onPress={() =>
-                                        openHelp('totalClaimPerBeneficiary')
-                                    }
-                                />
+                        <View style={{ marginTop: 28 }}>
+                            <Select
+                                label={i18n.t('frequency')}
+                                value={
+                                    baseInterval === '86400'
+                                        ? i18n.t('daily')
+                                        : i18n.t('weekly')
+                                }
+                                onPress={() =>
+                                    modalizeFrequencyRef.current?.open()
+                                }
+                            />
+                        </View>
+                        <View style={{ marginTop: 28 }}>
+                            <Input
+                                style={styles.inputTextField}
+                                label={i18n.t('totalClaimPerBeneficiary')}
+                                value={maxClaim}
+                                placeholder="$0"
+                                keyboardType="numeric"
+                                onChangeText={(value) => setMaxClaim(value)}
+                                onEndEditing={() =>
+                                    setIsMaxClaimValid(
+                                        maxClaim.length > 0 &&
+                                            /^\d*[\.\,]?\d*$/.test(maxClaim)
+                                    )
+                                }
+                            />
+                            {!isMaxClaimValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('maxClaimAmountRequired')}
+                                </HelperText>
                             )}
                             {maxClaim.length > 0 && (
-                                <Text style={styles.aroundCurrencyValue}>
+                                <Text
+                                    style={[
+                                        { marginTop: 14 },
+                                        styles.aroundCurrencyValue,
+                                    ]}
+                                >
                                     {i18n.t('aroundValue', {
                                         amount: amountToCurrency(
                                             new BigNumber(
@@ -1055,247 +1104,204 @@ function CreateCommunityScreen() {
                                 </Text>
                             )}
                         </View>
-                        <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>
-                            {i18n.t('frequency')}
-                        </Paragraph>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: 'row',
-                                alignSelf: 'center',
-                            }}
-                        >
-                            <Button
-                                mode="contained"
-                                style={{
-                                    width: '80%',
-                                    borderRadius: 6,
-                                    margin: 10,
-                                    backgroundColor: 'rgba(206,212,218,0.27)',
-                                }}
-                                onPress={() => setIsDialogFrequencyOpen(true)}
-                            >
-                                <Text style={{ color: 'black', opacity: 1 }}>
-                                    {baseInterval === '86400'
-                                        ? i18n.t('daily')
-                                        : i18n.t('weekly')}
-                                </Text>
-                            </Button>
-                            <IconButton
-                                style={{ marginTop: 10 }}
-                                icon="help-circle-outline"
-                                size={20}
-                                onPress={() => openHelp('frequency')}
+
+                        <View style={{ marginTop: 28 }}>
+                            <Input
+                                style={styles.inputTextField}
+                                label={i18n.t('timeIncrementAfterClaim')}
+                                value={incrementInterval}
+                                placeholder="0"
+                                keyboardType="numeric"
+                                onChangeText={(value) =>
+                                    setIncrementalInterval(value)
+                                }
+                                onEndEditing={() =>
+                                    setIsIncrementalIntervalValid(
+                                        incrementInterval.length > 0
+                                    )
+                                }
                             />
-                        </View>
-                        <View>
-                            <View style={{ margin: 10 }}>
-                                <TextInput
-                                    mode="flat"
-                                    underlineColor="transparent"
-                                    style={styles.inputTextField}
-                                    label={i18n.t('timeIncrementAfterClaim')}
-                                    placeholder={i18n.t('timeInMinutes')}
-                                    value={incrementInterval}
-                                    keyboardType="numeric"
-                                    onChangeText={(value) =>
-                                        setIncrementalInterval(value)
-                                    }
-                                    onEndEditing={() =>
-                                        setIsIncrementalIntervalValid(
-                                            incrementInterval.length > 0
-                                        )
-                                    }
-                                />
-                                {!isIncrementalIntervalValid && (
-                                    <HelperText type="error" visible>
-                                        {i18n.t('incrementalIntervalRequired')}
-                                    </HelperText>
-                                )}
-                            </View>
-                            {incrementInterval.length === 0 && (
-                                <IconButton
-                                    style={{
-                                        position: 'absolute',
-                                        top: 30,
-                                        right: 0,
-                                    }}
-                                    icon="help-circle-outline"
-                                    size={20}
-                                    onPress={() =>
-                                        openHelp('timeIncrementAfterClaim')
-                                    }
-                                />
+                            {!isIncrementalIntervalValid && (
+                                <HelperText type="error" visible>
+                                    {i18n.t('incrementalIntervalRequired')}
+                                </HelperText>
                             )}
-                        </View>
-                        <Divider />
-                        <Paragraph style={styles.inputTextFieldLabel}>
-                            {i18n.t('visibility')}
-                        </Paragraph>
-                        <View
-                            style={{
-                                flex: 1,
-                                flexDirection: 'row',
-                                alignSelf: 'center',
-                            }}
-                        >
-                            <Button
-                                mode="contained"
-                                style={{
-                                    width: '80%',
-                                    borderRadius: 6,
-                                    margin: 10,
-                                    backgroundColor: 'rgba(206,212,218,0.27)',
-                                }}
-                                onPress={() => setIsDialogVisibilityOpen(true)}
-                            >
-                                <Text style={{ color: 'black', opacity: 1 }}>
-                                    {visibility === 'public'
-                                        ? i18n.t('public')
-                                        : i18n.t('private')}
-                                </Text>
-                            </Button>
-                            <IconButton
-                                style={{ marginTop: 10 }}
-                                icon="help-circle-outline"
-                                size={20}
-                                onPress={() => openHelp('visibility')}
-                            />
+
+                            <View style={{ marginTop: 28 }}>
+                                <Select
+                                    label={i18n.t('visibility')}
+                                    value={
+                                        visibility === 'public'
+                                            ? i18n.t('public')
+                                            : i18n.t('private')
+                                    }
+                                    onPress={() =>
+                                        modalizeVisibilityRef.current?.open()
+                                    }
+                                />
+                            </View>
                         </View>
                     </View>
-                    <Text style={{ ...styles.textNote, marginVertical: 20 }}>
-                        {i18n.t('createCommunityNote1')}
-                    </Text>
-                    <Text style={styles.textNote}>
-                        {i18n.t('createCommunityNote2')}
-                    </Text>
-                </View>
-            </ScrollView>
-            <Portal>
-                <Dialog
-                    visible={isDialogCountryOpen}
-                    onDismiss={() => setIsDialogCountryOpen(false)}
+                </ScrollView>
+            </KeyboardAvoidingView>
+            <Modalize
+                ref={modalizeCountryRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('country'),
+                    modalizeCountryRef
+                )}
+                adjustToContentHeight
+            >
+                <View
+                    style={{
+                        padding: 20,
+                        height: Dimensions.get('screen').height * 0.5,
+                    }}
                 >
-                    <Dialog.Content>
-                        <Searchbar
-                            placeholder={i18n.t('search')}
-                            style={{
-                                backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                                shadowRadius: 0,
-                                elevation: 0,
-                                borderRadius: 6,
-                            }}
-                            autoFocus
-                            clearIcon={(p) => (
-                                <IconButton
-                                    icon="close"
-                                    onPress={() => {
-                                        setSearchCountryQuery('');
-                                        setSearchCountryISOResult([]);
-                                        setTooManyResultForQuery(false);
-                                        setShowingResults(false);
-                                    }}
-                                />
-                            )}
-                            onChangeText={(e) => {
-                                if (e.length === 0 && showingResults) {
+                    <Searchbar
+                        placeholder={i18n.t('search')}
+                        style={{
+                            backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                            shadowRadius: 0,
+                            elevation: 0,
+                            borderRadius: 6,
+                        }}
+                        autoFocus
+                        clearIcon={(p) => (
+                            <IconButton
+                                icon="close"
+                                onPress={() => {
+                                    setSearchCountryQuery('');
                                     setSearchCountryISOResult([]);
+                                    setTooManyResultForQuery(false);
                                     setShowingResults(false);
-                                }
-                                setSearchCountryQuery(e);
-                            }}
-                            value={searchCountryQuery}
-                            onEndEditing={handleSearchCountry}
-                        />
-                        {renderSearchCountryResult()}
-                    </Dialog.Content>
-                </Dialog>
-                <Dialog
-                    visible={isDialogFrequencyOpen}
-                    onDismiss={() => setIsDialogFrequencyOpen(false)}
+                                }}
+                            />
+                        )}
+                        onChangeText={(e) => {
+                            if (e.length === 0 && showingResults) {
+                                setSearchCountryISOResult([]);
+                                setShowingResults(false);
+                            }
+                            setSearchCountryQuery(e);
+                        }}
+                        value={searchCountryQuery}
+                        onEndEditing={handleSearchCountry}
+                    />
+                    {renderSearchCountryResult()}
+                </View>
+            </Modalize>
+            <Modalize
+                ref={modalizeCurrencyRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('currency'),
+                    modalizeCurrencyRef
+                )}
+                adjustToContentHeight
+            >
+                <View
+                    style={{
+                        padding: 20,
+                        height: Dimensions.get('screen').height * 0.5,
+                    }}
                 >
-                    <Dialog.Content>
-                        <RadioButton.Group
-                            onValueChange={(value) => {
-                                setBaseInterval(value);
-                                setIsDialogFrequencyOpen(false);
-                            }}
-                            value={baseInterval}
-                        >
-                            <RadioButton.Item
-                                label={i18n.t('daily')}
-                                value="86400"
-                            />
-                            <RadioButton.Item
-                                label={i18n.t('weekly')}
-                                value="604800"
-                            />
-                        </RadioButton.Group>
-                    </Dialog.Content>
-                </Dialog>
-                <Dialog
-                    visible={isDialogVisibilityOpen}
-                    onDismiss={() => setIsDialogVisibilityOpen(false)}
-                >
-                    <Dialog.Content>
-                        <RadioButton.Group
-                            onValueChange={(value) => {
-                                setVisivility(value);
-                                setIsDialogVisibilityOpen(false);
-                            }}
-                            value={visibility}
-                        >
-                            <RadioButton.Item
-                                label={i18n.t('public')}
-                                value="public"
-                            />
-                            <RadioButton.Item
-                                label={i18n.t('private')}
-                                value="private"
-                            />
-                        </RadioButton.Group>
-                    </Dialog.Content>
-                </Dialog>
-                <Dialog
-                    visible={isDialogCurrencyOpen}
-                    onDismiss={() => setIsDialogCurrencyOpen(false)}
-                >
-                    <Dialog.Content>
-                        <Searchbar
-                            placeholder={i18n.t('search')}
-                            style={{
-                                backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                                shadowRadius: 0,
-                                elevation: 0,
-                                borderRadius: 6,
-                            }}
-                            autoFocus
-                            clearIcon={(p) => (
-                                <IconButton
-                                    icon="close"
-                                    onPress={() => {
-                                        setSearchCurrency('');
-                                        setSearchCurrencyResult([]);
-                                        setTooManyResultForQuery(false);
-                                        setShowingResults(false);
-                                    }}
-                                />
-                            )}
-                            onChangeText={(e) => {
-                                if (e.length === 0 && showingResults) {
+                    <Searchbar
+                        placeholder={i18n.t('search')}
+                        style={{
+                            backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                            shadowRadius: 0,
+                            elevation: 0,
+                            borderRadius: 6,
+                        }}
+                        autoFocus
+                        clearIcon={(p) => (
+                            <IconButton
+                                icon="close"
+                                onPress={() => {
+                                    setSearchCurrency('');
                                     setSearchCurrencyResult([]);
+                                    setTooManyResultForQuery(false);
                                     setShowingResults(false);
-                                }
-                                setSearchCurrency(e);
-                            }}
-                            value={searchCurrency}
-                            onEndEditing={handleSearchCurrency}
+                                }}
+                            />
+                        )}
+                        onChangeText={(e) => {
+                            if (e.length === 0 && showingResults) {
+                                setSearchCurrencyResult([]);
+                                setShowingResults(false);
+                            }
+                            setSearchCurrency(e);
+                        }}
+                        value={searchCurrency}
+                        onEndEditing={handleSearchCurrency}
+                    />
+                    {renderSearchCurrencyResult()}
+                </View>
+            </Modalize>
+            <Modalize
+                ref={modalizeFrequencyRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('frequency'),
+                    modalizeFrequencyRef
+                )}
+                adjustToContentHeight
+            >
+                <View
+                    style={{
+                        padding: 20,
+                        height: Dimensions.get('screen').height * 0.2,
+                    }}
+                >
+                    <RadioButton.Group
+                        onValueChange={(value) => {
+                            setBaseInterval(value);
+                            modalizeFrequencyRef.current?.close();
+                        }}
+                        value={baseInterval}
+                    >
+                        <RadioButton.Item
+                            label={i18n.t('daily')}
+                            value="86400"
                         />
-                        {renderSearchCurrencyResult()}
-                    </Dialog.Content>
-                </Dialog>
-            </Portal>
+                        <RadioButton.Item
+                            label={i18n.t('weekly')}
+                            value="604800"
+                        />
+                    </RadioButton.Group>
+                </View>
+            </Modalize>
+            <Modalize
+                ref={modalizeVisibilityRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('visibility'),
+                    modalizeVisibilityRef
+                )}
+                adjustToContentHeight
+            >
+                <View
+                    style={{
+                        padding: 20,
+                        height: Dimensions.get('screen').height * 0.2,
+                    }}
+                >
+                    <RadioButton.Group
+                        onValueChange={(value) => {
+                            setVisivility(value);
+                            modalizeVisibilityRef.current?.close();
+                        }}
+                        value={visibility}
+                    >
+                        <RadioButton.Item
+                            label={i18n.t('public')}
+                            value="public"
+                        />
+                        <RadioButton.Item
+                            label={i18n.t('private')}
+                            value="private"
+                        />
+                    </RadioButton.Group>
+                </View>
+            </Modalize>
         </>
     );
 }
@@ -1362,25 +1368,16 @@ const styles = StyleSheet.create({
     aroundCurrencyValue: {
         position: 'absolute',
         marginHorizontal: 10,
-        marginVertical: 50,
         right: 0,
-        fontFamily: 'Gelion-Regular',
-        fontSize: 15,
-        lineHeight: 15,
-        letterSpacing: 0.25,
+        fontFamily: 'Inter-Regular',
+        fontSize: 12,
+        lineHeight: 20,
         color: ipctColors.regentGray,
     },
     communityDetailsHeadline: {
         fontFamily: 'Manrope-Bold',
         fontSize: 18,
         lineHeight: 28,
-    },
-    contractDetailsHeadline: {
-        fontFamily: 'Manrope-Bold',
-        fontSize: 18,
-        lineHeight: 28,
-        marginTop: 20,
-        marginHorizontal: 10,
     },
     createCommunityDescription: {
         fontFamily: 'Inter-Regular',
@@ -1403,6 +1400,20 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    gpsBtn: {
+        width: '100%',
+        height: 44,
+        marginVertical: 16,
+        borderRadius: 6,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+    },
+    gpsBtnText: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 15,
+        lineHeight: 28,
     },
 });
 
