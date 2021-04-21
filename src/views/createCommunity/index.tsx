@@ -147,7 +147,7 @@ function CreateCommunityScreen() {
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementInterval, setIncrementalInterval] = useState('');
     const [maxClaim, setMaxClaim] = useState('');
-    const [visibility, setVisivility] = useState('public');
+    const [visibility, setVisibility] = useState('public');
 
     const modalizeCurrencyRef = useRef<Modalize>(null);
     const modalizeCountryRef = useRef<Modalize>(null);
@@ -463,6 +463,127 @@ function CreateCommunityScreen() {
         }
     };
 
+    const renderCurrencyContent = () => (
+        <View
+            style={{
+                height: Dimensions.get('screen').height * 0.5,
+            }}
+        >
+            <Searchbar
+                placeholder={i18n.t('search')}
+                style={{
+                    backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                    shadowRadius: 0,
+                    elevation: 0,
+                    borderRadius: 6,
+                }}
+                autoFocus
+                clearIcon={(p) => (
+                    <IconButton
+                        icon="close"
+                        onPress={() => {
+                            setSearchCurrency('');
+                            setSearchCurrencyResult([]);
+                            setTooManyResultForQuery(false);
+                            setShowingResults(false);
+                        }}
+                    />
+                )}
+                onChangeText={(e) => {
+                    if (e.length === 0 && showingResults) {
+                        setSearchCurrencyResult([]);
+                        setShowingResults(false);
+                    }
+                    setSearchCurrency(e);
+                }}
+                value={searchCurrency}
+                onEndEditing={handleSearchCurrency}
+            />
+            {renderSearchCurrencyResult()}
+        </View>
+    );
+
+    const renderFrequency = () => (
+        <View
+            style={{
+                padding: 20,
+                height: Dimensions.get('screen').height * 0.2,
+            }}
+        >
+            <RadioButton.Group
+                onValueChange={(value) => {
+                    setBaseInterval(value);
+                    modalizeFrequencyRef.current?.close();
+                }}
+                value={baseInterval}
+            >
+                <RadioButton.Item label={i18n.t('daily')} value="86400" />
+                <RadioButton.Item label={i18n.t('weekly')} value="604800" />
+            </RadioButton.Group>
+        </View>
+    );
+
+    const renderCountries = () => (
+        <View
+            style={{
+                padding: 20,
+                height: Dimensions.get('screen').height * 0.5,
+            }}
+        >
+            <Searchbar
+                placeholder={i18n.t('search')}
+                style={{
+                    backgroundColor: 'rgba(206, 212, 218, 0.27)',
+                    shadowRadius: 0,
+                    elevation: 0,
+                    borderRadius: 6,
+                }}
+                autoFocus
+                clearIcon={(p) => (
+                    <IconButton
+                        icon="close"
+                        onPress={() => {
+                            setSearchCountryQuery('');
+                            setSearchCountryISOResult([]);
+                            setTooManyResultForQuery(false);
+                            setShowingResults(false);
+                        }}
+                    />
+                )}
+                onChangeText={(e) => {
+                    if (e.length === 0 && showingResults) {
+                        setSearchCountryISOResult([]);
+                        setShowingResults(false);
+                    }
+                    setSearchCountryQuery(e);
+                }}
+                value={searchCountryQuery}
+                onEndEditing={handleSearchCountry}
+            />
+            {renderSearchCountryResult()}
+        </View>
+    );
+
+    const renderVisibilities = () => (
+        <View
+            style={{
+                padding: 20,
+                height: Dimensions.get('screen').height * 0.2,
+            }}
+        >
+            <RadioButton.Group
+                onValueChange={(value) => {
+                    setVisibility(value);
+                    modalizeVisibilityRef.current?.close();
+                }}
+                value={visibility}
+            >
+                <RadioButton.Item label={i18n.t('public')} value="public" />
+                <RadioButton.Item label={i18n.t('private')} value="private" />
+            </RadioButton.Group>
+        </View>
+    );
+
     const handleSearchCountry = (
         e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
     ) => {
@@ -656,7 +777,7 @@ function CreateCommunityScreen() {
                                         style={{
                                             position: 'absolute',
                                             top: 38,
-                                            right: 20,
+                                            right: 14,
                                         }}
                                         onPress={() => {
                                             setCoverImage('');
@@ -1178,54 +1299,19 @@ function CreateCommunityScreen() {
                 ref={modalizeCountryRef}
                 HeaderComponent={renderHeader(
                     i18n.t('country'),
-                    modalizeCountryRef
+                    modalizeCountryRef,
+                    () => setSearchCountryQuery('')
                 )}
                 adjustToContentHeight
             >
-                <View
-                    style={{
-                        padding: 20,
-                        height: Dimensions.get('screen').height * 0.5,
-                    }}
-                >
-                    <Searchbar
-                        placeholder={i18n.t('search')}
-                        style={{
-                            backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                            shadowRadius: 0,
-                            elevation: 0,
-                            borderRadius: 6,
-                        }}
-                        autoFocus
-                        clearIcon={(p) => (
-                            <IconButton
-                                icon="close"
-                                onPress={() => {
-                                    setSearchCountryQuery('');
-                                    setSearchCountryISOResult([]);
-                                    setTooManyResultForQuery(false);
-                                    setShowingResults(false);
-                                }}
-                            />
-                        )}
-                        onChangeText={(e) => {
-                            if (e.length === 0 && showingResults) {
-                                setSearchCountryISOResult([]);
-                                setShowingResults(false);
-                            }
-                            setSearchCountryQuery(e);
-                        }}
-                        value={searchCountryQuery}
-                        onEndEditing={handleSearchCountry}
-                    />
-                    {renderSearchCountryResult()}
-                </View>
+                {renderCountries()}
             </Modalize>
             <Modalize
                 ref={modalizeCurrencyRef}
                 HeaderComponent={renderHeader(
                     i18n.t('currency'),
-                    modalizeCurrencyRef
+                    modalizeCurrencyRef,
+                    () => setSearchCurrency('')
                 )}
                 adjustToContentHeight
             >
@@ -1235,37 +1321,7 @@ function CreateCommunityScreen() {
                         height: Dimensions.get('screen').height * 0.5,
                     }}
                 >
-                    <Searchbar
-                        placeholder={i18n.t('search')}
-                        style={{
-                            backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                            shadowRadius: 0,
-                            elevation: 0,
-                            borderRadius: 6,
-                        }}
-                        autoFocus
-                        clearIcon={(p) => (
-                            <IconButton
-                                icon="close"
-                                onPress={() => {
-                                    setSearchCurrency('');
-                                    setSearchCurrencyResult([]);
-                                    setTooManyResultForQuery(false);
-                                    setShowingResults(false);
-                                }}
-                            />
-                        )}
-                        onChangeText={(e) => {
-                            if (e.length === 0 && showingResults) {
-                                setSearchCurrencyResult([]);
-                                setShowingResults(false);
-                            }
-                            setSearchCurrency(e);
-                        }}
-                        value={searchCurrency}
-                        onEndEditing={handleSearchCurrency}
-                    />
-                    {renderSearchCurrencyResult()}
+                    {renderCurrencyContent()}
                 </View>
             </Modalize>
             <Modalize
@@ -1276,29 +1332,7 @@ function CreateCommunityScreen() {
                 )}
                 adjustToContentHeight
             >
-                <View
-                    style={{
-                        padding: 20,
-                        height: Dimensions.get('screen').height * 0.2,
-                    }}
-                >
-                    <RadioButton.Group
-                        onValueChange={(value) => {
-                            setBaseInterval(value);
-                            modalizeFrequencyRef.current?.close();
-                        }}
-                        value={baseInterval}
-                    >
-                        <RadioButton.Item
-                            label={i18n.t('daily')}
-                            value="86400"
-                        />
-                        <RadioButton.Item
-                            label={i18n.t('weekly')}
-                            value="604800"
-                        />
-                    </RadioButton.Group>
-                </View>
+                {renderFrequency()}
             </Modalize>
             <Modalize
                 ref={modalizeVisibilityRef}
@@ -1308,29 +1342,7 @@ function CreateCommunityScreen() {
                 )}
                 adjustToContentHeight
             >
-                <View
-                    style={{
-                        padding: 20,
-                        height: Dimensions.get('screen').height * 0.2,
-                    }}
-                >
-                    <RadioButton.Group
-                        onValueChange={(value) => {
-                            setVisivility(value);
-                            modalizeVisibilityRef.current?.close();
-                        }}
-                        value={visibility}
-                    >
-                        <RadioButton.Item
-                            label={i18n.t('public')}
-                            value="public"
-                        />
-                        <RadioButton.Item
-                            label={i18n.t('private')}
-                            value="private"
-                        />
-                    </RadioButton.Group>
-                </View>
+                {renderVisibilities()}
             </Modalize>
         </>
     );
