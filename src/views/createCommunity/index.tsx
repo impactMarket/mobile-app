@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -166,6 +167,8 @@ function CreateCommunityScreen() {
     }, [
         navigation,
         coverImage,
+        profileImage,
+        communityLogo,
         name,
         description,
         city,
@@ -460,15 +463,6 @@ function CreateCommunityScreen() {
         }
     };
 
-    const openHelp = (help: string) => {
-        Alert.alert(
-            i18n.t(help),
-            i18n.t(`${help}Help`),
-            [{ text: i18n.t('close') }],
-            { cancelable: false }
-        );
-    };
-
     const handleSearchCountry = (
         e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
     ) => {
@@ -646,17 +640,29 @@ function CreateCommunityScreen() {
                                 )}
                             </View>
                             {coverImage ? (
-                                <Image
-                                    style={{
-                                        height: 331,
-                                        width: '100%',
-                                        borderRadius: 12,
-                                        marginVertical: 22,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                    source={{ uri: coverImage }}
-                                />
+                                <View style={{ flex: 1 }}>
+                                    <Image
+                                        style={{
+                                            height: 331,
+                                            width: '100%',
+                                            borderRadius: 12,
+                                            marginVertical: 22,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                        source={{ uri: coverImage }}
+                                    />
+                                    <CloseStorySvg
+                                        style={{
+                                            position: 'absolute',
+                                            top: 38,
+                                            right: 20,
+                                        }}
+                                        onPress={() => {
+                                            setCoverImage('');
+                                        }}
+                                    />
+                                </View>
                             ) : (
                                 <View
                                     style={[
@@ -708,16 +714,28 @@ function CreateCommunityScreen() {
                                 </View>
                             )}
                             {profileImage ? (
-                                <Image
-                                    style={{
-                                        height: 112,
-                                        width: '100%',
-                                        borderRadius: 12,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                    source={{ uri: profileImage }}
-                                />
+                                <View style={styles.uploadFilledContainer}>
+                                    <CloseStorySvg
+                                        style={{
+                                            position: 'absolute',
+                                            top: 14,
+                                            right: 14,
+                                        }}
+                                        onPress={() => {
+                                            setProfileImage('');
+                                        }}
+                                    />
+                                    <Image
+                                        style={{
+                                            height: 80,
+                                            width: 80,
+                                            borderRadius: 40,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                        source={{ uri: profileImage }}
+                                    />
+                                </View>
                             ) : (
                                 <View style={styles.uploadContainer}>
                                     <View
@@ -772,16 +790,28 @@ function CreateCommunityScreen() {
                             )} */}
 
                             {communityLogo ? (
-                                <Image
-                                    style={{
-                                        height: 112,
-                                        width: '100%',
-                                        borderRadius: 12,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                    source={{ uri: communityLogo }}
-                                />
+                                <View style={styles.uploadFilledContainer}>
+                                    <Image
+                                        style={{
+                                            height: 80,
+                                            width: 80,
+                                            borderRadius: 40,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                        source={{ uri: communityLogo }}
+                                    />
+                                    <CloseStorySvg
+                                        style={{
+                                            position: 'absolute',
+                                            top: 14,
+                                            right: 14,
+                                        }}
+                                        onPress={() => {
+                                            setCommunityLogo('');
+                                        }}
+                                    />
+                                </View>
                             ) : (
                                 <View style={styles.uploadContainer}>
                                     <View
@@ -1390,6 +1420,16 @@ const styles = StyleSheet.create({
         marginBottom: 24,
         alignItems: 'center',
         justifyContent: 'space-between',
+    },
+    uploadFilledContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        marginBottom: 24,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#E9EDF4',
+        paddingVertical: 18.1,
     },
     uploadBtn: {
         width: 98,
