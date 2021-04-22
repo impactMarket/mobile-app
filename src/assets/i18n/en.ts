@@ -65,7 +65,7 @@ export default {
     createCommunityDescription:
         'By creating a new community, you are initiating a new basic income mechanism for your community where each beneficiary you add will have equal access to claim a recurring amount defined by you in this form.',
     selectCoverImage: 'Select Cover Image',
-    changeCoverImage: 'Change Cover Image',
+    changeCoverImage: 'Cover Image',
     changeProfileImage: 'Your Profile Image',
     changeLogoImage: 'Community Logotype',
     addCoverImage: 'Cover Image',

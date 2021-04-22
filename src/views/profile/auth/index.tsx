@@ -47,6 +47,7 @@ const countries: {
     };
 } = countriesJSON;
 function Auth() {
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
@@ -196,7 +197,9 @@ function Auth() {
         );
     };
 
-    modalizeWelcomeRef.current?.open();
+    useEffect(() => {
+        modalizeWelcomeRef.current?.open();
+    }, []);
 
     return (
         <>
@@ -205,7 +208,9 @@ function Auth() {
                 HeaderComponent={renderHeader(
                     i18n.t('connectWithValora'),
                     modalizeWelcomeRef,
-                    () => {}
+                    () => {
+                        navigation.goBack();
+                    }
                 )}
                 adjustToContentHeight
             >

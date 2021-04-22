@@ -62,9 +62,9 @@ export default {
         'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
     contractDescriptionLabel:
         'Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas de seus beneficiários. Eles poderão reclamar enquanto houver fundos disponíveis no contrato. Você terá a responsabilidade de promover sua comunidade e de arrecadar fundos para isso.\n\nSe houver outra pessoa ou organização em sua comunidade que você acredita ser mais adequada para conduzir esta iniciativa, informe-a sobre essa possibilidade e incentive-a a criar uma comunidade.',
-    changeCoverImage: 'Altere a Imagem de Capa',
-    changeProfileImage: 'Altere a Imagem de Perfil',
-    changeLogoImage: 'Altere a Logomarca',
+    changeCoverImage: 'Imagem de Capa',
+    changeProfileImage: 'Imagem de Perfil',
+    changeLogoImage: 'Logomarca',
     communityName: 'Nome da Comunidade',
     shortDescription: 'Descrição',
     city: 'Cidade',

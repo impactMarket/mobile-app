@@ -616,7 +616,6 @@ function CreateCommunityScreen() {
         <List.Item
             title={`${countries[item].emoji} ${countries[item].name}`}
             onPress={() => handleSelectCountry(item)}
-            // left={(props) => <List.Icon {...props} icon="folder" />}
         />
     );
 
@@ -627,8 +626,8 @@ function CreateCommunityScreen() {
         if (tooManyResultForQuery) {
             return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
         }
-        if (searchCountryQuery.length > 0) {
-            if (setSearchCountryISOResult.length > 0) {
+        if (searchCountryQuery.length === 0) {
+            if (setSearchCountryISOResult.length === 0) {
                 return (
                     <FlatList
                         data={searchCountryISOResult}
