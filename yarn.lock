@@ -11099,6 +11099,11 @@ react-native-paper@4.5.0:
     color "^3.1.2"
     react-native-iphone-x-helper "^1.3.1"
 
+react-native-portalize@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-portalize/-/react-native-portalize-1.0.7.tgz#8b3c742a06f863654d526ea1075a8596625f8482"
+  integrity sha512-icqopPh9ZSV+I8C5LlZN9pQJ0OMeBDNqHhP80+qDx0hOGEcsDC09wgjogbEMfJE0GcMDM7PDYtyQkqa9gIqd1g==
+
 react-native-qrcode-svg@6.1.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/react-native-qrcode-svg/-/react-native-qrcode-svg-6.1.1.tgz#19dd15545b1cbcfc1b2738af170e9fd0f1d4d8a0"

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
+import { STORAGE_USER_AUTH_TOKEN, apiImageTargets } from 'helpers/constants';
 import * as Sentry from 'sentry-expo';
 
 import config from '../../../config';
@@ -12,8 +12,9 @@ import ApiRouteUser from './routes/user';
 axios.defaults.baseURL = config.baseApiUrl;
 
 class ApiRouteUpload {
-    static async uploadCommunityCoverImage(communityId: string, uri: string) {
+    static async uploadImage(uri: string, type: string) {
         let response;
+
         try {
             // handle success
             const uriParts = uri.split('.');
@@ -25,8 +26,6 @@ class ApiRouteUpload {
                 name: `photo.${fileType}`,
                 type: `image/${fileType}`,
             } as any);
-            formData.append('pictureContext', 'community');
-            formData.append('communityId', communityId);
             const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
             const requestHeaders = {
                 headers: {
@@ -36,41 +35,8 @@ class ApiRouteUpload {
                 },
             };
             const result = await axios.post(
-                '/storage/upload',
-                formData,
-                requestHeaders
-            );
-            response = result;
-        } catch (e) {
-            Sentry.Native.captureException(e);
-        }
-        return response;
-    }
-
-    static async uploadUserAvatarImage(uri: string) {
-        let response;
-        try {
-            // handle success
-            const uriParts = uri.split('.');
-            const fileType = uriParts[uriParts.length - 1];
-
-            const formData = new FormData();
-            formData.append('imageFile', {
-                uri,
-                name: `photo.${fileType}`,
-                type: `image/${fileType}`,
-            } as any);
-            formData.append('pictureContext', 'userAvatar');
-            const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-            const requestHeaders = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
-            };
-            const result = await axios.post(
-                '/storage/upload',
+                //TODO: Fix tsc signature error
+                apiImageTargets[type],
                 formData,
                 requestHeaders
             );

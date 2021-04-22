@@ -25,6 +25,13 @@ export interface ICommunity extends CommunityAttributes {
     metrics: CommunityDailyMetricsAttributes;
 }
 
+export interface IMediaContent {
+    id: number;
+    url: string;
+    width: number;
+    height: number;
+}
+
 export interface IManagers {
     managers: number;
     beneficiaries: {
@@ -66,7 +73,7 @@ export interface CommunityCreationAttributes {
     };
     email: string;
     txReceipt?: any;
-    // coverImage: string; // default image is used
+    coverMediaId?: number;
     contractParams: {
         claimAmount: string;
         maxClaim: string;

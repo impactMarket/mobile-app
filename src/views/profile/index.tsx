@@ -1,5 +1,6 @@
 /* eslint handle-callback-err: "warn" */
 // Assets
+import { useNavigation } from '@react-navigation/native';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 // Components
@@ -65,6 +66,7 @@ const currencies: {
 } = currenciesJSON;
 function ProfileScreen() {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
     const user = useSelector((state: IRootState) => state.user.metadata);
     const userWallet = useSelector((state: IRootState) => state.user.wallet);
     const app = useSelector((state: IRootState) => state.app);
@@ -118,6 +120,10 @@ function ProfileScreen() {
                 setUserCusdBalance(userWallet.balance);
             }
         };
+        navigation.setOptions({
+            tabBarVisible: false,
+        });
+
         loadProfile();
     }, [userWallet, user]);
 
@@ -458,7 +464,7 @@ function ProfileScreen() {
                         onChangeText={(value) => setName(value)}
                     />
                     <View
-                        style={{ marginTop: 16, flex: 2, flexDirection: 'row' }}
+                        style={{ marginTop: 28, flex: 2, flexDirection: 'row' }}
                     >
                         <View style={{ flex: 1, marginRight: 10 }}>
                             <Select
@@ -493,7 +499,7 @@ function ProfileScreen() {
                             />
                         </View>
                     </View>
-                    <View style={{ marginTop: 16 }}>
+                    <View style={{ marginTop: 28 }}>
                         <Input
                             label={i18n.t('howManyChildren')}
                             value={children}
@@ -519,14 +525,14 @@ function ProfileScreen() {
                             onChangeText={(value) => setChildren(value)}
                         />
                     </View>
-                    <View style={{ marginTop: 16 }}>
+                    <View style={{ marginTop: 28 }}>
                         <Select
                             label={i18n.t('currency')}
                             value={currencies[currency.toUpperCase()].name}
                             onPress={() => modalizeCurrencyRef.current?.open()}
                         />
                     </View>
-                    <View style={{ marginTop: 16 }}>
+                    <View style={{ marginTop: 28 }}>
                         <Select
                             label={i18n.t('language')}
                             value={language === 'en' ? 'English' : ' Português'}
@@ -535,7 +541,7 @@ function ProfileScreen() {
                     </View>
                     <Input
                         label={i18n.t('country')}
-                        style={{ marginTop: 16 }}
+                        style={{ marginTop: 28 }}
                         value={getCountryFromPhoneNumber(
                             userWallet.phoneNumber
                         )}
@@ -543,7 +549,7 @@ function ProfileScreen() {
                     />
                     <Input
                         label={i18n.t('phoneNumber')}
-                        style={{ marginTop: 16 }}
+                        style={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
                     />
@@ -623,8 +629,8 @@ function ProfileScreen() {
 
 ProfileScreen.navigationOptions = () => {
     return {
-        headerTitle: i18n.t('profile'),
         headerLeft: () => <BackSvg />,
+        headerTitle: i18n.t('profile'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <ProfileSvg focused={props.focused} />
         ),

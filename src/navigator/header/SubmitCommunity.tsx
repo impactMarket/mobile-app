@@ -11,8 +11,8 @@ function SubmitCommunity(props: { submit: () => void; submitting: boolean }) {
                 mode="text"
                 uppercase={false}
                 labelStyle={{
-                    fontFamily: 'Gelion-Bold',
-                    fontSize: 22,
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 18,
                     lineHeight: 26,
                     height: 26,
                     textAlign: 'center',

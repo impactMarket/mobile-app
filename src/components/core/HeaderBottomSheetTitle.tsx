@@ -4,7 +4,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 const renderHeader = (
-    title: string,
+    title: string | null,
     ref: React.RefObject<any>,
     cb?: React.SetStateAction<any>,
     leftIcon?: boolean
@@ -13,6 +13,7 @@ const renderHeader = (
         <View style={styles.bottomSheetHeaderContainer}>
             {leftIcon && (
                 <BackSvg
+                    style={{ alignSelf: 'flex-start' }}
                     onPress={() => {
                         ref.current?.close();
                         cb && cb();
@@ -39,6 +40,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         alignItems: 'center',
+        alignSelf: 'center',
         justifyContent: 'space-between',
         paddingVertical: 15,
         paddingHorizontal: 22,

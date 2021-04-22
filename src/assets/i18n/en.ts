@@ -114,6 +114,7 @@ export default {
         'With Valora you can easily send and receive money with just a mobile phone.',
     step1: 'Step 1 of 2',
     step2: 'Step 2 of 2',
+    whatIsValora: 'What is Valora?',
     installAndCreateValoraAccount: 'Install and create Valora Account',
     connectWithValora: 'Connect with Valora',
     notNow: 'Not now',

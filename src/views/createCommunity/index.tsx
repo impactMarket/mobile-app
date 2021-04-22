@@ -11,7 +11,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { celoNetwork } from 'helpers/constants';
+import { celoNetwork, imageTargets } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     amountToCurrency,
@@ -44,11 +44,8 @@ import {
     Button,
     Paragraph,
     Headline,
-    Portal,
-    Dialog,
     RadioButton,
     HelperText,
-    TextInput,
     IconButton,
     Text,
     Searchbar,
@@ -76,6 +73,7 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
+
 const currencies: {
     [key: string]: {
         symbol: string;
@@ -83,6 +81,7 @@ const currencies: {
         symbol_native: string;
     };
 } = currenciesJSON;
+
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
@@ -97,6 +96,10 @@ function CreateCommunityScreen() {
     );
     const userLanguage = useSelector(
         (state: IRootState) => state.user.metadata.language
+    );
+
+    const avatarMediaId = useSelector(
+        (state: IRootState) => state.user.metadata.avatarMediaId
     );
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
@@ -237,15 +240,16 @@ function CreateCommunityScreen() {
         if (!_isCoverImageValid) {
             setIsCoverImageValid(false);
         }
-        const _isProfileImageValid = profileImage.length > 0;
-        if (!_isProfileImageValid) {
-            setIsProfileImageValid(false);
-        }
+        //TODO: Will be added in later version
+        // const _isProfileImageValid = profileImage.length > 0;
+        // if (!_isProfileImageValid) {
+        //     setIsProfileImageValid(false);
+        // }
 
-        const _isCommunityLogoValid = communityLogo.length > 0;
-        if (!_isCommunityLogoValid) {
-            setIsCommunityLogoValid(false);
-        }
+        // const _isCommunityLogoValid = communityLogo.length > 0;
+        // if (!_isCommunityLogoValid) {
+        //     setIsCommunityLogoValid(false);
+        // }
 
         const _isNameValid = name.length > 0;
         if (!_isNameValid) {
@@ -295,9 +299,7 @@ function CreateCommunityScreen() {
             _isClaimAmountValid &&
             _isIncrementalIntervalValid &&
             _isMaxClaimValid &&
-            _isCoverImageValid &&
-            _isCommunityLogoValid &&
-            _isProfileImageValid;
+            _isCoverImageValid;
 
         if (!isSubmitAvailable) {
             return;
@@ -330,7 +332,6 @@ function CreateCommunityScreen() {
             return;
         }
 
-        //
         setSending(true);
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         let txReceipt = null;
@@ -361,6 +362,12 @@ function CreateCommunityScreen() {
                     txReceipt,
                 };
             }
+
+            const apiRequestResult = await Api.upload.uploadImage(
+                coverImage,
+                imageTargets.COVER
+            );
+
             const communityDetails: CommunityCreationAttributes = {
                 requestByAddress: userAddress,
                 name,
@@ -378,22 +385,22 @@ function CreateCommunityScreen() {
                         config.locationErrorMargin,
                 },
                 email,
-                // coverImage: uploadImagePath,
+                coverMediaId: apiRequestResult?.id, //TODO: Typescript check
                 contractParams,
                 ...privateParamsIfAvailable,
             };
 
-            const apiRequestResult = await Api.community.create(
-                communityDetails
-            );
-
             if (apiRequestResult) {
-                await Api.upload.uploadCommunityCoverImage(
-                    apiRequestResult.publicId,
-                    coverImage
+                const communityApiRequestResult = await Api.community.create(
+                    communityDetails
                 );
-                await updateCommunityInfo(apiRequestResult.publicId, dispatch);
-                dispatch(setUserIsCommunityManager(true));
+                if (communityApiRequestResult) {
+                    await updateCommunityInfo(
+                        communityApiRequestResult.publicId,
+                        dispatch
+                    );
+                    dispatch(setUserIsCommunityManager(true));
+                }
             } else {
                 Alert.alert(
                     i18n.t('failure'),
@@ -686,7 +693,6 @@ function CreateCommunityScreen() {
         <List.Item
             title={`[${currencies[item].symbol}] ${currencies[item].name}`}
             onPress={() => handleSelectCurrency(item)}
-            // left={(props) => <List.Icon {...props} icon="folder" />}
         />
     );
 
@@ -1051,7 +1057,10 @@ function CreateCommunityScreen() {
                                 <View>
                                     <Button
                                         mode="contained"
-                                        style={styles.gpsBtn}
+                                        style={[
+                                            styles.gpsBtn,
+                                            { paddingVertical: 0 },
+                                        ]}
                                         onPress={() => enableGPSLocation()}
                                         loading={isEnablingGPS}
                                         uppercase={false}
@@ -1072,9 +1081,7 @@ function CreateCommunityScreen() {
                                     )}
                                 </View>
                             ) : (
-                                <Button
-                                    mode="outlined"
-                                    uppercase={false}
+                                <TouchableOpacity
                                     style={[
                                         {
                                             backgroundColor: '#E9EDF4',
@@ -1082,11 +1089,11 @@ function CreateCommunityScreen() {
                                         },
                                         styles.gpsBtn,
                                     ]}
-                                    disabled
                                 >
                                     <View
                                         style={{
                                             flexDirection: 'row',
+                                            alignSelf: 'center',
                                             alignItems: 'center',
                                         }}
                                     >
@@ -1107,7 +1114,7 @@ function CreateCommunityScreen() {
                                             {i18n.t('validCoordinates')}
                                         </Text>
                                     </View>
-                                </Button>
+                                </TouchableOpacity>
                             )}
                             <View>
                                 <Input
@@ -1456,10 +1463,12 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 44,
         marginVertical: 16,
+        paddingVertical: 8,
         borderRadius: 6,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
+        marginBottom: 24,
     },
     gpsBtnText: {
         fontFamily: 'Inter-Regular',

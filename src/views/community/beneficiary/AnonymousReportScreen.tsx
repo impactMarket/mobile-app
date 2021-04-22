@@ -1,16 +1,14 @@
-import React, { useState, useLayoutEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { View, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
-import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
 import Input from 'components/core/Input';
 import BackSvg from 'components/svg/header/BackSvg';
+import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
+import React, { useState, useLayoutEffect } from 'react';
+import { View, Text, Alert } from 'react-native';
+import { useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
-import { Paragraph } from 'react-native-paper';
 
 function AnonymousReportScreen() {
     const navigation = useNavigation();
@@ -90,7 +88,7 @@ function AnonymousReportScreen() {
             </Text>
             <Input
                 placeholder={i18n.t('reportIlegal.label')}
-                multiline={true}
+                multiline
                 numberOfLines={6}
                 value={reportInput}
                 maxLength={256}

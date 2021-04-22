@@ -7,6 +7,7 @@ import ProfileSvg from 'components/svg/ProfileSvg';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
+import { Host } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
 
 import CommunitiesScreen from './communities';
@@ -60,35 +61,37 @@ function Tabs() {
         />
     );
     return (
-        <Tab.Navigator
-            // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
-            tabBarOptions={{
-                labelStyle: {
-                    fontFamily: 'Gelion-Regular',
-                    fontSize: 15,
-                    lineHeight: 18,
-                    letterSpacing: 0.212727,
-                },
-                tabStyle: {
-                    marginVertical: 16,
-                },
-                style: { height: 84 },
-            }}
-        >
-            {isBeneficiary && tabBeneficiary}
-            {isManager && tabManager}
-            {!isBeneficiary && !isManager && tabCommunities}
-            <Tab.Screen
-                name="profile"
-                component={ProfileScreen}
-                options={{
-                    title: i18n.t('profile'),
-                    tabBarIcon: (props: ITabBarIconProps) => (
-                        <ProfileSvg focused={props.focused} />
-                    ),
+        <Host>
+            <Tab.Navigator
+                // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
+                tabBarOptions={{
+                    labelStyle: {
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 15,
+                        lineHeight: 18,
+                        letterSpacing: 0.212727,
+                    },
+                    tabStyle: {
+                        marginVertical: 16,
+                    },
+                    style: { height: 84 },
                 }}
-            />
-        </Tab.Navigator>
+            >
+                {isBeneficiary && tabBeneficiary}
+                {isManager && tabManager}
+                {!isBeneficiary && !isManager && tabCommunities}
+                <Tab.Screen
+                    name="profile"
+                    component={ProfileScreen}
+                    options={{
+                        title: i18n.t('profile'),
+                        tabBarIcon: (props: ITabBarIconProps) => (
+                            <ProfileSvg focused={props.focused} />
+                        ),
+                    }}
+                />
+            </Tab.Navigator>
+        </Host>
     );
 }
 

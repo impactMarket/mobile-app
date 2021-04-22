@@ -6,7 +6,6 @@ import {
     View,
     StyleSheet,
 } from 'react-native';
-import { Paragraph } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
 
 interface IInputProps extends TextInputProps {
@@ -46,7 +45,11 @@ export default class Input extends Component<IInputProps, object> {
                 <View style={styles.outline}>
                     <Text style={styles.label}>{label}</Text>
                     <TextInput
-                        style={styles.textInput}
+                        style={
+                            value
+                                ? styles.textInput
+                                : [{ marginTop: 8 }, styles.textInput]
+                        }
                         value={value}
                         maxLength={maxLength}
                         onEndEditing={onEndEditing}
@@ -75,12 +78,12 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         borderColor: ipctColors.borderGray,
     },
-    //TODO: add font inter
     textInput: {
         flexGrow: 1,
         margin: 0,
         zIndex: 1,
         fontSize: 15,
+        fontFamily: 'Inter-Regular',
         lineHeight: 24,
         color: ipctColors.almostBlack,
     },
