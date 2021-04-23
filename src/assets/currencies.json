@@ -74,6 +74,11 @@
         "name": "Burundian Franc",
         "symbol_native": "FBu"
     },
+    "BOB": {
+        "symbol": "Bs",
+        "name": "Bolivian boliviano",
+        "symbol_native": "Bs"
+    },
     "BND": {
         "symbol": "BN$",
         "name": "Brunei Dollar",
@@ -98,6 +103,11 @@
         "symbol": "BZ$",
         "name": "Belize Dollar",
         "symbol_native": "$"
+    },
+    "BTN": {
+        "symbol": "Nu.",
+        "name": "Bhutanese ngultrum",
+        "symbol_native": "Nu."
     },
     "CDF": {
         "symbol": "CDF",
@@ -138,6 +148,11 @@
         "symbol": "Kč",
         "name": "Czech Republic Koruna",
         "symbol_native": "Kč"
+    },
+    "CUP": {
+        "symbol": "₱",
+        "name": "Cuban peso",
+        "symbol_native": "₱"
     },
     "DJF": {
         "symbol": "Fdj",
@@ -279,6 +294,11 @@
         "name": "Cambodian Riel",
         "symbol_native": "៛"
     },
+    "HTG": {
+        "symbol": "G",
+        "name": "Haitian gourde",
+        "symbol_native": "G"
+    },
     "KMF": {
         "symbol": "CF",
         "name": "Comorian Franc",
@@ -323,6 +343,11 @@
         "symbol": "LD",
         "name": "Libyan Dinar",
         "symbol_native": "د.ل.‏"
+    },
+    "LSL": {
+        "symbol": "L",
+        "name": "Lesotho loti",
+        "symbol_native": "L"
     },
     "MAD": {
         "symbol": "MAD",
@@ -488,6 +513,11 @@
         "symbol": "Ssh",
         "name": "Somali Shilling",
         "symbol_native": "Ssh"
+    },
+    "SVC": {
+        "symbol": "₡",
+        "name": "Salvadoran colón",
+        "symbol_native": "₡"
     },
     "SYP": {
         "symbol": "SY£",
