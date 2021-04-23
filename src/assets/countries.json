@@ -293,7 +293,7 @@
         "name": "Bolivia",
         "native": "Bolivia",
         "phone": "591",
-        "currency": "BOB,BOV",
+        "currency": "BOB",
         "languages": [
             "es",
             "ay",
@@ -335,7 +335,7 @@
         "name": "Bhutan",
         "native": "ʼbrug-yul",
         "phone": "975",
-        "currency": "BTN,INR",
+        "currency": "BTN",
         "languages": [
             "dz"
         ],
@@ -447,7 +447,7 @@
         "name": "Switzerland",
         "native": "Schweiz",
         "phone": "41",
-        "currency": "CHE,CHF,CHW",
+        "currency": "CHF",
         "languages": [
             "de",
             "fr",
@@ -479,7 +479,7 @@
         "name": "Chile",
         "native": "Chile",
         "phone": "56",
-        "currency": "CLF,CLP",
+        "currency": "CLP",
         "languages": [
             "es"
         ],
@@ -530,7 +530,7 @@
         "name": "Cuba",
         "native": "Cuba",
         "phone": "53",
-        "currency": "CUC,CUP",
+        "currency": "CUP",
         "languages": [
             "es"
         ],
@@ -686,7 +686,7 @@
         "name": "Western Sahara",
         "native": "الصحراء الغربية",
         "phone": "212",
-        "currency": "MAD,DZD,MRU",
+        "currency": "MAD",
         "languages": [
             "es"
         ],
@@ -1032,7 +1032,7 @@
         "name": "Haiti",
         "native": "Haïti",
         "phone": "509",
-        "currency": "HTG,USD",
+        "currency": "HTG",
         "languages": [
             "fr",
             "ht"
@@ -1375,7 +1375,7 @@
         "name": "Lesotho",
         "native": "Lesotho",
         "phone": "266",
-        "currency": "LSL,ZAR",
+        "currency": "LSL",
         "languages": [
             "en",
             "st"
@@ -1669,7 +1669,7 @@
         "name": "Namibia",
         "native": "Namibia",
         "phone": "264",
-        "currency": "NAD,ZAR",
+        "currency": "NAD",
         "languages": [
             "en",
             "af"
@@ -1804,7 +1804,7 @@
         "name": "Panama",
         "native": "Panamá",
         "phone": "507",
-        "currency": "PAB,USD",
+        "currency": "PAB",
         "languages": [
             "es"
         ],
@@ -2185,7 +2185,7 @@
         "name": "El Salvador",
         "native": "El Salvador",
         "phone": "503",
-        "currency": "SVC,USD",
+        "currency": "SVC",
         "languages": [
             "es"
         ],
@@ -2423,7 +2423,7 @@
         "name": "United States",
         "native": "United States",
         "phone": "1",
-        "currency": "USD,USN,USS",
+        "currency": "USD",
         "languages": [
             "en"
         ],
@@ -2433,7 +2433,7 @@
         "name": "Uruguay",
         "native": "Uruguay",
         "phone": "598",
-        "currency": "UYI,UYU",
+        "currency": "UYU",
         "languages": [
             "es"
         ],
@@ -2608,7 +2608,7 @@
         "name": "Zimbabwe",
         "native": "Zimbabwe",
         "phone": "263",
-        "currency": "USD,ZAR,BWP,GBP,AUD,CNY,INR,JPY",
+        "currency": "USD",
         "languages": [
             "en",
             "sn",
