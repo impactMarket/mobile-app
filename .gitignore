@@ -60,6 +60,7 @@ buck-out/
 
 web-build/
 .env
+.env.production
 .extra
 firebase/
 *.jks
