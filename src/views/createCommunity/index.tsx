@@ -41,6 +41,7 @@ import {
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
+    Portal,
     Button,
     Paragraph,
     Headline,
@@ -136,6 +137,8 @@ function CreateCommunityScreen() {
     const [description, setDescription] = useState('');
     const [city, setCity] = useState('');
     const [searchCountryQuery, setSearchCountryQuery] = useState('');
+
+    const [fullCountryList, setFullCountryList] = useState<string[]>([]);
     const [searchCountryISOResult, setSearchCountryISOResult] = useState<
         string[]
     >([]);
@@ -199,6 +202,7 @@ function CreateCommunityScreen() {
             }
         };
         setCountryAndCurrencyBasedOnPhoneNumber();
+        renderAvailableCountries();
     }, []);
 
     const deployPrivateCommunity = async () => {
@@ -453,6 +457,14 @@ function CreateCommunityScreen() {
         }
     };
 
+    const renderAvailableCountries = () => {
+        const availableCountryISO: string[] = [];
+        for (const [key] of Object.entries(countries)) {
+            availableCountryISO.push(key);
+        }
+        setFullCountryList(availableCountryISO);
+    };
+
     const pickImage = async (
         cb: Dispatch<React.SetStateAction<string>>,
         cbv: Dispatch<React.SetStateAction<boolean>>
@@ -534,7 +546,7 @@ function CreateCommunityScreen() {
         <View
             style={{
                 padding: 20,
-                height: Dimensions.get('screen').height * 0.5,
+                height: Dimensions.get('screen').height * 0.9,
             }}
         >
             <Searchbar
@@ -567,6 +579,7 @@ function CreateCommunityScreen() {
                 value={searchCountryQuery}
                 onEndEditing={handleSearchCountry}
             />
+
             {renderSearchCountryResult()}
         </View>
     );
@@ -603,7 +616,7 @@ function CreateCommunityScreen() {
                 countriesResult.push(key);
             }
         }
-        //
+
         if (countriesResult.length > 7) {
             setTooManyResultForQuery(true);
         } else {
@@ -627,14 +640,16 @@ function CreateCommunityScreen() {
     );
 
     const renderSearchCountryResult = () => {
-        if (!modalizeCountryRef.current?.open) {
-            return;
-        }
-        if (tooManyResultForQuery) {
-            return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
-        }
         if (searchCountryQuery.length === 0) {
-            if (setSearchCountryISOResult.length === 0) {
+            return (
+                <FlatList
+                    data={fullCountryList}
+                    renderItem={renderItemCountryQuery}
+                    keyExtractor={(item) => item}
+                />
+            );
+        } else {
+            if (setSearchCountryISOResult.length > 0) {
                 return (
                     <FlatList
                         data={searchCountryISOResult}
@@ -1301,55 +1316,57 @@ function CreateCommunityScreen() {
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-            <Modalize
-                ref={modalizeCountryRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('country'),
-                    modalizeCountryRef,
-                    () => setSearchCountryQuery('')
-                )}
-                adjustToContentHeight
-            >
-                {renderCountries()}
-            </Modalize>
-            <Modalize
-                ref={modalizeCurrencyRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('currency'),
-                    modalizeCurrencyRef,
-                    () => setSearchCurrency('')
-                )}
-                adjustToContentHeight
-            >
-                <View
-                    style={{
-                        padding: 20,
-                        height: Dimensions.get('screen').height * 0.5,
-                    }}
+            <Portal>
+                <Modalize
+                    ref={modalizeCountryRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('country'),
+                        modalizeCountryRef,
+                        () => setSearchCountryQuery('')
+                    )}
+                    adjustToContentHeight
                 >
-                    {renderCurrencyContent()}
-                </View>
-            </Modalize>
-            <Modalize
-                ref={modalizeFrequencyRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('frequency'),
-                    modalizeFrequencyRef
-                )}
-                adjustToContentHeight
-            >
-                {renderFrequency()}
-            </Modalize>
-            <Modalize
-                ref={modalizeVisibilityRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('visibility'),
-                    modalizeVisibilityRef
-                )}
-                adjustToContentHeight
-            >
-                {renderVisibilities()}
-            </Modalize>
+                    {renderCountries()}
+                </Modalize>
+                <Modalize
+                    ref={modalizeCurrencyRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('currency'),
+                        modalizeCurrencyRef,
+                        () => setSearchCurrency('')
+                    )}
+                    adjustToContentHeight
+                >
+                    <View
+                        style={{
+                            padding: 20,
+                            height: Dimensions.get('screen').height * 0.5,
+                        }}
+                    >
+                        {renderCurrencyContent()}
+                    </View>
+                </Modalize>
+                <Modalize
+                    ref={modalizeFrequencyRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('frequency'),
+                        modalizeFrequencyRef
+                    )}
+                    adjustToContentHeight
+                >
+                    {renderFrequency()}
+                </Modalize>
+                <Modalize
+                    ref={modalizeVisibilityRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('visibility'),
+                        modalizeVisibilityRef
+                    )}
+                    adjustToContentHeight
+                >
+                    {renderVisibilities()}
+                </Modalize>
+            </Portal>
         </>
     );
 }
