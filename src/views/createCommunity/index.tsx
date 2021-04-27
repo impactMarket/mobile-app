@@ -129,6 +129,7 @@ function CreateCommunityScreen() {
     //
     const [showingResults, setShowingResults] = useState(false);
     const [searchCurrency, setSearchCurrency] = useState('');
+    const [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]);
     const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
         []
     );
@@ -203,6 +204,7 @@ function CreateCommunityScreen() {
         };
         setCountryAndCurrencyBasedOnPhoneNumber();
         renderAvailableCountries();
+        renderAvailableCurrencies();
     }, []);
 
     const deployPrivateCommunity = async () => {
@@ -465,6 +467,14 @@ function CreateCommunityScreen() {
         setFullCountryList(availableCountryISO);
     };
 
+    const renderAvailableCurrencies = () => {
+        const currencyResult: string[] = [];
+        for (const [key] of Object.entries(currencies)) {
+            currencyResult.push(key);
+        }
+        setFullCurrencyList(currencyResult);
+    };
+
     const pickImage = async (
         cb: Dispatch<React.SetStateAction<string>>,
         cbv: Dispatch<React.SetStateAction<boolean>>
@@ -485,7 +495,7 @@ function CreateCommunityScreen() {
     const renderCurrencyContent = () => (
         <View
             style={{
-                height: Dimensions.get('screen').height * 0.5,
+                height: Dimensions.get('screen').height * 0.9,
             }}
         >
             <Searchbar
@@ -712,13 +722,15 @@ function CreateCommunityScreen() {
     );
 
     const renderSearchCurrencyResult = () => {
-        if (!modalizeCurrencyRef.current?.open) {
-            return;
-        }
-        if (tooManyResultForQuery) {
-            return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
-        }
-        if (searchCurrency.length > 0) {
+        if (searchCurrency.length === 0) {
+            return (
+                <FlatList
+                    data={fullCurrencyList}
+                    renderItem={renderItemCurrencyQuery}
+                    keyExtractor={(item) => item}
+                />
+            );
+        } else {
             if (searchCurrencyResult.length > 0) {
                 return (
                     <FlatList
@@ -1324,7 +1336,6 @@ function CreateCommunityScreen() {
                         modalizeCountryRef,
                         () => setSearchCountryQuery('')
                     )}
-                    adjustToContentHeight
                 >
                     {renderCountries()}
                 </Modalize>
@@ -1335,7 +1346,6 @@ function CreateCommunityScreen() {
                         modalizeCurrencyRef,
                         () => setSearchCurrency('')
                     )}
-                    adjustToContentHeight
                 >
                     <View
                         style={{
