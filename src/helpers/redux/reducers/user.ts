@@ -31,6 +31,8 @@ const INITIAL_STATE_USER: IUserState = {
         children: null,
         blocked: false,
         suspect: false,
+        avatar: '',
+        avatarMediaId: null,
     },
     exchangeRate: 1,
     community: {

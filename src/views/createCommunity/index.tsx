@@ -111,9 +111,11 @@ function CreateCommunityScreen() {
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     const [isNameValid, setIsNameValid] = useState(true);
+
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
     const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
+
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
     const [isCountryValid, setIsCountryValid] = useState(true);
@@ -147,7 +149,9 @@ function CreateCommunityScreen() {
     const [country, setCountry] = useState('');
     const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('');
-    const [profileImage, setProfileImage] = useState('');
+
+    const [profileImage, setProfileImage] = useState(''); //TODO: Add initial image if user has profile photo
+
     const [communityLogo, setCommunityLogo] = useState('');
 
     const [claimAmount, setClaimAmount] = useState('');
@@ -901,7 +905,7 @@ function CreateCommunityScreen() {
                                                 styles.communityDetailsHeadline
                                             }
                                         >
-                                            {i18n.t('changeLogoImage')}
+                                            {i18n.t('changeProfileImage')}
                                         </Headline>
                                         <Text
                                             style={[
@@ -933,16 +937,10 @@ function CreateCommunityScreen() {
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
-                                // <Text>Uploading file ...</Text>
                             )}
 
-                            {/* {!isProfileImageValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('profileImageRequired')}
-                                </HelperText>
-                            )} */}
-
-                            {communityLogo ? (
+                            {/* TODO: Community Logo will be available in upcomming release */}
+                            {/* {communityLogo ? (
                                 <View style={styles.uploadFilledContainer}>
                                     <Image
                                         style={{
@@ -977,7 +975,7 @@ function CreateCommunityScreen() {
                                                 styles.communityDetailsHeadline
                                             }
                                         >
-                                            {i18n.t('changeProfileImage')}
+                                            {i18n.t('changeLogoImage')}
                                         </Headline>
                                         <Text
                                             style={[
@@ -1009,13 +1007,6 @@ function CreateCommunityScreen() {
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
-                                // <Text>Uploading file ...</Text>
-                            )}
-
-                            {/* {!isCommunityLogoValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('communityLogoRequired')}
-                                </HelperText>
                             )} */}
                             <View style={{ marginTop: 16, minHeight: 115 }}>
                                 <Input

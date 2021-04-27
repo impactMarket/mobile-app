@@ -1,7 +1,11 @@
 import { newKitFromWeb3 } from '@celo/contractkit';
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import {
+    RouteProp,
+    useNavigation,
+    useFocusEffect,
+} from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
@@ -20,7 +24,7 @@ import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useRef, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
     Text,
@@ -58,12 +62,18 @@ const countries: {
 } = countriesJSON;
 function Auth() {
     const navigation = useNavigation();
+
     const dispatch = useDispatch();
     const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
+    const [loadRefs, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
+
+    useFocusEffect(() => {
+        renderAuthModalize();
+    });
 
     const login = async () => {
         const requestId = 'login';
@@ -245,6 +255,16 @@ function Auth() {
         );
     };
 
+    const renderAuthModalize = () => {
+        if (modalizeWelcomeRef.current === null) {
+            setTimeout(() => {
+                setLoadRefs(true);
+            }, 500);
+        } else {
+            modalizeWelcomeRef.current.open();
+        }
+    };
+
     return (
         <Portal>
             <Modalize
@@ -257,6 +277,9 @@ function Auth() {
                     }
                 )}
                 adjustToContentHeight
+                onClose={() => {
+                    navigation.navigate(Screens.Communities);
+                }}
             >
                 <View
                     style={{
