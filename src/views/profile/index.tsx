@@ -41,6 +41,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import {
+    Portal,
     Paragraph,
     RadioButton,
     Text,
@@ -48,7 +49,7 @@ import {
     Searchbar,
     IconButton,
 } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { batch, useDispatch, useSelector } from 'react-redux';
 // Services
 import Api from 'services/api';
@@ -79,13 +80,14 @@ function ProfileScreen() {
 
     const [showingResults, setShowingResults] = useState(false);
     const [searchCurrency, setSearchCurrency] = useState('');
+    const [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]);
     const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
         []
     );
     const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
 
     const [name, setName] = useState('');
-    const [avatarImage, setAvatarImage] = useState('');
+    const [userAvatarImage, setUserAvatarImage] = useState('');
     const [currency, setCurrency] = useState('usd');
     const [userCusdBalance, setUserCusdBalance] = useState('0');
     const [language, setLanguage] = useState('en');
@@ -118,12 +120,13 @@ function ProfileScreen() {
                     setChildren(user.children.toString());
                 }
                 setUserCusdBalance(userWallet.balance);
+                // setUserAvatarImage(user.avatar.url);
             }
         };
         navigation.setOptions({
             tabBarVisible: false,
         });
-
+        renderAvailableCurrencies();
         loadProfile();
     }, [userWallet, user]);
 
@@ -168,7 +171,7 @@ function ProfileScreen() {
     const handleChangeAvatar = async (avatar: string) => {
         try {
             setSending(true);
-            setAvatarImage(avatar);
+            setUserAvatarImage(avatar);
             //TODO: Discuss w/ Bernardo
             await Api.upload.uploadUserAvatarImage(avatar);
             setSending(false);
@@ -220,6 +223,14 @@ function ProfileScreen() {
         }
     };
 
+    const renderAvailableCurrencies = () => {
+        const currencyResult: string[] = [];
+        for (const [key] of Object.entries(currencies)) {
+            currencyResult.push(key);
+        }
+        setFullCurrencyList(currencyResult);
+    };
+
     const handleSearchCurrency = (
         e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
     ) => {
@@ -256,6 +267,7 @@ function ProfileScreen() {
             dispatch(setUserExchangeRate(exchangeRate));
         });
         setSelectedCurrencyId(currency);
+        modalizeCurrencyRef.current?.close();
     };
 
     const renderItemCurrencyQuery = ({ item }: { item: string }) => (
@@ -276,20 +288,22 @@ function ProfileScreen() {
     );
 
     const renderSearchCurrencyResult = () => {
-        if (!modalizeCurrencyRef.current?.open) {
-            return;
-        }
-        if (tooManyResultForQuery) {
-            return <Paragraph>{i18n.t('tooManyResults')}</Paragraph>;
-        }
-        if (searchCurrency.length > 0) {
+        if (searchCurrency.length === 0) {
+            return (
+                <FlatList
+                    data={fullCurrencyList}
+                    renderItem={renderItemCurrencyQuery}
+                    keyExtractor={(item) => item}
+                />
+            );
+        } else {
             if (searchCurrencyResult.length > 0) {
                 return (
                     <FlatList
                         data={searchCurrencyResult}
                         renderItem={renderItemCurrencyQuery}
                         keyExtractor={(item) => item}
-                        extraData={selectedCurrencyId}
+                        // extraData={selectedCurrencyId}
                         showsVerticalScrollIndicator={false}
                     />
                 );
@@ -333,7 +347,7 @@ function ProfileScreen() {
         <View
             style={{
                 paddingHorizontal: 22,
-                height: Dimensions.get('screen').height * 0.5,
+                height: Dimensions.get('screen').height * 0.9,
             }}
         >
             <Searchbar
@@ -420,9 +434,9 @@ function ProfileScreen() {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>
-                        {avatarImage.length > 0 ? (
+                        {userAvatarImage.length > 0 ? (
                             <Image
-                                source={{ uri: avatarImage }}
+                                source={{ uri: userAvatarImage }}
                                 style={styles.avatar}
                             />
                         ) : (
@@ -591,38 +605,38 @@ function ProfileScreen() {
                     </View>
                 </View>
             </ScrollView>
-            <Modalize
-                ref={modalizeCurrencyRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('currency'),
-                    modalizeCurrencyRef,
-                    () => setSearchCurrency('')
-                )}
-                adjustToContentHeight
-            >
-                {renderCurrencyContent()}
-            </Modalize>
-
-            <Modalize
-                ref={modalizeLanguageRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('language'),
-                    modalizeLanguageRef
-                )}
-                adjustToContentHeight
-            >
-                {renderLanguageContent()}
-            </Modalize>
-            <Modalize
-                ref={modalizeGenderRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('gender'),
-                    modalizeGenderRef
-                )}
-                adjustToContentHeight
-            >
-                {renderGenderContent()}
-            </Modalize>
+            <Portal>
+                <Modalize
+                    ref={modalizeCurrencyRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('currency'),
+                        modalizeCurrencyRef,
+                        () => setSearchCurrency('')
+                    )}
+                >
+                    {renderCurrencyContent()}
+                </Modalize>
+                <Modalize
+                    ref={modalizeLanguageRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('language'),
+                        modalizeLanguageRef
+                    )}
+                    adjustToContentHeight
+                >
+                    {renderLanguageContent()}
+                </Modalize>
+                <Modalize
+                    ref={modalizeGenderRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('gender'),
+                        modalizeGenderRef
+                    )}
+                    adjustToContentHeight
+                >
+                    {renderGenderContent()}
+                </Modalize>
+            </Portal>
         </>
     );
 }

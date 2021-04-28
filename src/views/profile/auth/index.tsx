@@ -259,7 +259,7 @@ function Auth() {
         if (modalizeWelcomeRef.current === null) {
             setTimeout(() => {
                 setLoadRefs(true);
-            }, 500);
+            }, 100);
         } else {
             modalizeWelcomeRef.current.open();
         }

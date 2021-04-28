@@ -99,8 +99,8 @@ function CreateCommunityScreen() {
         (state: IRootState) => state.user.metadata.language
     );
 
-    const avatarMediaId = useSelector(
-        (state: IRootState) => state.user.metadata.avatarMediaId
+    const avatar = useSelector(
+        (state: IRootState) => state.user.metadata.avatar
     );
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
@@ -499,17 +499,13 @@ function CreateCommunityScreen() {
     const renderCurrencyContent = () => (
         <View
             style={{
+                padding: 20,
                 height: Dimensions.get('screen').height * 0.9,
             }}
         >
             <Searchbar
                 placeholder={i18n.t('search')}
-                style={{
-                    backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                    shadowRadius: 0,
-                    elevation: 0,
-                    borderRadius: 6,
-                }}
+                style={styles.searchBarContainer}
                 autoFocus
                 clearIcon={(p) => (
                     <IconButton
@@ -565,12 +561,7 @@ function CreateCommunityScreen() {
         >
             <Searchbar
                 placeholder={i18n.t('search')}
-                style={{
-                    backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                    shadowRadius: 0,
-                    elevation: 0,
-                    borderRadius: 6,
-                }}
+                style={styles.searchBarContainer}
                 autoFocus
                 clearIcon={(p) => (
                     <IconButton
@@ -703,7 +694,7 @@ function CreateCommunityScreen() {
             }
         }
         //
-        if (currencyResult.length > 7) {
+        if (currencyResult.length > 15) {
             setTooManyResultForQuery(true);
         } else {
             setSearchCurrencyResult(currencyResult);
@@ -719,10 +710,20 @@ function CreateCommunityScreen() {
     };
 
     const renderItemCurrencyQuery = ({ item }: { item: string }) => (
-        <List.Item
-            title={`[${currencies[item].symbol}] ${currencies[item].name}`}
-            onPress={() => handleSelectCurrency(item)}
-        />
+        <TouchableOpacity onPress={() => handleSelectCurrency(item)}>
+            <View style={styles.itemContainer}>
+                <Text
+                    style={styles.itemTitle}
+                >{`[${currencies[item].symbol}] ${currencies[item].name}`}</Text>
+                {item === currency && (
+                    <Icon
+                        name="check"
+                        color={ipctColors.greenishTeal}
+                        size={22}
+                    />
+                )}
+            </View>
+        </TouchableOpacity>
     );
 
     const renderSearchCurrencyResult = () => {
@@ -741,6 +742,7 @@ function CreateCommunityScreen() {
                         data={searchCurrencyResult}
                         renderItem={renderItemCurrencyQuery}
                         keyExtractor={(item) => item}
+                        showsVerticalScrollIndicator={false}
                     />
                 );
             } else if (showingResults) {
@@ -1338,14 +1340,7 @@ function CreateCommunityScreen() {
                         () => setSearchCurrency('')
                     )}
                 >
-                    <View
-                        style={{
-                            padding: 20,
-                            height: Dimensions.get('screen').height * 0.5,
-                        }}
-                    >
-                        {renderCurrencyContent()}
-                    </View>
+                    {renderCurrencyContent()}
                 </Modalize>
                 <Modalize
                     ref={modalizeFrequencyRef}
@@ -1492,6 +1487,27 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Regular',
         fontSize: 15,
         lineHeight: 28,
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingVertical: 16,
+        paddingRight: 16,
+    },
+    itemTitle: {
+        fontSize: 15,
+        lineHeight: 24,
+        fontFamily: 'Inter-Regular',
+    },
+    searchBarContainer: {
+        borderColor: ipctColors.borderGray,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        shadowRadius: 0,
+        elevation: 0,
+        borderRadius: 6,
     },
 });
 
