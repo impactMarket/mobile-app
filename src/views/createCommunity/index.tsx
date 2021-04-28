@@ -8,6 +8,7 @@ import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
+import CloseSvg from 'components/svg/CloseSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -52,6 +53,7 @@ import {
     Searchbar,
     List,
 } from 'react-native-paper';
+import EIcon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
@@ -111,6 +113,7 @@ function CreateCommunityScreen() {
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     const [isNameValid, setIsNameValid] = useState(true);
+    const [isEditable, setIsEditable] = useState(false);
 
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
@@ -151,7 +154,7 @@ function CreateCommunityScreen() {
     const [coverImage, setCoverImage] = useState('');
 
     const [profileImage, setProfileImage] = useState(''); //TODO: Add initial image if user has profile photo
-
+    const [isAlertVisible, setIsAlertVisible] = useState(true);
     const [communityLogo, setCommunityLogo] = useState('');
 
     const [claimAmount, setClaimAmount] = useState('');
@@ -760,6 +763,52 @@ function CreateCommunityScreen() {
         }
     };
 
+    const renderCreateCommunityAlert = () => (
+        <View
+            style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                justifyContent: 'space-around',
+                height: 80,
+                width: '90%',
+                marginHorizontal: 20,
+                marginTop: 20,
+                borderColor: ipctColors.blueRibbon,
+                borderRadius: 8,
+                borderWidth: 2,
+                borderStyle: 'solid',
+                paddingTop: 16,
+            }}
+        >
+            <EIcon
+                name="info-with-circle"
+                size={18}
+                color={ipctColors.blueRibbon}
+                style={{ marginLeft: 26 }}
+            />
+
+            <Text
+                style={[
+                    styles.createCommunityDescription,
+                    { flexWrap: 'wrap', marginHorizontal: 34 },
+                ]}
+            >
+                {i18n.t('createCommunityAlert')}
+            </Text>
+            <TouchableOpacity
+                onPress={() => setIsAlertVisible(!isAlertVisible)}
+            >
+                <Icon
+                    name="close"
+                    size={18}
+                    color={ipctColors.almostBlack}
+                    style={{ marginRight: 26 }}
+                />
+            </TouchableOpacity>
+        </View>
+    );
+
     return (
         <>
             <KeyboardAvoidingView
@@ -773,6 +822,7 @@ function CreateCommunityScreen() {
                 keyboardVerticalOffset={140}
             >
                 <ScrollView>
+                    {isAlertVisible && renderCreateCommunityAlert()}
                     <View style={styles.container}>
                         <Headline style={styles.communityDetailsHeadline}>
                             {i18n.t('communityDetails')}
@@ -1164,160 +1214,179 @@ function CreateCommunityScreen() {
                                 />
                             </View>
                         </View>
-
-                        <Headline
-                            style={[
-                                { marginTop: 50 },
-                                styles.communityDetailsHeadline,
-                            ]}
-                        >
-                            {i18n.t('contractDetails')}
-                        </Headline>
-                        <Text style={styles.createCommunityDescription}>
-                            {i18n.t('contractDescriptionLabel')}
-                        </Text>
-
-                        <View>
-                            <View style={{ marginTop: 28 }}>
-                                <Input
-                                    style={styles.inputTextField}
-                                    label={i18n.t('claimAmount')}
-                                    value={claimAmount}
-                                    placeholder="$0"
-                                    onChangeText={(value) =>
-                                        setClaimAmount(value)
-                                    }
-                                    onEndEditing={() =>
-                                        setIsClaimAmountValid(
-                                            claimAmount.length > 0 &&
-                                                /^\d*[\.\,]?\d*$/.test(
-                                                    claimAmount
-                                                )
-                                        )
-                                    }
-                                />
-                                {!isClaimAmountValid && (
-                                    <HelperText type="error" visible>
-                                        {i18n.t('claimAmountRequired')}
-                                    </HelperText>
-                                )}
-                            </View>
-                            {claimAmount.length > 0 && (
-                                <Text
+                        {!isEditable && (
+                            <>
+                                <Headline
                                     style={[
-                                        { marginTop: 42 },
-                                        styles.aroundCurrencyValue,
+                                        { marginTop: 50 },
+                                        styles.communityDetailsHeadline,
                                     ]}
                                 >
-                                    {i18n.t('aroundValue', {
-                                        amount: amountToCurrency(
-                                            new BigNumber(
-                                                claimAmount.replace(/,/g, '.')
-                                            ).multipliedBy(
-                                                new BigNumber(10).pow(
-                                                    config.cUSDDecimals
-                                                )
-                                            ),
-                                            currency,
-                                            exchangeRates
-                                        ),
-                                    })}
+                                    {i18n.t('contractDetails')}
+                                </Headline>
+                                <Text style={styles.createCommunityDescription}>
+                                    {i18n.t('contractDescriptionLabel')}
                                 </Text>
-                            )}
-                        </View>
-                        <View style={{ marginTop: 28 }}>
-                            <Select
-                                label={i18n.t('frequency')}
-                                value={
-                                    baseInterval === '86400'
-                                        ? i18n.t('daily')
-                                        : i18n.t('weekly')
-                                }
-                                onPress={() =>
-                                    modalizeFrequencyRef.current?.open()
-                                }
-                            />
-                        </View>
-                        <View style={{ marginTop: 28 }}>
-                            <Input
-                                style={styles.inputTextField}
-                                label={i18n.t('totalClaimPerBeneficiary')}
-                                value={maxClaim}
-                                placeholder="$0"
-                                keyboardType="numeric"
-                                onChangeText={(value) => setMaxClaim(value)}
-                                onEndEditing={() =>
-                                    setIsMaxClaimValid(
-                                        maxClaim.length > 0 &&
-                                            /^\d*[\.\,]?\d*$/.test(maxClaim)
-                                    )
-                                }
-                            />
-                            {!isMaxClaimValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('maxClaimAmountRequired')}
-                                </HelperText>
-                            )}
-                            {maxClaim.length > 0 && (
-                                <Text
-                                    style={[
-                                        { marginTop: 14 },
-                                        styles.aroundCurrencyValue,
-                                    ]}
-                                >
-                                    {i18n.t('aroundValue', {
-                                        amount: amountToCurrency(
-                                            new BigNumber(
-                                                maxClaim.replace(/,/g, '.')
-                                            ).multipliedBy(
-                                                new BigNumber(10).pow(
-                                                    config.cUSDDecimals
+
+                                <View>
+                                    <View style={{ marginTop: 28 }}>
+                                        <Input
+                                            style={styles.inputTextField}
+                                            label={i18n.t('claimAmount')}
+                                            value={claimAmount}
+                                            placeholder="$0"
+                                            onChangeText={(value) =>
+                                                setClaimAmount(value)
+                                            }
+                                            onEndEditing={() =>
+                                                setIsClaimAmountValid(
+                                                    claimAmount.length > 0 &&
+                                                        /^\d*[\.\,]?\d*$/.test(
+                                                            claimAmount
+                                                        )
                                                 )
-                                            ),
-                                            currency,
-                                            exchangeRates
-                                        ),
-                                    })}
-                                </Text>
-                            )}
-                        </View>
+                                            }
+                                        />
+                                        {!isClaimAmountValid && (
+                                            <HelperText type="error" visible>
+                                                {i18n.t('claimAmountRequired')}
+                                            </HelperText>
+                                        )}
+                                    </View>
+                                    {claimAmount.length > 0 && (
+                                        <Text
+                                            style={[
+                                                { marginTop: 42 },
+                                                styles.aroundCurrencyValue,
+                                            ]}
+                                        >
+                                            {i18n.t('aroundValue', {
+                                                amount: amountToCurrency(
+                                                    new BigNumber(
+                                                        claimAmount.replace(
+                                                            /,/g,
+                                                            '.'
+                                                        )
+                                                    ).multipliedBy(
+                                                        new BigNumber(10).pow(
+                                                            config.cUSDDecimals
+                                                        )
+                                                    ),
+                                                    currency,
+                                                    exchangeRates
+                                                ),
+                                            })}
+                                        </Text>
+                                    )}
+                                </View>
+                                <View style={{ marginTop: 28 }}>
+                                    <Select
+                                        label={i18n.t('frequency')}
+                                        value={
+                                            baseInterval === '86400'
+                                                ? i18n.t('daily')
+                                                : i18n.t('weekly')
+                                        }
+                                        onPress={() =>
+                                            modalizeFrequencyRef.current?.open()
+                                        }
+                                    />
+                                </View>
+                                <View style={{ marginTop: 28 }}>
+                                    <Input
+                                        style={styles.inputTextField}
+                                        label={i18n.t(
+                                            'totalClaimPerBeneficiary'
+                                        )}
+                                        value={maxClaim}
+                                        placeholder="$0"
+                                        keyboardType="numeric"
+                                        onChangeText={(value) =>
+                                            setMaxClaim(value)
+                                        }
+                                        onEndEditing={() =>
+                                            setIsMaxClaimValid(
+                                                maxClaim.length > 0 &&
+                                                    /^\d*[\.\,]?\d*$/.test(
+                                                        maxClaim
+                                                    )
+                                            )
+                                        }
+                                    />
+                                    {!isMaxClaimValid && (
+                                        <HelperText type="error" visible>
+                                            {i18n.t('maxClaimAmountRequired')}
+                                        </HelperText>
+                                    )}
+                                    {maxClaim.length > 0 && (
+                                        <Text
+                                            style={[
+                                                { marginTop: 14 },
+                                                styles.aroundCurrencyValue,
+                                            ]}
+                                        >
+                                            {i18n.t('aroundValue', {
+                                                amount: amountToCurrency(
+                                                    new BigNumber(
+                                                        maxClaim.replace(
+                                                            /,/g,
+                                                            '.'
+                                                        )
+                                                    ).multipliedBy(
+                                                        new BigNumber(10).pow(
+                                                            config.cUSDDecimals
+                                                        )
+                                                    ),
+                                                    currency,
+                                                    exchangeRates
+                                                ),
+                                            })}
+                                        </Text>
+                                    )}
+                                </View>
 
-                        <View style={{ marginTop: 28 }}>
-                            <Input
-                                style={styles.inputTextField}
-                                label={i18n.t('timeIncrementAfterClaim')}
-                                value={incrementInterval}
-                                placeholder="0"
-                                keyboardType="numeric"
-                                onChangeText={(value) =>
-                                    setIncrementalInterval(value)
-                                }
-                                onEndEditing={() =>
-                                    setIsIncrementalIntervalValid(
-                                        incrementInterval.length > 0
-                                    )
-                                }
-                            />
-                            {!isIncrementalIntervalValid && (
-                                <HelperText type="error" visible>
-                                    {i18n.t('incrementalIntervalRequired')}
-                                </HelperText>
-                            )}
+                                <View style={{ marginTop: 28 }}>
+                                    <Input
+                                        style={styles.inputTextField}
+                                        label={i18n.t(
+                                            'timeIncrementAfterClaim'
+                                        )}
+                                        value={incrementInterval}
+                                        placeholder="0"
+                                        keyboardType="numeric"
+                                        onChangeText={(value) =>
+                                            setIncrementalInterval(value)
+                                        }
+                                        onEndEditing={() =>
+                                            setIsIncrementalIntervalValid(
+                                                incrementInterval.length > 0
+                                            )
+                                        }
+                                    />
+                                    {!isIncrementalIntervalValid && (
+                                        <HelperText type="error" visible>
+                                            {i18n.t(
+                                                'incrementalIntervalRequired'
+                                            )}
+                                        </HelperText>
+                                    )}
 
-                            <View style={{ marginTop: 28 }}>
-                                <Select
-                                    label={i18n.t('visibility')}
-                                    value={
-                                        visibility === 'public'
-                                            ? i18n.t('public')
-                                            : i18n.t('private')
-                                    }
-                                    onPress={() =>
-                                        modalizeVisibilityRef.current?.open()
-                                    }
-                                />
-                            </View>
-                        </View>
+                                    <View style={{ marginTop: 28 }}>
+                                        <Select
+                                            label={i18n.t('visibility')}
+                                            value={
+                                                visibility === 'public'
+                                                    ? i18n.t('public')
+                                                    : i18n.t('private')
+                                            }
+                                            onPress={() =>
+                                                modalizeVisibilityRef.current?.open()
+                                            }
+                                        />
+                                    </View>
+                                </View>
+                            </>
+                        )}
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
@@ -1390,7 +1459,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 0,
     },
     container: {
-        margin: 20,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        marginTop: 16,
     },
     //
     textNote: {

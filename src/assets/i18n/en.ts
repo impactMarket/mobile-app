@@ -64,6 +64,8 @@ export default {
         "These values should be a minimum basic income that is sufficient to meet your beneficiaries' basic needs. They will be able to claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.\n\nIf there is another person or organization among your community you believe is more suitable to drive this initiative, let them know about this possibility and encourage them to create a community.",
     createCommunityDescription:
         'By creating a new community, you are initiating a new basic income mechanism for your community where each beneficiary you add will have equal access to claim a recurring amount defined by you in this form.',
+    createCommunityAlert:
+        'After submitting, we’ll will contact you in 14 days or less.',
     selectCoverImage: 'Select Cover Image',
     changeCoverImage: 'Cover Image',
     changeProfileImage: 'Your Profile Image',

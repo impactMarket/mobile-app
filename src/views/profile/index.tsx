@@ -49,7 +49,7 @@ import {
     Searchbar,
     IconButton,
 } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { batch, useDispatch, useSelector } from 'react-redux';
 // Services
 import Api from 'services/api';
@@ -431,6 +431,16 @@ function ProfileScreen() {
                             >
                                 {userBalance}
                             </Headline>
+                            <Icon
+                                name="arrow-forward-ios"
+                                size={22}
+                                color={ipctColors.borderGray}
+                                style={{
+                                    right:
+                                        -Dimensions.get('screen').height * 0.25,
+                                    alignSelf: 'center',
+                                }}
+                            />
                         </View>
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>

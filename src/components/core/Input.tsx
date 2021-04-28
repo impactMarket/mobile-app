@@ -46,9 +46,15 @@ export default class Input extends Component<IInputProps, object> {
                     <Text style={styles.label}>{label}</Text>
                     <TextInput
                         style={
-                            value
+                            value && editable
                                 ? styles.textInput
-                                : [{ marginTop: 8 }, styles.textInput]
+                                : [
+                                      styles.textInput,
+                                      {
+                                          marginTop: 8,
+                                          color: ipctColors.borderGray,
+                                      },
+                                  ]
                         }
                         value={value}
                         maxLength={maxLength}
