@@ -110,7 +110,7 @@ export interface UserAttributes {
     language: string;
     currency: string;
     avatar: string | null;
-    avatarMediaId: number | null;
+    // avatarMediaId: number | null;
     // pushNotificationToken: string | null;
     gender: string | null;
     year: number | null;

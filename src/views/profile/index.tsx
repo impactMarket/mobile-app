@@ -14,6 +14,7 @@ import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
 import * as Linking from 'expo-linking';
+import { imageTargets } from 'helpers/constants';
 // Helpers
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
@@ -87,7 +88,7 @@ function ProfileScreen() {
     const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
 
     const [name, setName] = useState('');
-    const [userAvatarImage, setUserAvatarImage] = useState('');
+    const [userAvatarImage, setUserAvatarImage] = useState<string | null>('');
     const [currency, setCurrency] = useState('usd');
     const [userCusdBalance, setUserCusdBalance] = useState('0');
     const [language, setLanguage] = useState('en');
@@ -120,7 +121,7 @@ function ProfileScreen() {
                     setChildren(user.children.toString());
                 }
                 setUserCusdBalance(userWallet.balance);
-                // setUserAvatarImage(user.avatar.url);
+                setUserAvatarImage(user?.avatar);
             }
         };
         navigation.setOptions({
@@ -142,6 +143,7 @@ function ProfileScreen() {
             currency,
             gender,
             language,
+            avatar: userAvatarImage,
             username: name,
             //TODO: Change these props below to be optional
             blocked: false,
@@ -173,7 +175,7 @@ function ProfileScreen() {
             setSending(true);
             setUserAvatarImage(avatar);
             //TODO: Discuss w/ Bernardo
-            await Api.upload.uploadUserAvatarImage(avatar);
+            await Api.upload.uploadImage(userAvatarImage, imageTargets.PROFILE);
             setSending(false);
         } catch (e) {
             Alert.alert(

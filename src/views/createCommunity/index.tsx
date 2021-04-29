@@ -152,7 +152,7 @@ function CreateCommunityScreen() {
     const [email, setEmail] = useState('');
     const [coverImage, setCoverImage] = useState('');
 
-    const [profileImage, setProfileImage] = useState(''); //TODO: Add initial image if user has profile photo
+    const [profileImage, setProfileImage] = useState<string>(avatar || '');
     const [isAlertVisible, setIsAlertVisible] = useState(true);
     const [communityLogo, setCommunityLogo] = useState('');
 

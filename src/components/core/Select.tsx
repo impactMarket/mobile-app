@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
-    TextInput,
     Text,
-    TextInputProps,
     StyleSheet,
     GestureResponderEvent,
     TouchableWithoutFeedback,
