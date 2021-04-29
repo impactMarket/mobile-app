@@ -43,7 +43,18 @@ export default class Input extends Component<IInputProps, object> {
                 ]}
             >
                 <View style={styles.outline}>
-                    <Text style={styles.label}>{label}</Text>
+                    <Text
+                        style={[
+                            styles.label,
+                            {
+                                backgroundColor: label
+                                    ? '#FFFFFF'
+                                    : 'transparent',
+                            },
+                        ]}
+                    >
+                        {label}
+                    </Text>
                     <TextInput
                         style={
                             value

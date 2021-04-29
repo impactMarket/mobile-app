@@ -27,7 +27,6 @@ type Props = PropsFromRedux & ICommuntyStatusProps;
 class CommuntyStatus extends Component<Props, object> {
     render() {
         const { community, user, app } = this.props;
-        console.log({ community });
         // in theory, it's the total claimed is relative to the total raised.
         // But to draw the progress bar, it's relative to the progress bar size.
         const claimedByRaised = parseFloat(

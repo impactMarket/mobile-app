@@ -60,6 +60,7 @@ export default {
     createCommunityAlert:
         'Após o envio, entraremos em contato com você em 14 dias ou menos.',
     selectCoverImage: 'Selecione Imagem de Capa',
+    contractIncrementTitle: 'Incremento de tempo total após cada pedido',
     communityDescriptionLabel:
         'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
     contractDescriptionLabel:
@@ -78,9 +79,13 @@ export default {
     aroundValue: 'Em média {{amount}}',
     totalClaimPerBeneficiary: 'Montante total por beneficiário',
     frequency: 'Frequência',
+    incrementalFrequency: 'Tempo Incremental',
     hourly: 'Por Hora',
     daily: 'Diariamente',
     weekly: 'Semanalmente',
+    minutes: 'Minutos',
+    hours: 'Horas',
+    days: 'Dias',
     timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
     timeInMinutes: 'Tempo em minutos',
     visibility: 'Visibilidade',

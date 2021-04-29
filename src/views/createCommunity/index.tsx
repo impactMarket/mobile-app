@@ -159,6 +159,11 @@ function CreateCommunityScreen() {
     const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
     const [incrementInterval, setIncrementalInterval] = useState('');
+    const [
+        incrementalIntervalUnit,
+        setIncrementalIntervalUnit,
+    ] = useState<number>(0);
+
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisibility] = useState('public');
 
@@ -166,6 +171,7 @@ function CreateCommunityScreen() {
     const modalizeCountryRef = useRef<Modalize>(null);
     const modalizeFrequencyRef = useRef<Modalize>(null);
     const modalizeVisibilityRef = useRef<Modalize>(null);
+    const modalizeClaimImcrementRef = useRef<Modalize>(null);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -229,7 +235,9 @@ function CreateCommunityScreen() {
                     .multipliedBy(decimals)
                     .toString(),
                 baseInterval,
-                (parseInt(incrementInterval, 10) * 60).toString(),
+                (
+                    parseInt(incrementInterval, 10) * incrementalIntervalUnit
+                ).toString(),
                 celoNetwork.noAddress,
                 config.cUSDContract,
                 userAddress,
@@ -344,12 +352,12 @@ function CreateCommunityScreen() {
             return;
         }
 
-        setSending(true);
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         let txReceipt = null;
         let communityAddress = null;
 
         try {
+            setSending(true);
             const contractParams = {
                 claimAmount: new BigNumber(
                     formatInputAmountToTransfer(claimAmount)
@@ -360,7 +368,8 @@ function CreateCommunityScreen() {
                     .multipliedBy(decimals)
                     .toString(),
                 baseInterval: parseInt(baseInterval),
-                incrementInterval: parseInt(incrementInterval, 10) * 60,
+                incrementInterval:
+                    parseInt(incrementInterval, 10) * incrementalIntervalUnit,
             };
             let privateParamsIfAvailable = {};
             if (visibility === 'private') {
@@ -550,6 +559,27 @@ function CreateCommunityScreen() {
             >
                 <RadioButton.Item label={i18n.t('daily')} value="86400" />
                 <RadioButton.Item label={i18n.t('weekly')} value="604800" />
+            </RadioButton.Group>
+        </View>
+    );
+
+    const renderIncrementalFrequency = () => (
+        <View
+            style={{
+                padding: 20,
+                height: Dimensions.get('screen').height * 0.2,
+            }}
+        >
+            <RadioButton.Group
+                onValueChange={(value) => {
+                    setIncrementalIntervalUnit(Number(value));
+                    modalizeClaimImcrementRef.current?.close();
+                }}
+                value={incrementalIntervalUnit.toString()}
+            >
+                <RadioButton.Item label={i18n.t('minutes')} value="60" />
+                <RadioButton.Item label={i18n.t('hours')} value="3600" />
+                <RadioButton.Item label={i18n.t('days')} value="86400" />
             </RadioButton.Group>
         </View>
     );
@@ -1327,46 +1357,76 @@ function CreateCommunityScreen() {
                                         </Text>
                                     )}
                                 </View>
-
-                                <View style={{ marginTop: 28 }}>
-                                    <Input
-                                        style={styles.inputTextField}
-                                        label={i18n.t(
-                                            'timeIncrementAfterClaim'
+                                <Text
+                                    style={[
+                                        styles.createCommunityDescription,
+                                        {
+                                            marginTop: 22,
+                                            fontFamily: 'Manrope-Bold',
+                                        },
+                                    ]}
+                                >
+                                    {i18n.t('contractIncrementTitle')}
+                                </Text>
+                                <View
+                                    style={{
+                                        marginTop: 8,
+                                        flex: 2,
+                                        flexDirection: 'row',
+                                    }}
+                                >
+                                    <View style={{ flex: 1, marginRight: 10 }}>
+                                        <Input
+                                            style={styles.inputTextField}
+                                            value={incrementInterval}
+                                            placeholder="0"
+                                            keyboardType="numeric"
+                                            onChangeText={(value) =>
+                                                setIncrementalInterval(value)
+                                            }
+                                            onEndEditing={() =>
+                                                setIsIncrementalIntervalValid(
+                                                    incrementInterval.length > 0
+                                                )
+                                            }
+                                        />
+                                        {!isIncrementalIntervalValid && (
+                                            <HelperText type="error" visible>
+                                                {i18n.t(
+                                                    'incrementalIntervalRequired'
+                                                )}
+                                            </HelperText>
                                         )}
-                                        value={incrementInterval}
-                                        placeholder="0"
-                                        keyboardType="numeric"
-                                        onChangeText={(value) =>
-                                            setIncrementalInterval(value)
-                                        }
-                                        onEndEditing={() =>
-                                            setIsIncrementalIntervalValid(
-                                                incrementInterval.length > 0
-                                            )
-                                        }
-                                    />
-                                    {!isIncrementalIntervalValid && (
-                                        <HelperText type="error" visible>
-                                            {i18n.t(
-                                                'incrementalIntervalRequired'
-                                            )}
-                                        </HelperText>
-                                    )}
-
-                                    <View style={{ marginTop: 28 }}>
+                                    </View>
+                                    <View style={{ flex: 1, marginLeft: 10 }}>
                                         <Select
-                                            label={i18n.t('visibility')}
                                             value={
-                                                visibility === 'public'
-                                                    ? i18n.t('public')
-                                                    : i18n.t('private')
+                                                // TODO: Refactor
+                                                incrementalIntervalUnit === 60
+                                                    ? i18n.t('minutes')
+                                                    : incrementalIntervalUnit ===
+                                                      3600
+                                                    ? i18n.t('hours')
+                                                    : i18n.t('days')
                                             }
                                             onPress={() =>
-                                                modalizeVisibilityRef.current?.open()
+                                                modalizeClaimImcrementRef.current?.open()
                                             }
                                         />
                                     </View>
+                                </View>
+                                <View style={{ marginTop: 28 }}>
+                                    <Select
+                                        label={i18n.t('visibility')}
+                                        value={
+                                            visibility === 'public'
+                                                ? i18n.t('public')
+                                                : i18n.t('private')
+                                        }
+                                        onPress={() =>
+                                            modalizeVisibilityRef.current?.open()
+                                        }
+                                    />
                                 </View>
                             </>
                         )}
@@ -1403,6 +1463,16 @@ function CreateCommunityScreen() {
                     adjustToContentHeight
                 >
                     {renderFrequency()}
+                </Modalize>
+                <Modalize
+                    ref={modalizeClaimImcrementRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('incrementalFrequency'),
+                        modalizeClaimImcrementRef
+                    )}
+                    adjustToContentHeight
+                >
+                    {renderIncrementalFrequency()}
                 </Modalize>
                 <Modalize
                     ref={modalizeVisibilityRef}

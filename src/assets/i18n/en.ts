@@ -60,6 +60,7 @@ export default {
     communityDetails: 'Community Details',
     communityDescriptionLabel:
         'Tell more about your community and why access to a basic income could be important for its members.',
+    contractIncrementTitle: 'Total time increment after each claim',
     contractDescriptionLabel:
         "These values should be a minimum basic income that is sufficient to meet your beneficiaries' basic needs. They will be able to claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.\n\nIf there is another person or organization among your community you believe is more suitable to drive this initiative, let them know about this possibility and encourage them to create a community.",
     createCommunityDescription:
@@ -82,9 +83,13 @@ export default {
     aroundValue: 'Around {{amount}}',
     totalClaimPerBeneficiary: 'Amount',
     frequency: 'Claim Frequency',
+    incrementalFrequency: 'Incremental Frequency',
     hourly: 'Hourly',
     daily: 'Daily',
     weekly: 'Weekly',
+    minutes: 'Minutes',
+    hours: 'Hours',
+    days: 'Days',
     timeIncrementAfterClaim: 'Time increment after each claim',
     timeInMinutes: 'Time in minutes',
     visibility: 'Visibility',

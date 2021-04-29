@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { TextInput, Text, TextInputProps, StyleSheet } from 'react-native';
 import {
+    TextInput,
+    Text,
+    TextInputProps,
+    StyleSheet,
     GestureResponderEvent,
     TouchableWithoutFeedback,
     View,
 } from 'react-native';
-import { Paragraph } from 'react-native-paper';
 import Svg, { Path } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
 
 interface ISelectProps {
-    label: string;
+    label?: string;
     value: string;
     onPress?: (event: GestureResponderEvent) => void;
 }
@@ -28,7 +30,16 @@ export default class Select extends Component<ISelectProps, object> {
                     height: 48,
                 }}
             >
-                <Text style={styles.label}>{label}</Text>
+                <Text
+                    style={[
+                        styles.label,
+                        {
+                            backgroundColor: label ? '#FFFFFF' : 'transparent',
+                        },
+                    ]}
+                >
+                    {label}
+                </Text>
                 <TouchableWithoutFeedback onPress={onPress}>
                     <View style={styles.outline}>
                         <Text style={styles.textInput}>{value}</Text>
