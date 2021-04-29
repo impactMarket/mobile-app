@@ -71,6 +71,16 @@ export enum modalDonateAction {
     CLOSE = 'donateModal/close',
 }
 
+export enum apiImageTargets {
+    COVER = '/community/picture',
+    PROFILE = '/user/picture',
+}
+
+export enum imageTargets {
+    COVER = 'COVER',
+    PROFILE = 'PROFILE',
+}
+
 export enum storiesAction {
     INIT = 'stories/init',
     CONCAT = 'stories/concat',

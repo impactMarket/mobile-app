@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, Image, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Api from 'services/api';
-import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
-import DeleteSvg from 'components/svg/DeleteSvg';
-import CarouselSlide from './CarouselSlide';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
+import DeleteSvg from 'components/svg/DeleteSvg';
+import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
+import React, { useState } from 'react';
+import { View, Text, Image, Pressable, Alert } from 'react-native';
+import Api from 'services/api';
+
+import CarouselSlide from './CarouselSlide';
 
 export default function Container({ story, media }) {
-    const { id, coverImage, name, country, city } = story;
+    const { coverImage, name, country, city } = story;
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
 
     const navigation = useNavigation();
@@ -100,7 +101,7 @@ export default function Container({ story, media }) {
                         style={{ marginLeft: 8.4, marginRight: -26 }}
                         title={i18n.t('story')}
                         titleStyle={titleStyle}
-                        hasCloseBtn={true}
+                        hasCloseBtn
                     >
                         <Pressable
                             style={{

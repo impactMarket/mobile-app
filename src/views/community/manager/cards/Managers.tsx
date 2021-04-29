@@ -8,7 +8,7 @@ import { View } from 'react-native';
 import { Headline } from 'react-native-paper';
 
 interface IManagersProps {
-    managers: number;
+    managers: number | undefined;
 }
 function Managers(props: IManagersProps) {
     const navigation = useNavigation();

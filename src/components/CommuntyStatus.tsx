@@ -9,6 +9,7 @@ import { View, StyleSheet } from 'react-native';
 import { Title, ProgressBar, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { ipctColors } from 'styles/index';
+
 import Card from './core/Card';
 
 interface ICommuntyStatusProps {
@@ -26,7 +27,6 @@ type Props = PropsFromRedux & ICommuntyStatusProps;
 class CommuntyStatus extends Component<Props, object> {
     render() {
         const { community, user, app } = this.props;
-
         // in theory, it's the total claimed is relative to the total raised.
         // But to draw the progress bar, it's relative to the progress bar size.
         const claimedByRaised = parseFloat(

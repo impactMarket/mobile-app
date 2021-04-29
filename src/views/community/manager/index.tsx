@@ -1,29 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CachedImage from 'components/CacheImage';
 import CommuntyStatus from 'components/CommuntyStatus';
-import Button from 'components/core/Button';
 import Modal from 'components/Modal';
+import Button from 'components/core/Button';
 import ManageSvg from 'components/svg/ManageSvg';
 import * as Linking from 'expo-linking';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
+import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunity } from 'helpers/types/endpoints';
 import { UbiRequestChangeParams } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useLayoutEffect, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
-import { useNavigation } from '@react-navigation/native';
-
 // services
-import CacheStore from 'services/cacheStore';
-
 import {
     Headline,
     ActivityIndicator,
@@ -31,16 +28,15 @@ import {
     Paragraph,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 // redux Actions
-import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
 
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
-import * as Sentry from 'sentry-expo';
 
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
@@ -188,7 +184,7 @@ function CommunityManagerScreen() {
                             />
                         }
                     >
-                        <BaseCommunity community={community}>
+                        <BaseCommunity community={_community}>
                             <View style={styles.container}>
                                 <Beneficiaries
                                     beneficiaries={
@@ -215,7 +211,7 @@ function CommunityManagerScreen() {
                         <Portal>
                             <Modal
                                 title={i18n.t('ubiParams')}
-                                visible={true}
+                                visible
                                 buttons={
                                     <>
                                         <Button

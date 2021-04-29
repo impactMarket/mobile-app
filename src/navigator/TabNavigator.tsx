@@ -5,9 +5,11 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'assets/i18n';
+import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
+import { Host } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import CommunitiesScreen from 'views/communities';
@@ -64,6 +66,13 @@ function getHeaderRight(
     }
 }
 
+function getHeaderLeft(route: RouteProp<any, any>) {
+    const routeName = getFocusedRouteNameFromRoute(route);
+    if (routeName === Screens.Profile) {
+        return <BackSvg />;
+    }
+}
+
 const Tab = createBottomTabNavigator();
 
 function TabNavigator({
@@ -88,6 +97,7 @@ function TabNavigator({
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         navigation.setOptions({
+            headerLeft: () => getHeaderLeft(route),
             headerTitle: getHeaderTitle(
                 route,
                 isBeneficiary
@@ -151,34 +161,36 @@ function TabNavigator({
         />
     );
     return (
-        <Tab.Navigator
-            tabBarOptions={{
-                labelStyle: {
-                    fontFamily: 'Gelion-Regular',
-                    fontSize: 15,
-                    lineHeight: 18,
-                    letterSpacing: 0.212727,
-                },
-                tabStyle: {
-                    marginVertical: 16,
-                },
-                style: { height: 84 + insets.bottom },
-            }}
-            initialRouteName={
-                fromWelcomeScreen.length > 0 // if fromWelcomeScreen is valid, use it
-                    ? fromWelcomeScreen
-                    : isBeneficiary
-                    ? Screens.Beneficiary
-                    : isManager
-                    ? Screens.CommunityManager
-                    : Screens.Communities
-            }
-        >
-            {tabCommunities}
-            {isBeneficiary && tabBeneficiary}
-            {isManager && tabManager}
-            {userWallet.address.length === 0 ? tabAuth : tabProfile}
-        </Tab.Navigator>
+        <Host>
+            <Tab.Navigator
+                tabBarOptions={{
+                    labelStyle: {
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 15,
+                        lineHeight: 18,
+                        letterSpacing: 0.212727,
+                    },
+                    tabStyle: {
+                        marginVertical: 16,
+                    },
+                    style: { height: 84 + insets.bottom },
+                }}
+                initialRouteName={
+                    fromWelcomeScreen.length > 0 // if fromWelcomeScreen is valid, use it
+                        ? fromWelcomeScreen
+                        : isBeneficiary
+                        ? Screens.Beneficiary
+                        : isManager
+                        ? Screens.CommunityManager
+                        : Screens.Communities
+                }
+            >
+                {tabCommunities}
+                {isBeneficiary && tabBeneficiary}
+                {isManager && tabManager}
+                {userWallet.address.length === 0 ? tabAuth : tabProfile}
+            </Tab.Navigator>
+        </Host>
     );
 }
 

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import BackSvg from 'components/svg/header/BackSvg';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState, ICallerRouteParams } from 'helpers/types/state';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';

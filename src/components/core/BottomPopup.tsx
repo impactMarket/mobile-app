@@ -1,3 +1,4 @@
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import React, { ReactElement } from 'react';
 import {
     GestureResponderEvent,
@@ -6,10 +7,10 @@ import {
     StyleProp,
 } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
-import Card from './Card';
 import { Headline } from 'react-native-paper';
+
 import i18n from '../../assets/i18n';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
+import Card from './Card';
 
 interface IBottomPopupProps {
     children: ReactElement;

@@ -19,8 +19,8 @@ function CreateCommunity(props: { navigation: StackNavigationProp<any, any> }) {
                 mode="text"
                 uppercase={false}
                 labelStyle={{
-                    fontFamily: 'Gelion-Bold',
-                    fontSize: 22,
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 18,
                     lineHeight: 26,
                     height: 26,
                     textAlign: 'center',

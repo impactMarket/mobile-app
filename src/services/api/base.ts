@@ -2,8 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import { DevSettings } from 'react-native';
-import config from '../../../config';
 import * as Sentry from 'sentry-expo';
+
+import config from '../../../config';
 
 axios.defaults.baseURL = config.baseApiUrl;
 

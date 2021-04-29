@@ -1,26 +1,30 @@
-import CommunitiesSvg from 'components/svg/CommunitiesSvg';
-import { ITabBarIconProps } from 'helpers/types/common';
-import React, { useState, useEffect, useRef } from 'react';
+import i18n from 'assets/i18n';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Select from 'components/core/Select';
+import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import * as Location from 'expo-location';
+import { ITabBarIconProps } from 'helpers/types/common';
 import { ICommunityLightDetails } from 'helpers/types/endpoints';
-import { Alert, FlatList, View } from 'react-native';
-import { ActivityIndicator, Dialog, RadioButton } from 'react-native-paper';
+import React, { useState, useEffect, useRef } from 'react';
+import { Alert, FlatList, Dimensions, View } from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
+
 // import Stories from './Stories';
-import i18n from 'assets/i18n';
 
 function CommunitiesScreen() {
     const flatListRef = useRef<FlatList<ICommunityLightDetails> | null>(null);
+    const modalizeOrderRef = useRef<Modalize>(null);
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
     const [userLocation, setUserLocation] = useState<
         Location.LocationObject | undefined
     >(undefined);
-    const [isDialogOrderOpen, setIsDialogOrderOpen] = useState(false);
+
     const [refreshing, setRefreshing] = useState(true);
     const [communities, setCommunities] = useState<ICommunityLightDetails[]>(
         []
@@ -40,7 +44,7 @@ function CommunitiesScreen() {
     }, []);
 
     const handleChangeOrder = async (order: string) => {
-        setIsDialogOrderOpen(false);
+        modalizeOrderRef.current?.close();
         setRefreshing(true);
         setCommuntiesOrder(order);
         //
@@ -143,7 +147,7 @@ function CommunitiesScreen() {
                     <Select
                         label={i18n.t('order')}
                         value={textCommunitiesOrder(communtiesOrder)}
-                        onPress={() => setIsDialogOrderOpen(true)}
+                        onPress={() => modalizeOrderRef.current?.open()}
                     />
                 </View>
                 {refreshing && (
@@ -187,29 +191,40 @@ function CommunitiesScreen() {
                 maxToRenderPerBatch={1} // Reduce number in each render batch
                 updateCellsBatchingPeriod={100} // Increase time between renders
                 windowSize={7} // Reduce the window size
+                style={{ paddingTop: 20 }}
             />
-            <Dialog
-                visible={isDialogOrderOpen}
-                onDismiss={() => setIsDialogOrderOpen(false)}
-            >
-                <Dialog.Content>
-                    <RadioButton.Group
-                        onValueChange={(value) => handleChangeOrder(value)}
-                        value={communtiesOrder}
+            <Portal>
+                <Modalize
+                    ref={modalizeOrderRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('order'),
+                        modalizeOrderRef
+                    )}
+                    adjustToContentHeight
+                >
+                    <View
+                        style={{
+                            height: Dimensions.get('screen').height * 0.9,
+                        }}
                     >
-                        <RadioButton.Item
-                            key="bigger"
-                            label={i18n.t('bigger')}
-                            value="bigger"
-                        />
-                        <RadioButton.Item
-                            key="nearest"
-                            label={i18n.t('nearest')}
-                            value="nearest"
-                        />
-                    </RadioButton.Group>
-                </Dialog.Content>
-            </Dialog>
+                        <RadioButton.Group
+                            onValueChange={(value) => handleChangeOrder(value)}
+                            value={communtiesOrder}
+                        >
+                            <RadioButton.Item
+                                key="bigger"
+                                label={i18n.t('bigger')}
+                                value="bigger"
+                            />
+                            <RadioButton.Item
+                                key="nearest"
+                                label={i18n.t('nearest')}
+                                value="nearest"
+                            />
+                        </RadioButton.Group>
+                    </View>
+                </Modalize>
+            </Portal>
         </>
     );
 }
