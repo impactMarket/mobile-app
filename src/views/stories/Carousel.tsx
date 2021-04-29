@@ -1,3 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
+import BottomPopup from 'components/core/BottomPopup';
+import Button from 'components/core/Button';
+import StoryLoveSvg from 'components/svg/StoryLoveSvg';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Screens } from 'helpers/constants';
+import { ICommunityStory } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import {
     View,
@@ -8,19 +17,10 @@ import {
     Alert,
     useWindowDimensions,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import StoryLoveSvg from 'components/svg/StoryLoveSvg';
-import Button from 'components/core/Button';
-import Api from 'services/api';
-import { ICommunityStory } from 'helpers/types/endpoints';
-import { Screens } from 'helpers/constants';
 import { ActivityIndicator } from 'react-native-paper';
-import { ipctColors } from 'styles/index';
 import { useSelector } from 'react-redux';
-import { IRootState } from 'helpers/types/state';
-import i18n from 'assets/i18n';
-import BottomPopup from 'components/core/BottomPopup';
+import Api from 'services/api';
+import { ipctColors } from 'styles/index';
 
 import Container from './Container';
 
@@ -181,7 +181,7 @@ function Carousel(props: {
                                 l[index] = !l[index];
                                 setLovedStories([...l]);
                                 Api.story.love(stories[index].id);
-                                let previousStoriesValues = stories;
+                                const previousStoriesValues = stories;
                                 previousStoriesValues[index].loves += l[index]
                                     ? 1
                                     : -1;
@@ -288,7 +288,7 @@ function Carousel(props: {
                         alignItems: 'flex-start',
                         justifyContent: 'center',
                     }}
-                ></View>
+                />
             </BottomPopup>
         </View>
     );

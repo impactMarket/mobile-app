@@ -1,18 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
+import { STORAGE_USER_AUTH_TOKEN, apiImageTargets } from 'helpers/constants';
+import * as Sentry from 'sentry-expo';
+
 import config from '../../../config';
 import ApiRouteCommunity from './routes/community';
 import ApiRouteStory from './routes/story';
 import ApiRouteSystem from './routes/system';
 import ApiRouteUser from './routes/user';
-import * as Sentry from 'sentry-expo';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
 class ApiRouteUpload {
-    static async uploadCommunityCoverImage(communityId: string, uri: string) {
+    static async uploadImage(uri: string, type: string) {
         let response;
+
         try {
             // handle success
             const uriParts = uri.split('.');
@@ -24,8 +26,6 @@ class ApiRouteUpload {
                 name: `photo.${fileType}`,
                 type: `image/${fileType}`,
             } as any);
-            formData.append('pictureContext', 'community');
-            formData.append('communityId', communityId);
             const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
             const requestHeaders = {
                 headers: {
@@ -35,7 +35,8 @@ class ApiRouteUpload {
                 },
             };
             const result = await axios.post(
-                '/storage/upload',
+                //TODO: Fix tsc signature error
+                apiImageTargets[type],
                 formData,
                 requestHeaders
             );

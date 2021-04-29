@@ -4,6 +4,7 @@ import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
+import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
 import WelcomeRulesScreen from 'views/community/beneficiary/WelcomeRulesScreen';
 import CommunityDetailsScreen from 'views/community/details';
@@ -15,13 +16,12 @@ import AddedManagerScreen from 'views/community/manager/views/AddedManagerScreen
 import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBeneficiaryScreen';
 import CreateCommunityScreen from 'views/createCommunity';
 import FAQScreen from 'views/faq';
+import StoriesScreen from 'views/stories';
+import NewStoryScreen from 'views/stories/NewStory';
+import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
-import StoriesScreen from 'views/stories';
-import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
-import NewStoryScreen from 'views/stories/NewStory';
-import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
@@ -143,6 +143,7 @@ function StackNavigator() {
 
     return (
         <Stack.Navigator
+            headerMode="screen"
             screenOptions={{
                 headerTitleAlign: 'left',
                 headerLeft: () => null,

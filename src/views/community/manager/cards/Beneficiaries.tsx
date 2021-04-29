@@ -6,12 +6,13 @@ import { Screens } from 'helpers/constants';
 import React from 'react';
 import { Alert, View } from 'react-native';
 import { Headline } from 'react-native-paper';
+
 import SuspiciousActivity from './SuspiciousActivity';
 interface IBeneficiariesProps {
-    beneficiaries: number;
-    removedBeneficiaries: number;
+    beneficiaries: number | undefined;
+    removedBeneficiaries: number | undefined;
     hasFundsToNewBeneficiary: boolean;
-    isSuspeciousDetected: boolean;
+    isSuspeciousDetected: boolean | undefined;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
