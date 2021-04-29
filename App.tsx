@@ -449,102 +449,139 @@ export default class App extends React.Component<any, IAppState> {
     };
 
     _cacheResourcesAsync = async () => {
-        await Font.loadAsync({
-            // Load a font `Montserrat` from a static resource
-            // Montserrat: require('assets/fonts/Montserrat.ttf'),
+        try {
+            await Font.loadAsync({
+                // Load a font `Montserrat` from a static resource
+                // Montserrat: require('assets/fonts/Montserrat.ttf'),
 
-            // Any string can be used as the fontFamily name. Here we use an object to provide more control
-            'Gelion-SemiBold': {
-                uri: require('./src/assets/fonts/FontGelion/Gelion-SemiBold.ttf'),
-            },
-            'Gelion-Bold': {
-                uri: require('./src/assets/fonts/FontGelion/Gelion-Bold.ttf'),
-            },
-            'Gelion-Regular': {
-                uri: require('./src/assets/fonts/FontGelion/Gelion-Regular.ttf'),
-            },
-            'Gelion-Medium': {
-                uri: require('./src/assets/fonts/FontGelion/Gelion-Medium.ttf'),
-            },
-            'Gelion-Light': {
-                uri: require('./src/assets/fonts/FontGelion/Gelion-Light.ttf'),
-            },
-            'Gelion-Thin': {
-                uri: require('./src/assets/fonts/FontGelion/Gelion-Thin.ttf'),
-            },
-            'Inter-Thin': {
-                uri: require('./src/assets/fonts/Inter/Inter-Thin.ttf'),
-            },
-            'Inter-SemiBold': {
-                uri: require('./src/assets/fonts/Inter/Inter-SemiBold.ttf'),
-            },
-            'Inter-Regular': {
-                uri: require('./src/assets/fonts/Inter/Inter-Regular.ttf'),
-            },
-            'Inter-Medium': {
-                uri: require('./src/assets/fonts/Inter/Inter-Medium.ttf'),
-            },
-            'Inter-Light': {
-                uri: require('./src/assets/fonts/Inter/Inter-Light.ttf'),
-            },
-            'Inter-ExtraLight': {
-                uri: require('./src/assets/fonts/Inter/Inter-ExtraLight.ttf'),
-            },
-            'Inter-ExtraBold': {
-                uri: require('./src/assets/fonts/Inter/Inter-ExtraBold.ttf'),
-            },
-            'Inter-Bold': {
-                uri: require('./src/assets/fonts/Inter/Inter-Bold.ttf'),
-            },
-            'Inter-Black': {
-                uri: require('./src/assets/fonts/Inter/Inter-Black.ttf'),
-            },
-            'Manrope-Bold': {
-                uri: require('./src/assets/fonts/Manrope/Manrope-Bold.ttf'),
-            },
-            'Manrope-ExtraBold': {
-                uri: require('./src/assets/fonts/Manrope/Manrope-ExtraBold.ttf'),
-            },
-            'Manrope-ExtraLight': {
-                uri: require('./src/assets/fonts/Manrope/Manrope-ExtraLight.ttf'),
-            },
-            'Manrope-Light': {
-                uri: require('./src/assets/fonts/Manrope/Manrope-Light.ttf'),
-            },
-            'Manrope-Medium': {
-                uri: require('./src/assets/fonts/Manrope/Manrope-Medium.ttf'),
-            },
-            'Manrope-Regular': {
-                uri: require('./src/assets/fonts/Manrope/Manrope-Regular.ttf'),
-            },
-            'Manrope-SemiBold': {
-                uri: require('./src/assets/fonts/Manrope/Manrope-SemiBold.ttf'),
-            },
-        });
-        // wait to load langiages
-        await loadi18n;
-        let language = Localization.locale;
-        if (language.includes('-')) {
-            language = language.substr(0, language.indexOf('-'));
-        } else if (language.includes('_')) {
-            language = language.substr(0, language.indexOf('_'));
+                // Any string can be used as the fontFamily name. Here we use an object to provide more control
+                'Gelion-SemiBold': {
+                    uri: require('./src/assets/fonts/FontGelion/Gelion-SemiBold.ttf'),
+                },
+                'Gelion-Bold': {
+                    uri: require('./src/assets/fonts/FontGelion/Gelion-Bold.ttf'),
+                },
+                'Gelion-Regular': {
+                    uri: require('./src/assets/fonts/FontGelion/Gelion-Regular.ttf'),
+                },
+                'Gelion-Medium': {
+                    uri: require('./src/assets/fonts/FontGelion/Gelion-Medium.ttf'),
+                },
+                'Gelion-Light': {
+                    uri: require('./src/assets/fonts/FontGelion/Gelion-Light.ttf'),
+                },
+                'Gelion-Thin': {
+                    uri: require('./src/assets/fonts/FontGelion/Gelion-Thin.ttf'),
+                },
+                'Inter-Thin': {
+                    uri: require('./src/assets/fonts/Inter/Inter-Thin.ttf'),
+                },
+                'Inter-SemiBold': {
+                    uri: require('./src/assets/fonts/Inter/Inter-SemiBold.ttf'),
+                },
+                'Inter-Regular': {
+                    uri: require('./src/assets/fonts/Inter/Inter-Regular.ttf'),
+                },
+                'Inter-Medium': {
+                    uri: require('./src/assets/fonts/Inter/Inter-Medium.ttf'),
+                },
+                'Inter-Light': {
+                    uri: require('./src/assets/fonts/Inter/Inter-Light.ttf'),
+                },
+                'Inter-ExtraLight': {
+                    uri: require('./src/assets/fonts/Inter/Inter-ExtraLight.ttf'),
+                },
+                'Inter-ExtraBold': {
+                    uri: require('./src/assets/fonts/Inter/Inter-ExtraBold.ttf'),
+                },
+                'Inter-Bold': {
+                    uri: require('./src/assets/fonts/Inter/Inter-Bold.ttf'),
+                },
+                'Inter-Black': {
+                    uri: require('./src/assets/fonts/Inter/Inter-Black.ttf'),
+                },
+                'Manrope-Bold': {
+                    uri: require('./src/assets/fonts/Manrope/Manrope-Bold.ttf'),
+                },
+                'Manrope-ExtraBold': {
+                    uri: require('./src/assets/fonts/Manrope/Manrope-ExtraBold.ttf'),
+                },
+                'Manrope-ExtraLight': {
+                    uri: require('./src/assets/fonts/Manrope/Manrope-ExtraLight.ttf'),
+                },
+                'Manrope-Light': {
+                    uri: require('./src/assets/fonts/Manrope/Manrope-Light.ttf'),
+                },
+                'Manrope-Medium': {
+                    uri: require('./src/assets/fonts/Manrope/Manrope-Medium.ttf'),
+                },
+                'Manrope-Regular': {
+                    uri: require('./src/assets/fonts/Manrope/Manrope-Regular.ttf'),
+                },
+                'Manrope-SemiBold': {
+                    uri: require('./src/assets/fonts/Manrope/Manrope-SemiBold.ttf'),
+                },
+            });
+            // wait to load langiages
+            await loadi18n;
+            let language = Localization.locale;
+            if (language.includes('-')) {
+                language = language.substr(0, language.indexOf('-'));
+            } else if (language.includes('_')) {
+                language = language.substr(0, language.indexOf('_'));
+            }
+            if (!supportedLanguages.includes(language)) {
+                language = 'en';
+            }
+            i18n.changeLanguage(language);
+            store.dispatch(setUserLanguage(language));
+            const netState = await NetInfo.fetch();
+            if (!netState.isConnected) {
+                this.setState({ netAvailable: false });
+                return;
+            }
+            await this._checkForNewVersion();
+            await this._authUser();
+            await this._checkAcceptanceOfRules();
+            this.setState({ isAppReady: true });
+            // just at the end, so when we hide, app is ready!
+            SplashScreen.hideAsync();
+        } catch (e) {
+            Sentry.Native.captureException(e);
+            return (
+                <PaperProvider theme={theme}>
+                    <Portal>
+                        <Modal visible dismissable={false}>
+                            <Card
+                                style={{
+                                    marginHorizontal: 20,
+                                    paddingVertical: 43,
+                                }}
+                            >
+                                <Card.Content
+                                    style={{
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Paragraph
+                                        style={{
+                                            fontFamily: 'Gelion-Regular',
+                                            fontSize: 21,
+                                            lineHeight: 25,
+                                            color: ipctColors.almostBlack,
+                                            width: '70%',
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        {i18n.t('unexpectedError')}
+                                    </Paragraph>
+                                </Card.Content>
+                            </Card>
+                        </Modal>
+                    </Portal>
+                </PaperProvider>
+            );
         }
-        if (!supportedLanguages.includes(language)) {
-            language = 'en';
-        }
-        i18n.changeLanguage(language);
-        store.dispatch(setUserLanguage(language));
-        const netState = await NetInfo.fetch();
-        if (!netState.isConnected) {
-            this.setState({ netAvailable: false });
-            return;
-        }
-        await this._checkForNewVersion();
-        await this._authUser();
-        await this._checkAcceptanceOfRules();
-        this.setState({ isAppReady: true });
-        // just at the end, so when we hide, app is ready!
-        SplashScreen.hideAsync();
     };
 
     _checkForNewVersion = async () => {

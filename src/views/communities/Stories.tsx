@@ -25,6 +25,9 @@ export default function Stories() {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+    const userCommunityMetadata = useSelector(
+        (state: IRootState) => state.user.community
+    );
 
     useEffect(() => {
         setRefreshing(true);
@@ -74,12 +77,14 @@ export default function Stories() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ padding: 18 }}
             >
-                {userAddress.length > 0 && (
-                    <View style={{ flexDirection: 'column' }}>
-                        <NewStoryCard key="newStory" />
-                        <MyStoriesCard />
-                    </View>
-                )}
+                {userAddress.length > 0 &&
+                    (userCommunityMetadata.isBeneficiary ||
+                        userCommunityMetadata.isManager) && (
+                        <View style={{ flexDirection: 'column' }}>
+                            <NewStoryCard key="newStory" />
+                            <MyStoriesCard />
+                        </View>
+                    )}
                 {refreshing && (
                     <ActivityIndicator
                         style={{ marginBottom: 22 }}

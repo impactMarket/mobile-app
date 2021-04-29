@@ -356,4 +356,6 @@ export default {
     createStory: 'Create Story',
     myStories: 'My Stories',
     userNotRegistered: "The user isn't registered!",
+    unexpectedError:
+        'Unfortunately an unexpected error occurred while loading the app. Please restart the app and try again.',
 };
