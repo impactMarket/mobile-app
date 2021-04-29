@@ -31,6 +31,35 @@ export interface CommunityAttributes {
     beneficiaries: BeneficiaryAttributes[] | null;
 }
 
+export interface AppMediaThumbnail {
+    id: number;
+    mediaContentId: number;
+    url: string;
+    width: number;
+    height: number;
+    pixelRatio: number;
+}
+export interface AppMediaThumbnailCreation {
+    mediaContentId: number;
+    url: string;
+    width: number;
+    height: number;
+    pixelRatio: number;
+}
+export interface AppMediaContent {
+    id: number;
+    url: string;
+    width: number;
+    height: number;
+
+    thumbnails?: AppMediaThumbnail[];
+}
+export interface AppMediaContentCreation {
+    url: string;
+    width: number;
+    height: number;
+}
+
 export interface CommunityStateAttributes {
     claimed: string;
     claims: number;

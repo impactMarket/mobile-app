@@ -2,7 +2,9 @@ import { ContractKit } from '@celo/contractkit';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
+import * as Network from 'expo-network';
 import {
     ICommunity,
     ICommunityLightDetails,
@@ -27,8 +29,6 @@ import {
     setUserIsSuspect,
 } from './redux/actions/user';
 import { UserAttributes } from './types/models';
-import * as Device from 'expo-device';
-import * as Network from 'expo-network';
 
 export function generateUrlWithCloudFront(s3ContentKey: string) {
     // for backwards support
@@ -157,7 +157,7 @@ export function calculateCommunityProgress(
 }
 
 export function getCountryFromPhoneNumber(phoneNumber: string) {
-    for (var [key, value] of Object.entries(countriesJSON)) {
+    for (const [key, value] of Object.entries(countriesJSON)) {
         if (value.phone === phoneNumber.slice(1, value.phone.length + 1)) {
             return `${value.emoji} ${value.name}`;
         }
@@ -181,14 +181,14 @@ export function validateEmail(email: string) {
 
     if (email.length > 254) return false;
 
-    var valid = emailRegex.test(email);
+    const valid = emailRegex.test(email);
     if (!valid) return false;
 
     // Further checking of some things regex can't handle
-    var parts = email.split('@');
+    const parts = email.split('@');
     if (parts[0].length > 64) return false;
 
-    var domainParts = parts[1].split('.');
+    const domainParts = parts[1].split('.');
     if (
         domainParts.some(function (part) {
             return part.length > 63;

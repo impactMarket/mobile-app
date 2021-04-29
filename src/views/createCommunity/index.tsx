@@ -8,7 +8,6 @@ import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
-import CloseSvg from 'components/svg/CloseSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -381,29 +380,29 @@ function CreateCommunityScreen() {
                 imageTargets.COVER
             );
 
-            const communityDetails: CommunityCreationAttributes = {
-                requestByAddress: userAddress,
-                name,
-                description,
-                language: userLanguage,
-                currency,
-                city,
-                country,
-                gps: {
-                    latitude:
-                        gpsLocation!.coords.latitude +
-                        config.locationErrorMargin,
-                    longitude:
-                        gpsLocation!.coords.longitude +
-                        config.locationErrorMargin,
-                },
-                email,
-                coverMediaId: apiRequestResult?.id, //TODO: Typescript check
-                contractParams,
-                ...privateParamsIfAvailable,
-            };
-
             if (apiRequestResult) {
+                const communityDetails: CommunityCreationAttributes = {
+                    requestByAddress: userAddress,
+                    name,
+                    description,
+                    language: userLanguage,
+                    currency,
+                    city,
+                    country,
+                    gps: {
+                        latitude:
+                            gpsLocation!.coords.latitude +
+                            config.locationErrorMargin,
+                        longitude:
+                            gpsLocation!.coords.longitude +
+                            config.locationErrorMargin,
+                    },
+                    email,
+                    coverMediaId: apiRequestResult.data.data.id,
+                    contractParams,
+                    ...privateParamsIfAvailable,
+                };
+
                 const communityApiRequestResult = await Api.community.create(
                     communityDetails
                 );
@@ -764,23 +763,7 @@ function CreateCommunityScreen() {
     };
 
     const renderCreateCommunityAlert = () => (
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                justifyContent: 'space-around',
-                height: 80,
-                width: '90%',
-                marginHorizontal: 20,
-                marginTop: 20,
-                borderColor: ipctColors.blueRibbon,
-                borderRadius: 8,
-                borderWidth: 2,
-                borderStyle: 'solid',
-                paddingTop: 16,
-            }}
-        >
+        <View style={styles.createCommunityAlert}>
             <EIcon
                 name="info-with-circle"
                 size={18}
@@ -1579,6 +1562,21 @@ const styles = StyleSheet.create({
         shadowRadius: 0,
         elevation: 0,
         borderRadius: 6,
+    },
+    createCommunityAlert: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-around',
+        height: 80,
+        width: '90%',
+        marginHorizontal: 20,
+        marginTop: 20,
+        borderColor: ipctColors.blueRibbon,
+        borderRadius: 8,
+        borderWidth: 2,
+        borderStyle: 'solid',
+        paddingTop: 16,
     },
 });
 

@@ -13,6 +13,22 @@ export interface ICommunityLightDetails {
     city: string;
     country: string;
     coverImage: string;
+    cover: IMediaContent;
+    state: CommunityStateAttributes;
+    contract: CommunityContractAttributes;
+    blocked: boolean;
+    verifiedPN: boolean | undefined;
+    suspect: boolean | undefined;
+}
+
+export interface ICommunityDetails {
+    publicId: string;
+    contractAddress: string;
+    name: string;
+    city: string;
+    country: string;
+    coverImage: string;
+    cover: IMediaContent;
     state: CommunityStateAttributes;
     contract: CommunityContractAttributes;
     blocked: boolean;
@@ -112,6 +128,7 @@ export interface ICommunitiesListStories {
     id: number;
     name: string;
     coverImage: string;
+    cover: IMediaContent;
     story: {
         id: number;
         media: string | null;
@@ -126,5 +143,6 @@ export interface ICommunityStories {
     city: string;
     country: string;
     coverImage: string;
+    cover: IMediaContent;
     stories: ICommunityStory[];
 }

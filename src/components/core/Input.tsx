@@ -46,13 +46,12 @@ export default class Input extends Component<IInputProps, object> {
                     <Text style={styles.label}>{label}</Text>
                     <TextInput
                         style={
-                            value && editable
+                            value
                                 ? styles.textInput
                                 : [
                                       styles.textInput,
                                       {
                                           marginTop: 8,
-                                          color: ipctColors.borderGray,
                                       },
                                   ]
                         }
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     },
     textInput: {
         flexGrow: 1,
-        margin: 0,
+        // margin: 4,
         zIndex: 1,
         fontSize: 15,
         fontFamily: 'Inter-Regular',

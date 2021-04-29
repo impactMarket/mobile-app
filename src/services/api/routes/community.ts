@@ -6,6 +6,7 @@ import {
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
 import { UbiRequestChangeParams } from 'helpers/types/models';
+
 import { getRequest, postRequest } from '../base';
 
 class ApiRouteCommunity {
