@@ -13,8 +13,7 @@ import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
-
-// import Stories from './Stories';
+import Stories from './Stories';
 
 function CommunitiesScreen() {
     const flatListRef = useRef<FlatList<ICommunityLightDetails> | null>(null);
@@ -142,10 +141,10 @@ function CommunitiesScreen() {
     const filterHeader = () => {
         return (
             <>
-                {/* <Stories /> */}
+                <Stories />
                 <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
                     <Select
-                        label={i18n.t('order')}
+                        // label={i18n.t('order')}
                         value={textCommunitiesOrder(communtiesOrder)}
                         onPress={() => modalizeOrderRef.current?.open()}
                     />
