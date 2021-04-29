@@ -9,8 +9,7 @@
         "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*",
         "prettier": "prettier --write ./**/*.{ts,tsx}",
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
-        "test": "echo \"Not available yet.\"",
-        "prepare": "husky install"
+        "test": "echo \"Not available yet.\""
     },
     "engines": {
         "node": "14.15.1"
@@ -101,7 +100,6 @@
         "eslint": "7.23.0",
         "eslint-config-prettier": "8.1.0",
         "eslint-config-universe": "7.0.1",
-        "husky": ">=6",
         "jest-expo": "^40.0.0",
         "lint-staged": ">=10",
         "prettier": "2.2.1",
@@ -111,13 +109,5 @@
     "resolutions": {
         "styled-components": "5.2.3",
         "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz"
-    },
-    "lint-staged": {
-        "*.{js,jsx,ts,tsx}": [
-            "yarn eslint --quiet --fix",
-            "bash -c tsc --noEmit"
-        ],
-        "*.{js,ts,tsx,css,md}": "prettier --write",
-        "*.js": "eslint --cache --fix"
     }
 }
