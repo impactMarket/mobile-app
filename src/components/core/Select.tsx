@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
         marginTop: 12,
         zIndex: 1,
         fontSize: 15,
+        fontFamily: 'Inter-Regular',
         lineHeight: 24,
         color: ipctColors.almostBlack,
     },
