@@ -443,7 +443,7 @@ function ProfileScreen() {
                                 color={ipctColors.borderGray}
                                 style={{
                                     right:
-                                        -Dimensions.get('screen').height * 0.33,
+                                        -Dimensions.get('window').width * 0.75,
                                     alignSelf: 'center',
                                 }}
                             />
