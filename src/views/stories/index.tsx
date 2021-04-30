@@ -56,9 +56,10 @@ function StoriesScreen() {
                 // [D]
                 id: lastRowElements,
                 name: `empty-${lastRowElements}`,
-                coverImage: '',
+                // coverImage: '',
                 empty: true,
                 story: {} as any,
+                cover: data[0].cover,
             });
             lastRowElements += 1; // [E]
         }
@@ -92,8 +93,8 @@ function StoriesScreen() {
                         communityName={item.name}
                         imageURI={
                             item.story.media
-                                ? item.story.media
-                                : item.coverImage
+                                ? item.story.media.url
+                                : item.cover.url
                         }
                     />
                 );

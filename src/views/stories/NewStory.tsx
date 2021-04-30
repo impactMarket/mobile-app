@@ -22,7 +22,8 @@ import { IRootState } from 'helpers/types/state';
 import i18n from 'assets/i18n';
 import { StatusBar } from 'expo-status-bar';
 import Container from './Container';
-import { modalDonateAction } from 'helpers/constants';
+import { AppMediaContent } from 'helpers/types/models';
+import { StoryContent } from 'helpers/types/story/storyContent';
 
 function NewStoryScreen() {
     const dimensions = useWindowDimensions();
@@ -31,6 +32,9 @@ function NewStoryScreen() {
     const [storyText, setStoryText] = useState('');
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [submitedResult, setSubmitedResult] = useState<
+        StoryContent | undefined
+    >();
     const [submittedWithSuccess, setSubmittedWithSuccess] = useState(false);
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
@@ -50,6 +54,7 @@ function NewStoryScreen() {
                     <SubmitStory
                         submit={submitNewStory}
                         submitting={submitting}
+                        disabled={false}
                     />
                 ),
             });
@@ -64,30 +69,36 @@ function NewStoryScreen() {
         submittedWithSuccess,
     ]);
 
-    const submitNewStory = () => {
+    const submitNewStory = async () => {
         setSubmitting(true);
-        Api.story
-            .add(storyMedia, userCommunity.id, storyText, userAddress)
-            .then((r) => {
-                Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('storyCongrat'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                setSubmittedWithSuccess(true);
-            })
-            .catch((e) => {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('storyFailure'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-            })
-            .finally(() => {
-                setSubmitting(false);
-            });
+        try {
+            let media: AppMediaContent | undefined;
+            if (storyMedia.length > 0) {
+                media = await Api.story.addPicture(storyMedia);
+            }
+            const r = await Api.story.add(
+                userCommunity.id,
+                storyText.length > 0 ? storyText : undefined,
+                media?.id
+            );
+            setSubmitedResult(r);
+            Alert.alert(
+                i18n.t('success'),
+                i18n.t('storyCongrat'),
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
+            setSubmittedWithSuccess(true);
+        } catch (e) {
+            Alert.alert(
+                i18n.t('failure'),
+                i18n.t('storyFailure'),
+                [{ text: 'OK' }],
+                { cancelable: false }
+            );
+        } finally {
+            setSubmitting(false);
+        }
     };
 
     const pickImage = async () => {
@@ -113,10 +124,9 @@ function NewStoryScreen() {
     if (userCommunity?.id === undefined || userCommunityStatus !== 'valid') {
         return <Text>{i18n.t('notInComunity')}</Text>;
     }
-    console.log({ userCommunity });
     // TODO: most of the code above is repeated from Carousel
     // make it reusable!
-    if (submittedWithSuccess) {
+    if (submittedWithSuccess && submitedResult) {
         return (
             <View style={{ flex: 1, flexDirection: 'row' }}>
                 <StatusBar hidden={true} />
@@ -130,7 +140,10 @@ function NewStoryScreen() {
                         paddingTop: 20,
                     }}
                 >
-                    <Container media={storyMedia} story={userCommunity} />
+                    {/* <Container
+                        media={submitedResult.media!} // can be null, not undefined
+                        story={userCommunity}
+                    /> */}
                     <View style={{ width: '100%' }}>
                         <Text
                             style={{

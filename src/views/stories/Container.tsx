@@ -4,19 +4,38 @@ import i18n from 'assets/i18n';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import DeleteSvg from 'components/svg/DeleteSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
+import { ICommunity, ICommunityStories } from 'helpers/types/endpoints';
+import { AppMediaContent } from 'helpers/types/models';
 import React, { useState } from 'react';
-import { View, Text, Image, Pressable, Alert } from 'react-native';
+import {
+    View,
+    Text,
+    Image,
+    Pressable,
+    Alert,
+    StyleProp,
+    TextStyle,
+} from 'react-native';
 import Api from 'services/api';
 
 import CarouselSlide from './CarouselSlide';
 
-export default function Container({ story, media }) {
-    const { coverImage, name, country, city } = story;
+export default function Container({
+    story,
+    media,
+}: {
+    story: ICommunityStories;
+    media: AppMediaContent | null;
+}) {
+    const { cover, name, country, city } = story;
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
 
     const navigation = useNavigation();
 
-    const titleStyle = { textAlign: 'left', marginLeft: 12 };
+    const titleStyle: StyleProp<TextStyle> = {
+        textAlign: 'left',
+        marginLeft: 12,
+    };
 
     const countries: {
         [key: string]: {
@@ -54,7 +73,7 @@ export default function Container({ story, media }) {
                     >
                         <Image
                             source={{
-                                uri: coverImage,
+                                uri: cover.url,
                             }}
                             style={{
                                 height: 48,

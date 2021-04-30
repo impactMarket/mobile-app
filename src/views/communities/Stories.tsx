@@ -97,7 +97,9 @@ export default function Stories() {
                         key={s.id}
                         communityId={s.id}
                         communityName={s.name}
-                        imageURI={s.story.media ? s.story.media : s.coverImage}
+                        imageURI={
+                            s.story.media ? s.story.media.url : s.coverImage
+                        }
                     />
                 ))}
             </ScrollView>
