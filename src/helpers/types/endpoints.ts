@@ -1,4 +1,5 @@
 import {
+    AppMediaContent,
     CommunityAttributes,
     CommunityContractAttributes,
     CommunityDailyMetricsAttributes,
@@ -118,7 +119,7 @@ export interface IUserAuth extends IUserBaseAuth {
 
 export interface ICommunityStory {
     id: number;
-    media: string | null;
+    media: AppMediaContent | null;
     message: string | null;
     loves: number;
     userLoved: boolean;
@@ -127,22 +128,22 @@ export interface ICommunityStory {
 export interface ICommunitiesListStories {
     id: number;
     name: string;
-    coverImage: string;
+    // coverImage: string;
     cover: IMediaContent;
     story: {
         id: number;
-        media: string | null;
+        media: AppMediaContent | null;
         message: string | null;
     }; // most recent
 }
 
 export interface ICommunityStories {
     id: number;
-    publicId: string; // temporary
+    // publicId: string; // temporary
     name: string;
     city: string;
     country: string;
-    coverImage: string;
+    // coverImage: string;
     cover: IMediaContent;
     stories: ICommunityStory[];
 }
