@@ -5,7 +5,7 @@ import Button from 'components/core/Button';
 import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Screens } from 'helpers/constants';
-import { ICommunityStory } from 'helpers/types/endpoints';
+import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import {
@@ -37,11 +37,15 @@ function Carousel(props: {
     const [index, setIndex] = useState(0);
     const [stories, setStories] = useState<ICommunityStory[]>([]);
     const [lovedStories, setLovedStories] = useState<boolean[]>([]);
-    const [country, setCountry] = useState('');
-    const [city, setCity] = useState('');
-    const [name, setName] = useState('');
-    const [coverImage, setCoverImage] = useState('');
-    const [communityPublicId, setCommunityPublicId] = useState('');
+    // const [country, setCountry] = useState('');
+    // const [city, setCity] = useState('');
+    // const [name, setName] = useState('');
+    // const [coverImage, setCoverImage] = useState('');
+    // const [communityId, setCommunityId] = useState(0);
+    const [
+        communityStories,
+        setCommunityStories,
+    ] = useState<ICommunityStories>();
     const [openPopup, setOpenPopup] = useState(false);
 
     const togglePopup = () => setOpenPopup(!openPopup);
@@ -50,11 +54,12 @@ function Carousel(props: {
         Api.story
             .getByCommunity(props.communityId, userAddress.length > 0)
             .then((s) => {
-                setName(s.name);
-                setCity(s.city);
-                setCountry(s.country);
-                setCoverImage(s.coverImage);
-                setCommunityPublicId(s.publicId);
+                // setName(s.name);
+                // setCity(s.city);
+                // setCountry(s.country);
+                // setCoverImage(s.coverImage);
+                // setCommunityId(s.id);
+                setCommunityStories(s);
                 setStories(s.stories);
                 if (userAddress.length > 0) {
                     setLovedStories(s.stories.map((ss) => ss.userLoved));
@@ -81,7 +86,7 @@ function Carousel(props: {
     };
 
     // if (true) {
-    if (stories.length === 0) {
+    if (stories.length === 0 || communityStories === undefined) {
         return (
             <View
                 style={{
@@ -105,7 +110,14 @@ function Carousel(props: {
             </View>
         );
     }
-    const story = { coverImage, name, country, city };
+    // const story: ICommunityStories = {
+    //     coverImage,
+    //     name,
+    //     country,
+    //     city,
+    //     id: communityId,
+    //     cover,
+    // };
 
     return (
         <View
@@ -118,7 +130,10 @@ function Carousel(props: {
             }}
         >
             {stories[index].media ? (
-                <Container media={stories[index].media} story={story} />
+                <Container
+                    media={stories[index].media}
+                    story={communityStories}
+                />
             ) : (
                 <Text
                     style={{
@@ -218,7 +233,7 @@ function Carousel(props: {
                         style={{ marginRight: 22, width: 158 }}
                         onPress={() =>
                             navigation.navigate(Screens.CommunityDetails, {
-                                communityId: communityPublicId,
+                                communityId: communityStories.id,
                                 openDonate: true,
                             })
                         }

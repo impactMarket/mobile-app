@@ -1,8 +1,13 @@
 import CacheImage from 'components/CacheImage';
+import { AppMediaContent } from 'helpers/types/models';
 import React from 'react';
 import { useWindowDimensions, View } from 'react-native';
 
-export default function CarouselSlide({ media }: { media: string | null }) {
+export default function CarouselSlide({
+    media,
+}: {
+    media: AppMediaContent | null;
+}) {
     const dimensions = useWindowDimensions();
 
     return (
@@ -19,7 +24,7 @@ export default function CarouselSlide({ media }: { media: string | null }) {
                 <View style={{ flexDirection: 'row' }}>
                     <CacheImage
                         source={{
-                            uri: media,
+                            uri: media.url,
                         }}
                         style={{
                             width: dimensions.width,
@@ -32,7 +37,7 @@ export default function CarouselSlide({ media }: { media: string | null }) {
                     />
                     <CacheImage
                         source={{
-                            uri: media,
+                            uri: media.url,
                         }}
                         style={{
                             width: dimensions.width,

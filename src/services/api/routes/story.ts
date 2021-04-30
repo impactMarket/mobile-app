@@ -6,18 +6,15 @@ import {
     ICommunityStories,
 } from 'helpers/types/endpoints';
 import config from '../../../../config';
-import { getRequest, postRequest, deleteRequest } from '../base';
+import { getRequest, postRequest, deleteRequest, putRequest } from '../base';
 import * as Sentry from 'sentry-expo';
+import { AppMediaContent } from 'helpers/types/models';
+import { StoryContent } from 'helpers/types/story/storyContent';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
 class ApiRouteStory {
-    static async add(
-        mediaURI: string,
-        communityId: number,
-        message: string,
-        userAddress: string
-    ): Promise<any> {
+    static async addPicture(mediaURI: string): Promise<AppMediaContent> {
         let response;
         try {
             // handle success
@@ -33,9 +30,6 @@ class ApiRouteStory {
                     type: `image/${fileType}`,
                 } as any);
             }
-            formData.append('byAddress', userAddress);
-            formData.append('communityId', communityId.toString());
-            formData.append('message', message);
             const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
             const requestHeaders = {
                 headers: {
@@ -46,15 +40,34 @@ class ApiRouteStory {
             };
             console.log(formData);
             const result = await axios.post(
-                '/story/add',
+                '/story/picture',
                 formData,
                 requestHeaders
             );
-            response = result;
+            response = result.data;
         } catch (e) {
             Sentry.Native.captureException(e);
         }
         return response;
+    }
+
+    static async add(
+        communityId: number,
+        message?: string,
+        mediaId?: number
+    ): Promise<StoryContent> {
+        console.log('xxxxxxxxxxxxxxxxx');
+        console.log({
+            communityId,
+            message,
+            mediaId,
+        });
+        console.log('xxxxxxxxxxxxxxxxx');
+        return await postRequest<any>('/story', {
+            communityId,
+            message,
+            mediaId,
+        });
     }
 
     static async list<T extends ICommunitiesListStories[]>(): Promise<T> {
@@ -73,13 +86,18 @@ class ApiRouteStory {
         return result!; // TODO: don't!
     }
 
-    static async love(contentId: number): Promise<void> {
-        await postRequest('/story/love', { contentId });
+    static async love(storyId: number): Promise<void> {
+        await putRequest('/story/love/' + storyId, {});
+        return;
+    }
+
+    static async inapropriate(storyId: number): Promise<void> {
+        await putRequest('/story/inapropriate/' + storyId, {});
         return;
     }
 
     static async remove(storyId: number): Promise<void> {
-        await deleteRequest('/story/', { storyId });
+        await deleteRequest('/story/' + storyId, {});
         return;
     }
 
