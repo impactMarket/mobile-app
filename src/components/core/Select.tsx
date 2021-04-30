@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
         fontWeight: '400',
         fontSize: 17,
-        lineHeight: 17,
+        lineHeight: 18,
         letterSpacing: 0.245455,
     },
 });

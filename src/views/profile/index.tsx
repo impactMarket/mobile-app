@@ -7,7 +7,9 @@ import i18n from 'assets/i18n';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
+import ArrowForwardSvg from 'components/svg/ArrowForwardSvg';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
+import CheckSvg from 'components/svg/CheckSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
@@ -50,7 +52,6 @@ import {
     Searchbar,
     IconButton,
 } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { batch, useDispatch, useSelector } from 'react-redux';
 // Services
 import Api from 'services/api';
@@ -283,11 +284,7 @@ function ProfileScreen() {
                     style={styles.itemTitle}
                 >{`[${currencies[item].symbol}] ${currencies[item].name}`}</Text>
                 {item === selectedCurrencyId && (
-                    <Icon
-                        name="check"
-                        color={ipctColors.greenishTeal}
-                        size={22}
-                    />
+                    <CheckSvg color={ipctColors.greenishTeal} size={22} />
                 )}
             </View>
         </TouchableOpacity>
@@ -437,13 +434,11 @@ function ProfileScreen() {
                             >
                                 {userBalance}
                             </Headline>
-                            <Icon
-                                name="arrow-forward-ios"
-                                size={22}
+                            <ArrowForwardSvg
                                 color={ipctColors.borderGray}
                                 style={{
-                                    right:
-                                        -Dimensions.get('window').width * 0.75,
+                                    position: 'absolute',
+                                    right: 5,
                                     alignSelf: 'center',
                                 }}
                             />
