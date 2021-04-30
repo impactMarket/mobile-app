@@ -27,7 +27,6 @@ import { IRootState } from 'helpers/types/state';
 import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
-    Platform,
     Text,
     View,
     Alert,
@@ -285,7 +284,7 @@ function Auth() {
                 <View
                     style={{
                         height:
-                            Platform.OS === 'android'
+                            Device.osName === 'Android'
                                 ? Dimensions.get('window').height * 0.5
                                 : Dimensions.get('screen').height * 0.5,
                     }}
