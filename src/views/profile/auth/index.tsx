@@ -285,8 +285,8 @@ function Auth() {
                     style={{
                         height:
                             Device.osName === 'Android'
-                                ? Dimensions.get('window').height * 0.5
-                                : Dimensions.get('screen').height * 0.5,
+                                ? Dimensions.get('window').height * 0.6
+                                : Dimensions.get('screen').height * 0.6,
                     }}
                 >
                     <View style={{ width: '100%', paddingHorizontal: 22 }}>
