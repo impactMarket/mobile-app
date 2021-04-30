@@ -174,8 +174,12 @@ function ProfileScreen() {
         try {
             setSending(true);
             setUserAvatarImage(avatar);
-            //TODO: Discuss w/ Bernardo
-            await Api.upload.uploadImage(userAvatarImage, imageTargets.PROFILE);
+
+            userAvatarImage &&
+                (await Api.upload.uploadImage(
+                    userAvatarImage,
+                    imageTargets.PROFILE
+                ));
             setSending(false);
         } catch (e) {
             Alert.alert(
@@ -439,31 +443,30 @@ function ProfileScreen() {
                                 color={ipctColors.borderGray}
                                 style={{
                                     right:
-                                        -Dimensions.get('screen').height * 0.25,
+                                        -Dimensions.get('screen').height * 0.33,
                                     alignSelf: 'center',
                                 }}
                             />
                         </View>
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>
-                        {userAvatarImage.length > 0 ? (
-                            <Image
-                                source={{ uri: userAvatarImage }}
-                                style={styles.avatar}
-                            />
+                        {userAvatarImage && userAvatarImage.length > 0 ? (
+                            <View style={styles.avatar}>
+                                <Image
+                                    source={{ uri: userAvatarImage }}
+                                    style={styles.avatar}
+                                />
+                                {/* TODO: Call remote avatar API call */}
+                                <IconButton
+                                    style={styles.removeAvatar}
+                                    icon="close"
+                                    size={14}
+                                    onPress={() => setUserAvatarImage(null)}
+                                />
+                            </View>
                         ) : (
                             <AvatarPlaceholderSvg style={styles.avatar} />
                         )}
-
-                        {/* TODO: Integrate avatar feature with API */}
-                        {/* {user.avatar && (
-                            <IconButton
-                                style={styles.addAvatar}
-                                icon="close"
-                                size={14}
-                                onPress={() => {}}
-                            />
-                        )} */}
 
                         <TouchableOpacity
                             style={styles.avatar}
@@ -716,8 +719,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginVertical: 44,
     },
-    addAvatar: {
+    removeAvatar: {
         position: 'absolute',
+        top: -2,
         right: -4,
         zIndex: 2,
         height: 22,
