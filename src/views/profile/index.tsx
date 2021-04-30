@@ -431,7 +431,7 @@ function ProfileScreen() {
                             <Headline
                                 style={{
                                     fontSize: 25,
-                                    lineHeight: 24,
+                                    lineHeight: 28,
                                     ...styles.headlineBalance,
                                 }}
                             >
@@ -773,7 +773,7 @@ const styles = StyleSheet.create({
         color: ipctColors.regentGray,
         fontSize: 16,
         fontFamily: 'Inter-Regular',
-        lineHeight: 16,
+        lineHeight: 18,
         letterSpacing: 0.7,
         opacity: 0.48,
     },
