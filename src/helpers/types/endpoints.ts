@@ -42,6 +42,9 @@ export interface ICommunity extends CommunityAttributes {
     metrics: CommunityDailyMetricsAttributes;
 }
 
+/**
+ * @deprecated use AppMediaContent
+ */
 export interface IMediaContent {
     id: number;
     url: string;
@@ -129,7 +132,7 @@ export interface ICommunitiesListStories {
     id: number;
     name: string;
     // coverImage: string;
-    cover: IMediaContent;
+    cover: AppMediaContent;
     story: {
         id: number;
         media: AppMediaContent | null;
@@ -144,6 +147,6 @@ export interface ICommunityStories {
     city: string;
     country: string;
     // coverImage: string;
-    cover: IMediaContent;
+    cover: AppMediaContent;
     stories: ICommunityStory[];
 }
