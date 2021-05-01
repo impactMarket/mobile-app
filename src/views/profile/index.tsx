@@ -356,6 +356,9 @@ function ProfileScreen() {
             <Searchbar
                 placeholder={i18n.t('search')}
                 style={styles.searchBarContainer}
+                inputStyle={{
+                    marginLeft: -14,
+                }}
                 autoFocus
                 clearIcon={(p) => (
                     <IconButton
