@@ -571,6 +571,7 @@ function CreateCommunityScreen() {
             style={{
                 height: 160,
                 marginBottom: 22,
+                paddingLeft: 8,
             }}
         >
             <RadioButton.Group
@@ -630,7 +631,7 @@ function CreateCommunityScreen() {
     const renderVisibilities = () => (
         <View
             style={{
-                padding: 8,
+                paddingLeft: 8,
                 height: 120,
                 marginBottom: 22,
             }}
