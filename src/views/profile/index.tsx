@@ -333,7 +333,7 @@ function ProfileScreen() {
     );
 
     const renderLanguageContent = () => (
-        <View style={{ flex: 1, height: '50%' }}>
+        <View style={{ flex: 1, height: '50%', paddingLeft: 8 }}>
             <RadioButton.Group
                 onValueChange={(value) => {
                     handleChangeLanguage(value);
@@ -386,16 +386,18 @@ function ProfileScreen() {
     );
 
     const renderGenderContent = () => (
-        <RadioButton.Group
-            onValueChange={(value) => {
-                handleChangeGender(value);
-            }}
-            value={gender ? gender : ''}
-        >
-            <RadioButton.Item key="f" label={i18n.t('female')} value="f" />
-            <RadioButton.Item key="m" label={i18n.t('male')} value="m" />
-            <RadioButton.Item key="o" label={i18n.t('others')} value="o" />
-        </RadioButton.Group>
+        <View style={{ flex: 1, height: '50%', paddingLeft: 8 }}>
+            <RadioButton.Group
+                onValueChange={(value) => {
+                    handleChangeGender(value);
+                }}
+                value={gender ? gender : ''}
+            >
+                <RadioButton.Item key="f" label={i18n.t('female')} value="f" />
+                <RadioButton.Item key="m" label={i18n.t('male')} value="m" />
+                <RadioButton.Item key="o" label={i18n.t('others')} value="o" />
+            </RadioButton.Group>
+        </View>
     );
 
     return (
