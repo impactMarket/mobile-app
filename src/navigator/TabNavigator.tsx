@@ -106,6 +106,12 @@ function TabNavigator({
                     ? Screens.CommunityManager
                     : Screens.Communities
             ),
+            headerTitleStyle: {
+                fontFamily: 'Manrope-Bold',
+                fontSize: 22,
+                lineHeight: 28,
+                color: '#333239',
+            },
             headerShown: !(
                 (routeName === undefined &&
                     fromWelcomeScreen === Screens.Auth) ||
