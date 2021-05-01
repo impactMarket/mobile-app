@@ -30,6 +30,7 @@ export default class Input extends Component<IInputProps, object> {
             style,
             multiline,
             numberOfLines,
+            keyboardType,
         } = this.props;
 
         return (
@@ -70,6 +71,7 @@ export default class Input extends Component<IInputProps, object> {
                         maxLength={maxLength}
                         onEndEditing={onEndEditing}
                         onChangeText={onChangeText}
+                        keyboardType={keyboardType}
                         editable={editable}
                         multiline={multiline}
                         numberOfLines={numberOfLines}
