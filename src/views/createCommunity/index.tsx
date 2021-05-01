@@ -517,6 +517,9 @@ function CreateCommunityScreen() {
                 placeholder={i18n.t('search')}
                 style={styles.searchBarContainer}
                 autoFocus
+                inputStyle={{
+                    marginLeft: -14,
+                }}
                 clearIcon={(p) => (
                     <IconButton
                         icon="close"
@@ -595,6 +598,9 @@ function CreateCommunityScreen() {
                 placeholder={i18n.t('search')}
                 style={styles.searchBarContainer}
                 autoFocus
+                inputStyle={{
+                    marginLeft: -14,
+                }}
                 clearIcon={(p) => (
                     <IconButton
                         icon="close"
