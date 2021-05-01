@@ -1492,6 +1492,11 @@ CreateCommunityScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('applyCommunity'), // editing ? i18n.t('edit') : i18n.t('create'),
+        headerTitleStyle: {
+            fontFamily: 'Manrope-Bold',
+            fontSize: 22,
+            lineHeight: 28,
+        },
     };
 };
 
