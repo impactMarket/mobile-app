@@ -98,7 +98,7 @@ export default function Stories() {
                         communityId={s.id}
                         communityName={s.name}
                         imageURI={
-                            s.story.media ? s.story.media.url : s.coverImage
+                            s.story.media ? s.story.media.url : s.cover.url
                         }
                     />
                 ))}
