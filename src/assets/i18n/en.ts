@@ -95,6 +95,8 @@ export default {
     visibility: 'Visibility',
     public: 'Public',
     private: 'Private',
+    communityPicsImportance:
+        'P.S: Communities with all the details completed, including the managers photos, are more likely to get funded.',
     createCommunityNote1:
         "Note: These parameters should be a minimum basic income that is sufficient to meet your beneficiaries' basic needs. They can claim while there are funds available in the contract. You will have the responsibility to promote your community and to raise funds for it.",
     createCommunityNote2:
