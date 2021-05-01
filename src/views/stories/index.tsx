@@ -34,6 +34,7 @@ function StoriesScreen() {
         setRefreshing(true);
         if (caller !== 'MY_STORIES') {
             Api.story.list<ICommunityStoriesBox[]>().then((s) => {
+                // console.log(s);
                 setStories(s);
             });
         } else {
@@ -48,6 +49,7 @@ function StoriesScreen() {
     }, []);
 
     function createRows(data: ICommunityStoriesBox[], columns: number) {
+        // console.log('data', data);
         const rows = Math.floor(data.length / columns); // [A]
         let lastRowElements = data.length - rows * columns; // [B]
         while (lastRowElements !== columns) {
@@ -56,13 +58,13 @@ function StoriesScreen() {
                 // [D]
                 id: lastRowElements,
                 name: `empty-${lastRowElements}`,
-                // coverImage: '',
                 empty: true,
-                story: {} as any,
-                cover: data[0].cover,
+                story: {} as any, // empty on purpose
+                cover: {} as any, // empty on purpose
             });
             lastRowElements += 1; // [E]
         }
+        // console.log(data);
         return data; // [F]
     }
 
@@ -78,13 +80,29 @@ function StoriesScreen() {
 
     return (
         <FlatList
-            data={createRows(stories, 3)}
-            style={{ marginHorizontal: 12 }}
+            data={stories}
+            style={{
+                marginHorizontal: 12,
+                // backgroundColor: 'blue',
+            }}
+            contentContainerStyle={
+                {
+                    // alignItems: 'flex-start',
+                }
+            }
             keyExtractor={(item) => item.name}
             numColumns={3} // Número de colunas
             renderItem={({ item }) => {
                 if (item.empty) {
-                    return <View style={[styles.item, styles.itemEmpty]} />;
+                    return (
+                        <View
+                            style={[
+                                styles.item,
+                                styles.itemEmpty,
+                                // { backgroundColor: 'red' },
+                            ]}
+                        />
+                    );
                 }
                 return (
                     <StoriesCard
@@ -108,14 +126,16 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     item: {
-        alignItems: 'center',
+        // alignItems: 'center',
         backgroundColor: '#dcda48',
         flexGrow: 1,
         flexBasis: 0,
-        margin: 6,
-        padding: 20,
-        height: 182,
+        // margin: 6,
+        // padding: 20,
+        // width: 98.16,
+        height: 167,
         borderRadius: 8,
+        // marginRight: 11.84,
     },
     text: {
         color: '#333333',
