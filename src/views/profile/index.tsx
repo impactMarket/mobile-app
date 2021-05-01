@@ -284,7 +284,7 @@ function ProfileScreen() {
                     style={styles.itemTitle}
                 >{`[${currencies[item].symbol}] ${currencies[item].name}`}</Text>
                 {item === selectedCurrencyId && (
-                    <CheckSvg color={ipctColors.greenishTeal} size={22} />
+                    <CheckSvg color={ipctColors.greenishTeal} />
                 )}
             </View>
         </TouchableOpacity>
