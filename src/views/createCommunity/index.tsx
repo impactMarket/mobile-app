@@ -1003,6 +1003,14 @@ function CreateCommunityScreen() {
                                     </TouchableOpacity>
                                 </View>
                             )}
+                            <Text
+                                style={[
+                                    { color: '#73839D', marginBottom: 16 },
+                                    styles.createCommunityDescription,
+                                ]}
+                            >
+                                {i18n.t('communityPicsImportance')}
+                            </Text>
 
                             {/* TODO: Community Logo will be available in upcomming release */}
                             {/* {communityLogo ? (
@@ -1496,6 +1504,7 @@ CreateCommunityScreen.navigationOptions = () => {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,
             lineHeight: 28,
+            color: '#333239',
         },
     };
 };
