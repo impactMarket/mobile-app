@@ -50,7 +50,6 @@ import {
     IconButton,
     Text,
     Searchbar,
-    List,
 } from 'react-native-paper';
 import EIcon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -162,7 +161,7 @@ function CreateCommunityScreen() {
     const [
         incrementalIntervalUnit,
         setIncrementalIntervalUnit,
-    ] = useState<number>(0);
+    ] = useState<number>(60);
 
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisibility] = useState('public');
@@ -546,8 +545,9 @@ function CreateCommunityScreen() {
     const renderFrequency = () => (
         <View
             style={{
-                padding: 20,
-                height: Dimensions.get('screen').height * 0.2,
+                height: 120,
+                paddingLeft: 8,
+                marginBottom: 22,
             }}
         >
             <RadioButton.Group
@@ -566,8 +566,8 @@ function CreateCommunityScreen() {
     const renderIncrementalFrequency = () => (
         <View
             style={{
-                padding: 20,
-                height: Dimensions.get('screen').height * 0.2,
+                height: 160,
+                marginBottom: 22,
             }}
         >
             <RadioButton.Group
@@ -624,8 +624,9 @@ function CreateCommunityScreen() {
     const renderVisibilities = () => (
         <View
             style={{
-                padding: 20,
-                height: Dimensions.get('screen').height * 0.2,
+                padding: 8,
+                height: 120,
+                marginBottom: 22,
             }}
         >
             <RadioButton.Group
@@ -670,10 +671,20 @@ function CreateCommunityScreen() {
     };
 
     const renderItemCountryQuery = ({ item }: { item: string }) => (
-        <List.Item
-            title={`${countries[item].emoji} ${countries[item].name}`}
-            onPress={() => handleSelectCountry(item)}
-        />
+        <TouchableOpacity onPress={() => handleSelectCountry(item)}>
+            <View style={styles.itemContainer}>
+                <Text
+                    style={styles.itemTitle}
+                >{`${countries[item].emoji} ${countries[item].name}`}</Text>
+                {item === country && (
+                    <Icon
+                        name="check"
+                        color={ipctColors.greenishTeal}
+                        size={22}
+                    />
+                )}
+            </View>
+        </TouchableOpacity>
     );
 
     const renderSearchCountryResult = () => {
@@ -856,7 +867,12 @@ function CreateCommunityScreen() {
                                     }
                                 />
                                 {!isNameValid && (
-                                    <HelperText type="error" visible>
+                                    <HelperText
+                                        type="error"
+                                        padding="none"
+                                        visible
+                                        style={styles.errorText}
+                                    >
                                         {i18n.t('communityNameRequired')}
                                     </HelperText>
                                 )}
@@ -1103,7 +1119,12 @@ function CreateCommunityScreen() {
                                 />
                             </View>
                             {!isDescriptionValid && (
-                                <HelperText type="error" visible>
+                                <HelperText
+                                    type="error"
+                                    padding="none"
+                                    visible
+                                    style={styles.errorText}
+                                >
                                     {i18n.t('communityDescriptionRequired')}
                                 </HelperText>
                             )}
@@ -1120,7 +1141,12 @@ function CreateCommunityScreen() {
                                     }
                                 />
                                 {!isCityValid && (
-                                    <HelperText type="error" visible>
+                                    <HelperText
+                                        type="error"
+                                        visible
+                                        padding="none"
+                                        style={styles.errorText}
+                                    >
                                         {i18n.t('cityRequired')}
                                     </HelperText>
                                 )}
@@ -1139,7 +1165,12 @@ function CreateCommunityScreen() {
                                     }
                                 />
                                 {!isCountryValid && (
-                                    <HelperText type="error" visible>
+                                    <HelperText
+                                        type="error"
+                                        padding="none"
+                                        visible
+                                        style={styles.errorText}
+                                    >
                                         {i18n.t('countryRequired')}
                                     </HelperText>
                                 )}
@@ -1166,7 +1197,12 @@ function CreateCommunityScreen() {
                                         </Text>
                                     </Button>
                                     {!isEnabledGPS && (
-                                        <HelperText type="error" visible>
+                                        <HelperText
+                                            type="error"
+                                            padding="none"
+                                            visible
+                                            style={styles.errorText}
+                                        >
                                             {i18n.t('enablingGPSRequired')}
                                         </HelperText>
                                     )}
@@ -1220,7 +1256,12 @@ function CreateCommunityScreen() {
                                     }
                                 />
                                 {!isEmailValid && (
-                                    <HelperText type="error" visible>
+                                    <HelperText
+                                        type="error"
+                                        padding="none"
+                                        visible
+                                        style={styles.errorText}
+                                    >
                                         {i18n.t('emailRequired')}
                                     </HelperText>
                                 )}
@@ -1269,7 +1310,12 @@ function CreateCommunityScreen() {
                                             }
                                         />
                                         {!isClaimAmountValid && (
-                                            <HelperText type="error" visible>
+                                            <HelperText
+                                                type="error"
+                                                padding="none"
+                                                visible
+                                                style={styles.errorText}
+                                            >
                                                 {i18n.t('claimAmountRequired')}
                                             </HelperText>
                                         )}
@@ -1335,7 +1381,12 @@ function CreateCommunityScreen() {
                                         }
                                     />
                                     {!isMaxClaimValid && (
-                                        <HelperText type="error" visible>
+                                        <HelperText
+                                            type="error"
+                                            padding="none"
+                                            visible
+                                            style={styles.errorText}
+                                        >
                                             {i18n.t('maxClaimAmountRequired')}
                                         </HelperText>
                                     )}
@@ -1399,7 +1450,12 @@ function CreateCommunityScreen() {
                                             }
                                         />
                                         {!isIncrementalIntervalValid && (
-                                            <HelperText type="error" visible>
+                                            <HelperText
+                                                type="error"
+                                                padding="none"
+                                                visible
+                                                style={styles.errorText}
+                                            >
                                                 {i18n.t(
                                                     'incrementalIntervalRequired'
                                                 )}
@@ -1661,6 +1717,14 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderStyle: 'solid',
         paddingTop: 16,
+    },
+    errorText: {
+        fontFamily: 'Inter',
+        fontSize: 12,
+        fontStyle: 'normal',
+        fontWeight: '400',
+        lineHeight: 20,
+        textAlign: 'left',
     },
 });
 
