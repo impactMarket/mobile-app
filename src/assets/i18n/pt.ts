@@ -95,6 +95,8 @@ export default {
         'Nota: Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas dos seus beneficiários. Quem cria a comunidade tem a responsabilidade de a promover, gerir e angariar fundos.',
     createCommunityNote2:
         'Se existir outra pessoa ou organização social na sua comunidade que seja mais adequada para gerir esta iniciativa, informe sobre esta possibilidade e incentive a criar uma comunidade.',
+    communityPicsImportance:
+        'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
     failure: 'Falhou',
     success: 'Sucesso',
     requestNewCommunityPlaced:
