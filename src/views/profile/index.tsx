@@ -419,7 +419,6 @@ function ProfileScreen() {
                                 flex: 1,
                                 flexDirection: 'row',
                                 alignItems: 'flex-end',
-                                marginTop: 8,
                             }}
                         >
                             <Headline style={styles.headlineBalanceCurrency}>
@@ -439,7 +438,7 @@ function ProfileScreen() {
                                 style={{
                                     position: 'absolute',
                                     right: 5,
-                                    alignSelf: 'center',
+                                    alignSelf: 'flex-start',
                                 }}
                             />
                         </View>
@@ -655,6 +654,12 @@ ProfileScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('profile'),
+        headerTitleStyle: {
+            fontFamily: 'Manrope-Bold',
+            fontSize: 22,
+            lineHeight: 28,
+            color: '#333239',
+        },
         tabBarIcon: (props: ITabBarIconProps) => (
             <ProfileSvg focused={props.focused} />
         ),
@@ -670,7 +675,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#E1E4E7',
         marginTop: 10,
 
-        paddingVertical: 16,
+        paddingTop: 24,
+        paddingBottom: 16,
         paddingHorizontal: 22,
         width: Dimensions.get('screen').width,
         left: -20,
@@ -765,12 +771,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Manrope-Bold',
     },
     balanceValue: {
-        color: ipctColors.regentGray,
-        fontSize: 16,
+        color: '#73839D',
+        fontSize: 15,
         fontFamily: 'Inter-Regular',
-        lineHeight: 18,
+        lineHeight: 15,
         letterSpacing: 0.7,
-        opacity: 0.48,
     },
     avatarCallToAction: {
         fontFamily: 'Inter-Regular',
