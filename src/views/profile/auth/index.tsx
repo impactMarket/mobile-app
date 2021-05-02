@@ -294,7 +294,7 @@ function Auth() {
                             {i18n.t('loginDescription')}
                         </Text>
                     </View>
-                    <View style={{ width: '100%', paddingHorizontal: 31 }}>
+                    <View style={{ width: '100%', paddingHorizontal: 21 }}>
                         <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
                         <View style={{ width: '100%', marginTop: 16 }}>
                             {buttonStoreLink()}

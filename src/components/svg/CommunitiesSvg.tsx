@@ -14,7 +14,7 @@ function CommunitiesSvg(props: { focused: boolean }) {
                             ? ipctColors.blueRibbon
                             : ipctColors.regentGray
                     }
-                    strokeWidth={2}
+                    strokeWidth={0.1}
                 />
             </Mask>
             <G mask="url(#prefix__a)">
@@ -30,7 +30,7 @@ function CommunitiesSvg(props: { focused: boolean }) {
                             ? ipctColors.blueRibbon
                             : ipctColors.regentGray
                     }
-                    strokeWidth={0.4}
+                    strokeWidth={0.1}
                 />
                 <Path
                     d="M21.922 4.554c0-2.275 1.837-4.2 4.127-4.2 2.289 0 4.128 1.924 4.128 4.2a4.133 4.133 0 01-4.128 4.128 4.133 4.133 0 01-4.127-4.128zm1.764 0a2.366 2.366 0 002.363 2.364 2.366 2.366 0 002.364-2.364c0-1.316-1.074-2.436-2.364-2.436-1.29 0-2.363 1.12-2.363 2.436z"
@@ -44,7 +44,7 @@ function CommunitiesSvg(props: { focused: boolean }) {
                             ? ipctColors.blueRibbon
                             : ipctColors.regentGray
                     }
-                    strokeWidth={0.4}
+                    strokeWidth={0.1}
                 />
                 <Mask
                     id="prefix__b"

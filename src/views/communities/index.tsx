@@ -47,7 +47,7 @@ function CommunitiesScreen() {
         if (flatListRef.current) {
             flatListRef.current.scrollToIndex({ animated: true, index: 0 });
         }
-    }, []);
+    });
 
     const handleChangeOrder = async (order: string) => {
         modalizeOrderRef.current?.close();
