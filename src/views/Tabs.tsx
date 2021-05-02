@@ -63,13 +63,11 @@ function Tabs() {
     return (
         <Host>
             <Tab.Navigator
-                // tabBarOptions={{ style: { height: 60 }, labelStyle: { top: -6 } }}
                 tabBarOptions={{
                     labelStyle: {
-                        fontFamily: 'Gelion-Regular',
-                        fontSize: 15,
-                        lineHeight: 18,
-                        letterSpacing: 0.212727,
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 12,
+                        lineHeight: 20,
                     },
                     tabStyle: {
                         marginVertical: 16,
