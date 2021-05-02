@@ -33,6 +33,7 @@ import {
     Alert,
     View,
     Image,
+    Platform,
     FlatList,
     TextInputEndEditingEventData,
     TouchableOpacity,
@@ -1568,6 +1569,9 @@ CreateCommunityScreen.navigationOptions = () => {
             fontSize: 22,
             lineHeight: 28,
             color: '#333239',
+        },
+        headerTitleContainerStyle: {
+            left: 60,
         },
     };
 };
