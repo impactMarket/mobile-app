@@ -1571,7 +1571,7 @@ CreateCommunityScreen.navigationOptions = () => {
             color: '#333239',
         },
         headerTitleContainerStyle: {
-            left: 60,
+            left: 56,
         },
     };
 };
@@ -1642,12 +1642,12 @@ const styles = StyleSheet.create({
     },
     communityDetailsHeadline: {
         fontFamily: 'Manrope-Bold',
-        fontSize: 18,
-        lineHeight: 28,
+        fontSize: 15,
+        lineHeight: 24,
     },
     createCommunityDescription: {
         fontFamily: 'Inter-Regular',
-        fontSize: 15,
+        fontSize: 14,
         lineHeight: 24,
     },
     uploadContainer: {
