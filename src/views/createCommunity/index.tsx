@@ -1571,7 +1571,7 @@ CreateCommunityScreen.navigationOptions = () => {
             color: '#333239',
         },
         headerTitleContainerStyle: {
-            left: 56,
+            left: 58,
         },
     };
 };
@@ -1730,9 +1730,8 @@ const styles = StyleSheet.create({
         paddingTop: 16,
     },
     errorText: {
-        fontFamily: 'Inter',
+        fontFamily: 'Inter-Regular',
         fontSize: 12,
-        fontStyle: 'normal',
         fontWeight: '400',
         lineHeight: 20,
         textAlign: 'left',

@@ -665,6 +665,9 @@ ProfileScreen.navigationOptions = () => {
             lineHeight: 28,
             color: '#333239',
         },
+        headerTitleContainerStyle: {
+            left: 58,
+        },
         tabBarIcon: (props: ITabBarIconProps) => (
             <ProfileSvg focused={props.focused} />
         ),
