@@ -285,6 +285,9 @@ export default {
     noResults: 'No results founds!',
     tooManyResults: 'Too many results! Improve your search.',
     stories: 'Stories',
+    reportAsInapropriated: 'Report as inapropriate',
+    reportInapropriateWarning:
+        'Are you sure you want to report this story as inapropriate?',
     viewAll: 'View All',
     notInComunity: 'Not in a community!',
     story: 'Story',
