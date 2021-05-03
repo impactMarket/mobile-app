@@ -1,4 +1,5 @@
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState, ICallerRouteParams } from 'helpers/types/state';
@@ -9,7 +10,6 @@ import { useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
-
 interface ICommunityStoriesBox extends ICommunitiesListStories {
     empty: boolean;
 }
@@ -39,7 +39,7 @@ function StoriesScreen() {
             });
         } else {
             navigation.setOptions({
-                headerTitle: 'My Stories',
+                headerTitle: i18n.t('myStories'),
             });
             Api.story.me<ICommunityStoriesBox[]>().then((s) => {
                 setStories(s);
@@ -145,7 +145,16 @@ const styles = StyleSheet.create({
 StoriesScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: 'Stories',
+        headerTitle: i18n.t('stories'),
+        headerTitleStyle: {
+            fontFamily: 'Manrope-Bold',
+            fontSize: 22,
+            lineHeight: 28,
+            color: '#333239',
+        },
+        headerTitleContainerStyle: {
+            left: 58,
+        },
     };
 };
 

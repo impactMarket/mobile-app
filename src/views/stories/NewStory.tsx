@@ -1,29 +1,29 @@
+import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Input from 'components/core/Input';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
+import * as ImagePicker from 'expo-image-picker';
+import { StatusBar } from 'expo-status-bar';
+import { Screens } from 'helpers/constants';
+import { AppMediaContent } from 'helpers/types/models';
+import { IRootState } from 'helpers/types/state';
+import { StoryContent } from 'helpers/types/story/storyContent';
+import SubmitStory from 'navigator/header/SubmitStory';
 import React, { useLayoutEffect, useState } from 'react';
 import {
     View,
-    SafeAreaView,
     Text,
     ImageBackground,
     Alert,
     useWindowDimensions,
     StyleSheet,
 } from 'react-native';
-import { Screens } from 'helpers/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import * as ImagePicker from 'expo-image-picker';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
-import { useNavigation } from '@react-navigation/native';
-import SubmitStory from 'navigator/header/SubmitStory';
 import Api from 'services/api';
-import { IRootState } from 'helpers/types/state';
-import i18n from 'assets/i18n';
-import { StatusBar } from 'expo-status-bar';
+
 import Container from './Container';
-import { AppMediaContent } from 'helpers/types/models';
-import { StoryContent } from 'helpers/types/story/storyContent';
 
 function NewStoryScreen() {
     const dimensions = useWindowDimensions();
@@ -102,7 +102,7 @@ function NewStoryScreen() {
     };
 
     const pickImage = async () => {
-        let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
             alert(i18n.t('storyPermissionCamera'));
@@ -129,7 +129,7 @@ function NewStoryScreen() {
     if (submittedWithSuccess && submitedResult) {
         return (
             <View style={{ flex: 1, flexDirection: 'row' }}>
-                <StatusBar hidden={true} />
+                <StatusBar hidden />
                 <View
                     style={{
                         flex: 1,
@@ -196,7 +196,7 @@ function NewStoryScreen() {
         <View style={{ marginHorizontal: 18 }}>
             <Input
                 label="Story Post Text · Optional"
-                multiline={true}
+                multiline
                 numberOfLines={4}
                 value={storyText}
                 maxLength={256}
