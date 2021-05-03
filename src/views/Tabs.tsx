@@ -68,6 +68,7 @@ function Tabs() {
                         fontFamily: 'Inter-Regular',
                         fontSize: 12,
                         lineHeight: 20,
+                        color: 'red',
                     },
                     tabStyle: {
                         marginVertical: 16,

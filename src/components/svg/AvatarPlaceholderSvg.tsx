@@ -7,8 +7,7 @@ function AvatarPlaceholderSvg(props: SvgProps) {
             <Mask id="prefix__a" x={10} y={6} width={61} height={60}>
                 <Path
                     d="M69.5 35.958c0 15.9-12.977 28.8-29 28.8s-29-12.9-29-28.8 12.977-28.8 29-28.8 29 12.9 29 28.8z"
-                    fill="#C4C4C4"
-                    stroke="#333239"
+                    fill="#fff"
                     strokeWidth={2}
                 />
             </Mask>
