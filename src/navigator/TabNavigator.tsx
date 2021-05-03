@@ -12,6 +12,7 @@ import React, { useLayoutEffect } from 'react';
 import { Host } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
+import { ipctColors } from 'styles/index';
 import CommunitiesScreen from 'views/communities';
 import WelcomeRulesScreen from 'views/community/beneficiary';
 import CommunityManagerScreen from 'views/community/manager';
@@ -176,15 +177,16 @@ function TabNavigator({
             <Tab.Navigator
                 tabBarOptions={{
                     labelStyle: {
-                        fontFamily: 'Gelion-Regular',
-                        fontSize: 15,
-                        lineHeight: 18,
-                        letterSpacing: 0.212727,
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 12,
+                        lineHeight: 20,
                     },
                     tabStyle: {
                         marginVertical: 16,
                     },
                     style: { height: 84 + insets.bottom },
+                    activeTintColor: ipctColors.blueRibbon,
+                    inactiveTintColor: ipctColors.almostBlack,
                 }}
                 initialRouteName={
                     fromWelcomeScreen.length > 0 // if fromWelcomeScreen is valid, use it
