@@ -96,6 +96,8 @@ function TabNavigator({
 
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
+        const headerLeftDetected = getHeaderLeft(route);
+
         navigation.setOptions({
             headerLeft: () => getHeaderLeft(route),
             headerTitle: getHeaderTitle(
@@ -111,6 +113,9 @@ function TabNavigator({
                 fontSize: 22,
                 lineHeight: 28,
                 color: '#333239',
+            },
+            headerTitleContainerStyle: {
+                left: headerLeftDetected ? 58 : 18,
             },
             headerShown: !(
                 (routeName === undefined &&
