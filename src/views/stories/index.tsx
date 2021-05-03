@@ -83,7 +83,6 @@ function StoriesScreen() {
             data={stories}
             style={{
                 marginHorizontal: 12,
-                // backgroundColor: 'blue',
             }}
             contentContainerStyle={
                 {
@@ -94,15 +93,7 @@ function StoriesScreen() {
             numColumns={3} // Número de colunas
             renderItem={({ item }) => {
                 if (item.empty) {
-                    return (
-                        <View
-                            style={[
-                                styles.item,
-                                styles.itemEmpty,
-                                // { backgroundColor: 'red' },
-                            ]}
-                        />
-                    );
+                    return <View style={[styles.item, styles.itemEmpty]} />;
                 }
                 return (
                     <StoriesCard

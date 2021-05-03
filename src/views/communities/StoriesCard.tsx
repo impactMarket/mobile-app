@@ -14,7 +14,7 @@ export default function StoriesCard(props: {
         <View style={{ flexDirection: 'column' }}>
             <Pressable
                 style={{
-                    backgroundColor: 'blue',
+                    backgroundColor: ipctColors.blueRibbon,
                     width: 98.16,
                     height: 167,
                     borderRadius: 8,
