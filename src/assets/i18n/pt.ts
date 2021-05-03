@@ -286,6 +286,9 @@ export default {
     storyCongrat: 'Parabéns, sua story foi submetida!',
     story: 'Story',
     delete: 'Apagar',
+    reportAsInapropriated: 'Denunciar como inapropriada',
+    reportInapropriateWarning:
+        'Tem certeza que deseja denunciar esta story como inapropriada?',
     deleteWarning: 'Tens certeza que quer apagar esta story?',
     storyFailure: 'Erro ao submeter sua story!',
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',

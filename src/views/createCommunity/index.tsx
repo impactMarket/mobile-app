@@ -33,7 +33,6 @@ import {
     Alert,
     View,
     Image,
-    Platform,
     FlatList,
     TextInputEndEditingEventData,
     TouchableOpacity,
