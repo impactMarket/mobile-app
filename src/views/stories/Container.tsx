@@ -24,9 +24,11 @@ import CarouselSlide from './CarouselSlide';
 export default function Container({
     story,
     media,
+    message,
 }: {
     story: ICommunityStories;
     media: AppMediaContent | null;
+    message: string | null;
 }) {
     const { cover, name, country, city } = story;
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
@@ -66,7 +68,7 @@ export default function Container({
                         top: dimensions.height * 0.25,
                     }}
                 >
-                    {story.stories.message}
+                    {message}
                 </Text>
             )}
 
@@ -185,7 +187,7 @@ export default function Container({
                     </ThreeDotsSvg>
                     <Pressable
                         hitSlop={15}
-                        onPress={(e) => navigation.goBack()}
+                        onPress={() => navigation.goBack()}
                         style={{
                             right: 0,
                         }}
