@@ -117,8 +117,6 @@ function Carousel(props: {
     //     cover,
     // };
 
-    console.log({ stories });
-    console.log({ communityStories });
     return (
         <View
             style={{
@@ -131,6 +129,7 @@ function Carousel(props: {
         >
             <Container
                 media={stories[index].media && stories[index].media}
+                message={stories[index].message && stories[index].message}
                 story={communityStories}
             />
 
