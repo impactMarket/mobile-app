@@ -456,12 +456,14 @@ function ProfileScreen() {
                                     style={styles.avatar}
                                 />
                                 {/* TODO: Call remote avatar API call */}
-                                <IconButton
-                                    style={styles.removeAvatar}
-                                    icon="close"
-                                    size={14}
-                                    onPress={() => setUserAvatarImage(null)}
-                                />
+                                <View style={styles.removeAvatar}>
+                                    <IconButton
+                                        style={styles.removeAvatar}
+                                        icon="close"
+                                        size={14}
+                                        onPress={() => setUserAvatarImage(null)}
+                                    />
+                                </View>
                             </View>
                         ) : (
                             <AvatarPlaceholderSvg style={styles.avatar} />
@@ -730,13 +732,13 @@ const styles = StyleSheet.create({
     },
     removeAvatar: {
         position: 'absolute',
-        top: -2,
-        right: -4,
+        top: -1,
+        right: -3,
         zIndex: 2,
         height: 22,
         width: 22,
         borderRadius: 11,
-        backgroundColor: 'white',
+        backgroundColor: ipctColors.white,
     },
     avatar: {
         height: 80,
