@@ -33,6 +33,7 @@ import {
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
@@ -281,9 +282,9 @@ function Auth() {
                     navigation.navigate(Screens.Communities);
                 }}
             >
-                <View
+                <ScrollView
                     style={{
-                        height: 400,
+                        height: 500,
                     }}
                 >
                     <View style={{ width: '100%', paddingHorizontal: 22 }}>
@@ -318,7 +319,7 @@ function Auth() {
                             {i18n.t('connectWithValora')}
                         </Button>
                     </View>
-                </View>
+                </ScrollView>
             </Modalize>
 
             <Modalize
