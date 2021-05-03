@@ -211,7 +211,7 @@ function Auth() {
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(androidURL)}
                 >
-                    <Text style={{ color: 'black' }}>
+                    <Text style={styles.buttomStoreText}>
                         {i18n.t('installAndCreateValoraAccount')}
                     </Text>
                 </Button>
