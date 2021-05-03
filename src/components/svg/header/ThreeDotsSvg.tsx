@@ -1,7 +1,7 @@
-import React, { ReactElement } from 'react';
-import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 import BottomPopup from 'components/core/BottomPopup';
+import React, { ReactElement } from 'react';
 import { TextStyle, StyleProp } from 'react-native';
+import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 interface IThreeDotsProps extends SvgProps {
     children: ReactElement;
     openThreeDotsMenu: boolean;
@@ -41,6 +41,7 @@ function ThreeDotsSvg(props: IThreeDotsProps) {
                     fill="#161515"
                 />
             </Svg>
+
             <BottomPopup
                 isVisible={openThreeDotsMenu}
                 setIsVisible={toggleThreeDotsMenu}
