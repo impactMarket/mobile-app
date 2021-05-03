@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         flexDirection: 'row',
         paddingHorizontal: 16,
-        paddingBottom: 8,
+        paddingBottom: 12,
         borderRadius: 6,
         borderWidth: 0.5,
         borderColor: ipctColors.borderGray,
