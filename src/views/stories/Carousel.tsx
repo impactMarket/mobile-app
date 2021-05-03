@@ -10,10 +10,8 @@ import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import {
     View,
-    SafeAreaView,
     Text,
     Pressable,
-    Platform,
     Alert,
     useWindowDimensions,
 } from 'react-native';
@@ -119,6 +117,8 @@ function Carousel(props: {
     //     cover,
     // };
 
+    console.log({ stories });
+    console.log({ communityStories });
     return (
         <View
             style={{
@@ -129,29 +129,13 @@ function Carousel(props: {
                 backgroundColor: '#73839D',
             }}
         >
-            {stories[index].media ? (
-                <Container
-                    media={stories[index].media}
-                    story={communityStories}
-                />
-            ) : (
-                <Text
-                    style={{
-                        fontFamily: 'Gelion-Regular',
-                        fontSize: 20,
-                        lineHeight: 24,
-                        color: 'white',
-                        textAlign: 'center',
-                        marginHorizontal: 22,
-                        top: dimensions.height * 0.25,
-                    }}
-                >
-                    {stories[index].message}
-                </Text>
-            )}
+            <Container
+                media={stories[index].media && stories[index].media}
+                story={communityStories}
+            />
+
             <View
                 style={{
-                    // backgroundColor: 'yellow',
                     width: '100%',
                     flex: 1,
                     flexDirection: 'row',
@@ -165,7 +149,7 @@ function Carousel(props: {
                     width: '100%',
                 }}
             >
-                {stories[index].media && (
+                {stories[index].media && stories[index].message && (
                     <Text
                         style={{
                             fontFamily: 'Gelion-Regular',
@@ -281,7 +265,9 @@ function Carousel(props: {
                     position: 'absolute',
                 }}
                 colors={['#0B0B0B', '#73839D30', '#00000001']}
-                locations={[0.05, 0.9, 1]}
+                locations={
+                    stories[index].media ? [0.05, 0.7, 1] : [0.001, 0.6, 1]
+                }
             />
             <LinearGradient
                 style={{

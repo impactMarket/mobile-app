@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, FlatList, Text, useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { useSelector } from 'react-redux';
-import { IRootState } from 'helpers/types/state';
-import Carousel from './Carousel';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { View, FlatList, Text } from 'react-native';
+import { useSelector } from 'react-redux';
+
+import Carousel from './Carousel';
 
 interface IStoriesCarouselScreen {
     route: {
@@ -14,7 +15,6 @@ interface IStoriesCarouselScreen {
     };
 }
 function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
-    const dimensions = useWindowDimensions();
     const storiesListState = useSelector(
         (state: IRootState) => state.stories.stories
     );
@@ -41,7 +41,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
         // Prevent one pixel triggering setIndex in the middle
         // of the transition. With this we have to scroll a bit
         // more to trigger the index change.
-        const isNoMansLand = 0.4 < distance;
+        const isNoMansLand = distance > 0.4;
 
         if (roundIndex !== indexRef.current && !isNoMansLand) {
             setIndex(roundIndex);
@@ -67,14 +67,13 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
 
     return (
         <View style={{ flex: 1, flexDirection: 'row' }}>
-            <StatusBar hidden={true} />
+            <StatusBar hidden />
             <FlatList
                 data={storiesListState}
                 ref={flatListRef}
                 keyExtractor={(item) => item.id.toString()}
                 style={{
                     flex: 1,
-                    // backgroundColor: 'red',
                 }}
                 renderItem={({ item }) => {
                     return (

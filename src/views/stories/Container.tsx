@@ -15,6 +15,7 @@ import {
     Alert,
     StyleProp,
     TextStyle,
+    useWindowDimensions,
 } from 'react-native';
 import Api from 'services/api';
 
@@ -29,6 +30,7 @@ export default function Container({
 }) {
     const { cover, name, country, city } = story;
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
+    const dimensions = useWindowDimensions();
 
     const navigation = useNavigation();
 
@@ -50,7 +52,24 @@ export default function Container({
 
     return (
         <>
-            <CarouselSlide media={media} />
+            {media ? (
+                <CarouselSlide media={media} />
+            ) : (
+                <Text
+                    style={{
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 20,
+                        lineHeight: 24,
+                        color: 'white',
+                        textAlign: 'center',
+                        marginHorizontal: 22,
+                        top: dimensions.height * 0.25,
+                    }}
+                >
+                    {story.stories.message}
+                </Text>
+            )}
+
             <View
                 style={{
                     width: '100%',
