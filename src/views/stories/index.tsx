@@ -1,15 +1,16 @@
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
+import { Screens } from 'helpers/constants';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
-import { IRootState, ICallerRouteParams } from 'helpers/types/state';
+import { ICallerRouteParams } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
+
 interface ICommunityStoriesBox extends ICommunitiesListStories {
     empty: boolean;
 }
@@ -26,15 +27,10 @@ function StoriesScreen() {
 
     const [refreshing, setRefreshing] = useState(false);
 
-    const userAddress = useSelector(
-        (state: IRootState) => state.user.wallet.address
-    );
-
     useEffect(() => {
         setRefreshing(true);
         if (caller !== 'MY_STORIES') {
             Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-                // console.log(s);
                 setStories(s);
             });
         } else {
@@ -78,7 +74,7 @@ function StoriesScreen() {
         );
     }
 
-    return (
+    return stories.length > 0 ? (
         <FlatList
             data={stories}
             style={{
@@ -109,6 +105,58 @@ function StoriesScreen() {
                 );
             }}
         />
+    ) : (
+        <View
+            style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '90%',
+                alignSelf: 'center',
+            }}
+        >
+            <Text style={styles.title}>{i18n.t('emptyStoriesTitle')}</Text>
+            <Text style={styles.text}>{i18n.t('emptyStoriesDescription')}</Text>
+            <Pressable
+                style={{
+                    width: '80%',
+                    height: 44,
+                    marginTop: 24,
+                }}
+                onPress={() => navigation.navigate(Screens.NewStory)}
+            >
+                <View
+                    style={{
+                        backgroundColor: ipctColors.blueRibbon,
+                        borderRadius: 6,
+                        shadowColor: '#E1E4E7',
+                        shadowOffset: {
+                            width: 0,
+                            height: 2,
+                        },
+                        shadowOpacity: 14,
+                        elevation: 4,
+                        width: '100%',
+                        height: '100%',
+                        flex: 1,
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Gelion-Bold',
+                            fontSize: 13,
+                            lineHeight: 16,
+                            color: ipctColors.white,
+                        }}
+                    >
+                        {i18n.t('createStory')}
+                    </Text>
+                </View>
+            </Pressable>
+        </View>
     );
 }
 
@@ -117,19 +165,27 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
     item: {
-        // alignItems: 'center',
         backgroundColor: '#dcda48',
         flexGrow: 1,
         flexBasis: 0,
-        // margin: 6,
-        // padding: 20,
-        // width: 98.16,
         height: 167,
         borderRadius: 8,
-        // marginRight: 11.84,
+    },
+    title: {
+        fontFamily: 'Manrope-Regular',
+        fontSize: 22,
+        fontWeight: '800',
+        lineHeight: 28,
+        textAlign: 'center',
+        color: '#172032',
     },
     text: {
-        color: '#333333',
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        fontWeight: '400',
+        lineHeight: 24,
+        textAlign: 'center',
+        color: '#172032',
     },
 });
 

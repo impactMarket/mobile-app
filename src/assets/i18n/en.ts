@@ -22,6 +22,8 @@ export default {
     ubi: 'UBI',
     manage: 'Manage',
     communities: 'Communities',
+    emptyStoriesTitle: "Didn't create any story yet?",
+    emptyStoriesDescription: "Don't miss the opportunity and create one, now!",
     pay: 'Send',
     wallet: 'Wallet',
     uploadProfile: 'Upload profile picture',
