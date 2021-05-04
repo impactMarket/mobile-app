@@ -134,7 +134,6 @@ function NewStoryScreen() {
                     style={{
                         flex: 1,
                         flexDirection: 'column',
-                        // backgroundColor: 'blue',
                         width: dimensions.width,
                         justifyContent: 'space-between',
                         paddingTop: 20,
@@ -193,7 +192,7 @@ function NewStoryScreen() {
     }
 
     return (
-        <View style={{ marginHorizontal: 18 }}>
+        <View style={{ marginHorizontal: 18, marginTop: 14 }}>
             <Input
                 label="Story Post Text · Optional"
                 multiline
@@ -228,7 +227,7 @@ function NewStoryScreen() {
                             marginTop: 14,
                             marginRight: 10,
                         }}
-                        onPress={(e) => setStoryMedia('')}
+                        onPress={() => setStoryMedia('')}
                     />
                 </ImageBackground>
             )}
@@ -254,7 +253,16 @@ const styles = StyleSheet.create({
 NewStoryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: 'New Story',
+        headerTitle: i18n.t('newStory'),
+        headerTitleStyle: {
+            fontFamily: 'Manrope-Bold',
+            fontSize: 22,
+            lineHeight: 28,
+            color: '#333239',
+        },
+        headerTitleContainerStyle: {
+            left: 58,
+        },
     };
 };
 

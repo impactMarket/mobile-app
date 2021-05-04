@@ -291,6 +291,7 @@ export default {
     viewAll: 'View All',
     notInComunity: 'Not in a community!',
     story: 'Story',
+    newStory: 'New Story',
     delete: 'Delete',
     deleteWarning: 'Are you sure you want to delete this story?',
     storyCongrat: 'Congratulations, your story was submitted!',

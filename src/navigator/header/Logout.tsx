@@ -34,8 +34,8 @@ function Logout() {
                 labelStyle={{
                     fontFamily: 'Inter-Regular',
                     fontSize: 18,
-                    lineHeight: 26,
-                    height: 26,
+                    lineHeight: 20,
+                    height: 22,
                     textAlign: 'center',
                     letterSpacing: 0.366667,
                     color: ipctColors.blueRibbon,

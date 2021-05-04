@@ -285,6 +285,7 @@ export default {
     notInComunity: 'Não estás associado a nenhuma comunidade!',
     storyCongrat: 'Parabéns, sua story foi submetida!',
     story: 'Story',
+    newStory: 'Nova Story',
     delete: 'Apagar',
     reportAsInapropriated: 'Denunciar como inapropriada',
     reportInapropriateWarning:
