@@ -16,10 +16,10 @@ function SubmitStory(props: {
                 disabled={props.disabled}
                 uppercase={false}
                 labelStyle={{
-                    fontFamily: 'Gelion-Bold',
-                    fontSize: 22,
-                    lineHeight: 26,
-                    height: 26,
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 18,
+                    lineHeight: 20,
+                    height: 22,
                     textAlign: 'center',
                     letterSpacing: 0.366667,
                     color: ipctColors.blueRibbon,

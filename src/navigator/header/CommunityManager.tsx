@@ -22,7 +22,7 @@ function CommunityManager() {
                 flex: 1,
                 flexDirection: 'row',
                 alignItems: 'center',
-                marginRight: community.status !== 'valid' && 22,
+                marginRight: community.status !== 'valid' ? 22 : 0,
             }}
         >
             <FAQSvg />
