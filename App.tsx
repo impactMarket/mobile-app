@@ -1,7 +1,44 @@
-import React from 'react';
 import './global';
-import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
+import { newKitFromWeb3 } from '@celo/contractkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
+import {
+    NavigationContainer,
+    DefaultTheme as NavigationDefaultTheme,
+} from '@react-navigation/native';
+import BigNumber from 'bignumber.js';
+import Button from 'components/core/Button';
+import Card from 'components/core/Card';
+import DownloadSvg from 'components/svg/DownloadSvg';
+import NoConnectionSvg from 'components/svg/NoConnectionSvg';
+import AppLoading from 'expo-app-loading';
+import { Asset } from 'expo-asset';
+import Constants from 'expo-constants';
+import * as Device from 'expo-device';
+import * as Analytics from 'expo-firebase-analytics';
+import * as Font from 'expo-font';
+import * as Linking from 'expo-linking';
+import * as Localization from 'expo-localization';
+import * as Notifications from 'expo-notifications';
+import * as SplashScreen from 'expo-splash-screen';
+import {
+    STORAGE_USER_ADDRESS,
+    STORAGE_USER_PHONE_NUMBER,
+} from 'helpers/constants';
+import {
+    setAppExchangeRatesAction,
+    setAppSuspectWrongDateTime,
+    setCeloKit,
+    setPushNotificationListeners,
+    setAppHasBeneficiaryAcceptedTerms,
+    setAppHasManagerAcceptedTerms,
+} from 'helpers/redux/actions/app';
+import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
+import { resetUserApp, setUserLanguage } from 'helpers/redux/actions/user';
+import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
+import moment from 'moment';
+import React from 'react';
+import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -20,16 +57,6 @@ import * as Sentry from 'sentry-expo';
 import CacheStore from 'services/cacheStore';
 import { startNotificationsListeners } from 'services/pushNotifications';
 import Web3 from 'web3';
-import { newKitFromWeb3 } from '@celo/contractkit';
-import * as Font from 'expo-font';
-import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
-import AppLoading from 'expo-app-loading';
-import { Asset } from 'expo-asset';
-import {
-    NavigationContainer,
-    DefaultTheme as NavigationDefaultTheme,
-} from '@react-navigation/native';
 
 import config from './config';
 import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
@@ -39,34 +66,6 @@ import Navigator from './src/navigator';
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
 import { ipctColors } from './src/styles';
-
-import BigNumber from 'bignumber.js';
-import Button from 'components/core/Button';
-import NetInfo from '@react-native-community/netinfo';
-import Card from 'components/core/Card';
-import NoConnectionSvg from 'components/svg/NoConnectionSvg';
-import DownloadSvg from 'components/svg/DownloadSvg';
-import * as Linking from 'expo-linking';
-import * as Device from 'expo-device';
-import * as Localization from 'expo-localization';
-import moment from 'moment';
-import * as Analytics from 'expo-firebase-analytics';
-import * as SplashScreen from 'expo-splash-screen';
-import { resetUserApp, setUserLanguage } from 'helpers/redux/actions/user';
-import {
-    setAppExchangeRatesAction,
-    setAppSuspectWrongDateTime,
-    setCeloKit,
-    setPushNotificationListeners,
-    setAppHasBeneficiaryAcceptedTerms,
-    setAppHasManagerAcceptedTerms,
-} from 'helpers/redux/actions/app';
-import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
-import {
-    STORAGE_USER_ADDRESS,
-    STORAGE_USER_PHONE_NUMBER,
-} from 'helpers/constants';
-import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));

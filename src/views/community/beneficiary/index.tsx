@@ -1,26 +1,28 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
+import ReportCard from 'components/svg/header/ReportCard';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
-import { Screens } from 'helpers/constants';
+import { Screens, SHOW_REPORT_CARD } from 'helpers/constants';
 import { humanifyCurrencyAmount } from 'helpers/currency';
-import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/app';
+import {
+    setAppSuspectWrongDateTime,
+    setAppHasBeneficiaryAcceptedTerms,
+} from 'helpers/redux/actions/app';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { SHOW_REPORT_CARD } from 'helpers/constants';
 
 // redux Actions
-import { setAppHasBeneficiaryAcceptedTerms } from 'helpers/redux/actions/app';
 import { Trans } from 'react-i18next';
 import {
     StyleSheet,
@@ -44,10 +46,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
-import ReportCard from 'components/svg/header/ReportCard';
-import BlockedAccount from './cards/BlockedAccount';
 
 import Claim from './Claim';
+import BlockedAccount from './cards/BlockedAccount';
 
 function BeneficiaryScreen() {
     let timeoutTimeDiff: number | undefined;
@@ -547,6 +548,7 @@ BeneficiaryScreen.navigationOptions = ({
 }) => {
     return {
         title: i18n.t('claim'),
+        tabBarLabel: i18n.t('claim'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <ClaimSvg focused={props.focused} />
         ),
