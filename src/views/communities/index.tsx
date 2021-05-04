@@ -238,6 +238,7 @@ function CommunitiesScreen() {
 CommunitiesScreen.navigationOptions = () => {
     return {
         headerTitle: i18n.t('communities'),
+        tabBarLabel: i18n.t('communities'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <CommunitiesSvg focused={props.focused} />
         ),
