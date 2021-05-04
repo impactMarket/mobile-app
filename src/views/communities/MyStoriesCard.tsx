@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
-import i18n from 'assets/i18n';
 
 export default function MyStoriesCard() {
     const navigation = useNavigation();
@@ -13,7 +13,7 @@ export default function MyStoriesCard() {
                 height: 53.0,
                 marginRight: 11.84,
             }}
-            onPress={(e) =>
+            onPress={() =>
                 navigation.navigate(Screens.Stories, {
                     caller: 'MY_STORIES',
                 })
@@ -41,8 +41,9 @@ export default function MyStoriesCard() {
                     style={{
                         fontFamily: 'Gelion-Bold',
                         fontSize: 13,
-                        lineHeight: 16,
+                        lineHeight: 14,
                         color: '#E1E4E7',
+                        textAlign: 'center',
                     }}
                 >
                     {i18n.t('myStories')}
