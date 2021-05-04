@@ -342,6 +342,7 @@ function CommunityManagerScreen() {
 CommunityManagerScreen.navigationOptions = () => {
     return {
         title: i18n.t('manage'),
+        tabBarLabel: i18n.t('manage'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

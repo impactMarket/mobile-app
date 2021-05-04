@@ -661,6 +661,7 @@ ProfileScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('profile'),
+        tabBarLabel: i18n.t('profile'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

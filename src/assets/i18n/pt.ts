@@ -25,6 +25,7 @@ export default {
     wallet: 'Carteira',
     profile: 'Perfil',
     balance: 'Balanço',
+    uploadProfile: 'Atualizar foto de perfil',
     name: 'Nome',
     currency: 'Moeda',
     country: 'País',
