@@ -77,6 +77,7 @@ export default function Container({
                 style={{
                     width: '100%',
                     alignItems: 'center',
+                    top: 5,
                 }}
             >
                 <View
