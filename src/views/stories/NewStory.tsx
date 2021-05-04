@@ -76,11 +76,11 @@ function NewStoryScreen() {
             if (storyMedia.length > 0) {
                 media = await Api.story.addPicture(storyMedia);
             }
-            const r = await Api.story.add(
-                userCommunity.id,
-                storyText.length > 0 ? storyText : undefined,
-                media?.id
-            );
+            const r = await Api.story.add({
+                communityId: userCommunity.id,
+                message: storyText.length > 0 ? storyText : undefined,
+                mediaId: media?.id,
+            });
             setSubmitedResult(r);
             Alert.alert(
                 i18n.t('success'),

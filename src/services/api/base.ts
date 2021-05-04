@@ -201,7 +201,7 @@ class ApiRequests {
         const result = await axios.post(
             endpoint,
             requestBody,
-            await this._requestOptions(...options)
+            await this._requestOptions(options)
         );
         // if (result.status === 401) {
         //     await AsyncStorage.clear();
@@ -238,7 +238,7 @@ class ApiRequests {
         const result = await axios.put(
             endpoint,
             requestBody,
-            await this._requestOptions(...options)
+            await this._requestOptions(options)
         );
         //     if (result.status === 401) {
         //         await AsyncStorage.clear();
@@ -303,14 +303,11 @@ class ApiRequests {
         const formData = new FormData();
         // console.log(mediaURI.length);
         if (mediaURI.length > 0) {
-            formData.append(
-                'imageFile',
-                JSON.stringify({
-                    uri: mediaURI,
-                    name: `photo.${fileType}`,
-                    type: `image/${fileType}`,
-                })
-            );
+            formData.append('imageFile', {
+                uri: mediaURI,
+                name: `photo.${fileType}`,
+                type: `image/${fileType}`,
+            } as any);
         }
         const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
         const requestHeaders = {
