@@ -23,6 +23,8 @@ export default {
     communities: 'Comunidades',
     pay: 'Enviar',
     wallet: 'Carteira',
+    emptyStoriesTitle: 'Ainda não criou uma story?',
+    emptyStoriesDescription: 'Não perca tempo, e comece a criar agora mesmo!',
     profile: 'Perfil',
     balance: 'Balanço',
     uploadProfile: 'Atualizar foto de perfil',

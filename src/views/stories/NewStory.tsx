@@ -73,13 +73,16 @@ function NewStoryScreen() {
         setSubmitting(true);
         try {
             let media: AppMediaContent | undefined;
+
             if (storyMedia.length > 0) {
                 media = await Api.story.addPicture(storyMedia);
+                console.log({ media });
             }
+
             const r = await Api.story.add(
                 userCommunity.id,
                 storyText.length > 0 ? storyText : undefined,
-                media?.id
+                media && media.id
             );
             setSubmitedResult(r);
             Alert.alert(
