@@ -76,6 +76,7 @@ export default function Container({
             <View
                 style={{
                     width: '100%',
+                    alignItems: 'center',
                 }}
             >
                 <View
@@ -91,6 +92,7 @@ export default function Container({
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
+                            width: '80%',
                         }}
                     >
                         <Image
@@ -118,7 +120,7 @@ export default function Container({
                                 }}
                             >
                                 {name?.length > 23
-                                    ? name.substr(0, 22) + '...'
+                                    ? name.substr(0, 21) + '...'
                                     : name}
                             </Text>
                             <Text
@@ -136,116 +138,120 @@ export default function Container({
                             </Text>
                         </View>
                     </View>
-                    <ThreeDotsSvg
-                        setOpenThreeDotsMenu={setOpenThreeDotsMenu}
-                        openThreeDotsMenu={openThreeDotsMenu}
-                        style={{ marginLeft: 8.4, marginRight: -26 }}
-                        title={i18n.t('story')}
-                        titleStyle={titleStyle}
-                        hasCloseBtn
-                    >
-                        <>
-                            <Pressable
-                                style={{
-                                    flexDirection: 'row',
-                                    width: '100%',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-start',
-                                    marginLeft: 24,
-                                    marginVertical: 12,
-                                }}
-                                hitSlop={15}
-                                onPress={() => {
-                                    Alert.alert(
-                                        i18n.t('delete'),
-                                        i18n.t('deleteWarning'),
-                                        [
-                                            {
-                                                text: i18n.t('cancel'),
-                                                onPress: () =>
-                                                    console.log(
-                                                        'Cancel Pressed'
-                                                    ),
-                                                style: 'cancel',
-                                            },
-                                            {
-                                                text: i18n.t('confirm'),
-                                                onPress: () =>
-                                                    Api.story.remove(story.id),
-                                            },
-                                        ]
-                                    );
-                                }}
-                            >
-                                <DeleteSvg />
-                                <Text
+                    <View style={{ flexDirection: 'row' }}>
+                        <ThreeDotsSvg
+                            setOpenThreeDotsMenu={setOpenThreeDotsMenu}
+                            openThreeDotsMenu={openThreeDotsMenu}
+                            style={{ marginHorizontal: 6 }}
+                            title={i18n.t('story')}
+                            titleStyle={titleStyle}
+                            hasCloseBtn
+                        >
+                            <>
+                                <Pressable
                                     style={{
-                                        marginLeft: 13.4,
-                                        fontFamily: 'Manrope-Bold',
-                                        fontSize: 17,
-                                        letterSpacing: 0.7,
+                                        flexDirection: 'row',
+                                        width: '100%',
+                                        alignItems: 'center',
+                                        justifyContent: 'flex-start',
+                                        marginLeft: 24,
+                                        marginVertical: 12,
+                                    }}
+                                    hitSlop={15}
+                                    onPress={() => {
+                                        Alert.alert(
+                                            i18n.t('delete'),
+                                            i18n.t('deleteWarning'),
+                                            [
+                                                {
+                                                    text: i18n.t('cancel'),
+                                                    onPress: () =>
+                                                        console.log(
+                                                            'Cancel Pressed'
+                                                        ),
+                                                    style: 'cancel',
+                                                },
+                                                {
+                                                    text: i18n.t('confirm'),
+                                                    onPress: () =>
+                                                        Api.story.remove(
+                                                            story.id
+                                                        ),
+                                                },
+                                            ]
+                                        );
                                     }}
                                 >
-                                    {i18n.t('delete')}
-                                </Text>
-                            </Pressable>
-                            <Pressable
-                                style={{
-                                    flexDirection: 'row',
-                                    width: '100%',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-start',
-                                    marginLeft: 24,
-                                    marginVertical: 12,
-                                }}
-                                hitSlop={15}
-                                onPress={() => {
-                                    Alert.alert(
-                                        i18n.t('reportAsInapropriated'),
-                                        i18n.t('reportInapropriateWarning'),
-                                        [
-                                            {
-                                                text: i18n.t('cancel'),
-                                                onPress: () =>
-                                                    console.log(
-                                                        'Cancel Pressed'
-                                                    ),
-                                                style: 'cancel',
-                                            },
-                                            {
-                                                text: i18n.t('confirm'),
-                                                onPress: () =>
-                                                    Api.story.inapropriate(
-                                                        story.id
-                                                    ),
-                                            },
-                                        ]
-                                    );
-                                }}
-                            >
-                                <ReportInapropriateSvg />
-                                <Text
+                                    <DeleteSvg />
+                                    <Text
+                                        style={{
+                                            marginLeft: 13.4,
+                                            fontFamily: 'Manrope-Bold',
+                                            fontSize: 17,
+                                            letterSpacing: 0.7,
+                                        }}
+                                    >
+                                        {i18n.t('delete')}
+                                    </Text>
+                                </Pressable>
+                                <Pressable
                                     style={{
-                                        marginLeft: 13.4,
-                                        fontFamily: 'Manrope-Bold',
-                                        fontSize: 17,
-                                        letterSpacing: 0.7,
+                                        flexDirection: 'row',
+                                        width: '100%',
+                                        alignItems: 'center',
+                                        justifyContent: 'flex-start',
+                                        marginLeft: 24,
+                                        marginVertical: 12,
+                                    }}
+                                    hitSlop={15}
+                                    onPress={() => {
+                                        Alert.alert(
+                                            i18n.t('reportAsInapropriated'),
+                                            i18n.t('reportInapropriateWarning'),
+                                            [
+                                                {
+                                                    text: i18n.t('cancel'),
+                                                    onPress: () =>
+                                                        console.log(
+                                                            'Cancel Pressed'
+                                                        ),
+                                                    style: 'cancel',
+                                                },
+                                                {
+                                                    text: i18n.t('confirm'),
+                                                    onPress: () =>
+                                                        Api.story.inapropriate(
+                                                            story.id
+                                                        ),
+                                                },
+                                            ]
+                                        );
                                     }}
                                 >
-                                    {i18n.t('reportAsInapropriated')}
-                                </Text>
-                            </Pressable>
-                        </>
-                    </ThreeDotsSvg>
-                    <Pressable
-                        hitSlop={15}
-                        onPress={() => navigation.goBack()}
-                        style={{
-                            right: 0,
-                        }}
-                    >
-                        <CloseStorySvg />
-                    </Pressable>
+                                    <ReportInapropriateSvg />
+                                    <Text
+                                        style={{
+                                            marginLeft: 13.4,
+                                            fontFamily: 'Manrope-Bold',
+                                            fontSize: 17,
+                                            letterSpacing: 0.7,
+                                        }}
+                                    >
+                                        {i18n.t('reportAsInapropriated')}
+                                    </Text>
+                                </Pressable>
+                            </>
+                        </ThreeDotsSvg>
+                        <Pressable
+                            hitSlop={15}
+                            onPress={() => navigation.goBack()}
+                            style={{
+                                right: 0,
+                            }}
+                        >
+                            <CloseStorySvg />
+                        </Pressable>
+                    </View>
                 </View>
             </View>
         </>
