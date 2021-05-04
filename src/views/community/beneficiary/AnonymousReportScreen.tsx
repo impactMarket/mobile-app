@@ -57,7 +57,7 @@ function AnonymousReportScreen() {
                 setSubmittedWithSuccess(true);
                 navigation.goBack();
             })
-            .catch((e) => {
+            .catch(() => {
                 Alert.alert(
                     i18n.t('failure'),
                     i18n.t('reportIlegal.alertFailure'),
@@ -82,19 +82,18 @@ function AnonymousReportScreen() {
                     fontSize: 17,
                     lineHeight: 21,
                     color: ipctColors.nileBlue,
+                    marginBottom: 16,
                 }}
             >
                 {i18n.t('reportIlegal.message')}
             </Text>
             <Input
-                placeholder={i18n.t('reportIlegal.label')}
+                label={i18n.t('reportIlegal.label')}
                 multiline
                 numberOfLines={6}
                 value={reportInput}
                 maxLength={256}
                 onChangeText={(value) => setReportInput(value)}
-                isBig
-                // isReportInput
                 style={{ fontFamily: 'Gelion-Regular', fontSize: 17 }}
             />
         </View>
