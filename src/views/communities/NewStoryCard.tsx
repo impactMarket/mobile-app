@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
+import i18n from 'assets/i18n';
 import BluePlusSvg from 'components/svg/BluePlusSvg';
 import { Screens } from 'helpers/constants';
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ipctColors } from 'styles/index';
-import i18n from 'assets/i18n';
 
 export default function NewStoriesCard() {
     const navigation = useNavigation();
@@ -16,7 +16,7 @@ export default function NewStoriesCard() {
                 marginRight: 11.84,
                 marginBottom: 11.84,
             }}
-            onPress={(e) => navigation.navigate(Screens.NewStory)}
+            onPress={() => navigation.navigate(Screens.NewStory)}
         >
             <View
                 style={{

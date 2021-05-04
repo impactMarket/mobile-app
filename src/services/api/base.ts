@@ -320,7 +320,6 @@ class ApiRequests {
                 'Content-Type': 'multipart/form-data',
             },
         };
-        // console.log(formData);
         const result = await axios.post(endpoint, formData, requestHeaders);
         const r = result.data as IApiResult;
         return r.data as AppMediaContent;
