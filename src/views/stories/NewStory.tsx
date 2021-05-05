@@ -7,9 +7,9 @@ import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from 'expo-status-bar';
 import { Screens } from 'helpers/constants';
+import { ICommunityStory } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import { StoryContent } from 'helpers/types/story/storyContent';
 import SubmitStory from 'navigator/header/SubmitStory';
 import React, { useLayoutEffect, useState } from 'react';
 import {
@@ -33,7 +33,7 @@ function NewStoryScreen() {
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [submitedResult, setSubmitedResult] = useState<
-        StoryContent | undefined
+        ICommunityStory | undefined
     >();
     const [submittedWithSuccess, setSubmittedWithSuccess] = useState(false);
     const userAddress = useSelector(
@@ -142,10 +142,23 @@ function NewStoryScreen() {
                         paddingTop: 20,
                     }}
                 >
-                    {/* <Container
-                        media={submitedResult.media!} // can be null, not undefined
-                        story={userCommunity}
-                    /> */}
+                    <Container
+                        // media={submitedResult.media!} // can be null, not undefined
+                        community={{
+                            id: userCommunity.id,
+                            name: userCommunity.name,
+                            country: userCommunity.country,
+                            city: userCommunity.city,
+                            cover: {
+                                url: userCommunity.coverImage,
+                                height: 0,
+                                width: 0,
+                                id: 0,
+                            },
+                            stories: [],
+                        }}
+                        story={submitedResult}
+                    />
                     <View style={{ width: '100%' }}>
                         <Text
                             style={{

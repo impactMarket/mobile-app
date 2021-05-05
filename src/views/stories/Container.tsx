@@ -5,8 +5,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import DeleteSvg from 'components/svg/DeleteSvg';
 import ReportInapropriateSvg from 'components/svg/ReportInapropriateSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
-import { ICommunity, ICommunityStories } from 'helpers/types/endpoints';
-import { AppMediaContent } from 'helpers/types/models';
+import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
 import React, { useState } from 'react';
 import {
     View,
@@ -24,14 +23,17 @@ import CarouselSlide from './CarouselSlide';
 
 export default function Container({
     story,
-    media,
-    message,
-}: {
-    story: ICommunityStories;
-    media: AppMediaContent | null;
-    message: string | null;
+    community,
+}: // media,
+// message,
+{
+    community: ICommunityStories;
+    story: ICommunityStory;
+    // media: AppMediaContent | null;
+    // message: string | null;
 }) {
-    const { cover, name, country, city } = story;
+    const { cover, name, country, city } = community;
+    const { media, message } = story;
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
     const dimensions = useWindowDimensions();
 
