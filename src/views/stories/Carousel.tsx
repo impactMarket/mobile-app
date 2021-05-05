@@ -128,9 +128,10 @@ function Carousel(props: {
             }}
         >
             <Container
-                media={stories[index].media && stories[index].media}
-                message={stories[index].message && stories[index].message}
-                story={communityStories}
+                // media={stories[index].media && stories[index].media}
+                // message={stories[index].message && stories[index].message}
+                community={communityStories}
+                story={stories[index]}
             />
 
             <View

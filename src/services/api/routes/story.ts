@@ -4,9 +4,9 @@ import axios from 'axios';
 import {
     ICommunitiesListStories,
     ICommunityStories,
+    ICommunityStory,
 } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
-import { StoryContent } from 'helpers/types/story/storyContent';
 
 import config from '../../../../config';
 import {
@@ -31,8 +31,8 @@ class ApiRouteStory {
         communityId: number;
         message?: string;
         mediaId?: number;
-    }): Promise<StoryContent> {
-        return this.api.post<StoryContent>('/story', story);
+    }): Promise<ICommunityStory> {
+        return this.api.post<ICommunityStory>('/story', story);
     }
 
     static async list<T extends ICommunitiesListStories[]>(): Promise<T> {
