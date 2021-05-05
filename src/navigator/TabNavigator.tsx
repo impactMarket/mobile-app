@@ -9,6 +9,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
+import { Platform, Dimensions } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
@@ -72,6 +73,11 @@ function getHeaderLeft(route: RouteProp<any, any>) {
     if (routeName === Screens.Profile) {
         return <BackSvg />;
     }
+}
+function isLargeIphone() {
+    const d = Dimensions.get('window');
+    const isX = !!(Platform.OS === 'ios' && (d.height > 800 || d.width > 800));
+    return isX;
 }
 
 const Tab = createBottomTabNavigator();
@@ -179,12 +185,27 @@ function TabNavigator({
                     labelStyle: {
                         fontFamily: 'Inter-Regular',
                         fontSize: 12,
-                        lineHeight: 20,
+                        lineHeight: 14,
                     },
-                    tabStyle: {
-                        marginVertical: 16,
-                    },
+                    tabStyle: { marginVertical: 16 },
                     style: { height: 84 + insets.bottom },
+                    //TODO: Fix the extra heigh on iPhone X
+                    // tabStyle: {
+                    //     marginVertical: !(
+                    //         Platform.OS === 'ios' && !!isLargeIphone()
+                    //     )
+                    //         ? 16
+                    //         : 0,
+                    //     marginTop:
+                    //         Platform.OS === 'ios' && isLargeIphone() ? 16 : 0,
+                    // },
+
+                    // style: {
+                    //     height:
+                    //         Platform.OS === 'ios' && !!isLargeIphone()
+                    //             ? 80
+                    //             : 84 + insets.bottom,
+                    // },
                     activeTintColor: ipctColors.blueRibbon,
                     inactiveTintColor: ipctColors.almostBlack,
                 }}

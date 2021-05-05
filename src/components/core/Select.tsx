@@ -5,6 +5,7 @@ import {
     GestureResponderEvent,
     TouchableWithoutFeedback,
     View,
+    Platform,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
@@ -70,20 +71,18 @@ const styles = StyleSheet.create({
         bottom: 0,
         flexDirection: 'row',
         paddingHorizontal: 16,
-        paddingTop: 6,
-        paddingBottom: 6,
+        // paddingTop: 6,
+        // paddingBottom: 6,
         borderRadius: 6,
         borderWidth: 0.5,
         borderColor: ipctColors.borderGray,
     },
-    //TODO: add font inter
     textInput: {
         flexGrow: 1,
-        marginTop: 10,
+        alignSelf: 'center',
         zIndex: 1,
         fontSize: 15,
         fontFamily: 'Inter-Regular',
-        lineHeight: 16,
         color: ipctColors.almostBlack,
     },
     label: {

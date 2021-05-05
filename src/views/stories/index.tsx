@@ -44,6 +44,7 @@ function StoriesScreen() {
         setRefreshing(false);
     }, []);
 
+    console.log({ stories });
     function createRows(data: ICommunityStoriesBox[], columns: number) {
         // console.log('data', data);
         const rows = Math.floor(data.length / columns); // [A]
@@ -97,9 +98,9 @@ function StoriesScreen() {
                         communityId={item.id}
                         communityName={item.name}
                         imageURI={
-                            item.story.media
+                            item.story?.media
                                 ? item.story.media.url
-                                : item.cover.url
+                                : item.cover?.url
                         }
                     />
                 );

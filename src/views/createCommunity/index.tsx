@@ -520,17 +520,17 @@ function CreateCommunityScreen() {
                 inputStyle={{
                     marginLeft: -14,
                 }}
-                clearIcon={(p) => (
-                    <IconButton
-                        icon="close"
-                        onPress={() => {
-                            setSearchCurrency('');
-                            setSearchCurrencyResult([]);
-                            setTooManyResultForQuery(false);
-                            setShowingResults(false);
-                        }}
-                    />
-                )}
+                // clearIcon={(e) => (
+                //     <IconButton
+                //         icon="close"
+                //         onPress={() => {
+                //             setSearchCurrency('');
+                //             setSearchCurrencyResult([]);
+                //             setTooManyResultForQuery(false);
+                //             setShowingResults(false);
+                //         }}
+                //     />
+                // )}
                 onChangeText={(e) => {
                     if (e.length === 0 && showingResults) {
                         setSearchCurrencyResult([]);
@@ -602,17 +602,17 @@ function CreateCommunityScreen() {
                 inputStyle={{
                     marginLeft: -14,
                 }}
-                clearIcon={(p) => (
-                    <IconButton
-                        icon="close"
-                        onPress={() => {
-                            setSearchCountryQuery('');
-                            setSearchCountryISOResult([]);
-                            setTooManyResultForQuery(false);
-                            setShowingResults(false);
-                        }}
-                    />
-                )}
+                // clearIcon={(p) => (
+                //     <IconButton
+                //         icon="close"
+                //         onPress={() => {
+                //             setSearchCountryQuery('');
+                //             setSearchCountryISOResult([]);
+                //             setTooManyResultForQuery(false);
+                //             setShowingResults(false);
+                //         }}
+                //     />
+                // )}
                 onChangeText={(e) => {
                     if (e.length === 0 && showingResults) {
                         setSearchCountryISOResult([]);
@@ -1183,7 +1183,12 @@ function CreateCommunityScreen() {
                                 )}
                             </View>
                             {gpsLocation === undefined ? (
-                                <View>
+                                <View
+                                    style={{
+                                        marginVertical: 16,
+                                        marginBottom: 24,
+                                    }}
+                                >
                                     <Button
                                         mode="contained"
                                         style={[
@@ -1215,40 +1220,48 @@ function CreateCommunityScreen() {
                                     )}
                                 </View>
                             ) : (
-                                <TouchableOpacity
-                                    style={[
-                                        {
-                                            backgroundColor: '#E9EDF4',
-                                            borderWidth: 0,
-                                        },
-                                        styles.gpsBtn,
-                                    ]}
+                                <View
+                                    style={{
+                                        marginVertical: 16,
+                                        marginBottom: 24,
+                                    }}
                                 >
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            alignSelf: 'center',
-                                            alignItems: 'center',
-                                        }}
+                                    <TouchableOpacity
+                                        style={[
+                                            {
+                                                backgroundColor: '#E9EDF4',
+                                                borderWidth: 0,
+                                            },
+                                            styles.gpsBtn,
+                                        ]}
                                     >
-                                        <Icon
-                                            name="check-circle-outline"
-                                            size={22}
-                                            color={ipctColors.greenishTeal}
-                                        />
-                                        <Text
-                                            style={[
-                                                {
-                                                    color: ipctColors.darBlue,
-                                                    marginLeft: 10,
-                                                },
-                                                styles.gpsBtnText,
-                                            ]}
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignSelf: 'center',
+                                                alignItems: 'center',
+                                            }}
                                         >
-                                            {i18n.t('validCoordinates')}
-                                        </Text>
-                                    </View>
-                                </TouchableOpacity>
+                                            <Icon
+                                                name="check-circle-outline"
+                                                size={22}
+                                                color={ipctColors.greenishTeal}
+                                            />
+                                            <Text
+                                                style={[
+                                                    {
+                                                        color:
+                                                            ipctColors.darBlue,
+                                                        marginLeft: 10,
+                                                    },
+                                                    styles.gpsBtnText,
+                                                ]}
+                                            >
+                                                {i18n.t('validCoordinates')}
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             )}
                             <View>
                                 <Input
@@ -1269,7 +1282,9 @@ function CreateCommunityScreen() {
                                         visible
                                         style={styles.errorText}
                                     >
-                                        {i18n.t('emailRequired')}
+                                        {!email
+                                            ? i18n.t('emailRequired')
+                                            : i18n.t('emailInvalidFormat')}
                                     </HelperText>
                                 )}
                             </View>
@@ -1304,6 +1319,8 @@ function CreateCommunityScreen() {
                                             label={i18n.t('claimAmount')}
                                             value={claimAmount}
                                             placeholder="$0"
+                                            maxLength={14}
+                                            keyboardType="numeric"
                                             onChangeText={(value) =>
                                                 setClaimAmount(value)
                                             }
@@ -1374,6 +1391,7 @@ function CreateCommunityScreen() {
                                         )}
                                         value={maxClaim}
                                         placeholder="$0"
+                                        maxLength={14}
                                         keyboardType="numeric"
                                         onChangeText={(value) =>
                                             setMaxClaim(value)
@@ -1446,6 +1464,7 @@ function CreateCommunityScreen() {
                                             style={styles.inputTextField}
                                             value={incrementInterval}
                                             placeholder="0"
+                                            maxLength={14}
                                             keyboardType="numeric"
                                             onChangeText={(value) =>
                                                 setIncrementalInterval(value)
@@ -1679,13 +1698,11 @@ const styles = StyleSheet.create({
     gpsBtn: {
         width: '100%',
         height: 44,
-        marginVertical: 16,
         paddingVertical: 8,
         borderRadius: 6,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        marginBottom: 24,
     },
     gpsBtnText: {
         fontFamily: 'Inter-Regular',

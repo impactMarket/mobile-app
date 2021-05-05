@@ -151,7 +151,6 @@ function CommunitiesScreen() {
                 <Stories />
                 <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
                     <Select
-                        // label={i18n.t('order')}
                         value={textCommunitiesOrder(communtiesOrder)}
                         onPress={() => modalizeOrderRef.current?.open()}
                     />
@@ -210,7 +209,7 @@ function CommunitiesScreen() {
                 >
                     <View
                         style={{
-                            height: Dimensions.get('screen').height * 0.9,
+                            height: Dimensions.get('screen').height * 0.24,
                         }}
                     >
                         <RadioButton.Group

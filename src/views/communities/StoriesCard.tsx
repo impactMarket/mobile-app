@@ -19,10 +19,9 @@ export default function StoriesCard(props: {
                     height: 167,
                     borderRadius: 8,
                     marginRight: 11.84,
-                    // flexDirection: 'row',
                     // alignItems: 'flex-end',
                 }}
-                onPress={(e) =>
+                onPress={() =>
                     navigation.navigate(Screens.StoriesCarousel, {
                         communityId: props.communityId,
                     })
@@ -41,11 +40,13 @@ export default function StoriesCard(props: {
             </Pressable>
             <Text
                 style={{
-                    fontFamily: 'Gelion-Bold',
-                    fontSize: 13,
-                    lineHeight: 16,
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 12,
+                    lineHeight: 20,
                     color: ipctColors.almostBlack,
                     marginTop: 8,
+                    flexWrap: 'wrap',
+                    width: 110,
                     // marginHorizontal: 12,
                 }}
             >
