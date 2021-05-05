@@ -169,6 +169,7 @@ function ProfileScreen() {
         Api.user.setGender(gender);
         updateUserMetadataCache();
         dispatch(setUserMetadata({ ...user, gender }));
+        modalizeGenderRef.current?.close();
     };
 
     const handleChangeAvatar = async (avatar: string) => {
@@ -202,6 +203,7 @@ function ProfileScreen() {
         dispatch(setUserLanguage(text));
         i18n.changeLanguage(text);
         moment.locale(text);
+        modalizeLanguageRef.current?.close();
     };
 
     const textGender = (g: string | null) => {
@@ -360,17 +362,17 @@ function ProfileScreen() {
                     marginLeft: -14,
                 }}
                 autoFocus
-                clearIcon={(p) => (
-                    <IconButton
-                        icon="close"
-                        onPress={() => {
-                            setSearchCurrency('');
-                            setSearchCurrencyResult([]);
-                            setTooManyResultForQuery(false);
-                            setShowingResults(false);
-                        }}
-                    />
-                )}
+                // clearIcon={(p) => (
+                //     <IconButton
+                //         icon="close"
+                //         onPress={() => {
+                //             setSearchCurrency('');
+                //             setSearchCurrencyResult([]);
+                //             setTooManyResultForQuery(false);
+                //             setShowingResults(false);
+                //         }}
+                //     />
+                // )}
                 onChangeText={(e) => {
                     if (e.length === 0 && showingResults) {
                         setSearchCurrencyResult([]);
@@ -450,7 +452,10 @@ function ProfileScreen() {
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>
                         {userAvatarImage && userAvatarImage.length > 0 ? (
-                            <View style={styles.avatar}>
+                            <TouchableOpacity
+                                style={styles.avatar}
+                                onPress={pickImage}
+                            >
                                 <Image
                                     source={{ uri: userAvatarImage }}
                                     style={styles.avatar}
@@ -464,7 +469,7 @@ function ProfileScreen() {
                                         onPress={() => setUserAvatarImage(null)}
                                     />
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         ) : (
                             <AvatarPlaceholderSvg style={styles.avatar} />
                         )}

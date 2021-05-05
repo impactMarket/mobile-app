@@ -188,6 +188,7 @@ export default {
     countryRequired: 'País é obrigatório!',
     enablingGPSRequired: 'Ativar o GPS é obrigatório!',
     emailRequired: 'Endereço de e-mail é obrigatório!',
+    emailInvalidFormat: 'Endereço de e-mail inválido!',
     claimAmountRequired: 'Quantidade a pegar é obrigatório!',
     maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
     incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
@@ -290,7 +291,9 @@ export default {
     story: 'Story',
     newStory: 'Nova Story',
     delete: 'Apagar',
+    reportInapropriateSuccess: 'Sua denuncia foi submetida com sucesso.',
     reportAsInapropriated: 'Denunciar como inapropriada',
+    deleteSuccess: 'Sua story foi apagada com sucesso.',
     reportInapropriateWarning:
         'Tem certeza que deseja denunciar esta story como inapropriada?',
     deleteWarning: 'Tens certeza que quer apagar esta story?',

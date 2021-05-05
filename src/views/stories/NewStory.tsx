@@ -181,7 +181,9 @@ function NewStoryScreen() {
                             }}
                         >
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.donateLabel}>-- Loves</Text>
+                                <Text style={styles.donateLabel}>
+                                    `${submitedResult.loves} Loves`
+                                </Text>
                             </View>
                             <Button
                                 modeType="green"
