@@ -78,12 +78,12 @@ function NewStoryScreen() {
                 media = await Api.story.addPicture(storyMedia);
                 console.log({ media });
             }
+            const r = await Api.story.add({
+                communityId: userCommunity.id,
+                message: storyText.length > 0 ? storyText : undefined,
+                mediaId: media?.id,
+            });
 
-            const r = await Api.story.add(
-                userCommunity.id,
-                storyText.length > 0 ? storyText : undefined,
-                media && media.id
-            );
             setSubmitedResult(r);
             Alert.alert(
                 i18n.t('success'),
