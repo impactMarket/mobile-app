@@ -1,3 +1,12 @@
+import i18n from 'assets/i18n';
+import Button from 'components/core/Button';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import BackSvg from 'components/svg/header/BackSvg';
+import { amountToCurrency } from 'helpers/currency';
+import { isOutOfTime } from 'helpers/index';
+import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -15,20 +24,10 @@ import {
     Searchbar,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
-import BackSvg from 'components/svg/header/BackSvg';
-import { amountToCurrency } from 'helpers/currency';
-import { isOutOfTime } from 'helpers/index';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
-import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
-import { IRootState } from 'helpers/types/state';
-
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
-import * as Sentry from 'sentry-expo';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -357,16 +356,16 @@ function AddedBeneficiaryScreen() {
                     borderRadius: 6,
                     marginBottom: 15,
                 }}
-                clearIcon={(p) => (
-                    <IconButton
-                        icon="close"
-                        onPress={() => {
-                            setSearchBeneficiary('');
-                            setSearchResults([]);
-                            setShowingSearchResults(false);
-                        }}
-                    />
-                )}
+                // clearIcon={(p) => (
+                //     <IconButton
+                //         icon="close"
+                //         onPress={() => {
+                //             setSearchBeneficiary('');
+                //             setSearchResults([]);
+                //             setShowingSearchResults(false);
+                //         }}
+                //     />
+                // )}
                 onChangeText={(e) => {
                     if (e.length === 0 && searchResults.length > 0) {
                         setSearchResults([]);

@@ -6,7 +6,7 @@ import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
-import { ActivityIndicator, Headline } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
@@ -45,14 +45,23 @@ export default function Stories() {
                     marginHorizontal: 18,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    alignItems: 'flex-end',
+                    alignItems: 'center',
                     marginBottom: 9,
                 }}
             >
-                <Headline>{i18n.t('stories')}</Headline>
+                <Text
+                    style={{
+                        fontFamily: 'Gelion-Bold',
+                        fontSize: 20,
+                        lineHeight: 23.44,
+                        color: '#1E3252',
+                    }}
+                >
+                    {i18n.t('stories')}
+                </Text>
                 <Pressable
                     hitSlop={10}
-                    onPress={(e) =>
+                    onPress={() =>
                         navigationRef.current?.navigate(Screens.Stories, {
                             caller: 'VIEW_ALL',
                         })
@@ -68,7 +77,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')}
+                        {i18n.t('viewAll')} ({storiesCommunity.length})
                     </Text>
                 </Pressable>
             </View>

@@ -57,16 +57,7 @@ export default class Input extends Component<IInputProps, object> {
                         {label}
                     </Text>
                     <TextInput
-                        style={
-                            value
-                                ? styles.textInput
-                                : [
-                                      styles.textInput,
-                                      {
-                                          marginTop: 8,
-                                      },
-                                  ]
-                        }
+                        style={styles.textInput}
                         value={value}
                         maxLength={maxLength}
                         onEndEditing={onEndEditing}
@@ -100,10 +91,10 @@ const styles = StyleSheet.create({
     },
     textInput: {
         flexGrow: 1,
+        alignSelf: 'center',
         zIndex: 1,
         fontSize: 15,
         fontFamily: 'Inter-Regular',
-        lineHeight: 16,
         color: ipctColors.almostBlack,
     },
     label: {

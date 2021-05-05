@@ -5,6 +5,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import DeleteSvg from 'components/svg/DeleteSvg';
 import ReportInapropriateSvg from 'components/svg/ReportInapropriateSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
+import { Screens } from 'helpers/constants';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
 import React, { useState } from 'react';
 import {
@@ -177,9 +178,29 @@ export default function Container({
                                                 {
                                                     text: i18n.t('confirm'),
                                                     onPress: () =>
-                                                        Api.story.remove(
-                                                            story.id
-                                                        ),
+                                                        Api.story
+                                                            .remove(story.id)
+                                                            .then(() =>
+                                                                Alert.alert(
+                                                                    i18n.t(
+                                                                        'success'
+                                                                    ),
+                                                                    i18n.t(
+                                                                        'deleteSuccess'
+                                                                    ),
+                                                                    [
+                                                                        {
+                                                                            text: i18n.t(
+                                                                                'close'
+                                                                            ),
+                                                                            onPress: () =>
+                                                                                navigation.navigate(
+                                                                                    Screens.Communities
+                                                                                ),
+                                                                        },
+                                                                    ]
+                                                                )
+                                                            ),
                                                 },
                                             ]
                                         );
@@ -223,9 +244,31 @@ export default function Container({
                                                 {
                                                     text: i18n.t('confirm'),
                                                     onPress: () =>
-                                                        Api.story.inapropriate(
-                                                            story.id
-                                                        ),
+                                                        Api.story
+                                                            .inapropriate(
+                                                                story.id
+                                                            )
+                                                            .then(() =>
+                                                                Alert.alert(
+                                                                    i18n.t(
+                                                                        'success'
+                                                                    ),
+                                                                    i18n.t(
+                                                                        'reportInapropriateSuccess'
+                                                                    ),
+                                                                    [
+                                                                        {
+                                                                            text: i18n.t(
+                                                                                'close'
+                                                                            ),
+                                                                            onPress: () =>
+                                                                                navigation.navigate(
+                                                                                    Screens.Communities
+                                                                                ),
+                                                                        },
+                                                                    ]
+                                                                )
+                                                            ),
                                                 },
                                             ]
                                         );

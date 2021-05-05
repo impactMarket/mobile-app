@@ -194,7 +194,8 @@ export default {
     cityRequired: 'City is required!',
     countryRequired: 'Country is required!',
     enablingGPSRequired: 'Enabling GPS is required!',
-    emailRequired: 'Email address is invalid!',
+    emailRequired: 'Email address is required!',
+    emailInvalidFormat: 'Email address is invalid!',
     claimAmountRequired: 'Claim amount is required!',
     maxClaimAmountRequired: 'Max claim amount is required!',
     incrementalIntervalRequired: 'Incremental interval is required!',
@@ -288,6 +289,8 @@ export default {
     tooManyResults: 'Too many results! Improve your search.',
     stories: 'Stories',
     reportAsInapropriated: 'Report as inapropriate',
+    reportInapropriateSuccess: 'Your report was successfully submitted.',
+    deleteSuccess: 'Your story was successfully deleted.',
     reportInapropriateWarning:
         'Are you sure you want to report this story as inapropriate?',
     viewAll: 'View All',
