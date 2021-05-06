@@ -31,6 +31,7 @@ function StoriesScreen() {
         setRefreshing(false);
     }, []);
 
+    console.log({ stories });
     function createRows(data: ICommunityStoriesBox[], columns: number) {
         // console.log('data', data);
         const rows = Math.floor(data.length / columns); // [A]

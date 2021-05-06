@@ -42,8 +42,6 @@ export default function Container({
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
     const dimensions = useWindowDimensions();
 
-    console.log({ story });
-
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
@@ -51,6 +49,8 @@ export default function Container({
     const communityMetadata = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
+
+    console.log({ communityMetadata });
 
     const navigation = useNavigation();
 
