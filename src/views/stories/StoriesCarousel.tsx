@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import Carousel from './Carousel';

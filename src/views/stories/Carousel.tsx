@@ -127,7 +127,11 @@ function Carousel(props: {
                 backgroundColor: '#73839D',
             }}
         >
-            <Container community={communityStories} story={stories[index]} />
+            <Container
+                communityId={props.communityId}
+                community={communityStories}
+                story={stories[index]}
+            />
 
             <View
                 style={{

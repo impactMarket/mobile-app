@@ -27,11 +27,13 @@ import CarouselSlide from './CarouselSlide';
 export default function Container({
     story,
     community,
+    communityId,
 }: // media,
 // message,
 {
     community: ICommunityStories;
     story: ICommunityStory;
+    communityId: number;
     // media: AppMediaContent | null;
     // message: string | null;
 }) {
@@ -44,7 +46,12 @@ export default function Container({
         (state: IRootState) => state.user.wallet.address
     );
 
-    console.log({ userAddress });
+    const communityMetadata = useSelector(
+        (state: IRootState) => state.user.community.metadata
+    );
+
+    console.log({ communityMetadata });
+
     const navigation = useNavigation();
 
     const titleStyle: StyleProp<TextStyle> = {
@@ -166,74 +173,81 @@ export default function Container({
                                 hasCloseBtn
                             >
                                 <>
-                                    <Pressable
-                                        style={{
-                                            flexDirection: 'row',
-                                            width: '100%',
-                                            alignItems: 'center',
-                                            justifyContent: 'flex-start',
-                                            marginLeft: 24,
-                                            marginVertical: 12,
-                                        }}
-                                        hitSlop={15}
-                                        onPress={() => {
-                                            Alert.alert(
-                                                i18n.t('delete'),
-                                                i18n.t('deleteWarning'),
-                                                [
-                                                    {
-                                                        text: i18n.t('cancel'),
-                                                        onPress: () =>
-                                                            console.log(
-                                                                'Cancel Pressed'
-                                                            ),
-                                                        style: 'cancel',
-                                                    },
-                                                    {
-                                                        text: i18n.t('confirm'),
-                                                        onPress: () =>
-                                                            Api.story
-                                                                .remove(
-                                                                    story.id
-                                                                )
-                                                                .then(() =>
-                                                                    Alert.alert(
-                                                                        i18n.t(
-                                                                            'success'
-                                                                        ),
-                                                                        i18n.t(
-                                                                            'deleteSuccess'
-                                                                        ),
-                                                                        [
-                                                                            {
-                                                                                text: i18n.t(
-                                                                                    'close'
-                                                                                ),
-                                                                                onPress: () =>
-                                                                                    navigation.navigate(
-                                                                                        Screens.Communities
-                                                                                    ),
-                                                                            },
-                                                                        ]
-                                                                    )
-                                                                ),
-                                                    },
-                                                ]
-                                            );
-                                        }}
-                                    >
-                                        <DeleteSvg />
-                                        <Text
+                                    {communityId === communityMetadata.id && (
+                                        <Pressable
                                             style={{
-                                                marginLeft: 13.4,
-                                                fontFamily: 'Manrope-Bold',
-                                                fontSize: 17,
-                                                letterSpacing: 0.7,
+                                                flexDirection: 'row',
+                                                width: '100%',
+                                                alignItems: 'center',
+                                                justifyContent: 'flex-start',
+                                                marginLeft: 24,
+                                                marginVertical: 12,
+                                            }}
+                                            hitSlop={15}
+                                            onPress={() => {
+                                                Alert.alert(
+                                                    i18n.t('delete'),
+                                                    i18n.t('deleteWarning'),
+                                                    [
+                                                        {
+                                                            text: i18n.t(
+                                                                'cancel'
+                                                            ),
+                                                            onPress: () =>
+                                                                console.log(
+                                                                    'Cancel Pressed'
+                                                                ),
+                                                            style: 'cancel',
+                                                        },
+                                                        {
+                                                            text: i18n.t(
+                                                                'confirm'
+                                                            ),
+                                                            onPress: () =>
+                                                                Api.story
+                                                                    .remove(
+                                                                        story.id
+                                                                    )
+                                                                    .then(() =>
+                                                                        Alert.alert(
+                                                                            i18n.t(
+                                                                                'success'
+                                                                            ),
+                                                                            i18n.t(
+                                                                                'deleteSuccess'
+                                                                            ),
+                                                                            [
+                                                                                {
+                                                                                    text: i18n.t(
+                                                                                        'close'
+                                                                                    ),
+                                                                                    onPress: () =>
+                                                                                        navigation.navigate(
+                                                                                            Screens.Communities
+                                                                                        ),
+                                                                                },
+                                                                            ]
+                                                                        )
+                                                                    ),
+                                                        },
+                                                    ]
+                                                );
                                             }}
                                         >
-                                            {i18n.t('delete')}
-                                        </Text>
-                                    </Pressable>
+                                            <DeleteSvg />
+                                            <Text
+                                                style={{
+                                                    marginLeft: 13.4,
+                                                    fontFamily: 'Manrope-Bold',
+                                                    fontSize: 17,
+                                                    letterSpacing: 0.7,
+                                                }}
+                                            >
+                                                {i18n.t('delete')}
+                                            </Text>
+                                        </Pressable>
+                                    )}
+
                                     <Pressable
                                         style={{
                                             flexDirection: 'row',
