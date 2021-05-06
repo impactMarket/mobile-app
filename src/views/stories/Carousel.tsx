@@ -6,7 +6,7 @@ import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Screens } from 'helpers/constants';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
+import { IRootState, IStoriesState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import {
     View,
@@ -32,14 +32,13 @@ function Carousel(props: {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+    const myStories = useSelector((state: IStoriesState) => state.myStories);
+
+    console.log(myStories);
+
     const [index, setIndex] = useState(0);
     const [stories, setStories] = useState<ICommunityStory[]>([]);
     const [lovedStories, setLovedStories] = useState<boolean[]>([]);
-    // const [country, setCountry] = useState('');
-    // const [city, setCity] = useState('');
-    // const [name, setName] = useState('');
-    // const [coverImage, setCoverImage] = useState('');
-    // const [communityId, setCommunityId] = useState(0);
     const [
         communityStories,
         setCommunityStories,
@@ -49,22 +48,21 @@ function Carousel(props: {
     const togglePopup = () => setOpenPopup(!openPopup);
 
     useEffect(() => {
-        Api.story
-            .getByCommunity(props.communityId, userAddress.length > 0)
-            .then((s) => {
-                // setName(s.name);
-                // setCity(s.city);
-                // setCountry(s.country);
-                // setCoverImage(s.coverImage);
-                // setCommunityId(s.id);
-                setCommunityStories(s);
-                setStories(s.stories);
-                if (userAddress.length > 0) {
-                    setLovedStories(s.stories.map((ss) => ss.userLoved));
-                } else {
-                    setLovedStories(Array(s.stories.length).fill(false));
-                }
-            });
+        if (myStories?.length > 0) {
+            setStories(myStories);
+        } else {
+            Api.story
+                .getByCommunity(props.communityId, userAddress.length > 0)
+                .then((s) => {
+                    setCommunityStories(s);
+                    setStories(s.stories);
+                    if (userAddress.length > 0) {
+                        setLovedStories(s.stories.map((ss) => ss.userLoved));
+                    } else {
+                        setLovedStories(Array(s.stories.length).fill(false));
+                    }
+                });
+        }
     }, []);
 
     const handlePressPrevious = () => {
@@ -108,14 +106,6 @@ function Carousel(props: {
             </View>
         );
     }
-    // const story: ICommunityStories = {
-    //     coverImage,
-    //     name,
-    //     country,
-    //     city,
-    //     id: communityId,
-    //     cover,
-    // };
 
     return (
         <View

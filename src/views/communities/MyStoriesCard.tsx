@@ -1,11 +1,23 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
+import { addMyStoriesToState } from 'helpers/redux/actions/stories';
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
+import { useDispatch } from 'react-redux';
+import Api from 'services/api';
 
 export default function MyStoriesCard() {
     const navigation = useNavigation();
+
+    const dispatch = useDispatch();
+
+    const fetchMyStories = async () => {
+        await Api.story.me().then((s) => {
+            dispatch(addMyStoriesToState(s.stories));
+        });
+    };
+
     return (
         <Pressable
             style={{
@@ -13,11 +25,11 @@ export default function MyStoriesCard() {
                 height: 53.0,
                 marginRight: 11.84,
             }}
-            onPress={() =>
-                navigation.navigate(Screens.Stories, {
-                    caller: 'MY_STORIES',
-                })
-            }
+            onPress={() => {
+                fetchMyStories().then(() =>
+                    navigation.navigate(Screens.Carousel)
+                );
+            }}
         >
             <View
                 style={{

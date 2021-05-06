@@ -1,25 +1,17 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Headline, Text, Paragraph } from 'react-native-paper';
-import { useDispatch } from 'react-redux';
-// components
+import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import WarningRedCircle from 'components/svg/WarningRedCircle';
-
-// redux Actions
 import {
     setAppHasManagerAcceptedTerms,
     setAppHasBeneficiaryAcceptedTerms,
 } from 'helpers/redux/actions/app';
-
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Headline, Text, Paragraph } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 // services
 import CacheStore from 'services/cacheStore';
-
-// translation
-import i18n from 'assets/i18n';
-
-// colors
 import { ipctColors } from 'styles/index';
 
 function CommunityRules({ caller }) {

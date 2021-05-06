@@ -4,6 +4,7 @@ import { IStoriesState } from 'helpers/types/state';
 
 const INITIAL_STATE_STORIES: IStoriesState = {
     stories: [],
+    myStories: [],
 };
 
 export const storiesReducer = (
@@ -19,6 +20,11 @@ export const storiesReducer = (
         case storiesAction.CONCAT:
             return {
                 stories: state.stories.concat(action.payload),
+            };
+
+        case storiesAction.USER_STORIES:
+            return {
+                myStories: action.payload,
             };
 
         default:
