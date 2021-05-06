@@ -23,6 +23,7 @@ function SubmitCommunity(props: { submit: () => void; submitting: boolean }) {
                 }}
                 onPress={props.submit}
                 loading={props.submitting}
+                disabled={props.submitting}
             >
                 {i18n.t('submit')}
             </Button>
