@@ -7,6 +7,7 @@ import ReportInapropriateSvg from 'components/svg/ReportInapropriateSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
 import { Screens } from 'helpers/constants';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
 import {
     View,
@@ -18,6 +19,7 @@ import {
     TextStyle,
     useWindowDimensions,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import Api from 'services/api';
 
 import CarouselSlide from './CarouselSlide';
@@ -38,6 +40,11 @@ export default function Container({
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
     const dimensions = useWindowDimensions();
 
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
+
+    console.log({ userAddress });
     const navigation = useNavigation();
 
     const titleStyle: StyleProp<TextStyle> = {
@@ -96,7 +103,7 @@ export default function Container({
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            width: '80%',
+                            flex: 1,
                         }}
                     >
                         <Image
@@ -142,152 +149,164 @@ export default function Container({
                             </Text>
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <ThreeDotsSvg
-                            setOpenThreeDotsMenu={setOpenThreeDotsMenu}
-                            openThreeDotsMenu={openThreeDotsMenu}
-                            style={{ marginHorizontal: 6 }}
-                            title={i18n.t('story')}
-                            titleStyle={titleStyle}
-                            hasCloseBtn
-                        >
-                            <>
-                                <Pressable
-                                    style={{
-                                        flexDirection: 'row',
-                                        width: '100%',
-                                        alignItems: 'center',
-                                        justifyContent: 'flex-start',
-                                        marginLeft: 24,
-                                        marginVertical: 12,
-                                    }}
-                                    hitSlop={15}
-                                    onPress={() => {
-                                        Alert.alert(
-                                            i18n.t('delete'),
-                                            i18n.t('deleteWarning'),
-                                            [
-                                                {
-                                                    text: i18n.t('cancel'),
-                                                    onPress: () =>
-                                                        console.log(
-                                                            'Cancel Pressed'
-                                                        ),
-                                                    style: 'cancel',
-                                                },
-                                                {
-                                                    text: i18n.t('confirm'),
-                                                    onPress: () =>
-                                                        Api.story
-                                                            .remove(story.id)
-                                                            .then(() =>
-                                                                Alert.alert(
-                                                                    i18n.t(
-                                                                        'success'
-                                                                    ),
-                                                                    i18n.t(
-                                                                        'deleteSuccess'
-                                                                    ),
-                                                                    [
-                                                                        {
-                                                                            text: i18n.t(
-                                                                                'close'
-                                                                            ),
-                                                                            onPress: () =>
-                                                                                navigation.navigate(
-                                                                                    Screens.Communities
-                                                                                ),
-                                                                        },
-                                                                    ]
-                                                                )
-                                                            ),
-                                                },
-                                            ]
-                                        );
-                                    }}
-                                >
-                                    <DeleteSvg />
-                                    <Text
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignSelf: 'center',
+                        }}
+                    >
+                        {userAddress.length > 0 && (
+                            <ThreeDotsSvg
+                                setOpenThreeDotsMenu={setOpenThreeDotsMenu}
+                                openThreeDotsMenu={openThreeDotsMenu}
+                                style={{ marginHorizontal: 6 }}
+                                title={i18n.t('story')}
+                                titleStyle={titleStyle}
+                                hasCloseBtn
+                            >
+                                <>
+                                    <Pressable
                                         style={{
-                                            marginLeft: 13.4,
-                                            fontFamily: 'Manrope-Bold',
-                                            fontSize: 17,
-                                            letterSpacing: 0.7,
+                                            flexDirection: 'row',
+                                            width: '100%',
+                                            alignItems: 'center',
+                                            justifyContent: 'flex-start',
+                                            marginLeft: 24,
+                                            marginVertical: 12,
+                                        }}
+                                        hitSlop={15}
+                                        onPress={() => {
+                                            Alert.alert(
+                                                i18n.t('delete'),
+                                                i18n.t('deleteWarning'),
+                                                [
+                                                    {
+                                                        text: i18n.t('cancel'),
+                                                        onPress: () =>
+                                                            console.log(
+                                                                'Cancel Pressed'
+                                                            ),
+                                                        style: 'cancel',
+                                                    },
+                                                    {
+                                                        text: i18n.t('confirm'),
+                                                        onPress: () =>
+                                                            Api.story
+                                                                .remove(
+                                                                    story.id
+                                                                )
+                                                                .then(() =>
+                                                                    Alert.alert(
+                                                                        i18n.t(
+                                                                            'success'
+                                                                        ),
+                                                                        i18n.t(
+                                                                            'deleteSuccess'
+                                                                        ),
+                                                                        [
+                                                                            {
+                                                                                text: i18n.t(
+                                                                                    'close'
+                                                                                ),
+                                                                                onPress: () =>
+                                                                                    navigation.navigate(
+                                                                                        Screens.Communities
+                                                                                    ),
+                                                                            },
+                                                                        ]
+                                                                    )
+                                                                ),
+                                                    },
+                                                ]
+                                            );
                                         }}
                                     >
-                                        {i18n.t('delete')}
-                                    </Text>
-                                </Pressable>
-                                <Pressable
-                                    style={{
-                                        flexDirection: 'row',
-                                        width: '100%',
-                                        alignItems: 'center',
-                                        justifyContent: 'flex-start',
-                                        marginLeft: 24,
-                                        marginVertical: 12,
-                                    }}
-                                    hitSlop={15}
-                                    onPress={() => {
-                                        Alert.alert(
-                                            i18n.t('reportAsInapropriated'),
-                                            i18n.t('reportInapropriateWarning'),
-                                            [
-                                                {
-                                                    text: i18n.t('cancel'),
-                                                    onPress: () =>
-                                                        console.log(
-                                                            'Cancel Pressed'
-                                                        ),
-                                                    style: 'cancel',
-                                                },
-                                                {
-                                                    text: i18n.t('confirm'),
-                                                    onPress: () =>
-                                                        Api.story
-                                                            .inapropriate(
-                                                                story.id
-                                                            )
-                                                            .then(() =>
-                                                                Alert.alert(
-                                                                    i18n.t(
-                                                                        'success'
-                                                                    ),
-                                                                    i18n.t(
-                                                                        'reportInapropriateSuccess'
-                                                                    ),
-                                                                    [
-                                                                        {
-                                                                            text: i18n.t(
-                                                                                'close'
-                                                                            ),
-                                                                            onPress: () =>
-                                                                                navigation.navigate(
-                                                                                    Screens.Communities
-                                                                                ),
-                                                                        },
-                                                                    ]
-                                                                )
-                                                            ),
-                                                },
-                                            ]
-                                        );
-                                    }}
-                                >
-                                    <ReportInapropriateSvg />
-                                    <Text
+                                        <DeleteSvg />
+                                        <Text
+                                            style={{
+                                                marginLeft: 13.4,
+                                                fontFamily: 'Manrope-Bold',
+                                                fontSize: 17,
+                                                letterSpacing: 0.7,
+                                            }}
+                                        >
+                                            {i18n.t('delete')}
+                                        </Text>
+                                    </Pressable>
+                                    <Pressable
                                         style={{
-                                            marginLeft: 13.4,
-                                            fontFamily: 'Manrope-Bold',
-                                            fontSize: 17,
-                                            letterSpacing: 0.7,
+                                            flexDirection: 'row',
+                                            width: '100%',
+                                            alignItems: 'center',
+                                            justifyContent: 'flex-start',
+                                            marginLeft: 24,
+                                            marginVertical: 12,
+                                        }}
+                                        hitSlop={15}
+                                        onPress={() => {
+                                            Alert.alert(
+                                                i18n.t('reportAsInapropriated'),
+                                                i18n.t(
+                                                    'reportInapropriateWarning'
+                                                ),
+                                                [
+                                                    {
+                                                        text: i18n.t('cancel'),
+                                                        onPress: () =>
+                                                            console.log(
+                                                                'Cancel Pressed'
+                                                            ),
+                                                        style: 'cancel',
+                                                    },
+                                                    {
+                                                        text: i18n.t('confirm'),
+                                                        onPress: () =>
+                                                            Api.story
+                                                                .inapropriate(
+                                                                    story.id
+                                                                )
+                                                                .then(() =>
+                                                                    Alert.alert(
+                                                                        i18n.t(
+                                                                            'success'
+                                                                        ),
+                                                                        i18n.t(
+                                                                            'reportInapropriateSuccess'
+                                                                        ),
+                                                                        [
+                                                                            {
+                                                                                text: i18n.t(
+                                                                                    'close'
+                                                                                ),
+                                                                                onPress: () =>
+                                                                                    navigation.navigate(
+                                                                                        Screens.Communities
+                                                                                    ),
+                                                                            },
+                                                                        ]
+                                                                    )
+                                                                ),
+                                                    },
+                                                ]
+                                            );
                                         }}
                                     >
-                                        {i18n.t('reportAsInapropriated')}
-                                    </Text>
-                                </Pressable>
-                            </>
-                        </ThreeDotsSvg>
+                                        <ReportInapropriateSvg />
+                                        <Text
+                                            style={{
+                                                marginLeft: 13.4,
+                                                fontFamily: 'Manrope-Bold',
+                                                fontSize: 17,
+                                                letterSpacing: 0.7,
+                                            }}
+                                        >
+                                            {i18n.t('reportAsInapropriated')}
+                                        </Text>
+                                    </Pressable>
+                                </>
+                            </ThreeDotsSvg>
+                        )}
                         <Pressable
                             hitSlop={15}
                             onPress={() => navigation.goBack()}

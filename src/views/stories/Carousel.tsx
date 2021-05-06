@@ -127,12 +127,7 @@ function Carousel(props: {
                 backgroundColor: '#73839D',
             }}
         >
-            <Container
-                // media={stories[index].media && stories[index].media}
-                // message={stories[index].message && stories[index].message}
-                community={communityStories}
-                story={stories[index]}
-            />
+            <Container community={communityStories} story={stories[index]} />
 
             <View
                 style={{
