@@ -113,7 +113,7 @@ class ApiRouteCommunity {
     static async create(
         details: CommunityCreationAttributes
     ): Promise<ICommunity | undefined> {
-        return await postRequest<ICommunity>('/community/create', details);
+        return (await postRequest<any>('/community/create', details)).data; // this is using a new endpoint
     }
 
     static async getRequestChangeUbi(
