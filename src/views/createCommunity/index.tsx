@@ -11,13 +11,16 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { celoNetwork, imageTargets } from 'helpers/constants';
+import { celoNetwork, imageTargets, Screens } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     amountToCurrency,
 } from 'helpers/currency';
 import { validateEmail, updateCommunityInfo } from 'helpers/index';
-import { setUserIsCommunityManager } from 'helpers/redux/actions/user';
+import {
+    setCommunityMetadata,
+    setUserIsCommunityManager,
+} from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, {
@@ -53,7 +56,7 @@ import {
 } from 'react-native-paper';
 import EIcon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector, useStore } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -86,6 +89,7 @@ const currencies: {
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
+    // const store = useStore();
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
@@ -99,6 +103,12 @@ function CreateCommunityScreen() {
         (state: IRootState) => state.user.metadata.language
     );
 
+    const userIsManager = useSelector(
+        (state: IRootState) => state.user.community.isManager
+    );
+    const userCommunity = useSelector(
+        (state: IRootState) => state.user.community.metadata
+    );
     const avatar = useSelector(
         (state: IRootState) => state.user.metadata.avatar
     );
@@ -218,6 +228,13 @@ function CreateCommunityScreen() {
         renderAvailableCurrencies();
     }, []);
 
+    useEffect(() => {
+        if (userCommunity !== undefined && userIsManager === true) {
+            navigation.goBack();
+            navigation.navigate(Screens.CommunityManager);
+        }
+    }, [userIsManager, userCommunity]);
+
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         const CommunityContract = new kit.web3.eth.Contract(
@@ -258,6 +275,7 @@ function CreateCommunityScreen() {
         const _isCoverImageValid = coverImage.length > 0;
         if (!_isCoverImageValid) {
             setIsCoverImageValid(false);
+            return;
         }
         //TODO: Will be added in later version
         // const _isProfileImageValid = profileImage.length > 0;
@@ -273,40 +291,49 @@ function CreateCommunityScreen() {
         const _isNameValid = name.length > 0;
         if (!_isNameValid) {
             setIsNameValid(false);
+            return;
         }
         const _isDescriptionValid = description.length > 0;
         if (!_isDescriptionValid) {
             setIsDescriptionValid(false);
+            return;
         }
         const _isCityValid = city.length > 0;
         if (!_isCityValid) {
             setIsCityValid(false);
+            return;
         }
         const _isCountryValid = country.length > 0;
         if (!_isCountryValid) {
             setIsCountryValid(false);
+            return;
         }
         const _isEmailValid = validateEmail(email);
         if (!_isEmailValid) {
             setIsEmailValid(false);
+            return;
         }
         const _isEnabledGPS = gpsLocation !== undefined;
         if (!_isEnabledGPS) {
             setIsEnabledGPS(false);
+            return;
         }
         const _isClaimAmountValid =
             claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
         if (!_isClaimAmountValid) {
             setIsClaimAmountValid(false);
+            return;
         }
         const _isIncrementalIntervalValid = incrementInterval.length > 0;
         if (!_isIncrementalIntervalValid) {
             setIsIncrementalIntervalValid(false);
+            return;
         }
         const _isMaxClaimValid =
             maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
         if (!_isMaxClaimValid) {
             setIsMaxClaimValid(false);
+            return;
         }
 
         const isSubmitAvailable =
@@ -419,7 +446,15 @@ function CreateCommunityScreen() {
                         communityApiRequestResult.publicId,
                         dispatch
                     );
-                    dispatch(setUserIsCommunityManager(true));
+                    const community = await Api.community.getByPublicId(
+                        communityApiRequestResult.publicId
+                    );
+                    if (community !== undefined) {
+                        batch(() => {
+                            dispatch(setCommunityMetadata(community));
+                            dispatch(setUserIsCommunityManager(true));
+                        });
+                    }
                 }
             } else {
                 Alert.alert(
@@ -495,8 +530,8 @@ function CreateCommunityScreen() {
     ) => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
+            // allowsEditing: true,
+            // aspect: [1, 1],
             quality: 1,
         });
 
@@ -884,7 +919,7 @@ function CreateCommunityScreen() {
                                     </HelperText>
                                 )}
                             </View>
-                            {coverImage ? (
+                            {coverImage.length > 0 ? (
                                 <View style={{ flex: 1 }}>
                                     <Image
                                         style={{
@@ -958,7 +993,7 @@ function CreateCommunityScreen() {
                                     </TouchableOpacity>
                                 </View>
                             )}
-                            {profileImage ? (
+                            {profileImage.length > 0 ? (
                                 <View style={styles.uploadFilledContainer}>
                                     <CloseStorySvg
                                         style={{
