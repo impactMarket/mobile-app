@@ -41,7 +41,7 @@ export default function Container({
     // message: string | null;
 }) {
     const { cover, name, country, city } = community;
-    const { media, message } = story;
+    const { media, message, byAddress } = story;
     const [openThreeDotsMenu, setOpenThreeDotsMenu] = useState(false);
     const dimensions = useWindowDimensions();
 
@@ -194,7 +194,7 @@ export default function Container({
                                 hasCloseBtn
                             >
                                 <>
-                                    {communityId === communityMetadata.id && (
+                                    {byAddress === userAddress && (
                                         <Pressable
                                             style={{
                                                 flexDirection: 'row',
