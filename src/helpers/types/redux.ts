@@ -26,7 +26,11 @@ import {
     storiesAction,
 } from 'helpers/constants';
 
-import { ICommunitiesListStories, ICommunity } from './endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunity,
+    ICommunityStory,
+} from './endpoints';
 import { UserAttributes } from './models';
 import { IUserWallet } from './state';
 
@@ -160,6 +164,11 @@ interface InitLoadStoriesAction {
     payload: ICommunitiesListStories[];
 }
 
+interface LoadMyStoriesAction {
+    type: typeof storiesAction.USER_STORIES;
+    payload: ICommunityStory[];
+}
+
 interface LoadMoreStoriesAction {
     type: typeof storiesAction.CONCAT;
     payload: ICommunitiesListStories[];
@@ -206,7 +215,10 @@ export type ModalActionTypes =
     | InProgressModalDonateAction
     | CloseModalDonateAction;
 
-export type StoriesActionTypes = InitLoadStoriesAction | LoadMoreStoriesAction;
+export type StoriesActionTypes =
+    | InitLoadStoriesAction
+    | LoadMoreStoriesAction
+    | LoadMyStoriesAction;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes

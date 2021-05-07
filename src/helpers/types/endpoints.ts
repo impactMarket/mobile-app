@@ -143,11 +143,11 @@ export interface ICommunitiesListStories {
 
 export interface ICommunityStories {
     id: number;
-    // publicId: string; // temporary
     name: string;
+    cover: AppMediaContent;
+    stories: ICommunityStory[];
+    // publicId: string; // temporary
     city: string;
     country: string;
     // coverImage: string;
-    cover: AppMediaContent;
-    stories: ICommunityStory[];
 }

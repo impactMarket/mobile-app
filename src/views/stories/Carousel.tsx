@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BottomPopup from 'components/core/BottomPopup';
 import Button from 'components/core/Button';
@@ -6,7 +6,7 @@ import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Screens } from 'helpers/constants';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
+import { IRootState, ICallerRouteParams } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import {
     View,
@@ -14,6 +14,7 @@ import {
     Pressable,
     Alert,
     useWindowDimensions,
+    StyleSheet,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -32,14 +33,18 @@ function Carousel(props: {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+
+    const myStories = useSelector(
+        (state: IRootState) => state.stories.myStories
+    );
+
+    const route = useRoute<
+        RouteProp<Record<string, ICallerRouteParams>, string>
+    >();
+
     const [index, setIndex] = useState(0);
     const [stories, setStories] = useState<ICommunityStory[]>([]);
     const [lovedStories, setLovedStories] = useState<boolean[]>([]);
-    // const [country, setCountry] = useState('');
-    // const [city, setCity] = useState('');
-    // const [name, setName] = useState('');
-    // const [coverImage, setCoverImage] = useState('');
-    // const [communityId, setCommunityId] = useState(0);
     const [
         communityStories,
         setCommunityStories,
@@ -47,16 +52,73 @@ function Carousel(props: {
     const [openPopup, setOpenPopup] = useState(false);
 
     const togglePopup = () => setOpenPopup(!openPopup);
+    const { caller } = route.params;
 
+    const renderEmptyStories = () => {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '90%',
+                    alignSelf: 'center',
+                }}
+            >
+                <Text style={styles.title}>{i18n.t('emptyStoriesTitle')}</Text>
+                <Text style={styles.text}>
+                    {i18n.t('emptyStoriesDescription')}
+                </Text>
+                <Pressable
+                    style={{
+                        width: '80%',
+                        height: 44,
+                        marginTop: 24,
+                    }}
+                    onPress={() => navigation.navigate(Screens.NewStory)}
+                >
+                    <View
+                        style={{
+                            backgroundColor: ipctColors.blueRibbon,
+                            borderRadius: 6,
+                            shadowColor: '#E1E4E7',
+                            shadowOffset: {
+                                width: 0,
+                                height: 2,
+                            },
+                            shadowOpacity: 14,
+                            elevation: 4,
+                            width: '100%',
+                            height: '100%',
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontFamily: 'Gelion-Bold',
+                                fontSize: 13,
+                                lineHeight: 16,
+                                color: ipctColors.white,
+                            }}
+                        >
+                            {i18n.t('createStory')}
+                        </Text>
+                    </View>
+                </Pressable>
+            </View>
+        );
+    };
     useEffect(() => {
+        // if (caller === 'MY_STORIES' && myStories?.length > 0) {
+        //     setStories(myStories);
+        // } else {
+        //     !caller &&
         Api.story
             .getByCommunity(props.communityId, userAddress.length > 0)
             .then((s) => {
-                // setName(s.name);
-                // setCity(s.city);
-                // setCountry(s.country);
-                // setCoverImage(s.coverImage);
-                // setCommunityId(s.id);
                 setCommunityStories(s);
                 setStories(s.stories);
                 if (userAddress.length > 0) {
@@ -65,6 +127,7 @@ function Carousel(props: {
                     setLovedStories(Array(s.stories.length).fill(false));
                 }
             });
+        // }
     }, []);
 
     const handlePressPrevious = () => {
@@ -83,8 +146,7 @@ function Carousel(props: {
         }
     };
 
-    // if (true) {
-    if (stories.length === 0 || communityStories === undefined) {
+    if (stories.length === 0) {
         return (
             <View
                 style={{
@@ -108,15 +170,10 @@ function Carousel(props: {
             </View>
         );
     }
-    // const story: ICommunityStories = {
-    //     coverImage,
-    //     name,
-    //     country,
-    //     city,
-    //     id: communityId,
-    //     cover,
-    // };
 
+    // return caller === 'MY_STORIES' && stories.length === 0 ? (
+    //     renderEmptyStories()
+    // ) :
     return (
         <View
             style={{
@@ -129,7 +186,18 @@ function Carousel(props: {
         >
             <Container
                 communityId={props.communityId}
-                community={communityStories}
+                community={
+                    communityStories
+                        ? communityStories
+                        : {
+                              id: 0,
+                              cover: { url: '', id: 0, height: 0, width: 0 },
+                              name: '',
+                              country: '',
+                              city: '',
+                              stories: [],
+                          }
+                }
                 story={stories[index]}
             />
 
@@ -210,14 +278,14 @@ function Carousel(props: {
                             {stories[index].loves} Loves
                         </Text>
                     </Pressable>
-                    {communityStories.id !== -1 && (
+                    {communityStories?.id !== -1 && (
                         <Button
                             modeType="green"
                             bold
                             style={{ marginRight: 22, width: 158 }}
                             onPress={() =>
                                 navigation.navigate(Screens.CommunityDetails, {
-                                    communityId: communityStories.id,
+                                    communityId: communityStories?.id,
                                     openDonate: true,
                                 })
                             }
@@ -296,4 +364,39 @@ function Carousel(props: {
     );
 }
 
+Carousel.navigationOptions = () => {
+    return {
+        headerShown: false,
+    };
+};
+
 export default Carousel;
+
+const styles = StyleSheet.create({
+    itemEmpty: {
+        backgroundColor: 'transparent',
+    },
+    item: {
+        backgroundColor: '#dcda48',
+        flexGrow: 1,
+        flexBasis: 0,
+        height: 167,
+        borderRadius: 8,
+    },
+    title: {
+        fontFamily: 'Manrope-Regular',
+        fontSize: 22,
+        fontWeight: '800',
+        lineHeight: 28,
+        textAlign: 'center',
+        color: '#172032',
+    },
+    text: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        fontWeight: '400',
+        lineHeight: 24,
+        textAlign: 'center',
+        color: '#172032',
+    },
+});

@@ -1,9 +1,8 @@
-import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
-import { ICallerRouteParams } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
@@ -17,11 +16,6 @@ interface ICommunityStoriesBox extends ICommunitiesListStories {
 
 function StoriesScreen() {
     const navigation = useNavigation();
-    const route = useRoute<
-        RouteProp<Record<string, ICallerRouteParams>, string>
-    >();
-
-    const { caller } = route.params;
 
     const [stories, setStories] = useState<ICommunityStoriesBox[]>([]);
 
@@ -29,41 +23,13 @@ function StoriesScreen() {
 
     useEffect(() => {
         setRefreshing(true);
-        if (caller !== 'MY_STORIES') {
-            Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-                setStories(s);
-            });
-        } else {
-            navigation.setOptions({
-                headerTitle: i18n.t('myStories'),
-            });
-            Api.story.me<ICommunityStoriesBox[]>().then((s) => {
-                setStories(s);
-            });
-        }
+
+        Api.story.list<ICommunityStoriesBox[]>().then((s) => {
+            setStories(s);
+        });
+
         setRefreshing(false);
     }, []);
-
-    console.log({ stories });
-    function createRows(data: ICommunityStoriesBox[], columns: number) {
-        // console.log('data', data);
-        const rows = Math.floor(data.length / columns); // [A]
-        let lastRowElements = data.length - rows * columns; // [B]
-        while (lastRowElements !== columns) {
-            // [C]
-            data.push({
-                // [D]
-                id: lastRowElements,
-                name: `empty-${lastRowElements}`,
-                empty: true,
-                story: {} as any, // empty on purpose
-                cover: {} as any, // empty on purpose
-            });
-            lastRowElements += 1; // [E]
-        }
-        // console.log(data);
-        return data; // [F]
-    }
 
     if (refreshing) {
         return (
@@ -74,39 +40,7 @@ function StoriesScreen() {
             />
         );
     }
-
-    return stories.length > 0 ? (
-        <FlatList
-            data={stories}
-            style={{
-                marginHorizontal: 12,
-            }}
-            contentContainerStyle={
-                {
-                    // alignItems: 'flex-start',
-                }
-            }
-            keyExtractor={(item) => item.name}
-            numColumns={3} // Número de colunas
-            renderItem={({ item }) => {
-                if (item.empty) {
-                    return <View style={[styles.item, styles.itemEmpty]} />;
-                }
-                return (
-                    <StoriesCard
-                        key={item.id}
-                        communityId={item.id}
-                        communityName={item.name}
-                        imageURI={
-                            item.story?.media
-                                ? item.story.media.url
-                                : item.cover?.url
-                        }
-                    />
-                );
-            }}
-        />
-    ) : (
+    return refreshing && stories.length === 0 ? (
         <View
             style={{
                 flex: 1,
@@ -158,6 +92,37 @@ function StoriesScreen() {
                 </View>
             </Pressable>
         </View>
+    ) : (
+        <FlatList
+            data={stories}
+            style={{
+                marginHorizontal: 12,
+            }}
+            contentContainerStyle={
+                {
+                    // alignItems: 'flex-start',
+                }
+            }
+            keyExtractor={(item) => item.name}
+            numColumns={3} // Número de colunas
+            renderItem={({ item }) => {
+                if (item.empty) {
+                    return <View style={[styles.item, styles.itemEmpty]} />;
+                }
+                return (
+                    <StoriesCard
+                        key={item.id}
+                        communityId={item.id}
+                        communityName={item.name}
+                        imageURI={
+                            item.story?.media
+                                ? item.story.media.url
+                                : item.cover?.url
+                        }
+                    />
+                );
+            }}
+        />
     );
 }
 

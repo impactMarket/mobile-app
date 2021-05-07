@@ -1,5 +1,8 @@
 import { storiesAction } from 'helpers/constants';
-import { ICommunitiesListStories } from 'helpers/types/endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunityStory,
+} from 'helpers/types/endpoints';
 import { StoriesActionTypes } from 'helpers/types/redux';
 
 export function addStoriesToState(
@@ -8,5 +11,14 @@ export function addStoriesToState(
     return {
         type: storiesAction.INIT,
         payload: stories,
+    };
+}
+
+export function addMyStoriesToState(
+    myStories: ICommunityStory[]
+): StoriesActionTypes {
+    return {
+        type: storiesAction.USER_STORIES,
+        payload: myStories,
     };
 }

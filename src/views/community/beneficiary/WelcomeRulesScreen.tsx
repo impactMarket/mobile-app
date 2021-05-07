@@ -1,20 +1,16 @@
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import i18n from 'assets/i18n';
+import BaseCommunity from 'components/BaseCommunity';
+import CommunityRules from 'components/core/CommunityRules';
+import { Screens } from 'helpers/constants';
+import { amountToCurrency } from 'helpers/currency';
+import { IRootState, ICallerRouteParams } from 'helpers/types/state';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import i18n from 'assets/i18n';
-
-import BaseCommunity from 'components/BaseCommunity';
-
-import { amountToCurrency } from 'helpers/currency';
-import { IRootState, ICallerRouteParams } from 'helpers/types/state';
-import CommunityRules from 'components/core/CommunityRules';
-
 import { ipctColors } from 'styles/index';
-import { Screens } from 'helpers/constants';
 
 function WelcomeRulesScreen() {
     const navigation = useNavigation();
