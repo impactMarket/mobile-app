@@ -31,26 +31,6 @@ function StoriesScreen() {
         setRefreshing(false);
     }, []);
 
-    function createRows(data: ICommunityStoriesBox[], columns: number) {
-        // console.log('data', data);
-        const rows = Math.floor(data.length / columns); // [A]
-        let lastRowElements = data.length - rows * columns; // [B]
-        while (lastRowElements !== columns) {
-            // [C]
-            data.push({
-                // [D]
-                id: lastRowElements,
-                name: `empty-${lastRowElements}`,
-                empty: true,
-                story: {} as any, // empty on purpose
-                cover: {} as any, // empty on purpose
-            });
-            lastRowElements += 1; // [E]
-        }
-        // console.log(data);
-        return data; // [F]
-    }
-
     if (refreshing) {
         return (
             <ActivityIndicator
@@ -60,39 +40,7 @@ function StoriesScreen() {
             />
         );
     }
-
-    return stories.length > 0 ? (
-        <FlatList
-            data={stories}
-            style={{
-                marginHorizontal: 12,
-            }}
-            contentContainerStyle={
-                {
-                    // alignItems: 'flex-start',
-                }
-            }
-            keyExtractor={(item) => item.name}
-            numColumns={3} // Número de colunas
-            renderItem={({ item }) => {
-                if (item.empty) {
-                    return <View style={[styles.item, styles.itemEmpty]} />;
-                }
-                return (
-                    <StoriesCard
-                        key={item.id}
-                        communityId={item.id}
-                        communityName={item.name}
-                        imageURI={
-                            item.story?.media
-                                ? item.story.media.url
-                                : item.cover?.url
-                        }
-                    />
-                );
-            }}
-        />
-    ) : (
+    return refreshing && stories.length === 0 ? (
         <View
             style={{
                 flex: 1,
@@ -144,6 +92,37 @@ function StoriesScreen() {
                 </View>
             </Pressable>
         </View>
+    ) : (
+        <FlatList
+            data={stories}
+            style={{
+                marginHorizontal: 12,
+            }}
+            contentContainerStyle={
+                {
+                    // alignItems: 'flex-start',
+                }
+            }
+            keyExtractor={(item) => item.name}
+            numColumns={3} // Número de colunas
+            renderItem={({ item }) => {
+                if (item.empty) {
+                    return <View style={[styles.item, styles.itemEmpty]} />;
+                }
+                return (
+                    <StoriesCard
+                        key={item.id}
+                        communityId={item.id}
+                        communityName={item.name}
+                        imageURI={
+                            item.story?.media
+                                ? item.story.media.url
+                                : item.cover?.url
+                        }
+                    />
+                );
+            }}
+        />
     );
 }
 

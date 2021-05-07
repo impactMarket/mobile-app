@@ -125,7 +125,15 @@ export default function Container({
                                 }}
                             />
                         ) : (
-                            <AvatarPlaceholderSvg style={styles.avatar} />
+                            <View
+                                style={{
+                                    height: 48,
+                                    width: 48,
+                                    borderRadius: 24,
+                                }}
+                            >
+                                <AvatarPlaceholderSvg style={styles.avatar} />
+                            </View>
                         )}
 
                         <View
@@ -344,9 +352,9 @@ export default function Container({
 
 const styles = StyleSheet.create({
     avatar: {
-        height: 32,
-        width: 32,
-        borderRadius: 16,
+        height: 48,
+        width: 48,
+        borderRadius: 24,
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 16,
