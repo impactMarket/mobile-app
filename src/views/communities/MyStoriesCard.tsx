@@ -27,7 +27,9 @@ export default function MyStoriesCard() {
             }}
             onPress={() => {
                 fetchMyStories().then(() =>
-                    navigation.navigate(Screens.Carousel)
+                    navigation.navigate(Screens.Carousel, {
+                        caller: 'MY_STORIES',
+                    })
                 );
             }}
         >

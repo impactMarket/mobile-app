@@ -182,7 +182,7 @@ function NewStoryScreen() {
                         >
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.donateLabel}>
-                                    `${submitedResult.loves} Loves`
+                                    {submitedResult.loves} Loves
                                 </Text>
                             </View>
                             <Button
