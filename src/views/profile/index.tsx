@@ -144,7 +144,7 @@ function ProfileScreen() {
             currency,
             gender,
             language,
-            avatar: userAvatarImage,
+            avatar: userAvatarImage, // this does not change
             username: name,
             //TODO: Change these props below to be optional
             blocked: false,
@@ -182,7 +182,26 @@ function ProfileScreen() {
                 imageTargets.PROFILE
             )) as any;
             setSending(false);
-            updateUserMetadataCache();
+            CacheStore.cacheUser({
+                // TODO: we should use the generic method instead
+                address: userWallet.address,
+                year:
+                    age && age.length > 0
+                        ? new Date().getFullYear() - parseInt(age, 10)
+                        : null,
+                children:
+                    children && children.length > 0
+                        ? parseInt(children, 10)
+                        : null,
+                currency,
+                gender,
+                language,
+                avatar: res.data.data.url,
+                username: name,
+                //TODO: Change these props below to be optional
+                blocked: false,
+                suspect: false,
+            });
             dispatch(setUserMetadata({ ...user, avatar: res.data.data.url }));
         } catch (e) {
             Alert.alert(
