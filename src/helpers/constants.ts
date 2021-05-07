@@ -7,6 +7,7 @@ export enum Screens {
     Stories = 'Stories',
     NewStory = 'NewStory',
     StoriesCarousel = 'StoriesCarousel',
+    Carousel = 'Carousel',
     //
     ClaimExplained = 'ClaimExplained',
     AnonymousReport = 'AnonymousReport',
@@ -84,6 +85,7 @@ export enum imageTargets {
 export enum storiesAction {
     INIT = 'stories/init',
     CONCAT = 'stories/concat',
+    USER_STORIES = 'stories/user',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

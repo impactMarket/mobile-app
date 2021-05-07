@@ -1,10 +1,11 @@
+import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
 import { addStoriesToState } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,14 +30,26 @@ export default function Stories() {
         (state: IRootState) => state.user.community
     );
 
-    useEffect(() => {
-        setRefreshing(true);
-        Api.story.list<ICommunitiesListStories[]>().then((s) => {
-            setStoriesCommunity(s);
-            dispatch(addStoriesToState(s));
-            setRefreshing(false);
-        });
-    }, []);
+    // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
+    useFocusEffect(
+        useCallback(() => {
+            setRefreshing(true);
+            Api.story.list<ICommunitiesListStories[]>().then((s) => {
+                setStoriesCommunity(s);
+                dispatch(addStoriesToState(s));
+                setRefreshing(false);
+            });
+        }, [])
+    );
+
+    // useEffect(() => {
+    //     setRefreshing(true);
+    //     Api.story.list<ICommunitiesListStories[]>().then((s) => {
+    //         setStoriesCommunity(s);
+    //         dispatch(addStoriesToState(s));
+    //         setRefreshing(false);
+    //     });
+    // }, []);
 
     return (
         <SafeAreaView>
@@ -92,7 +105,7 @@ export default function Stories() {
                     userCommunityMetadata.metadata.status === 'valid' && (
                         <View style={{ flexDirection: 'column' }}>
                             <NewStoryCard key="newStory" />
-                            <MyStoriesCard />
+                            {/* <MyStoriesCard /> */}
                         </View>
                     )}
                 {refreshing && (

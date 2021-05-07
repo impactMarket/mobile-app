@@ -12,7 +12,7 @@ export default function NewStoriesCard() {
         <Pressable
             style={{
                 width: 98.16,
-                height: 102.16,
+                height: 167,
                 marginRight: 11.84,
                 marginBottom: 11.84,
             }}

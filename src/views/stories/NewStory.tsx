@@ -158,6 +158,7 @@ function NewStoryScreen() {
                             stories: [],
                         }}
                         story={submitedResult}
+                        communityId={userCommunity.id}
                     />
                     <View style={{ width: '100%' }}>
                         <Text
@@ -182,7 +183,7 @@ function NewStoryScreen() {
                         >
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={styles.donateLabel}>
-                                    `${submitedResult.loves} Loves`
+                                    {submitedResult.loves} Loves
                                 </Text>
                             </View>
                             <Button

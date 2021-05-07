@@ -17,6 +17,7 @@ import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBenef
 import CreateCommunityScreen from 'views/createCommunity';
 import FAQScreen from 'views/faq';
 import StoriesScreen from 'views/stories';
+import Carousel from 'views/stories/Carousel';
 import NewStoryScreen from 'views/stories/NewStory';
 import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
@@ -62,6 +63,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.StoriesCarousel}
             component={StoriesCarouselScreen}
             options={StoriesCarouselScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.Carousel}
+            component={Carousel}
+            options={{ headerShown: false }}
         />
         <Navigator.Screen
             name={Screens.CommunityDetails}

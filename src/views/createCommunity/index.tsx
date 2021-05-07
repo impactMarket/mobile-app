@@ -42,6 +42,7 @@ import {
     TouchableOpacity,
     Dimensions,
     KeyboardAvoidingView,
+    Platform,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
@@ -51,7 +52,6 @@ import {
     Headline,
     RadioButton,
     HelperText,
-    IconButton,
     Text,
     Searchbar,
 } from 'react-native-paper';
@@ -899,7 +899,7 @@ function CreateCommunityScreen() {
                     flexDirection: 'column',
                     justifyContent: 'center',
                 }}
-                behavior="padding"
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 enabled
                 keyboardVerticalOffset={140}
             >

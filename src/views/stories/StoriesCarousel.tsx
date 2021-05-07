@@ -18,6 +18,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     const storiesListState = useSelector(
         (state: IRootState) => state.stories.stories
     );
+
     const flatListRef = useRef<FlatList<ICommunitiesListStories> | null>(null);
     const [index, setIndex] = useState(-1);
 
@@ -68,6 +69,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     return (
         <View style={{ flex: 1, flexDirection: 'row' }}>
             <StatusBar hidden />
+
             <FlatList
                 data={storiesListState}
                 ref={flatListRef}

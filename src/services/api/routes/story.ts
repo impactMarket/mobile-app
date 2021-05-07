@@ -61,8 +61,8 @@ class ApiRouteStory {
         return this.api.delete('/story/' + storyId, {});
     }
 
-    static async me<T extends ICommunitiesListStories[]>(): Promise<T> {
-        return this.api.get<T>('/story/me', true);
+    static async me(): Promise<ICommunityStories> {
+        return this.api.get<ICommunityStories>('/story/me', true);
     }
 }
 
