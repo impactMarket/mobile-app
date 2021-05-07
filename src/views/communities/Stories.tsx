@@ -88,7 +88,8 @@ export default function Stories() {
             >
                 {userAddress.length > 0 &&
                     (userCommunityMetadata.isBeneficiary ||
-                        userCommunityMetadata.isManager) && (
+                        userCommunityMetadata.isManager) &&
+                    userCommunityMetadata.metadata.status === 'valid' && (
                         <View style={{ flexDirection: 'column' }}>
                             <NewStoryCard key="newStory" />
                             <MyStoriesCard />

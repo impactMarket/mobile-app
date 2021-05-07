@@ -189,25 +189,15 @@ function TabNavigator({
                     },
                     tabStyle: { marginVertical: 16 },
                     style: { height: 84 + insets.bottom },
-                    //TODO: Fix the extra heigh on iPhone X
-                    // tabStyle: {
-                    //     marginVertical: !(
-                    //         Platform.OS === 'ios' && !!isLargeIphone()
-                    //     )
-                    //         ? 16
-                    //         : 0,
-                    //     marginTop:
-                    //         Platform.OS === 'ios' && isLargeIphone() ? 16 : 0,
-                    // },
-
-                    // style: {
-                    //     height:
-                    //         Platform.OS === 'ios' && !!isLargeIphone()
-                    //             ? 80
-                    //             : 84 + insets.bottom,
-                    // },
+                    style: {
+                        height:
+                            Platform.OS === 'ios' && !!isLargeIphone()
+                                ? 82
+                                : 84 + insets.bottom,
+                    },
                     activeTintColor: ipctColors.blueRibbon,
                     inactiveTintColor: ipctColors.almostBlack,
+                    safeAreaInsets: { bottom: 0, top: 0 },
                 }}
                 initialRouteName={
                     fromWelcomeScreen.length > 0 // if fromWelcomeScreen is valid, use it

@@ -160,7 +160,7 @@ export default function Container({
                                     ? name.substr(0, 21) + '...'
                                     : name}
                             </Text>
-                            {city?.length > 0 && (
+                            {country.length > 0 && (
                                 <Text
                                     style={{
                                         fontFamily: 'Gelion-Bold',
