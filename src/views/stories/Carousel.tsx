@@ -112,26 +112,22 @@ function Carousel(props: {
         );
     };
     useEffect(() => {
-        if (caller === 'MY_STORIES' && myStories?.length > 0) {
-            setStories(myStories);
-        } else {
-            !caller &&
-                Api.story
-                    .getByCommunity(props.communityId, userAddress.length > 0)
-                    .then((s) => {
-                        setCommunityStories(s);
-                        setStories(s.stories);
-                        if (userAddress.length > 0) {
-                            setLovedStories(
-                                s.stories.map((ss) => ss.userLoved)
-                            );
-                        } else {
-                            setLovedStories(
-                                Array(s.stories.length).fill(false)
-                            );
-                        }
-                    });
-        }
+        // if (caller === 'MY_STORIES' && myStories?.length > 0) {
+        //     setStories(myStories);
+        // } else {
+        //     !caller &&
+        Api.story
+            .getByCommunity(props.communityId, userAddress.length > 0)
+            .then((s) => {
+                setCommunityStories(s);
+                setStories(s.stories);
+                if (userAddress.length > 0) {
+                    setLovedStories(s.stories.map((ss) => ss.userLoved));
+                } else {
+                    setLovedStories(Array(s.stories.length).fill(false));
+                }
+            });
+        // }
     }, []);
 
     const handlePressPrevious = () => {
@@ -150,7 +146,7 @@ function Carousel(props: {
         }
     };
 
-    if (stories.length === 0 && caller !== 'MY_STORIES') {
+    if (stories.length === 0) {
         return (
             <View
                 style={{
@@ -175,9 +171,10 @@ function Carousel(props: {
         );
     }
 
-    return caller === 'MY_STORIES' && stories.length === 0 ? (
-        renderEmptyStories()
-    ) : (
+    // return caller === 'MY_STORIES' && stories.length === 0 ? (
+    //     renderEmptyStories()
+    // ) :
+    return (
         <View
             style={{
                 flex: 1,
