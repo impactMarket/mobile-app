@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import DeleteSvg from 'components/svg/DeleteSvg';
 import ReportInapropriateSvg from 'components/svg/ReportInapropriateSvg';
@@ -18,6 +19,7 @@ import {
     StyleProp,
     TextStyle,
     useWindowDimensions,
+    StyleSheet,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
@@ -49,8 +51,6 @@ export default function Container({
     const communityMetadata = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
-
-    console.log({ communityMetadata });
 
     const navigation = useNavigation();
 
@@ -113,16 +113,21 @@ export default function Container({
                             flex: 1,
                         }}
                     >
-                        <Image
-                            source={{
-                                uri: cover.url,
-                            }}
-                            style={{
-                                height: 48,
-                                width: 48,
-                                borderRadius: 24,
-                            }}
-                        />
+                        {cover.url.length > 0 ? (
+                            <Image
+                                source={{
+                                    uri: cover.url,
+                                }}
+                                style={{
+                                    height: 48,
+                                    width: 48,
+                                    borderRadius: 24,
+                                }}
+                            />
+                        ) : (
+                            <AvatarPlaceholderSvg style={styles.avatar} />
+                        )}
+
                         <View
                             style={{
                                 flexDirection: 'column',
@@ -336,3 +341,15 @@ export default function Container({
         </>
     );
 }
+
+const styles = StyleSheet.create({
+    avatar: {
+        height: 32,
+        width: 32,
+        borderRadius: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 16,
+        marginRight: 16,
+    },
+});

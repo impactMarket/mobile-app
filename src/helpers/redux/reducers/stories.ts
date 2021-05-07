@@ -14,16 +14,19 @@ export const storiesReducer = (
     switch (action.type) {
         case storiesAction.INIT:
             return {
+                ...state,
                 stories: action.payload,
             };
 
         case storiesAction.CONCAT:
             return {
+                ...state,
                 stories: state.stories.concat(action.payload),
             };
 
         case storiesAction.USER_STORIES:
             return {
+                ...state,
                 myStories: action.payload,
             };
 

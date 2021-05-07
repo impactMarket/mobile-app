@@ -6,7 +6,7 @@ import StoryLoveSvg from 'components/svg/StoryLoveSvg';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Screens } from 'helpers/constants';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
-import { IRootState, IStoriesState } from 'helpers/types/state';
+import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import {
     View,
@@ -32,9 +32,9 @@ function Carousel(props: {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
-    const myStories = useSelector((state: IStoriesState) => state.myStories);
-
-    console.log(myStories);
+    const myStories = useSelector(
+        (state: IRootState) => state.stories.myStories
+    );
 
     const [index, setIndex] = useState(0);
     const [stories, setStories] = useState<ICommunityStory[]>([]);
@@ -46,6 +46,10 @@ function Carousel(props: {
     const [openPopup, setOpenPopup] = useState(false);
 
     const togglePopup = () => setOpenPopup(!openPopup);
+
+    useEffect(() => {
+        console.log({ myStories });
+    }, [myStories]);
 
     useEffect(() => {
         if (myStories?.length > 0) {
@@ -82,7 +86,7 @@ function Carousel(props: {
     };
 
     // if (true) {
-    if (stories.length === 0 || communityStories === undefined) {
+    if (stories.length === 0) {
         return (
             <View
                 style={{
@@ -119,7 +123,18 @@ function Carousel(props: {
         >
             <Container
                 communityId={props.communityId}
-                community={communityStories}
+                community={
+                    communityStories
+                        ? communityStories
+                        : {
+                              id: 0,
+                              cover: { url: '', id: 0, height: 0, width: 0 },
+                              name: '',
+                              country: '',
+                              city: '',
+                              stories: [],
+                          }
+                }
                 story={stories[index]}
             />
 
@@ -283,5 +298,11 @@ function Carousel(props: {
         </View>
     );
 }
+
+Carousel.navigationOptions = () => {
+    return {
+        headerShown: false,
+    };
+};
 
 export default Carousel;
