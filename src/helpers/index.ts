@@ -102,14 +102,21 @@ export async function welcomeUser(
                 balance: balance.toString(),
             })
         );
-        dispatch(
-            setUserMetadata({
-                ...userMetadata,
-                avatar: (userMetadata as any).avatar
-                    ? (userMetadata as any).avatar.url
-                    : null, // TODO: avoid this
-            })
-        );
+        if (
+            (user as any).user !== undefined && // TODO: avoid this
+            (user as any).user.avatar !== null // TODO: avoid this
+        ) {
+            dispatch(
+                setUserMetadata({
+                    ...userMetadata,
+                    avatar: (user as any).user.avatar
+                        ? (user as any).user.avatar.url
+                        : null, // TODO: avoid this
+                })
+            );
+        } else {
+            dispatch(setUserMetadata(userMetadata));
+        }
         // const allExchangeRates: { [key: string]: number } = {};
         // Object.assign(
         //     allExchangeRates,
