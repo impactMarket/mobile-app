@@ -64,7 +64,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             component={StoriesCarouselScreen}
             options={StoriesCarouselScreen.navigationOptions}
         />
-        <Navigator.Screen name={Screens.Carousel} component={Carousel} />
+        <Navigator.Screen
+            name={Screens.Carousel}
+            component={Carousel}
+            options={{ headerShown: false }}
+        />
         <Navigator.Screen
             name={Screens.CommunityDetails}
             component={CommunityDetailsScreen}

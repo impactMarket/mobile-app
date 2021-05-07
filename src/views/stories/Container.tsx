@@ -23,6 +23,7 @@ import {
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
+import { ipctColors } from 'styles/index';
 
 import CarouselSlide from './CarouselSlide';
 
@@ -132,7 +133,12 @@ export default function Container({
                                     borderRadius: 24,
                                 }}
                             >
-                                <AvatarPlaceholderSvg style={styles.avatar} />
+                                <AvatarPlaceholderSvg
+                                    style={styles.avatar}
+                                    width="100%"
+                                    height="100%"
+                                    color={ipctColors.white}
+                                />
                             </View>
                         )}
 
@@ -154,19 +160,21 @@ export default function Container({
                                     ? name.substr(0, 21) + '...'
                                     : name}
                             </Text>
-                            <Text
-                                style={{
-                                    fontFamily: 'Gelion-Bold',
-                                    fontSize: 15,
-                                    lineHeight: 18,
-                                    color: '#FAFAFA',
-                                }}
-                            >
-                                {countries[country]?.name},{' '}
-                                {city?.length > 15
-                                    ? city.substr(0, 13) + '...'
-                                    : city}
-                            </Text>
+                            {city?.length > 0 && (
+                                <Text
+                                    style={{
+                                        fontFamily: 'Gelion-Bold',
+                                        fontSize: 15,
+                                        lineHeight: 18,
+                                        color: '#FAFAFA',
+                                    }}
+                                >
+                                    {countries[country]?.name},{' '}
+                                    {city?.length > 15
+                                        ? city.substr(0, 13) + '...'
+                                        : city}
+                                </Text>
+                            )}
                         </View>
                     </View>
 
