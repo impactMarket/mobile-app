@@ -125,6 +125,7 @@ export interface ICommunityStory {
     id: number;
     media: AppMediaContent | null;
     message: string | null;
+    byAddress: string;
     loves: number;
     userLoved: boolean;
 }
