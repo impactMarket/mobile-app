@@ -20,6 +20,7 @@ import { validateEmail, updateCommunityInfo } from 'helpers/index';
 import {
     setCommunityMetadata,
     setUserIsCommunityManager,
+    setUserMetadata,
 } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
@@ -59,6 +60,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { batch, useDispatch, useSelector, useStore } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
+import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
@@ -102,6 +104,7 @@ function CreateCommunityScreen() {
     const userLanguage = useSelector(
         (state: IRootState) => state.user.metadata.language
     );
+    const user = useSelector((state: IRootState) => state.user.metadata);
 
     const userIsManager = useSelector(
         (state: IRootState) => state.user.community.isManager
@@ -125,7 +128,7 @@ function CreateCommunityScreen() {
 
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
-    const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
+    // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
 
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
@@ -163,7 +166,7 @@ function CreateCommunityScreen() {
 
     const [profileImage, setProfileImage] = useState<string>(avatar || '');
     const [isAlertVisible, setIsAlertVisible] = useState(true);
-    const [communityLogo, setCommunityLogo] = useState('');
+    // const [communityLogo, setCommunityLogo] = useState('');
 
     const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
@@ -196,7 +199,7 @@ function CreateCommunityScreen() {
         navigation,
         coverImage,
         profileImage,
-        communityLogo,
+        // communityLogo,
         name,
         description,
         city,
@@ -278,10 +281,11 @@ function CreateCommunityScreen() {
             return;
         }
         //TODO: Will be added in later version
-        // const _isProfileImageValid = profileImage.length > 0;
-        // if (!_isProfileImageValid) {
-        //     setIsProfileImageValid(false);
-        // }
+        const _isProfileImageValid = profileImage.length > 0;
+        if (!_isProfileImageValid) {
+            setIsProfileImageValid(false);
+            return;
+        }
 
         // const _isCommunityLogoValid = communityLogo.length > 0;
         // if (!_isCommunityLogoValid) {
@@ -414,6 +418,18 @@ function CreateCommunityScreen() {
                 coverImage,
                 imageTargets.COVER
             );
+
+            const res = (await Api.upload.uploadImage(
+                profileImage,
+                imageTargets.PROFILE
+            )) as any;
+
+            const cachedUser = (await CacheStore.getUser())!;
+            await CacheStore.cacheUser({
+                ...cachedUser,
+                avatar: res.data.data.url as string,
+            });
+            dispatch(setUserMetadata({ ...user, avatar: res.data.data.url }));
 
             if (apiRequestResult) {
                 const communityDetails: CommunityCreationAttributes = {

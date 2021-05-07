@@ -162,7 +162,12 @@ function Auth() {
                 STORAGE_USER_PHONE_NUMBER,
                 dappkitResponse.phoneNumber
             );
-            await CacheStore.cacheUser(user.user);
+            await CacheStore.cacheUser({
+                ...user.user,
+                avatar: user.user.avatar ? (user.user.avatar as any).url : null, // TODO: avoid this
+            });
+
+            console.log(user.user);
 
             await welcomeUser(
                 userAddress,
