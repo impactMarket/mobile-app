@@ -249,20 +249,28 @@ function ProfileScreen() {
         const currencyResult: string[] = [];
         for (const [key, value] of Object.entries(currencies)) {
             if (
-                value.name.indexOf(searchCurrency) !== -1 ||
-                value.symbol.indexOf(searchCurrency) !== -1 ||
-                value.symbol_native.indexOf(searchCurrency) !== -1
+                key.toLowerCase().indexOf(searchCurrency.toLowerCase()) !==
+                    -1 ||
+                value.name
+                    .toLowerCase()
+                    .indexOf(searchCurrency.toLowerCase()) !== -1 ||
+                value.symbol
+                    .toLowerCase()
+                    .indexOf(searchCurrency.toLowerCase()) !== -1 ||
+                value.symbol_native
+                    .toLowerCase()
+                    .indexOf(searchCurrency.toLowerCase()) !== -1
             ) {
                 currencyResult.push(key);
             }
         }
         //
-        if (currencyResult.length > 15) {
-            setTooManyResultForQuery(true);
-        } else {
-            setSearchCurrencyResult(currencyResult);
-            setShowingResults(true);
-        }
+        // if (currencyResult.length > 15) {
+        //     setTooManyResultForQuery(true);
+        // } else {
+        setSearchCurrencyResult(currencyResult);
+        setShowingResults(true);
+        // }
     };
 
     const handleSelectCurrency = (currency: string) => {
@@ -451,7 +459,7 @@ function ProfileScreen() {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>
-                        {userAvatarImage && userAvatarImage.length > 0 ? (
+                        {/* {userAvatarImage && userAvatarImage.length > 0 ? (
                             <TouchableOpacity
                                 style={styles.avatar}
                                 onPress={pickImage}
@@ -460,7 +468,7 @@ function ProfileScreen() {
                                     source={{ uri: userAvatarImage }}
                                     style={styles.avatar}
                                 />
-                                {/* TODO: Call remote avatar API call */}
+                                 TODO: Call remote avatar API call 
                                 <View style={styles.removeAvatar}>
                                     <IconButton
                                         style={styles.removeAvatar}
@@ -483,7 +491,8 @@ function ProfileScreen() {
                                     {i18n.t('uploadProfile')}
                                 </Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
+                        <AvatarPlaceholderSvg style={styles.avatar} />
                     </View>
                     <Input
                         label={i18n.t('name')}
