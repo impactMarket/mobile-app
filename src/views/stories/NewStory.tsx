@@ -158,6 +158,7 @@ function NewStoryScreen() {
                             stories: [],
                         }}
                         story={submitedResult}
+                        communityId={userCommunity.id}
                     />
                     <View style={{ width: '100%' }}>
                         <Text
