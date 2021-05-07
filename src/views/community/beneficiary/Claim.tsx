@@ -221,7 +221,16 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
                 let error = 'unknown';
-                if (e.message.includes('has been reverted')) {
+                if (e.message.includes('execution reverted')) {
+                    if (e.message.includes('NOT_YET')) {
+                        error = 'clockNotSynced';
+                    } else if (
+                        e.message.includes('transfer value exceeded balance')
+                    ) {
+                        error = 'communityWentOutOfFunds';
+                        this.setState({ notEnoughToClaimOnContract });
+                    }
+                } else if (e.message.includes('has been reverted')) {
                     error = 'syncIssues';
                 } else if (
                     e.message.includes('nonce') ||

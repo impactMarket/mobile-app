@@ -141,19 +141,21 @@ export default function Container({
                                     ? name.substr(0, 21) + '...'
                                     : name}
                             </Text>
-                            <Text
-                                style={{
-                                    fontFamily: 'Gelion-Bold',
-                                    fontSize: 15,
-                                    lineHeight: 18,
-                                    color: '#FAFAFA',
-                                }}
-                            >
-                                {countries[country]?.name},{' '}
-                                {city?.length > 15
-                                    ? city.substr(0, 13) + '...'
-                                    : city}
-                            </Text>
+                            {country.length > 0 && (
+                                <Text
+                                    style={{
+                                        fontFamily: 'Gelion-Bold',
+                                        fontSize: 15,
+                                        lineHeight: 18,
+                                        color: '#FAFAFA',
+                                    }}
+                                >
+                                    {countries[country]?.name},{' '}
+                                    {city?.length > 15
+                                        ? city.substr(0, 13) + '...'
+                                        : city}
+                                </Text>
+                            )}
                         </View>
                     </View>
 

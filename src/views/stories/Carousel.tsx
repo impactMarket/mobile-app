@@ -210,19 +210,21 @@ function Carousel(props: {
                             {stories[index].loves} Loves
                         </Text>
                     </Pressable>
-                    <Button
-                        modeType="green"
-                        bold
-                        style={{ marginRight: 22, width: 158 }}
-                        onPress={() =>
-                            navigation.navigate(Screens.CommunityDetails, {
-                                communityId: communityStories.id,
-                                openDonate: true,
-                            })
-                        }
-                    >
-                        {i18n.t('donate')}
-                    </Button>
+                    {communityStories.id !== -1 && (
+                        <Button
+                            modeType="green"
+                            bold
+                            style={{ marginRight: 22, width: 158 }}
+                            onPress={() =>
+                                navigation.navigate(Screens.CommunityDetails, {
+                                    communityId: communityStories.id,
+                                    openDonate: true,
+                                })
+                            }
+                        >
+                            {i18n.t('donate')}
+                        </Button>
+                    )}
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     {Array(stories.length)
