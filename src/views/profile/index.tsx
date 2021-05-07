@@ -177,12 +177,13 @@ function ProfileScreen() {
             setSending(true);
             setUserAvatarImage(avatar);
 
-            userAvatarImage &&
-                (await Api.upload.uploadImage(
-                    userAvatarImage,
-                    imageTargets.PROFILE
-                ));
+            const res = (await Api.upload.uploadImage(
+                avatar,
+                imageTargets.PROFILE
+            )) as any;
             setSending(false);
+            updateUserMetadataCache();
+            dispatch(setUserMetadata({ ...user, avatar: res.data.data.url }));
         } catch (e) {
             Alert.alert(
                 i18n.t('failure'),
@@ -192,8 +193,6 @@ function ProfileScreen() {
             );
             setSending(false);
         }
-        updateUserMetadataCache();
-        dispatch(setUserMetadata({ ...user, avatar }));
     };
 
     const handleChangeLanguage = async (text: string) => {
@@ -222,8 +221,8 @@ function ProfileScreen() {
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
+            // allowsEditing: true,
+            // aspect: [4, 3],
             quality: 1,
         });
 
@@ -459,7 +458,7 @@ function ProfileScreen() {
                         </View>
                     </TouchableOpacity>
                     <View style={styles.avatarContainer}>
-                        {/* {userAvatarImage && userAvatarImage.length > 0 ? (
+                        {userAvatarImage && userAvatarImage.length > 0 ? (
                             <TouchableOpacity
                                 style={styles.avatar}
                                 onPress={pickImage}
@@ -468,15 +467,15 @@ function ProfileScreen() {
                                     source={{ uri: userAvatarImage }}
                                     style={styles.avatar}
                                 />
-                                 TODO: Call remote avatar API call 
-                                <View style={styles.removeAvatar}>
+                                {/* TODO: Call remote avatar API call  */}
+                                {/* <View style={styles.removeAvatar}>
                                     <IconButton
                                         style={styles.removeAvatar}
                                         icon="close"
                                         size={14}
                                         onPress={() => setUserAvatarImage(null)}
                                     />
-                                </View>
+                                </View> */}
                             </TouchableOpacity>
                         ) : (
                             <AvatarPlaceholderSvg style={styles.avatar} />
@@ -491,8 +490,7 @@ function ProfileScreen() {
                                     {i18n.t('uploadProfile')}
                                 </Text>
                             </View>
-                        </TouchableOpacity> */}
-                        <AvatarPlaceholderSvg style={styles.avatar} />
+                        </TouchableOpacity>
                     </View>
                     <Input
                         label={i18n.t('name')}

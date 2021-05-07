@@ -32,10 +32,10 @@ import { UserAttributes } from './types/models';
 
 export function generateUrlWithCloudFront(s3ContentKey: string) {
     // for backwards support
-    if (s3ContentKey.startsWith('http')) {
-        return s3ContentKey;
-    }
-    return `${config.cloudfrontUrl}/${s3ContentKey}`;
+    // if (s3ContentKey.startsWith('http')) {
+    // }
+    // return `${config.cloudfrontUrl}/${s3ContentKey}`;
+    return s3ContentKey;
 }
 
 export function makeDeeplinkUrl() {
@@ -102,7 +102,14 @@ export async function welcomeUser(
                 balance: balance.toString(),
             })
         );
-        dispatch(setUserMetadata(userMetadata));
+        dispatch(
+            setUserMetadata({
+                ...userMetadata,
+                avatar: (userMetadata as any).avatar
+                    ? (userMetadata as any).avatar.url
+                    : null, // TODO: avoid this
+            })
+        );
         // const allExchangeRates: { [key: string]: number } = {};
         // Object.assign(
         //     allExchangeRates,

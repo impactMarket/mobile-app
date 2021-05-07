@@ -116,6 +116,7 @@ export interface IUserHello extends IUserBaseAuth {
 }
 
 export interface IUserAuth extends IUserBaseAuth {
+    avatar: AppMediaContent | null;
     user: UserAttributes;
     token: string;
 }
