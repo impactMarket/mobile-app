@@ -48,10 +48,6 @@ function Carousel(props: {
     const togglePopup = () => setOpenPopup(!openPopup);
 
     useEffect(() => {
-        console.log({ myStories });
-    }, [myStories]);
-
-    useEffect(() => {
         if (myStories?.length > 0) {
             setStories(myStories);
         } else {
@@ -67,7 +63,7 @@ function Carousel(props: {
                     }
                 });
         }
-    }, []);
+    }, [myStories]);
 
     const handlePressPrevious = () => {
         if (index === 0) {
