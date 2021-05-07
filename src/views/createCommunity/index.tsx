@@ -419,17 +419,21 @@ function CreateCommunityScreen() {
                 imageTargets.COVER
             );
 
-            const res = (await Api.upload.uploadImage(
-                profileImage,
-                imageTargets.PROFILE
-            )) as any;
+            if (profileImage.length > 0) {
+                const res = (await Api.upload.uploadImage(
+                    profileImage,
+                    imageTargets.PROFILE
+                )) as any;
 
-            const cachedUser = (await CacheStore.getUser())!;
-            await CacheStore.cacheUser({
-                ...cachedUser,
-                avatar: res.data.data.url as string,
-            });
-            dispatch(setUserMetadata({ ...user, avatar: res.data.data.url }));
+                const cachedUser = (await CacheStore.getUser())!;
+                await CacheStore.cacheUser({
+                    ...cachedUser,
+                    avatar: res.data.data.url as string,
+                });
+                dispatch(
+                    setUserMetadata({ ...user, avatar: res.data.data.url })
+                );
+            }
 
             if (apiRequestResult) {
                 const communityDetails: CommunityCreationAttributes = {
@@ -1010,29 +1014,30 @@ function CreateCommunityScreen() {
                                 </View>
                             )}
                             {profileImage.length > 0 ? (
-                                <View style={styles.uploadFilledContainer}>
-                                    <CloseStorySvg
-                                        style={{
-                                            position: 'absolute',
-                                            top: 14,
-                                            right: 14,
-                                        }}
-                                        onPress={() => {
-                                            setProfileImage('');
-                                        }}
-                                    />
-                                    <Image
-                                        style={{
-                                            height: 80,
-                                            width: 80,
-                                            borderRadius: 40,
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                        }}
-                                        source={{ uri: profileImage }}
-                                    />
-                                </View>
+                                <View />
                             ) : (
+                                // <View style={styles.uploadFilledContainer}>
+                                //     <CloseStorySvg
+                                //         style={{
+                                //             position: 'absolute',
+                                //             top: 14,
+                                //             right: 14,
+                                //         }}
+                                //         onPress={() => {
+                                //             setProfileImage('');
+                                //         }}
+                                //     />
+                                //     <Image
+                                //         style={{
+                                //             height: 80,
+                                //             width: 80,
+                                //             borderRadius: 40,
+                                //             alignItems: 'center',
+                                //             justifyContent: 'center',
+                                //         }}
+                                //         source={{ uri: profileImage }}
+                                //     />
+                                // </View>
                                 <View style={styles.uploadContainer}>
                                     <View
                                         style={{
