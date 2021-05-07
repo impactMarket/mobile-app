@@ -36,7 +36,7 @@ class ApiRouteStory {
     }
 
     static async list<T extends ICommunitiesListStories[]>(): Promise<T> {
-        return this.api.get<T>('/story/list');
+        return this.api.get<T>('/story/list?includeIPCT=true');
     }
 
     static async getByCommunity(
