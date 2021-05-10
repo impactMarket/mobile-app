@@ -1005,7 +1005,7 @@ function CreateCommunityScreen() {
                                                 color: '#333239',
                                                 fontFamily: 'Inter-Regular',
                                                 fontSize: 15,
-                                                lineHeight: 28,
+                                                lineHeight: 16,
                                             }}
                                         >
                                             Upload
@@ -1074,7 +1074,7 @@ function CreateCommunityScreen() {
                                                 color: '#333239',
                                                 fontFamily: 'Inter-Regular',
                                                 fontSize: 15,
-                                                lineHeight: 28,
+                                                lineHeight: 16,
                                             }}
                                         >
                                             Upload
@@ -1744,7 +1744,7 @@ const styles = StyleSheet.create({
     uploadBtn: {
         width: 98,
         height: 44,
-        paddingHorizontal: 23,
+        paddingHorizontal: 12,
         paddingVertical: 8,
         backgroundColor: '#E9EDF4',
         borderRadius: 8,
