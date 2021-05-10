@@ -2,7 +2,7 @@ export default {
     testnetWarning:
         'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
     pendingApprovalMessage:
-        'Esta comunidade ainda não foi aprovada. Alguma questão, contacte-nos',
+        'Estamos revisando seu envio e entraremos em contato em X dias ou menos. Se você tiver outras perguntas, visite nossa Central de Ajuda para ler nosso F.A.Q.s ou enviar um tíquete.',
     pendingApproval: 'Pedido Pendente',
     fullDashboard: 'Painel Completo',
     editCommunityDetails: 'Editar detalhes da comunidade',
@@ -182,6 +182,7 @@ export default {
         'Uma comunidade pode ser publica (necessita da aprovação da equipada impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
     currencyHelp: 'Escolha aqui a moeda usada entre os seus beneficiários.',
     coverImageRequired: 'Imagem de capa é obrigatório!',
+    profileImageRequired: 'Sua Imagem de Perfil é obrigatória!',
     communityNameRequired: 'Nome da comunidade é obrigatório!',
     communityDescriptionRequired: 'Descrição da comunidade é obrigatório!',
     cityRequired: 'Cidade é obrigatório!',
@@ -192,6 +193,7 @@ export default {
     claimAmountRequired: 'Quantidade a pegar é obrigatório!',
     maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
     incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
+    openHelpCenter: 'Abrir o Centro de Ajuda',
     turnOn: 'Ativar',
     turnOnLocationHint: 'Ative a sua localização para uma melhor experiência.',
     tryAgain: 'Tentar Novamente',

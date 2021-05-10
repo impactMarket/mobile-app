@@ -2,7 +2,7 @@ export default {
     testnetWarning:
         "A friendly reminder you're using the Alfajores network build - the balances are not real.",
     pendingApprovalMessage:
-        'This community is being reviewed. If you have any question please contact us at',
+        'We are reviewing your submission and will contact you in X days or less. If you have any additional questions visit our Help Center to read our F.A.Q.s or submit a ticket.',
     pendingApproval: 'Pending Approval',
     fullDashboard: 'Full Dashboard',
     editCommunityDetails: 'Edit community details',
@@ -189,6 +189,7 @@ export default {
         'A community can be public (need our approval to be listed on the app), or private where anyone can create its own UBI and will not show up on the communities list.',
     currencyHelp: 'Choose the currency used among the beneficiaries.',
     coverImageRequired: 'Cover image is required!',
+    profileImageRequired: 'Profile image is required!',
     communityNameRequired: 'Comunity name is required!',
     communityDescriptionRequired: 'Comunity description is required!',
     cityRequired: 'City is required!',
@@ -199,6 +200,7 @@ export default {
     claimAmountRequired: 'Claim amount is required!',
     maxClaimAmountRequired: 'Max claim amount is required!',
     incrementalIntervalRequired: 'Incremental interval is required!',
+    openHelpCenter: 'Open Help Center',
     turnOn: 'Turn On',
     turnOnLocationHint: 'Turn on your location for a better experience.',
     tryAgain: 'Try Again',
