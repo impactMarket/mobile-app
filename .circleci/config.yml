@@ -215,6 +215,11 @@ jobs:
             openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
             echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
             base64 --decode expo-project.jks.base64 > expo-project.jks
+            export EXPO_API_BASE_URL=$EXPO_API_BASE_URL_PROD
+            export EXPO_JSON_RPC_URL=$EXPO_JSON_RPC_URL_PROD
+            export EXPO_BLOCK_EXPLORER_URL=$EXPO_BLOCK_EXPLORER_URL_PROD
+            export EXPO_CUSD_CONTRACT_ADDRESS=$EXPO_CUSD_CONTRACT_ADDRESS_PROD
+            export EXPO_IS_TESTNET=false
             turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ~/expo-project.aab
           environment:
             NODE_OPTIONS: --max_old_space_size=3072
