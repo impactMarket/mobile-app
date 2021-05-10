@@ -277,8 +277,8 @@ workflows:
   #    - test_app
   builds:
     jobs:
-      - publish_app
-      - build_android_aab:
-          requires:
-            - publish_app
+      #- publish_app
+      - build_android_aab#:
+          #requires:
+          #  - publish_app
   
