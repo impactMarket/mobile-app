@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
-import CachedImage from 'components/CacheImage';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
@@ -259,52 +258,52 @@ function CommunityManagerScreen() {
             );
         }
         return (
-            <View style={{ flex: 1 }}>
-                <View
+            <ScrollView
+            // style={{ flex: 1 }}
+            // contentContainerStyle={{
+            //     flexDirection: 'column',
+            //     alignItems: 'center',
+            //     justifyContent: 'space-around',
+            // }}
+            >
+                <Text
                     style={{
-                        marginHorizontal: 20,
-                        flex: 1,
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 15,
+                        lineHeight: 24,
+                        marginHorizontal: 18,
+                        letterSpacing: 0,
+                        textAlign: 'left',
                     }}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 15,
-                            lineHeight: 24,
-
-                            letterSpacing: 0,
-                            textAlign: 'left',
-                        }}
-                    >
-                        {i18n.t('pendingApprovalMessage')}{' '}
-                    </Text>
-                    <Button
-                        modeType="gray"
-                        style={{
-                            marginTop: 16,
-                            marginBottom: 41,
-                            width: '100%',
-                        }}
-                        labelStyle={{
-                            fontSize: 18,
-                            lineHeight: 18,
-                            letterSpacing: 0.3,
-                        }}
-                        // onPress={() => {
-                        //     setRedirecting(true);
-                        //     dispatch(
-                        //         SetAppFromWelcomeScreen(Screens.Communities)
-                        //     );
-                        // }}
-                    >
-                        {i18n.t('openHelpCenter')}
-                    </Button>
+                    {i18n.t('pendingApprovalMessage')}{' '}
+                </Text>
+                <Button
+                    modeType="gray"
+                    style={{
+                        marginHorizontal: 18,
+                        marginTop: 16,
+                        marginBottom: 16,
+                        // width: '100%',
+                    }}
+                    labelStyle={{
+                        fontSize: 18,
+                        lineHeight: 18,
+                        letterSpacing: 0.3,
+                    }}
+                    // onPress={() => {
+                    //     setRedirecting(true);
+                    //     dispatch(
+                    //         SetAppFromWelcomeScreen(Screens.Communities)
+                    //     );
+                    // }}
+                >
+                    {i18n.t('openHelpCenter')}
+                </Button>
+                {!hasManagerAcceptedRulesAlready && (
                     <CommunityRules caller="MANAGER" />
-                </View>
-            </View>
+                )}
+            </ScrollView>
         );
     };
 
