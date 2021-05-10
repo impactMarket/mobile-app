@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     textInput: {
         flexGrow: 1,
         alignSelf: 'center',
+        textAlignVertical: 'top',
         zIndex: 1,
         fontSize: 15,
         fontFamily: 'Inter-Regular',
