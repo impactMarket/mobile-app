@@ -6,6 +6,7 @@ import CachedImage from 'components/CacheImage';
 import CommuntyStatus from 'components/CommuntyStatus';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
+import CommunityRules from 'components/core/CommunityRules';
 import ManageSvg from 'components/svg/ManageSvg';
 import * as Linking from 'expo-linking';
 import { Screens } from 'helpers/constants';
@@ -21,12 +22,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 // services
-import {
-    Headline,
-    ActivityIndicator,
-    Portal,
-    Paragraph,
-} from 'react-native-paper';
+import { ActivityIndicator, Portal, Paragraph } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
@@ -264,56 +260,50 @@ function CommunityManagerScreen() {
         }
         return (
             <View style={{ flex: 1 }}>
-                <BaseCommunity community={_community} full>
-                    <View
+                <View
+                    style={{
+                        marginHorizontal: 20,
+                        flex: 1,
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                    }}
+                >
+                    <Text
                         style={{
-                            marginHorizontal: 20,
-                            flex: 1,
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'space-around',
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 15,
+                            lineHeight: 24,
+
+                            letterSpacing: 0,
+                            textAlign: 'left',
                         }}
                     >
-                        <CachedImage
-                            source={require('assets/images/pending.png')}
-                            style={{ width: 50, height: 50 }}
-                        />
-                        <Headline
-                            style={{
-                                fontFamily: 'Gelion-Regular',
-                                fontSize: 22,
-                                lineHeight: 22,
-                                height: 22,
-                                letterSpacing: 0,
-                                textAlign: 'center',
-                            }}
-                        >
-                            {i18n.t('pendingApproval')}
-                        </Headline>
-                        <Text
-                            style={{
-                                fontFamily: 'Gelion-Regular',
-                                fontSize: 19,
-                                lineHeight: 19,
-                                height: 100,
-                                letterSpacing: 0,
-                                textAlign: 'center',
-                            }}
-                        >
-                            {i18n.t('pendingApprovalMessage')}{' '}
-                            <Text
-                                style={{ color: ipctColors.blueRibbon }}
-                                onPress={() =>
-                                    Linking.openURL(
-                                        'mailto:hello@impactmarket.com'
-                                    )
-                                }
-                            >
-                                hello@impactmarket.com
-                            </Text>
-                        </Text>
-                    </View>
-                </BaseCommunity>
+                        {i18n.t('pendingApprovalMessage')}{' '}
+                    </Text>
+                    <Button
+                        modeType="gray"
+                        style={{
+                            marginTop: 16,
+                            marginBottom: 41,
+                            width: '100%',
+                        }}
+                        labelStyle={{
+                            fontSize: 18,
+                            lineHeight: 18,
+                            letterSpacing: 0.3,
+                        }}
+                        // onPress={() => {
+                        //     setRedirecting(true);
+                        //     dispatch(
+                        //         SetAppFromWelcomeScreen(Screens.Communities)
+                        //     );
+                        // }}
+                    >
+                        {i18n.t('openHelpCenter')}
+                    </Button>
+                    <CommunityRules caller="MANAGER" />
+                </View>
             </View>
         );
     };

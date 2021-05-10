@@ -287,11 +287,6 @@ function CreateCommunityScreen() {
             return;
         }
 
-        // const _isCommunityLogoValid = communityLogo.length > 0;
-        // if (!_isCommunityLogoValid) {
-        //     setIsCommunityLogoValid(false);
-        // }
-
         const _isNameValid = name.length > 0;
         if (!_isNameValid) {
             setIsNameValid(false);
@@ -349,7 +344,8 @@ function CreateCommunityScreen() {
             _isClaimAmountValid &&
             _isIncrementalIntervalValid &&
             _isMaxClaimValid &&
-            _isCoverImageValid;
+            _isCoverImageValid &&
+            _isProfileImageValid;
 
         if (!isSubmitAvailable) {
             return;
@@ -657,26 +653,14 @@ function CreateCommunityScreen() {
                 inputStyle={{
                     marginLeft: -14,
                 }}
-                // clearIcon={(p) => (
-                //     <IconButton
-                //         icon="close"
-                //         onPress={() => {
-                //             setSearchCountryQuery('');
-                //             setSearchCountryISOResult([]);
-                //             setTooManyResultForQuery(false);
-                //             setShowingResults(false);
-                //         }}
-                //     />
-                // )}
                 onChangeText={(e) => {
-                    if (e.length === 0 && showingResults) {
+                    if (e.length === 0) {
                         setSearchCountryISOResult([]);
                         setShowingResults(false);
                     }
-                    setSearchCountryQuery(e);
+                    handleSearchCountry(e);
                 }}
                 value={searchCountryQuery}
-                onEndEditing={handleSearchCountry}
             />
 
             {renderSearchCountryResult()}
@@ -704,25 +688,17 @@ function CreateCommunityScreen() {
         </View>
     );
 
-    const handleSearchCountry = (
-        e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
-    ) => {
-        if (tooManyResultForQuery) {
-            setTooManyResultForQuery(false);
-        }
+    const handleSearchCountry = (e: string) => {
+        setSearchCountryQuery(e);
+
         const countriesResult: string[] = [];
         for (const [key, value] of Object.entries(countries)) {
             if (value.name.indexOf(searchCountryQuery) !== -1) {
                 countriesResult.push(key);
             }
         }
-
-        if (countriesResult.length > 7) {
-            setTooManyResultForQuery(true);
-        } else {
-            setSearchCountryISOResult(countriesResult);
-            setShowingResults(true);
-        }
+        setSearchCountryISOResult(countriesResult);
+        setShowingResults(true);
     };
 
     const handleSelectCountry = (countryISO: string) => {
@@ -990,6 +966,16 @@ function CreateCommunityScreen() {
                                         >
                                             Min. 784px by 784px
                                         </Text>
+                                        {!isCoverImageValid && (
+                                            <HelperText
+                                                type="error"
+                                                padding="none"
+                                                visible
+                                                style={styles.errorText}
+                                            >
+                                                {i18n.t('coverImageRequired')}
+                                            </HelperText>
+                                        )}
                                     </View>
                                     <TouchableOpacity
                                         style={styles.uploadBtn}
@@ -1013,6 +999,7 @@ function CreateCommunityScreen() {
                                     </TouchableOpacity>
                                 </View>
                             )}
+
                             {profileImage.length > 0 ? (
                                 <View />
                             ) : (
@@ -1059,6 +1046,16 @@ function CreateCommunityScreen() {
                                         >
                                             Min. 300px by 300px
                                         </Text>
+                                        {!isProfileImageValid && (
+                                            <HelperText
+                                                type="error"
+                                                padding="none"
+                                                visible
+                                                style={styles.errorText}
+                                            >
+                                                {i18n.t('profileImageRequired')}
+                                            </HelperText>
+                                        )}
                                     </View>
                                     <TouchableOpacity
                                         style={styles.uploadBtn}
