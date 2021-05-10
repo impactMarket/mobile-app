@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Inter-Regular',
         color: ipctColors.almostBlack,
+        justifyContent: 'flex-start',
     },
     label: {
         position: 'absolute',
