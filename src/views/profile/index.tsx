@@ -258,12 +258,8 @@ function ProfileScreen() {
         setFullCurrencyList(currencyResult);
     };
 
-    const handleSearchCurrency = (
-        e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
-    ) => {
-        if (tooManyResultForQuery) {
-            setTooManyResultForQuery(false);
-        }
+    const handleSearchCurrency = (e: string) => {
+        setSearchCurrency(e);
         const currencyResult: string[] = [];
         for (const [key, value] of Object.entries(currencies)) {
             if (
@@ -388,26 +384,14 @@ function ProfileScreen() {
                     marginLeft: -14,
                 }}
                 autoFocus
-                // clearIcon={(p) => (
-                //     <IconButton
-                //         icon="close"
-                //         onPress={() => {
-                //             setSearchCurrency('');
-                //             setSearchCurrencyResult([]);
-                //             setTooManyResultForQuery(false);
-                //             setShowingResults(false);
-                //         }}
-                //     />
-                // )}
                 onChangeText={(e) => {
                     if (e.length === 0 && showingResults) {
                         setSearchCurrencyResult([]);
                         setShowingResults(false);
                     }
-                    setSearchCurrency(e);
+                    handleSearchCurrency(e);
                 }}
                 value={searchCurrency}
-                onEndEditing={handleSearchCurrency}
             />
             {renderSearchCurrencyResult()}
         </View>

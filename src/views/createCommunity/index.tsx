@@ -587,10 +587,9 @@ function CreateCommunityScreen() {
                         setSearchCurrencyResult([]);
                         setShowingResults(false);
                     }
-                    setSearchCurrency(e);
+                    handleSearchCurrency(e);
                 }}
                 value={searchCurrency}
-                onEndEditing={handleSearchCurrency}
             />
             {renderSearchCurrencyResult()}
         </View>
@@ -654,7 +653,7 @@ function CreateCommunityScreen() {
                     marginLeft: -14,
                 }}
                 onChangeText={(e) => {
-                    if (e.length === 0) {
+                    if (e.length === 0 && showingResults) {
                         setSearchCountryISOResult([]);
                         setShowingResults(false);
                     }
@@ -758,12 +757,8 @@ function CreateCommunityScreen() {
         }
     };
 
-    const handleSearchCurrency = (
-        e: React.BaseSyntheticEvent<TextInputEndEditingEventData>
-    ) => {
-        if (tooManyResultForQuery) {
-            setTooManyResultForQuery(false);
-        }
+    const handleSearchCurrency = (e: string) => {
+        setSearchCurrency(e);
         const currencyResult: string[] = [];
         for (const [key, value] of Object.entries(currencies)) {
             if (
