@@ -17,25 +17,25 @@ export default {
     /**
      * The default API URL
      */
-    baseApiUrl: process.env.EXPO_API_BASE_URL + '/api',
+    baseApiUrl: process.env.EXPO_API_BASE_URL! + '/api',
 
     /**
      * Block explorer base URL. Contract address is added at the end.
      */
-    blockExplorer: process.env.EXPO_BLOCK_EXPLORER_URL,
+    blockExplorer: process.env.EXPO_BLOCK_EXPLORER_URL!,
 
     /**
      * JSON RPC url
      */
-    jsonRpc: process.env.EXPO_JSON_RPC_URL,
+    jsonRpc: process.env.EXPO_JSON_RPC_URL!,
 
     /**
      * cUSD contract address
      */
-    cUSDContract: process.env.EXPO_CUSD_CONTRACT_ADDRESS,
+    cUSDContract: process.env.EXPO_CUSD_CONTRACT_ADDRESS!,
 
     /**
      * Is it in testnet?
      */
-    testnet: process.env.EXPO_IS_TESTNET,
+    testnet: process.env.EXPO_IS_TESTNET! === 'true',
 };
