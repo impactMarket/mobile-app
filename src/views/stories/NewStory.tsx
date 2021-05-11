@@ -23,7 +23,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 
+import Carousel from './Carousel';
 import Container from './Container';
+import StoriesCarouselScreen from './StoriesCarousel';
 
 function NewStoryScreen() {
     const dimensions = useWindowDimensions();
@@ -127,86 +129,13 @@ function NewStoryScreen() {
     if (userCommunity?.id === undefined || userCommunityStatus !== 'valid') {
         return <Text>{i18n.t('notInComunity')}</Text>;
     }
-    // TODO: most of the code above is repeated from Carousel
-    // make it reusable!
+
     if (submittedWithSuccess && submitedResult) {
         return (
-            <View style={{ flex: 1, flexDirection: 'row' }}>
-                <StatusBar hidden />
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        width: dimensions.width,
-                        justifyContent: 'space-between',
-                        paddingTop: 20,
-                    }}
-                >
-                    <Container
-                        // media={submitedResult.media!} // can be null, not undefined
-                        community={{
-                            id: userCommunity.id,
-                            name: userCommunity.name,
-                            country: userCommunity.country,
-                            city: userCommunity.city,
-                            cover: {
-                                url: userCommunity.coverImage,
-                                height: 0,
-                                width: 0,
-                                id: 0,
-                            },
-                            stories: [],
-                        }}
-                        story={submitedResult}
-                        communityId={userCommunity.id}
-                    />
-                    <View style={{ width: '100%' }}>
-                        <Text
-                            style={{
-                                fontFamily: 'Gelion-Regular',
-                                fontSize: 20,
-                                lineHeight: 24,
-                                color: 'white',
-                                textAlign: 'left',
-                                marginHorizontal: 22,
-                            }}
-                        >
-                            {storyText}
-                        </Text>
-                        <View
-                            style={{
-                                marginVertical: 27,
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.donateLabel}>
-                                    {submitedResult.loves} Loves
-                                </Text>
-                            </View>
-                            <Button
-                                modeType="green"
-                                bold
-                                style={styles.donate}
-                                labelStyle={styles.donateLabel}
-                                onPress={() =>
-                                    navigation.navigate(
-                                        Screens.CommunityDetails,
-                                        {
-                                            communityId: userCommunity.publicId,
-                                            openDonate: true,
-                                        }
-                                    )
-                                }
-                            >
-                                {i18n.t('donate')}
-                            </Button>
-                        </View>
-                    </View>
-                </View>
-            </View>
+            <Carousel
+                communityId={userCommunity?.id}
+                goToOtherCommunity={() => {}}
+            />
         );
     }
 

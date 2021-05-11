@@ -52,7 +52,7 @@ function Carousel(props: {
     const [openPopup, setOpenPopup] = useState(false);
 
     const togglePopup = () => setOpenPopup(!openPopup);
-    const { caller } = route.params;
+    // const { caller } = route.params;
 
     const renderEmptyStories = () => {
         return (

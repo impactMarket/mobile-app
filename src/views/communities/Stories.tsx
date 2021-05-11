@@ -105,7 +105,7 @@ export default function Stories() {
                     userCommunityMetadata.metadata.status === 'valid' && (
                         <View style={{ flexDirection: 'column' }}>
                             <NewStoryCard key="newStory" />
-                            {/* <MyStoriesCard /> */}
+                            <MyStoriesCard />
                         </View>
                     )}
                 {refreshing && (
