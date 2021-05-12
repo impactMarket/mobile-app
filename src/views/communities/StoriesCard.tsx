@@ -31,9 +31,7 @@ export default function StoriesCard(props: {
                     source={{ uri: props.imageURI }}
                     style={{
                         flex: 1,
-                        // resizeMode: 'cover',
                         justifyContent: 'center',
-                        // alignItems: 'flex-end',
                         borderRadius: 8,
                     }}
                 />
@@ -47,7 +45,6 @@ export default function StoriesCard(props: {
                     marginTop: 8,
                     flexWrap: 'wrap',
                     width: 110,
-                    // marginHorizontal: 12,
                 }}
             >
                 {props.communityName?.length > 18

@@ -31,6 +31,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     }, [storiesListState, props.route.params.communityId]);
 
     const indexRef = useRef(index);
+
     indexRef.current = index;
     const onScroll = useCallback((event) => {
         const slideSize = event.nativeEvent.layoutMeasurement.width;
@@ -92,7 +93,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                 onScroll={onScroll}
                 // Performance settings
                 removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={1} // Reduce initial render amount
+                initialNumToRender={5} // Reduce initial render amount
                 maxToRenderPerBatch={1} // Reduce number in each render batch
             />
         </View>
