@@ -34,7 +34,7 @@ export default function Stories() {
     useFocusEffect(
         useCallback(() => {
             setRefreshing(true);
-            Api.story.list<ICommunitiesListStories[]>().then((s) => {
+            Api.story.list<ICommunitiesListStories[]>(0, 5).then((s) => {
                 setStoriesCommunity(s);
                 dispatch(addStoriesToState(s));
                 setRefreshing(false);
