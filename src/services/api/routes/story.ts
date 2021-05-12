@@ -35,8 +35,15 @@ class ApiRouteStory {
         return this.api.post<ICommunityStory>('/story', story);
     }
 
-    static async list<T extends ICommunitiesListStories[]>(): Promise<T> {
-        return this.api.get<T>('/story/list?includeIPCT=true');
+    static async list<T extends ICommunitiesListStories[]>(
+        offset?: number,
+        limit?: number
+    ): Promise<T> {
+        return this.api.get<T>(
+            '/story/list?includeIPCT=true' +
+                (offset !== undefined ? `&offset=${offset}` : '') +
+                (limit !== undefined ? `&limit=${limit}` : '')
+        );
     }
 
     static async getByCommunity(
