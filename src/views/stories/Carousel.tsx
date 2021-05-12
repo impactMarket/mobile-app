@@ -52,9 +52,73 @@ function Carousel(props: {
     const [openPopup, setOpenPopup] = useState(false);
 
     const togglePopup = () => setOpenPopup(!openPopup);
-    // const { caller } = route.params;
+    const { caller } = route.params ?? {};
 
-    const renderEmptyStories = () => {
+    useEffect(() => {
+        if (caller === 'MY_STORIES' && myStories?.length > 0) {
+            setStories(myStories);
+        } else {
+            caller !== 'MY_STORIES' &&
+                Api.story
+                    .getByCommunity(props.communityId, userAddress.length > 0)
+                    .then((s) => {
+                        setCommunityStories(s);
+                        setStories(s.stories);
+                        if (userAddress.length > 0) {
+                            setLovedStories(
+                                s.stories.map((ss) => ss.userLoved)
+                            );
+                        } else {
+                            setLovedStories(
+                                Array(s.stories.length).fill(false)
+                            );
+                        }
+                    });
+        }
+    }, []);
+
+    const handlePressPrevious = () => {
+        if (index === 0 && caller !== 'MY_STORIES') {
+            props.goToOtherCommunity(false);
+        } else if (index > 0) {
+            setIndex(index - 1);
+        }
+    };
+
+    const handlePressNext = () => {
+        if (index === stories.length - 1 && caller !== 'MY_STORIES') {
+            props.goToOtherCommunity(true);
+        } else if (index < stories.length - 1) {
+            setIndex(index + 1);
+        }
+    };
+
+    if (stories.length === 0) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    alignContent: 'center',
+                    height: dimensions.height,
+                    width: dimensions.width,
+                }}
+            >
+                <ActivityIndicator
+                    size={35}
+                    style={{
+                        marginBottom: 22,
+                        width: '100%',
+                    }}
+                    animating
+                    color={ipctColors.blueRibbon}
+                />
+            </View>
+        );
+    }
+
+    if (caller === 'MY_STORIES' && stories.length === 0) {
         return (
             <View
                 style={{
@@ -110,70 +174,8 @@ function Carousel(props: {
                 </Pressable>
             </View>
         );
-    };
-    useEffect(() => {
-        // if (caller === 'MY_STORIES' && myStories?.length > 0) {
-        //     setStories(myStories);
-        // } else {
-        //     !caller &&
-        Api.story
-            .getByCommunity(props.communityId, userAddress.length > 0)
-            .then((s) => {
-                setCommunityStories(s);
-                setStories(s.stories);
-                if (userAddress.length > 0) {
-                    setLovedStories(s.stories.map((ss) => ss.userLoved));
-                } else {
-                    setLovedStories(Array(s.stories.length).fill(false));
-                }
-            });
-        // }
-    }, []);
-
-    const handlePressPrevious = () => {
-        if (index === 0) {
-            props.goToOtherCommunity(false);
-        } else {
-            setIndex(index - 1);
-        }
-    };
-
-    const handlePressNext = () => {
-        if (index === stories.length - 1) {
-            props.goToOtherCommunity(true);
-        } else {
-            setIndex(index + 1);
-        }
-    };
-
-    if (stories.length === 0) {
-        return (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    alignContent: 'center',
-                    height: dimensions.height,
-                    width: dimensions.width,
-                }}
-            >
-                <ActivityIndicator
-                    size={35}
-                    style={{
-                        marginBottom: 22,
-                        width: '100%',
-                    }}
-                    animating
-                    color={ipctColors.blueRibbon}
-                />
-            </View>
-        );
     }
 
-    // return caller === 'MY_STORIES' && stories.length === 0 ? (
-    //     renderEmptyStories()
-    // ) :
     return (
         <View
             style={{

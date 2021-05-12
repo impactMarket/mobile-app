@@ -5,32 +5,20 @@ import Input from 'components/core/Input';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
-import { StatusBar } from 'expo-status-bar';
-import { Screens } from 'helpers/constants';
 import { ICommunityStory } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
 import React, { useLayoutEffect, useState } from 'react';
-import {
-    View,
-    Text,
-    ImageBackground,
-    Alert,
-    useWindowDimensions,
-    StyleSheet,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { View, Text, ImageBackground, Alert, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 import Api from 'services/api';
 
 import Carousel from './Carousel';
-import Container from './Container';
-import StoriesCarouselScreen from './StoriesCarousel';
 
 function NewStoryScreen() {
-    const dimensions = useWindowDimensions();
     const navigation = useNavigation();
-    const dispatch = useDispatch();
+
     const [storyText, setStoryText] = useState('');
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
@@ -38,9 +26,7 @@ function NewStoryScreen() {
         ICommunityStory | undefined
     >();
     const [submittedWithSuccess, setSubmittedWithSuccess] = useState(false);
-    const userAddress = useSelector(
-        (state: IRootState) => state.user.wallet.address
-    );
+
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
@@ -78,7 +64,6 @@ function NewStoryScreen() {
 
             if (storyMedia.length > 0) {
                 media = await Api.story.addPicture(storyMedia);
-                console.log({ media });
             }
             const r = await Api.story.add({
                 communityId: userCommunity.id,
