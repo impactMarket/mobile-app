@@ -7,6 +7,7 @@ import {
     useFocusEffect,
 } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
+import currenciesJSON from 'assets/currencies.json';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
@@ -61,6 +62,13 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
+const currencies: {
+    [key: string]: {
+        symbol: string;
+        name: string;
+        symbol_native: string;
+    };
+} = currenciesJSON;
 function Auth() {
     const navigation = useNavigation();
 
@@ -125,7 +133,11 @@ function Auth() {
                 value.phone ===
                 dappkitResponse.phoneNumber.slice(1, value.phone.length + 1)
             ) {
-                currency = value.currency;
+                if (value.currency in currencies) {
+                    currency = value.currency;
+                } else {
+                    currency = 'USD';
+                }
                 break;
             }
         }
