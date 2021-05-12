@@ -394,6 +394,11 @@
         "name": "Malaysian Ringgit",
         "symbol_native": "RM"
     },
+    "MWK": {
+        "symbol": "K",
+        "name": "Malawian kwacha",
+        "symbol_native": "K"
+    },
     "MZN": {
         "symbol": "MTn",
         "name": "Mozambican Metical",
