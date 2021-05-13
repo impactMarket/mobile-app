@@ -22,7 +22,10 @@ import {
     setUserIsCommunityManager,
     setUserMetadata,
 } from 'helpers/redux/actions/user';
-import { CommunityCreationAttributes } from 'helpers/types/endpoints';
+import {
+    CommunityCreationAttributes,
+    CommunityEditionAttributes,
+} from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, {
     useState,
@@ -38,7 +41,6 @@ import {
     View,
     Image,
     FlatList,
-    TextInputEndEditingEventData,
     TouchableOpacity,
     Dimensions,
     KeyboardAvoidingView,
@@ -57,9 +59,10 @@ import {
 } from 'react-native-paper';
 import EIcon from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { batch, useDispatch, useSelector, useStore } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
+import community from 'services/api/routes/community';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
@@ -89,6 +92,7 @@ const currencies: {
 } = currenciesJSON;
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
+
 function CreateCommunityScreen() {
     const dispatch = useDispatch();
     // const store = useStore();
@@ -112,6 +116,7 @@ function CreateCommunityScreen() {
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
+
     const avatar = useSelector(
         (state: IRootState) => state.user.metadata.avatar
     );
@@ -121,10 +126,19 @@ function CreateCommunityScreen() {
     const kit = useSelector((state: IRootState) => state.app.kit);
     const navigation = useNavigation();
 
+    const initialData = {
+        name: userCommunity?.name,
+        description: userCommunity?.description,
+        city: userCommunity?.city,
+        country: userCommunity?.country,
+        email: userCommunity?.email,
+        coverImage: userCommunity?.coverImage,
+    };
+
     const [sending, setSending] = useState(false);
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     const [isNameValid, setIsNameValid] = useState(true);
-    const [isEditable, setIsEditable] = useState(false);
+    const [isEditable, setIsEditable] = useState(!!userCommunity);
 
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
@@ -149,23 +163,26 @@ function CreateCommunityScreen() {
     const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
         []
     );
+
     const [currency, setCurrency] = useState<string>(userCurrency);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [city, setCity] = useState('');
+    const [name, setName] = useState(initialData.name || '');
+    const [description, setDescription] = useState(
+        initialData.description || ''
+    );
+    const [city, setCity] = useState(initialData.city || '');
     const [searchCountryQuery, setSearchCountryQuery] = useState('');
 
     const [fullCountryList, setFullCountryList] = useState<string[]>([]);
     const [searchCountryISOResult, setSearchCountryISOResult] = useState<
         string[]
     >([]);
-    const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
-    const [country, setCountry] = useState('');
-    const [email, setEmail] = useState('');
-    const [coverImage, setCoverImage] = useState('');
+
+    const [country, setCountry] = useState(initialData.country || '');
+    const [email, setEmail] = useState(initialData.email || '');
+    const [coverImage, setCoverImage] = useState(initialData.coverImage || '');
 
     const [profileImage, setProfileImage] = useState<string>(avatar || '');
-    const [isAlertVisible, setIsAlertVisible] = useState(true);
+    const [isAlertVisible, setIsAlertVisible] = useState(!userCommunity);
     // const [communityLogo, setCommunityLogo] = useState('');
 
     const [claimAmount, setClaimAmount] = useState('');
@@ -233,12 +250,14 @@ function CreateCommunityScreen() {
         setCountryAndCurrencyBasedOnPhoneNumber();
         renderAvailableCountries();
         renderAvailableCurrencies();
+        navigation.setOptions({
+            headerTitle: i18n.t('editCommunity'),
+        });
     }, []);
 
     useEffect(() => {
-        if (userCommunity !== undefined && userIsManager === true) {
-            navigation.goBack();
-            navigation.navigate(Screens.CommunityManager);
+        if (userIsManager === true) {
+            setIsEditable(true);
         }
     }, [userIsManager, userCommunity]);
 
@@ -351,9 +370,22 @@ function CreateCommunityScreen() {
             _isCoverImageValid &&
             _isProfileImageValid;
 
-        if (!isSubmitAvailable) {
+        const isSubmitEditAvailable =
+            _isNameValid &&
+            _isDescriptionValid &&
+            _isCityValid &&
+            _isCountryValid &&
+            _isEmailValid &&
+            _isCoverImageValid;
+
+        if (!isEditable && !isSubmitAvailable) {
             return;
         }
+
+        if (isEditable && !isSubmitEditAvailable) {
+            return;
+        }
+
         if (new BigNumber(maxClaim).lte(claimAmount)) {
             Alert.alert(
                 i18n.t('failure'),
@@ -436,60 +468,104 @@ function CreateCommunityScreen() {
             }
 
             if (apiRequestResult) {
-                const communityDetails: CommunityCreationAttributes = {
-                    requestByAddress: userAddress,
-                    name,
-                    description,
-                    language: userLanguage,
-                    currency,
-                    city,
-                    country,
-                    gps: {
-                        latitude:
-                            gpsLocation!.coords.latitude +
-                            config.locationErrorMargin,
-                        longitude:
-                            gpsLocation!.coords.longitude +
-                            config.locationErrorMargin,
-                    },
-                    email,
-                    coverMediaId: apiRequestResult.data.data.id,
-                    contractParams,
-                    ...privateParamsIfAvailable,
-                };
+                if (userCommunity) {
+                    const communityDetails: CommunityEditionAttributes = {
+                        requestByAddress: userAddress,
+                        name,
+                        description,
+                        language: userLanguage,
+                        city,
+                        country,
+                        email,
+                        coverMediaId: apiRequestResult.data.data.id,
+                    };
 
-                const communityApiRequestResult = await Api.community.create(
-                    communityDetails
-                );
-                if (communityApiRequestResult) {
-                    await updateCommunityInfo(
-                        communityApiRequestResult.publicId,
-                        dispatch
+                    const communityApiRequestResult = await Api.community.edit(
+                        userCommunity.id,
+                        communityDetails
                     );
-                    const community = await Api.community.getByPublicId(
-                        communityApiRequestResult.publicId
+
+                    if (communityApiRequestResult) {
+                        await updateCommunityInfo(
+                            communityApiRequestResult.publicId,
+                            dispatch
+                        );
+                        const community = await Api.community.getByPublicId(
+                            communityApiRequestResult.publicId
+                        );
+                        if (community !== undefined) {
+                            batch(() => {
+                                dispatch(setCommunityMetadata(community));
+                                dispatch(setUserIsCommunityManager(true));
+                            });
+                        }
+                    } else {
+                        Alert.alert(
+                            i18n.t('failure'),
+                            i18n.t('errorEditingCommunity'),
+                            [{ text: 'OK' }],
+                            { cancelable: false }
+                        );
+                        setSending(false);
+                    }
+                } else {
+                    const communityDetails: CommunityCreationAttributes = {
+                        requestByAddress: userAddress,
+                        name,
+                        description,
+                        language: userLanguage,
+                        currency,
+                        city,
+                        country,
+                        gps: {
+                            latitude:
+                                gpsLocation!.coords.latitude +
+                                config.locationErrorMargin,
+                            longitude:
+                                gpsLocation!.coords.longitude +
+                                config.locationErrorMargin,
+                        },
+                        email,
+                        coverMediaId: apiRequestResult.data.data.id,
+                        contractParams,
+                        ...privateParamsIfAvailable,
+                    };
+
+                    const communityApiRequestResult = await Api.community.create(
+                        communityDetails
                     );
-                    if (community !== undefined) {
-                        batch(() => {
-                            dispatch(setCommunityMetadata(community));
-                            dispatch(setUserIsCommunityManager(true));
-                        });
+                    if (communityApiRequestResult) {
+                        await updateCommunityInfo(
+                            communityApiRequestResult.publicId,
+                            dispatch
+                        );
+                        const community = await Api.community.getByPublicId(
+                            communityApiRequestResult.publicId
+                        );
+                        if (community !== undefined) {
+                            batch(() => {
+                                dispatch(setCommunityMetadata(community));
+                                dispatch(setUserIsCommunityManager(true));
+                            });
+                        }
+                    } else {
+                        Alert.alert(
+                            i18n.t('failure'),
+                            i18n.t('errorCreatingCommunity'),
+                            [{ text: 'OK' }],
+                            { cancelable: false }
+                        );
+                        setSending(false);
                     }
                 }
-            } else {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorCreatingCommunity'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                setSending(false);
             }
         } catch (e) {
             Sentry.Native.captureException(e);
             Alert.alert(
                 i18n.t('failure'),
-                i18n.t('errorCreatingCommunity'),
+                isEditable
+                    ? i18n.t('errorEditingCommunity')
+                    : i18n.t('errorCreatingCommunity'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
@@ -575,17 +651,6 @@ function CreateCommunityScreen() {
                 inputStyle={{
                     marginLeft: -14,
                 }}
-                // clearIcon={(e) => (
-                //     <IconButton
-                //         icon="close"
-                //         onPress={() => {
-                //             setSearchCurrency('');
-                //             setSearchCurrencyResult([]);
-                //             setTooManyResultForQuery(false);
-                //             setShowingResults(false);
-                //         }}
-                //     />
-                // )}
                 onChangeText={(e) => {
                     if (e.length === 0 && showingResults) {
                         setSearchCurrencyResult([]);
@@ -773,13 +838,9 @@ function CreateCommunityScreen() {
                 currencyResult.push(key);
             }
         }
-        //
-        if (currencyResult.length > 15) {
-            setTooManyResultForQuery(true);
-        } else {
-            setSearchCurrencyResult(currencyResult);
-            setShowingResults(true);
-        }
+
+        setSearchCurrencyResult(currencyResult);
+        setShowingResults(true);
     };
 
     const handleSelectCurrency = (currency: string) => {
@@ -1340,18 +1401,18 @@ function CreateCommunityScreen() {
                                     </HelperText>
                                 )}
                             </View>
-                            <View style={{ marginTop: 28 }}>
-                                <Select
-                                    label={i18n.t('currency')}
-                                    value={currencies[currency].name}
-                                    onPress={() =>
-                                        modalizeCurrencyRef.current?.open()
-                                    }
-                                />
-                            </View>
                         </View>
                         {!isEditable && (
                             <>
+                                <View style={{ marginTop: 28 }}>
+                                    <Select
+                                        label={i18n.t('currency')}
+                                        value={currencies[currency].name}
+                                        onPress={() =>
+                                            modalizeCurrencyRef.current?.open()
+                                        }
+                                    />
+                                </View>
                                 <Headline
                                     style={[
                                         { marginTop: 50 },
@@ -1630,10 +1691,10 @@ function CreateCommunityScreen() {
         </>
     );
 }
-CreateCommunityScreen.navigationOptions = () => {
+CreateCommunityScreen.navigationOptions = (isEditable: boolean) => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('applyCommunity'), // editing ? i18n.t('edit') : i18n.t('create'),
+        headerTitle: i18n.t('applyCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

@@ -6,7 +6,7 @@ import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 
 function CommunityManager() {
@@ -33,19 +33,35 @@ function CommunityManager() {
                     style={{ marginLeft: 8.4, marginRight: 16 }}
                     hasCloseBtn={false}
                 >
-                    <Button
-                        modeType="gray"
-                        bold
-                        style={{ marginVertical: 10, width: '100%' }}
-                        onPress={() => {
-                            setOpenThreeDotsMenu(false);
-                            navigation.navigate(Screens.CommunityDetails, {
-                                communityId: community.publicId,
-                            });
-                        }}
-                    >
-                        {i18n.t('viewAsPublic')}
-                    </Button>
+                    <>
+                        <Button
+                            modeType="gray"
+                            bold
+                            style={{ marginVertical: 10, width: '100%' }}
+                            onPress={() => {
+                                setOpenThreeDotsMenu(false);
+                                navigation.navigate(Screens.CommunityDetails, {
+                                    communityId: community.publicId,
+                                });
+                            }}
+                        >
+                            {i18n.t('viewAsPublic')}
+                        </Button>
+                        <Button
+                            modeType="gray"
+                            bold
+                            style={{ marginVertical: 10, width: '100%' }}
+                            onPress={() => {
+                                setOpenThreeDotsMenu(false);
+                                // Alert.alert('teste');
+                                navigation.navigate(Screens.CreateCommunity, {
+                                    communityId: community.publicId,
+                                });
+                            }}
+                        >
+                            {i18n.t('editCommunityDetails')}
+                        </Button>
+                    </>
                 </ThreeDotsSvg>
             )}
         </View>

@@ -58,6 +58,7 @@ export default {
         'É necessário estar conectado com a app Valora para criar uma comunidade.',
     communityDetails: 'Detalhes da Comunidade',
     applyCommunity: 'Criar Comunidade',
+    editCommunity: 'Editar Comunidade',
     createCommunityDescription:
         'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
     createCommunityAlert:
@@ -112,6 +113,8 @@ export default {
         'Ocorreu um erro enquanto atualizava os dados da comunidade!',
     errorCreatingCommunity:
         'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
+    errorEditingCommunity:
+        'Ocorreu um erro enquanto era registado o pedido para editar uma comunidade!',
     errorUploadingAvatar:
         'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente!',
     anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',

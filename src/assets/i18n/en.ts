@@ -56,6 +56,7 @@ export default {
     edit: 'Edit',
     create: 'Create',
     applyCommunity: 'Apply Community',
+    editCommunity: 'Edit Community',
     submit: 'Submit',
     needLoginToCreateCommunity:
         'You need to connect with Valora to create a community.',
@@ -115,6 +116,8 @@ export default {
     errorUpdatingCommunity: 'An error happened while updating your community!',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
+    errorEditingCommunity:
+        'An error happened while placing the request to edit a community!',
     errorUploadingAvatar:
         'An error happened while uploading your image, try again later!',
     anErroHappenedTryAgain: 'An error happened, please, try again.',

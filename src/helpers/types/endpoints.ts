@@ -78,6 +78,18 @@ export interface IManagerDetailsBeneficiary {
 }
 
 //
+
+export interface CommunityEditionAttributes {
+    requestByAddress: string;
+    contractAddress?: string;
+    name: string;
+    description: string;
+    language: string;
+    city: string;
+    country: string;
+    email: string;
+    coverMediaId?: number;
+}
 export interface CommunityCreationAttributes {
     requestByAddress: string;
     contractAddress?: string;

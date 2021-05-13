@@ -1,5 +1,6 @@
 import {
     CommunityCreationAttributes,
+    CommunityEditionAttributes,
     ICommunity,
     ICommunityLightDetails,
     IManagerDetailsBeneficiary,
@@ -114,6 +115,13 @@ class ApiRouteCommunity {
         details: CommunityCreationAttributes
     ): Promise<ICommunity | undefined> {
         return (await postRequest<any>('/community/create', details)).data; // this is using a new endpoint
+    }
+
+    static async edit(
+        communityId: number,
+        details: CommunityEditionAttributes
+    ): Promise<ICommunity | undefined> {
+        return (await postRequest<any>('/community/edit', details)).data; // this is using a new endpoint
     }
 
     static async getRequestChangeUbi(
