@@ -18,10 +18,18 @@ import { ICommunity } from 'helpers/types/endpoints';
 import { UbiRequestChangeParams } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    RefreshControl,
+    Alert,
+    Dimensions,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 // services
 import { ActivityIndicator, Portal, Paragraph } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
@@ -36,7 +44,7 @@ import Managers from './cards/Managers';
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-
+    const [openHelpCenter, setOpenHelpCenter] = useState(false);
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userCurrency = useSelector(
         (state: IRootState) => state.user.metadata.currency
@@ -257,6 +265,20 @@ function CommunityManagerScreen() {
                 </>
             );
         }
+
+        const renderHelpCenter = () => {
+            if (openHelpCenter) {
+                return (
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{ uri: 'https://docs.impactmarket.com/' }}
+                        style={{
+                            height: Dimensions.get('screen').height * 0.85,
+                        }}
+                    />
+                );
+            }
+        };
         return (
             <ScrollView
             // style={{ flex: 1 }}
@@ -291,12 +313,9 @@ function CommunityManagerScreen() {
                         lineHeight: 18,
                         letterSpacing: 0.3,
                     }}
-                    // onPress={() => {
-                    //     setRedirecting(true);
-                    //     dispatch(
-                    //         SetAppFromWelcomeScreen(Screens.Communities)
-                    //     );
-                    // }}
+                    onPress={() => {
+                        setOpenHelpCenter(true);
+                    }}
                 >
                     {i18n.t('openHelpCenter')}
                 </Button>

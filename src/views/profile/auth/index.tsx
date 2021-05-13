@@ -179,8 +179,6 @@ function Auth() {
                 avatar: user.user.avatar ? (user.user.avatar as any).url : null, // TODO: avoid this
             });
 
-            console.log(user.user);
-
             await welcomeUser(
                 userAddress,
                 dappkitResponse.phoneNumber,

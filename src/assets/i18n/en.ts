@@ -201,6 +201,7 @@ export default {
     maxClaimAmountRequired: 'Max claim amount is required!',
     incrementalIntervalRequired: 'Incremental interval is required!',
     openHelpCenter: 'Open Help Center',
+    knowMoreHelpCenter: 'Know more about on our Help Center',
     turnOn: 'Turn On',
     turnOnLocationHint: 'Turn on your location for a better experience.',
     tryAgain: 'Try Again',
@@ -290,7 +291,14 @@ export default {
     noResults: 'No results founds!',
     tooManyResults: 'Too many results! Improve your search.',
     stories: 'Stories',
+    storyRules: 'Important Rules',
+    storyRulesFirstParagraph:
+        '<bold>Sharing your stories will help your community to raise more funds.</bold> Do not share any content (text or image) that infringe our rules as it will be deleted and you may be removed from your community.',
+    storySubTitle: 'Stories must not contain any of the following:',
+    storyRulesSecondParagraph:
+        'Violence, Terrorism/violent extremism, Child sexual exploitation, Abuse/harassment, Hateful conduct, Suicide or self-harm, Sensitive media, Illegal or certain regulated goods or services, Nudity, Non-consensual nudity, Civic Integrity, Impersonation, Synthetic and manipulated media, and Copyrights and trademarks.',
     reportAsInapropriated: 'Report as inapropriate',
+    reportedAsInapropriated: 'Reported as inapropriate',
     reportInapropriateSuccess: 'Your report was successfully submitted.',
     deleteSuccess: 'Your story was successfully deleted.',
     reportInapropriateWarning:
