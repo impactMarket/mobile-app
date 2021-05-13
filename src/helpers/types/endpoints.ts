@@ -128,6 +128,7 @@ export interface ICommunityStory {
     byAddress: string;
     loves: number;
     userLoved: boolean;
+    userReported: boolean;
 }
 
 export interface ICommunitiesListStories {

@@ -194,6 +194,7 @@ export default {
     maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
     incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
     openHelpCenter: 'Abrir o Centro de Ajuda',
+    knowMoreHelpCenter: 'Saiba mais em nosso Centro de Ajuda',
     turnOn: 'Ativar',
     turnOnLocationHint: 'Ative a sua localização para uma melhor experiência.',
     tryAgain: 'Tentar Novamente',
@@ -291,10 +292,17 @@ export default {
     notInComunity: 'Não estás associado a nenhuma comunidade!',
     storyCongrat: 'Parabéns, sua story foi submetida!',
     story: 'Story',
+    storyRules: 'Regras Importantes',
+    storyRulesFirstParagraph:
+        'Compartilhar suas histórias ajudará sua comunidade a arrecadar mais fundos. Não compartilhe nenhum conteúdo (texto ou imagem) que infrinja nossas regras, pois ele será excluído e você poderá ser removido de sua comunidade.',
+    storySubTitle: 'As histórias não devem conter nenhum dos seguintes:',
+    storyRulesSecondParagraph:
+        'Violência, terrorismo / extremismo violento, exploração sexual infantil, abuso / assédio, conduta de ódio, suicídio ou automutilação, mídia sensível, bens ou serviços ilegais ou regulamentados, nudez, nudez não consensual, integridade cívica, falsificação de identidade, sintético e mídia manipulada e direitos autorais e marcas registradas.',
     newStory: 'Nova Story',
     delete: 'Apagar',
     reportInapropriateSuccess: 'Sua denuncia foi submetida com sucesso.',
     reportAsInapropriated: 'Denunciar como inapropriada',
+    reportedAsInapropriated: 'Denunciada como inapropriada',
     deleteSuccess: 'Sua story foi apagada com sucesso.',
     reportInapropriateWarning:
         'Tem certeza que deseja denunciar esta story como inapropriada?',

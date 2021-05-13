@@ -58,6 +58,7 @@ export default function Container({
     const titleStyle: StyleProp<TextStyle> = {
         textAlign: 'left',
         marginLeft: 12,
+        fontSize: 22,
     };
 
     const countries: {
@@ -260,8 +261,7 @@ export default function Container({
                                                 style={{
                                                     marginLeft: 13.4,
                                                     fontFamily: 'Manrope-Bold',
-                                                    fontSize: 17,
-                                                    letterSpacing: 0.7,
+                                                    fontSize: 14,
                                                 }}
                                             >
                                                 {i18n.t('delete')}
@@ -327,16 +327,23 @@ export default function Container({
                                             );
                                         }}
                                     >
-                                        <ReportInapropriateSvg />
+                                        <ReportInapropriateSvg
+                                            reported={story.userReported}
+                                        />
                                         <Text
                                             style={{
                                                 marginLeft: 13.4,
                                                 fontFamily: 'Manrope-Bold',
-                                                fontSize: 17,
-                                                letterSpacing: 0.7,
+                                                fontSize: 14,
                                             }}
                                         >
-                                            {i18n.t('reportAsInapropriated')}
+                                            {story.userReported
+                                                ? i18n.t(
+                                                      'reportedAsInapropriated'
+                                                  )
+                                                : i18n.t(
+                                                      'reportAsInapropriated'
+                                                  )}
                                         </Text>
                                     </Pressable>
                                 </>

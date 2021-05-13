@@ -1,6 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -9,10 +10,22 @@ import { ICommunityStory } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
-import React, { useLayoutEffect, useState } from 'react';
-import { View, Text, ImageBackground, Alert, StyleSheet } from 'react-native';
+import React, { useLayoutEffect, useState, useRef } from 'react';
+import { Trans } from 'react-i18next';
+import {
+    View,
+    Text,
+    ImageBackground,
+    Alert,
+    StyleSheet,
+    ScrollView,
+    Dimensions,
+} from 'react-native';
+import { Modalize } from 'react-native-modalize';
+import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
+import { ipctColors } from 'styles/index';
 
 import Carousel from './Carousel';
 
@@ -22,11 +35,13 @@ function NewStoryScreen() {
     const [storyText, setStoryText] = useState('');
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [loadRefs, setLoadRefs] = useState(false);
+    const [openHelpCenter, setOpenHelpCenter] = useState(false);
     const [submitedResult, setSubmitedResult] = useState<
         ICommunityStory | undefined
     >();
     const [submittedWithSuccess, setSubmittedWithSuccess] = useState(false);
-
+    const modalizeStoryRef = useRef<Modalize>(null);
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
@@ -56,6 +71,39 @@ function NewStoryScreen() {
         userCommunity,
         submittedWithSuccess,
     ]);
+
+    useFocusEffect(() => {
+        renderAuthModalize();
+    });
+
+    const renderHelpCenter = () => {
+        if (openHelpCenter) {
+            // TODO: Discuss w/ Bernardo
+            // navigation.setOptions({
+            //     headerShown: !openHelpCenter,
+            // });
+            console.log({ openHelpCenter });
+            return (
+                <WebView
+                    originWhitelist={['*']}
+                    source={{ uri: 'https://docs.impactmarket.com/' }}
+                    style={{
+                        height: Dimensions.get('screen').height * 0.85,
+                    }}
+                />
+            );
+        }
+    };
+
+    const renderAuthModalize = () => {
+        if (modalizeStoryRef.current === null) {
+            setTimeout(() => {
+                setLoadRefs(true);
+            }, 100);
+        } else {
+            modalizeStoryRef.current.open();
+        }
+    };
 
     const submitNewStory = async () => {
         setSubmitting(true);
@@ -124,64 +172,114 @@ function NewStoryScreen() {
         );
     }
 
-    return (
-        <View style={{ marginHorizontal: 18, marginTop: 14 }}>
-            <Input
-                label="Story Post Text · Optional"
-                multiline
-                numberOfLines={4}
-                value={storyText}
-                maxLength={256}
-                onChangeText={(value) => setStoryText(value)}
-                isBig
-            />
-            <Button
-                modeType="default"
-                bold
-                onPress={() => pickImage()}
-                style={{ width: '100%', marginVertical: 24 }}
-            >
-                {i18n.t('attach')}
-            </Button>
-            {storyMedia.length > 0 && (
-                <ImageBackground
-                    source={{ uri: storyMedia }}
-                    imageStyle={{
-                        borderRadius: 4,
-                    }}
+    const renderStoryRules = () => (
+        <ScrollView
+            style={{
+                height: 500,
+            }}
+        >
+            <View style={{ width: '100%', paddingHorizontal: 22 }}>
+                <Text style={styles.description}>
+                    <Trans
+                        i18nKey="storyRulesFirstParagraph"
+                        components={{
+                            bold: (
+                                <Text
+                                    style={{
+                                        fontFamily: 'Inter-Bold',
+                                    }}
+                                />
+                            ),
+                        }}
+                    />
+                </Text>
+                <Text style={styles.storySubTitle}>
+                    {i18n.t('storySubTitle')}
+                </Text>
+                <Text style={styles.description}>
+                    {i18n.t('storyRulesSecondParagraph')}
+                </Text>
+                <Button
+                    modeType="gray"
                     style={{
-                        width: 148,
-                        height: 100,
+                        marginTop: 16,
+                        marginBottom: 16,
+                    }}
+                    labelStyle={{
+                        fontSize: 15,
+                        lineHeight: 28,
+                    }}
+                    onPress={() => {
+                        modalizeStoryRef?.current.close();
+                        setOpenHelpCenter(true);
                     }}
                 >
-                    <CloseStorySvg
-                        style={{
-                            alignSelf: 'flex-end',
-                            marginTop: 14,
-                            marginRight: 10,
-                        }}
-                        onPress={() => setStoryMedia('')}
+                    {i18n.t('knowMoreHelpCenter')}
+                </Button>
+            </View>
+        </ScrollView>
+    );
+
+    return (
+        <>
+            {openHelpCenter ? (
+                renderHelpCenter()
+            ) : (
+                <View style={{ marginHorizontal: 18, marginTop: 14 }}>
+                    <Input
+                        label="Story Post Text · Optional"
+                        multiline
+                        numberOfLines={4}
+                        value={storyText}
+                        maxLength={256}
+                        onChangeText={(value) => setStoryText(value)}
+                        isBig
                     />
-                </ImageBackground>
+                    <Button
+                        modeType="default"
+                        bold
+                        onPress={() => pickImage()}
+                        style={{ width: '100%', marginVertical: 24 }}
+                    >
+                        {i18n.t('attach')}
+                    </Button>
+                    {storyMedia.length > 0 && (
+                        <ImageBackground
+                            source={{ uri: storyMedia }}
+                            imageStyle={{
+                                borderRadius: 4,
+                            }}
+                            style={{
+                                width: 148,
+                                height: 100,
+                            }}
+                        >
+                            <CloseStorySvg
+                                style={{
+                                    alignSelf: 'flex-end',
+                                    marginTop: 14,
+                                    marginRight: 10,
+                                }}
+                                onPress={() => setStoryMedia('')}
+                            />
+                        </ImageBackground>
+                    )}
+                </View>
             )}
-        </View>
+
+            <Modalize
+                ref={modalizeStoryRef}
+                adjustToContentHeight
+                HeaderComponent={renderHeader(
+                    i18n.t('storyRules'),
+                    modalizeStoryRef
+                )}
+            >
+                {renderStoryRules()}
+            </Modalize>
+        </>
     );
 }
-
-const styles = StyleSheet.create({
-    donate: {
-        borderRadius: 5,
-        width: 158,
-        height: 39,
-    },
-    donateLabel: {
-        fontFamily: 'Gelion-Regular',
-        fontSize: 16,
-        lineHeight: 19,
-        color: 'white',
-        letterSpacing: 0.3,
-    },
-});
 
 NewStoryScreen.navigationOptions = () => {
     return {
@@ -200,3 +298,25 @@ NewStoryScreen.navigationOptions = () => {
 };
 
 export default NewStoryScreen;
+
+const styles = StyleSheet.create({
+    description: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 15,
+        fontWeight: '400',
+        lineHeight: 24,
+        textAlign: 'left',
+        color: ipctColors.darBlue,
+        marginTop: 8,
+    },
+    storySubTitle: {
+        fontFamily: 'Inter-Bold',
+        fontSize: 15,
+        fontWeight: '700',
+        lineHeight: 24,
+        textAlign: 'left',
+        color: ipctColors.darBlue,
+        marginTop: 22,
+        marginBottom: 10,
+    },
+});

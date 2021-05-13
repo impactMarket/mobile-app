@@ -78,7 +78,6 @@ class ApiRouteUser {
         const result = await postRequest<boolean>('/user/language', {
             language,
         });
-        console.log({ result });
         return !!result;
     }
 
