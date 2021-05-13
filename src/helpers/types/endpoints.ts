@@ -76,12 +76,7 @@ export interface IManagerDetailsBeneficiary {
     verifiedPN: boolean | undefined;
     suspect: boolean | undefined;
 }
-
-//
-
 export interface CommunityEditionAttributes {
-    requestByAddress: string;
-    contractAddress?: string;
     name: string;
     description: string;
     language: string;

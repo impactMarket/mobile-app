@@ -470,7 +470,6 @@ function CreateCommunityScreen() {
             if (apiRequestResult) {
                 if (userCommunity) {
                     const communityDetails: CommunityEditionAttributes = {
-                        requestByAddress: userAddress,
                         name,
                         description,
                         language: userLanguage,
@@ -481,7 +480,6 @@ function CreateCommunityScreen() {
                     };
 
                     const communityApiRequestResult = await Api.community.edit(
-                        userCommunity.id,
                         communityDetails
                     );
 
