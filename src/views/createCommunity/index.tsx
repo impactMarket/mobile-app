@@ -221,7 +221,11 @@ function CreateCommunityScreen() {
                     userPhoneNumber.slice(1, value.phone.length + 1)
                 ) {
                     setCountry(key);
-                    setCurrency(value.currency);
+                    if (value.currency in currencies) {
+                        setCurrency(value.currency);
+                    } else {
+                        setCurrency('USD');
+                    }
                     break;
                 }
             }
