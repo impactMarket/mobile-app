@@ -23,7 +23,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
     }
 
     render() {
-        const { style, disabled, children, modeType, bold } = this.props;
+        const { style, disabled, children, modeType, bold, icon } = this.props;
         let buttonStyle: StyleProp<ViewStyle> = {
             elevation: 0,
             height: 42,
@@ -60,6 +60,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
             <RNPButton
                 mode="contained"
                 uppercase={false}
+                icon={icon}
                 {...this.props}
                 style={buttonStyle}
                 labelStyle={{
