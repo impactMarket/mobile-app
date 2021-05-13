@@ -39,7 +39,7 @@ export default class Input extends Component<IInputProps, object> {
                     style,
                     {
                         width: '100%',
-                        height: 48,
+                        height: isBig ? 200 : 48,
                     },
                 ]}
             >

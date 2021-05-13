@@ -210,7 +210,7 @@ function NewStoryScreen() {
                         lineHeight: 28,
                     }}
                     onPress={() => {
-                        modalizeStoryRef?.current.close();
+                        modalizeStoryRef.current?.close();
                         setOpenHelpCenter(true);
                     }}
                 >
@@ -229,7 +229,7 @@ function NewStoryScreen() {
                     <Input
                         label="Story Post Text · Optional"
                         multiline
-                        numberOfLines={4}
+                        numberOfLines={12}
                         value={storyText}
                         maxLength={256}
                         onChangeText={(value) => setStoryText(value)}
@@ -238,6 +238,7 @@ function NewStoryScreen() {
                     <Button
                         modeType="default"
                         bold
+                        icon="image"
                         onPress={() => pickImage()}
                         style={{ width: '100%', marginVertical: 24 }}
                     >
