@@ -335,40 +335,48 @@ function CreateCommunityScreen() {
             setIsEmailValid(false);
             return;
         }
-        const _isEnabledGPS = gpsLocation !== undefined;
-        if (!_isEnabledGPS) {
-            setIsEnabledGPS(false);
-            return;
-        }
-        const _isClaimAmountValid =
-            claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
-        if (!_isClaimAmountValid) {
-            setIsClaimAmountValid(false);
-            return;
-        }
-        const _isIncrementalIntervalValid = incrementInterval.length > 0;
-        if (!_isIncrementalIntervalValid) {
-            setIsIncrementalIntervalValid(false);
-            return;
-        }
-        const _isMaxClaimValid =
-            maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
-        if (!_isMaxClaimValid) {
-            setIsMaxClaimValid(false);
-            return;
-        }
+        if (!isEditable) {
+            const _isEnabledGPS = gpsLocation !== undefined;
+            if (!_isEnabledGPS) {
+                setIsEnabledGPS(false);
+                return;
+            }
+            const _isClaimAmountValid =
+                claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
+            if (!_isClaimAmountValid) {
+                setIsClaimAmountValid(false);
+                return;
+            }
+            const _isIncrementalIntervalValid = incrementInterval.length > 0;
+            if (!_isIncrementalIntervalValid) {
+                setIsIncrementalIntervalValid(false);
+                return;
+            }
+            const _isMaxClaimValid =
+                maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
+            if (!_isMaxClaimValid) {
+                setIsMaxClaimValid(false);
+                return;
+            }
 
-        const isSubmitAvailable =
-            _isNameValid &&
-            _isDescriptionValid &&
-            _isCityValid &&
-            _isCountryValid &&
-            _isEmailValid &&
-            _isClaimAmountValid &&
-            _isIncrementalIntervalValid &&
-            _isMaxClaimValid &&
-            _isCoverImageValid &&
-            _isProfileImageValid;
+            const isSubmitAvailable =
+                _isNameValid &&
+                _isDescriptionValid &&
+                _isCityValid &&
+                _isCountryValid &&
+                _isEmailValid &&
+                _isClaimAmountValid &&
+                _isIncrementalIntervalValid &&
+                _isMaxClaimValid &&
+                _isCoverImageValid &&
+                _isProfileImageValid;
+
+            if (!isEditable && !isSubmitAvailable) {
+                console.log({ isEditable });
+                console.log({ isSubmitAvailable });
+                return;
+            }
+        }
 
         const isSubmitEditAvailable =
             _isNameValid &&
@@ -377,10 +385,6 @@ function CreateCommunityScreen() {
             _isCountryValid &&
             _isEmailValid &&
             _isCoverImageValid;
-
-        if (!isEditable && !isSubmitAvailable) {
-            return;
-        }
 
         if (isEditable && !isSubmitEditAvailable) {
             return;
@@ -476,8 +480,11 @@ function CreateCommunityScreen() {
                         city,
                         country,
                         email,
+                        currency,
                         coverMediaId: apiRequestResult.data.data.id,
                     };
+
+                    console.log({ communityDetails });
 
                     const communityApiRequestResult = await Api.community.edit(
                         communityDetails
@@ -559,6 +566,7 @@ function CreateCommunityScreen() {
             }
         } catch (e) {
             Sentry.Native.captureException(e);
+            console.log({ e });
             Alert.alert(
                 i18n.t('failure'),
                 isEditable
@@ -1400,17 +1408,18 @@ function CreateCommunityScreen() {
                                 )}
                             </View>
                         </View>
+
+                        <View style={{ marginTop: 28 }}>
+                            <Select
+                                label={i18n.t('currency')}
+                                value={currencies[currency].name}
+                                onPress={() =>
+                                    modalizeCurrencyRef.current?.open()
+                                }
+                            />
+                        </View>
                         {!isEditable && (
                             <>
-                                <View style={{ marginTop: 28 }}>
-                                    <Select
-                                        label={i18n.t('currency')}
-                                        value={currencies[currency].name}
-                                        onPress={() =>
-                                            modalizeCurrencyRef.current?.open()
-                                        }
-                                    />
-                                </View>
                                 <Headline
                                     style={[
                                         { marginTop: 50 },

@@ -83,6 +83,7 @@ export interface CommunityEditionAttributes {
     city: string;
     country: string;
     email: string;
+    currency: string;
     coverMediaId?: number;
 }
 export interface CommunityCreationAttributes {
