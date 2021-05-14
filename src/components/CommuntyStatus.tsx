@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import { amountToCurrency } from 'helpers/currency';
 import { calculateCommunityProgress } from 'helpers/index';
-import { ICommunity } from 'helpers/types/endpoints';
+import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -14,7 +14,7 @@ import Card from './core/Card';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
-    community: ICommunity;
+    community: CommunityAttributes;
 }
 const mapStateToProps = (state: IRootState) => {
     const { user, app } = state;
@@ -27,6 +27,9 @@ type Props = PropsFromRedux & ICommuntyStatusProps;
 class CommuntyStatus extends Component<Props, object> {
     render() {
         const { community, user, app } = this.props;
+        if (community.contract === undefined || community.state === undefined) {
+            return null;
+        }
         // in theory, it's the total claimed is relative to the total raised.
         // But to draw the progress bar, it's relative to the progress bar size.
         const claimedByRaised = parseFloat(

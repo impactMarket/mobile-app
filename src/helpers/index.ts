@@ -5,11 +5,7 @@ import BigNumber from 'bignumber.js';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import * as Network from 'expo-network';
-import {
-    ICommunity,
-    ICommunityLightDetails,
-    IUserBaseAuth,
-} from 'helpers/types/endpoints';
+import { IUserBaseAuth } from 'helpers/types/endpoints';
 import moment from 'moment';
 import { batch } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -161,7 +157,7 @@ export function claimFrequencyToText(frequency: number): string {
 
 export function calculateCommunityProgress(
     toCalculte: string /*'raised' | 'claimed'*/,
-    community: ICommunity | ICommunityLightDetails | CommunityAttributes
+    community: CommunityAttributes
 ): number {
     if (community.contract === undefined || community.state === undefined) {
         return 0;
@@ -187,10 +183,10 @@ export function getCountryFromPhoneNumber(phoneNumber: string) {
 }
 
 export async function updateCommunityInfo(
-    communityId: string,
+    communityId: number,
     dispatch: Dispatch<any>
 ) {
-    const community = await Api.community.getByPublicId(communityId);
+    const community = await Api.community.findById(communityId);
     if (community !== undefined) {
         dispatch(setCommunityMetadata(community));
     }

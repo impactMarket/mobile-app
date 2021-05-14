@@ -40,7 +40,7 @@ function CommunityManager() {
                         onPress={() => {
                             setOpenThreeDotsMenu(false);
                             navigation.navigate(Screens.CommunityDetails, {
-                                communityId: community.publicId,
+                                communityId: community.id,
                             });
                         }}
                     >

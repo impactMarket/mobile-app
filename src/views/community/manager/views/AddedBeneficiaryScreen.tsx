@@ -130,7 +130,7 @@ function AddedBeneficiaryScreen() {
                 // refresh community details
                 setTimeout(() => {
                     Api.community
-                        .getByPublicId(community.metadata.publicId)
+                        .findById(community.metadata.id)
                         .then((c) => dispatch(setCommunityMetadata(c!)));
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);

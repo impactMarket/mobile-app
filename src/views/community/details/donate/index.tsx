@@ -1,7 +1,7 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import { modalDonateAction } from 'helpers/constants';
-import { ICommunity } from 'helpers/types/endpoints';
+import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Portal } from 'react-native-paper';
@@ -12,7 +12,7 @@ import DonateModal from '../donate/modals/donate';
 import ErrorModal from '../donate/modals/error';
 
 interface IDonateProps {
-    community: ICommunity;
+    community: CommunityAttributes;
 }
 
 export default function Donate(props: IDonateProps) {

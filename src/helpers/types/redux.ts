@@ -26,12 +26,8 @@ import {
     storiesAction,
 } from 'helpers/constants';
 
-import {
-    ICommunitiesListStories,
-    ICommunity,
-    ICommunityStory,
-} from './endpoints';
-import { UserAttributes } from './models';
+import { ICommunitiesListStories, ICommunityStory } from './endpoints';
+import { CommunityAttributes, UserAttributes } from './models';
 import { IUserWallet } from './state';
 
 // action
@@ -87,7 +83,7 @@ interface SetCommunityContractAction {
 
 interface SetCommunityMetadataAction {
     type: typeof SET_COMMUNITY;
-    payload: ICommunity;
+    payload: CommunityAttributes;
 }
 
 interface ResetUserAction {
@@ -129,7 +125,7 @@ interface SetAppEchangeRatesAction {
 
 interface OpenModalDonateAction {
     type: typeof modalDonateAction.OPEN;
-    payload: ICommunity;
+    payload: CommunityAttributes;
 }
 
 interface GoToConfirmModalDonateAction {

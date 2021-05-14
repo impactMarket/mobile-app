@@ -7,15 +7,16 @@ import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import CommunityRules from 'components/core/CommunityRules';
 import ManageSvg from 'components/svg/ManageSvg';
-import * as Linking from 'expo-linking';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
 import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
-import { ICommunity } from 'helpers/types/endpoints';
-import { UbiRequestChangeParams } from 'helpers/types/models';
+import {
+    CommunityAttributes,
+    UbiRequestChangeParams,
+} from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
 import {
@@ -68,9 +69,10 @@ function CommunityManagerScreen() {
     const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
         true
     );
-    const [requiredUbiToChange, setRequiredUbiToChange] = useState<
-        UbiRequestChangeParams | undefined
-    >();
+    const [
+        requiredUbiToChange,
+        setRequiredUbiToChange,
+    ] = useState<UbiRequestChangeParams | null>();
 
     const [editInProgress, setEditInProgress] = useState(false);
 
@@ -90,7 +92,7 @@ function CommunityManagerScreen() {
             };
             const verifyRequestToChangeUbiParams = () => {
                 Api.community
-                    .getRequestChangeUbi(community.publicId)
+                    .getRequestChangeUbi(community.id)
                     .then(setRequiredUbiToChange);
             };
             loadCommunityBalance();
@@ -111,7 +113,7 @@ function CommunityManagerScreen() {
     }, []);
 
     const onRefresh = () => {
-        updateCommunityInfo(community.publicId, dispatch).then(async () => {
+        updateCommunityInfo(community.id, dispatch).then(async () => {
             const stableToken = await kit.contracts.getStableToken();
             const cUSDBalanceBig = await stableToken.balanceOf(
                 communityContract._address
@@ -127,7 +129,7 @@ function CommunityManagerScreen() {
     };
 
     const handleAcceptNewUbiParams = async () => {
-        if (requiredUbiToChange === undefined) {
+        if (requiredUbiToChange === null || requiredUbiToChange === undefined) {
             return;
         }
         celoWalletRequest(
@@ -149,7 +151,7 @@ function CommunityManagerScreen() {
                 // refresh community details
                 setTimeout(() => {
                     Api.community
-                        .getByPublicId(community.publicId)
+                        .findById(community.id)
                         .then((c) => dispatch(setCommunityMetadata(c!)));
                 }, 2500);
 
@@ -174,8 +176,12 @@ function CommunityManagerScreen() {
             });
     };
 
-    const communityStatus = (_community: ICommunity) => {
-        if (_community.status === 'valid') {
+    const communityStatus = (_community: CommunityAttributes) => {
+        if (
+            _community.status === 'valid' &&
+            _community.contract !== undefined &&
+            _community.state !== undefined
+        ) {
             return (
                 <>
                     <ScrollView
@@ -200,7 +206,7 @@ function CommunityManagerScreen() {
                                         hasFundsToNewBeneficiary
                                     }
                                     isSuspeciousDetected={
-                                        _community.suspect &&
+                                        _community.suspect !== undefined &&
                                         _community.suspect.length > 0
                                     }
                                 />
@@ -211,57 +217,72 @@ function CommunityManagerScreen() {
                             </View>
                         </BaseCommunity>
                     </ScrollView>
-                    {requiredUbiToChange !== undefined && (
-                        <Portal>
-                            <Modal
-                                title={i18n.t('ubiParams')}
-                                visible
-                                buttons={
-                                    <>
-                                        <Button
-                                            modeType="green"
-                                            bold
-                                            onPress={handleAcceptNewUbiParams}
-                                            loading={editInProgress}
-                                        >
-                                            {i18n.t('acceptNewUbiParams')}
-                                        </Button>
-                                    </>
-                                }
-                            >
-                                <Paragraph style={styles.ubiChangeModalText}>
-                                    {i18n.t('ubiParamsChanged')}
-                                </Paragraph>
-                                <Paragraph style={styles.ubiChangeModalText}>
-                                    {i18n.t('claimAmount')}:{' '}
-                                    {amountToCurrency(
-                                        requiredUbiToChange.claimAmount,
-                                        userCurrency,
-                                        rates
-                                    )}
-                                </Paragraph>
-                                <Paragraph style={styles.ubiChangeModalText}>
-                                    {i18n.t('totalClaimPerBeneficiary')}:{' '}
-                                    {amountToCurrency(
-                                        requiredUbiToChange.maxClaim,
-                                        userCurrency,
-                                        rates
-                                    )}
-                                </Paragraph>
-                                <Paragraph style={styles.ubiChangeModalText}>
-                                    {i18n.t('frequency')}:{' '}
-                                    {requiredUbiToChange.baseInterval === 86400
-                                        ? i18n.t('day')
-                                        : i18n.t('week')}
-                                </Paragraph>
-                                <Paragraph style={styles.ubiChangeModalText}>
-                                    {i18n.t('timeIncrementAfterClaim')} (
-                                    {i18n.t('timeInMinutes')}):{' '}
-                                    {requiredUbiToChange.incrementInterval / 60}{' '}
-                                </Paragraph>
-                            </Modal>
-                        </Portal>
-                    )}
+                    {requiredUbiToChange !== undefined &&
+                        requiredUbiToChange !== null && (
+                            <Portal>
+                                <Modal
+                                    title={i18n.t('ubiParams')}
+                                    visible
+                                    buttons={
+                                        <>
+                                            <Button
+                                                modeType="green"
+                                                bold
+                                                onPress={
+                                                    handleAcceptNewUbiParams
+                                                }
+                                                loading={editInProgress}
+                                            >
+                                                {i18n.t('acceptNewUbiParams')}
+                                            </Button>
+                                        </>
+                                    }
+                                >
+                                    <Paragraph
+                                        style={styles.ubiChangeModalText}
+                                    >
+                                        {i18n.t('ubiParamsChanged')}
+                                    </Paragraph>
+                                    <Paragraph
+                                        style={styles.ubiChangeModalText}
+                                    >
+                                        {i18n.t('claimAmount')}:{' '}
+                                        {amountToCurrency(
+                                            requiredUbiToChange.claimAmount,
+                                            userCurrency,
+                                            rates
+                                        )}
+                                    </Paragraph>
+                                    <Paragraph
+                                        style={styles.ubiChangeModalText}
+                                    >
+                                        {i18n.t('totalClaimPerBeneficiary')}:{' '}
+                                        {amountToCurrency(
+                                            requiredUbiToChange.maxClaim,
+                                            userCurrency,
+                                            rates
+                                        )}
+                                    </Paragraph>
+                                    <Paragraph
+                                        style={styles.ubiChangeModalText}
+                                    >
+                                        {i18n.t('frequency')}:{' '}
+                                        {requiredUbiToChange.baseInterval ===
+                                        86400
+                                            ? i18n.t('day')
+                                            : i18n.t('week')}
+                                    </Paragraph>
+                                    <Paragraph
+                                        style={styles.ubiChangeModalText}
+                                    >
+                                        {i18n.t('timeIncrementAfterClaim')} (
+                                        {i18n.t('timeInMinutes')}):{' '}
+                                        {requiredUbiToChange.incrementInterval /
+                                            60}{' '}
+                                    </Paragraph>
+                                </Modal>
+                            </Portal>
+                        )}
                 </>
             );
         }
@@ -326,7 +347,11 @@ function CommunityManagerScreen() {
         );
     };
 
-    if (community === undefined) {
+    if (
+        community === undefined ||
+        community.contract === undefined ||
+        community.state === undefined
+    ) {
         return (
             <View
                 style={{

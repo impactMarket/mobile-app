@@ -1,7 +1,5 @@
 import {
     CommunityCreationAttributes,
-    ICommunity,
-    ICommunityLightDetails,
     IManagerDetailsBeneficiary,
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
@@ -11,7 +9,7 @@ import {
     UbiRequestChangeParams,
 } from 'helpers/types/models';
 
-import { ApiRequests, getRequest, postRequest } from '../base';
+import { ApiRequests, getRequest } from '../base';
 
 class ApiRouteCommunity {
     static api = new ApiRequests();
@@ -67,24 +65,6 @@ class ApiRouteCommunity {
         return this.api.get('/community/' + communityId + '/managers/', true);
     }
 
-    // static async listNearest(
-    //     lat: number,
-    //     lng: number,
-    //     offset: number,
-    //     limit: number
-    // ) {
-    //     const result = await getRequest<ICommunityLightDetails[]>(
-    //         '/community/list/light?order=nearest&lat=' +
-    //             lat +
-    //             '&lng=' +
-    //             lng +
-    //             '&offset=' +
-    //             offset +
-    //             '&limit=' +
-    //             limit
-    //     );
-    //     return result ? result : [];
-    // }
     static async list(query: {
         offset: number;
         limit: number;
@@ -106,38 +86,30 @@ class ApiRouteCommunity {
         );
     }
 
-    static async getByPublicId(
-        publicId: string
-    ): Promise<ICommunity | undefined> {
-        return await getRequest<ICommunity>('/community/publicid/' + publicId);
+    static async findById(id: number): Promise<CommunityAttributes> {
+        return this.api.get('/community/' + id);
     }
 
-    static async getByContractAddress(
+    static async findByContractAddress(
         address: string
-    ): Promise<ICommunity | undefined> {
-        return await getRequest<ICommunity>('/community/contract/' + address);
+    ): Promise<CommunityAttributes> {
+        return this.api.get('/community/address/' + address);
     }
 
-    static async getHistoricalSSI(publicId: string): Promise<number[]> {
-        const result = await getRequest<number[]>(
-            '/community/hssi/' + publicId
-        );
-        return result ? result : [];
+    static async pastSSI(id: number): Promise<number[]> {
+        return this.api.get('/community/' + id + '/past-ssi');
     }
 
     static async create(
         details: CommunityCreationAttributes
-    ): Promise<ICommunity | undefined> {
-        return (await postRequest<any>('/community/create', details)).data; // this is using a new endpoint
+    ): Promise<CommunityAttributes> {
+        return this.api.post('/community/create', details);
     }
 
     static async getRequestChangeUbi(
-        publicId: string
-    ): Promise<UbiRequestChangeParams | undefined> {
-        const result = await getRequest<UbiRequestChangeParams>(
-            '/community/ubiparams/' + publicId
-        );
-        return result;
+        id: number
+    ): Promise<UbiRequestChangeParams | null> {
+        return this.api.get('/community/' + id + '/ubi');
     }
 }
 

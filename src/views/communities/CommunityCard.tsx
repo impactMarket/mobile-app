@@ -45,7 +45,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
             style={styles.card}
             onPress={() =>
                 navigation.navigate(Screens.CommunityDetails, {
-                    communityId: community.publicId,
+                    communityId: community.id,
                 })
             }
         >

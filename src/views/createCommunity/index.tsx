@@ -463,11 +463,11 @@ function CreateCommunityScreen() {
                 );
                 if (communityApiRequestResult) {
                     await updateCommunityInfo(
-                        communityApiRequestResult.publicId,
+                        communityApiRequestResult.id,
                         dispatch
                     );
-                    const community = await Api.community.getByPublicId(
-                        communityApiRequestResult.publicId
+                    const community = await Api.community.findById(
+                        communityApiRequestResult.id
                     );
                     if (community !== undefined) {
                         batch(() => {

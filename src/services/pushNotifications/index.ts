@@ -76,7 +76,7 @@ export const startNotificationsListeners = (
                 action === 'beneficiary-added'
             ) {
                 Api.community
-                    .getByContractAddress(communityAddress)
+                    .findByContractAddress(communityAddress)
                     .then((community) => {
                         if (community !== undefined) {
                             const communityContract = new kit.web3.eth.Contract(
@@ -108,13 +108,13 @@ export const startNotificationsListeners = (
             const communityAddress = notificationData.communityAddress as string;
             if (action === 'community-low-funds') {
                 Api.community
-                    .getByContractAddress(communityAddress)
+                    .findByContractAddress(communityAddress)
                     .then((community) => {
                         if (community !== undefined) {
                             navigationRef.current?.navigate(
                                 Screens.CommunityDetails,
                                 {
-                                    communityId: community.publicId,
+                                    communityId: community.id,
                                 }
                             );
                         }
