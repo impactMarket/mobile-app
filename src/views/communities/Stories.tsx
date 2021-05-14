@@ -1,11 +1,12 @@
 import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
+import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToState } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -121,7 +122,12 @@ export default function Stories() {
                         communityId={s.id}
                         communityName={s.name}
                         imageURI={
-                            s.story.media ? s.story.media.url : s.cover.url
+                            s.story.media
+                                ? chooseMediaThumbnail(s.story.media, {
+                                      width: 84,
+                                      heigth: 140,
+                                  })
+                                : s.cover.url
                         }
                     />
                 ))}

@@ -11,6 +11,7 @@ import {
     IUserBaseAuth,
 } from 'helpers/types/endpoints';
 import moment from 'moment';
+import { PixelRatio } from 'react-native';
 import { batch } from 'react-redux';
 import { Dispatch } from 'redux';
 import Api from 'services/api';
@@ -28,7 +29,7 @@ import {
     setUserIsBlocked,
     setUserIsSuspect,
 } from './redux/actions/user';
-import { UserAttributes } from './types/models';
+import { AppMediaContent, UserAttributes } from './types/models';
 
 export function generateUrlWithCloudFront(s3ContentKey: string) {
     // for backwards support
@@ -40,6 +41,27 @@ export function generateUrlWithCloudFront(s3ContentKey: string) {
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
+}
+
+export function chooseMediaThumbnail(
+    media: AppMediaContent,
+    size: { heigth: number; width: number }
+) {
+    if (media.thumbnails) {
+        const thumbnails = media.thumbnails.filter(
+            (t) => t.height === size.heigth && t.width === size.width
+        );
+        if (thumbnails.length > 0) {
+            const thumbnail = thumbnails.find(
+                (t) => t.pixelRatio === PixelRatio.get()
+            );
+            if (thumbnail) {
+                return thumbnail.url;
+            }
+            return thumbnails[0].url;
+        }
+    }
+    return media.url;
 }
 
 export async function isOutOfTime() {
