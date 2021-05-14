@@ -101,6 +101,7 @@ async function postRequest<T>(
         if (result.status >= 400) {
             return undefined;
         }
+
         response = result.data as T;
     } catch (e) {
         Sentry.Native.captureException(e);

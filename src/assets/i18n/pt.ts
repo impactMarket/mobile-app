@@ -15,6 +15,7 @@ export default {
     addBeneficiary: 'Adicionar Beneficiário',
     add: 'Adicionar',
     cancel: 'Fechar',
+    cancelSending: 'Cancelar',
     confirm: 'Confirmar',
     claimed: 'Distribuído',
     raised: 'Angariado',
@@ -101,6 +102,14 @@ export default {
         'Se existir outra pessoa ou organização social na sua comunidade que seja mais adequada para gerir esta iniciativa, informe sobre esta possibilidade e incentive a criar uma comunidade.',
     communityPicsImportance:
         'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
+    communityRequestSending:
+        'Aguarde enquanto as informações da comunidade estão sendo carregadas ...',
+    communityRequestError:
+        'Ocorreu um erro ao enviar as informações da comunidade. Verifique sua conexão com a Internet e tente novamente mais tarde.',
+    communityRequestErrorDetails:
+        'Se você não conseguir criar/editar esta comunidade, envie um tíquete descrevendo o problema.',
+    communityRequestSuccess:
+        'As informações da sua comunidade foram enviadas com sucesso.',
     failure: 'Falhou',
     success: 'Sucesso',
     requestNewCommunityPlaced:
@@ -109,6 +118,7 @@ export default {
     claimNotZero: 'Montante por Pedido deve ser superior a zero!',
     maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
     communityUpdated: 'Os dados da comunidade foram atualizados!',
+    submissionFailed: 'Falha no envio',
     errorUpdatingCommunity:
         'Ocorreu um erro enquanto atualizava os dados da comunidade!',
     errorCreatingCommunity:

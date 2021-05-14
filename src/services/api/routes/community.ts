@@ -120,7 +120,7 @@ class ApiRouteCommunity {
     static async edit(
         details: CommunityEditionAttributes
     ): Promise<ICommunity | undefined> {
-        return (await postRequest<any>('/community/edit', details)).data; // this is using a new endpoint
+        return await postRequest<any>('/community/edit', details);
     }
 
     static async getRequestChangeUbi(

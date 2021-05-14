@@ -4,14 +4,16 @@ import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
+import SuccessSvg from 'components/svg/SuccessSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { celoNetwork, imageTargets, Screens } from 'helpers/constants';
+import { celoNetwork, imageTargets } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     amountToCurrency,
@@ -48,8 +50,10 @@ import {
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
+    Card,
     Portal,
-    Button,
+    Button as RNButton,
+    Modal,
     Paragraph,
     Headline,
     RadioButton,
@@ -62,7 +66,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
-import community from 'services/api/routes/community';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
@@ -136,6 +139,8 @@ function CreateCommunityScreen() {
     };
 
     const [sending, setSending] = useState(false);
+    const [sendingSuccess, setSendingSuccess] = useState(false);
+
     const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     const [isNameValid, setIsNameValid] = useState(true);
     const [isEditable, setIsEditable] = useState(!!userCommunity);
@@ -158,6 +163,8 @@ function CreateCommunityScreen() {
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
     const [showingResults, setShowingResults] = useState(false);
+    const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
+
     const [searchCurrency, setSearchCurrency] = useState('');
     const [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]);
     const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
@@ -260,6 +267,126 @@ function CreateCommunityScreen() {
             setIsEditable(true);
         }
     }, [userIsManager, userCommunity]);
+
+    if (toggleInformativeModal) {
+        return (
+            <Portal>
+                <Modal visible dismissable={false}>
+                    <Card style={{ marginHorizontal: 22, borderRadius: 12 }}>
+                        <View
+                            style={{
+                                paddingVertical: 14,
+                                height: !sendingSuccess && sending ? 400 : 400,
+                                width: '88%',
+                                alignItems: 'center',
+                                alignSelf: 'center',
+                            }}
+                        >
+                            {sending ? (
+                                <Image
+                                    style={{
+                                        height: 58,
+                                        width: 58,
+                                    }}
+                                    source={require('../../assets/images/waitingTx.gif')}
+                                />
+                            ) : sendingSuccess ? (
+                                <SuccessSvg />
+                            ) : (
+                                <>
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            width: '100%',
+                                            marginBottom: 13.5,
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Manrope-Bold',
+                                                fontSize: 18,
+                                                lineHeight: 20,
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            {i18n.t('submissionFailed')}
+                                        </Text>
+                                        <CloseStorySvg
+                                            onPress={() => {
+                                                setToggleInformativeModal(
+                                                    false
+                                                );
+                                                setSending(false);
+                                            }}
+                                        />
+                                    </View>
+                                    <View
+                                        style={{
+                                            padding: 16,
+                                            borderStyle: 'solid',
+                                            borderColor: '#EB5757',
+                                            borderWidth: 2,
+                                            borderRadius: 8,
+                                            width: '100%',
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Inter-Regular',
+                                                fontSize: 14,
+                                                lineHeight: 24,
+                                                color: ipctColors.almostBlack,
+                                                textAlign: 'left',
+                                            }}
+                                        >
+                                            {i18n.t('communityRequestError')}
+                                        </Text>
+                                    </View>
+                                </>
+                            )}
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                    width: '80%',
+                                    textAlign:
+                                        sendingSuccess || sending
+                                            ? 'center'
+                                            : 'left',
+                                    marginBottom: 10,
+                                }}
+                            >
+                                {sending
+                                    ? i18n.t('communityRequestSending')
+                                    : sendingSuccess
+                                    ? i18n.t('communityRequestSuccess')
+                                    : i18n.t('communityRequestErrorDetails')}
+                            </Text>
+                            <Button
+                                modeType="gray"
+                                bold
+                                style={{ width: '100%' }}
+                                onPress={() => {
+                                    setSending(false);
+                                    setToggleInformativeModal(false);
+                                }}
+                            >
+                                {sending
+                                    ? i18n.t('cancelSending')
+                                    : sendingSuccess
+                                    ? i18n.t('continue')
+                                    : i18n.t('close')}
+                            </Button>
+                        </View>
+                    </Card>
+                </Modal>
+            </Portal>
+        );
+    }
 
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
@@ -424,6 +551,7 @@ function CreateCommunityScreen() {
 
         try {
             setSending(true);
+            setToggleInformativeModal(true);
             const contractParams = {
                 claimAmount: new BigNumber(
                     formatInputAmountToTransfer(claimAmount)
@@ -484,8 +612,6 @@ function CreateCommunityScreen() {
                         coverMediaId: apiRequestResult.data.data.id,
                     };
 
-                    console.log({ communityDetails });
-
                     const communityApiRequestResult = await Api.community.edit(
                         communityDetails
                     );
@@ -495,23 +621,22 @@ function CreateCommunityScreen() {
                             communityApiRequestResult.publicId,
                             dispatch
                         );
+
                         const community = await Api.community.getByPublicId(
                             communityApiRequestResult.publicId
                         );
+
                         if (community !== undefined) {
                             batch(() => {
                                 dispatch(setCommunityMetadata(community));
                                 dispatch(setUserIsCommunityManager(true));
                             });
                         }
-                    } else {
-                        Alert.alert(
-                            i18n.t('failure'),
-                            i18n.t('errorEditingCommunity'),
-                            [{ text: 'OK' }],
-                            { cancelable: false }
-                        );
                         setSending(false);
+                        setSendingSuccess(true);
+                    } else {
+                        setSending(false);
+                        setSendingSuccess(false);
                     }
                 } else {
                     const communityDetails: CommunityCreationAttributes = {
@@ -553,29 +678,18 @@ function CreateCommunityScreen() {
                                 dispatch(setUserIsCommunityManager(true));
                             });
                         }
-                    } else {
-                        Alert.alert(
-                            i18n.t('failure'),
-                            i18n.t('errorCreatingCommunity'),
-                            [{ text: 'OK' }],
-                            { cancelable: false }
-                        );
                         setSending(false);
+                        setSendingSuccess(true);
+                    } else {
+                        setSending(false);
+                        setSendingSuccess(false);
                     }
                 }
             }
         } catch (e) {
             Sentry.Native.captureException(e);
-            console.log({ e });
-            Alert.alert(
-                i18n.t('failure'),
-                isEditable
-                    ? i18n.t('errorEditingCommunity')
-                    : i18n.t('errorCreatingCommunity'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
             setSending(false);
+            setSendingSuccess(false);
         }
     };
 
@@ -1308,7 +1422,7 @@ function CreateCommunityScreen() {
                                         marginBottom: 24,
                                     }}
                                 >
-                                    <Button
+                                    <RNButton
                                         mode="contained"
                                         style={[
                                             styles.gpsBtn,
@@ -1326,7 +1440,7 @@ function CreateCommunityScreen() {
                                         >
                                             {i18n.t('getGPSLocation')}
                                         </Text>
-                                    </Button>
+                                    </RNButton>
                                     {!isEnabledGPS && (
                                         <HelperText
                                             type="error"
