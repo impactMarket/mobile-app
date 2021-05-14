@@ -127,7 +127,10 @@ export default function Stories() {
                                       width: 84,
                                       heigth: 140,
                                   })
-                                : s.cover.url
+                                : chooseMediaThumbnail(s.cover, {
+                                      width: 88,
+                                      heigth: 88,
+                                  })
                         }
                     />
                 ))}
