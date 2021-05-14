@@ -11,7 +11,8 @@ import {
     claimFrequencyToText,
     generateUrlWithCloudFront,
 } from 'helpers/index';
-import { ICommunityLightDetails } from 'helpers/types/endpoints';
+// import { ICommunityLightDetails } from 'helpers/types/endpoints';
+import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
@@ -27,9 +28,15 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
-function CommunityCard(props: { community: ICommunityLightDetails }) {
+function CommunityCard(props: { community: CommunityAttributes }) {
     const navigation = useNavigation();
     const { community } = props;
+
+    if (community.state === undefined || community.contract === undefined) {
+        navigation.goBack();
+        // TODO: throw some error!
+        return null;
+    }
 
     return (
         <Card

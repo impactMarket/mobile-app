@@ -28,7 +28,11 @@ import {
     setUserIsBlocked,
     setUserIsSuspect,
 } from './redux/actions/user';
-import { UserAttributes } from './types/models';
+import {
+    // AppMediaContent,
+    CommunityAttributes,
+    UserAttributes,
+} from './types/models';
 
 export function generateUrlWithCloudFront(s3ContentKey: string) {
     // for backwards support
@@ -157,8 +161,11 @@ export function claimFrequencyToText(frequency: number): string {
 
 export function calculateCommunityProgress(
     toCalculte: string /*'raised' | 'claimed'*/,
-    community: ICommunity | ICommunityLightDetails
+    community: ICommunity | ICommunityLightDetails | CommunityAttributes
 ): number {
+    if (community.contract === undefined || community.state === undefined) {
+        return 0;
+    }
     const m = new BigNumber(community.contract.maxClaim).multipliedBy(
         community.state.beneficiaries
     );
