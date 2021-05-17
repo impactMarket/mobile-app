@@ -316,8 +316,8 @@ function CreateCommunityScreen() {
             setIsEmailValid(false);
             return;
         }
-        const _isEnabledGPS = gpsLocation !== undefined;
-        if (!_isEnabledGPS) {
+        // const _isEnabledGPS = gpsLocation !== undefined;
+        if (gpsLocation === undefined) {
             setIsEnabledGPS(false);
             return;
         }
@@ -397,7 +397,7 @@ function CreateCommunityScreen() {
                 maxClaim: new BigNumber(formatInputAmountToTransfer(maxClaim))
                     .multipliedBy(decimals)
                     .toString(),
-                baseInterval: parseInt(baseInterval),
+                baseInterval: parseInt(baseInterval, 10),
                 incrementInterval:
                     parseInt(incrementInterval, 10) * incrementalIntervalUnit,
             };
@@ -414,73 +414,123 @@ function CreateCommunityScreen() {
                 };
             }
 
-            const apiRequestResult = await Api.upload.uploadImage(
-                coverImage,
-                imageTargets.COVER
-            );
-
-            if (profileImage.length > 0) {
-                const res = (await Api.upload.uploadImage(
-                    profileImage,
-                    imageTargets.PROFILE
-                )) as any;
-
-                const cachedUser = (await CacheStore.getUser())!;
-                await CacheStore.cacheUser({
-                    ...cachedUser,
-                    avatar: res.data.data.url as string,
-                });
-                dispatch(
-                    setUserMetadata({ ...user, avatar: res.data.data.url })
+            let apiRequestResult = undefined;
+            try {
+                apiRequestResult = await Api.upload.uploadImage(
+                    coverImage,
+                    imageTargets.COVER
                 );
+            } catch (e) {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('createCommunityView.errorUploadCover'),
+                    [{ text: i18n.t('close') }],
+                    { cancelable: false }
+                );
+                setSending(false);
+            }
+
+            if (profileImage.length > 0 && profileImage !== avatar) {
+                try {
+                    const res = (await Api.upload.uploadImage(
+                        profileImage,
+                        imageTargets.PROFILE
+                    )) as any;
+
+                    const cachedUser = (await CacheStore.getUser())!;
+                    await CacheStore.cacheUser({
+                        ...cachedUser,
+                        avatar: res.data.data.url as string,
+                    });
+                    dispatch(
+                        setUserMetadata({ ...user, avatar: res.data.data.url })
+                    );
+                } catch (e) {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('profileView.errorUploadAvatar'),
+                        [{ text: i18n.t('close') }],
+                        { cancelable: false }
+                    );
+                    setSending(false);
+                }
             }
 
             if (apiRequestResult) {
-                const communityDetails: CommunityCreationAttributes = {
-                    requestByAddress: userAddress,
-                    name,
-                    description,
-                    language: userLanguage,
-                    currency,
-                    city,
-                    country,
-                    gps: {
-                        latitude:
-                            gpsLocation!.coords.latitude +
-                            config.locationErrorMargin,
-                        longitude:
-                            gpsLocation!.coords.longitude +
-                            config.locationErrorMargin,
-                    },
-                    email,
-                    coverMediaId: apiRequestResult.data.data.id,
-                    contractParams,
-                    ...privateParamsIfAvailable,
-                };
+                let communityApiRequestResult;
+                try {
+                    const communityDetails: CommunityCreationAttributes = {
+                        requestByAddress: userAddress,
+                        name,
+                        description,
+                        language: userLanguage,
+                        currency,
+                        city,
+                        country,
+                        gps: {
+                            latitude:
+                                gpsLocation.coords.latitude +
+                                config.locationErrorMargin,
+                            longitude:
+                                gpsLocation.coords.longitude +
+                                config.locationErrorMargin,
+                        },
+                        email,
+                        coverMediaId: apiRequestResult.data.data.id,
+                        contractParams,
+                        ...privateParamsIfAvailable,
+                    };
 
-                const communityApiRequestResult = await Api.community.create(
-                    communityDetails
-                );
+                    communityApiRequestResult = await Api.community.create(
+                        communityDetails
+                    );
+                } catch (e) {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('createCommunityView.errorCreating'),
+                        [{ text: i18n.t('close') }],
+                        { cancelable: false }
+                    );
+                    setSending(false);
+                }
                 if (communityApiRequestResult) {
-                    await updateCommunityInfo(
-                        communityApiRequestResult.id,
-                        dispatch
-                    );
-                    const community = await Api.community.findById(
-                        communityApiRequestResult.id
-                    );
-                    if (community !== undefined) {
-                        batch(() => {
-                            dispatch(setCommunityMetadata(community));
-                            dispatch(setUserIsCommunityManager(true));
-                        });
+                    try {
+                        await updateCommunityInfo(
+                            communityApiRequestResult.id,
+                            dispatch
+                        );
+                        const community = await Api.community.findById(
+                            communityApiRequestResult.id
+                        );
+                        if (community !== undefined) {
+                            batch(() => {
+                                dispatch(setCommunityMetadata(community));
+                                dispatch(setUserIsCommunityManager(true));
+                            });
+                        }
+                    } catch (e) {
+                        Alert.alert(
+                            i18n.t('failure'),
+                            i18n.t('createCommunityView.errorLoading'),
+                            [{ text: i18n.t('close') }],
+                            { cancelable: false }
+                        );
+                        setSending(false);
                     }
+                } else {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('createCommunityView.errorCreating'),
+                        [{ text: i18n.t('close') }],
+                        { cancelable: false }
+                    );
+                    setSending(false);
                 }
             } else {
                 Alert.alert(
                     i18n.t('failure'),
-                    i18n.t('errorCreatingCommunity'),
-                    [{ text: 'OK' }],
+                    i18n.t('createCommunityView.errorUploadCover'),
+                    [{ text: i18n.t('close') }],
                     { cancelable: false }
                 );
                 setSending(false);
@@ -490,7 +540,7 @@ function CreateCommunityScreen() {
             Alert.alert(
                 i18n.t('failure'),
                 i18n.t('errorCreatingCommunity'),
-                [{ text: 'OK' }],
+                [{ text: i18n.t('close') }],
                 { cancelable: false }
             );
             setSending(false);
@@ -999,31 +1049,7 @@ function CreateCommunityScreen() {
                                 </View>
                             )}
 
-                            {profileImage.length > 0 ? (
-                                <View />
-                            ) : (
-                                // <View style={styles.uploadFilledContainer}>
-                                //     <CloseStorySvg
-                                //         style={{
-                                //             position: 'absolute',
-                                //             top: 14,
-                                //             right: 14,
-                                //         }}
-                                //         onPress={() => {
-                                //             setProfileImage('');
-                                //         }}
-                                //     />
-                                //     <Image
-                                //         style={{
-                                //             height: 80,
-                                //             width: 80,
-                                //             borderRadius: 40,
-                                //             alignItems: 'center',
-                                //             justifyContent: 'center',
-                                //         }}
-                                //         source={{ uri: profileImage }}
-                                //     />
-                                // </View>
+                            {profileImage.length === 0 ? (
                                 <View style={styles.uploadContainer}>
                                     <View
                                         style={{
@@ -1077,7 +1103,33 @@ function CreateCommunityScreen() {
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
+                            ) : profileImage === avatar ? (
+                                <View />
+                            ) : (
+                                <View style={styles.uploadFilledContainer}>
+                                    <CloseStorySvg
+                                        style={{
+                                            position: 'absolute',
+                                            top: 14,
+                                            right: 14,
+                                        }}
+                                        onPress={() => {
+                                            setProfileImage('');
+                                        }}
+                                    />
+                                    <Image
+                                        style={{
+                                            height: 80,
+                                            width: 80,
+                                            borderRadius: 40,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                        source={{ uri: profileImage }}
+                                    />
+                                </View>
                             )}
+
                             <Text
                                 style={[
                                     { color: '#73839D', marginBottom: 16 },
