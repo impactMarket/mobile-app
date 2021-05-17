@@ -30,6 +30,11 @@ publish: &publish
         name: Publish to Expo
         command: npx expo-cli publish --non-interactive
         environment:
+            EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
+            EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
+            EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
+            EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
+            EXPO_IS_TESTNET: true
             NODE_OPTIONS: --max_old_space_size=3072
 
     - run:
@@ -47,6 +52,72 @@ test: &test
         name: test
         command: yarn test
 
+commands:
+  install_macos_deps:
+    steps:
+      - run:
+          name: Installing jq & node@14.15.1
+          command: |
+            brew install jq node@14.15.1
+            brew link --overwrite --force node@14.15.1
+  add_yarn_binaries_to_path:
+    steps:
+      - run:
+          name: Add yarn binaries path to $PATH
+          command: echo 'export PATH=~/.yarn/bin:$PATH' >> $BASH_ENV
+
+  determine_turtle_cache_key_component:
+    steps:
+      - run:
+          name: Determine Turtle cache key component
+          command: echo $TURTLE_VERSION $PLATFORM > /tmp/turtle-version-platform
+
+  restore_turtle_cache:
+    steps:
+      - restore_cache:
+          keys:
+          - cache-turtle-cli-{{ .Environment.CACHE_VERSION }}-{{ checksum "/tmp/turtle-version-platform" }}
+
+  save_turtle_cache:
+    steps:
+      - save_cache:
+          paths:
+            - ~/.turtle
+            - ~/yarn_cache
+          key: cache-turtle-cli-{{ .Environment.CACHE_VERSION }}-{{ checksum "/tmp/turtle-version-platform" }}
+
+  install_turtle_ios:
+    steps:
+      - run:
+          name: Installing turtle-cli
+          command: |
+            yarn config set prefix ~/.yarn
+            yarn global add turtle-cli@$TURTLE_VERSION
+  setup_turtle:
+    steps:
+      - run:
+          name: Setting up environment for Turtle
+          command: turtle setup:$PLATFORM --sdk-version $EXPO_SDK_VERSION
+
+  restore_yarn_cache:
+    parameters:
+      platform:
+        type: string
+    steps:
+      - restore_cache:
+          keys:
+          - cache-yarn-<< parameters.platform >>-{{ .Environment.CACHE_VERSION }}-{{ checksum "package.json" }}
+
+  save_yarn_cache:
+    parameters:
+      platform:
+        type: string
+    steps:
+      - save_cache:
+          paths:
+            - ~/yarn_cache
+          key: cache-yarn-<< parameters.platform >>-{{ .Environment.CACHE_VERSION }}-{{ checksum "package.json" }}
+
 jobs:
   publish_to_expo:
     <<: *publish
@@ -57,8 +128,8 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
         environment:
-            EXPO_SDK_VERSION: 40.0.1
-            TURTLE_VERSION: 0.20.7
+            EXPO_SDK_VERSION: 40.0.0
+            TURTLE_VERSION: 0.21.6
             NODE_VERSION: 14.15.1
             YARN_VERSION: 1.22.5
     steps:
@@ -79,7 +150,7 @@ jobs:
       - run:
           name: Install packages
           command: |
-              curl -sSL "https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v14.15.1-linux-x64/bin/node
+              curl -sSL "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v$NODE_VERSION-linux-x64/bin/node
               curl https://www.npmjs.com/install.sh | sudo bash
               npm install --prefix=$HOME/.local --global --legacy-peer-deps yarn gulp-cli turtle-cli@$TURTLE_VERSION
       - run:
@@ -101,19 +172,104 @@ jobs:
               bundle install
               ls -l ~/deploy-app
               fastlane supply --track 'internal' --aab $BUILD_PATH --json_key google-api-access.json --skip_upload_images --skip_upload_screenshots
+  publish_app:
+    executor: js
+    steps:
+      - checkout
+      - add_yarn_binaries_to_path
+      - restore_yarn_cache:
+          platform: linux
+      - run:
+          name: Installing expo-cli and dependencies
+          command: |
+            npm install --prefix=$HOME/.local --global --legacy-peer-deps expo-cli
+            yarn
+          environment:
+            EXPO_IMAGE_UTILS_NO_SHARP: true
+      - run:
+          name: Login
+          command: expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD --non-interactive
+      - save_yarn_cache:
+          platform: linux
+  build_android_aab:
+    executor: android
+    steps:
+      - checkout
+      - restore_yarn_cache:
+          platform: linux
+      - run:
+          name: Install packages
+          command: |
+              curl -sSL "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz" | sudo tar --strip-components=2 -xJ -C /usr/local/bin/ node-v$NODE_VERSION-linux-x64/bin/node
+              curl https://www.npmjs.com/install.sh | sudo bash
+      - run: yarn
+      - save_yarn_cache:
+          platform: linux
+      - add_yarn_binaries_to_path
+      - determine_turtle_cache_key_component
+      - restore_turtle_cache
+      - run:
+          name: Installing gulp-cli & turtle-cli
+          command: yarn global add gulp-cli turtle-cli@$TURTLE_VERSION
+      - setup_turtle
+      - save_turtle_cache
+      - run:
+          name: Building Expo standalone app
+          command: |
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+            echo $EXPO_ANDROID_KEYSTORE_BASE64 > expo-project.jks.base64
+            base64 --decode expo-project.jks.base64 > expo-project.jks
+            turtle build:android --keystore-path ./expo-project.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ~/expo-project.aab
+          environment:
+            EXPO_API_BASE_URL: $EXPO_API_BASE_URL_PROD
+            EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_PROD
+            EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_PROD
+            EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_PROD
+            EXPO_IS_TESTNET: false
+            NODE_OPTIONS: --max_old_space_size=3072
+      - store_artifacts:
+          path: ~/expo-project.aab
 
-orbs:
-  openjdk-install: cloudesire/openjdk-install@1.2.3
+executors:
+  js:
+    docker:
+      - image: circleci/node:14.15.1
+    working_directory: ~/expo-project
+    environment:
+      YARN_CACHE_FOLDER: ~/yarn_cache
+
+  android:
+    # WARNING: medium (default) seems not to be enough for Turtle
+    # To use larger resource classes you need to open a ticket and request it from CircleCI
+    # More Information Here - https://circleci.com/docs/2.0/configuration-reference/#resource_class
+    # resource_class: xlarge
+    docker:
+      # https://github.com/expo/expo-turtle-android
+      - image: dsokal/expo-turtle-android
+    # NOTE: If you have macos machines you can use them instead.
+    # Comment out 'resource_class', 'docker' and 'image' and replace
+    # with the comments below.
+    #  macos:
+    #    xcode: 10.1.0
+    working_directory: ~/expo-project
+    environment:
+      EXPO_SDK_VERSION: 40.0.0
+      TURTLE_VERSION: 0.21.6
+      NODE_VERSION: 14.15.1
+      YARN_VERSION: 1.22.5
+      PLATFORM: android
+      YARN_CACHE_FOLDER: ~/yarn_cache
 
 workflows:
   version: 2
-  deploy:
-    jobs:
-      - fastlane_release:
-          filters:
-              branches:
-                only:
-                  - production
+  # deploy:
+  #   jobs:
+  #     - fastlane_release:
+  #         filters:
+  #             branches:
+  #               only:
+  #                 - production
   expo:
     jobs:
       - publish_to_expo:
@@ -123,5 +279,15 @@ workflows:
                   - staging
   everyday:
     jobs:
-      - test_app
+     - test_app
+  builds:
+    jobs:
+      #- publish_app
+      - build_android_aab
+          filters:
+              branches:
+                only:
+                  - production
+          #requires:
+          #  - publish_app
   
