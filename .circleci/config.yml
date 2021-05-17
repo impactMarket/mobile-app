@@ -30,6 +30,11 @@ publish: &publish
         name: Publish to Expo
         command: npx expo-cli publish --non-interactive
         environment:
+            EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
+            EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
+            EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
+            EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
+            EXPO_IS_TESTNET: false
             NODE_OPTIONS: --max_old_space_size=3072
 
     - run:
