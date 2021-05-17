@@ -1,5 +1,32 @@
 // same as in api/types/models
 
+import { UbiCommunityContract } from './ubi/ubiCommunityContract';
+import { UbiCommunityDailyMetrics } from './ubi/ubiCommunityDailyMetrics';
+import { UbiCommunityState } from './ubi/ubiCommunityState';
+import { UbiOrganization } from './ubi/ubiOrganization';
+
+export interface User {
+    address: string;
+    avatarMediaId: number | null;
+    username: string | null;
+    language: string;
+    currency: string;
+    pushNotificationToken: string | null;
+    gender: string;
+    year: number | null;
+    children: number | null;
+    lastLogin: Date;
+
+    // timestamps
+    createdAt: Date;
+    updatedAt: Date;
+
+    avatar?: AppMediaContent;
+    // throughTrust?: AppUserTrust[];
+    beneficiary?: BeneficiaryAttributes[];
+    manager?: ManagerAttributes[];
+}
+
 export interface UbiCommunitySuspect {
     id: number;
     communityId: number;
@@ -7,7 +34,7 @@ export interface UbiCommunitySuspect {
     createdAt: boolean;
 }
 export interface CommunityAttributes {
-    id: number;
+    id: number; // Note that the `null assertion` `!` is required in strict mode.
     publicId: string;
     requestByAddress: string;
     contractAddress: string | null;
@@ -25,10 +52,25 @@ export interface CommunityAttributes {
     email: string;
     visibility: 'public' | 'private';
     coverImage: string;
-    status: 'pending' | 'valid' | 'removed';
+    coverMediaId: number;
+    status: 'pending' | 'valid' | 'removed'; // pending / valid / removed
     started: Date;
-    suspect: UbiCommunitySuspect[] | null;
-    beneficiaries: BeneficiaryAttributes[] | null;
+
+    // timestamps
+    createdAt: Date;
+    updatedAt: Date;
+
+    metrics?: UbiCommunityDailyMetrics[];
+    cover?: AppMediaContent;
+    contract?: UbiCommunityContract;
+    state?: UbiCommunityState;
+    // storyCommunity?: StoryCommunity[];
+    suspect?: UbiCommunitySuspect[];
+    // beneficiaries?: BeneficiaryAttributes[];
+    organization?: UbiOrganization;
+    // claimLocation?: ClaimLocationAttributes[];
+    // demographics?: UbiCommunityDemographics[];
+    // dailyState?: UbiCommunityDailyState[];
 }
 
 export interface AppMediaThumbnail {
@@ -100,8 +142,17 @@ export interface BeneficiaryAttributes {
 }
 
 export interface ManagerAttributes {
-    user: string;
+    id: number;
+    address: string;
     communityId: string;
+    active: boolean;
+
+    // timestamps
+    createdAt: Date;
+    updatedAt: Date;
+
+    user?: User;
+    community?: CommunityAttributes;
 }
 
 export interface UserAttributes {

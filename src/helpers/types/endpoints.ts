@@ -1,46 +1,4 @@
-import {
-    AppMediaContent,
-    CommunityAttributes,
-    CommunityContractAttributes,
-    CommunityDailyMetricsAttributes,
-    CommunityStateAttributes,
-    UserAttributes,
-} from './models';
-
-export interface ICommunityLightDetails {
-    publicId: string;
-    contractAddress: string;
-    name: string;
-    city: string;
-    country: string;
-    coverImage: string;
-    cover: IMediaContent;
-    state: CommunityStateAttributes;
-    contract: CommunityContractAttributes;
-    blocked: boolean;
-    verifiedPN: boolean | undefined;
-    suspect: boolean | undefined;
-}
-
-export interface ICommunityDetails {
-    publicId: string;
-    contractAddress: string;
-    name: string;
-    city: string;
-    country: string;
-    coverImage: string;
-    cover: IMediaContent;
-    state: CommunityStateAttributes;
-    contract: CommunityContractAttributes;
-    blocked: boolean;
-    verifiedPN: boolean | undefined;
-    suspect: boolean | undefined;
-}
-export interface ICommunity extends CommunityAttributes {
-    state: CommunityStateAttributes;
-    contract: CommunityContractAttributes;
-    metrics: CommunityDailyMetricsAttributes;
-}
+import { AppMediaContent, CommunityAttributes, UserAttributes } from './models';
 
 /**
  * @deprecated use AppMediaContent
@@ -113,7 +71,7 @@ export interface CommunityCreationAttributes {
 export interface IUserBaseAuth {
     isBeneficiary: boolean;
     isManager: boolean;
-    community?: ICommunity;
+    community?: CommunityAttributes;
     suspect: UserAttributes['suspect'];
     blocked: boolean;
 }

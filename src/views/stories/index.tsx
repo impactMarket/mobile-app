@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
+import { chooseMediaThumbnail } from 'helpers/index';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
@@ -116,8 +117,14 @@ function StoriesScreen() {
                         communityName={item.name}
                         imageURI={
                             item.story?.media
-                                ? item.story.media.url
-                                : item.cover?.url
+                                ? chooseMediaThumbnail(item.story.media, {
+                                      width: 84,
+                                      heigth: 140,
+                                  })
+                                : chooseMediaThumbnail(item.cover, {
+                                      width: 88,
+                                      heigth: 88,
+                                  })
                         }
                     />
                 );

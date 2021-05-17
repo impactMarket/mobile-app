@@ -1,9 +1,11 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
+// import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import { isOutOfTime } from 'helpers/index';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
-import { IManagerDetailsManager } from 'helpers/types/endpoints';
+// import { IManagerDetailsManager } from 'helpers/types/endpoints';
+import { ManagerAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -16,21 +18,20 @@ import {
 } from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
-import * as Sentry from 'sentry-expo';
 
 function AddedManagerScreen() {
     const dispatch = useDispatch();
-    const flatListRef = useRef<FlatList<IManagerDetailsManager> | null>(null);
+    const flatListRef = useRef<FlatList<ManagerAttributes> | null>(null);
     const community = useSelector((state: IRootState) => state.user.community);
     const userWallet = useSelector((state: IRootState) => state.user.wallet);
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [removing, setRemoving] = useState<boolean[]>();
     const [managersOffset, setManagersOffset] = useState(0);
-    const [managers, setManagers] = useState<IManagerDetailsManager[]>(
+    const [managers, setManagers] = useState<ManagerAttributes[]>(
         undefined as any
     );
     const [refreshing, setRefreshing] = React.useState(false);
@@ -39,7 +40,7 @@ function AddedManagerScreen() {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        Api.community.listManagers(0, 10).then((l) => {
+        Api.community.listManagers(community.metadata.id, 0, 10).then((l) => {
             if (l.length < 10) {
                 setReachedEndList(true);
             }
@@ -53,21 +54,23 @@ function AddedManagerScreen() {
 
     useEffect(() => {
         const loadActiveBeneficiaries = () => {
-            Api.community.listManagers(0, 10).then((l) => {
-                if (l.length < 10) {
-                    setReachedEndList(true);
-                }
-                setTotalManagers(l.length);
-                setManagers(l);
-                setManagersOffset(0);
-                setRemoving(Array(l.length).fill(false));
-            });
+            Api.community
+                .listManagers(community.metadata.id, 0, 10)
+                .then((l) => {
+                    if (l.length < 10) {
+                        setReachedEndList(true);
+                    }
+                    setTotalManagers(l.length);
+                    setManagers(l);
+                    setManagersOffset(0);
+                    setRemoving(Array(l.length).fill(false));
+                });
         };
         loadActiveBeneficiaries();
     }, []);
 
     const handleRemoveManager = async (
-        manager: IManagerDetailsManager,
+        manager: ManagerAttributes,
         index: number
     ) => {
         if (userWallet.balance.length < 16) {
@@ -108,19 +111,21 @@ function AddedManagerScreen() {
                 // refresh community details
                 setTimeout(() => {
                     Api.community
-                        .getByPublicId(community.metadata.publicId)
+                        .findById(community.metadata.id)
                         .then((c) => dispatch(setCommunityMetadata(c!)));
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);
-                    Api.community.listManagers(0, 10).then((l) => {
-                        if (l.length < 10) {
-                            setReachedEndList(true);
-                        }
-                        setManagers(l);
-                        setManagersOffset(0);
-                        setRemoving(Array(l.length).fill(false));
-                        setRefreshing(false);
-                    });
+                    Api.community
+                        .listManagers(community.metadata.id, 0, 10)
+                        .then((l) => {
+                            if (l.length < 10) {
+                                setReachedEndList(true);
+                            }
+                            setManagers(l);
+                            setManagersOffset(0);
+                            setRemoving(Array(l.length).fill(false));
+                            setRefreshing(false);
+                        });
                 }, 2500);
             })
             .catch(async (e) => {
@@ -186,7 +191,7 @@ function AddedManagerScreen() {
         if (!refreshing && !reachedEndList) {
             setRefreshing(true);
             Api.community
-                .listManagers(managersOffset + 10, 10)
+                .listManagers(community.metadata.id, managersOffset + 10, 10)
                 .then((l) => {
                     if (l.length < 10) {
                         setReachedEndList(true);
@@ -203,13 +208,13 @@ function AddedManagerScreen() {
         item,
         index,
     }: {
-        item: IManagerDetailsManager;
+        item: ManagerAttributes;
         index: number;
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
             description={i18n.t('managerSince', {
-                date: moment(item.timestamp).format('MMM, YYYY'),
+                date: moment(item.createdAt).format('MMM, YYYY'),
             })}
             right={() =>
                 totalManagers > 2 && (
@@ -234,12 +239,16 @@ function AddedManagerScreen() {
         />
     );
 
-    const formatAddressOrName = (from: IManagerDetailsManager) => {
+    const formatAddressOrName = (from: ManagerAttributes) => {
         const titleMaxLength = 25;
-        const fromHasName = from.username !== null && from.username.length > 0;
+        let fromHasName = false;
         let name = '';
-        if (from.username !== null && fromHasName) {
-            name = from.username;
+        if (from.user) {
+            fromHasName =
+                from.user.username !== null && from.user.username.length > 0;
+            if (from.user.username !== null && fromHasName) {
+                name = from.user.username;
+            }
         }
 
         return fromHasName

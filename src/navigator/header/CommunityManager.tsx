@@ -41,7 +41,7 @@ function CommunityManager() {
                             onPress={() => {
                                 setOpenThreeDotsMenu(false);
                                 navigation.navigate(Screens.CommunityDetails, {
-                                    communityId: community.publicId,
+                                    communityId: community.id,
                                 });
                             }}
                         >
@@ -55,7 +55,7 @@ function CommunityManager() {
                                 setOpenThreeDotsMenu(false);
                                 // Alert.alert('teste');
                                 navigation.navigate(Screens.CreateCommunity, {
-                                    communityId: community.publicId,
+                                    communityId: community.id,
                                 });
                             }}
                         >

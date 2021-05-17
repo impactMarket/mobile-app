@@ -106,7 +106,7 @@ function AddBeneficiaryScreen() {
                 // refresh community details
                 setTimeout(() => {
                     Api.community
-                        .getByPublicId(communityMetadata.publicId)
+                        .findById(communityMetadata.id)
                         .then((c) => dispatch(setCommunityMetadata(c!)));
                 }, 2500);
 

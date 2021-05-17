@@ -601,20 +601,24 @@ export default class App extends React.Component<any, IAppState> {
         if (timeDiff < -10000 || timeDiff > 10000) {
             store.dispatch(setAppSuspectWrongDateTime(true, timeDiff));
         }
-        let lastVersionFromCache = await CacheStore.getLastVersion();
-        if (lastVersionFromCache === null) {
-            lastVersionFromCache = Constants.manifest.version!;
-        }
-        const currentVersion = Constants.manifest.version;
-        if (semverGt(version.latest, lastVersionFromCache)) {
-            await CacheStore.cacheLastVersion(version.latest);
-            this.setState({ infoUserNewAppVersion: true });
-        }
-        if (
-            currentVersion !== undefined &&
-            !semverGte(currentVersion, version.minimal)
-        ) {
-            this.setState({ blockUserToUpdateApp: true });
+        if (Constants.manifest.version) {
+            let lastVersionFromCache = await CacheStore.getLastVersion();
+            if (lastVersionFromCache === null) {
+                lastVersionFromCache = Constants.manifest.version;
+            }
+            if (!semverGte(Constants.manifest.version, version.minimal)) {
+                // id the user does not have the minimal required version
+                // block until update
+                this.setState({
+                    blockUserToUpdateApp: true,
+                    infoUserNewAppVersion: true,
+                });
+            } else if (semverGt(version.latest, lastVersionFromCache)) {
+                // if there's a new version
+                // warn only once
+                await CacheStore.cacheLastVersion(version.latest);
+                this.setState({ infoUserNewAppVersion: true });
+            }
         }
     };
 
