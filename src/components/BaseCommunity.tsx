@@ -1,6 +1,6 @@
 import { Entypo } from '@expo/vector-icons';
 import countriesJSON from 'assets/countries.json';
-import { ICommunity } from 'helpers/types/endpoints';
+import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
@@ -17,7 +17,7 @@ const countries: {
     };
 } = countriesJSON;
 export default function BaseCommunity(props: {
-    community: ICommunity;
+    community: CommunityAttributes;
     full?: boolean;
     action?: React.ReactNode;
     children?: React.ReactNode;

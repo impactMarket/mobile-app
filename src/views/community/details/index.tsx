@@ -10,7 +10,7 @@ import Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
-import { ICommunity } from 'helpers/types/endpoints';
+import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
@@ -35,7 +35,7 @@ import Donate from './donate';
 interface ICommunityDetailsScreen {
     route: {
         params: {
-            communityId: string;
+            communityId: number;
             openDonate?: boolean;
             fromStories?: boolean;
         };
@@ -51,16 +51,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
     const [historicalSSI, setHistoricalSSI] = useState<number[]>([]);
-    const [community, setCommunity] = useState<ICommunity | undefined>(
+    const [community, setCommunity] = useState<CommunityAttributes | undefined>(
         undefined
     );
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
         Api.community
-            .getByPublicId(props.route.params.communityId)
+            .findById(props.route.params.communityId)
             .then((c) => {
-                setCommunity(c!);
+                setCommunity(c);
                 if (props.route.params.openDonate === true) {
                     dispatch({
                         type: modalDonateAction.OPEN,
@@ -70,14 +70,14 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             })
             .finally(() => setRefreshing(false));
         Api.community
-            .getHistoricalSSI(props.route.params.communityId)
+            .pastSSI(props.route.params.communityId)
             .then(setHistoricalSSI);
     }, []);
 
     const onRefresh = () => {
         Api.community
-            .getByPublicId(props.route.params.communityId)
-            .then((c) => setCommunity(c!))
+            .findById(props.route.params.communityId)
+            .then((c) => setCommunity(c))
             .finally(() => setRefreshing(false));
     };
 
@@ -119,7 +119,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 }}
                             >
                                 <Headline style={styles.ssiHeadline}>
-                                    {community.metrics.ssi}
+                                    {community.metrics.map((m) => m.ssi)}
                                 </Headline>
                                 <Text
                                     style={{
@@ -151,7 +151,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         }
     };
 
-    if (community === undefined) {
+    if (
+        community === undefined ||
+        community.contract === undefined ||
+        community.state === undefined
+    ) {
         return (
             <View
                 style={{

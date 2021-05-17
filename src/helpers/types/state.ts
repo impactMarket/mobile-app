@@ -1,12 +1,8 @@
 import { ContractKit } from '@celo/contractkit';
 import { Subscription } from '@unimodules/core';
 
-import {
-    ICommunitiesListStories,
-    ICommunity,
-    ICommunityStory,
-} from './endpoints';
-import { UserAttributes } from './models';
+import { ICommunitiesListStories, ICommunityStory } from './endpoints';
+import { CommunityAttributes, UserAttributes } from './models';
 
 export interface IUserWallet {
     address: string;
@@ -23,7 +19,7 @@ export interface IUserState {
     community: {
         isBeneficiary: boolean;
         isManager: boolean;
-        metadata: ICommunity;
+        metadata: CommunityAttributes;
         contract: any;
     };
 }
@@ -39,7 +35,7 @@ export interface IModalDonateState {
         backNBeneficiaries: number;
         backForDays: number;
     };
-    community?: ICommunity;
+    community?: CommunityAttributes;
     inProgress: boolean;
     modalDonateOpen: boolean;
     modalConfirmOpen: boolean;

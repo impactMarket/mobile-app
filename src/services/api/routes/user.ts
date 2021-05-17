@@ -1,13 +1,15 @@
 import { IUserHello, IUserAuth } from 'helpers/types/endpoints';
 
-import { getRequest, postRequest } from '../base';
+import { ApiRequests } from '../base';
 
 class ApiRouteUser {
+    static api = new ApiRequests();
+
     static async report(
         communityId: string,
         message: string
     ): Promise<boolean> {
-        return !!postRequest<boolean>(`/user/report`, {
+        return this.api.post(`/user/report`, {
             communityId,
             message,
         });
@@ -18,7 +20,7 @@ class ApiRouteUser {
         token: string,
         phone: string
     ): Promise<IUserHello | undefined> {
-        return postRequest<IUserHello>(`/user/hello`, {
+        return this.api.post(`/user/welcome`, {
             address,
             token,
             phone,
@@ -32,7 +34,7 @@ class ApiRouteUser {
         pushNotificationToken: string,
         phone: string
     ): Promise<IUserAuth | undefined> {
-        return await postRequest<IUserAuth>('/user/authenticate', {
+        return this.api.post('/user/auth', {
             address,
             language,
             currency,
@@ -45,61 +47,50 @@ class ApiRouteUser {
         communityId: string,
         gps: any
     ): Promise<boolean> {
-        const requestBody = {
+        return this.api.post('/claim-location', {
             communityId,
             gps,
-        };
-        const result = await postRequest<boolean>(
-            '/claim-location',
-            requestBody
-        );
-        return !!result;
+        });
     }
 
     static async exists(address: string): Promise<boolean> {
-        return !!(await getRequest<boolean>('/user/exists/' + address));
+        return this.api.get('/user/exist/' + address);
     }
 
     static async setUsername(username: string): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/username', {
+        return this.api.post('/user/username', {
             username,
         });
-        return !!result;
     }
 
     static async setCurrency(currency: string): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/currency', {
+        return this.api.post('/user/currency', {
             currency,
         });
-        return !!result;
     }
 
     static async setLanguage(language: string): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/language', {
+        return this.api.post('/user/language', {
             language,
         });
-        return !!result;
     }
 
     static async setGender(gender: string): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/gender', {
+        return this.api.post('/user/gender', {
             gender,
         });
-        return !!result;
     }
 
     static async setAge(age: number): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/age', {
+        return this.api.post('/user/age', {
             age,
         });
-        return !!result;
     }
 
     static async setChildren(children: number | null): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/children', {
+        return this.api.post('/user/children', {
             children,
         });
-        return !!result;
     }
 
     static async device(
@@ -108,13 +99,12 @@ class ApiRouteUser {
         device: string,
         network: string
     ): Promise<boolean> {
-        const result = await postRequest<boolean>('/user/device', {
+        return this.api.post('/user/device', {
             phone,
             identifier,
             device,
             network,
         });
-        return !!result;
     }
 }
 

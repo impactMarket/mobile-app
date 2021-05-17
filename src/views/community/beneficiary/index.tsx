@@ -90,7 +90,7 @@ function BeneficiaryScreen() {
 
     useEffect(() => {
         const loadCommunity = async () => {
-            if (community !== undefined) {
+            if (community !== undefined && community.contract !== undefined) {
                 const beneficiaryClaimCache = await CacheStore.getBeneficiaryClaim();
                 if (
                     beneficiaryClaimCache !== null &&
@@ -200,7 +200,7 @@ function BeneficiaryScreen() {
     };
 
     const onRefresh = () => {
-        Api.community.getByPublicId(community.publicId).then((c) => {
+        Api.community.findById(community.id).then((c) => {
             dispatch(setCommunityMetadata(c!));
             setRefreshing(false);
         });
@@ -232,13 +232,18 @@ function BeneficiaryScreen() {
         CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
 
         const progress = new BigNumber(claimed).div(
-            community.contract.maxClaim
+            community.contract!.maxClaim
         );
         setClaimedProgress(progress.toNumber());
         setClaimedAmount(humanifyCurrencyAmount(claimed.toString()));
     };
 
-    if (community === undefined || lastInterval === 0 || cooldownTime === 0) {
+    if (
+        community === undefined ||
+        community.contract === undefined ||
+        lastInterval === 0 ||
+        cooldownTime === 0
+    ) {
         return (
             <View
                 style={{
@@ -258,7 +263,7 @@ function BeneficiaryScreen() {
 
     const formatedTimeNextCooldown = () => {
         const nextCooldownTime = moment.duration(
-            (lastInterval + community.contract.incrementInterval) * 1000
+            (lastInterval + community.contract!.incrementInterval) * 1000
         );
         let next = '';
         if (nextCooldownTime.days() > 0) {
@@ -299,7 +304,7 @@ function BeneficiaryScreen() {
                             labelStyle={{ textAlign: 'center' }}
                             onPress={() =>
                                 navigation.navigate(Screens.CommunityDetails, {
-                                    communityId: community.publicId,
+                                    communityId: community.id,
                                 })
                             }
                         >

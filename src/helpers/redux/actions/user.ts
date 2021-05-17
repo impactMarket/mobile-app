@@ -12,8 +12,7 @@ import {
     SET_COMMUNITY,
     RESET_USER_APP,
 } from 'helpers/constants';
-import { ICommunity } from 'helpers/types/endpoints';
-import { UserAttributes } from 'helpers/types/models';
+import { CommunityAttributes, UserAttributes } from 'helpers/types/models';
 import { UserActionTypes } from 'helpers/types/redux';
 import { IUserWallet } from 'helpers/types/state';
 
@@ -89,7 +88,9 @@ export function setCommunityContract(community: any): UserActionTypes {
     };
 }
 
-export function setCommunityMetadata(community: ICommunity): UserActionTypes {
+export function setCommunityMetadata(
+    community: CommunityAttributes
+): UserActionTypes {
     return {
         type: SET_COMMUNITY,
         payload: community,

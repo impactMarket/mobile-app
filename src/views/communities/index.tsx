@@ -5,7 +5,8 @@ import Select from 'components/core/Select';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import * as Location from 'expo-location';
 import { ITabBarIconProps } from 'helpers/types/common';
-import { ICommunityLightDetails } from 'helpers/types/endpoints';
+// import { ICommunityLightDetails } from 'helpers/types/endpoints';
+import { CommunityAttributes } from 'helpers/types/models';
 import React, { useState, useEffect, useRef } from 'react';
 import { Alert, FlatList, Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -17,7 +18,7 @@ import CommunityCard from './CommunityCard';
 import Stories from './Stories';
 
 function CommunitiesScreen() {
-    const flatListRef = useRef<FlatList<ICommunityLightDetails> | null>(null);
+    const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
     const modalizeOrderRef = useRef<Modalize>(null);
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
@@ -26,17 +27,20 @@ function CommunitiesScreen() {
     >(undefined);
 
     const [refreshing, setRefreshing] = useState(true);
-    const [communities, setCommunities] = useState<ICommunityLightDetails[]>(
-        []
-    );
+    const [communities, setCommunities] = useState<CommunityAttributes[]>([]);
     const [reachedEndList, setReachedEndList] = useState(false);
 
     useEffect(() => {
         Api.community
-            .list(0, 5)
+            .list({
+                offset: 0,
+                limit: 5,
+            })
             .then((c) => {
                 if (c.length < 5) {
                     setReachedEndList(true);
+                } else {
+                    setReachedEndList(false);
                 }
                 setCommunities(c);
             })
@@ -74,13 +78,19 @@ function CommunitiesScreen() {
                 });
                 setUserLocation(location);
                 Api.community
-                    .listNearest(
-                        location.coords.latitude,
-                        location.coords.longitude,
-                        0,
-                        5
-                    )
+                    .list({
+                        offset: 0,
+                        limit: 5,
+                        orderBy: 'nearest',
+                        lat: location.coords.latitude,
+                        lng: location.coords.longitude,
+                    })
                     .then((c) => {
+                        if (c.length < 5) {
+                            setReachedEndList(true);
+                        } else {
+                            setReachedEndList(false);
+                        }
                         setCommunities(c);
                         setCommuntiesOffset(0);
                     })
@@ -92,8 +102,16 @@ function CommunitiesScreen() {
             }
         } else {
             Api.community
-                .list(0, 5)
+                .list({
+                    offset: 0,
+                    limit: 5,
+                })
                 .then((c) => {
+                    if (c.length < 5) {
+                        setReachedEndList(true);
+                    } else {
+                        setReachedEndList(false);
+                    }
                     setCommunities(c);
                     setCommuntiesOffset(0);
                 })
@@ -107,12 +125,13 @@ function CommunitiesScreen() {
             setRefreshing(true);
             if (communtiesOrder === 'nearest' && userLocation) {
                 Api.community
-                    .listNearest(
-                        userLocation.coords.latitude,
-                        userLocation.coords.longitude,
-                        communtiesOffset + 5,
-                        5
-                    )
+                    .list({
+                        offset: communtiesOffset + 5,
+                        limit: 5,
+                        orderBy: 'nearest',
+                        lat: userLocation.coords.latitude,
+                        lng: userLocation.coords.longitude,
+                    })
                     .then((c) => {
                         if (c.length < 5) {
                             setReachedEndList(true);
@@ -123,7 +142,10 @@ function CommunitiesScreen() {
                     .finally(() => setRefreshing(false));
             } else {
                 Api.community
-                    .list(communtiesOffset + 5, 5)
+                    .list({
+                        offset: communtiesOffset + 5,
+                        limit: 5,
+                    })
                     .then((c) => {
                         if (c.length < 5) {
                             setReachedEndList(true);
@@ -176,7 +198,7 @@ function CommunitiesScreen() {
                     item,
                     index,
                 }: {
-                    item: ICommunityLightDetails;
+                    item: CommunityAttributes;
                     index: number;
                 }) =>
                     index === 0 ? (
