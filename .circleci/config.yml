@@ -283,7 +283,7 @@ workflows:
   builds:
     jobs:
       #- publish_app
-      - build_android_aab
+      - build_android_aab:
           filters:
               branches:
                 only:
