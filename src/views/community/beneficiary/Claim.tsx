@@ -57,39 +57,41 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             kit,
         } = this.props;
         const { state, contract } = communityMetadata;
-        await this._loadAllowance(cooldownTime);
-        // check if there's enough funds to enable/disable claim button
+        if (state !== undefined && contract !== undefined) {
+            await this._loadAllowance(cooldownTime);
+            // check if there's enough funds to enable/disable claim button
 
-        const claimedRatio = new BigNumber(state.claimed).dividedBy(
-            state.raised
-        );
-        let notEnoughToClaimOnContract = false;
-        if (
-            claimedRatio.gt(new BigNumber(0.97)) ||
-            (await CacheStore.getCommunityHadNoFunds()) !== null
-        ) {
-            // if it's above 97, check from contract
-            // because the values aren't 100% correct,
-            // as we send 5 cents when a beneficiary is added
-            const stableToken = await kit.contracts.getStableToken();
-            const cUSDBalanceBig = await stableToken.balanceOf(
-                communityContract._address
+            const claimedRatio = new BigNumber(state.claimed).dividedBy(
+                state.raised
             );
-            notEnoughToClaimOnContract = new BigNumber(
-                cUSDBalanceBig.toString()
-            ).lt(contract.claimAmount);
-            if (!notEnoughToClaimOnContract) {
-                CacheStore.removeCommunityHadNoFunds();
+            let notEnoughToClaimOnContract = false;
+            if (
+                claimedRatio.gt(new BigNumber(0.97)) ||
+                (await CacheStore.getCommunityHadNoFunds()) !== null
+            ) {
+                // if it's above 97, check from contract
+                // because the values aren't 100% correct,
+                // as we send 5 cents when a beneficiary is added
+                const stableToken = await kit.contracts.getStableToken();
+                const cUSDBalanceBig = await stableToken.balanceOf(
+                    communityContract._address
+                );
+                notEnoughToClaimOnContract = new BigNumber(
+                    cUSDBalanceBig.toString()
+                ).lt(contract.claimAmount);
+                if (!notEnoughToClaimOnContract) {
+                    CacheStore.removeCommunityHadNoFunds();
+                }
+            } else if (
+                new BigNumber(state.raised)
+                    .minus(state.claimed)
+                    .lt(contract.claimAmount)
+            ) {
+                notEnoughToClaimOnContract = true;
             }
-        } else if (
-            new BigNumber(state.raised)
-                .minus(state.claimed)
-                .lt(contract.claimAmount)
-        ) {
-            notEnoughToClaimOnContract = true;
-        }
 
-        this.setState({ notEnoughToClaimOnContract });
+            this.setState({ notEnoughToClaimOnContract });
+        }
     };
 
     handleClaimPress = async () => {
@@ -256,49 +258,55 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             });
                         } else {
                             // verify contract funds :/
-                            const communityUpdated = await Api.community.getByPublicId(
-                                communityMetadata.publicId
+                            const communityUpdated = await Api.community.findById(
+                                communityMetadata.id
                             );
                             if (communityUpdated) {
                                 const { state, contract } = communityUpdated;
-                                const claimedRatio = new BigNumber(
-                                    state.claimed
-                                ).dividedBy(state.raised);
-                                let notEnoughToClaimOnContract = false;
-                                if (claimedRatio.gt(new BigNumber(0.97))) {
-                                    // if it's above 97, check from contract
-                                    // because the values aren't 100% correct,
-                                    // as we send 5 cents when a beneficiary is added
-                                    const stableToken = await kit.contracts.getStableToken();
-                                    const cUSDBalanceBig = await stableToken.balanceOf(
-                                        communityContract._address
-                                    );
-                                    notEnoughToClaimOnContract = new BigNumber(
-                                        cUSDBalanceBig.toString()
-                                    ).lt(contract.claimAmount);
-                                } else if (
-                                    new BigNumber(state.raised)
-                                        .minus(state.claimed)
-                                        .lt(contract.claimAmount)
-                                ) {
-                                    notEnoughToClaimOnContract = true;
-                                } else {
-                                    // very rare cases when the two prior conditions don't have a match
-                                    // this is the same code has the first condition
-                                    const stableToken = await kit.contracts.getStableToken();
-                                    const cUSDBalanceBig = await stableToken.balanceOf(
-                                        communityContract._address
-                                    );
-                                    notEnoughToClaimOnContract = new BigNumber(
-                                        cUSDBalanceBig.toString()
-                                    ).lt(contract.claimAmount);
+                                if (state && contract) {
+                                    const claimedRatio = new BigNumber(
+                                        state.claimed
+                                    ).dividedBy(state.raised);
+                                    let notEnoughToClaimOnContract = false;
+                                    if (claimedRatio.gt(new BigNumber(0.97))) {
+                                        // if it's above 97, check from contract
+                                        // because the values aren't 100% correct,
+                                        // as we send 5 cents when a beneficiary is added
+                                        const stableToken = await kit.contracts.getStableToken();
+                                        const cUSDBalanceBig = await stableToken.balanceOf(
+                                            communityContract._address
+                                        );
+                                        notEnoughToClaimOnContract = new BigNumber(
+                                            cUSDBalanceBig.toString()
+                                        ).lt(contract.claimAmount);
+                                    } else if (
+                                        new BigNumber(state.raised)
+                                            .minus(state.claimed)
+                                            .lt(contract.claimAmount)
+                                    ) {
+                                        notEnoughToClaimOnContract = true;
+                                    } else {
+                                        // very rare cases when the two prior conditions don't have a match
+                                        // this is the same code has the first condition
+                                        const stableToken = await kit.contracts.getStableToken();
+                                        const cUSDBalanceBig = await stableToken.balanceOf(
+                                            communityContract._address
+                                        );
+                                        notEnoughToClaimOnContract = new BigNumber(
+                                            cUSDBalanceBig.toString()
+                                        ).lt(contract.claimAmount);
+                                    }
+                                    if (notEnoughToClaimOnContract) {
+                                        CacheStore.cacheCommunityHadNoFunds();
+                                        error = 'communityWentOutOfFunds';
+                                    }
+                                    this.setState({
+                                        notEnoughToClaimOnContract,
+                                    });
                                 }
-                                if (notEnoughToClaimOnContract) {
-                                    CacheStore.cacheCommunityHadNoFunds();
-                                    error = 'communityWentOutOfFunds';
-                                }
-                                this.setState({ notEnoughToClaimOnContract });
+                                // TODO: else throw some error
                             }
+                            // TODO: else throw some error
                         }
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
