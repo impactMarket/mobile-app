@@ -380,4 +380,14 @@ export default {
         'O utilizador que está a tentar adicionar, não está registado!',
     unexpectedError:
         'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
+    createCommunityView: {
+        errorUploadCover: 'Ocorreu um erro ao carregar a imagem da comunidade!',
+        errorCreating:
+            'Ocorreu um erro ao submeter o pedido para criar a comunidade! Por favor, tente novamente.',
+        errorLoading:
+            'Ocorreu um erro ao carregar a proxima página. Por favor, reinicie o aplicativo.',
+    },
+    profileView: {
+        errorUploadAvatar: 'Ocorreu um erro ao carregar a sua foto de perfil!',
+    },
 };
