@@ -308,6 +308,8 @@ export default {
         'Tem certeza que deseja denunciar esta story como inapropriada?',
     deleteWarning: 'Tens certeza que quer apagar esta story?',
     storyFailure: 'Erro ao submeter sua story!',
+    emptyStoryFailure:
+        'Por favor, assegure que a sua story possui texto ou imagem.',
     storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
     descriptionCopiedClipboard:
         'Descrição copiada para a área de transferência!',
