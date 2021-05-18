@@ -110,7 +110,7 @@ class ApiRouteCommunity {
     static async edit(
         details: CommunityEditionAttributes
     ): Promise<CommunityAttributes> {
-        return this.api.post('/community/edit', details);
+        return this.api.put('/community', details);
     }
 
     static async getRequestChangeUbi(
