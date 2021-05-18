@@ -10,7 +10,7 @@ import { ICommunityStory } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
-import React, { useLayoutEffect, useState, useRef } from 'react';
+import React, { useLayoutEffect, useState, useRef, useCallback } from 'react';
 import { Trans } from 'react-i18next';
 import {
     View,
@@ -72,17 +72,14 @@ function NewStoryScreen() {
         submittedWithSuccess,
     ]);
 
-    useFocusEffect(() => {
-        renderAuthModalize();
-    });
+    useFocusEffect(
+        useCallback(() => {
+            renderAuthModalize();
+        }, [])
+    );
 
     const renderHelpCenter = () => {
         if (openHelpCenter) {
-            // TODO: Discuss w/ Bernardo
-            // navigation.setOptions({
-            //     headerShown: !openHelpCenter,
-            // });
-            console.log({ openHelpCenter });
             return (
                 <WebView
                     originWhitelist={['*']}
