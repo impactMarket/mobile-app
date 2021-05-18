@@ -42,7 +42,7 @@ export interface CommunityEditionAttributes {
     country: string;
     email: string;
     currency: string;
-    coverMediaId?: number;
+    coverMediaId: number;
 }
 export interface CommunityCreationAttributes {
     requestByAddress: string;

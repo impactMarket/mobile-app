@@ -10,6 +10,7 @@ import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import SuccessSvg from 'components/svg/SuccessSvg';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -135,7 +136,7 @@ function CreateCommunityScreen() {
         city: userCommunity?.city,
         country: userCommunity?.country,
         email: userCommunity?.email,
-        coverImage: userCommunity?.coverImage,
+        coverImage: userCommunity?.cover?.url || userCommunity.coverImage,
     };
 
     const [sending, setSending] = useState(false);
@@ -187,7 +188,6 @@ function CreateCommunityScreen() {
     const [country, setCountry] = useState(initialData.country || '');
     const [email, setEmail] = useState(initialData.email || '');
     const [coverImage, setCoverImage] = useState(initialData.coverImage || '');
-
     const [profileImage, setProfileImage] = useState<string>(avatar || '');
     const [isAlertVisible, setIsAlertVisible] = useState(!userCommunity);
     // const [communityLogo, setCommunityLogo] = useState('');
@@ -276,7 +276,7 @@ function CreateCommunityScreen() {
                         <View
                             style={{
                                 paddingVertical: 14,
-                                height: sending || sendingSuccess ? 240 : 400,
+                                height: sending || sendingSuccess ? 220 : 420,
                                 width: '88%',
                                 alignItems: 'center',
                                 alignSelf: 'center',
@@ -324,14 +324,23 @@ function CreateCommunityScreen() {
                                     </View>
                                     <View
                                         style={{
-                                            padding: 16,
+                                            paddingVertical: 16,
+                                            paddingHorizontal: 22,
                                             borderStyle: 'solid',
                                             borderColor: '#EB5757',
                                             borderWidth: 2,
                                             borderRadius: 8,
                                             width: '100%',
+                                            flexDirection: 'row',
                                         }}
                                     >
+                                        <WarningRedTriangle
+                                            style={{
+                                                alignSelf: 'flex-start',
+                                                marginRight: 16,
+                                                marginTop: 8,
+                                            }}
+                                        />
                                         <Text
                                             style={{
                                                 fontFamily: 'Inter-Regular',
@@ -339,6 +348,7 @@ function CreateCommunityScreen() {
                                                 lineHeight: 24,
                                                 color: ipctColors.almostBlack,
                                                 textAlign: 'left',
+                                                marginRight: 12,
                                             }}
                                         >
                                             {i18n.t('communityRequestError')}
@@ -352,12 +362,12 @@ function CreateCommunityScreen() {
                                     fontSize: 14,
                                     lineHeight: 24,
                                     color: ipctColors.almostBlack,
-                                    width: '80%',
+                                    width: '100%',
+                                    marginVertical: 16,
                                     textAlign:
                                         sendingSuccess || sending
                                             ? 'center'
                                             : 'left',
-                                    marginBottom: 10,
                                 }}
                             >
                                 {sending
@@ -499,8 +509,6 @@ function CreateCommunityScreen() {
                 _isProfileImageValid;
 
             if (!isEditable && !isSubmitAvailable) {
-                console.log({ isEditable });
-                console.log({ isSubmitAvailable });
                 return;
             }
         }
@@ -616,6 +624,8 @@ function CreateCommunityScreen() {
                         communityDetails
                     );
 
+                    console.log(communityApiRequestResult);
+
                     if (communityApiRequestResult) {
                         await updateCommunityInfo(
                             communityApiRequestResult.id,
@@ -690,6 +700,7 @@ function CreateCommunityScreen() {
             Sentry.Native.captureException(e);
             setSending(false);
             setSendingSuccess(false);
+            console.log({ e });
         }
     };
 
@@ -1106,7 +1117,9 @@ function CreateCommunityScreen() {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                         }}
-                                        source={{ uri: coverImage }}
+                                        source={{
+                                            uri: coverImage,
+                                        }}
                                     />
                                     <CloseStorySvg
                                         style={{
