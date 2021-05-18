@@ -392,4 +392,16 @@ export default {
     userNotRegistered: "The user isn't registered!",
     unexpectedError:
         'Unfortunately an unexpected error occurred while loading the app. Please restart the app and try again.',
+    createCommunityView: {
+        errorUploadCover:
+            'An error happened while uploading the community cover image!',
+        errorCreating:
+            'An error happened while submitting the request to create a community! Please, try again.',
+        errorLoading:
+            'An error happened while loading the next page. Please, reload the app.',
+    },
+    profileView: {
+        errorUploadAvatar:
+            'An error happened while uploading your profile picture!',
+    },
 };
