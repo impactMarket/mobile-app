@@ -136,7 +136,7 @@ function CreateCommunityScreen() {
         city: userCommunity?.city,
         country: userCommunity?.country,
         email: userCommunity?.email,
-        coverImage: userCommunity?.cover?.url || userCommunity.coverImage,
+        coverImage: userCommunity?.cover?.url || userCommunity?.coverImage,
     };
 
     const [sending, setSending] = useState(false);
