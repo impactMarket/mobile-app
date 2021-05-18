@@ -311,6 +311,7 @@ export default {
     deleteWarning: 'Are you sure you want to delete this story?',
     storyCongrat: 'Congratulations, your story was submitted!',
     storyFailure: 'Error uploading story!',
+    emptyStoryFailure: 'Please meka sure your story has a text or image.',
     storyPermissionCamera: 'Permission to access camera roll is required!',
     descriptionCopiedClipboard: 'Description copied to clipboard!',
     report: 'Report',
