@@ -29,10 +29,12 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
             )
         );
     }, [storiesListState, props.route.params.communityId]);
+    console.log(props.route.params.communityId);
 
     const indexRef = useRef(index);
 
     indexRef.current = index;
+
     const onScroll = useCallback((event) => {
         const slideSize = event.nativeEvent.layoutMeasurement.width;
         const index = event.nativeEvent.contentOffset.x / slideSize;
@@ -53,6 +55,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     /**
      * returns new community id, or null if there's no previous or next
      */
+
     const goToOtherCommunity = (next: boolean): void => {
         if (index > 0 && !next) {
             flatListRef.current?.scrollToIndex({ index: index - 1 });
@@ -63,9 +66,9 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
         }
     };
 
-    if (index === -1) {
-        return null;
-    }
+    // if (index === -1) {
+    //     return null;
+    // }
 
     return (
         <View style={{ flex: 1, flexDirection: 'row' }}>
