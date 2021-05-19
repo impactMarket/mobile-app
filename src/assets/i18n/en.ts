@@ -104,7 +104,7 @@ export default {
     communityRequestError:
         'There was an error submitting the community information. Please check your internet connection and try again later.',
     communityRequestErrorDetails:
-        'If you are unable to create this community please submit a ticket describing the problem.',
+        'If you are unable to create this community please <webview>submit a ticket</webview> describing the problem.',
     communityRequestSuccess:
         'Your community information was succefully submitted.',
     communityPicsImportance:

@@ -107,7 +107,7 @@ export default {
     communityRequestError:
         'Ocorreu um erro ao enviar as informações da comunidade. Verifique sua conexão com a Internet e tente novamente mais tarde.',
     communityRequestErrorDetails:
-        'Se você não conseguir criar/editar esta comunidade, envie um tíquete descrevendo o problema.',
+        'Se você não conseguir criar/editar esta comunidade, <webview>envie um tíquete</webview> descrevendo o problema.',
     communityRequestSuccess:
         'As informações da sua comunidade foram enviadas com sucesso.',
     failure: 'Falhou',
