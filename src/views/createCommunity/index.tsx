@@ -276,7 +276,7 @@ function CreateCommunityScreen() {
                         <View
                             style={{
                                 paddingVertical: 14,
-                                height: sending || sendingSuccess ? 220 : 420,
+                                height: sending || sendingSuccess ? 220 : 440,
                                 width: '88%',
                                 alignItems: 'center',
                                 alignSelf: 'center',
@@ -347,8 +347,8 @@ function CreateCommunityScreen() {
                                                 fontSize: 14,
                                                 lineHeight: 24,
                                                 color: ipctColors.almostBlack,
-                                                textAlign: 'left',
-                                                marginRight: 12,
+                                                textAlign: 'justify',
+                                                marginRight: 36,
                                             }}
                                         >
                                             {i18n.t('communityRequestError')}
