@@ -287,28 +287,8 @@ function CommunityManagerScreen() {
             );
         }
 
-        const renderHelpCenter = () => {
-            if (openHelpCenter) {
-                return (
-                    <WebView
-                        originWhitelist={['*']}
-                        source={{ uri: 'https://docs.impactmarket.com/' }}
-                        style={{
-                            height: Dimensions.get('screen').height * 0.85,
-                        }}
-                    />
-                );
-            }
-        };
         return (
-            <ScrollView
-            // style={{ flex: 1 }}
-            // contentContainerStyle={{
-            //     flexDirection: 'column',
-            //     alignItems: 'center',
-            //     justifyContent: 'space-around',
-            // }}
-            >
+            <ScrollView>
                 <Text
                     style={{
                         fontFamily: 'Inter-Regular',

@@ -34,8 +34,16 @@ export interface IManagerDetailsBeneficiary {
     verifiedPN: boolean | undefined;
     suspect: boolean | undefined;
 }
-
-//
+export interface CommunityEditionAttributes {
+    name: string;
+    description: string;
+    language: string;
+    city: string;
+    country: string;
+    email: string;
+    currency: string;
+    coverMediaId: number;
+}
 export interface CommunityCreationAttributes {
     requestByAddress: string;
     contractAddress?: string;

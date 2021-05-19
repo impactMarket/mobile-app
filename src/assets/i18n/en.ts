@@ -14,6 +14,7 @@ export default {
     removed: 'Removed',
     addBeneficiary: 'Add Beneficiary',
     add: 'Add',
+    cancelSending: 'Cancel',
     cancel: 'Cancel',
     confirm: 'Confirm',
     claimed: 'Claimed',
@@ -56,6 +57,7 @@ export default {
     edit: 'Edit',
     create: 'Create',
     applyCommunity: 'Apply Community',
+    editCommunity: 'Edit Community',
     submit: 'Submit',
     needLoginToCreateCommunity:
         'You need to connect with Valora to create a community.',
@@ -97,6 +99,14 @@ export default {
     visibility: 'Visibility',
     public: 'Public',
     private: 'Private',
+    communityRequestSending:
+        'Please wait while the community information is being uploaded...',
+    communityRequestError:
+        'There was an error submitting the community information. Please check your internet connection and try again later.',
+    communityRequestErrorDetails:
+        'If you are unable to create this community please <webview>submit a ticket</webview> describing the problem.',
+    communityRequestSuccess:
+        'Your community information was succefully submitted.',
     communityPicsImportance:
         'P.S: Communities with all the details completed, including the managers photos, are more likely to get funded.',
     createCommunityNote1:
@@ -113,8 +123,11 @@ export default {
     maxNotZero: 'Total claim amount should not be zero!',
     communityUpdated: 'Your community was updated!',
     errorUpdatingCommunity: 'An error happened while updating your community!',
+    submissionFailed: 'Submission failed',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
+    errorEditingCommunity:
+        'An error happened while placing the request to edit a community!',
     errorUploadingAvatar:
         'An error happened while uploading your image, try again later!',
     anErroHappenedTryAgain: 'An error happened, please, try again.',

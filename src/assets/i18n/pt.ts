@@ -15,6 +15,7 @@ export default {
     addBeneficiary: 'Adicionar Beneficiário',
     add: 'Adicionar',
     cancel: 'Fechar',
+    cancelSending: 'Cancelar',
     confirm: 'Confirmar',
     claimed: 'Distribuído',
     raised: 'Angariado',
@@ -58,6 +59,7 @@ export default {
         'É necessário estar conectado com a app Valora para criar uma comunidade.',
     communityDetails: 'Detalhes da Comunidade',
     applyCommunity: 'Criar Comunidade',
+    editCommunity: 'Editar Comunidade',
     createCommunityDescription:
         'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
     createCommunityAlert:
@@ -100,6 +102,14 @@ export default {
         'Se existir outra pessoa ou organização social na sua comunidade que seja mais adequada para gerir esta iniciativa, informe sobre esta possibilidade e incentive a criar uma comunidade.',
     communityPicsImportance:
         'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
+    communityRequestSending:
+        'Aguarde enquanto as informações da comunidade estão sendo carregadas ...',
+    communityRequestError:
+        'Ocorreu um erro ao enviar as informações da comunidade. Verifique sua conexão com a Internet e tente novamente mais tarde.',
+    communityRequestErrorDetails:
+        'Se você não conseguir criar/editar esta comunidade, <webview>envie um tíquete</webview> descrevendo o problema.',
+    communityRequestSuccess:
+        'As informações da sua comunidade foram enviadas com sucesso.',
     failure: 'Falhou',
     success: 'Sucesso',
     requestNewCommunityPlaced:
@@ -108,10 +118,13 @@ export default {
     claimNotZero: 'Montante por Pedido deve ser superior a zero!',
     maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
     communityUpdated: 'Os dados da comunidade foram atualizados!',
+    submissionFailed: 'Falha no envio',
     errorUpdatingCommunity:
         'Ocorreu um erro enquanto atualizava os dados da comunidade!',
     errorCreatingCommunity:
         'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
+    errorEditingCommunity:
+        'Ocorreu um erro enquanto era registado o pedido para editar uma comunidade!',
     errorUploadingAvatar:
         'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente!',
     anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',

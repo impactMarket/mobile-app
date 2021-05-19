@@ -1,6 +1,7 @@
 import {
     CommunityCreationAttributes,
     IManagerDetailsBeneficiary,
+    CommunityEditionAttributes,
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
 import {
@@ -104,6 +105,12 @@ class ApiRouteCommunity {
         details: CommunityCreationAttributes
     ): Promise<CommunityAttributes> {
         return this.api.post('/community/create', details);
+    }
+
+    static async edit(
+        details: CommunityEditionAttributes
+    ): Promise<CommunityAttributes> {
+        return this.api.put('/community', details);
     }
 
     static async getRequestChangeUbi(
