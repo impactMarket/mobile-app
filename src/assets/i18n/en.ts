@@ -124,6 +124,8 @@ export default {
     communityUpdated: 'Your community was updated!',
     errorUpdatingCommunity: 'An error happened while updating your community!',
     submissionFailed: 'Submission failed',
+    modalErrorTitle: 'Ooops!',
+    modalErrorDescription: 'Something went wrong. Please try again later.',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
     errorEditingCommunity:
