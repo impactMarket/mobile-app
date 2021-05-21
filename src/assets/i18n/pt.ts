@@ -119,6 +119,9 @@ export default {
     maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
     communityUpdated: 'Os dados da comunidade foram atualizados!',
     submissionFailed: 'Falha no envio',
+    modalErrorTitle: 'Ooops!',
+    modalErrorDescription:
+        'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
     errorUpdatingCommunity:
         'Ocorreu um erro enquanto atualizava os dados da comunidade!',
     errorCreatingCommunity:
