@@ -5,7 +5,11 @@ import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import DeleteSvg from 'components/svg/DeleteSvg';
 import ReportInapropriateSvg from 'components/svg/ReportInapropriateSvg';
+import ShareSvg from 'components/svg/ShareSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
+import Clipboard from 'expo-clipboard';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import { Screens } from 'helpers/constants';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
@@ -346,6 +350,46 @@ export default function Container({
                                                   )}
                                         </Text>
                                     </Pressable>
+                                    {media && (
+                                        <Pressable
+                                            hitSlop={15}
+                                            style={{
+                                                flexDirection: 'row',
+                                                width: '100%',
+                                                alignItems: 'center',
+                                                justifyContent: 'flex-start',
+                                                marginLeft: 24,
+                                                marginVertical: 12,
+                                            }}
+                                            onPress={() => {
+                                                FileSystem.downloadAsync(
+                                                    media.url,
+                                                    FileSystem.documentDirectory +
+                                                        '.jpeg'
+                                                )
+                                                    .then(({ uri }) => {
+                                                        Sharing.shareAsync(uri);
+                                                        Clipboard.setString(
+                                                            `https://www.impactmarket.com/communities/${community.id}`
+                                                        );
+                                                    })
+                                                    .catch(() => {
+                                                        // TODO: some error occurred
+                                                    });
+                                            }}
+                                        >
+                                            <ShareSvg />
+                                            <Text
+                                                style={{
+                                                    marginLeft: 13.4,
+                                                    fontFamily: 'Manrope-Bold',
+                                                    fontSize: 14,
+                                                }}
+                                            >
+                                                {i18n.t('share')}
+                                            </Text>
+                                        </Pressable>
+                                    )}
                                 </>
                             </ThreeDotsSvg>
                         )}
