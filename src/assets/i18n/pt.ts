@@ -104,6 +104,8 @@ export default {
         'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
     communityRequestSending:
         'Aguarde enquanto as informações da comunidade estão sendo carregadas ...',
+    missingFieldError:
+        'Todos os campos marcados como obrigatórios precisam ser informados. Verifique o que está faltando e tente novamente. ',
     communityRequestError:
         'Ocorreu um erro ao enviar as informações da comunidade. Verifique sua conexão com a Internet e tente novamente mais tarde.',
     communityRequestErrorDetails:
