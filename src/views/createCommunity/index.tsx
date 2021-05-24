@@ -148,6 +148,13 @@ function CreateCommunityScreen() {
     const [isNameValid, setIsNameValid] = useState(true);
     const [isEditable, setIsEditable] = useState(!!userCommunity);
 
+    const [genericErrorTitle, setGenericErrorTitle] = useState(
+        'genericErrorTitle'
+    );
+    const [genericErrorContent, setGenericErrorContent] = useState(
+        'genericErrorContent'
+    );
+
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
     // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
@@ -215,6 +222,7 @@ function CreateCommunityScreen() {
     const modalizeFrequencyRef = useRef<Modalize>(null);
     const modalizeVisibilityRef = useRef<Modalize>(null);
     const modalizeClaimImcrementRef = useRef<Modalize>(null);
+    const modalizeGenericErrorRef = useRef<Modalize>(null);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -276,6 +284,18 @@ function CreateCommunityScreen() {
             setIsEditable(true);
         }
     }, [userIsManager, userCommunity]);
+
+    const handleGenericHelpTexts = ({
+        title,
+        content,
+    }: {
+        title: string;
+        content: string;
+    }) => {
+        setGenericErrorTitle(title);
+        setGenericErrorContent(content);
+        modalizeGenericErrorRef.current?.open();
+    };
 
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
@@ -1709,6 +1729,17 @@ function CreateCommunityScreen() {
                                             <Input
                                                 style={styles.inputTextField}
                                                 label={i18n.t('claimAmount')}
+                                                help
+                                                onPress={() =>
+                                                    handleGenericHelpTexts({
+                                                        title: i18n.t(
+                                                            'claimAmount'
+                                                        ),
+                                                        content: i18n.t(
+                                                            'claimAmountHelp'
+                                                        ),
+                                                    })
+                                                }
                                                 value={claimAmount}
                                                 placeholder="$0"
                                                 maxLength={14}
@@ -1770,6 +1801,15 @@ function CreateCommunityScreen() {
                                     <View style={{ marginTop: 28 }}>
                                         <Select
                                             label={i18n.t('frequency')}
+                                            help
+                                            onHelpPress={() =>
+                                                handleGenericHelpTexts({
+                                                    title: i18n.t('frequency'),
+                                                    content: i18n.t(
+                                                        'frequencyHelp'
+                                                    ),
+                                                })
+                                            }
                                             value={
                                                 baseInterval === '86400'
                                                     ? i18n.t('daily')
@@ -1786,6 +1826,17 @@ function CreateCommunityScreen() {
                                             label={i18n.t(
                                                 'totalClaimPerBeneficiary'
                                             )}
+                                            help
+                                            onPress={() =>
+                                                handleGenericHelpTexts({
+                                                    title: i18n.t(
+                                                        'totalClaimPerBeneficiary'
+                                                    ),
+                                                    content: i18n.t(
+                                                        'totalClaimPerBeneficiaryHelp'
+                                                    ),
+                                                })
+                                            }
                                             value={maxClaim}
                                             placeholder="$0"
                                             maxLength={14}
@@ -1866,6 +1917,17 @@ function CreateCommunityScreen() {
                                             <Input
                                                 style={styles.inputTextField}
                                                 value={incrementInterval}
+                                                // help
+                                                // onPress={() =>
+                                                //     handleGenericHelpTexts({
+                                                //         title: i18n.t(
+                                                //             'timeIncrementAfterClaim'
+                                                //         ),
+                                                //         content: i18n.t(
+                                                //             'timeIncrementAfterClaimHelp'
+                                                //         ),
+                                                //     })
+                                                // }
                                                 placeholder="0"
                                                 maxLength={14}
                                                 keyboardType="numeric"
@@ -1917,6 +1979,15 @@ function CreateCommunityScreen() {
                                     <View style={{ marginTop: 28 }}>
                                         <Select
                                             label={i18n.t('visibility')}
+                                            help
+                                            onHelpPress={() =>
+                                                handleGenericHelpTexts({
+                                                    title: i18n.t('visibility'),
+                                                    content: i18n.t(
+                                                        'visibilityHelp'
+                                                    ),
+                                                })
+                                            }
                                             value={
                                                 visibility === 'public'
                                                     ? i18n.t('public')
@@ -1934,6 +2005,35 @@ function CreateCommunityScreen() {
                 )}
             </KeyboardAvoidingView>
             <RNPortal>
+                <Modalize ref={modalizeGenericErrorRef} adjustToContentHeight>
+                    <View
+                        style={{
+                            padding: 20,
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontFamily: 'Manrope-Bold',
+                                fontSize: 18,
+                                lineHeight: 20,
+                                textAlign: 'left',
+                                marginBottom: 20,
+                            }}
+                        >
+                            {genericErrorTitle}
+                        </Text>
+                        <Text
+                            style={{
+                                fontFamily: 'Inter-Regular',
+                                fontSize: 14,
+                                lineHeight: 20,
+                                textAlign: 'left',
+                            }}
+                        >
+                            {genericErrorContent}
+                        </Text>
+                    </View>
+                </Modalize>
                 <Modalize
                     ref={modalizeCountryRef}
                     HeaderComponent={renderHeader(
