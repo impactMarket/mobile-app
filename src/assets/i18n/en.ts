@@ -133,6 +133,8 @@ export default {
     errorUploadingAvatar:
         'An error happened while uploading your image, try again later!',
     anErroHappenedTryAgain: 'An error happened, please, try again.',
+    authErroHappenedTryAgain:
+        'An error happened when retrieving your data from valora, please, try again.',
     toContinuePlease: 'To continue please',
     impactMarketDescription:
         'ImpactMarket operates on top of Celo network, an open and global financial platform.',

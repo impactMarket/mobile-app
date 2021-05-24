@@ -1,14 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
-import { ModalGenericError } from 'components/core/ModalGenericError';
+import ModalGenericError from 'components/core/ModalGenericError';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import DeleteSvg from 'components/svg/DeleteSvg';
 import ReportInapropriateSvg from 'components/svg/ReportInapropriateSvg';
 import ShareSvg from 'components/svg/ShareSvg';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
 import Clipboard from 'expo-clipboard';
 import * as FileSystem from 'expo-file-system';
@@ -85,9 +83,9 @@ export default function Container({
         <ModalGenericError
             title={i18n.t('modalErrorTitle')}
             description={i18n.t('modalErrorDescription')}
-            btnString={setToggleInformativeModal(false)}
+            btnString={i18n.t('close')}
             closeFn={setToggleInformativeModal(false)}
-            btnFn={i18n.t('close')}
+            btnFn={setToggleInformativeModal(false)}
         />
     );
     // const renderInformativeModal = () => {
