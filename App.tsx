@@ -355,8 +355,8 @@ export default class App extends React.Component<any, IAppState> {
                     }}
                 >
                     <Image
-                        style={{ flex: 1, resizeMode: 'contain' }}
-                        source={require('./src/assets/images/splash2.png')}
+                        style={{ flex: 1, resizeMode: 'cover' }}
+                        source={require('./src/assets/images/splash.png')}
                         onLoad={this._cacheResourcesAsync}
                     />
                 </View>
@@ -439,7 +439,7 @@ export default class App extends React.Component<any, IAppState> {
     }
 
     _cacheSplashResourcesAsync = async () => {
-        const images = [require('./src/assets/images/splash2.png')];
+        const images = [require('./src/assets/images/splash.png')];
 
         const cacheImages = images.map((image) => {
             return Asset.fromModule(image).downloadAsync();
