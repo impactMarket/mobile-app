@@ -129,8 +129,10 @@ export default {
     errorEditingCommunity:
         'Ocorreu um erro enquanto era registado o pedido para editar uma comunidade!',
     errorUploadingAvatar:
-        'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente!',
-    anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente!',
+        'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente.',
+    anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente.',
+    authErroHappenedTryAgain:
+        'Ocorreu um erro enquanto recebíamos os seus dados da valora, Por favor tente novamente.',
     toContinuePlease: 'Para continuar, deverá',
     impactMarketDescription:
         'ImpactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.',

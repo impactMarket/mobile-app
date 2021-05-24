@@ -11,6 +11,7 @@ import currenciesJSON from 'assets/currencies.json';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
+import ModalGenericError from 'components/core/ModalGenericError';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import * as Localization from 'expo-localization';
@@ -76,6 +77,7 @@ function Auth() {
     const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
+    const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
     const [loadRefs, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
@@ -83,6 +85,22 @@ function Auth() {
     useFocusEffect(() => {
         renderAuthModalize();
     });
+
+    const renderInformativeModal = (
+        title: string,
+        description: string,
+        btnString: string,
+        closeFn: React.SetStateAction<any>,
+        btnFn: React.SetStateAction<any>
+    ) => (
+        <ModalGenericError
+            title={title}
+            description={description}
+            btnString={btnString}
+            closeFn={closeFn}
+            btnFn={btnFn}
+        />
+    );
 
     const login = async () => {
         const requestId = 'login';
@@ -108,12 +126,16 @@ function Auth() {
         } catch (e) {
             Sentry.Native.captureException(e);
             analytics('login', { device: Device.brand, success: 'false' });
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('errorConnectToValora'),
-                [{ text: i18n.t('close') }],
-                { cancelable: false }
-            );
+
+            setToggleInformativeModal(true);
+            toggleInformativeModal &&
+                renderInformativeModal(
+                    i18n.t('failure'),
+                    i18n.t('errorConnectToValora'),
+                    i18n.t('close'),
+                    setToggleInformativeModal,
+                    setToggleInformativeModal
+                );
             setConnecting(false);
             return;
         }
@@ -157,13 +179,15 @@ function Auth() {
             //     Sentry.Native.Severity.Critical
             // );
             analytics('login', { device: Device.brand, success: 'false' });
-
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('anErroHappenedTryAgain'),
-                [{ text: i18n.t('close') }],
-                { cancelable: false }
-            );
+            setToggleInformativeModal(true);
+            toggleInformativeModal &&
+                renderInformativeModal(
+                    i18n.t('failure'),
+                    i18n.t('authErroHappenedTryAgain'),
+                    i18n.t('close'),
+                    setToggleInformativeModal,
+                    setToggleInformativeModal
+                );
             setConnecting(false);
             return;
         }
@@ -203,13 +227,14 @@ function Auth() {
             //     }),
             //     Sentry.Native.Severity.Critical
             // );
-
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('anErroHappenedTryAgain'),
-                [{ text: i18n.t('close') }],
-                { cancelable: false }
-            );
+            toggleInformativeModal &&
+                renderInformativeModal(
+                    i18n.t('failure'),
+                    i18n.t('anErroHappenedTryAgain'),
+                    i18n.t('close'),
+                    setToggleInformativeModal,
+                    setToggleInformativeModal
+                );
             setConnecting(false);
         }
     };

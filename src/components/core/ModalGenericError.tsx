@@ -6,13 +6,20 @@ import { View, Text } from 'react-native';
 import { Card, Portal as RNPortal, Modal } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
 
-const ModalGenericError = (
-    title: string | null,
-    description: string | null,
-    btnString: string | null,
-    closeFn?: React.SetStateAction<any>,
-    btnFn?: React.SetStateAction<any>
-) => {
+interface ErrorProps {
+    title: string | null;
+    description: string | null;
+    btnString: string | null;
+    closeFn?: React.SetStateAction<any>;
+    btnFn?: React.SetStateAction<any>;
+}
+const ModalGenericError: React.FC<ErrorProps> = ({
+    title,
+    description,
+    btnString,
+    closeFn,
+    btnFn,
+}) => {
     return (
         <RNPortal>
             <Modal visible dismissable={false}>
