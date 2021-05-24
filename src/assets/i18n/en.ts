@@ -103,6 +103,8 @@ export default {
         'Please wait while the community information is being uploaded...',
     communityRequestError:
         'There was an error submitting the community information. Please check your internet connection and try again later.',
+    missingFieldError:
+        'All the fields marked as required need to be informed. Please check what is missing and try again.',
     communityRequestErrorDetails:
         'If you are unable to create this community please <webview>submit a ticket</webview> describing the problem.',
     communityRequestSuccess:
