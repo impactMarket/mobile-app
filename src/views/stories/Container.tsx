@@ -173,23 +173,6 @@ export default function Container({
     return (
         <>
             {toggleInformativeModal && renderInformativeModal()}
-            {media ? (
-                <CarouselSlide media={media} />
-            ) : (
-                <Text
-                    style={{
-                        fontFamily: 'Gelion-Regular',
-                        fontSize: 20,
-                        lineHeight: 24,
-                        color: 'white',
-                        textAlign: 'center',
-                        marginHorizontal: 22,
-                        top: dimensions.height * 0.25,
-                    }}
-                >
-                    {message}
-                </Text>
-            )}
 
             <View
                 style={{
@@ -256,8 +239,8 @@ export default function Container({
                                     color: '#FAFAFA',
                                 }}
                             >
-                                {name?.length > 23
-                                    ? name.substr(0, 21) + '...'
+                                {name?.length > 20
+                                    ? name.substr(0, 20) + '...'
                                     : name}
                             </Text>
                             {country.length > 0 && (
@@ -502,6 +485,23 @@ export default function Container({
                     </View>
                 </View>
             </View>
+            {media ? (
+                <CarouselSlide media={media} />
+            ) : (
+                <Text
+                    style={{
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 20,
+                        lineHeight: 24,
+                        color: 'white',
+                        textAlign: 'center',
+                        marginHorizontal: 22,
+                        top: dimensions.height * 0.35,
+                    }}
+                >
+                    {message}
+                </Text>
+            )}
         </>
     );
 }
