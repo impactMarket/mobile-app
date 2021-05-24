@@ -278,7 +278,8 @@ function NewStoryScreen() {
                 adjustToContentHeight
                 HeaderComponent={renderHeader(
                     i18n.t('storyRules'),
-                    modalizeStoryRef
+                    modalizeStoryRef,
+                    () => modalizeStoryRef.current?.close()
                 )}
             >
                 {renderStoryRules()}
