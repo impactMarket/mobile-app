@@ -167,7 +167,9 @@ function CreateCommunityScreen() {
     //
     const [showingResults, setShowingResults] = useState(false);
     const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
-    const [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(false);
+    const [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(
+        false
+    );
 
     const [searchCurrency, setSearchCurrency] = useState('');
     const [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]);
@@ -315,62 +317,51 @@ function CreateCommunityScreen() {
         const _isCoverImageValid = coverImage.length > 0;
         if (!_isCoverImageValid) {
             setIsCoverImageValid(false);
-            return;
         }
         //TODO: Will be added in later version
         const _isProfileImageValid = profileImage.length > 0;
         if (!_isProfileImageValid) {
             setIsProfileImageValid(false);
-            return;
         }
 
         const _isNameValid = name.length > 0;
         if (!_isNameValid) {
             setIsNameValid(false);
-            return;
         }
         const _isDescriptionValid = description.length > 0;
         if (!_isDescriptionValid) {
             setIsDescriptionValid(false);
-            return;
         }
         const _isCityValid = city.length > 0;
         if (!_isCityValid) {
             setIsCityValid(false);
-            return;
         }
         const _isCountryValid = country.length > 0;
         if (!_isCountryValid) {
             setIsCountryValid(false);
-            return;
         }
         const _isEmailValid = validateEmail(email);
         if (!_isEmailValid) {
             setIsEmailValid(false);
-            return;
         }
         if (!isEditable) {
             const _isEnabledGPS = gpsLocation !== undefined;
             if (!_isEnabledGPS) {
                 setIsEnabledGPS(false);
-                return;
             }
             const _isClaimAmountValid =
                 claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
             if (!_isClaimAmountValid) {
                 setIsClaimAmountValid(false);
-                return;
             }
             const _isIncrementalIntervalValid = incrementInterval.length > 0;
             if (!_isIncrementalIntervalValid) {
                 setIsIncrementalIntervalValid(false);
-                return;
             }
             const _isMaxClaimValid =
                 maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
             if (!_isMaxClaimValid) {
                 setIsMaxClaimValid(false);
-                return;
             }
 
             const isSubmitAvailable =
@@ -386,6 +377,7 @@ function CreateCommunityScreen() {
                 _isProfileImageValid;
 
             if (!isEditable && !isSubmitAvailable) {
+                console.log('setToggleMissingFieldsModal 1');
                 setToggleMissingFieldsModal(true);
                 return;
             }
@@ -400,6 +392,7 @@ function CreateCommunityScreen() {
             _isCoverImageValid;
 
         if (isEditable && !isSubmitEditAvailable) {
+            console.log('setToggleMissingFieldsModal 2');
             setToggleMissingFieldsModal(true);
             return;
         }
@@ -941,11 +934,8 @@ function CreateCommunityScreen() {
         </View>
     );
 
-
     const renderWebview = () => {
         return (
-            // <RNPortal>
-            //     <Modal visible dismissable={false}>
             <WebView
                 originWhitelist={['*']}
                 source={{
@@ -956,89 +946,95 @@ function CreateCommunityScreen() {
                     height: Dimensions.get('screen').height * 0.85,
                 }}
             />
-            //     </Modal>
-            // </RNPortal>
         );
     };
 
     if (toggleMissingFieldsModal) {
-        return (            <RNPortal>
-            <Modal visible dismissable={false}>
-                <Card style={{ marginHorizontal: 22, borderRadius: 12 }}>
-            <View
-                   style={{
-                       flexDirection: 'row',
-                       alignItems: 'center',
-                       justifyContent: 'space-between',
-                       width: '100%',
-                       marginBottom: 13.5,
-                   }}
-               >
-                   <Text
-                       style={{
-                           fontFamily: 'Manrope-Bold',
-                           fontSize: 18,
-                           lineHeight: 20,
-                           textAlign: 'left',
-                       }}
-                   >
-                       {i18n.t('submissionFailed')}
-                   </Text>
-                   <CloseStorySvg
-                       onPress={() => {
-                        setToggleMissingFieldsModal(
-                               false
-                           );
-                           setSending(false);
-                       }}
-                   />
-               </View>
-               <View
-                   style={{
-                       paddingVertical: 16,
-                       paddingHorizontal: 22,
-                       borderStyle: 'solid',
-                       borderColor: '#EB5757',
-                       borderWidth: 2,
-                       borderRadius: 8,
-                       width: '100%',
-                       flexDirection: 'row',
-                   }}
-               >
-                   <WarningRedTriangle
-                       style={{
-                           alignSelf: 'flex-start',
-                           marginRight: 16,
-                           marginTop: 8,
-                       }}
-                   />
-                   <Text
-                       style={{
-                           fontFamily: 'Inter-Regular',
-                           fontSize: 14,
-                           lineHeight: 24,
-                           color: ipctColors.almostBlack,
-                           textAlign: 'justify',
-                           marginRight: 36,
-                       }}
-                   >
-                       {i18n.t('missingFieldError')}
-                   </Text>
-               </View>
-               <Button
-                    modeType="gray"
-                    bold
-                    style={{ width: '100%' }}
-                    onPress={() => {
-                        setSending(false);
-                        setToggleMissingFieldsModal(false);
-                    }}
-                >
-                    {i18n.t('close')}
-                </Button>
-                </Card >
-            </Modal>
-        </RNPortal>)
+        return (
+            <RNPortal>
+                <Modal visible dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalErrorTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => {
+                                    setToggleMissingFieldsModal(false);
+                                    setSending(false);
+                                }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                paddingVertical: 16,
+                                paddingHorizontal: 22,
+                                borderStyle: 'solid',
+                                borderColor: '#EB5757',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <WarningRedTriangle
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    marginRight: 16,
+                                    marginTop: 8,
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                    textAlign: 'justify',
+                                    marginRight: 36,
+                                }}
+                            >
+                                {i18n.t('missingFieldError')}
+                            </Text>
+                        </View>
+                        <Button
+                            modeType="gray"
+                            bold
+                            style={{ width: '100%' }}
+                            onPress={() => {
+                                setSending(false);
+                                setToggleMissingFieldsModal(false);
+                            }}
+                        >
+                            {i18n.t('close')}
+                        </Button>
+                    </Card>
+                </Modal>
+            </RNPortal>
+        );
     }
 
     if (toggleInformativeModal) {
