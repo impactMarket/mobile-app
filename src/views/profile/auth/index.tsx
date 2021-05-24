@@ -77,7 +77,7 @@ function Auth() {
     const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
-    const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
+    const [toggleInformativeModal, setToggleInformativeModal] = useState(true);
     const [loadRefs, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
@@ -127,14 +127,13 @@ function Auth() {
             Sentry.Native.captureException(e);
             analytics('login', { device: Device.brand, success: 'false' });
 
-            setToggleInformativeModal(true);
             toggleInformativeModal &&
                 renderInformativeModal(
                     i18n.t('failure'),
                     i18n.t('errorConnectToValora'),
                     i18n.t('close'),
-                    setToggleInformativeModal,
-                    setToggleInformativeModal
+                    setToggleInformativeModal(false),
+                    setToggleInformativeModal(false)
                 );
             setConnecting(false);
             return;
@@ -179,14 +178,14 @@ function Auth() {
             //     Sentry.Native.Severity.Critical
             // );
             analytics('login', { device: Device.brand, success: 'false' });
-            setToggleInformativeModal(true);
+
             toggleInformativeModal &&
                 renderInformativeModal(
                     i18n.t('failure'),
                     i18n.t('authErroHappenedTryAgain'),
                     i18n.t('close'),
-                    setToggleInformativeModal,
-                    setToggleInformativeModal
+                    setToggleInformativeModal(false),
+                    setToggleInformativeModal(false)
                 );
             setConnecting(false);
             return;
@@ -227,13 +226,14 @@ function Auth() {
             //     }),
             //     Sentry.Native.Severity.Critical
             // );
+
             toggleInformativeModal &&
                 renderInformativeModal(
                     i18n.t('failure'),
                     i18n.t('anErroHappenedTryAgain'),
                     i18n.t('close'),
-                    setToggleInformativeModal,
-                    setToggleInformativeModal
+                    setToggleInformativeModal(false),
+                    setToggleInformativeModal(false)
                 );
             setConnecting(false);
         }
