@@ -5,12 +5,16 @@ import {
     TextInputProps,
     View,
     StyleSheet,
+    GestureResponderEvent,
+    TouchableWithoutFeedback,
 } from 'react-native';
 import { ipctColors } from 'styles/index';
 
 interface IInputProps extends TextInputProps {
     label?: string;
+    help?: boolean;
     isBig?: boolean;
+    onPress?: (event: GestureResponderEvent) => void;
 }
 export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
@@ -20,6 +24,8 @@ export default class Input extends Component<IInputProps, object> {
     render() {
         const {
             label,
+            help,
+            onPress,
             value,
             maxLength,
             onEndEditing,
@@ -54,7 +60,17 @@ export default class Input extends Component<IInputProps, object> {
                             },
                         ]}
                     >
-                        {label}
+                        {label}{' '}
+                        {help && (
+                            <TouchableWithoutFeedback
+                                onPress={onPress}
+                                style={{ width: 50, height: 30 }}
+                            >
+                                <Text style={{ color: ipctColors.blueRibbon }}>
+                                    [?]
+                                </Text>
+                            </TouchableWithoutFeedback>
+                        )}
                     </Text>
                     <TextInput
                         style={styles.textInput}

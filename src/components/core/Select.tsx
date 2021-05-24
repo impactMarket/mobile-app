@@ -5,7 +5,6 @@ import {
     GestureResponderEvent,
     TouchableWithoutFeedback,
     View,
-    Platform,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
@@ -13,6 +12,8 @@ import { ipctColors } from 'styles/index';
 interface ISelectProps {
     label?: string;
     value: string;
+    help?: boolean;
+    onHelpPress?: (event: GestureResponderEvent) => void;
     onPress?: (event: GestureResponderEvent) => void;
 }
 export default class Select extends Component<ISelectProps, object> {
@@ -21,7 +22,7 @@ export default class Select extends Component<ISelectProps, object> {
     }
 
     render() {
-        const { label, value, onPress } = this.props;
+        const { label, value, help, onPress, onHelpPress } = this.props;
         return (
             <View
                 style={{
@@ -37,7 +38,17 @@ export default class Select extends Component<ISelectProps, object> {
                         },
                     ]}
                 >
-                    {label}
+                    {label}{' '}
+                    {help && (
+                        <TouchableWithoutFeedback
+                            onPress={onHelpPress}
+                            style={{ width: 70, height: 40 }}
+                        >
+                            <Text style={{ color: ipctColors.blueRibbon }}>
+                                [?]
+                            </Text>
+                        </TouchableWithoutFeedback>
+                    )}
                 </Text>
                 <TouchableWithoutFeedback onPress={onPress}>
                     <View style={styles.outline}>
