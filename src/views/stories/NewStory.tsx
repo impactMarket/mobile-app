@@ -180,7 +180,7 @@ function NewStoryScreen() {
     const renderStoryRules = () => (
         <ScrollView
             style={{
-                height: 500,
+                height: 600,
             }}
         >
             <View style={{ width: '100%', paddingHorizontal: 22 }}>
@@ -275,7 +275,7 @@ function NewStoryScreen() {
 
             <Modalize
                 ref={modalizeStoryRef}
-                adjustToContentHeight
+                // adjustToContentHeight
                 HeaderComponent={renderHeader(
                     i18n.t('storyRules'),
                     modalizeStoryRef,
