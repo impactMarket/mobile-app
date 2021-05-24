@@ -90,9 +90,10 @@ function AnonymousReportScreen() {
             <Input
                 label={i18n.t('reportIlegal.label')}
                 multiline
-                numberOfLines={6}
+                numberOfLines={12}
                 value={reportInput}
                 maxLength={256}
+                isBig
                 onChangeText={(value) => setReportInput(value)}
                 style={{ fontFamily: 'Gelion-Regular', fontSize: 17 }}
             />
