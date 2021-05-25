@@ -15,6 +15,7 @@ import {
     Alert,
     useWindowDimensions,
     StyleSheet,
+    StatusBar,
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -186,6 +187,7 @@ function Carousel(props: {
                 backgroundColor: '#73839D',
             }}
         >
+            <StatusBar hidden />
             <Container
                 communityId={props.communityId}
                 community={
@@ -368,7 +370,7 @@ function Carousel(props: {
 
 Carousel.navigationOptions = () => {
     return {
-        headerShown: false,
+        headerShown: true,
     };
 };
 
