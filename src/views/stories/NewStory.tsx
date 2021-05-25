@@ -275,7 +275,7 @@ function NewStoryScreen() {
 
             <Modalize
                 ref={modalizeStoryRef}
-                // adjustToContentHeight
+                adjustToContentHeight
                 HeaderComponent={renderHeader(
                     i18n.t('storyRules'),
                     modalizeStoryRef,
