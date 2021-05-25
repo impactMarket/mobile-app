@@ -12,6 +12,7 @@ import Clipboard from 'expo-clipboard';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Screens } from 'helpers/constants';
+import { chooseMediaThumbnail } from 'helpers/index';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
@@ -208,7 +209,10 @@ export default function Container({
                         {cover.url.length > 0 ? (
                             <Image
                                 source={{
-                                    uri: cover.url,
+                                    uri: chooseMediaThumbnail(cover, {
+                                        heigth: 42,
+                                        width: 42,
+                                    }),
                                 }}
                                 style={{
                                     height: 48,
