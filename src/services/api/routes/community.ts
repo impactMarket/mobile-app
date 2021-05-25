@@ -22,8 +22,11 @@ class ApiRouteCommunity {
         return this.api.get(
             '/community/beneficiaries?action=search&search=' +
                 beneficiaryQuery +
-                '/' +
-                (active === undefined ? '' : active ? 'true' : 'false'),
+                (active === undefined
+                    ? ''
+                    : active
+                    ? '&active=true'
+                    : '&active=false'),
             true
         );
     }
