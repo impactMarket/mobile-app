@@ -36,6 +36,8 @@ function NewStoryScreen() {
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [loadRefs, setLoadRefs] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
+
     const [openHelpCenter, setOpenHelpCenter] = useState(false);
     const [submitedResult, setSubmitedResult] = useState<
         ICommunityStory | undefined
@@ -57,7 +59,7 @@ function NewStoryScreen() {
                     <SubmitStory
                         submit={submitNewStory}
                         submitting={submitting}
-                        disabled={false}
+                        disabled={isDisabled}
                     />
                 ),
             });
@@ -178,11 +180,7 @@ function NewStoryScreen() {
     }
 
     const renderStoryRules = () => (
-        <ScrollView
-            style={{
-                height: 600,
-            }}
-        >
+        <ScrollView style={{ maxHeight: 600 }}>
             <View style={{ width: '100%', paddingHorizontal: 22 }}>
                 <Text style={styles.description}>
                     <Trans
@@ -275,7 +273,9 @@ function NewStoryScreen() {
 
             <Modalize
                 ref={modalizeStoryRef}
-                adjustToContentHeight
+                modalTopOffset={100}
+                onOpen={() => setIsDisabled(true)}
+                onClose={() => setIsDisabled(false)}
                 HeaderComponent={renderHeader(
                     i18n.t('storyRules'),
                     modalizeStoryRef,
