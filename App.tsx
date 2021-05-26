@@ -126,6 +126,8 @@ Sentry.init({
     dsn: process.env.EXPO_SENTRY_DNS,
     enableInExpoDevelopment: true,
     debug: true,
+    sampleRate: 0.1,
+    tracesSampleRate: 0.1,
 });
 
 const prefix = Linking.makeUrl('/');
