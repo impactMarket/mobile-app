@@ -216,6 +216,7 @@ function CreateCommunityScreen() {
 
     const [maxClaim, setMaxClaim] = useState('');
     const [visibility, setVisibility] = useState('public');
+    const [apiResult, setApiResult] = useState<any>();
 
     const modalizeCurrencyRef = useRef<Modalize>(null);
     const modalizeCountryRef = useRef<Modalize>(null);
@@ -229,7 +230,11 @@ function CreateCommunityScreen() {
             headerRight: () =>
                 !showWebview ? (
                     <SubmitCommunity
-                        submit={submitNewCommunity}
+                        submit={
+                            !isEditable
+                                ? submitNewCommunity
+                                : submitEditCommunity
+                        }
                         submitting={sending}
                     />
                 ) : null,
@@ -364,55 +369,40 @@ function CreateCommunityScreen() {
         if (!_isEmailValid) {
             setIsEmailValid(false);
         }
-        if (!isEditable) {
-            const _isEnabledGPS = gpsLocation !== undefined;
-            if (!_isEnabledGPS) {
-                setIsEnabledGPS(false);
-            }
-            const _isClaimAmountValid =
-                claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
-            if (!_isClaimAmountValid) {
-                setIsClaimAmountValid(false);
-            }
-            const _isIncrementalIntervalValid = incrementInterval.length > 0;
-            if (!_isIncrementalIntervalValid) {
-                setIsIncrementalIntervalValid(false);
-            }
-            const _isMaxClaimValid =
-                maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
-            if (!_isMaxClaimValid) {
-                setIsMaxClaimValid(false);
-            }
 
-            const isSubmitAvailable =
-                _isNameValid &&
-                _isDescriptionValid &&
-                _isCityValid &&
-                _isCountryValid &&
-                _isEmailValid &&
-                _isClaimAmountValid &&
-                _isIncrementalIntervalValid &&
-                _isMaxClaimValid &&
-                _isCoverImageValid &&
-                _isProfileImageValid;
-
-            if (!isEditable && !isSubmitAvailable) {
-                console.log('setToggleMissingFieldsModal 1');
-                setToggleMissingFieldsModal(true);
-                return;
-            }
+        const _isEnabledGPS = gpsLocation !== undefined;
+        if (!_isEnabledGPS) {
+            setIsEnabledGPS(false);
+        }
+        const _isClaimAmountValid =
+            claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
+        if (!_isClaimAmountValid) {
+            setIsClaimAmountValid(false);
+        }
+        const _isIncrementalIntervalValid = incrementInterval.length > 0;
+        if (!_isIncrementalIntervalValid) {
+            setIsIncrementalIntervalValid(false);
+        }
+        const _isMaxClaimValid =
+            maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
+        if (!_isMaxClaimValid) {
+            setIsMaxClaimValid(false);
         }
 
-        const isSubmitEditAvailable =
+        const isSubmitAvailable =
             _isNameValid &&
             _isDescriptionValid &&
             _isCityValid &&
             _isCountryValid &&
             _isEmailValid &&
-            _isCoverImageValid;
+            _isClaimAmountValid &&
+            _isIncrementalIntervalValid &&
+            _isMaxClaimValid &&
+            _isCoverImageValid &&
+            _isProfileImageValid;
 
-        if (isEditable && !isSubmitEditAvailable) {
-            console.log('setToggleMissingFieldsModal 2');
+        if (!isSubmitAvailable) {
+            console.log('setToggleMissingFieldsModal 1');
             setToggleMissingFieldsModal(true);
             return;
         }
@@ -483,7 +473,7 @@ function CreateCommunityScreen() {
                 imageTargets.COVER
             );
 
-            if (profileImage.length > 0) {
+            if (profileImage.length > 0 && profileImage !== avatar) {
                 const res = (await Api.upload.uploadImage(
                     profileImage,
                     imageTargets.PROFILE
@@ -500,93 +490,175 @@ function CreateCommunityScreen() {
             }
 
             if (apiRequestResult) {
-                if (userCommunity) {
-                    const communityDetails: CommunityEditionAttributes = {
-                        name,
-                        description,
-                        language: userLanguage,
-                        city,
-                        country,
-                        email,
-                        currency,
-                        coverMediaId: apiRequestResult.data.data.id,
-                    };
+                const communityDetails: CommunityCreationAttributes = {
+                    requestByAddress: userAddress,
+                    name,
+                    description,
+                    language: userLanguage,
+                    currency,
+                    city,
+                    country,
+                    gps: {
+                        latitude:
+                            gpsLocation!.coords.latitude +
+                            config.locationErrorMargin,
+                        longitude:
+                            gpsLocation!.coords.longitude +
+                            config.locationErrorMargin,
+                    },
+                    email,
+                    coverMediaId: apiResult.data.data.id,
+                    contractParams,
+                    ...privateParamsIfAvailable,
+                };
 
-                    const communityApiRequestResult = await Api.community.edit(
-                        communityDetails
+                const communityApiRequestResult = await Api.community.create(
+                    communityDetails
+                );
+                if (communityApiRequestResult) {
+                    await updateCommunityInfo(
+                        communityApiRequestResult.id,
+                        dispatch
                     );
-
-                    console.log(communityApiRequestResult);
-
-                    if (communityApiRequestResult) {
-                        await updateCommunityInfo(
-                            communityApiRequestResult.id,
-                            dispatch
-                        );
-
-                        const community = await Api.community.findById(
-                            communityApiRequestResult.id
-                        );
-
-                        if (community !== undefined) {
-                            batch(() => {
-                                dispatch(setCommunityMetadata(community));
-                                dispatch(setUserIsCommunityManager(true));
-                            });
-                        }
-                        setSending(false);
-                        setSendingSuccess(true);
-                    } else {
-                        setSending(false);
-                        setSendingSuccess(false);
+                    const community = await Api.community.findById(
+                        communityApiRequestResult.id
+                    );
+                    if (community !== undefined) {
+                        batch(() => {
+                            dispatch(setCommunityMetadata(community));
+                            dispatch(setUserIsCommunityManager(true));
+                        });
                     }
+                    setSending(false);
+                    setSendingSuccess(true);
                 } else {
-                    const communityDetails: CommunityCreationAttributes = {
-                        requestByAddress: userAddress,
-                        name,
-                        description,
-                        language: userLanguage,
-                        currency,
-                        city,
-                        country,
-                        gps: {
-                            latitude:
-                                gpsLocation!.coords.latitude +
-                                config.locationErrorMargin,
-                            longitude:
-                                gpsLocation!.coords.longitude +
-                                config.locationErrorMargin,
-                        },
-                        email,
-                        coverMediaId: apiRequestResult.data.data.id,
-                        contractParams,
-                        ...privateParamsIfAvailable,
-                    };
-
-                    const communityApiRequestResult = await Api.community.create(
-                        communityDetails
-                    );
-                    if (communityApiRequestResult) {
-                        await updateCommunityInfo(
-                            communityApiRequestResult.id,
-                            dispatch
-                        );
-                        const community = await Api.community.findById(
-                            communityApiRequestResult.id
-                        );
-                        if (community !== undefined) {
-                            batch(() => {
-                                dispatch(setCommunityMetadata(community));
-                                dispatch(setUserIsCommunityManager(true));
-                            });
-                        }
-                        setSending(false);
-                        setSendingSuccess(true);
-                    } else {
-                        setSending(false);
-                        setSendingSuccess(false);
-                    }
+                    setSending(false);
+                    setSendingSuccess(false);
                 }
+            }
+        } catch (e) {
+            Sentry.Native.captureException(e);
+            setSending(false);
+            setSendingSuccess(false);
+            console.log({ e });
+        }
+    };
+
+    const submitEditCommunity = async () => {
+        const _isCoverImageValid = coverImage.length > 0;
+        if (!_isCoverImageValid) {
+            setIsCoverImageValid(false);
+        }
+        //TODO: Will be added in later version
+        const _isProfileImageValid = profileImage.length > 0;
+        if (!_isProfileImageValid) {
+            setIsProfileImageValid(false);
+        }
+
+        const _isNameValid = name.length > 0;
+        if (!_isNameValid) {
+            setIsNameValid(false);
+        }
+        const _isDescriptionValid = description.length > 0;
+        if (!_isDescriptionValid) {
+            setIsDescriptionValid(false);
+        }
+        const _isCityValid = city.length > 0;
+        if (!_isCityValid) {
+            setIsCityValid(false);
+        }
+        const _isCountryValid = country.length > 0;
+        if (!_isCountryValid) {
+            setIsCountryValid(false);
+        }
+        const _isEmailValid = validateEmail(email);
+        if (!_isEmailValid) {
+            setIsEmailValid(false);
+        }
+
+        const isSubmitEditAvailable =
+            _isNameValid &&
+            _isDescriptionValid &&
+            _isCityValid &&
+            _isCountryValid &&
+            _isEmailValid &&
+            _isCoverImageValid &&
+            _isProfileImageValid;
+
+        if (!isSubmitEditAvailable) {
+            setToggleMissingFieldsModal(true);
+            return;
+        }
+
+        try {
+            setSending(true);
+            setToggleInformativeModal(true);
+
+            if (coverImage !== initialData.coverImage) {
+                const apiRequestResult = await Api.upload.uploadImage(
+                    coverImage,
+                    imageTargets.COVER
+                );
+                setApiResult(apiRequestResult);
+                console.log({ apiRequestResult });
+            }
+
+            if (profileImage !== avatar) {
+                const res = (await Api.upload.uploadImage(
+                    profileImage,
+                    imageTargets.PROFILE
+                )) as any;
+
+                const cachedUser = (await CacheStore.getUser())!;
+                await CacheStore.cacheUser({
+                    ...cachedUser,
+                    avatar: res.data.data.url as string,
+                });
+                dispatch(
+                    setUserMetadata({ ...user, avatar: res.data.data.url })
+                );
+            }
+
+            const communityDetails: CommunityEditionAttributes = {
+                name,
+                description,
+                language: userLanguage,
+                city,
+                country,
+                email,
+                currency,
+                coverMediaId: apiResult
+                    ? apiResult.data.data.id
+                    : userCommunity.coverMediaId,
+            };
+
+            const communityApiRequestResult = await Api.community.edit(
+                communityDetails
+            );
+
+            console.log(communityApiRequestResult);
+
+            if (communityApiRequestResult) {
+                await updateCommunityInfo(
+                    communityApiRequestResult.id,
+                    dispatch
+                );
+
+                const community = await Api.community.findById(
+                    communityApiRequestResult.id
+                );
+
+                if (community !== undefined) {
+                    batch(() => {
+                        dispatch(setCommunityMetadata(community));
+                        dispatch(setUserIsCommunityManager(true));
+                    });
+                }
+                setSending(false);
+                setSendingSuccess(true);
+            } else {
+                setSending(false);
+                setSendingSuccess(false);
             }
         } catch (e) {
             Sentry.Native.captureException(e);
