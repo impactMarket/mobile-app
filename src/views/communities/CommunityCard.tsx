@@ -54,9 +54,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                     <CachedImage
                         style={styles.cardImage}
                         source={{
-                            uri:
-                                community.cover &&
-                                generateUrlWithCloudFront(community.cover.url),
+                            uri: community?.cover?.url,
                         }}
                     />
                     <View
