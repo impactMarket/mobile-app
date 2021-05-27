@@ -38,7 +38,7 @@ export default function BaseCommunity(props: {
                 <CachedImage
                     style={styles.imageBackground}
                     source={{
-                        uri: community.coverImage || community.cover?.url,
+                        uri: community.cover?.url,
                     }}
                 />
                 <View style={styles.darkerBackground} />
