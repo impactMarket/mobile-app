@@ -9,7 +9,6 @@ import { humanifyCurrencyAmount } from 'helpers/currency';
 import {
     calculateCommunityProgress,
     claimFrequencyToText,
-    generateUrlWithCloudFront,
 } from 'helpers/index';
 // import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
