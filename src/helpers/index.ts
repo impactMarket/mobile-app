@@ -31,14 +31,6 @@ import {
     UserAttributes,
 } from './types/models';
 
-export function generateUrlWithCloudFront(s3ContentKey: string) {
-    // for backwards support
-    // if (s3ContentKey.startsWith('http')) {
-    // }
-    // return `${config.cloudfrontUrl}/${s3ContentKey}`;
-    return s3ContentKey;
-}
-
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
 }
