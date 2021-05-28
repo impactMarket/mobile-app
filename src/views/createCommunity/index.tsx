@@ -15,7 +15,7 @@ import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { celoNetwork, imageTargets } from 'helpers/constants';
+import { Screens, celoNetwork, imageTargets } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     amountToCurrency,
@@ -535,6 +535,7 @@ function CreateCommunityScreen() {
                     }
                     setSending(false);
                     setSendingSuccess(true);
+                    navigation.navigate(Screens.CommunityManager);
                 } else {
                     setSending(false);
                     setSendingSuccess(false);
@@ -604,7 +605,6 @@ function CreateCommunityScreen() {
                     imageTargets.COVER
                 );
                 setApiResult(apiRequestResult);
-                console.log({ apiRequestResult });
             }
 
             if (profileImage !== avatar) {
