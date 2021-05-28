@@ -4,6 +4,7 @@ import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import CachedImage from 'components/CacheImage';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -122,6 +123,8 @@ function CreateCommunityScreen() {
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
+
+    console.log({ userCommunity });
 
     const avatar = useSelector(
         (state: IRootState) => state.user.metadata.avatar
@@ -279,9 +282,10 @@ function CreateCommunityScreen() {
         setCountryAndCurrencyBasedOnPhoneNumber();
         renderAvailableCountries();
         renderAvailableCurrencies();
-        navigation.setOptions({
-            headerTitle: i18n.t('editCommunity'),
-        });
+        isEditable &&
+            navigation.setOptions({
+                headerTitle: i18n.t('editCommunity'),
+            });
     }, []);
 
     useEffect(() => {
@@ -870,7 +874,6 @@ function CreateCommunityScreen() {
         setSearchCountryQuery('');
         setSearchCountryISOResult([]);
     };
-
     const renderItemCountryQuery = ({ item }: { item: string }) => (
         <TouchableOpacity onPress={() => handleSelectCountry(item)}>
             <View style={styles.itemContainer}>
@@ -1331,7 +1334,7 @@ function CreateCommunityScreen() {
                                 </View>
                                 {coverImage.length > 0 ? (
                                     <View style={{ flex: 1 }}>
-                                        <Image
+                                        <CachedImage
                                             style={{
                                                 height: 331,
                                                 width: '100%',
@@ -1341,7 +1344,7 @@ function CreateCommunityScreen() {
                                                 justifyContent: 'center',
                                             }}
                                             source={{
-                                                uri: coverImage,
+                                                uri: userCommunity?.cover?.url,
                                             }}
                                         />
                                         <CloseStorySvg
