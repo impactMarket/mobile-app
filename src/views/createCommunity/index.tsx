@@ -511,7 +511,7 @@ function CreateCommunityScreen() {
                             config.locationErrorMargin,
                     },
                     email,
-                    coverMediaId: apiResult.data.data.id,
+                    coverMediaId: apiRequestResult.data.data.id,
                     contractParams,
                     ...privateParamsIfAvailable,
                 };
@@ -599,14 +599,6 @@ function CreateCommunityScreen() {
             setSending(true);
             setToggleInformativeModal(true);
 
-            if (coverImage !== initialData.coverImage) {
-                const apiRequestResult = await Api.upload.uploadImage(
-                    coverImage,
-                    imageTargets.COVER
-                );
-                setApiResult(apiRequestResult);
-            }
-
             if (profileImage !== avatar) {
                 const res = (await Api.upload.uploadImage(
                     profileImage,
@@ -621,6 +613,14 @@ function CreateCommunityScreen() {
                 dispatch(
                     setUserMetadata({ ...user, avatar: res.data.data.url })
                 );
+            }
+
+            if (coverImage !== initialData.coverImage) {
+                const apiRequestResult = await Api.upload.uploadImage(
+                    coverImage,
+                    imageTargets.COVER
+                );
+                setApiResult(apiRequestResult);
             }
 
             const communityDetails: CommunityEditionAttributes = {
