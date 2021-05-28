@@ -511,7 +511,7 @@ function CreateCommunityScreen() {
                             config.locationErrorMargin,
                     },
                     email,
-                    coverMediaId: apiRequestResult.data.data.id,
+                    coverMediaId: apiRequestResult.data.id,
                     contractParams,
                     ...privateParamsIfAvailable,
                 };
