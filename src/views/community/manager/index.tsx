@@ -19,18 +19,10 @@ import {
 } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect } from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    RefreshControl,
-    Alert,
-    Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 // services
 import { ActivityIndicator, Portal, Paragraph } from 'react-native-paper';
-import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
