@@ -9,14 +9,14 @@
         "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*",
         "prettier": "prettier --write ./**/*.{ts,tsx}",
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
-        "test": "echo \"Not available yet.\"" 
+        "test": "echo \"Not available yet.\""
     },
     "lint-staged": {
-        "*.ts": [
-          "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-          "git add"
+        "*.ts*": [
+            "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
+            "git add"
         ]
-      },
+    },
     "engines": {
         "node": "14.15.1"
     },
