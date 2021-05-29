@@ -80,153 +80,132 @@ import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
 
 const countries: {
-    [key: string]: {
-        name: string;
-        native: string;
-        phone: string;
-        currency: string;
-        languages: string[];
-        emoji: string;
-    };
-} = countriesJSON;
-
-const currencies: {
-    [key: string]: {
-        symbol: string;
-        name: string;
-        symbol_native: string;
-    };
-} = currenciesJSON;
+        [key: string]: {
+            name: string;
+            native: string;
+            phone: string;
+            currency: string;
+            languages: string[];
+            emoji: string;
+        };
+    } = countriesJSON,
+    currencies: {
+        [key: string]: {
+            symbol: string;
+            name: string;
+            symbol_native: string;
+        };
+    } = currenciesJSON;
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
 function CreateCommunityScreen() {
-    const dispatch = useDispatch();
-    // const store = useStore();
-    const userAddress = useSelector(
-        (state: IRootState) => state.user.wallet.address
-    );
-    const userCurrency = useSelector(
-        (state: IRootState) => state.user.metadata.currency
-    );
-    const userPhoneNumber = useSelector(
-        (state: IRootState) => state.user.wallet.phoneNumber
-    );
-    const userLanguage = useSelector(
-        (state: IRootState) => state.user.metadata.language
-    );
-    const user = useSelector((state: IRootState) => state.user.metadata);
+    const dispatch = useDispatch(),
+        // const store = useStore();
+        userAddress = useSelector(
+            (state: IRootState) => state.user.wallet.address
+        ),
+        userCurrency = useSelector(
+            (state: IRootState) => state.user.metadata.currency
+        ),
+        userPhoneNumber = useSelector(
+            (state: IRootState) => state.user.wallet.phoneNumber
+        ),
+        userLanguage = useSelector(
+            (state: IRootState) => state.user.metadata.language
+        ),
+        user = useSelector((state: IRootState) => state.user.metadata),
+        userIsManager = useSelector(
+            (state: IRootState) => state.user.community.isManager
+        ),
+        userCommunity = useSelector(
+            (state: IRootState) => state.user.community.metadata
+        ),
+        avatar = useSelector((state: IRootState) => state.user.metadata.avatar),
+        exchangeRates = useSelector(
+            (state: IRootState) => state.app.exchangeRates
+        ),
+        kit = useSelector((state: IRootState) => state.app.kit),
+        navigation = useNavigation(),
+        initialData = {
+            name: userCommunity?.name,
+            description: userCommunity?.description,
+            city: userCommunity?.city,
+            country: userCommunity?.country,
+            email: userCommunity?.email,
+            coverImage: userCommunity?.cover?.url,
+        },
+        [sending, setSending] = useState(false),
+        [sendingSuccess, setSendingSuccess] = useState(false),
+        [gpsLocation, setGpsLocation] = useState<Location.LocationObject>(),
+        [isNameValid, setIsNameValid] = useState(true),
+        [isEditable, setIsEditable] = useState(!!userCommunity),
+        [genericErrorTitle, setGenericErrorTitle] = useState(
+            'genericErrorTitle'
+        ),
+        [genericErrorContent, setGenericErrorContent] = useState(
+            'genericErrorContent'
+        ),
+        [isCoverImageValid, setIsCoverImageValid] = useState(true),
+        [isProfileImageValid, setIsProfileImageValid] = useState(true),
+        // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
 
-    const userIsManager = useSelector(
-        (state: IRootState) => state.user.community.isManager
-    );
-    const userCommunity = useSelector(
-        (state: IRootState) => state.user.community.metadata
-    );
+        [isDescriptionValid, setIsDescriptionValid] = useState(true),
+        [isCityValid, setIsCityValid] = useState(true),
+        [isCountryValid, setIsCountryValid] = useState(true),
+        [isEmailValid, setIsEmailValid] = useState(true),
+        [isClaimAmountValid, setIsClaimAmountValid] = useState(true),
+        [isEnablingGPS, setIsEnablingGPS] = useState(false),
+        [isEnabledGPS, setIsEnabledGPS] = useState(true),
+        [isIncrementalIntervalValid, setIsIncrementalIntervalValid] = useState(
+            true
+        ),
+        [isMaxClaimValid, setIsMaxClaimValid] = useState(true),
+        //
+        [showingResults, setShowingResults] = useState(false),
+        [toggleInformativeModal, setToggleInformativeModal] = useState(false),
+        [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(
+            false
+        ),
+        [searchCurrency, setSearchCurrency] = useState(''),
+        [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]),
+        [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
+            []
+        ),
+        [currency, setCurrency] = useState<string>(userCurrency),
+        [name, setName] = useState(initialData.name || ''),
+        [description, setDescription] = useState(initialData.description || ''),
+        [city, setCity] = useState(initialData.city || ''),
+        [searchCountryQuery, setSearchCountryQuery] = useState(''),
+        [fullCountryList, setFullCountryList] = useState<string[]>([]),
+        [searchCountryISOResult, setSearchCountryISOResult] = useState<
+            string[]
+        >([]),
+        [country, setCountry] = useState(initialData.country || ''),
+        [email, setEmail] = useState(initialData.email || ''),
+        [coverImage, setCoverImage] = useState(initialData.coverImage || ''),
+        [profileImage, setProfileImage] = useState<string>(avatar || ''),
+        [isAlertVisible, setIsAlertVisible] = useState(!userCommunity),
+        // const [communityLogo, setCommunityLogo] = useState('');
+        [showWebview, setShowWebview] = useState(false),
+        // setToggleInformativeModal(false);
 
-    console.log({ userCommunity });
-
-    const avatar = useSelector(
-        (state: IRootState) => state.user.metadata.avatar
-    );
-    const exchangeRates = useSelector(
-        (state: IRootState) => state.app.exchangeRates
-    );
-    const kit = useSelector((state: IRootState) => state.app.kit);
-    const navigation = useNavigation();
-
-    const initialData = {
-        name: userCommunity?.name,
-        description: userCommunity?.description,
-        city: userCommunity?.city,
-        country: userCommunity?.country,
-        email: userCommunity?.email,
-        coverImage: userCommunity?.cover?.url,
-    };
-
-    const [sending, setSending] = useState(false);
-    const [sendingSuccess, setSendingSuccess] = useState(false);
-
-    const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
-    const [isNameValid, setIsNameValid] = useState(true);
-    const [isEditable, setIsEditable] = useState(!!userCommunity);
-
-    const [genericErrorTitle, setGenericErrorTitle] = useState(
-        'genericErrorTitle'
-    );
-    const [genericErrorContent, setGenericErrorContent] = useState(
-        'genericErrorContent'
-    );
-
-    const [isCoverImageValid, setIsCoverImageValid] = useState(true);
-    const [isProfileImageValid, setIsProfileImageValid] = useState(true);
-    // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
-
-    const [isDescriptionValid, setIsDescriptionValid] = useState(true);
-    const [isCityValid, setIsCityValid] = useState(true);
-    const [isCountryValid, setIsCountryValid] = useState(true);
-    const [isEmailValid, setIsEmailValid] = useState(true);
-    const [isClaimAmountValid, setIsClaimAmountValid] = useState(true);
-    const [isEnablingGPS, setIsEnablingGPS] = useState(false);
-    const [isEnabledGPS, setIsEnabledGPS] = useState(true);
-    const [
-        isIncrementalIntervalValid,
-        setIsIncrementalIntervalValid,
-    ] = useState(true);
-    const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
-    //
-    const [showingResults, setShowingResults] = useState(false);
-    const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
-    const [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(
-        false
-    );
-
-    const [searchCurrency, setSearchCurrency] = useState('');
-    const [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]);
-    const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
-        []
-    );
-
-    const [currency, setCurrency] = useState<string>(userCurrency);
-    const [name, setName] = useState(initialData.name || '');
-    const [description, setDescription] = useState(
-        initialData.description || ''
-    );
-    const [city, setCity] = useState(initialData.city || '');
-    const [searchCountryQuery, setSearchCountryQuery] = useState('');
-
-    const [fullCountryList, setFullCountryList] = useState<string[]>([]);
-    const [searchCountryISOResult, setSearchCountryISOResult] = useState<
-        string[]
-    >([]);
-
-    const [country, setCountry] = useState(initialData.country || '');
-    const [email, setEmail] = useState(initialData.email || '');
-    const [coverImage, setCoverImage] = useState(initialData.coverImage || '');
-    const [profileImage, setProfileImage] = useState<string>(avatar || '');
-    const [isAlertVisible, setIsAlertVisible] = useState(!userCommunity);
-    // const [communityLogo, setCommunityLogo] = useState('');
-    const [showWebview, setShowWebview] = useState(false);
-    // setToggleInformativeModal(false);
-
-    const [claimAmount, setClaimAmount] = useState('');
-    const [baseInterval, setBaseInterval] = useState('86400');
-    const [incrementInterval, setIncrementalInterval] = useState('');
-    const [
-        incrementalIntervalUnit,
-        setIncrementalIntervalUnit,
-    ] = useState<number>(60);
-
-    const [maxClaim, setMaxClaim] = useState('');
-    const [visibility, setVisibility] = useState('public');
-    const [apiResult, setApiResult] = useState<any>();
-
-    const modalizeCurrencyRef = useRef<Modalize>(null);
-    const modalizeCountryRef = useRef<Modalize>(null);
-    const modalizeFrequencyRef = useRef<Modalize>(null);
-    const modalizeVisibilityRef = useRef<Modalize>(null);
-    const modalizeClaimImcrementRef = useRef<Modalize>(null);
-    const modalizeGenericErrorRef = useRef<Modalize>(null);
+        [claimAmount, setClaimAmount] = useState(''),
+        [baseInterval, setBaseInterval] = useState('86400'),
+        [incrementInterval, setIncrementalInterval] = useState(''),
+        [
+            incrementalIntervalUnit,
+            setIncrementalIntervalUnit,
+        ] = useState<number>(60),
+        [maxClaim, setMaxClaim] = useState(''),
+        [visibility, setVisibility] = useState('public'),
+        [apiResult, setApiResult] = useState<any>(),
+        modalizeCurrencyRef = useRef<Modalize>(null),
+        modalizeCountryRef = useRef<Modalize>(null),
+        modalizeFrequencyRef = useRef<Modalize>(null),
+        modalizeVisibilityRef = useRef<Modalize>(null),
+        modalizeClaimImcrementRef = useRef<Modalize>(null),
+        modalizeGenericErrorRef = useRef<Modalize>(null);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -295,754 +274,761 @@ function CreateCommunityScreen() {
     }, [userIsManager, userCommunity]);
 
     const handleGenericHelpTexts = ({
-        title,
-        content,
-    }: {
-        title: string;
-        content: string;
-    }) => {
-        setGenericErrorTitle(title);
-        setGenericErrorContent(content);
-        modalizeGenericErrorRef.current?.open();
-    };
-
-    const deployPrivateCommunity = async () => {
-        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        const CommunityContract = new kit.web3.eth.Contract(
-            CommunityContractABI as any
-        );
-        const txObject = await CommunityContract.deploy({
-            data: CommunityBytecode.bytecode,
-            arguments: [
-                userAddress,
-                new BigNumber(formatInputAmountToTransfer(claimAmount))
-                    .multipliedBy(decimals)
-                    .toString(),
-                new BigNumber(formatInputAmountToTransfer(maxClaim))
-                    .multipliedBy(decimals)
-                    .toString(),
-                baseInterval,
-                (
-                    parseInt(incrementInterval, 10) * incrementalIntervalUnit
-                ).toString(),
-                celoNetwork.noAddress,
-                config.cUSDContract,
-                userAddress,
-            ],
-        });
-        // exception is handled outside
-        // receipt as undefined is handled outside
-        const receipt = await celoWalletRequest(
-            userAddress,
-            celoNetwork.noAddress,
-            txObject,
-            'createcommunity',
-            kit
-        );
-        return receipt;
-    };
-
-    const submitNewCommunity = async () => {
-        const _isCoverImageValid = coverImage.length > 0;
-        if (!_isCoverImageValid) {
-            setIsCoverImageValid(false);
-        }
-        //TODO: Will be added in later version
-        const _isProfileImageValid = profileImage.length > 0;
-        if (!_isProfileImageValid) {
-            setIsProfileImageValid(false);
-        }
-
-        const _isNameValid = name.length > 0;
-        if (!_isNameValid) {
-            setIsNameValid(false);
-        }
-        const _isDescriptionValid = description.length > 0;
-        if (!_isDescriptionValid) {
-            setIsDescriptionValid(false);
-        }
-        const _isCityValid = city.length > 0;
-        if (!_isCityValid) {
-            setIsCityValid(false);
-        }
-        const _isCountryValid = country.length > 0;
-        if (!_isCountryValid) {
-            setIsCountryValid(false);
-        }
-        const _isEmailValid = validateEmail(email);
-        if (!_isEmailValid) {
-            setIsEmailValid(false);
-        }
-
-        const _isEnabledGPS = gpsLocation !== undefined;
-        if (!_isEnabledGPS) {
-            setIsEnabledGPS(false);
-        }
-        const _isClaimAmountValid =
-            claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
-        if (!_isClaimAmountValid) {
-            setIsClaimAmountValid(false);
-        }
-        const _isIncrementalIntervalValid = incrementInterval.length > 0;
-        if (!_isIncrementalIntervalValid) {
-            setIsIncrementalIntervalValid(false);
-        }
-        const _isMaxClaimValid =
-            maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
-        if (!_isMaxClaimValid) {
-            setIsMaxClaimValid(false);
-        }
-
-        const isSubmitAvailable =
-            _isNameValid &&
-            _isDescriptionValid &&
-            _isCityValid &&
-            _isCountryValid &&
-            _isEmailValid &&
-            _isClaimAmountValid &&
-            _isIncrementalIntervalValid &&
-            _isMaxClaimValid &&
-            _isCoverImageValid &&
-            _isProfileImageValid;
-
-        if (!isSubmitAvailable) {
-            console.log('setToggleMissingFieldsModal 1');
-            setToggleMissingFieldsModal(true);
-            return;
-        }
-
-        if (new BigNumber(maxClaim).lte(claimAmount)) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('claimBiggerThanMax'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            return;
-        }
-        if (new BigNumber(claimAmount).eq(0)) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('claimNotZero'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            return;
-        }
-        if (new BigNumber(maxClaim).eq(0)) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('maxNotZero'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-            return;
-        }
-
-        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        let txReceipt = null;
-        let communityAddress = null;
-
-        try {
-            setSending(true);
-            setToggleInformativeModal(true);
-            const contractParams = {
-                claimAmount: new BigNumber(
-                    formatInputAmountToTransfer(claimAmount)
-                )
-                    .multipliedBy(decimals)
-                    .toString(),
-                maxClaim: new BigNumber(formatInputAmountToTransfer(maxClaim))
-                    .multipliedBy(decimals)
-                    .toString(),
-                baseInterval: parseInt(baseInterval),
-                incrementInterval:
-                    parseInt(incrementInterval, 10) * incrementalIntervalUnit,
-            };
-            let privateParamsIfAvailable = {};
-            if (visibility === 'private') {
-                txReceipt = await deployPrivateCommunity();
-                if (txReceipt === undefined) {
-                    return;
-                }
-                communityAddress = txReceipt.contractAddress;
-                privateParamsIfAvailable = {
-                    contractAddress: communityAddress,
-                    txReceipt,
-                };
+            title,
+            content,
+        }: {
+            title: string;
+            content: string;
+        }) => {
+            setGenericErrorTitle(title);
+            setGenericErrorContent(content);
+            modalizeGenericErrorRef.current?.open();
+        },
+        deployPrivateCommunity = async () => {
+            const decimals = new BigNumber(10).pow(config.cUSDDecimals),
+                CommunityContract = new kit.web3.eth.Contract(
+                    CommunityContractABI as any
+                ),
+                txObject = await CommunityContract.deploy({
+                    data: CommunityBytecode.bytecode,
+                    arguments: [
+                        userAddress,
+                        new BigNumber(formatInputAmountToTransfer(claimAmount))
+                            .multipliedBy(decimals)
+                            .toString(),
+                        new BigNumber(formatInputAmountToTransfer(maxClaim))
+                            .multipliedBy(decimals)
+                            .toString(),
+                        baseInterval,
+                        (
+                            parseInt(incrementInterval, 10) *
+                            incrementalIntervalUnit
+                        ).toString(),
+                        celoNetwork.noAddress,
+                        config.cUSDContract,
+                        userAddress,
+                    ],
+                }),
+                // exception is handled outside
+                // receipt as undefined is handled outside
+                receipt = await celoWalletRequest(
+                    userAddress,
+                    celoNetwork.noAddress,
+                    txObject,
+                    'createcommunity',
+                    kit
+                );
+            return receipt;
+        },
+        submitNewCommunity = async () => {
+            const _isCoverImageValid = coverImage.length > 0;
+            if (!_isCoverImageValid) {
+                setIsCoverImageValid(false);
+            }
+            //TODO: Will be added in later version
+            const _isProfileImageValid = profileImage.length > 0;
+            if (!_isProfileImageValid) {
+                setIsProfileImageValid(false);
             }
 
-            const apiRequestResult = await Api.upload.uploadImage(
-                coverImage,
-                imageTargets.COVER
-            );
-
-            if (profileImage.length > 0 && profileImage !== avatar) {
-                const res = (await Api.upload.uploadImage(
-                    profileImage,
-                    imageTargets.PROFILE
-                )) as any;
-
-                const cachedUser = (await CacheStore.getUser())!;
-                await CacheStore.cacheUser({
-                    ...cachedUser,
-                    avatar: res.data.data.url as string,
-                });
-                dispatch(
-                    setUserMetadata({ ...user, avatar: res.data.data.url })
-                );
+            const _isNameValid = name.length > 0;
+            if (!_isNameValid) {
+                setIsNameValid(false);
+            }
+            const _isDescriptionValid = description.length > 0;
+            if (!_isDescriptionValid) {
+                setIsDescriptionValid(false);
+            }
+            const _isCityValid = city.length > 0;
+            if (!_isCityValid) {
+                setIsCityValid(false);
+            }
+            const _isCountryValid = country.length > 0;
+            if (!_isCountryValid) {
+                setIsCountryValid(false);
+            }
+            const _isEmailValid = validateEmail(email);
+            if (!_isEmailValid) {
+                setIsEmailValid(false);
             }
 
-            if (apiRequestResult) {
-                const communityDetails: CommunityCreationAttributes = {
-                    requestByAddress: userAddress,
-                    name,
-                    description,
-                    language: userLanguage,
-                    currency,
-                    city,
-                    country,
-                    gps: {
-                        latitude:
-                            gpsLocation!.coords.latitude +
-                            config.locationErrorMargin,
-                        longitude:
-                            gpsLocation!.coords.longitude +
-                            config.locationErrorMargin,
-                    },
-                    email,
-                    coverMediaId: apiRequestResult.data.id,
-                    contractParams,
-                    ...privateParamsIfAvailable,
-                };
-
-                const communityApiRequestResult = await Api.community.create(
-                    communityDetails
-                );
-                if (communityApiRequestResult) {
-                    await updateCommunityInfo(
-                        communityApiRequestResult.id,
-                        dispatch
-                    );
-                    const community = await Api.community.findById(
-                        communityApiRequestResult.id
-                    );
-                    if (community !== undefined) {
-                        batch(() => {
-                            dispatch(setCommunityMetadata(community));
-                            dispatch(setUserIsCommunityManager(true));
-                        });
-                    }
-                    setSending(false);
-                    setSendingSuccess(true);
-                    navigation.navigate(Screens.CommunityManager);
-                } else {
-                    setSending(false);
-                    setSendingSuccess(false);
-                }
+            const _isEnabledGPS = gpsLocation !== undefined;
+            if (!_isEnabledGPS) {
+                setIsEnabledGPS(false);
             }
-        } catch (e) {
-            Sentry.Native.captureException(e);
-            setSending(false);
-            setSendingSuccess(false);
-            console.log({ e });
-        }
-    };
-
-    const submitEditCommunity = async () => {
-        const _isCoverImageValid = coverImage.length > 0;
-        if (!_isCoverImageValid) {
-            setIsCoverImageValid(false);
-        }
-        //TODO: Will be added in later version
-        const _isProfileImageValid = profileImage.length > 0;
-        if (!_isProfileImageValid) {
-            setIsProfileImageValid(false);
-        }
-
-        const _isNameValid = name.length > 0;
-        if (!_isNameValid) {
-            setIsNameValid(false);
-        }
-        const _isDescriptionValid = description.length > 0;
-        if (!_isDescriptionValid) {
-            setIsDescriptionValid(false);
-        }
-        const _isCityValid = city.length > 0;
-        if (!_isCityValid) {
-            setIsCityValid(false);
-        }
-        const _isCountryValid = country.length > 0;
-        if (!_isCountryValid) {
-            setIsCountryValid(false);
-        }
-        const _isEmailValid = validateEmail(email);
-        if (!_isEmailValid) {
-            setIsEmailValid(false);
-        }
-
-        const isSubmitEditAvailable =
-            _isNameValid &&
-            _isDescriptionValid &&
-            _isCityValid &&
-            _isCountryValid &&
-            _isEmailValid &&
-            _isCoverImageValid &&
-            _isProfileImageValid;
-
-        if (!isSubmitEditAvailable) {
-            setToggleMissingFieldsModal(true);
-            return;
-        }
-
-        try {
-            setSending(true);
-            setToggleInformativeModal(true);
-
-            if (profileImage !== avatar) {
-                const res = (await Api.upload.uploadImage(
-                    profileImage,
-                    imageTargets.PROFILE
-                )) as any;
-
-                const cachedUser = (await CacheStore.getUser())!;
-                await CacheStore.cacheUser({
-                    ...cachedUser,
-                    avatar: res.data.data.url as string,
-                });
-                dispatch(
-                    setUserMetadata({ ...user, avatar: res.data.data.url })
-                );
+            const _isClaimAmountValid =
+                claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
+            if (!_isClaimAmountValid) {
+                setIsClaimAmountValid(false);
+            }
+            const _isIncrementalIntervalValid = incrementInterval.length > 0;
+            if (!_isIncrementalIntervalValid) {
+                setIsIncrementalIntervalValid(false);
+            }
+            const _isMaxClaimValid =
+                maxClaim.length > 0 && /^\d*[\.\,]?\d*$/.test(maxClaim);
+            if (!_isMaxClaimValid) {
+                setIsMaxClaimValid(false);
             }
 
-            if (coverImage !== initialData.coverImage) {
-                const apiRequestResult = await Api.upload.uploadImage(
-                    coverImage,
-                    imageTargets.COVER
-                );
-                setApiResult(apiRequestResult);
+            const isSubmitAvailable =
+                _isNameValid &&
+                _isDescriptionValid &&
+                _isCityValid &&
+                _isCountryValid &&
+                _isEmailValid &&
+                _isClaimAmountValid &&
+                _isIncrementalIntervalValid &&
+                _isMaxClaimValid &&
+                _isCoverImageValid &&
+                _isProfileImageValid;
+
+            if (!isSubmitAvailable) {
+                console.log('setToggleMissingFieldsModal 1');
+                setToggleMissingFieldsModal(true);
+                return;
             }
 
-            const communityDetails: CommunityEditionAttributes = {
-                name,
-                description,
-                language: userLanguage,
-                city,
-                country,
-                email,
-                currency,
-                coverMediaId: apiResult
-                    ? apiResult.data.data.id
-                    : userCommunity.coverMediaId,
-            };
-
-            const communityApiRequestResult = await Api.community.edit(
-                communityDetails
-            );
-
-            console.log(communityApiRequestResult);
-
-            if (communityApiRequestResult) {
-                await updateCommunityInfo(
-                    communityApiRequestResult.id,
-                    dispatch
-                );
-
-                const community = await Api.community.findById(
-                    communityApiRequestResult.id
-                );
-
-                if (community !== undefined) {
-                    batch(() => {
-                        dispatch(setCommunityMetadata(community));
-                        dispatch(setUserIsCommunityManager(true));
-                    });
-                }
-                setSending(false);
-                setSendingSuccess(true);
-            } else {
-                setSending(false);
-                setSendingSuccess(false);
-            }
-        } catch (e) {
-            Sentry.Native.captureException(e);
-            setSending(false);
-            setSendingSuccess(false);
-            console.log({ e });
-        }
-    };
-
-    const enableGPSLocation = async () => {
-        setIsEnablingGPS(true);
-        try {
-            const { status } = await Location.requestPermissionsAsync();
-            if (status !== 'granted') {
+            if (new BigNumber(maxClaim).lte(claimAmount)) {
                 Alert.alert(
                     i18n.t('failure'),
-                    i18n.t('errorGettingGPSLocation'),
+                    i18n.t('claimBiggerThanMax'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                return;
+            }
+            if (new BigNumber(claimAmount).eq(0)) {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('claimNotZero'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+                return;
+            }
+            if (new BigNumber(maxClaim).eq(0)) {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('maxNotZero'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
                 return;
             }
 
-            const loc = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Low,
-            });
-            setGpsLocation(loc);
-            setIsEnabledGPS(true);
-        } catch (e) {
-            Alert.alert(
-                i18n.t('failure'),
-                i18n.t('errorGettingGPSLocation'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-        } finally {
-            setIsEnablingGPS(false);
-        }
-    };
+            const decimals = new BigNumber(10).pow(config.cUSDDecimals);
+            let txReceipt = null,
+                communityAddress = null;
 
-    const renderAvailableCountries = () => {
-        const availableCountryISO: string[] = [];
-        for (const [key] of Object.entries(countries)) {
-            availableCountryISO.push(key);
-        }
-        setFullCountryList(availableCountryISO);
-    };
-
-    const renderAvailableCurrencies = () => {
-        const currencyResult: string[] = [];
-        for (const [key] of Object.entries(currencies)) {
-            currencyResult.push(key);
-        }
-        setFullCurrencyList(currencyResult);
-    };
-
-    const pickImage = async (
-        cb: Dispatch<React.SetStateAction<string>>,
-        cbv: Dispatch<React.SetStateAction<boolean>>
-    ) => {
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            // allowsEditing: true,
-            // aspect: [1, 1],
-            quality: 1,
-        });
-
-        if (!result.cancelled) {
-            cb(result.uri);
-            cbv(true);
-        }
-    };
-
-    const renderCurrencyContent = () => (
-        <View
-            style={{
-                padding: 20,
-                height: Dimensions.get('screen').height * 0.9,
-            }}
-        >
-            <Searchbar
-                placeholder={i18n.t('search')}
-                style={styles.searchBarContainer}
-                autoFocus
-                inputStyle={{
-                    marginLeft: -14,
-                }}
-                onChangeText={(e) => {
-                    if (e.length === 0 && showingResults) {
-                        setSearchCurrencyResult([]);
-                        setShowingResults(false);
+            try {
+                setSending(true);
+                setToggleInformativeModal(true);
+                const contractParams = {
+                    claimAmount: new BigNumber(
+                        formatInputAmountToTransfer(claimAmount)
+                    )
+                        .multipliedBy(decimals)
+                        .toString(),
+                    maxClaim: new BigNumber(
+                        formatInputAmountToTransfer(maxClaim)
+                    )
+                        .multipliedBy(decimals)
+                        .toString(),
+                    baseInterval: parseInt(baseInterval),
+                    incrementInterval:
+                        parseInt(incrementInterval, 10) *
+                        incrementalIntervalUnit,
+                };
+                let privateParamsIfAvailable = {};
+                if (visibility === 'private') {
+                    txReceipt = await deployPrivateCommunity();
+                    if (txReceipt === undefined) {
+                        return;
                     }
-                    handleSearchCurrency(e);
-                }}
-                value={searchCurrency}
-            />
-            {renderSearchCurrencyResult()}
-        </View>
-    );
+                    communityAddress = txReceipt.contractAddress;
+                    privateParamsIfAvailable = {
+                        contractAddress: communityAddress,
+                        txReceipt,
+                    };
+                }
 
-    const renderFrequency = () => (
-        <View
-            style={{
-                height: 120,
-                paddingLeft: 8,
-                marginBottom: 22,
-            }}
-        >
-            <RadioButton.Group
-                onValueChange={(value) => {
-                    setBaseInterval(value);
-                    modalizeFrequencyRef.current?.close();
-                }}
-                value={baseInterval}
-            >
-                <RadioButton.Item label={i18n.t('daily')} value="86400" />
-                <RadioButton.Item label={i18n.t('weekly')} value="604800" />
-            </RadioButton.Group>
-        </View>
-    );
+                const apiRequestResult = await Api.upload.uploadImage(
+                    coverImage,
+                    imageTargets.COVER
+                );
 
-    const renderIncrementalFrequency = () => (
-        <View
-            style={{
-                height: 160,
-                marginBottom: 22,
-                paddingLeft: 8,
-            }}
-        >
-            <RadioButton.Group
-                onValueChange={(value) => {
-                    setIncrementalIntervalUnit(Number(value));
-                    modalizeClaimImcrementRef.current?.close();
-                }}
-                value={incrementalIntervalUnit.toString()}
-            >
-                <RadioButton.Item label={i18n.t('minutes')} value="60" />
-                <RadioButton.Item label={i18n.t('hours')} value="3600" />
-                <RadioButton.Item label={i18n.t('days')} value="86400" />
-            </RadioButton.Group>
-        </View>
-    );
+                if (profileImage.length > 0 && profileImage !== avatar) {
+                    const res = (await Api.upload.uploadImage(
+                            profileImage,
+                            imageTargets.PROFILE
+                        )) as any,
+                        cachedUser = (await CacheStore.getUser())!;
+                    await CacheStore.cacheUser({
+                        ...cachedUser,
+                        avatar: res.data.data.url as string,
+                    });
+                    dispatch(
+                        setUserMetadata({ ...user, avatar: res.data.data.url })
+                    );
+                }
 
-    const renderCountries = () => (
-        <View
-            style={{
-                padding: 20,
-                height: Dimensions.get('screen').height * 0.9,
-            }}
-        >
-            <Searchbar
-                placeholder={i18n.t('search')}
-                style={styles.searchBarContainer}
-                autoFocus
-                inputStyle={{
-                    marginLeft: -14,
-                }}
-                onChangeText={(e) => {
-                    if (e.length === 0 && showingResults) {
-                        setSearchCountryISOResult([]);
-                        setShowingResults(false);
+                if (apiRequestResult) {
+                    const communityDetails: CommunityCreationAttributes = {
+                            requestByAddress: userAddress,
+                            name,
+                            description,
+                            language: userLanguage,
+                            currency,
+                            city,
+                            country,
+                            gps: {
+                                latitude:
+                                    gpsLocation!.coords.latitude +
+                                    config.locationErrorMargin,
+                                longitude:
+                                    gpsLocation!.coords.longitude +
+                                    config.locationErrorMargin,
+                            },
+                            email,
+                            coverMediaId: apiRequestResult.data.data.id,
+                            contractParams,
+                            ...privateParamsIfAvailable,
+                        },
+                        communityApiRequestResult = await Api.community.create(
+                            communityDetails
+                        );
+                    if (communityApiRequestResult) {
+                        await updateCommunityInfo(
+                            communityApiRequestResult.id,
+                            dispatch
+                        );
+                        const community = await Api.community.findById(
+                            communityApiRequestResult.id
+                        );
+                        if (community !== undefined) {
+                            batch(() => {
+                                dispatch(setCommunityMetadata(community));
+                                dispatch(setUserIsCommunityManager(true));
+                            });
+                        }
+                        setSending(false);
+                        setSendingSuccess(true);
+                        navigation.navigate(Screens.CommunityManager);
+                    } else {
+                        setSending(false);
+                        setSendingSuccess(false);
                     }
-                    handleSearchCountry(e);
-                }}
-                value={searchCountryQuery}
-            />
-
-            {renderSearchCountryResult()}
-        </View>
-    );
-
-    const renderVisibilities = () => (
-        <View
-            style={{
-                paddingLeft: 8,
-                height: 120,
-                marginBottom: 22,
-            }}
-        >
-            <RadioButton.Group
-                onValueChange={(value) => {
-                    setVisibility(value);
-                    modalizeVisibilityRef.current?.close();
-                }}
-                value={visibility}
-            >
-                <RadioButton.Item label={i18n.t('public')} value="public" />
-                <RadioButton.Item label={i18n.t('private')} value="private" />
-            </RadioButton.Group>
-        </View>
-    );
-
-    const handleSearchCountry = (e: string) => {
-        setSearchCountryQuery(e);
-
-        const countriesResult: string[] = [];
-        for (const [key, value] of Object.entries(countries)) {
-            if (value.name.indexOf(searchCountryQuery) !== -1) {
-                countriesResult.push(key);
+                }
+            } catch (e) {
+                Sentry.Native.captureException(e);
+                setSending(false);
+                setSendingSuccess(false);
+                console.log({ e });
             }
-        }
-        setSearchCountryISOResult(countriesResult);
-        setShowingResults(true);
-    };
+        },
+        submitEditCommunity = async () => {
+            const _isCoverImageValid = coverImage.length > 0;
+            if (!_isCoverImageValid) {
+                setIsCoverImageValid(false);
+            }
+            //TODO: Will be added in later version
+            const _isProfileImageValid = profileImage.length > 0;
+            if (!_isProfileImageValid) {
+                setIsProfileImageValid(false);
+            }
 
-    const handleSelectCountry = (countryISO: string) => {
-        setCountry(countryISO);
-        modalizeCountryRef.current?.close();
-        setSearchCountryQuery('');
-        setSearchCountryISOResult([]);
-    };
-    const renderItemCountryQuery = ({ item }: { item: string }) => (
-        <TouchableOpacity onPress={() => handleSelectCountry(item)}>
-            <View style={styles.itemContainer}>
-                <Text
-                    style={styles.itemTitle}
-                >{`${countries[item].emoji} ${countries[item].name}`}</Text>
-                {item === country && (
-                    <Icon
-                        name="check"
-                        color={ipctColors.greenishTeal}
-                        size={22}
-                    />
-                )}
-            </View>
-        </TouchableOpacity>
-    );
+            const _isNameValid = name.length > 0;
+            if (!_isNameValid) {
+                setIsNameValid(false);
+            }
+            const _isDescriptionValid = description.length > 0;
+            if (!_isDescriptionValid) {
+                setIsDescriptionValid(false);
+            }
+            const _isCityValid = city.length > 0;
+            if (!_isCityValid) {
+                setIsCityValid(false);
+            }
+            const _isCountryValid = country.length > 0;
+            if (!_isCountryValid) {
+                setIsCountryValid(false);
+            }
+            const _isEmailValid = validateEmail(email);
+            if (!_isEmailValid) {
+                setIsEmailValid(false);
+            }
 
-    const renderSearchCountryResult = () => {
-        if (searchCountryQuery.length === 0) {
-            return (
-                <FlatList
-                    data={fullCountryList}
-                    renderItem={renderItemCountryQuery}
-                    keyExtractor={(item) => item}
+            const isSubmitEditAvailable =
+                _isNameValid &&
+                _isDescriptionValid &&
+                _isCityValid &&
+                _isCountryValid &&
+                _isEmailValid &&
+                _isCoverImageValid &&
+                _isProfileImageValid;
+
+            if (!isSubmitEditAvailable) {
+                setToggleMissingFieldsModal(true);
+                return;
+            }
+
+            try {
+                setSending(true);
+                setToggleInformativeModal(true);
+
+                if (profileImage !== avatar) {
+                    const res = (await Api.upload.uploadImage(
+                            profileImage,
+                            imageTargets.PROFILE
+                        )) as any,
+                        cachedUser = (await CacheStore.getUser())!;
+                    await CacheStore.cacheUser({
+                        ...cachedUser,
+                        avatar: res.data.data.url as string,
+                    });
+                    dispatch(
+                        setUserMetadata({ ...user, avatar: res.data.data.url })
+                    );
+                }
+
+                if (coverImage !== initialData.coverImage) {
+                    const apiRequestResult = await Api.upload.uploadImage(
+                        coverImage,
+                        imageTargets.COVER
+                    );
+                    const communityDetails: CommunityEditionAttributes = {
+                            name,
+                            description,
+                            language: userLanguage,
+                            city,
+                            country,
+                            email,
+                            currency,
+                            coverMediaId: apiRequestResult?.data.data.id,
+                        },
+                        communityApiRequestResult = await Api.community.edit(
+                            communityDetails
+                        );
+
+                    if (communityApiRequestResult) {
+                        await updateCommunityInfo(
+                            communityApiRequestResult.id,
+                            dispatch
+                        );
+
+                        const community = await Api.community.findById(
+                            communityApiRequestResult.id
+                        );
+
+                        if (community !== undefined) {
+                            batch(() => {
+                                dispatch(setCommunityMetadata(community));
+                                dispatch(setUserIsCommunityManager(true));
+                            });
+                        }
+                    }
+                    setSending(false);
+                    setSendingSuccess(true);
+                } else {
+                    const communityDetails: CommunityEditionAttributes = {
+                            name,
+                            description,
+                            language: userLanguage,
+                            city,
+                            country,
+                            email,
+                            currency,
+                            coverMediaId: userCommunity.coverMediaId,
+                        },
+                        communityApiRequestResult = await Api.community.edit(
+                            communityDetails
+                        );
+
+                    if (communityApiRequestResult) {
+                        await updateCommunityInfo(
+                            communityApiRequestResult.id,
+                            dispatch
+                        );
+
+                        const community = await Api.community.findById(
+                            communityApiRequestResult.id
+                        );
+
+                        if (community !== undefined) {
+                            batch(() => {
+                                dispatch(setCommunityMetadata(community));
+                                dispatch(setUserIsCommunityManager(true));
+                            });
+                        }
+                    }
+                    setSending(false);
+                    setSendingSuccess(false);
+                }
+            } catch (e) {
+                Sentry.Native.captureException(e);
+                setSending(false);
+                setSendingSuccess(false);
+                console.log({ e });
+            }
+        },
+        enableGPSLocation = async () => {
+            setIsEnablingGPS(true);
+            try {
+                const { status } = await Location.requestPermissionsAsync();
+                if (status !== 'granted') {
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('errorGettingGPSLocation'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                    return;
+                }
+
+                const loc = await Location.getCurrentPositionAsync({
+                    accuracy: Location.Accuracy.Low,
+                });
+                setGpsLocation(loc);
+                setIsEnabledGPS(true);
+            } catch (e) {
+                Alert.alert(
+                    i18n.t('failure'),
+                    i18n.t('errorGettingGPSLocation'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+            } finally {
+                setIsEnablingGPS(false);
+            }
+        },
+        renderAvailableCountries = () => {
+            const availableCountryISO: string[] = [];
+            for (const [key] of Object.entries(countries)) {
+                availableCountryISO.push(key);
+            }
+            setFullCountryList(availableCountryISO);
+        },
+        renderAvailableCurrencies = () => {
+            const currencyResult: string[] = [];
+            for (const [key] of Object.entries(currencies)) {
+                currencyResult.push(key);
+            }
+            setFullCurrencyList(currencyResult);
+        },
+        pickImage = async (
+            cb: Dispatch<React.SetStateAction<string>>,
+            cbv: Dispatch<React.SetStateAction<boolean>>
+        ) => {
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                // allowsEditing: true,
+                // aspect: [1, 1],
+                quality: 1,
+            });
+
+            if (!result.cancelled) {
+                cb(result.uri);
+                cbv(true);
+            }
+        },
+        renderCurrencyContent = () => (
+            <View
+                style={{
+                    padding: 20,
+                    height: Dimensions.get('screen').height * 0.9,
+                }}
+            >
+                <Searchbar
+                    placeholder={i18n.t('search')}
+                    style={styles.searchBarContainer}
+                    autoFocus
+                    inputStyle={{
+                        marginLeft: -14,
+                    }}
+                    onChangeText={(e) => {
+                        if (e.length === 0 && showingResults) {
+                            setSearchCurrencyResult([]);
+                            setShowingResults(false);
+                        }
+                        handleSearchCurrency(e);
+                    }}
+                    value={searchCurrency}
                 />
-            );
-        } else {
-            if (setSearchCountryISOResult.length > 0) {
+                {renderSearchCurrencyResult()}
+            </View>
+        ),
+        renderFrequency = () => (
+            <View
+                style={{
+                    height: 120,
+                    paddingLeft: 8,
+                    marginBottom: 22,
+                }}
+            >
+                <RadioButton.Group
+                    onValueChange={(value) => {
+                        setBaseInterval(value);
+                        modalizeFrequencyRef.current?.close();
+                    }}
+                    value={baseInterval}
+                >
+                    <RadioButton.Item label={i18n.t('daily')} value="86400" />
+                    <RadioButton.Item label={i18n.t('weekly')} value="604800" />
+                </RadioButton.Group>
+            </View>
+        ),
+        renderIncrementalFrequency = () => (
+            <View
+                style={{
+                    height: 160,
+                    marginBottom: 22,
+                    paddingLeft: 8,
+                }}
+            >
+                <RadioButton.Group
+                    onValueChange={(value) => {
+                        setIncrementalIntervalUnit(Number(value));
+                        modalizeClaimImcrementRef.current?.close();
+                    }}
+                    value={incrementalIntervalUnit.toString()}
+                >
+                    <RadioButton.Item label={i18n.t('minutes')} value="60" />
+                    <RadioButton.Item label={i18n.t('hours')} value="3600" />
+                    <RadioButton.Item label={i18n.t('days')} value="86400" />
+                </RadioButton.Group>
+            </View>
+        ),
+        renderCountries = () => (
+            <View
+                style={{
+                    padding: 20,
+                    height: Dimensions.get('screen').height * 0.9,
+                }}
+            >
+                <Searchbar
+                    placeholder={i18n.t('search')}
+                    style={styles.searchBarContainer}
+                    autoFocus
+                    inputStyle={{
+                        marginLeft: -14,
+                    }}
+                    onChangeText={(e) => {
+                        if (e.length === 0 && showingResults) {
+                            setSearchCountryISOResult([]);
+                            setShowingResults(false);
+                        }
+                        handleSearchCountry(e);
+                    }}
+                    value={searchCountryQuery}
+                />
+
+                {renderSearchCountryResult()}
+            </View>
+        ),
+        renderVisibilities = () => (
+            <View
+                style={{
+                    paddingLeft: 8,
+                    height: 120,
+                    marginBottom: 22,
+                }}
+            >
+                <RadioButton.Group
+                    onValueChange={(value) => {
+                        setVisibility(value);
+                        modalizeVisibilityRef.current?.close();
+                    }}
+                    value={visibility}
+                >
+                    <RadioButton.Item label={i18n.t('public')} value="public" />
+                    <RadioButton.Item
+                        label={i18n.t('private')}
+                        value="private"
+                    />
+                </RadioButton.Group>
+            </View>
+        ),
+        handleSearchCountry = (e: string) => {
+            setSearchCountryQuery(e);
+
+            const countriesResult: string[] = [];
+            for (const [key, value] of Object.entries(countries)) {
+                if (value.name.indexOf(searchCountryQuery) !== -1) {
+                    countriesResult.push(key);
+                }
+            }
+            setSearchCountryISOResult(countriesResult);
+            setShowingResults(true);
+        },
+        handleSelectCountry = (countryISO: string) => {
+            setCountry(countryISO);
+            modalizeCountryRef.current?.close();
+            setSearchCountryQuery('');
+            setSearchCountryISOResult([]);
+        },
+        renderItemCountryQuery = ({ item }: { item: string }) => (
+            <TouchableOpacity onPress={() => handleSelectCountry(item)}>
+                <View style={styles.itemContainer}>
+                    <Text
+                        style={styles.itemTitle}
+                    >{`${countries[item].emoji} ${countries[item].name}`}</Text>
+                    {item === country && (
+                        <Icon
+                            name="check"
+                            color={ipctColors.greenishTeal}
+                            size={22}
+                        />
+                    )}
+                </View>
+            </TouchableOpacity>
+        ),
+        renderSearchCountryResult = () => {
+            if (searchCountryQuery.length === 0) {
                 return (
                     <FlatList
-                        data={searchCountryISOResult}
+                        data={fullCountryList}
                         renderItem={renderItemCountryQuery}
                         keyExtractor={(item) => item}
                     />
                 );
-            } else if (showingResults) {
-                return (
-                    <Paragraph
-                        style={{
-                            textAlign: 'center',
-                            fontSize: 18,
-                        }}
-                    >
-                        {i18n.t('noResults')}
-                    </Paragraph>
-                );
+            } else {
+                if (setSearchCountryISOResult.length > 0) {
+                    return (
+                        <FlatList
+                            data={searchCountryISOResult}
+                            renderItem={renderItemCountryQuery}
+                            keyExtractor={(item) => item}
+                        />
+                    );
+                } else if (showingResults) {
+                    return (
+                        <Paragraph
+                            style={{
+                                textAlign: 'center',
+                                fontSize: 18,
+                            }}
+                        >
+                            {i18n.t('noResults')}
+                        </Paragraph>
+                    );
+                }
             }
-        }
-    };
-
-    const handleSearchCurrency = (e: string) => {
-        setSearchCurrency(e);
-        const currencyResult: string[] = [];
-        for (const [key, value] of Object.entries(currencies)) {
-            if (
-                value.name.indexOf(searchCurrency) !== -1 ||
-                value.symbol.indexOf(searchCurrency) !== -1 ||
-                value.symbol_native.indexOf(searchCurrency) !== -1
-            ) {
-                currencyResult.push(key);
+        },
+        handleSearchCurrency = (e: string) => {
+            setSearchCurrency(e);
+            const currencyResult: string[] = [];
+            for (const [key, value] of Object.entries(currencies)) {
+                if (
+                    value.name.indexOf(searchCurrency) !== -1 ||
+                    value.symbol.indexOf(searchCurrency) !== -1 ||
+                    value.symbol_native.indexOf(searchCurrency) !== -1
+                ) {
+                    currencyResult.push(key);
+                }
             }
-        }
 
-        setSearchCurrencyResult(currencyResult);
-        setShowingResults(true);
-    };
-
-    const handleSelectCurrency = (currency: string) => {
-        setCurrency(currency);
-        modalizeCurrencyRef.current?.close();
-        setSearchCurrency('');
-        setSearchCurrencyResult([]);
-    };
-
-    const renderItemCurrencyQuery = ({ item }: { item: string }) => (
-        <TouchableOpacity onPress={() => handleSelectCurrency(item)}>
-            <View style={styles.itemContainer}>
-                <Text
-                    style={styles.itemTitle}
-                >{`[${currencies[item].symbol}] ${currencies[item].name}`}</Text>
-                {item === currency && (
-                    <Icon
-                        name="check"
-                        color={ipctColors.greenishTeal}
-                        size={22}
-                    />
-                )}
-            </View>
-        </TouchableOpacity>
-    );
-
-    const renderSearchCurrencyResult = () => {
-        if (searchCurrency.length === 0) {
-            return (
-                <FlatList
-                    data={fullCurrencyList}
-                    renderItem={renderItemCurrencyQuery}
-                    keyExtractor={(item) => item}
-                />
-            );
-        } else {
-            if (searchCurrencyResult.length > 0) {
+            setSearchCurrencyResult(currencyResult);
+            setShowingResults(true);
+        },
+        handleSelectCurrency = (currency: string) => {
+            setCurrency(currency);
+            modalizeCurrencyRef.current?.close();
+            setSearchCurrency('');
+            setSearchCurrencyResult([]);
+        },
+        renderItemCurrencyQuery = ({ item }: { item: string }) => (
+            <TouchableOpacity onPress={() => handleSelectCurrency(item)}>
+                <View style={styles.itemContainer}>
+                    <Text
+                        style={styles.itemTitle}
+                    >{`[${currencies[item].symbol}] ${currencies[item].name}`}</Text>
+                    {item === currency && (
+                        <Icon
+                            name="check"
+                            color={ipctColors.greenishTeal}
+                            size={22}
+                        />
+                    )}
+                </View>
+            </TouchableOpacity>
+        ),
+        renderSearchCurrencyResult = () => {
+            if (searchCurrency.length === 0) {
                 return (
                     <FlatList
-                        data={searchCurrencyResult}
+                        data={fullCurrencyList}
                         renderItem={renderItemCurrencyQuery}
                         keyExtractor={(item) => item}
-                        showsVerticalScrollIndicator={false}
                     />
                 );
-            } else if (showingResults) {
-                return (
-                    <Paragraph
-                        style={{
-                            textAlign: 'center',
-                            fontSize: 18,
-                        }}
-                    >
-                        {i18n.t('noResults')}
-                    </Paragraph>
-                );
+            } else {
+                if (searchCurrencyResult.length > 0) {
+                    return (
+                        <FlatList
+                            data={searchCurrencyResult}
+                            renderItem={renderItemCurrencyQuery}
+                            keyExtractor={(item) => item}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    );
+                } else if (showingResults) {
+                    return (
+                        <Paragraph
+                            style={{
+                                textAlign: 'center',
+                                fontSize: 18,
+                            }}
+                        >
+                            {i18n.t('noResults')}
+                        </Paragraph>
+                    );
+                }
             }
-        }
-    };
-
-    const renderCreateCommunityAlert = () => (
-        <View style={styles.createCommunityAlert}>
-            <EIcon
-                name="info-with-circle"
-                size={18}
-                color={ipctColors.blueRibbon}
-                style={{ marginLeft: 26 }}
-            />
-
-            <Text
-                style={[
-                    styles.createCommunityDescription,
-                    { flexWrap: 'wrap', marginHorizontal: 34 },
-                ]}
-            >
-                {i18n.t('createCommunityAlert')}
-            </Text>
-            <TouchableOpacity
-                onPress={() => setIsAlertVisible(!isAlertVisible)}
-            >
-                <Icon
-                    name="close"
+        },
+        renderCreateCommunityAlert = () => (
+            <View style={styles.createCommunityAlert}>
+                <EIcon
+                    name="info-with-circle"
                     size={18}
-                    color={ipctColors.almostBlack}
-                    style={{ marginRight: 26 }}
+                    color={ipctColors.blueRibbon}
+                    style={{ marginLeft: 26 }}
                 />
-            </TouchableOpacity>
-        </View>
-    );
 
-    const renderWebview = () => {
-        return (
-            <WebView
-                originWhitelist={['*']}
-                source={{
-                    uri:
-                        'https://impactmarket.uvdesk.com/en/customer/create-ticket/',
-                }}
-                style={{
-                    height: Dimensions.get('screen').height * 0.85,
-                }}
-            />
-        );
-    };
+                <Text
+                    style={[
+                        styles.createCommunityDescription,
+                        { flexWrap: 'wrap', marginHorizontal: 34 },
+                    ]}
+                >
+                    {i18n.t('createCommunityAlert')}
+                </Text>
+                <TouchableOpacity
+                    onPress={() => setIsAlertVisible(!isAlertVisible)}
+                >
+                    <Icon
+                        name="close"
+                        size={18}
+                        color={ipctColors.almostBlack}
+                        style={{ marginRight: 26 }}
+                    />
+                </TouchableOpacity>
+            </View>
+        ),
+        renderWebview = () => {
+            return (
+                <WebView
+                    originWhitelist={['*']}
+                    source={{
+                        uri:
+                            'https://impactmarket.uvdesk.com/en/customer/create-ticket/',
+                    }}
+                    style={{
+                        height: Dimensions.get('screen').height * 0.85,
+                    }}
+                />
+            );
+        };
 
     if (toggleMissingFieldsModal) {
         return (
@@ -1334,7 +1320,7 @@ function CreateCommunityScreen() {
                                 </View>
                                 {coverImage.length > 0 ? (
                                     <View style={{ flex: 1 }}>
-                                        <CachedImage
+                                        <Image
                                             style={{
                                                 height: 331,
                                                 width: '100%',
@@ -1344,7 +1330,7 @@ function CreateCommunityScreen() {
                                                 justifyContent: 'center',
                                             }}
                                             source={{
-                                                uri: userCommunity?.cover?.url,
+                                                uri: coverImage,
                                             }}
                                         />
                                         <CloseStorySvg
