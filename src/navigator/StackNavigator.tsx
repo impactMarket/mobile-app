@@ -128,6 +128,11 @@ const managerScreens = (Navigator: typeof Stack) => (
             component={AddedManagerScreen}
             options={AddedManagerScreen.navigationOptions}
         />
+        <Navigator.Screen
+            name={Screens.WelcomeRulesScreen}
+            component={WelcomeRulesScreen}
+            options={WelcomeRulesScreen.navigationOptions}
+        />
     </>
 );
 
