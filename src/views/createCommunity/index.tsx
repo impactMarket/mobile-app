@@ -4,7 +4,6 @@ import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import CachedImage from 'components/CacheImage';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -80,132 +79,136 @@ import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
 
 const countries: {
-        [key: string]: {
-            name: string;
-            native: string;
-            phone: string;
-            currency: string;
-            languages: string[];
-            emoji: string;
-        };
-    } = countriesJSON,
-    currencies: {
-        [key: string]: {
-            symbol: string;
-            name: string;
-            symbol_native: string;
-        };
-    } = currenciesJSON;
+    [key: string]: {
+        name: string;
+        native: string;
+        phone: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
+const currencies: {
+    [key: string]: {
+        symbol: string;
+        name: string;
+        symbol_native: string;
+    };
+} = currenciesJSON;
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
 function CreateCommunityScreen() {
-    const dispatch = useDispatch(),
-        // const store = useStore();
-        userAddress = useSelector(
-            (state: IRootState) => state.user.wallet.address
-        ),
-        userCurrency = useSelector(
-            (state: IRootState) => state.user.metadata.currency
-        ),
-        userPhoneNumber = useSelector(
-            (state: IRootState) => state.user.wallet.phoneNumber
-        ),
-        userLanguage = useSelector(
-            (state: IRootState) => state.user.metadata.language
-        ),
-        user = useSelector((state: IRootState) => state.user.metadata),
-        userIsManager = useSelector(
-            (state: IRootState) => state.user.community.isManager
-        ),
-        userCommunity = useSelector(
-            (state: IRootState) => state.user.community.metadata
-        ),
-        avatar = useSelector((state: IRootState) => state.user.metadata.avatar),
-        exchangeRates = useSelector(
-            (state: IRootState) => state.app.exchangeRates
-        ),
-        kit = useSelector((state: IRootState) => state.app.kit),
-        navigation = useNavigation(),
-        initialData = {
-            name: userCommunity?.name,
-            description: userCommunity?.description,
-            city: userCommunity?.city,
-            country: userCommunity?.country,
-            email: userCommunity?.email,
-            coverImage: userCommunity?.cover?.url,
-        },
-        [sending, setSending] = useState(false),
-        [sendingSuccess, setSendingSuccess] = useState(false),
-        [gpsLocation, setGpsLocation] = useState<Location.LocationObject>(),
-        [isNameValid, setIsNameValid] = useState(true),
-        [isEditable, setIsEditable] = useState(!!userCommunity),
-        [genericErrorTitle, setGenericErrorTitle] = useState(
-            'genericErrorTitle'
-        ),
-        [genericErrorContent, setGenericErrorContent] = useState(
-            'genericErrorContent'
-        ),
-        [isCoverImageValid, setIsCoverImageValid] = useState(true),
-        [isProfileImageValid, setIsProfileImageValid] = useState(true),
-        // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
+    const dispatch = useDispatch();
+    // const store = useStore();
+    const userAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
+    const userPhoneNumber = useSelector(
+        (state: IRootState) => state.user.wallet.phoneNumber
+    );
+    const userLanguage = useSelector(
+        (state: IRootState) => state.user.metadata.language
+    );
+    const user = useSelector((state: IRootState) => state.user.metadata);
+    const userIsManager = useSelector(
+        (state: IRootState) => state.user.community.isManager
+    );
+    const userCommunity = useSelector(
+        (state: IRootState) => state.user.community.metadata
+    );
+    const avatar = useSelector(
+        (state: IRootState) => state.user.metadata.avatar
+    );
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
+    const kit = useSelector((state: IRootState) => state.app.kit);
+    const navigation = useNavigation();
+    const initialData = {
+        name: userCommunity?.name,
+        description: userCommunity?.description,
+        city: userCommunity?.city,
+        country: userCommunity?.country,
+        email: userCommunity?.email,
+        coverImage: userCommunity?.cover?.url,
+    };
+    const [sending, setSending] = useState(false);
+    const [sendingSuccess, setSendingSuccess] = useState(false);
+    const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
+    const [isNameValid, setIsNameValid] = useState(true);
+    const [isEditable, setIsEditable] = useState(!!userCommunity);
+    const [genericErrorTitle, setGenericErrorTitle] = useState(
+        'genericErrorTitle'
+    );
+    const [genericErrorContent, setGenericErrorContent] = useState(
+        'genericErrorContent'
+    );
+    const [isCoverImageValid, setIsCoverImageValid] = useState(true);
+    const [isProfileImageValid, setIsProfileImageValid] = useState(true);
+    // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
 
-        [isDescriptionValid, setIsDescriptionValid] = useState(true),
-        [isCityValid, setIsCityValid] = useState(true),
-        [isCountryValid, setIsCountryValid] = useState(true),
-        [isEmailValid, setIsEmailValid] = useState(true),
-        [isClaimAmountValid, setIsClaimAmountValid] = useState(true),
-        [isEnablingGPS, setIsEnablingGPS] = useState(false),
-        [isEnabledGPS, setIsEnabledGPS] = useState(true),
-        [isIncrementalIntervalValid, setIsIncrementalIntervalValid] = useState(
-            true
-        ),
-        [isMaxClaimValid, setIsMaxClaimValid] = useState(true),
-        //
-        [showingResults, setShowingResults] = useState(false),
-        [toggleInformativeModal, setToggleInformativeModal] = useState(false),
-        [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(
-            false
-        ),
-        [searchCurrency, setSearchCurrency] = useState(''),
-        [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]),
-        [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
-            []
-        ),
-        [currency, setCurrency] = useState<string>(userCurrency),
-        [name, setName] = useState(initialData.name || ''),
-        [description, setDescription] = useState(initialData.description || ''),
-        [city, setCity] = useState(initialData.city || ''),
-        [searchCountryQuery, setSearchCountryQuery] = useState(''),
-        [fullCountryList, setFullCountryList] = useState<string[]>([]),
-        [searchCountryISOResult, setSearchCountryISOResult] = useState<
-            string[]
-        >([]),
-        [country, setCountry] = useState(initialData.country || ''),
-        [email, setEmail] = useState(initialData.email || ''),
-        [coverImage, setCoverImage] = useState(initialData.coverImage || ''),
-        [profileImage, setProfileImage] = useState<string>(avatar || ''),
-        [isAlertVisible, setIsAlertVisible] = useState(!userCommunity),
-        // const [communityLogo, setCommunityLogo] = useState('');
-        [showWebview, setShowWebview] = useState(false),
-        // setToggleInformativeModal(false);
+    const [isDescriptionValid, setIsDescriptionValid] = useState(true);
+    const [isCityValid, setIsCityValid] = useState(true);
+    const [isCountryValid, setIsCountryValid] = useState(true);
+    const [isEmailValid, setIsEmailValid] = useState(true);
+    const [isClaimAmountValid, setIsClaimAmountValid] = useState(true);
+    const [isEnablingGPS, setIsEnablingGPS] = useState(false);
+    const [isEnabledGPS, setIsEnabledGPS] = useState(true);
+    const [
+        isIncrementalIntervalValid,
+        setIsIncrementalIntervalValid,
+    ] = useState(true);
+    const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
+    //
+    const [showingResults, setShowingResults] = useState(false);
+    const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
+    const [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(
+        false
+    );
+    const [searchCurrency, setSearchCurrency] = useState('');
+    const [fullCurrencyList, setFullCurrencyList] = useState<string[]>([]);
+    const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
+        []
+    );
+    const [currency, setCurrency] = useState<string>(userCurrency);
+    const [name, setName] = useState(initialData.name || '');
+    const [description, setDescription] = useState(
+        initialData.description || ''
+    );
+    const [city, setCity] = useState(initialData.city || '');
+    const [searchCountryQuery, setSearchCountryQuery] = useState('');
+    const [fullCountryList, setFullCountryList] = useState<string[]>([]);
+    const [searchCountryISOResult, setSearchCountryISOResult] = useState<
+        string[]
+    >([]);
+    const [country, setCountry] = useState(initialData.country || '');
+    const [email, setEmail] = useState(initialData.email || '');
+    const [coverImage, setCoverImage] = useState(initialData.coverImage || '');
+    const [profileImage, setProfileImage] = useState<string>(avatar || '');
+    const [isAlertVisible, setIsAlertVisible] = useState(!userCommunity);
+    // const [communityLogo, setCommunityLogo] = useState('');
+    const [showWebview, setShowWebview] = useState(false);
+    // setToggleInformativeModal(false);
 
-        [claimAmount, setClaimAmount] = useState(''),
-        [baseInterval, setBaseInterval] = useState('86400'),
-        [incrementInterval, setIncrementalInterval] = useState(''),
-        [
-            incrementalIntervalUnit,
-            setIncrementalIntervalUnit,
-        ] = useState<number>(60),
-        [maxClaim, setMaxClaim] = useState(''),
-        [visibility, setVisibility] = useState('public'),
-        [apiResult, setApiResult] = useState<any>(),
-        modalizeCurrencyRef = useRef<Modalize>(null),
-        modalizeCountryRef = useRef<Modalize>(null),
-        modalizeFrequencyRef = useRef<Modalize>(null),
-        modalizeVisibilityRef = useRef<Modalize>(null),
-        modalizeClaimImcrementRef = useRef<Modalize>(null),
-        modalizeGenericErrorRef = useRef<Modalize>(null);
+    const [claimAmount, setClaimAmount] = useState('');
+    const [baseInterval, setBaseInterval] = useState('86400');
+    const [incrementInterval, setIncrementalInterval] = useState('');
+    const [
+        incrementalIntervalUnit,
+        setIncrementalIntervalUnit,
+    ] = useState<number>(60);
+    const [maxClaim, setMaxClaim] = useState('');
+    const [visibility, setVisibility] = useState('public');
+    const modalizeCurrencyRef = useRef<Modalize>(null);
+    const modalizeCountryRef = useRef<Modalize>(null);
+    const modalizeFrequencyRef = useRef<Modalize>(null);
+    const modalizeVisibilityRef = useRef<Modalize>(null);
+    const modalizeClaimImcrementRef = useRef<Modalize>(null);
+    const modalizeGenericErrorRef = useRef<Modalize>(null);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -514,7 +517,6 @@ function CreateCommunityScreen() {
                         }
                         setSending(false);
                         setSendingSuccess(true);
-                        navigation.navigate(Screens.CommunityManager);
                     } else {
                         setSending(false);
                         setSendingSuccess(false);
@@ -663,7 +665,7 @@ function CreateCommunityScreen() {
                         }
                     }
                     setSending(false);
-                    setSendingSuccess(false);
+                    setSendingSuccess(true);
                 }
             } catch (e) {
                 Sentry.Native.captureException(e);
@@ -1256,6 +1258,9 @@ function CreateCommunityScreen() {
                                 onPress={() => {
                                     setSending(false);
                                     setToggleInformativeModal(false);
+                                    navigation.navigate(
+                                        Screens.CommunityManager
+                                    );
                                 }}
                             >
                                 {sending

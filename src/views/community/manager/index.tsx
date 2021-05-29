@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
@@ -92,7 +92,7 @@ function CommunityManagerScreen() {
         }
     }, [community, kit]);
 
-    useEffect(() => {
+    useFocusEffect(() => {
         async function loadCommunityRulesStats() {
             if (!hasManagerAcceptedRulesAlready) {
                 dispatch(setAppHasManagerAcceptedTerms(false));
@@ -102,7 +102,7 @@ function CommunityManagerScreen() {
             }
         }
         loadCommunityRulesStats();
-    }, []);
+    });
 
     const onRefresh = () => {
         updateCommunityInfo(community.id, dispatch).then(async () => {
