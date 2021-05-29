@@ -22,6 +22,7 @@
         "sourceMap": true,
         "inlineSources": true,
         "sourceRoot": "/",
+        "types": ["node", "jest"],
         "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
         "exclude": ["node_modules"]
     }
