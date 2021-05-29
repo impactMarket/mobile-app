@@ -111,6 +111,8 @@
         "babel-preset-expo": "8.3.0",
         "chai": "4.3.4",
         "dotenv": "8.2.0",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.6",
         "eslint": "7.23.0",
         "eslint-config-prettier": "8.1.0",
         "eslint-config-universe": "7.0.1",
