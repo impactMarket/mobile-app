@@ -13,7 +13,7 @@
     },
     "lint-staged": {
         "*.ts": [
-          "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: "./tsconfig.json"}]'",
+          "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
           "git add"
         ]
       },
