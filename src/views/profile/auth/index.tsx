@@ -31,7 +31,6 @@ import {
     StyleSheet,
     Text,
     View,
-    Alert,
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
