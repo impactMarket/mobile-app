@@ -271,7 +271,7 @@ function CreateCommunityScreen() {
     }, []);
 
     useEffect(() => {
-        if (userIsManager === true) {
+        if (userCommunity !== undefined && userIsManager === true) {
             setIsEditable(true);
         }
     }, [userIsManager, userCommunity]);
@@ -1258,7 +1258,7 @@ function CreateCommunityScreen() {
                                 onPress={() => {
                                     setSending(false);
                                     setToggleInformativeModal(false);
-                                    // userIsManager && navigation.goBack();
+                                    navigation.goBack();
                                     navigation.navigate(
                                         Screens.CommunityManager
                                     );

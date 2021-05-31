@@ -12,7 +12,7 @@ function CreateCommunity(props: {
     userCommunity?: CommunityAttributes;
 }) {
     return (
-        props.userCommunity?.status !== 'pending' && (
+        !props.userCommunity && (
             <View
                 style={{
                     flex: 1,
@@ -38,9 +38,7 @@ function CreateCommunity(props: {
                         props.navigation.navigate(Screens.CreateCommunity)
                     }
                 >
-                    {props.userCommunity?.status === 'valid'
-                        ? i18n.t('edit')
-                        : i18n.t('create')}
+                    {i18n.t('create')}
                 </Button>
             </View>
         )
