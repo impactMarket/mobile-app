@@ -7,6 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
+import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
 import { Platform, Dimensions } from 'react-native';
@@ -47,7 +48,7 @@ function getHeaderRight(
     navigation: StackNavigationProp<any, any>,
     defaultValue: string,
     isManagerOrBeneficiary: boolean,
-    hasCommunity: boolean
+    userCommunity: CommunityAttributes
 ) {
     let routeName = getFocusedRouteNameFromRoute(route);
     if (routeName === undefined) {
@@ -64,8 +65,7 @@ function getHeaderRight(
                 return (
                     <CreateCommunity
                         navigation={navigation}
-                        hasCommunity={hasCommunity}
-                        isManagerOrBeneficiary={isManagerOrBeneficiary}
+                        userCommunity={userCommunity}
                     />
                 );
             }
@@ -100,6 +100,10 @@ function TabNavigator({
     const isManager = useSelector(
         (state: IRootState) => state.user.community.isManager
     );
+
+    const userCommunity = useSelector(
+        (state: IRootState) => state.user.community.metadata
+    );
     const isBeneficiary = useSelector(
         (state: IRootState) => state.user.community.isBeneficiary
     );
@@ -111,7 +115,6 @@ function TabNavigator({
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         const headerLeftDetected = getHeaderLeft(route);
-        const hasCommunity = isManager;
 
         navigation.setOptions({
             headerLeft: () => getHeaderLeft(route),
@@ -147,7 +150,7 @@ function TabNavigator({
                         ? Screens.CommunityManager
                         : Screens.Communities,
                     isBeneficiary || isBeneficiary,
-                    hasCommunity
+                    userCommunity
                 ),
         });
     }, [navigation, route]);

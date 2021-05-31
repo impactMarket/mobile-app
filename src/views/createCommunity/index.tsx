@@ -1258,6 +1258,7 @@ function CreateCommunityScreen() {
                                 onPress={() => {
                                     setSending(false);
                                     setToggleInformativeModal(false);
+                                    // userIsManager && navigation.goBack();
                                     navigation.navigate(
                                         Screens.CommunityManager
                                     );
@@ -1412,31 +1413,7 @@ function CreateCommunityScreen() {
                                     </View>
                                 )}
 
-                                {profileImage.length > 0 ? (
-                                    <View />
-                                ) : (
-                                    // <View style={styles.uploadFilledContainer}>
-                                    //     <CloseStorySvg
-                                    //         style={{
-                                    //             position: 'absolute',
-                                    //             top: 14,
-                                    //             right: 14,
-                                    //         }}
-                                    //         onPress={() => {
-                                    //             setProfileImage('');
-                                    //         }}
-                                    //     />
-                                    //     <Image
-                                    //         style={{
-                                    //             height: 80,
-                                    //             width: 80,
-                                    //             borderRadius: 40,
-                                    //             alignItems: 'center',
-                                    //             justifyContent: 'center',
-                                    //         }}
-                                    //         source={{ uri: profileImage }}
-                                    //     />
-                                    // </View>
+                                {profileImage.length === 0 ? (
                                     <View style={styles.uploadContainer}>
                                         <View
                                             style={{
@@ -1492,7 +1469,35 @@ function CreateCommunityScreen() {
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
+                                ) : (
+                                    profileImage !== avatar && (
+                                        <View
+                                            style={styles.uploadFilledContainer}
+                                        >
+                                            <CloseStorySvg
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: 14,
+                                                    right: 14,
+                                                }}
+                                                onPress={() => {
+                                                    setProfileImage('');
+                                                }}
+                                            />
+                                            <Image
+                                                style={{
+                                                    height: 80,
+                                                    width: 80,
+                                                    borderRadius: 40,
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                }}
+                                                source={{ uri: profileImage }}
+                                            />
+                                        </View>
+                                    )
                                 )}
+
                                 <Text
                                     style={[
                                         { color: '#73839D', marginBottom: 16 },
