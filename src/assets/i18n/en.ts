@@ -414,7 +414,7 @@ export default {
     sagas: {
         messages: {
             submitAddStoriesToStateFailure:
-                'Oops! We could not retrieve all stories this time. Please try again later',
+                'Oops! We could not upddate all stories at this time. Please try again later',
         },
     },
 };

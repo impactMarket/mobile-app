@@ -415,7 +415,7 @@ export default {
     sagas: {
         messages: {
             submitAddStoriesToStateFailure:
-                'Oops! Não conseguimos listar todas as stories desta vez. Por favor, tente mais tarde.',
+                'Oops! Não conseguimos atualizar todas as stories desta vez. Por favor, tente mais tarde.',
         },
     },
 };

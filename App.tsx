@@ -40,7 +40,7 @@ import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
 import React from 'react';
 import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
-import FlashMessage from 'react-native-flash-message';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -112,6 +112,17 @@ const navigationTheme = {
     },
 };
 
+const netInfoSubscribe = NetInfo.addEventListener((state) => {
+    const offline = !(state.isConnected && state.isInternetReachable);
+    if (offline) {
+        showMessage({
+            message: i18n.t('networkConnectionLost'),
+            type: 'info',
+            autoHide: !offline,
+        });
+    }
+});
+
 LogBox.ignoreLogs([
     'No DSN provided, backend will not do anything',
     "The provided value 'moz-chunked-arraybuffer' is not a valid 'responseType'.",
@@ -172,6 +183,7 @@ export default class App extends React.Component<any, IAppState> {
                 startNotificationsListeners(kit, store.dispatch)
             );
         }
+
         if (config.testnet) {
             this.setState({ testnetWarningOpen: true });
             setTimeout(
@@ -195,6 +207,7 @@ export default class App extends React.Component<any, IAppState> {
             };
         }
         Analytics.setUserProperties(userProperties);
+        return () => netInfoSubscribe();
     };
 
     componentWillUnmount = () => {
