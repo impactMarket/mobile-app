@@ -54,6 +54,11 @@ import {
 } from 'react-native-paper';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import {
+    offlineMiddleware,
+    suspendSaga,
+    consumeActionMiddleware,
+} from 'redux-offline-queue';
 import createSagaMiddleware from 'redux-saga';
 import { gt as semverGt, gte as semverGte } from 'semver';
 import * as Sentry from 'sentry-expo';
@@ -72,8 +77,15 @@ import { ipctColors } from './src/styles';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
+
+const middlewares = [];
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(combinedReducer, applyMiddleware(sagaMiddleware));
+
+middlewares.push(offlineMiddleware());
+middlewares.push(suspendSaga(sagaMiddleware));
+middlewares.push(consumeActionMiddleware());
+
+const store = createStore(combinedReducer, applyMiddleware(...middlewares));
 sagaMiddleware.run(rootSagas);
 const fonts = {
     regular: {
@@ -111,17 +123,6 @@ const navigationTheme = {
         background: '#ffffff',
     },
 };
-
-const netInfoSubscribe = NetInfo.addEventListener((state) => {
-    const offline = !(state.isConnected && state.isInternetReachable);
-    if (offline) {
-        showMessage({
-            message: i18n.t('networkConnectionLost'),
-            type: 'info',
-            autoHide: !offline,
-        });
-    }
-});
 
 LogBox.ignoreLogs([
     'No DSN provided, backend will not do anything',
@@ -207,7 +208,6 @@ export default class App extends React.Component<any, IAppState> {
             };
         }
         Analytics.setUserProperties(userProperties);
-        return () => netInfoSubscribe();
     };
 
     componentWillUnmount = () => {

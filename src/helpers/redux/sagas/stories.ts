@@ -21,7 +21,7 @@ export function* submitAddStoriesToStateRequest({ payload }: any) {
             start,
             end
         );
-
+        console.log(stories.length);
         yield put(addStoriesToStateSuccess(stories));
     } catch (err) {
         console.log(err);

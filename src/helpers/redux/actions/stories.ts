@@ -4,6 +4,9 @@ import {
     ICommunityStory,
 } from 'helpers/types/endpoints';
 import { StoriesActionTypes } from 'helpers/types/redux';
+import { markActionsOffline } from 'redux-offline-queue';
+
+markActionsOffline(storiesAction, [addStoriesToStateRequest]);
 
 export function addStoriesToStateRequest(
     start: number,

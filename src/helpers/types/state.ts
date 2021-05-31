@@ -63,6 +63,7 @@ export interface IAppState {
 }
 
 export interface IRootState {
+    offline?: any;
     user: IUserState;
     auth: IAuthState;
     app: IAppState;

@@ -20,6 +20,12 @@ export const storiesReducer = (
                 refreshing: false,
             };
 
+        case storiesAction.INIT_REQUEST:
+            return {
+                ...state,
+                refreshing: true,
+            };
+
         case storiesAction.INIT_FAILURE:
             return {
                 ...state,
