@@ -45,6 +45,7 @@ export interface IModalDonateState {
 export interface IStoriesState {
     stories: ICommunitiesListStories[];
     myStories: ICommunityStory[];
+    refreshing: boolean;
 }
 
 export interface IAppState {

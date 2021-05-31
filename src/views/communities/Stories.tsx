@@ -2,15 +2,13 @@ import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addStoriesToState } from 'helpers/redux/actions/stories';
+import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
-import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 import MyStoriesCard from './MyStoriesCard';
@@ -20,13 +18,18 @@ import StoriesCard from './StoriesCard';
 export default function Stories() {
     const dispatch = useDispatch();
 
-    const [storiesCommunity, setStoriesCommunity] = useState<
-        ICommunitiesListStories[]
-    >([]);
-    const [refreshing, setRefreshing] = useState(false);
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+
+    const storiesCommunity = useSelector(
+        (state: IRootState) => state.stories.stories
+    );
+
+    const refreshing = useSelector(
+        (state: IRootState) => state.stories.refreshing
+    );
+
     const userCommunityMetadata = useSelector(
         (state: IRootState) => state.user.community
     );
@@ -34,12 +37,7 @@ export default function Stories() {
     // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
     useFocusEffect(
         useCallback(() => {
-            setRefreshing(true);
-            Api.story.list<ICommunitiesListStories[]>(0, 5).then((s) => {
-                setStoriesCommunity(s);
-                dispatch(addStoriesToState(s));
-                setRefreshing(false);
-            });
+            dispatch(addStoriesToStateRequest(0, 5));
         }, [])
     );
 

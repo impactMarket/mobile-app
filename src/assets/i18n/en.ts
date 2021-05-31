@@ -411,4 +411,10 @@ export default {
         errorUploadAvatar:
             'An error happened while uploading your profile picture!',
     },
+    sagas: {
+        messages: {
+            submitAddStoriesToStateFailure:
+                'Oops! We could not retrieve all stories this time. Please try again later',
+        },
+    },
 };

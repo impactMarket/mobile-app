@@ -1,18 +1,17 @@
 import { storiesAction } from 'helpers/constants';
 import {
     ICommunitiesListStories,
-    ICommunitiesListStoriesPagination,
     ICommunityStory,
 } from 'helpers/types/endpoints';
 import { StoriesActionTypes } from 'helpers/types/redux';
 
 export function addStoriesToStateRequest(
-    stories: ICommunitiesListStories[]
-    pagination: ICommunitiesListStoriesPagination
+    start: number,
+    end: number
 ): StoriesActionTypes {
     return {
         type: storiesAction.INIT_REQUEST,
-        payload: pagination,
+        payload: { start, end },
     };
 }
 
@@ -25,9 +24,7 @@ export function addStoriesToStateSuccess(
     };
 }
 
-export function addStoriesToStateFailure(
-    stories: ICommunitiesListStories[]
-): StoriesActionTypes {
+export function addStoriesToStateFailure(): StoriesActionTypes {
     return {
         type: storiesAction.INIT_FAILURE,
     };

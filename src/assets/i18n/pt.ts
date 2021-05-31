@@ -412,4 +412,10 @@ export default {
     profileView: {
         errorUploadAvatar: 'Ocorreu um erro ao carregar a sua foto de perfil!',
     },
+    sagas: {
+        messages: {
+            submitAddStoriesToStateFailure:
+                'Oops! Não conseguimos listar todas as stories desta vez. Por favor, tente mais tarde.',
+        },
+    },
 };
