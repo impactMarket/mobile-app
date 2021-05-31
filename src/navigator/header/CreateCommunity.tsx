@@ -6,7 +6,10 @@ import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
 
-function CreateCommunity(props: { navigation: StackNavigationProp<any, any> }) {
+function CreateCommunity(props: {
+    navigation: StackNavigationProp<any, any>;
+    hasCommunity?: boolean;
+}) {
     return (
         <View
             style={{
@@ -33,7 +36,7 @@ function CreateCommunity(props: { navigation: StackNavigationProp<any, any> }) {
                     props.navigation.navigate(Screens.CreateCommunity)
                 }
             >
-                {i18n.t('create')}
+                {props.hasCommunity ? i18n.t('edit') : i18n.t('create')}
             </Button>
         </View>
     );

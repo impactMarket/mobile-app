@@ -46,7 +46,8 @@ function getHeaderRight(
     route: RouteProp<any, any>,
     navigation: StackNavigationProp<any, any>,
     defaultValue: string,
-    isManagerOrBeneficiary: boolean
+    isManagerOrBeneficiary: boolean,
+    hasCommunity: boolean
 ) {
     let routeName = getFocusedRouteNameFromRoute(route);
     if (routeName === undefined) {
@@ -60,7 +61,13 @@ function getHeaderRight(
             return <CommunityManager />;
         case Screens.Communities:
             if (!isManagerOrBeneficiary) {
-                return <CreateCommunity navigation={navigation} />;
+                return (
+                    <CreateCommunity
+                        navigation={navigation}
+                        hasCommunity={hasCommunity}
+                        isManagerOrBeneficiary={isManagerOrBeneficiary}
+                    />
+                );
             }
             return;
         case Screens.Profile:
@@ -104,6 +111,7 @@ function TabNavigator({
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         const headerLeftDetected = getHeaderLeft(route);
+        const hasCommunity = isManager;
 
         navigation.setOptions({
             headerLeft: () => getHeaderLeft(route),
@@ -138,7 +146,8 @@ function TabNavigator({
                         : isManager
                         ? Screens.CommunityManager
                         : Screens.Communities,
-                    isBeneficiary || isBeneficiary
+                    isBeneficiary || isBeneficiary,
+                    hasCommunity
                 ),
         });
     }, [navigation, route]);
@@ -188,7 +197,6 @@ function TabNavigator({
                         lineHeight: 14,
                     },
                     tabStyle: { marginVertical: 16 },
-                    style: { height: 84 + insets.bottom },
                     style: {
                         height:
                             Platform.OS === 'ios' && !!isLargeIphone()
