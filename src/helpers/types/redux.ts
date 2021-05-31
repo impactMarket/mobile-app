@@ -156,12 +156,12 @@ interface CloseModalDonateAction {
 }
 
 interface InitLoadStoriesAction {
-    type: typeof storiesAction.INIT;
+    type: typeof storiesAction.INIT_REQUEST;
     payload: ICommunitiesListStories[];
 }
 
 interface LoadMyStoriesAction {
-    type: typeof storiesAction.USER_STORIES;
+    type: typeof storiesAction.USER_STORIES_REQUEST;
     payload: ICommunityStory[];
 }
 

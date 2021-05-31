@@ -12,7 +12,7 @@ export const storiesReducer = (
     action: StoriesActionTypes
 ) => {
     switch (action.type) {
-        case storiesAction.INIT:
+        case storiesAction.INIT_REQUEST:
             return {
                 ...state,
                 stories: action.payload,
@@ -24,7 +24,7 @@ export const storiesReducer = (
                 stories: state.stories.concat(action.payload),
             };
 
-        case storiesAction.USER_STORIES:
+        case storiesAction.USER_STORIES_REQUEST:
             return {
                 ...state,
                 myStories: action.payload,

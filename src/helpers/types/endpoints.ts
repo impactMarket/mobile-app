@@ -109,6 +109,11 @@ export interface ICommunitiesListStories {
     }; // most recent
 }
 
+export interface ICommunitiesListStoriesPagination {
+    begin: number;
+    end: number;
+}
+
 export interface ICommunityStories {
     id: number;
     name: string;
