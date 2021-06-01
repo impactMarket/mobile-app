@@ -75,17 +75,6 @@ export async function isOutOfTime() {
     );
 }
 
-export function linkDeviceInfo(phoneNumber: string, identifier: string) {
-    const buildId = Device.osInternalBuildId; // null only on web
-    Network.getIpAddressAsync()
-        .then((ip) =>
-            Api.user.device(phoneNumber, identifier, buildId ? buildId : '', ip)
-        )
-        .catch(() =>
-            Api.user.device(phoneNumber, identifier, buildId ? buildId : '', '')
-        );
-}
-
 export async function welcomeUser(
     address: string,
     phoneNumber: string,
@@ -101,13 +90,6 @@ export async function welcomeUser(
         i18n.changeLanguage(language);
         moment.locale(language);
     }
-    let identifier = '';
-    if (Device.osName?.toLowerCase() === 'android') {
-        identifier = Device.osBuildFingerprint!;
-    } else {
-        identifier = Device.osBuildId!;
-    }
-    linkDeviceInfo(phoneNumber, identifier);
     batch(() => {
         dispatch(
             setUserWallet({
