@@ -23,6 +23,7 @@ export default function Stories() {
     const [storiesCommunity, setStoriesCommunity] = useState<
         ICommunitiesListStories[]
     >([]);
+    const [countStories, setCountStories] = useState(0);
     const [refreshing, setRefreshing] = useState(false);
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
@@ -36,8 +37,9 @@ export default function Stories() {
         useCallback(() => {
             setRefreshing(true);
             Api.story.list<ICommunitiesListStories[]>(0, 5).then((s) => {
-                setStoriesCommunity(s);
-                dispatch(addStoriesToState(s));
+                setStoriesCommunity(s.data);
+                setCountStories(s.count);
+                dispatch(addStoriesToState(s.data));
                 setRefreshing(false);
             });
         }, [])
@@ -91,7 +93,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} ({storiesCommunity.length})
+                        {i18n.t('viewAll')} ({countStories})
                     </Text>
                 </Pressable>
             </View>
