@@ -3,10 +3,12 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
+import { addStoriesToState } from 'helpers/redux/actions/stories';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
@@ -17,6 +19,7 @@ interface ICommunityStoriesBox extends ICommunitiesListStories {
 
 function StoriesScreen() {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     const [stories, setStories] = useState<ICommunityStoriesBox[]>([]);
 
@@ -27,6 +30,7 @@ function StoriesScreen() {
 
         Api.story.list<ICommunityStoriesBox[]>().then((s) => {
             setStories(s.data);
+            dispatch(addStoriesToState(s.data));
         });
 
         setRefreshing(false);
