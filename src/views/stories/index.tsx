@@ -26,7 +26,7 @@ function StoriesScreen() {
         setRefreshing(true);
 
         Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-            setStories(s);
+            setStories(s.data);
         });
 
         setRefreshing(false);
