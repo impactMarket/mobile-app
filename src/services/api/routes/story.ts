@@ -38,22 +38,28 @@ class ApiRouteStory {
     static async list<T extends ICommunitiesListStories[]>(
         offset?: number,
         limit?: number
-    ): Promise<T> {
-        return this.api.get<T>(
+    ): Promise<{ data: T; count: number }> {
+        const r = await this.api.get<T>(
             '/story/list?includeIPCT=true' +
                 (offset !== undefined ? `&offset=${offset}` : '') +
                 (limit !== undefined ? `&limit=${limit}` : '')
         );
+        return {
+            data: r.data,
+            count: r.count!,
+        };
     }
 
     static async getByCommunity(
         communityId: number,
         isUserLogged: boolean // TODO: this must change
     ): Promise<ICommunityStories> {
-        return this.api.get<ICommunityStories>(
-            '/story/community/' + communityId,
-            isUserLogged
-        );
+        return (
+            await this.api.get<ICommunityStories>(
+                '/story/community/' + communityId,
+                isUserLogged
+            )
+        ).data;
     }
 
     static async love(storyId: number): Promise<void> {
@@ -69,7 +75,7 @@ class ApiRouteStory {
     }
 
     static async me(): Promise<ICommunityStories> {
-        return this.api.get<ICommunityStories>('/story/me', true);
+        return (await this.api.get<ICommunityStories>('/story/me', true)).data;
     }
 }
 

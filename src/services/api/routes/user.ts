@@ -54,7 +54,7 @@ class ApiRouteUser {
     }
 
     static async exists(address: string): Promise<boolean> {
-        return this.api.get('/user/exist/' + address);
+        return (await this.api.get<boolean>('/user/exist/' + address)).data;
     }
 
     static async setUsername(username: string): Promise<boolean> {

@@ -19,16 +19,18 @@ class ApiRouteCommunity {
         beneficiaryQuery: string,
         active?: boolean
     ): Promise<IManagerDetailsBeneficiary[]> {
-        return this.api.get(
-            '/community/beneficiaries?action=search&search=' +
-                beneficiaryQuery +
-                (active === undefined
-                    ? ''
-                    : active
-                    ? '&active=true'
-                    : '&active=false'),
-            true
-        );
+        return (
+            await this.api.get<IManagerDetailsBeneficiary[]>(
+                '/community/beneficiaries?action=search&search=' +
+                    beneficiaryQuery +
+                    (active === undefined
+                        ? ''
+                        : active
+                        ? '&active=true'
+                        : '&active=false'),
+                true
+            )
+        ).data;
     }
 
     static async listBeneficiaries(
@@ -36,15 +38,17 @@ class ApiRouteCommunity {
         offset: number,
         limit: number
     ): Promise<IManagerDetailsBeneficiary[]> {
-        return this.api.get(
-            '/community/beneficiaries?action=list?active=' +
-                active +
-                '&offset=' +
-                offset +
-                '&limit=' +
-                limit,
-            true
-        );
+        return (
+            await this.api.get<IManagerDetailsBeneficiary[]>(
+                '/community/beneficiaries?action=list?active=' +
+                    active +
+                    '&offset=' +
+                    offset +
+                    '&limit=' +
+                    limit,
+                true
+            )
+        ).data;
     }
 
     /**
@@ -66,7 +70,12 @@ class ApiRouteCommunity {
         offset: number,
         limit: number
     ): Promise<ManagerAttributes[]> {
-        return this.api.get('/community/' + communityId + '/managers/', true);
+        return (
+            await this.api.get<ManagerAttributes[]>(
+                '/community/' + communityId + '/managers/',
+                true
+            )
+        ).data;
     }
 
     static async list(query: {
@@ -78,30 +87,38 @@ class ApiRouteCommunity {
         lat?: number;
         lng?: number;
     }): Promise<CommunityAttributes[]> {
-        return this.api.get(
-            '/community/list?extended=true&offset=' +
-                query.offset +
-                '&limit=' +
-                query.limit +
-                (query.orderBy ? `&orderBy=${query.orderBy}` : '') +
-                (query.filter ? `&filter=${query.filter}` : '') +
-                (query.lat ? `&lat=${query.lat}` : '') +
-                (query.lng ? `&lng=${query.lng}` : '')
-        );
+        return (
+            await this.api.get<CommunityAttributes[]>(
+                '/community/list?extended=true&offset=' +
+                    query.offset +
+                    '&limit=' +
+                    query.limit +
+                    (query.orderBy ? `&orderBy=${query.orderBy}` : '') +
+                    (query.filter ? `&filter=${query.filter}` : '') +
+                    (query.lat ? `&lat=${query.lat}` : '') +
+                    (query.lng ? `&lng=${query.lng}` : '')
+            )
+        ).data;
     }
 
     static async findById(id: number): Promise<CommunityAttributes> {
-        return this.api.get('/community/' + id);
+        return (await this.api.get<CommunityAttributes>('/community/' + id))
+            .data;
     }
 
     static async findByContractAddress(
         address: string
     ): Promise<CommunityAttributes> {
-        return this.api.get('/community/address/' + address);
+        return (
+            await this.api.get<CommunityAttributes>(
+                '/community/address/' + address
+            )
+        ).data;
     }
 
     static async pastSSI(id: number): Promise<number[]> {
-        return this.api.get('/community/' + id + '/past-ssi');
+        return (await this.api.get<number[]>('/community/' + id + '/past-ssi'))
+            .data;
     }
 
     static async create(
@@ -119,7 +136,11 @@ class ApiRouteCommunity {
     static async getRequestChangeUbi(
         id: number
     ): Promise<UbiRequestChangeParams | null> {
-        return this.api.get('/community/' + id + '/ubi');
+        return (
+            await this.api.get<UbiRequestChangeParams | null>(
+                '/community/' + id + '/ubi'
+            )
+        ).data;
     }
 }
 
