@@ -1,7 +1,10 @@
 import CacheImage from 'components/CacheImage';
+import { chooseMediaThumbnail } from 'helpers/index';
 import { AppMediaContent } from 'helpers/types/models';
-import React from 'react';
-import { useWindowDimensions, View } from 'react-native';
+import React, { useState } from 'react';
+import { useWindowDimensions, View, Image } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { ipctColors } from 'styles/index';
 
 export default function CarouselSlide({
     media,
@@ -9,6 +12,7 @@ export default function CarouselSlide({
     media: AppMediaContent | null;
 }) {
     const dimensions = useWindowDimensions();
+    const [isLoading, setIsLoading] = useState(true);
 
     return (
         <View
@@ -24,7 +28,10 @@ export default function CarouselSlide({
                 <View style={{ flexDirection: 'row' }}>
                     <CacheImage
                         source={{
-                            uri: media.url,
+                            uri: chooseMediaThumbnail(media, {
+                                heigth: 148,
+                                width: 94,
+                            }),
                         }}
                         style={{
                             width: dimensions.width,
@@ -35,7 +42,17 @@ export default function CarouselSlide({
                         }}
                         blurRadius={8}
                     />
-                    <CacheImage
+                    {isLoading && (
+                        <ActivityIndicator
+                            color={ipctColors.blueRibbon}
+                            style={{
+                                zIndex: 6,
+                                width: dimensions.width,
+                                alignContent: 'center',
+                            }}
+                        />
+                    )}
+                    <Image
                         source={{
                             uri: media.url,
                         }}
@@ -44,6 +61,8 @@ export default function CarouselSlide({
                             resizeMode: 'contain',
                             zIndex: 5,
                         }}
+                        onLoadStart={() => setIsLoading(true)}
+                        onLoadEnd={() => setIsLoading(false)}
                     />
                 </View>
             )}
