@@ -1,10 +1,11 @@
 import { Entypo } from '@expo/vector-icons';
 import countriesJSON from 'assets/countries.json';
+import { chooseMediaThumbnail } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Image } from 'react-native';
 
-import CachedImage from './CacheImage';
+// import CachedImage from './CacheImage';
 
 const countries: {
     [key: string]: {
@@ -35,12 +36,16 @@ export default function BaseCommunity(props: {
                     position: 'absolute',
                 }}
             >
-                <CachedImage
+                <Image
                     style={styles.imageBackground}
                     source={{
-                        uri: community.cover?.url,
+                        uri: chooseMediaThumbnail(community.cover!, {
+                            width: 330,
+                            heigth: 330,
+                        }),
                     }}
                 />
+                {/** TODO: should load thumbnail until original image is loaded only */}
                 <View style={styles.darkerBackground} />
             </View>
             <View
