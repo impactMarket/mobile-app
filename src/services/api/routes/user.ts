@@ -9,10 +9,12 @@ class ApiRouteUser {
         communityId: string,
         message: string
     ): Promise<boolean> {
-        return this.api.post(`/user/report`, {
-            communityId,
-            message,
-        });
+        return (
+            await this.api.post<boolean>(`/user/report`, {
+                communityId,
+                message,
+            })
+        ).data;
     }
 
     static async hello(
@@ -20,11 +22,13 @@ class ApiRouteUser {
         token: string,
         phone: string
     ): Promise<IUserHello | undefined> {
-        return this.api.post(`/user/welcome`, {
-            address,
-            token,
-            phone,
-        });
+        return (
+            await this.api.post<IUserHello | undefined>(`/user/welcome`, {
+                address,
+                token,
+                phone,
+            })
+        ).data;
     }
 
     static async auth(
@@ -34,23 +38,27 @@ class ApiRouteUser {
         pushNotificationToken: string,
         phone: string
     ): Promise<IUserAuth | undefined> {
-        return this.api.post('/user/auth', {
-            address,
-            language,
-            currency,
-            pushNotificationToken,
-            phone,
-        });
+        return (
+            await this.api.post<IUserAuth | undefined>('/user/auth', {
+                address,
+                language,
+                currency,
+                pushNotificationToken,
+                phone,
+            })
+        ).data;
     }
 
     static async addClaimLocation(
         communityId: string,
         gps: any
     ): Promise<boolean> {
-        return this.api.post('/claim-location', {
-            communityId,
-            gps,
-        });
+        return (
+            await this.api.post<boolean>('/claim-location', {
+                communityId,
+                gps,
+            })
+        ).data;
     }
 
     static async exists(address: string): Promise<boolean> {
@@ -58,53 +66,51 @@ class ApiRouteUser {
     }
 
     static async setUsername(username: string): Promise<boolean> {
-        return this.api.post('/user/username', {
-            username,
-        });
+        return (
+            await this.api.post<boolean>('/user/username', {
+                username,
+            })
+        ).data;
     }
 
     static async setCurrency(currency: string): Promise<boolean> {
-        return this.api.post('/user/currency', {
-            currency,
-        });
+        return (
+            await this.api.post<boolean>('/user/currency', {
+                currency,
+            })
+        ).data;
     }
 
     static async setLanguage(language: string): Promise<boolean> {
-        return this.api.post('/user/language', {
-            language,
-        });
+        return (
+            await this.api.post<boolean>('/user/language', {
+                language,
+            })
+        ).data;
     }
 
     static async setGender(gender: string): Promise<boolean> {
-        return this.api.post('/user/gender', {
-            gender,
-        });
+        return (
+            await this.api.post<boolean>('/user/gender', {
+                gender,
+            })
+        ).data;
     }
 
     static async setAge(age: number): Promise<boolean> {
-        return this.api.post('/user/age', {
-            age,
-        });
+        return (
+            await this.api.post<boolean>('/user/age', {
+                age,
+            })
+        ).data;
     }
 
     static async setChildren(children: number | null): Promise<boolean> {
-        return this.api.post('/user/children', {
-            children,
-        });
-    }
-
-    static async device(
-        phone: string,
-        identifier: string,
-        device: string,
-        network: string
-    ): Promise<boolean> {
-        return this.api.post('/user/device', {
-            phone,
-            identifier,
-            device,
-            network,
-        });
+        return (
+            await this.api.post<boolean>('/user/children', {
+                children,
+            })
+        ).data;
     }
 }
 

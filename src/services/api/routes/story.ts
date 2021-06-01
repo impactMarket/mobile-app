@@ -27,12 +27,12 @@ class ApiRouteStory {
         return this.api.uploadSingleImage('/story/picture', mediaURI);
     }
 
-    static add(story: {
+    static async add(story: {
         communityId: number;
         message?: string;
         mediaId?: number;
     }): Promise<ICommunityStory> {
-        return this.api.post<ICommunityStory>('/story', story);
+        return (await this.api.post<ICommunityStory>('/story', story)).data;
     }
 
     static async list<T extends ICommunitiesListStories[]>(
