@@ -1,5 +1,4 @@
-import Constants from 'expo-constants';
-import { getRequest, postRequest } from '../base';
+import { getRequest } from '../base';
 
 class ApiRouteSystem {
     static async getServerTime(): Promise<number> {

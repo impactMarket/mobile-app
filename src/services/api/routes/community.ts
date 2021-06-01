@@ -123,8 +123,8 @@ class ApiRouteCommunity {
 
     static async create(
         details: CommunityCreationAttributes
-    ): Promise<CommunityAttributes> {
-        return this.api.post('/community/create', details);
+    ): Promise<{ data: CommunityAttributes; error: any }> {
+        return this.api.post<CommunityAttributes>('/community/create', details);
     }
 
     static async edit(
