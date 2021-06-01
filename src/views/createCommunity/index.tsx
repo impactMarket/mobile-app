@@ -738,7 +738,7 @@ function CreateCommunityScreen() {
             <View
                 style={{
                     padding: 20,
-                    height: Dimensions.get('screen').height * 0.9,
+                    // height: Dimensions.get('screen').height * 0.9,
                 }}
             >
                 <Searchbar
@@ -805,7 +805,7 @@ function CreateCommunityScreen() {
             <View
                 style={{
                     padding: 20,
-                    height: Dimensions.get('screen').height * 0.9,
+                    // height: Dimensions.get('screen').height * 0.9,
                 }}
             >
                 <Searchbar
