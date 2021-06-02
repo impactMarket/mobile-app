@@ -157,9 +157,12 @@ class ApiRequests {
     //     );
     // }
 
-    async get<T>(endpoint: string, useAuthToken = false): Promise<T> {
+    async get<T>(
+        endpoint: string,
+        useAuthToken = false
+    ): Promise<{ data: T; count?: number }> {
         // try {
-        let result;
+        let apiResult;
         if (useAuthToken) {
             // const requestOptions = {
             //     headers: {
@@ -168,15 +171,19 @@ class ApiRequests {
             //         Accept: 'application/json',
             //     },
             // };
-            result = await axios.get(endpoint, await this._requestOptions());
+            apiResult = await axios.get(endpoint, await this._requestOptions());
         } else {
-            result = await axios.get(endpoint);
+            apiResult = await axios.get(endpoint);
         }
         // if (result.status >= 400) {
         //     return undefined;
         // }
-        const r = result.data as IApiResult;
-        return r.data as T;
+        const r = apiResult.data as IApiResult;
+        let result: any = { data: r.data as T };
+        if (r.count !== undefined) {
+            result = { ...result, count: r.count };
+        }
+        return result;
         // } catch (e) {
         //     //
         //     return;
@@ -187,7 +194,7 @@ class ApiRequests {
         endpoint: string,
         requestBody: any,
         options?: any
-    ): Promise<T> {
+    ): Promise<{ data: T; error: any }> {
         // let response: T | undefined;
         // try {
         // handle success
@@ -199,7 +206,7 @@ class ApiRequests {
         //     },
         //     ...options,
         // };
-        const result = await axios.post(
+        const apiResult = await axios.post(
             endpoint,
             requestBody,
             await this._requestOptions(options)
@@ -212,8 +219,12 @@ class ApiRequests {
         // if (result.status >= 400) {
         //     return undefined;
         // }
-        const r = result.data as IApiResult;
-        return r.data as T;
+        const r = apiResult.data as IApiResult;
+        let result: any = { data: r.data as T };
+        if (r.error !== undefined) {
+            result = { ...result, error: r.error };
+        }
+        return result;
         // } catch (e) {
         //     Sentry.Native.captureException(e);
         // }

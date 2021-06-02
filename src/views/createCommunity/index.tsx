@@ -12,6 +12,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
+import Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Screens, celoNetwork, imageTargets } from 'helpers/constants';
@@ -462,52 +463,59 @@ function CreateCommunityScreen() {
                 );
 
                 if (profileImage.length > 0 && profileImage !== avatar) {
-                    const res = (await Api.upload.uploadImage(
-                            profileImage,
-                            imageTargets.PROFILE
-                        )) as any,
-                        cachedUser = (await CacheStore.getUser())!;
-                    await CacheStore.cacheUser({
-                        ...cachedUser,
-                        avatar: res.data.data.url as string,
-                    });
-                    dispatch(
-                        setUserMetadata({ ...user, avatar: res.data.data.url })
-                    );
+                    try {
+                        const res = (await Api.upload.uploadImage(
+                                profileImage,
+                                imageTargets.PROFILE
+                            )) as any,
+                            cachedUser = (await CacheStore.getUser())!;
+                        await CacheStore.cacheUser({
+                            ...cachedUser,
+                            avatar: res.data.data.url as string,
+                        });
+                        dispatch(
+                            setUserMetadata({
+                                ...user,
+                                avatar: res.data.data.url,
+                            })
+                        );
+                    } catch (e) {
+                        // TODO: block community creation if this fails, for now, lets ignore
+                    }
                 }
 
                 if (apiRequestResult) {
                     const communityDetails: CommunityCreationAttributes = {
-                            requestByAddress: userAddress,
-                            name,
-                            description,
-                            language: userLanguage,
-                            currency,
-                            city,
-                            country,
-                            gps: {
-                                latitude:
-                                    gpsLocation!.coords.latitude +
-                                    config.locationErrorMargin,
-                                longitude:
-                                    gpsLocation!.coords.longitude +
-                                    config.locationErrorMargin,
-                            },
-                            email,
-                            coverMediaId: apiRequestResult.data.data.id,
-                            contractParams,
-                            ...privateParamsIfAvailable,
+                        requestByAddress: userAddress,
+                        name,
+                        description,
+                        language: userLanguage,
+                        currency,
+                        city,
+                        country,
+                        gps: {
+                            latitude:
+                                gpsLocation!.coords.latitude +
+                                config.locationErrorMargin,
+                            longitude:
+                                gpsLocation!.coords.longitude +
+                                config.locationErrorMargin,
                         },
-                        communityApiRequestResult = await Api.community.create(
-                            communityDetails
-                        );
-                    if (communityApiRequestResult) {
+                        email,
+                        coverMediaId: apiRequestResult.data.data.id,
+                        contractParams,
+                        ...privateParamsIfAvailable,
+                    };
+                    const communityApiRequestResult: any = await Api.community.create(
+                        communityDetails
+                    );
+                    if (communityApiRequestResult.error === undefined) {
                         await updateCommunityInfo(
-                            communityApiRequestResult.id,
+                            communityApiRequestResult.data.id,
                             dispatch
                         );
                         const community = await Api.community.findById(
-                            communityApiRequestResult.id
+                            communityApiRequestResult.data.id
                         );
                         if (community !== undefined) {
                             batch(() => {
@@ -518,11 +526,19 @@ function CreateCommunityScreen() {
                         setSending(false);
                         setSendingSuccess(true);
                     } else {
+                        Clipboard.setString(
+                            communityApiRequestResult.error.toString()
+                        );
                         setSending(false);
                         setSendingSuccess(false);
                     }
+                } else {
+                    Clipboard.setString('error uploading cover image');
+                    setSending(false);
+                    setSendingSuccess(false);
                 }
             } catch (e) {
+                Clipboard.setString(e.toString());
                 Sentry.Native.captureException(e);
                 setSending(false);
                 setSendingSuccess(false);
@@ -738,7 +754,7 @@ function CreateCommunityScreen() {
             <View
                 style={{
                     padding: 20,
-                    height: Dimensions.get('screen').height * 0.9,
+                    // height: Dimensions.get('screen').height * 0.9,
                 }}
             >
                 <Searchbar
@@ -805,7 +821,7 @@ function CreateCommunityScreen() {
             <View
                 style={{
                     padding: 20,
-                    height: Dimensions.get('screen').height * 0.9,
+                    // height: Dimensions.get('screen').height * 0.9,
                 }}
             >
                 <Searchbar
