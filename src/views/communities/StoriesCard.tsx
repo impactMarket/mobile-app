@@ -19,7 +19,6 @@ export default function StoriesCard(props: {
                     height: 167,
                     borderRadius: 8,
                     marginRight: 11.84,
-                    // alignItems: 'flex-end',
                 }}
                 onPress={() =>
                     navigation.navigate(Screens.StoriesCarousel, {
