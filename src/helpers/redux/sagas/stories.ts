@@ -1,11 +1,9 @@
-import i18n from 'assets/i18n';
 import { storiesAction } from 'helpers/constants';
 import {
     addStoriesToStateSuccess,
     addStoriesToStateFailure,
 } from 'helpers/redux/actions/stories';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
-import { showMessage } from 'react-native-flash-message';
 import Api from 'services/api';
 import { takeLatest, call, put, all } from 'typed-redux-saga';
 
@@ -21,14 +19,10 @@ export function* submitAddStoriesToStateRequest({ payload }: any) {
             start,
             end
         );
-        console.log(stories.length);
-        yield put(addStoriesToStateSuccess(stories));
+        const { data } = stories;
+
+        yield put(addStoriesToStateSuccess(data));
     } catch (err) {
-        console.log(err);
-        showMessage({
-            message: i18n.t('sagas.messages.submitAddStoriesToStateFailure'),
-            type: 'danger',
-        });
         yield put(addStoriesToStateFailure());
     }
 }

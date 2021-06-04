@@ -9,7 +9,7 @@ import { storiesReducer } from './stories';
 import { userReducer } from './user';
 
 export default combineReducers<IRootState>({
-    // offline,
+    offline,
     user: userReducer,
     auth: authReducer,
     app: appReducer,

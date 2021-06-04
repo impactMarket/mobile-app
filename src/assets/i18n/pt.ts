@@ -414,6 +414,10 @@ export default {
     },
     sagas: {
         messages: {
+            yourNetworkisOffline: 'Ouch! Parece que você está offline.',
+            yourNetworkisOnline: 'Hurray! Sua rede está online novamente!',
+            submitAddStoriesToStateSuccess:
+                'Hurray! Veja as stories mais recentes.',
             submitAddStoriesToStateFailure:
                 'Oops! Não conseguimos atualizar todas as stories desta vez. Por favor, tente mais tarde.',
         },

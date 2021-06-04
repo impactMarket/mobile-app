@@ -6,7 +6,10 @@ import {
 import { StoriesActionTypes } from 'helpers/types/redux';
 import { markActionsOffline } from 'redux-offline-queue';
 
-markActionsOffline(storiesAction, [addStoriesToStateRequest]);
+markActionsOffline(storiesAction, [
+    addStoriesToStateRequest,
+    addMyStoriesToStateRequest,
+]);
 
 export function addStoriesToStateRequest(
     start: number,

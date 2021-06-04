@@ -11,6 +11,8 @@ import {
     SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
     SET_CELO_KIT,
+    SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS,
+    SET_APP_MANAGER_HAS_ACCEPTED_TERMS,
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
     RESET_USER_APP,
@@ -68,6 +70,16 @@ interface UserSetIsSuspectAction {
 
 interface UserSetIsCommunityManagerAction {
     type: typeof SET_USER_IS_COMMUNITY_MANAGER;
+    payload: boolean;
+}
+
+interface UserSetBeneficiaryAcceptedRulesAction {
+    type: typeof SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS;
+    payload: boolean;
+}
+
+interface UserSetManagerAcceptedRulesAction {
+    type: typeof SET_APP_MANAGER_HAS_ACCEPTED_TERMS;
     payload: boolean;
 }
 
@@ -219,7 +231,9 @@ export type AppActionTypes =
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime
     | SetAppFromWelcomeScreen
-    | SetAppPushNotificationListeners;
+    | SetAppPushNotificationListeners
+    | UserSetBeneficiaryAcceptedRulesAction
+    | UserSetManagerAcceptedRulesAction;
 
 export type ModalActionTypes =
     | OpenModalDonateAction

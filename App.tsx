@@ -40,7 +40,7 @@ import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
 import React from 'react';
 import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
-import FlashMessage, { showMessage } from 'react-native-flash-message';
+import FlashMessage from 'react-native-flash-message';
 import {
     DefaultTheme,
     Provider as PaperProvider,

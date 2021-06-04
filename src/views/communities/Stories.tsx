@@ -40,6 +40,9 @@ export default function Stories() {
             dispatch(addStoriesToStateRequest(0, 5));
         }, [])
     );
+    /**
+     * Code Before Sagas
+     * */
 
     // useEffect(() => {
     //     setRefreshing(true);
@@ -89,7 +92,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} ({countStories})
+                        {i18n.t('viewAll')} ({storiesCommunity?.length})
                     </Text>
                 </Pressable>
             </View>
@@ -114,24 +117,25 @@ export default function Stories() {
                         color={ipctColors.blueRibbon}
                     />
                 )}
-                {storiesCommunity.map((s) => (
-                    <StoriesCard
-                        key={s.id}
-                        communityId={s.id}
-                        communityName={s.name}
-                        imageURI={
-                            s.story.media
-                                ? chooseMediaThumbnail(s.story.media, {
-                                      width: 84,
-                                      heigth: 140,
-                                  })
-                                : chooseMediaThumbnail(s.cover, {
-                                      width: 88,
-                                      heigth: 88,
-                                  })
-                        }
-                    />
-                ))}
+                {storiesCommunity.length > 0 &&
+                    storiesCommunity.map((s) => (
+                        <StoriesCard
+                            key={s.id}
+                            communityId={s.id}
+                            communityName={s.name}
+                            imageURI={
+                                s.story.media
+                                    ? chooseMediaThumbnail(s.story.media, {
+                                          width: 84,
+                                          heigth: 140,
+                                      })
+                                    : chooseMediaThumbnail(s.cover, {
+                                          width: 88,
+                                          heigth: 88,
+                                      })
+                            }
+                        />
+                    ))}
             </ScrollView>
         </SafeAreaView>
     );
