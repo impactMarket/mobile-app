@@ -1015,8 +1015,8 @@ function CreateCommunityScreen() {
 
                 <Text
                     style={[
-                        styles.createCommunityDescription,
-                        { flexWrap: 'wrap', marginHorizontal: 34 },
+                        styles.createCommunityAlertDescription,
+                        { flexWrap: 'wrap', marginHorizontal: 42 },
                     ]}
                 >
                     {i18n.t('createCommunityAlert')}
@@ -1112,8 +1112,8 @@ function CreateCommunityScreen() {
                                     fontSize: 14,
                                     lineHeight: 24,
                                     color: ipctColors.almostBlack,
-                                    textAlign: 'justify',
-                                    marginRight: 36,
+                                    // textAlign: 'justify',
+                                    marginRight: 12,
                                 }}
                             >
                                 {i18n.t('missingFieldError')}
@@ -1121,7 +1121,6 @@ function CreateCommunityScreen() {
                         </View>
                         <Button
                             modeType="gray"
-                            bold
                             style={{ width: '100%' }}
                             onPress={() => {
                                 setSending(false);
@@ -1158,7 +1157,7 @@ function CreateCommunityScreen() {
                                     }}
                                     source={require('../../assets/images/waitingTx.gif')}
                                 />
-                            ) : sendingSuccess ? (
+                            ) : !sendingSuccess ? (
                                 <SuccessSvg />
                             ) : (
                                 <>
@@ -1269,7 +1268,6 @@ function CreateCommunityScreen() {
                             </Text>
                             <Button
                                 modeType="gray"
-                                bold
                                 style={{ width: '100%' }}
                                 onPress={() => {
                                     setSending(false);
@@ -2264,6 +2262,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Regular',
         fontSize: 14,
         lineHeight: 24,
+    },
+    createCommunityAlertDescription: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 20,
     },
     uploadContainer: {
         flexDirection: 'row',

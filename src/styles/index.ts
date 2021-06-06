@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 // use https://chir.ag/projects/name-that-color
 export const ipctColors = {
     greenishTeal: '#2DCE89',
-    softGray: '#E9ECEF',
+    softGray: '#E9EDF4',
     regentGray: '#7E8DA6',
     almostBlack: '#1E3252',
     baliHai: '#8898AA',
