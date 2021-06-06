@@ -1,4 +1,3 @@
-import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Select from 'components/core/Select';
@@ -46,12 +45,6 @@ function CommunitiesScreen() {
             })
             .finally(() => setRefreshing(false));
     }, []);
-
-    useFocusEffect(() => {
-        if (flatListRef.current) {
-            flatListRef.current.scrollToIndex({ animated: true, index: 0 });
-        }
-    });
 
     const handleChangeOrder = async (order: string) => {
         modalizeOrderRef.current?.close();
