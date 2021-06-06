@@ -310,7 +310,7 @@ function Carousel(props: {
                                     backgroundColor: '#E9ECEF',
                                     opacity: _index === index ? 1 : 0.37,
                                     height: 4,
-                                    marginBottom: 4,
+                                    marginBottom: 8,
                                 }}
                             />
                         ))}
