@@ -27,7 +27,6 @@ import {
     useWindowDimensions,
     StyleSheet,
 } from 'react-native';
-import { Card, Portal as RNPortal, Modal } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
@@ -44,8 +43,6 @@ export default function Container({
     community: ICommunityStories;
     story: ICommunityStory;
     communityId: number;
-    // media: AppMediaContent | null;
-    // message: string | null;
 }) {
     const { cover, name, country, city } = community;
     const { media, message, byAddress } = story;
@@ -109,12 +106,17 @@ export default function Container({
                         justifyContent: 'space-between',
                     }}
                 >
-                    <View
+                    <Pressable
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
                             flex: 1,
                         }}
+                        onPress={() =>
+                            navigation.navigate(Screens.CommunityDetails, {
+                                communityId,
+                            })
+                        }
                     >
                         {cover.url.length > 0 ? (
                             <Image
@@ -161,8 +163,8 @@ export default function Container({
                                     color: '#FAFAFA',
                                 }}
                             >
-                                {name?.length > 20
-                                    ? name.substr(0, 20) + '...'
+                                {name?.length > 17
+                                    ? name.substr(0, 17) + '...'
                                     : name}
                             </Text>
                             {country.length > 0 && (
@@ -181,8 +183,7 @@ export default function Container({
                                 </Text>
                             )}
                         </View>
-                    </View>
-
+                    </Pressable>
                     <View
                         style={{
                             flexDirection: 'row',
