@@ -224,7 +224,7 @@ function CommunitiesScreen() {
                 >
                     <View
                         style={{
-                            height: Dimensions.get('screen').height * 0.24,
+                            height: 110,
                         }}
                     >
                         <RadioButton.Group
