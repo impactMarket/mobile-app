@@ -15,10 +15,11 @@ export default function StoriesCard(props: {
             <Pressable
                 style={{
                     backgroundColor: ipctColors.blueRibbon,
-                    width: 98.16,
+                    width: 103.16,
+                    // width: 98.16,
                     height: 167,
                     borderRadius: 8,
-                    marginRight: 11.84,
+                    marginHorizontal: 5.92,
                 }}
                 onPress={() =>
                     navigation.navigate(Screens.StoriesCarousel, {
@@ -40,10 +41,11 @@ export default function StoriesCard(props: {
                     fontFamily: 'Inter-Regular',
                     fontSize: 12,
                     lineHeight: 20,
+                    marginHorizontal: 5.92,
                     color: ipctColors.almostBlack,
                     marginTop: 8,
                     flexWrap: 'wrap',
-                    width: 110,
+                    width: 103.16,
                 }}
             >
                 {props.communityName?.length > 18

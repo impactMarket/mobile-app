@@ -100,12 +100,10 @@ function StoriesScreen() {
     ) : (
         <FlatList
             data={stories}
-            style={{
-                paddingHorizontal: 22,
-            }}
             contentContainerStyle={{
-                alignItems: 'flex-start',
+                marginHorizontal: 22,
             }}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
             keyExtractor={(item) => item.name}
             numColumns={3} // Número de colunas
             renderItem={({ item }) => {
