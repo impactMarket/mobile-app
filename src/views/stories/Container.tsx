@@ -54,10 +54,6 @@ export default function Container({
         (state: IRootState) => state.user.wallet.address
     );
 
-    const communityMetadata = useSelector(
-        (state: IRootState) => state.user.community.metadata
-    );
-
     const navigation = useNavigation();
 
     const titleStyle: StyleProp<TextStyle> = {
