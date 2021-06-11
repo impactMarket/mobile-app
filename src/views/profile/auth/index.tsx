@@ -317,7 +317,7 @@ function Auth() {
                         navigation.navigate(Screens.Communities);
                     }
                 )}
-                adjustToContentHeight={Device.osName === 'iOS'}
+                adjustToContentHeight={Dimensions.get('window').height >= 720}
                 onClose={() => {
                     navigation.navigate(Screens.Communities);
                 }}
