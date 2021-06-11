@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
 import React from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
+import { View, Text, Pressable, Image, Dimensions } from 'react-native';
 import { ipctColors } from 'styles/index';
 
 export default function StoriesCard(props: {
@@ -15,12 +15,11 @@ export default function StoriesCard(props: {
             <Pressable
                 style={{
                     backgroundColor: ipctColors.blueRibbon,
-                    maxWidth: 98.16,
-                    minWidth: 92.16,
+                    width: Dimensions.get('screen').width * 0.28,
+                    minHeight: Dimensions.get('screen').height * 0.25,
                     maxHeight: 167,
-                    minHeight: 152,
                     borderRadius: 8,
-                    marginRight: 11.84,
+                    marginRight: Dimensions.get('screen').width * 0.04,
                 }}
                 onPress={() =>
                     navigation.navigate(Screens.StoriesCarousel, {
