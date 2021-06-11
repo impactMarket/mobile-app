@@ -286,7 +286,10 @@ function Carousel(props: {
                         <Button
                             modeType="green"
                             bold
-                            style={{ marginRight: 22, width: 158 }}
+                            style={{
+                                marginRight: 22,
+                                width: 128,
+                            }}
                             onPress={() =>
                                 navigation.navigate(Screens.CommunityDetails, {
                                     communityId: communityStories?.id,
