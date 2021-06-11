@@ -15,8 +15,10 @@ export default function StoriesCard(props: {
             <Pressable
                 style={{
                     backgroundColor: ipctColors.blueRibbon,
-                    width: 98.16,
-                    height: 167,
+                    maxWidth: 98.16,
+                    minWidth: 92.16,
+                    maxHeight: 167,
+                    minHeight: 152,
                     borderRadius: 8,
                     marginRight: 11.84,
                 }}
@@ -43,7 +45,8 @@ export default function StoriesCard(props: {
                     color: ipctColors.almostBlack,
                     marginTop: 8,
                     flexWrap: 'wrap',
-                    width: 110,
+                    maxWidth: 100,
+                    minWidth: 90,
                 }}
             >
                 {props.communityName?.length > 18
