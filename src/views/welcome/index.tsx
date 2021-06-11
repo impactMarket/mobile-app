@@ -6,7 +6,7 @@ import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
 import { Screens } from 'helpers/constants';
 import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
 import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Dimensions, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
@@ -33,7 +33,14 @@ function Welcome() {
                 >
                     <LogoBlueSvg style={{ height: 74, marginTop: 25 }} />
                 </View>
-                <DiversitySvg style={{ height: 136, marginTop: 16 }} />
+                <DiversitySvg
+                    width={Dimensions.get('screen').width}
+                    style={{
+                        maxHeight: 136,
+                        minHeight: 116,
+                        marginTop: 16,
+                    }}
+                />
                 <Text
                     style={{
                         paddingHorizontal: 33,
