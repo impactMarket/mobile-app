@@ -101,7 +101,7 @@ function StoriesScreen() {
         <FlatList
             data={stories}
             style={{
-                paddingHorizontal: 10,
+                paddingHorizontal: 14,
             }}
             contentContainerStyle={{
                 alignItems: 'flex-start',
