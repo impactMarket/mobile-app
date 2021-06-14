@@ -1157,7 +1157,7 @@ function CreateCommunityScreen() {
                                     }}
                                     source={require('../../assets/images/waitingTx.gif')}
                                 />
-                            ) : !sendingSuccess ? (
+                            ) : sendingSuccess ? (
                                 <SuccessSvg />
                             ) : (
                                 <>
