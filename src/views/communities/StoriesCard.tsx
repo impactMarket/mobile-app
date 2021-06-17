@@ -41,6 +41,7 @@ export default function StoriesCard(props: {
                     fontFamily: 'Inter-Regular',
                     fontSize: 12,
                     lineHeight: 20,
+                    marginHorizontal: 5.92,
                     color: ipctColors.almostBlack,
                     marginTop: 8,
                     flexWrap: 'wrap',

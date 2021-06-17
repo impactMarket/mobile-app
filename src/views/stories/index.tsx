@@ -104,8 +104,9 @@ function StoriesScreen() {
                 paddingHorizontal: 14,
             }}
             contentContainerStyle={{
-                alignItems: 'flex-start',
+                marginHorizontal: 22,
             }}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
             keyExtractor={(item) => item.name}
             showsVerticalScrollIndicator={false}
             numColumns={3} // Número de colunas
