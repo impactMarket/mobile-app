@@ -308,7 +308,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     WebBrowser.openBrowserAsync(
                                         config.blockExplorer +
                                             community.contractAddress +
-                                            '/token_transfers'
+                                            '/token-transfers'
                                     )
                                 }
                             >
