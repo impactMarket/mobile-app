@@ -13,7 +13,7 @@ import { ipctColors } from 'styles/index';
 function DiversitySvg(props: SvgProps) {
     return (
         <Svg
-            width={375}
+            width={props.width}
             height={136}
             viewBox="0 0 375 136"
             fill="none"
