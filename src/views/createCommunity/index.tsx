@@ -211,6 +211,11 @@ function CreateCommunityScreen() {
     const modalizeClaimImcrementRef = useRef<Modalize>(null);
     const modalizeGenericErrorRef = useRef<Modalize>(null);
 
+    enum imageTypes {
+        COVER_IMAGE = 'COVER_IMAGE',
+        PROFILE_IMAGE = 'PROFILE_IMAGE',
+    }
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () =>
@@ -736,18 +741,34 @@ function CreateCommunityScreen() {
         },
         pickImage = async (
             cb: Dispatch<React.SetStateAction<string>>,
-            cbv: Dispatch<React.SetStateAction<boolean>>
+            cbv: Dispatch<React.SetStateAction<boolean>>,
+            type: string
         ) => {
             const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                // allowsEditing: true,
-                // aspect: [1, 1],
                 quality: 1,
             });
 
             if (!result.cancelled) {
-                cb(result.uri);
-                cbv(true);
+                if (type === imageTypes.COVER_IMAGE) {
+                    Image.getSize(result.uri, (width, height) => {
+                        if (width <= 784 && height <= 784) {
+                            cb(result.uri);
+                            cbv(true);
+                        } else {
+                            Alert.alert(i18n.t('imageDimensionsNotFit'));
+                        }
+                    });
+                } else {
+                    Image.getSize(result.uri, (width, height) => {
+                        if (width <= 300 && height <= 300) {
+                            cb(result.uri);
+                            cbv(true);
+                        } else {
+                            Alert.alert(i18n.t('imageDimensionsNotFit'));
+                        }
+                    });
+                }
             }
         },
         renderCurrencyContent = () => (
@@ -1409,7 +1430,8 @@ function CreateCommunityScreen() {
                                             onPress={() =>
                                                 pickImage(
                                                     setCoverImage,
-                                                    setIsCoverImageValid
+                                                    setIsCoverImageValid,
+                                                    imageTypes.COVER_IMAGE
                                                 )
                                             }
                                         >
@@ -1467,7 +1489,8 @@ function CreateCommunityScreen() {
                                             onPress={() =>
                                                 pickImage(
                                                     setProfileImage,
-                                                    setIsProfileImageValid
+                                                    setIsProfileImageValid,
+                                                    imageTypes.PROFILE_IMAGE
                                                 )
                                             }
                                         >

@@ -240,13 +240,17 @@ function ProfileScreen() {
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            // allowsEditing: true,
-            // aspect: [4, 3],
             quality: 1,
         });
 
         if (!result.cancelled) {
-            handleChangeAvatar(result.uri);
+            Image.getSize(result.uri, (width, height) => {
+                if (width <= 300 && height <= 300) {
+                    handleChangeAvatar(result.uri);
+                } else {
+                    Alert.alert(i18n.t('imageDimensionsNotFit'));
+                }
+            });
         }
     };
 
