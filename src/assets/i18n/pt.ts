@@ -65,6 +65,7 @@ export default {
     createCommunityAlert:
         'Após o envio, entraremos em contato com você em 14 dias ou menos.',
     selectCoverImage: 'Selecione Imagem de Capa',
+    imageDimensionsNotFit: 'Selectione uma Imagem com as dimensões corretas',
     contractIncrementTitle: 'Incremento de tempo total após cada pedido',
     communityDescriptionLabel:
         'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
