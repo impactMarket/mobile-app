@@ -7,7 +7,14 @@ import { navigationRef } from 'helpers/rootNavigation';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useCallback } from 'react';
-import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import {
+    Dimensions,
+    Pressable,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    View,
+} from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
@@ -106,7 +113,15 @@ export default function Stories() {
                     (userCommunityMetadata.isBeneficiary ||
                         userCommunityMetadata.isManager) &&
                     userCommunityMetadata.metadata.status === 'valid' && (
-                        <View style={{ flexDirection: 'column' }}>
+                        <View
+                            style={{
+                                flexDirection: 'column',
+                                width: 114,
+                                minHeight:
+                                    Dimensions.get('screen').height * 0.214,
+                                maxHeight: 167,
+                            }}
+                        >
                             <NewStoryCard key="newStory" />
                             <MyStoriesCard />
                         </View>
