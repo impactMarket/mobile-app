@@ -193,7 +193,10 @@ function CreateCommunityScreen() {
     const [isAlertVisible, setIsAlertVisible] = useState(!userCommunity);
     // const [communityLogo, setCommunityLogo] = useState('');
     const [showWebview, setShowWebview] = useState(false);
-    // setToggleInformativeModal(false);
+    const [
+        toggleImageDimensionsModal,
+        setToggleImageDimensionsModal,
+    ] = useState<boolean>(false);
 
     const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
@@ -756,7 +759,7 @@ function CreateCommunityScreen() {
                             cb(result.uri);
                             cbv(true);
                         } else {
-                            Alert.alert(i18n.t('imageDimensionsNotFit'));
+                            setToggleImageDimensionsModal(true);
                         }
                     });
                 } else {
@@ -765,7 +768,7 @@ function CreateCommunityScreen() {
                             cb(result.uri);
                             cbv(true);
                         } else {
-                            Alert.alert(i18n.t('imageDimensionsNotFit'));
+                            setToggleImageDimensionsModal(true);
                         }
                     });
                 }
@@ -1068,6 +1071,91 @@ function CreateCommunityScreen() {
                 />
             );
         };
+
+    if (toggleImageDimensionsModal) {
+        return (
+            <RNPortal>
+                <Modal visible dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalErrorTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => {
+                                    setToggleImageDimensionsModal(false);
+                                }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                paddingVertical: 16,
+                                paddingHorizontal: 22,
+                                borderStyle: 'solid',
+                                borderColor: '#EB5757',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <WarningRedTriangle
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    marginRight: 16,
+                                    marginTop: 8,
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                    // textAlign: 'justify',
+                                    marginRight: 12,
+                                }}
+                            >
+                                {i18n.t('imageDimensionsNotFit')}
+                            </Text>
+                        </View>
+                        <Button
+                            modeType="gray"
+                            style={{ width: '100%' }}
+                            onPress={() => {
+                                setToggleImageDimensionsModal(false);
+                            }}
+                        >
+                            {i18n.t('close')}
+                        </Button>
+                    </Card>
+                </Modal>
+            </RNPortal>
+        );
+    }
 
     if (toggleMissingFieldsModal) {
         return (
