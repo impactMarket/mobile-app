@@ -9,7 +9,31 @@
         "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*",
         "prettier": "prettier --write ./**/*.{ts,tsx}",
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
-        "test": "echo \"Not available yet.\""
+        "test": "jest --maxWorkers=50%",
+        "test:watch": "jest --watch --maxWorkers=25%"
+    },
+    "jest": {
+        "preset": "jest-expo",
+        "setupFiles": [
+            "./jestSetup.ts"
+        ],
+        "moduleNameMapper": {
+            "\\.(jpg|jpeg|png|gif)$": "<rootDir>/node_modules/react-native/Libraries/Image/RelativeImageStub"
+        },
+        "transformIgnorePatterns": [
+            "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+        ],
+        "transform": {
+            "^.+\\.[jt]sx?$": "babel-jest"
+        },
+        "collectCoverage": true,
+        "collectCoverageFrom": [
+            "**/*.{ts,tsx}",
+            "!**/coverage/**",
+            "!**/node_modules/**",
+            "!**/babel.config.js",
+            "!**/jest.setup.js"
+        ]
     },
     "engines": {
         "node": "14.15.1"
@@ -88,9 +112,12 @@
     },
     "devDependencies": {
         "@babel/core": "~7.13.14",
+        "@testing-library/react-native": "^7.2.0",
+        "@types/jest": "^26.0.23",
         "@types/react": "~16.9.35",
         "@types/react-native": "0.63.40",
         "@types/react-redux": "7.1.16",
+        "@types/react-test-renderer": "^17.0.1",
         "@types/semver": "7.3.4",
         "@types/styled-components": "5.1.9",
         "@typescript-eslint/eslint-plugin": "4.20.0",
@@ -103,10 +130,12 @@
         "eslint": "7.23.0",
         "eslint-config-prettier": "8.1.0",
         "eslint-config-universe": "7.0.1",
-        "jest-expo": "^40.0.0",
+        "jest": "^27.0.4",
+        "jest-expo": "^41.0.0",
         "lint-staged": ">=10",
         "prettier": "2.2.1",
         "react-native-bundle-visualizer": "2.2.1",
+        "react-test-renderer": "^17.0.2",
         "typescript": "~4.0.0"
     },
     "resolutions": {
