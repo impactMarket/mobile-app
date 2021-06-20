@@ -34,7 +34,6 @@ import {
     FlatList,
     RefreshControl,
     StyleSheet,
-    TextInputEndEditingEventData,
     View,
     Image,
     Dimensions,
@@ -50,7 +49,6 @@ import {
     Text,
     Headline,
     Searchbar,
-    IconButton,
 } from 'react-native-paper';
 import { batch, useDispatch, useSelector } from 'react-redux';
 // Services

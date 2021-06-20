@@ -56,6 +56,7 @@ function Welcome() {
                 </Text>
             </ScrollView>
             <View
+                testID="welcomeBtnContainer"
                 style={{
                     paddingHorizontal: 30,
                     width: '100%',
