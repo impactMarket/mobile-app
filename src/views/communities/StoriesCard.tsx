@@ -16,8 +16,7 @@ export default function StoriesCard(props: {
                 style={{
                     backgroundColor: ipctColors.blueRibbon,
                     width: Dimensions.get('screen').width * 0.28,
-                    minHeight: Dimensions.get('screen').height * 0.214,
-                    maxHeight: 167,
+                    height: 167,
                     borderRadius: 8,
                     marginRight: Dimensions.get('screen').width * 0.04,
                 }}
