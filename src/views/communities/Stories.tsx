@@ -109,23 +109,22 @@ export default function Stories() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ padding: 18 }}
             >
-                {userAddress.length > 0 &&
+                {/* {userAddress.length > 0 &&
                     (userCommunityMetadata.isBeneficiary ||
                         userCommunityMetadata.isManager) &&
-                    userCommunityMetadata.metadata.status === 'valid' && (
-                        <View
-                            style={{
-                                flexDirection: 'column',
-                                width: 114,
-                                minHeight:
-                                    Dimensions.get('screen').height * 0.214,
-                                maxHeight: 167,
-                            }}
-                        >
-                            <NewStoryCard key="newStory" />
-                            <MyStoriesCard />
-                        </View>
-                    )}
+                    userCommunityMetadata.metadata.status === 'valid' && ( */}
+                <View
+                    style={{
+                        flexDirection: 'column',
+                        width: 114,
+                        minHeight: Dimensions.get('screen').height * 0.214,
+                        // maxHeight: 167,
+                    }}
+                >
+                    <NewStoryCard key="newStory" />
+                    <MyStoriesCard />
+                </View>
+                {/* )} */}
                 {refreshing && (
                     <ActivityIndicator
                         style={{ marginBottom: 22 }}
