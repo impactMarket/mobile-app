@@ -19,10 +19,6 @@ publish: &publish
               command: yarn
 
         - run:
-              name: Force Jest Installation
-              command: yarn add jest
-
-        - run:
               name: Add global expo-cli
               command: yarn global add expo-cli
 
@@ -51,6 +47,10 @@ test: &test
         - image: circleci/node:14.15.1
     steps:
         - checkout
+
+        - run:
+              name: Force Jest Installation
+              command: yarn add jest jest-expo @testing-library/react-native --dev
 
         - run:
               name: test
