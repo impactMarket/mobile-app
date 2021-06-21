@@ -6,7 +6,7 @@ import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
-import { View, Alert } from 'react-native';
+import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 
 function CommunityManager() {
@@ -53,7 +53,6 @@ function CommunityManager() {
                             style={{ marginVertical: 10, width: '100%' }}
                             onPress={() => {
                                 setOpenThreeDotsMenu(false);
-                                // Alert.alert('teste');
                                 navigation.navigate(Screens.CreateCommunity, {
                                     communityId: community.id,
                                 });

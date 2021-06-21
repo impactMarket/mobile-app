@@ -65,6 +65,7 @@ export default {
     createCommunityAlert:
         'Após o envio, entraremos em contato com você em 14 dias ou menos.',
     selectCoverImage: 'Selecione Imagem de Capa',
+    imageDimensionsNotFit: 'Selectione uma Imagem com as dimensões corretas',
     contractIncrementTitle: 'Incremento de tempo total após cada pedido',
     communityDescriptionLabel:
         'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
@@ -199,7 +200,7 @@ export default {
     timeIncrementAfterClaimHelp:
         'É possível adicionar um incremento de tempo cada vez qEue um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
     visibilityHelp:
-        'Uma comunidade pode ser publica (necessita da aprovação da equipada impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
+        'Uma comunidade pode ser publica (necessita da aprovação da equipe da impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
     currencyHelp: 'Escolha aqui a moeda usada entre os seus beneficiários.',
     coverImageRequired: 'Imagem de capa é obrigatório!',
     profileImageRequired: 'Sua Imagem de Perfil é obrigatória!',

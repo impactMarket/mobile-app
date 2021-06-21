@@ -79,15 +79,15 @@ const commonScreens = (Navigator: typeof Stack) => (
             component={FAQScreen}
             options={FAQScreen.navigationOptions}
         />
-    </>
-);
-const beneficiaryScreens = (Navigator: typeof Stack) => (
-    <>
         <Navigator.Screen
             name={Screens.WelcomeRulesScreen}
             component={WelcomeRulesScreen}
             options={WelcomeRulesScreen.navigationOptions}
         />
+    </>
+);
+const beneficiaryScreens = (Navigator: typeof Stack) => (
+    <>
         <Navigator.Screen
             name={Screens.ClaimExplained}
             component={ClaimExplainedScreen}

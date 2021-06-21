@@ -7,6 +7,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
+import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
 import { Platform, Dimensions } from 'react-native';
@@ -46,7 +47,8 @@ function getHeaderRight(
     route: RouteProp<any, any>,
     navigation: StackNavigationProp<any, any>,
     defaultValue: string,
-    isManagerOrBeneficiary: boolean
+    isManagerOrBeneficiary: boolean,
+    userCommunity: CommunityAttributes
 ) {
     let routeName = getFocusedRouteNameFromRoute(route);
     if (routeName === undefined) {
@@ -60,7 +62,12 @@ function getHeaderRight(
             return <CommunityManager />;
         case Screens.Communities:
             if (!isManagerOrBeneficiary) {
-                return <CreateCommunity navigation={navigation} />;
+                return (
+                    <CreateCommunity
+                        navigation={navigation}
+                        userCommunity={userCommunity}
+                    />
+                );
             }
             return;
         case Screens.Profile:
@@ -92,6 +99,10 @@ function TabNavigator({
     const insets = useSafeAreaInsets();
     const isManager = useSelector(
         (state: IRootState) => state.user.community.isManager
+    );
+
+    const userCommunity = useSelector(
+        (state: IRootState) => state.user.community.metadata
     );
     const isBeneficiary = useSelector(
         (state: IRootState) => state.user.community.isBeneficiary
@@ -138,7 +149,8 @@ function TabNavigator({
                         : isManager
                         ? Screens.CommunityManager
                         : Screens.Communities,
-                    isBeneficiary || isBeneficiary
+                    isBeneficiary || isBeneficiary,
+                    userCommunity
                 ),
         });
     }, [navigation, route]);
@@ -188,7 +200,6 @@ function TabNavigator({
                         lineHeight: 14,
                     },
                     tabStyle: { marginVertical: 16 },
-                    style: { height: 84 + insets.bottom },
                     style: {
                         height:
                             Platform.OS === 'ios' && !!isLargeIphone()

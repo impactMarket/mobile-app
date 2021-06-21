@@ -34,7 +34,6 @@ import {
     FlatList,
     RefreshControl,
     StyleSheet,
-    TextInputEndEditingEventData,
     View,
     Image,
     Dimensions,
@@ -50,7 +49,6 @@ import {
     Text,
     Headline,
     Searchbar,
-    IconButton,
 } from 'react-native-paper';
 import { batch, useDispatch, useSelector } from 'react-redux';
 // Services
@@ -240,13 +238,17 @@ function ProfileScreen() {
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            // allowsEditing: true,
-            // aspect: [4, 3],
             quality: 1,
         });
 
         if (!result.cancelled) {
-            handleChangeAvatar(result.uri);
+            Image.getSize(result.uri, (width, height) => {
+                if (width <= 300 && height <= 300) {
+                    handleChangeAvatar(result.uri);
+                } else {
+                    Alert.alert(i18n.t('imageDimensionsNotFit'));
+                }
+            });
         }
     };
 
@@ -374,7 +376,7 @@ function ProfileScreen() {
         <View
             style={{
                 paddingHorizontal: 22,
-                height: Dimensions.get('screen').height * 0.9,
+                // height: Dimensions.get('screen').height * 0.9,
             }}
         >
             <Searchbar
