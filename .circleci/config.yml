@@ -45,12 +45,14 @@ test: &test
     working_directory: ~/my-app
     docker:
         - image: circleci/node:14.15.1
+    environment:
+        - NODE_ENV: development
     steps:
         - checkout
 
         - run:
-              name: Force Jest Installation
-              command: yarn add jest jest-expo @testing-library/react-native --dev
+              name: Installing dependencies
+              command: yarn
 
         - run:
               name: test
