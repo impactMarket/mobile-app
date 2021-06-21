@@ -1,0 +1,1325 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for mobile-app/src/assets/i18n/pt.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">mobile-app/src/assets/i18n</a> pt.ts</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+    </div>
+    <div class='status-line low'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a>
+<a name='L258'></a><a href='#L258'>258</a>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export default {
+    testnetWarning:
+        'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
+    pendingApprovalMessage:
+        'Estamos revisando seu envio e entraremos em contato em X dias ou menos. Se você tiver outras perguntas, visite nossa Central de Ajuda para ler nosso F.A.Q.s ou enviar um tíquete.',
+    pendingApproval: 'Pedido Pendente',
+    fullDashboard: 'Painel Completo',
+    editCommunityDetails: 'Editar detalhes da comunidade',
+    viewAsPublic: 'Ver página da comunidade',
+    share: 'Partilhar',
+    beneficiaries: 'Beneficiários',
+    backers: 'Apoiantes',
+    added: 'Adicionado',
+    removed: 'Removido',
+    addBeneficiary: 'Adicionar Beneficiário',
+    add: 'Adicionar',
+    cancel: 'Fechar',
+    cancelSending: 'Cancelar',
+    confirm: 'Confirmar',
+    claimed: 'Distribuído',
+    raised: 'Angariado',
+    claim: 'Pegar',
+    manage: 'Gerir',
+    communities: 'Comunidades',
+    pay: 'Enviar',
+    wallet: 'Carteira',
+    emptyStoriesTitle: 'Ainda não criou uma story?',
+    emptyStoriesDescription: 'Não perca tempo, e comece a criar agora mesmo!',
+    profile: 'Perfil',
+    balance: 'Balanço',
+    uploadProfile: 'Atualizar foto de perfil',
+    name: 'Nome',
+    currency: 'Moeda',
+    country: 'País',
+    phoneNumber: 'Número de telemóvel',
+    logout: 'Sair',
+    recentTransactions: 'Transações Recentes',
+    nameAddressPhone: 'Endereço do destinatário',
+    nameAddressPhoneNotFound: 'Não encontrado.',
+    noteOptional: 'Nota (opcional)',
+    recent: 'Recentes',
+    remove: 'Remover',
+    beneficiaryAddress: 'Conta do Beneficiario',
+    useText: 'Usar Texto',
+    useCamera: 'Usar Camera',
+    tapToScanAgain: 'Clique para tentar de novo',
+    currentAddress: 'Endereço Atual',
+    allowCamera: 'Permitir camera',
+    moreAboutYourCommunity: 'Sobre a minha comunidade',
+    ssi: 'Índice de Autossustentabilidade',
+    ssiDescription: 'SSI mede a sustentabilidade financeira de uma comunidade.',
+    seeMore: 'Ver Mais',
+    seeLess: 'Ver Menos',
+    exploreCommunityContract: 'Ver Contrato da Comunidade',
+    edit: 'Editar',
+    create: 'Criar',
+    submit: 'Enviar',
+    needLoginToCreateCommunity:
+        'É necessário estar conectado com a app Valora para criar uma comunidade.',
+    communityDetails: 'Detalhes da Comunidade',
+    applyCommunity: 'Criar Comunidade',
+    editCommunity: 'Editar Comunidade',
+    createCommunityDescription:
+        'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
+    createCommunityAlert:
+        'Após o envio, entraremos em contato com você em 14 dias ou menos.',
+    selectCoverImage: 'Selecione Imagem de Capa',
+    contractIncrementTitle: 'Incremento de tempo total após cada pedido',
+    communityDescriptionLabel:
+        'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
+    contractDescriptionLabel:
+        'Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas de seus beneficiários. Eles poderão reclamar enquanto houver fundos disponíveis no contrato. Você terá a responsabilidade de promover sua comunidade e de arrecadar fundos para isso.\n\nSe houver outra pessoa ou organização em sua comunidade que você acredita ser mais adequada para conduzir esta iniciativa, informe-a sobre essa possibilidade e incentive-a a criar uma comunidade.',
+    changeCoverImage: 'Imagem de Capa',
+    changeProfileImage: 'Sua Imagem de Perfil',
+    changeLogoImage: 'Logomarca',
+    communityName: 'Nome da Comunidade',
+    shortDescription: 'Descrição',
+    city: 'Cidade',
+    getGPSLocation: 'Obter Localização GPS',
+    validCoordinates: 'Coordenadas Válidas',
+    email: 'Email',
+    contractDetails: 'Detalhes do Contrato',
+    claimAmount: 'Montante por Pedido',
+    aroundValue: 'Em média {{amount}}',
+    totalClaimPerBeneficiary: 'Montante total por beneficiário',
+    frequency: 'Frequência',
+    incrementalFrequency: 'Tempo Incremental',
+    hourly: 'Por Hora',
+    daily: 'Diariamente',
+    weekly: 'Semanalmente',
+    minutes: 'Minutos',
+    hours: 'Horas',
+    days: 'Dias',
+    timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
+    timeInMinutes: 'Tempo em minutos',
+    visibility: 'Visibilidade',
+    public: 'Publico',
+    private: 'Privado',
+    createCommunityNote1:
+        'Nota: Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas dos seus beneficiários. Quem cria a comunidade tem a responsabilidade de a promover, gerir e angariar fundos.',
+    createCommunityNote2:
+        'Se existir outra pessoa ou organização social na sua comunidade que seja mais adequada para gerir esta iniciativa, informe sobre esta possibilidade e incentive a criar uma comunidade.',
+    communityPicsImportance:
+        'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
+    communityRequestSending:
+        'Aguarde enquanto as informações da comunidade estão sendo carregadas ...',
+    missingFieldError:
+        'Todos os campos marcados como obrigatórios precisam ser informados. Verifique o que está faltando e tente novamente. ',
+    communityRequestError:
+        'Ocorreu um erro ao enviar as informações da comunidade. Verifique sua conexão com a Internet e tente novamente mais tarde.',
+    communityRequestErrorDetails:
+        'Se você não conseguir criar/editar esta comunidade, &lt;webview&gt;envie um tíquete&lt;/webview&gt; descrevendo o problema.',
+    communityRequestSuccess:
+        'As informações da sua comunidade foram enviadas com sucesso.',
+    failure: 'Falhou',
+    success: 'Sucesso',
+    requestNewCommunityPlaced:
+        'O seu pedido para criar uma nova comunidade foi registado! Validação a decorrer.',
+    claimBiggerThanMax: 'O valor por pedido deve ser inferior ao valor total!',
+    claimNotZero: 'Montante por Pedido deve ser superior a zero!',
+    maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
+    communityUpdated: 'Os dados da comunidade foram atualizados!',
+    submissionFailed: 'Falha no envio',
+    modalErrorTitle: 'Ooops!',
+    modalErrorDescription:
+        'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
+    errorUpdatingCommunity:
+        'Ocorreu um erro enquanto atualizava os dados da comunidade!',
+    errorCreatingCommunity:
+        'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
+    errorEditingCommunity:
+        'Ocorreu um erro enquanto era registado o pedido para editar uma comunidade!',
+    errorUploadingAvatar:
+        'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente.',
+    anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente.',
+    authErroHappenedTryAgain:
+        'Ocorreu um erro enquanto recebíamos os seus dados da valora, Por favor tente novamente.',
+    toContinuePlease: 'Para continuar, deverá',
+    impactMarketDescription:
+        'ImpactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.',
+    loginDescription:
+        'Com a carteira Valora, pode enviar e receber dinheiro usando apenas um telemóvel.',
+    step1: 'Step 1 de 2',
+    step2: 'Step 2 de 2',
+    whatIsValora: 'O que é Valora?',
+    installAndCreateValoraAccount: 'Instalar Valora e criar conta',
+    connectWithValora: 'Conectar com Valora',
+    notNow: 'Agora não',
+    beforeMovingInsertPin: 'Antes de continuar, por favor, introduza o PIN',
+    pin4Digits: 'PIN (4 digitos)',
+    continue: 'Continuar',
+    yourQRCode: 'Seu código QR',
+    youHaveDonated: 'Obrigado pelo seu donativo!',
+    errorDonating: 'Um erro ocorreu durante o donativo!',
+    addressCopiedClipboard:
+        'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
+    donate: 'Contribuir',
+    attach: 'Anexar',
+    donateWithValora: 'Doar com Valora',
+    amountSymbol: 'Montante em {{symbol}}',
+    donateSymbol: 'Contribuir ({{symbol}})',
+    close: 'Fechar',
+    youCanClaimXin: 'Poderá pegar {{amount}} em',
+    claimX: 'Pegar ', // {{amount}}
+    loading: 'A carregar...',
+    youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
+    hour: 'hora',
+    day: 'dia',
+    week: 'semana',
+    changePhoto: 'Alterar foto',
+    scanningInvalidAddress: 'Esse endereço parece inválido!',
+    select: 'Selecionar',
+    errorGettingGPSLocation: 'Ocorreu um erro ao obter a localização GPS.',
+    errorWhileLoadingRestart: 'Ocorreu eu erro ao iniciar. Por favor reinicie.',
+    userWasRemoved: '{{user}} foi removido com sucesso!',
+    errorRemovingBeneficiary:
+        'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
+    addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
+    addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
+    errorAddingBeneficiary:
+        'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
+    oneTimeWelcomeMessage1:
+        'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
+    exploreCommunities: 'Explorar Comunidades',
+    noFunds:
+        'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
+    notFundsToAddBeneficiary:
+        'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
+    claimExplained1:
+        'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
+    claimExplained2:
+        'Existe um tempo minimo que terá de esperar antes de poder pegar novamente, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
+    claimAmountHelp:
+        'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir/pegar de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
+    totalClaimPerBeneficiaryHelp:
+        'Este montante é o limite que cada beneficiário pode obter no total após várias pedidos. Por exemplo, cada beneficiário pode pegar $2 por dia até atingir um total de $1000, o que significa que cada beneficiário terá acesso a um rendimento mínimo de $2/dia durante pelo menos 16 meses. Este tempo pode aumentar se a opção de incremento de tempo dessa comunidade for superior a zero.',
+    frequencyHelp:
+        'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pegar novamente (mais $2).',
+    timeIncrementAfterClaimHelp:
+        'É possível adicionar um incremento de tempo cada vez qEue um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
+    visibilityHelp:
+        'Uma comunidade pode ser publica (necessita da aprovação da equipe da impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
+    currencyHelp: 'Escolha aqui a moeda usada entre os seus beneficiários.',
+    coverImageRequired: 'Imagem de capa é obrigatório!',
+    profileImageRequired: 'Sua Imagem de Perfil é obrigatória!',
+    communityNameRequired: 'Nome da comunidade é obrigatório!',
+    communityDescriptionRequired: 'Descrição da comunidade é obrigatório!',
+    cityRequired: 'Cidade é obrigatório!',
+    countryRequired: 'País é obrigatório!',
+    enablingGPSRequired: 'Ativar o GPS é obrigatório!',
+    emailRequired: 'Endereço de e-mail é obrigatório!',
+    emailInvalidFormat: 'Endereço de e-mail inválido!',
+    claimAmountRequired: 'Quantidade a pegar é obrigatório!',
+    maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
+    incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
+    openHelpCenter: 'Abrir o Centro de Ajuda',
+    knowMoreHelpCenter: 'Saiba mais em nosso Centro de Ajuda',
+    turnOn: 'Ativar',
+    turnOnLocationHint: 'Ative a sua localização para uma melhor experiência.',
+    tryAgain: 'Tentar Novamente',
+    payConfirmMessage:
+        "Ao selecionar 'Enviar', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
+    donateConfirmMessage:
+        "Ao selecionar 'Contribuir', irá enviar &lt;bold&gt;{{symbol}}{{amount}} (${{amountInDollars}} cUSD)&lt;/bold&gt; para {{to}}.",
+    yourDonationWillBackFor:
+        'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
+    eachBeneficiaryCanClaimXUpToY:
+        'Cada beneficiário pode aceder a ~{{claimXCCurrency}} ($&lt;bold&gt;{{claimX}}&lt;/bold&gt; cUSD) por &lt;bold&gt;{{interval}}&lt;/bold&gt;, até acumular $&lt;bold&gt;{{upToY}}&lt;/bold&gt; cUSD. A cada pedido, &lt;bold&gt;{{minIncrement}}&lt;/bold&gt; minutos são adicionados ao tempo de espera.',
+    nextTimeWillWaitClaim:
+        'Na próxima terá de esperar pelo menos {{nextWait}}. &lt;a&gt;Como funciona?&lt;/a&gt;',
+    howClaimWorks: 'Como funciona?',
+    copyContractAddress: 'Copiar Endereço do Contrato',
+    donationBiggerThanBalance:
+        'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
+    errorClaiming:
+        'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.\n\nErro: {{error}}',
+    consentAnonymousAnalytics: 'Aceitar enviar dados anonimos para análises',
+    youCreatedPrivateCommunity:
+        'Você criou uma comunidade privada. Seja bem vindo.',
+    youAreNotConnected:
+        'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
+    errorConnectToValora:
+        'Ocorreu um erro enquanto se conectava á Valora. Por favor, tente novamente.',
+    addingYourOwnAddress:
+        'Você está a tentar adicionar o seu endereço. Tem certeza?',
+    alreadyInCommunity:
+        'Você está a tentar adicionar um endereço que já está nesta comunidade!',
+    requestingPermission: 'Perdido de permissão',
+    requestCameraPermission:
+        'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
+    claimedSince: 'Recebeu {{amount}} desde {{date}}',
+    language: 'Idioma',
+    update: 'Atualizar',
+    skip: 'Mais Tarde',
+    newVersionAvailable: 'Nova versão disponível',
+    newVersionAvailableMessage:
+        'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.',
+    amountShouldBe: 'Quantidade deve ser ${{claimAmount}}+ para calcular..',
+    offline: 'Você não está conectado à internet.',
+    openClockSettings: 'Abrir definições data/hora',
+    dismiss: 'Fechar',
+    incorrectTime: 'Data/Hora incorreta',
+    incorrectTimeMessage:
+        'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}. Após terminar, reinicie o aplicativo.',
+    backWithSymbol: '&lt; Voltar',
+    age: 'Idade',
+    gender: 'Género',
+    male: 'Masculino',
+    female: 'Feminino',
+    others: 'Outros',
+    howManyChildren: 'Quantos filhos você tem?',
+    addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
+    errorAddingManager:
+        'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
+    errorRemovingManager:
+        'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
+    managerAddress: 'Conta do Gestor',
+    addManager: 'Adicionar Gestor',
+    managers: 'Gestores',
+    notAnUser: 'O endereço que está a tentar adicionar não é um utilizador.',
+    managerSince: 'Gestor desde {{date}}',
+    order: 'Ordem',
+    nearest: 'Mais próxima',
+    bigger: 'Mais beneficiários',
+    pleaseWait: 'Por favor aguarde...',
+    thankYou: 'Obrigado!',
+    donationBeingProcessed: 'O seu donativo está a ser processado...',
+    beneficiaryCommunityNoFunds:
+        'Infelizmente, a sua comunidade não tem fundos de momento! Por favor, tente mais tarde.',
+    possibleNetworkIssues: 'Posivelmente problemas de conexão.',
+    networkConnectionLost: 'A ligação à internet foi perdida.',
+    networkIssuesRPC: 'Serviço RPC indisponivel. Tente novamente mais tarde.',
+    syncIssues:
+        'Parece que ocorreu um problema de sincronização. Por favor tente novamente.',
+    possiblyValoraNotSynced:
+        "Parece que a sua valora não está sincronizada com a rede. Por favor, abra a Valora e certifique-se que não tem nenhuma mensagem como 'Connecting...'",
+    unknown: 'Desconhecido.',
+    clockNotSynced:
+        'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
+    communityWentOutOfFunds:
+        'Parece que a comunidade ficou sem fundos. Tente novamente mais tarde.',
+    notEnoughForTransaction:
+        'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
+    claimLockedUntil:
+        'Você ainda não pode pegar novamente. Ficará disponivel em {{date}}. Se habitualmente falha, certifique-se que tem a melhor ligação á internet possivel e que a sua Valora está sincronizada.',
+    search: 'Pesquisar',
+    noResults: 'Nenhum resultado!',
+    tooManyResults:
+        'Foram encontrados muitos resultados! Melhore a sua pesquisa.',
+    stories: 'Stories',
+    viewAll: 'Ver Todas',
+    notInComunity: 'Não estás associado a nenhuma comunidade!',
+    storyCongrat: 'Parabéns, sua story foi submetida!',
+    story: 'Story',
+    storyRules: 'Regras Importantes',
+    storyRulesFirstParagraph:
+        'Compartilhar suas histórias ajudará sua comunidade a arrecadar mais fundos. Não compartilhe nenhum conteúdo (texto ou imagem) que infrinja nossas regras, pois ele será excluído e você poderá ser removido de sua comunidade.',
+    storySubTitle: 'As histórias não devem conter nenhum dos seguintes:',
+    storyRulesSecondParagraph:
+        'Violência, terrorismo / extremismo violento, exploração sexual infantil, abuso / assédio, conduta de ódio, suicídio ou automutilação, mídia sensível, bens ou serviços ilegais ou regulamentados, nudez, nudez não consensual, integridade cívica, falsificação de identidade, sintético e mídia manipulada e direitos autorais e marcas registradas.',
+    newStory: 'Nova Story',
+    delete: 'Apagar',
+    reportInapropriateSuccess: 'Sua denuncia foi submetida com sucesso.',
+    reportAsInapropriated: 'Denunciar como inapropriada',
+    reportedAsInapropriated: 'Denunciada como inapropriada',
+    deleteSuccess: 'Sua story foi apagada com sucesso.',
+    reportInapropriateWarning:
+        'Tem certeza que deseja denunciar esta story como inapropriada?',
+    deleteWarning: 'Tens certeza que quer apagar esta story?',
+    storyFailure: 'Erro ao submeter sua story!',
+    emptyStoryFailure:
+        'Por favor, assegure que a sua story possui texto ou imagem.',
+    storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
+    descriptionCopiedClipboard:
+        'Descrição copiada para a área de transferência!',
+    report: 'Relatório',
+    reportIlegal: {
+        title: 'Denunciar atividade ilegal',
+        message:
+            'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
+        btnText: 'Reportar',
+        label: 'Descreva a potencial atividade ilegal',
+        alertCongrat: 'Parabéns, seu relatório foi submetido!',
+        alertFailure: 'Erro ao submeter seu relatório!',
+    },
+    ubiParamsUpdated:
+        'Parâmetros UBI da sua comunidade foram atualizados com sucesso!',
+    ubiParams: 'Parâmetros UBI',
+    ubiParamsChanged:
+        'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
+    acceptNewUbiParams: 'Aceitar novos parâmetros',
+    newManagerRules: {
+        title: 'Regras Importantes',
+        btnText: 'Eu li e compreendo',
+        first:
+            'Como gestor, você terá a responsabilidade de selecionar quais beneficiários terão acesso à renda básica. Quanto mais pessoas tiverem acesso em sua comunidade, mais difícil será ter fundos disponíveis para todos o tempo todo, então tome cuidado ao escolher quem pode / deve se beneficiar e realmente precisa disso. ',
+        second:
+            'Este aplicativo usa tecnologia blockchain para identificar fraude em potencial e uso de fundos suspeitos, Para que tudo o que aconteça, incluindo todas as transações, seja público e transparente.',
+        third:
+            'O seu perfil pode ser bloqueado e os fundos podem ser impedidos de serem distribuídos aos beneficiários se atividades suspeitas forem encontradas ou relatadas. Isso pode resultar na remoção de sua comunidade e organização do sistema. ',
+        fourth: 'Não adicione beneficiários que já foram removidos.',
+        fifth: 'Não peça dinheiro aos beneficiários.',
+        sixth: 'Não adicione mais de uma conta por pessoa e dispositivo.',
+        seventh: 'As informações do seu perfil devem ser completas e precisas.',
+        warning:
+            'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
+    },
+    newBeneficiaryRules: {
+        title: 'Regras importantes',
+        btnText: 'Eu li e entendo',
+        first:
+            'Este dinheiro é só seu e incondicional para usar no que você precisar.',
+        second:
+            'Use apenas 1 conta por pessoa. Usar mais contas por pessoa / dispositivo irá bloqueá-lo e sua comunidade será identificada como um risco para os doadores enviarem fundos. ',
+        third:
+            'Recomendamos que você tenha seu perfil preenchido com informações verdadeiras.',
+        fourth: 'Não compartilhe sua chave de conta Valora com ninguém.',
+        fifth:
+            'Todas as atividades e transações são públicas e transparentes, então é mais fácil para qualquer pessoa identificar e verificar possíveis fraudes. Uma vez que o sistema detecta uma atividade fraudulenta em potencial, os fundos podem ser cortados para toda a comunidade. ',
+        sixth:
+            'Os fundos são alocados e priorizados para as comunidades com base em seus níveis de risco e atividades suspeitas.',
+        seventh:
+            'Se seus gerentes lhe pedirem dinheiro para participar do programa, informe-nos. Mais uma vez, este é um dinheiro incondicional para você usar no que precisar. ',
+        warning:
+            'Se você encontrar alguma atividade suspeita, avise-nos, pois será considerada uma ação de boa fé que pode evitar que toda a comunidade seja afetada por causa de alguns atores mal-intencionados.',
+    },
+    suspiciousActivityDetected: 'Atividade suspeita detectada',
+    suspiciousDescription:
+        'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
+    blockedAccountTitle: 'Conta Bloqueada',
+    blockedAccountDescription:
+        'Sua conta foi bloqueada. Entre em contato com seu gerente se achar que foi um engano.',
+    welcome: 'Bem Vindo!',
+    welcomeManagerTitle: 'Você agora é um gestor da {{ communityName }}',
+    welcomeBeneficiayTitle:
+        'Você agora é um beneficiário da {{ communityName }}',
+    welcomeBeneficiaryDecription:
+        'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
+    createStory: 'Criar Story',
+    myStories: 'Minhas Stories',
+    userNotRegistered:
+        'O utilizador que está a tentar adicionar, não está registado!',
+    unexpectedError:
+        'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
+    createCommunityView: {
+        errorUploadCover: 'Ocorreu um erro ao carregar a imagem da comunidade!',
+        errorCreating:
+            'Ocorreu um erro ao submeter o pedido para criar a comunidade! Por favor, tente novamente.',
+        errorLoading:
+            'Ocorreu um erro ao carregar a proxima página. Por favor, reinicie o aplicativo.',
+    },
+    profileView: {
+        errorUploadAvatar: 'Ocorreu um erro ao carregar a sua foto de perfil!',
+    },
+};
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+                at Mon Jun 21 2021 15:16:34 GMT+0100 (Western European Summer Time)
+            </div>
+        </div>
+        <script src="../../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
+    </body>
+</html>
+    
