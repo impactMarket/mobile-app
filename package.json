@@ -35,6 +35,17 @@
             "!**/jest.setup.js"
         ]
     },
+    "lint-staged": {
+        "*.(ts|tsx)": [
+            "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
+            "git add"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
     "engines": {
         "node": "14.15.1"
     },
@@ -130,6 +141,9 @@
         "eslint": "7.23.0",
         "eslint-config-prettier": "8.1.0",
         "eslint-config-universe": "7.0.1",
+
+        "eslint-plugin-tsc": "^2.0.0",
+        "husky": "^6.0.0",
         "jest": "^27.0.4",
         "jest-expo": "^41.0.0",
         "lint-staged": ">=10",
