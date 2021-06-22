@@ -188,7 +188,6 @@ function CommunityManagerScreen() {
                         <BaseCommunity community={_community}>
                             <View style={styles.container}>
                                 <Beneficiaries
-                                    testID="beneficiariesCard"
                                     beneficiaries={
                                         _community.state.beneficiaries
                                     }
@@ -204,7 +203,6 @@ function CommunityManagerScreen() {
                                     }
                                 />
                                 <Managers
-                                    testID="managersCard"
                                     managers={_community.state.managers}
                                 />
                                 <CommuntyStatus community={_community} />

@@ -23,10 +23,14 @@ jest.mock('@react-navigation/stack');
 jest.mock('expo-constants');
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
-jest.mock('@react-navigation/native', () => ({
-    useNavigation: () => jest.fn(),
-    useFocusEffect: () => jest.fn(),
-    useNavigationParam: jest.fn(
-        jest.requireActual('@react-navigation/native').useNavigationParam
-    ),
-}));
+jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native');
+    return {
+        ...actualNav,
+        useFocusEffect: () => jest.fn(),
+        useNavigation: () => ({
+            navigate: jest.fn(),
+            dispatch: jest.fn(),
+        }),
+    };
+});

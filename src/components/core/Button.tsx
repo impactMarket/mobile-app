@@ -14,6 +14,7 @@ interface IButtonProps {
     style?: StyleProp<ViewStyle>;
     contentStyle?: StyleProp<ViewStyle>;
     labelStyle?: StyleProp<TextStyle>;
+    testID?: string;
 }
 interface IButtonState {}
 
@@ -58,6 +59,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
         }
         return (
             <RNPButton
+                testID={this.props.testID}
                 mode="contained"
                 uppercase={false}
                 icon={icon}

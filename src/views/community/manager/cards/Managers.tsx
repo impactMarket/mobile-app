@@ -9,16 +9,15 @@ import { Headline } from 'react-native-paper';
 
 interface IManagersProps {
     managers: number | undefined;
-    testID: string | null;
 }
 function Managers(props: IManagersProps) {
     const navigation = useNavigation();
 
-    const { managers, testID } = props;
+    const { managers } = props;
 
     return (
         <View>
-            <Card testID={testID} style={{ marginTop: 16 }}>
+            <Card testID="managersCard" style={{ marginTop: 16 }}>
                 <Card.Content>
                     <Headline
                         style={{
@@ -34,6 +33,7 @@ function Managers(props: IManagersProps) {
                     </Headline>
                     <Button
                         modeType="gray"
+                        testID="addedManagersBtn"
                         bold
                         disabled={managers === 0}
                         style={{ marginVertical: 5 }}
@@ -45,6 +45,7 @@ function Managers(props: IManagersProps) {
                     </Button>
                     <Button
                         modeType="green"
+                        testID="addManagersBtn"
                         bold
                         style={{
                             marginVertical: 5,

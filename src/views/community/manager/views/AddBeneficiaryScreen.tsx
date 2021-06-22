@@ -9,11 +9,11 @@ import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import SuspiciousActivity from '../cards/SuspiciousActivity';
-import * as Sentry from 'sentry-expo';
 
+import SuspiciousActivity from '../cards/SuspiciousActivity';
 import ScanQR from './ScanQR';
 
 function AddBeneficiaryScreen() {
@@ -189,6 +189,7 @@ function AddBeneficiaryScreen() {
                 >
                     <TextInput
                         mode="flat"
+                        testID="beneficiaryAddressInput"
                         underlineColor="transparent"
                         style={{
                             width: '80%',
@@ -215,6 +216,7 @@ function AddBeneficiaryScreen() {
                 <Divider />
                 <Button
                     modeType="green"
+                    testID="addBeneficiaryBtn"
                     style={{
                         marginVertical: 10,
                         marginHorizontal: 20,

@@ -13,7 +13,7 @@ interface IBeneficiariesProps {
     removedBeneficiaries: number | undefined;
     hasFundsToNewBeneficiary: boolean;
     isSuspeciousDetected: boolean | null;
-    testID: string | null;
+    testID?: string | null;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
@@ -24,12 +24,11 @@ function Beneficiaries(props: IBeneficiariesProps) {
         removedBeneficiaries,
         hasFundsToNewBeneficiary,
         isSuspeciousDetected,
-        testID,
     } = props;
 
     return (
-        <View>
-            <Card testID={testID}>
+        <View testID="beneficiariesCard">
+            <Card>
                 <Card.Content>
                     <Headline
                         style={{
