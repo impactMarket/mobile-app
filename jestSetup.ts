@@ -25,6 +25,7 @@ jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
 jest.mock('@react-navigation/native', () => ({
     useNavigation: () => jest.fn(),
+    useFocusEffect: () => jest.fn(),
     useNavigationParam: jest.fn(
         jest.requireActual('@react-navigation/native').useNavigationParam
     ),

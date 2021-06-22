@@ -9,15 +9,16 @@ import { Headline } from 'react-native-paper';
 
 interface IManagersProps {
     managers: number | undefined;
+    testID: string | null;
 }
 function Managers(props: IManagersProps) {
     const navigation = useNavigation();
 
-    const { managers } = props;
+    const { managers, testID } = props;
 
     return (
         <View>
-            <Card style={{ marginTop: 16 }}>
+            <Card testID={testID} style={{ marginTop: 16 }}>
                 <Card.Content>
                     <Headline
                         style={{

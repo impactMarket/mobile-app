@@ -13,6 +13,7 @@ interface IBeneficiariesProps {
     removedBeneficiaries: number | undefined;
     hasFundsToNewBeneficiary: boolean;
     isSuspeciousDetected: boolean | null;
+    testID: string | null;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {
@@ -23,11 +24,12 @@ function Beneficiaries(props: IBeneficiariesProps) {
         removedBeneficiaries,
         hasFundsToNewBeneficiary,
         isSuspeciousDetected,
+        testID,
     } = props;
 
     return (
         <View>
-            <Card>
+            <Card testID={testID}>
                 <Card.Content>
                     <Headline
                         style={{
@@ -43,6 +45,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     </Headline>
                     <Button
                         modeType="gray"
+                        testID="addedBeneficiaryBtn"
                         bold
                         disabled={beneficiaries === 0}
                         style={{ marginVertical: 5 }}
@@ -54,6 +57,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                     </Button>
                     <Button
                         modeType="gray"
+                        testID="removedBeneficiaryBtn"
                         bold
                         disabled={removedBeneficiaries === 0}
                         style={{ marginVertical: 5 }}
@@ -67,6 +71,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         {hasFundsToNewBeneficiary ? (
                             <Button
                                 modeType="green"
+                                testID="addBeneficiaryBtn"
                                 bold
                                 style={{
                                     marginVertical: 5,
@@ -80,6 +85,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         ) : (
                             <Button
                                 modeType="default"
+                                testID="noFundsBtn"
                                 icon="alert"
                                 style={{
                                     marginVertical: 5,
@@ -97,7 +103,9 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                 {i18n.t('addBeneficiary')}
                             </Button>
                         )}
-                        {isSuspeciousDetected && <SuspiciousActivity />}
+                        {isSuspeciousDetected && (
+                            <SuspiciousActivity testID="suspiciousActivityView" />
+                        )}
                     </View>
                 </Card.Content>
             </Card>

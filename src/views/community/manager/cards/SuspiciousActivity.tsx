@@ -12,9 +12,9 @@ import i18n from 'assets/i18n';
 // colors
 import { ipctColors } from 'styles/index';
 
-function SuspiciousActivity() {
+function SuspiciousActivity({ props }) {
     return (
-        <Card style={styles.cardContainer}>
+        <Card testID={props.testID} style={styles.cardContainer}>
             <View style={styles.headlineContainer}>
                 <WarningRedTriangle />
                 <Headline style={styles.headerTitle}>
