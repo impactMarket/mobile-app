@@ -9,19 +9,20 @@ import Managers from '../cards/Managers';
 import CommunityManagerScreen from '../index';
 import AddBeneficiaryScreen from '../views/AddBeneficiaryScreen';
 
-const mockedDispatch = jest.fn();
-
 jest.mock('@react-navigation/native', () => {
-    const actualNav = jest.requireActual('@react-navigation/native');
     return {
-        ...actualNav,
+        ...jest.requireActual('@react-navigation/native'),
+        useFocusEffect: () => jest.fn(),
         useNavigation: () => ({
             navigate: jest.fn(),
-            dispatch: mockedDispatch,
+            dispatch: jest.fn(),
         }),
     };
 });
+
 describe('CommunityManager Screen Unit tests', () => {
+    jest.useFakeTimers();
+
     const mockedState = {
         kit: { teste: '' },
         userCurrency: 'USD',
@@ -187,15 +188,18 @@ describe('CommunityManager Screen Unit tests', () => {
     }
 
     function thenNavigateToTheAddedBeneficiaryScreen() {
-        expect(mockedDispatch).toHaveBeenCalledWith(Screens.AddedBeneficiary);
+        expect(navigate).toHaveBeenCalledTimes(1);
+        // expect(mockedDispatch).toHaveBeenCalledWith(Screens.AddedBeneficiary);
     }
 
     function thenNavigateToTheRemovedBeneficiaryScreen() {
-        expect(mockedDispatch).toHaveBeenCalledWith(Screens.RemovedBeneficiary);
+        expect(navigate).toHaveBeenCalledTimes(1);
+        // expect(mockedDispatch).toHaveBeenCalledWith(Screens.RemovedBeneficiary);
     }
 
     function thenNavigateToTheAddBeneficiaryScreen() {
-        expect(mockedDispatch).toHaveBeenCalledWith(Screens.AddBeneficiary);
+        expect(navigate).toHaveBeenCalledTimes(1);
+        // expect(mockedDispatch).toHaveBeenCalledWith(Screens.AddBeneficiary);
     }
 
     function givenAddBeneficiaryScreen(
