@@ -1,21 +1,48 @@
-import combinedReducer from 'helpers/redux/reducers';
-import React from 'react';
+import { assert } from 'chai';
+import { shallow, ShallowWrapper, configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import { clear } from 'jest-date-mock';
+import * as React from 'react';
 import { Provider } from 'react-redux';
-import { create } from 'react-test-renderer';
-import { createStore } from 'redux';
+import configureMockStore from 'redux-mock-store';
 
 import BeneficiaryScreen from '../index';
 
-const store = createStore(combinedReducer);
+const mockStore = configureMockStore();
+const store = mockStore({});
 
-const tree = create(
-    <Provider store={store}>
-        <BeneficiaryScreen />
-    </Provider>
-).toJSON();
+configure({ adapter: new Adapter() });
 
 describe('Beneficiary screen test', () => {
-    test('should render BeneficiaryScreen correctly', () => {
-        expect(tree).toMatchSnapshot();
+    let wrapper: ShallowWrapper;
+    let navigation: any;
+
+    beforeEach(() => {
+        jest.resetAllMocks();
     });
+
+    afterEach(() => {
+        clear();
+    });
+
+    it('should render beneficiary screen correctly', () => {
+        givenComponent();
+        thenItRenderProperly();
+    });
+
+    it('should exists', function () {});
+
+    function givenComponent() {
+        assert.isDefined(BeneficiaryScreen);
+
+        wrapper = shallow(
+            <Provider store={store}>
+                <BeneficiaryScreen />
+            </Provider>
+        );
+    }
+
+    function thenItRenderProperly() {
+        expect(wrapper).toMatchSnapshot();
+    }
 });

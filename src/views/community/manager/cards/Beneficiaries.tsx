@@ -13,7 +13,6 @@ interface IBeneficiariesProps {
     removedBeneficiaries: number | undefined;
     hasFundsToNewBeneficiary: boolean;
     isSuspeciousDetected: boolean | null;
-    testID?: string | null;
 }
 
 function Beneficiaries(props: IBeneficiariesProps) {

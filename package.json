@@ -10,7 +10,8 @@
         "prettier": "prettier --write ./**/*.{ts,tsx}",
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
         "test": "jest --maxWorkers=50%",
-        "test:watch": "jest --watch --maxWorkers=25%"
+        "test:watch": "jest --watch --maxWorkers=25%",
+        "test:clean": "jest --clearCache"
     },
     "jest": {
         "preset": "jest-expo",
@@ -50,8 +51,9 @@
         "node": "14.15.1"
     },
     "dependencies": {
+        "-": "^0.0.1",
         "@celo/dappkit": "1.0.1",
-        "@react-native-async-storage/async-storage": "1.13.2",
+        "@react-native-async-storage/async-storage": "^1.15.5",
         "@react-native-community/masked-view": "0.1.10",
         "@react-native-community/netinfo": "5.9.7",
         "@react-navigation/bottom-tabs": "5.11.2",
@@ -123,12 +125,16 @@
     },
     "devDependencies": {
         "@babel/core": "~7.13.14",
-        "@testing-library/react-native": "^7.2.0",
+        "@types/": "react-native-async-storage/async-storage",
+        "@types/chai": "^4.2.19",
+        "@types/enzyme": "^3.10.8",
+        "@types/enzyme-adapter-react-16": "^1.0.6",
         "@types/jest": "^26.0.23",
         "@types/react": "~16.9.35",
         "@types/react-native": "0.63.40",
         "@types/react-redux": "7.1.16",
         "@types/react-test-renderer": "^17.0.1",
+        "@types/redux-mock-store": "^1.0.2",
         "@types/semver": "7.3.4",
         "@types/styled-components": "5.1.9",
         "@typescript-eslint/eslint-plugin": "4.20.0",
@@ -136,20 +142,24 @@
         "babel-plugin-inline-dotenv": "1.6.0",
         "babel-plugin-module-resolver": "4.1.0",
         "babel-preset-expo": "8.3.0",
-        "chai": "4.3.4",
+        "chai": "^4.3.4",
         "dotenv": "8.2.0",
+        "enzyme": "^3.11.0",
+        "enzyme-adapter-react-16": "^1.15.6",
         "eslint": "7.23.0",
         "eslint-config-prettier": "8.1.0",
         "eslint-config-universe": "7.0.1",
-
         "eslint-plugin-tsc": "^2.0.0",
         "husky": "^6.0.0",
         "jest": "^27.0.4",
+        "jest-date-mock": "^1.0.8",
         "jest-expo": "^41.0.0",
+        "jest-fetch-mock": "^3.0.3",
         "lint-staged": ">=10",
         "prettier": "2.2.1",
         "react-native-bundle-visualizer": "2.2.1",
         "react-test-renderer": "^17.0.2",
+        "redux-mock-store": "^1.5.4",
         "typescript": "~4.0.0"
     },
     "resolutions": {
