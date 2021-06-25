@@ -104,3 +104,5 @@ exports[`Splash screen test should render SplashScreen correctly 1`] = `
   </RNSVGSvgView>
 </View>
 `;
+
+exports[`Splash screen test suite should render Splash screen correctly 1`] = `ShallowWrapper {}`;

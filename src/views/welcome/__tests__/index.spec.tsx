@@ -1,24 +1,37 @@
-import combinedReducer from 'helpers/redux/reducers';
+import { assert } from 'chai';
+import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { create } from 'react-test-renderer';
-import { createStore } from 'redux';
+import configureMockStore from 'redux-mock-store';
 
 import Welcome from '../index';
 
-const store = createStore(combinedReducer);
+const mockStore = configureMockStore();
+const store = mockStore({});
 
-const tree = create(
-    <Provider store={store}>
-        <Welcome />
-    </Provider>
-).toJSON();
-describe('Welcome screen test', () => {
-    test('should render WelcomeScreen correctly', () => {
-        expect(tree).toMatchSnapshot();
+describe('Welcome screen test suite', () => {
+    let screen: ShallowWrapper<any>;
+
+    beforeEach(() => {
+        jest.resetAllMocks();
     });
 
-    test('should render welcomeBtnContainer correctly', () => {
-        expect('welcomeBtnContainer').toBeDefined();
+    it('should render Welcome screen correctly', () => {
+        givenScreen();
+        thenItRenderProperly();
     });
+
+    function givenScreen() {
+        assert.isDefined(Welcome);
+
+        screen = shallow(
+            <Provider store={store}>
+                <Welcome />
+            </Provider>
+        );
+    }
+
+    function thenItRenderProperly() {
+        expect(screen).toMatchSnapshot();
+    }
 });

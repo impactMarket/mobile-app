@@ -1,23 +1,45 @@
-import combinedReducer from 'helpers/redux/reducers';
+import { assert } from 'chai';
+import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { create } from 'react-test-renderer';
-import { createStore } from 'redux';
+import configureMockStore from 'redux-mock-store';
 
 import CommunityDetailsScreen from '../index';
 
-const store = createStore(combinedReducer);
+const mockStore = configureMockStore();
+const store = mockStore({});
 
-const routeParams = { communityId: 2, openDonate: true, fromStories: false };
+describe('Community Details screen test suite', () => {
+    let screen: ShallowWrapper<any>;
 
-const tree = create(
-    <Provider store={store}>
-        <CommunityDetailsScreen props={routeParams} />
-    </Provider>
-).toJSON();
+    let route: {
+        params: {
+            communityId: 2;
+            openDonate?: true;
+            fromStories?: false;
+        };
+    };
 
-describe('CommunityManager screen test', () => {
-    test('should render CommunityDetailsScreen correctly', () => {
-        expect(tree).toMatchSnapshot();
+    beforeEach(() => {
+        jest.resetAllMocks();
     });
+
+    it('should render CommunityDetails screen correctly', () => {
+        givenScreen();
+        thenItRenderProperly();
+    });
+
+    function givenScreen() {
+        assert.isDefined(CommunityDetailsScreen);
+
+        screen = shallow(
+            <Provider store={store}>
+                <CommunityDetailsScreen route={route} />
+            </Provider>
+        );
+    }
+
+    function thenItRenderProperly() {
+        expect(screen).toMatchSnapshot();
+    }
 });

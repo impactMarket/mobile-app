@@ -1,21 +1,37 @@
-import combinedReducer from 'helpers/redux/reducers';
+import { assert } from 'chai';
+import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { create } from 'react-test-renderer';
-import { createStore } from 'redux';
+import configureMockStore from 'redux-mock-store';
 
 import StoriesScreen from '../index';
 
-const store = createStore(combinedReducer);
+const mockStore = configureMockStore();
+const store = mockStore({});
 
-const tree = create(
-    <Provider store={store}>
-        <StoriesScreen />
-    </Provider>
-).toJSON();
+describe('Stories screen test suite', () => {
+    let screen: ShallowWrapper<any>;
 
-describe('Stories screen test', () => {
-    test('should render StoriesScreen correctly', () => {
-        expect(tree).toMatchSnapshot();
+    beforeEach(() => {
+        jest.resetAllMocks();
     });
+
+    it('should render Stories screen correctly', () => {
+        givenScreen();
+        thenItRenderProperly();
+    });
+
+    function givenScreen() {
+        assert.isDefined(StoriesScreen);
+
+        screen = shallow(
+            <Provider store={store}>
+                <StoriesScreen />
+            </Provider>
+        );
+    }
+
+    function thenItRenderProperly() {
+        expect(screen).toMatchSnapshot();
+    }
 });

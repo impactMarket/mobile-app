@@ -1,8 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import { assert } from 'chai';
-import { shallow, ShallowWrapper, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import { Screens } from 'helpers/constants';
+import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
@@ -14,8 +12,6 @@ import AddBeneficiaryScreen from '../views/AddBeneficiaryScreen';
 
 const mockStore = configureMockStore();
 const store = mockStore({});
-
-configure({ adapter: new Adapter() });
 
 describe('CommunityManager test suite', () => {
     const navigation = {

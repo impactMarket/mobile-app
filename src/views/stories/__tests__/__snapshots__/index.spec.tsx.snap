@@ -39,3 +39,5 @@ exports[`Stories screen test should render StoriesScreen correctly 1`] = `
   <View />
 </RCTScrollView>
 `;
+
+exports[`Stories screen test suite should render Stories screen correctly 1`] = `ShallowWrapper {}`;

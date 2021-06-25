@@ -1344,3 +1344,5 @@ exports[`Welcome screen test should render WelcomeScreen correctly 1`] = `
   </View>
 </View>
 `;
+
+exports[`Welcome screen test suite should render Welcome screen correctly 1`] = `ShallowWrapper {}`;

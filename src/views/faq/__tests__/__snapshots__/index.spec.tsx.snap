@@ -11,3 +11,5 @@ exports[`FAQ screen test should render FAQScreen correctly 1`] = `
   <View />
 </RCTScrollView>
 `;
+
+exports[`FAQ screen test suite should render FAQ screen correctly 1`] = `ShallowWrapper {}`;

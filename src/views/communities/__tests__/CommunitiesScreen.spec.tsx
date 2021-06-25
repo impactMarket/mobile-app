@@ -4,29 +4,29 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 
-import FAQScreen from '../index';
+import CommunitiesScreen from '../index';
 
 const mockStore = configureMockStore();
 const store = mockStore({});
 
-describe('FAQ screen test suite', () => {
+describe('Communities screen test suite', () => {
     let screen: ShallowWrapper<any>;
 
     beforeEach(() => {
         jest.resetAllMocks();
     });
 
-    it('should render FAQ screen correctly', () => {
+    it('should render Communities screen correctly', () => {
         givenScreen();
         thenItRenderProperly();
     });
 
     function givenScreen() {
-        assert.isDefined(FAQScreen);
+        assert.isDefined(CommunitiesScreen);
 
         screen = shallow(
             <Provider store={store}>
-                <FAQScreen />
+                <CommunitiesScreen />
             </Provider>
         );
     }

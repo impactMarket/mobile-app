@@ -1,12 +1,37 @@
+import { assert } from 'chai';
+import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
-import { create } from 'react-test-renderer';
+import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
 
 import SplashScreen from '../index';
 
-const tree = create(<SplashScreen />).toJSON();
+const mockStore = configureMockStore();
+const store = mockStore({});
 
-describe('Splash screen test', () => {
-    test('should render SplashScreen correctly', () => {
-        expect(tree).toMatchSnapshot();
+describe('Splash screen test suite', () => {
+    let screen: ShallowWrapper<any>;
+
+    beforeEach(() => {
+        jest.resetAllMocks();
     });
+
+    it('should render Splash screen correctly', () => {
+        givenScreen();
+        thenItRenderProperly();
+    });
+
+    function givenScreen() {
+        assert.isDefined(SplashScreen);
+
+        screen = shallow(
+            <Provider store={store}>
+                <SplashScreen />
+            </Provider>
+        );
+    }
+
+    function thenItRenderProperly() {
+        expect(screen).toMatchSnapshot();
+    }
 });
