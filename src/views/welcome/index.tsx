@@ -64,6 +64,7 @@ function Welcome() {
             >
                 <Button
                     modeType="green"
+                    testID="connectWithValora"
                     bold
                     style={{
                         width: '100%',
@@ -82,6 +83,7 @@ function Welcome() {
                 </Button>
                 <Button
                     modeType="gray"
+                    testID="exploreCommunities"
                     bold
                     style={{
                         marginTop: 16,
