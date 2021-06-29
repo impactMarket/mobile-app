@@ -59,9 +59,9 @@ function Beneficiaries(props: IBeneficiariesProps) {
                         bold
                         disabled={removedBeneficiaries === 0}
                         style={{ marginVertical: 5 }}
-                        onPress={() =>
-                            navigation.navigate(Screens.RemovedBeneficiary)
-                        }
+                        onPress={() => {
+                            navigation.navigate(Screens.RemovedBeneficiary);
+                        }}
                     >
                         {i18n.t('removed')} ({removedBeneficiaries})
                     </Button>
@@ -74,9 +74,9 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                 style={{
                                     marginVertical: 5,
                                 }}
-                                onPress={() =>
-                                    navigation.navigate(Screens.AddBeneficiary)
-                                }
+                                onPress={() => {
+                                    navigation.navigate(Screens.AddBeneficiary);
+                                }}
                             >
                                 {i18n.t('addBeneficiary')}
                             </Button>

@@ -1,15 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FAQ screen test should render FAQScreen correctly 1`] = `
-<RCTScrollView
-  style={
-    Object {
-      "paddingHorizontal": 20,
-    }
-  }
->
-  <View />
-</RCTScrollView>
-`;
-
 exports[`FAQ screen test suite should render FAQ screen correctly 1`] = `ShallowWrapper {}`;

@@ -16,7 +16,7 @@
     "jest": {
         "preset": "jest-expo",
         "setupFiles": [
-            "./jestSetup.ts"
+            "./jestSetup.js"
         ],
         "moduleNameMapper": {
             "\\.(jpg|jpeg|png|gif)$": "<rootDir>/node_modules/react-native/Libraries/Image/RelativeImageStub"

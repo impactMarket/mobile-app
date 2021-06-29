@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
 import { assert } from 'chai';
 import { shallow, ShallowWrapper } from 'enzyme';
-import React from 'react';
+import { Screens } from 'helpers/constants';
+import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 
@@ -10,19 +11,56 @@ import Managers from '../cards/Managers';
 import CommunityManagerScreen from '../index';
 import AddBeneficiaryScreen from '../views/AddBeneficiaryScreen';
 
-const mockStore = configureMockStore();
-const store = mockStore({});
-
 describe('CommunityManager test suite', () => {
-    const navigation = {
-        navigate: jest.fn(),
-    };
-
+    const navigate = jest.fn();
     const onChange = jest.fn();
     const handleModalScanQR = jest.fn();
 
     let screen: ShallowWrapper<any>;
     let card: ShallowWrapper<any>;
+
+    const mockStore = configureMockStore();
+    const store = mockStore({
+        kit: { teste: '' },
+        userCurrency: 'USD',
+        userAddress: '0xc1912fEDSKJSA59aE311',
+        rates: ['1'],
+        communityContract: '0xc1912fEDSKJSA59aE311',
+        hasManagerAcceptedRulesAlready: true,
+        user: {
+            community: {
+                contract: '0xc1912fEDSKJSA59aE311',
+                metadata: {
+                    id: 2,
+                    publicId: '3',
+                    requestByAddress: '0xc1912fEDSKJSA59aE311',
+                    contractAddress: '0xc1912fEDSKJSA59aE311',
+                    name: 'Comunidade Teste',
+                    description: 'description test',
+                    descriptionEn: '',
+                    language: 'EN',
+                    currency: 'USD',
+                    city: 'Lisbon',
+                    country: 'Portugal',
+                    gps: {},
+                    email: 'mail',
+                    visibility: 'public',
+                    coverMediaId: 3,
+                    status: 'valid',
+                    started: new Date(),
+
+                    // timestamps
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                },
+            },
+        },
+    });
+
+    jest.mock('react-redux', () => ({
+        useDispatch: () => {},
+        useSelector: jest.fn().mockImplementation((func) => func()),
+    }));
 
     const event = {
         target: {
@@ -32,7 +70,8 @@ describe('CommunityManager test suite', () => {
 
     beforeEach(() => {
         jest.resetAllMocks();
-        (useNavigation as jest.Mock).mockReturnValue({ navigation });
+        (useEffect as jest.Mock).mockImplementation((f: any) => f());
+        (useNavigation as jest.Mock).mockReturnValue({ navigate });
     });
 
     it('should render CommunityManager screen correctly', () => {
@@ -54,28 +93,28 @@ describe('CommunityManager test suite', () => {
         givenBeneficiariesCard();
         thenCardRenderProperly();
         whenPressingButton('addBeneficiaryBtn');
-        // thenAppNavigateToScreen(Screens.AddBeneficiary);
+        thenAppNavigateToScreen(Screens.AddBeneficiary);
     });
 
     it('should navigate to Added Beneficiary screen when addedBeneficiary button is pressed', () => {
         givenBeneficiariesCard();
         thenCardRenderProperly();
         whenPressingButton('addedBeneficiaryBtn');
-        // thenAppNavigateToScreen(Screens.AddedBeneficiary);
+        thenAppNavigateToScreen(Screens.AddedBeneficiary);
     });
 
     it('should navigate to Removed Beneficiary screen when removedBeneficiary button is pressed', () => {
         givenBeneficiariesCard();
         thenCardRenderProperly();
         whenPressingButton('removedBeneficiaryBtn');
-        // thenAppNavigateToScreen(Screens.RemovedBeneficiary);
+        thenAppNavigateToScreen(Screens.RemovedBeneficiary);
     });
 
     it('should add Beneficiary when address is valid', () => {
         givenBeneficiariesCard();
         thenCardRenderProperly();
         whenPressingButton('addBeneficiaryBtn');
-        // thenAppNavigateToScreen(Screens.AddBeneficiary);
+        thenAppNavigateToScreen(Screens.AddBeneficiary);
         // givenAddBeneficiaryScreen();
         // whenInformValoraAddressToAdd();
         // whenPressingButton('addBeneficiaryBtn');
@@ -154,9 +193,9 @@ describe('CommunityManager test suite', () => {
 
     function thenAppNavigateToScreen(screen: string, params?: any) {
         if (params) {
-            expect(navigation.navigate).toHaveBeenCalledWith(screen, params);
+            expect(navigate).toHaveBeenCalledWith(screen, params);
         } else {
-            expect(navigation.navigate).toHaveBeenCalledWith(screen);
+            expect(navigate).toHaveBeenCalledWith(screen);
         }
     }
 });

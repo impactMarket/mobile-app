@@ -8,6 +8,9 @@ import 'react-native-gesture-handler/jestSetup';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+// Some modules depend on self, which is not available in RN.
+if (typeof global.self === 'undefined') global.self = global;
+
 jest.mock('react-native-gesture-handler', () => {
     // eslint-disable-next-line global-require
     const View = require('react-native/Libraries/Components/View/View');
@@ -72,14 +75,6 @@ jest.mock('react-native-reanimated', () =>
     require('react-native-reanimated/mock')
 );
 
-jest.mock('react-native-reanimated', () => {
-    const Reanimated = require('react-native-reanimated/mock');
-
-    Reanimated.default.call = () => {};
-
-    return Reanimated;
-});
-
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 
 jest.useFakeTimers();
@@ -104,13 +99,13 @@ jest.mock('react', () => ({
     useRef: jest.fn().mockReturnValue({ currend: {} }),
 }));
 
-jest.mock('@react-navigation/native', () => {
-    return {
-        ...jest.requireActual('@react-navigation/native'),
-        useFocusEffect: () => jest.fn(),
-        useNavigation: () => ({
-            navigate: jest.fn(),
-            dispatch: jest.fn(),
-        }),
-    };
-});
+// jest.mock('@react-navigation/native', () => {
+//     return {
+//         ...jest.requireActual('@react-navigation/native'),
+//         useFocusEffect: () => jest.fn(),
+//         useNavigation: () => ({
+//             navigate: jest.fn(),
+//             dispatch: jest.fn(),
+//         }),
+//     };
+// });
