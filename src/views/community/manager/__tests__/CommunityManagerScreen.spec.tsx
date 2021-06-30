@@ -115,6 +115,8 @@ describe('CommunityManager test suite', () => {
         thenCardRenderProperly();
         whenPressingButton('addBeneficiaryBtn');
         thenAppNavigateToScreen(Screens.AddBeneficiary);
+
+        // TODO: Check the state drilldown problem
         // givenAddBeneficiaryScreen();
         // whenInformValoraAddressToAdd();
         // whenPressingButton('addBeneficiaryBtn');

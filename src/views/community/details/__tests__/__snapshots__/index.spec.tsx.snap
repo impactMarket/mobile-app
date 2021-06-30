@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Community Details screen test suite should open Donation modal 1`] = `ShallowWrapper {}`;
+
 exports[`Community Details screen test suite should render CommunityDetails screen correctly 1`] = `ShallowWrapper {}`;

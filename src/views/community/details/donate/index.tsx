@@ -21,6 +21,7 @@ export default function Donate(props: IDonateProps) {
         <>
             <Button
                 modeType="green"
+                testID="donate"
                 bold
                 style={styles.donate}
                 labelStyle={{

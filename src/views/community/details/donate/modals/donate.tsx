@@ -133,6 +133,7 @@ class DonateModal extends Component<
             userAddress.length > 0 ? (
                 <Button
                     modeType="default"
+                    testID="donateWithValora"
                     bold
                     labelStyle={styles.donateLabel}
                     loading={donating}
@@ -150,6 +151,7 @@ class DonateModal extends Component<
                 <Button
                     icon="alert"
                     modeType="default"
+                    testID="donateWithValora"
                     bold
                     style={{
                         backgroundColor: '#f0ad4e',
@@ -192,6 +194,7 @@ class DonateModal extends Component<
                         <>
                             <Button
                                 modeType="gray"
+                                testID="copyContractAddress"
                                 bold
                                 style={{ marginBottom: 10 }}
                                 labelStyle={styles.donateLabel}
@@ -232,6 +235,7 @@ class DonateModal extends Component<
                             </Text>
                             <TextInput
                                 keyboardType="numeric"
+                                testID="amountDonate"
                                 maxLength={9}
                                 autoFocus
                                 style={{

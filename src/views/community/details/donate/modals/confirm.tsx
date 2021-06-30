@@ -143,6 +143,7 @@ class ConfirmModal extends Component<
                         >
                             <Button
                                 modeType="gray"
+                                testID="backWithSymbol"
                                 bold
                                 style={{
                                     marginRight: 14.48,
@@ -155,6 +156,7 @@ class ConfirmModal extends Component<
                             </Button>
                             <Button
                                 modeType="default"
+                                testID="donate"
                                 bold
                                 style={{ flex: 1 }}
                                 loading={donating}
