@@ -755,7 +755,7 @@ function CreateCommunityScreen() {
             if (!result.cancelled) {
                 if (type === imageTypes.COVER_IMAGE) {
                     Image.getSize(result.uri, (width, height) => {
-                        if (width <= 784 && height <= 784) {
+                        if (width >= 784 && height >= 784) {
                             cb(result.uri);
                             cbv(true);
                         } else {
@@ -764,7 +764,7 @@ function CreateCommunityScreen() {
                     });
                 } else {
                     Image.getSize(result.uri, (width, height) => {
-                        if (width <= 300 && height <= 300) {
+                        if (width >= 300 && height >= 300) {
                             cb(result.uri);
                             cbv(true);
                         } else {
