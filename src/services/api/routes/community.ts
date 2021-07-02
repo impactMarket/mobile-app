@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system';
 import {
     CommunityCreationAttributes,
     IManagerDetailsBeneficiary,
@@ -5,6 +6,7 @@ import {
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
 import {
+    AppMediaContent,
     CommunityAttributes,
     ManagerAttributes,
     UbiRequestChangeParams,
@@ -122,8 +124,25 @@ class ApiRouteCommunity {
     }
 
     static async create(
+        uri: string,
         details: CommunityCreationAttributes
     ): Promise<{ data: CommunityAttributes; error: any }> {
+        const uriParts = uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+        //
+        const preSigned = (
+            await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
+                '/community/media/' + fileType,
+                true
+            )
+        ).data;
+        await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+            httpMethod: 'PUT',
+        });
+        details = {
+            ...details,
+            coverMediaId: preSigned.media.id,
+        };
         return this.api.post<CommunityAttributes>('/community/create', details);
     }
 

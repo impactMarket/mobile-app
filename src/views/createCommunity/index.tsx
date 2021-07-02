@@ -465,10 +465,10 @@ function CreateCommunityScreen() {
                     };
                 }
 
-                const apiRequestResult = await Api.upload.uploadImage(
-                    coverImage,
-                    imageTargets.COVER
-                );
+                // const apiRequestResult = await Api.upload.uploadImage(
+                //     coverImage,
+                //     imageTargets.COVER
+                // );
 
                 if (profileImage.length > 0 && profileImage !== avatar) {
                     try {
@@ -492,59 +492,60 @@ function CreateCommunityScreen() {
                     }
                 }
 
-                if (apiRequestResult) {
-                    const communityDetails: CommunityCreationAttributes = {
-                        requestByAddress: userAddress,
-                        name,
-                        description,
-                        language: userLanguage,
-                        currency,
-                        city,
-                        country,
-                        gps: {
-                            latitude:
-                                gpsLocation!.coords.latitude +
-                                config.locationErrorMargin,
-                            longitude:
-                                gpsLocation!.coords.longitude +
-                                config.locationErrorMargin,
-                        },
-                        email,
-                        coverMediaId: apiRequestResult.data.data.id,
-                        contractParams,
-                        ...privateParamsIfAvailable,
-                    };
-                    const communityApiRequestResult: any = await Api.community.create(
-                        communityDetails
+                // if (apiRequestResult) {
+                const communityDetails: CommunityCreationAttributes = {
+                    requestByAddress: userAddress,
+                    name,
+                    description,
+                    language: userLanguage,
+                    currency,
+                    city,
+                    country,
+                    gps: {
+                        latitude:
+                            gpsLocation!.coords.latitude +
+                            config.locationErrorMargin,
+                        longitude:
+                            gpsLocation!.coords.longitude +
+                            config.locationErrorMargin,
+                    },
+                    email,
+                    coverMediaId: 0,
+                    contractParams,
+                    ...privateParamsIfAvailable,
+                };
+                const communityApiRequestResult: any = await Api.community.create(
+                    coverImage,
+                    communityDetails
+                );
+                if (communityApiRequestResult.error === undefined) {
+                    await updateCommunityInfo(
+                        communityApiRequestResult.data.id,
+                        dispatch
                     );
-                    if (communityApiRequestResult.error === undefined) {
-                        await updateCommunityInfo(
-                            communityApiRequestResult.data.id,
-                            dispatch
-                        );
-                        const community = await Api.community.findById(
-                            communityApiRequestResult.data.id
-                        );
-                        if (community !== undefined) {
-                            batch(() => {
-                                dispatch(setCommunityMetadata(community));
-                                dispatch(setUserIsCommunityManager(true));
-                            });
-                        }
-                        setSending(false);
-                        setSendingSuccess(true);
-                    } else {
-                        Clipboard.setString(
-                            communityApiRequestResult.error.toString()
-                        );
-                        setSending(false);
-                        setSendingSuccess(false);
+                    const community = await Api.community.findById(
+                        communityApiRequestResult.data.id
+                    );
+                    if (community !== undefined) {
+                        batch(() => {
+                            dispatch(setCommunityMetadata(community));
+                            dispatch(setUserIsCommunityManager(true));
+                        });
                     }
+                    setSending(false);
+                    setSendingSuccess(true);
                 } else {
-                    Clipboard.setString('error uploading cover image');
+                    Clipboard.setString(
+                        communityApiRequestResult.error.toString()
+                    );
                     setSending(false);
                     setSendingSuccess(false);
                 }
+                // } else {
+                //     Clipboard.setString('error uploading cover image');
+                //     setSending(false);
+                //     setSendingSuccess(false);
+                // }
             } catch (e) {
                 Clipboard.setString(e.toString());
                 Sentry.Native.captureException(e);
