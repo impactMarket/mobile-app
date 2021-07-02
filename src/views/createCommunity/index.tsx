@@ -1215,7 +1215,7 @@ function CreateCommunityScreen() {
                                                 fontSize: 14,
                                                 lineHeight: 24,
                                                 color: ipctColors.almostBlack,
-                                                textAlign: 'justify',
+                                                textAlign: 'left',
                                                 marginRight: 36,
                                             }}
                                         >
