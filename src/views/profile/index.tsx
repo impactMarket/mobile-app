@@ -243,7 +243,7 @@ function ProfileScreen() {
 
         if (!result.cancelled) {
             Image.getSize(result.uri, (width, height) => {
-                if (width <= 300 && height <= 300) {
+                if (width >= 300 && height >= 300) {
                     handleChangeAvatar(result.uri);
                 } else {
                     Alert.alert(i18n.t('imageDimensionsNotFit'));
