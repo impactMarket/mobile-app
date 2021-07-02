@@ -29,7 +29,6 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
             )
         );
     }, [storiesListState, props.route.params.communityId]);
-    console.log(props.route.params.communityId);
 
     const indexRef = useRef(index);
 
@@ -65,7 +64,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
             setIndex(index + 1);
         }
     };
-
+    console.log({ index });
     // if (index === -1) {
     //     return null;
     // }
@@ -90,13 +89,24 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                     );
                 }}
                 initialScrollIndex={index}
+                onScrollToIndexFailed={(info) => {
+                    const wait = new Promise((resolve) =>
+                        setTimeout(resolve, 300)
+                    );
+                    wait.then(() => {
+                        flatListRef.current?.scrollToIndex({
+                            index: info.index,
+                            animated: true,
+                        });
+                    });
+                }}
                 pagingEnabled
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 onScroll={onScroll}
                 // Performance settings
                 removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={5} // Reduce initial render amount
+                initialNumToRender={10} // Reduce initial render amount
                 maxToRenderPerBatch={1} // Reduce number in each render batch
             />
         </View>

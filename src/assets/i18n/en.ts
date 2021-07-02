@@ -72,6 +72,7 @@ export default {
     createCommunityAlert:
         'After submitting, we’ll will contact you in 14 days or less.',
     selectCoverImage: 'Select Cover Image',
+    imageDimensionsNotFit: 'Select an image with the correct dimensions',
     changeCoverImage: 'Cover Image',
     changeProfileImage: 'Your Profile Image',
     changeLogoImage: 'Community Logotype',

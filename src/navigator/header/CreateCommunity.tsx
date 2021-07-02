@@ -18,37 +18,36 @@ function CreateCommunity(props: {
     );
     // TODO: create should always be visible, but allowed only after login
     return (
-        !props.userCommunity &&
-        walletAddress.length > 0 && (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
+        <View
+            style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+            }}
+        >
+            <Button
+                mode="text"
+                uppercase={false}
+                labelStyle={{
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 18,
+                    lineHeight: 26,
+                    height: 26,
+                    textAlign: 'center',
+                    letterSpacing: 0.366667,
+                    color: ipctColors.blueRibbon,
+                    // marginLeft: 8.4,
+                    marginRight: 16,
                 }}
+                onPress={() =>
+                    !props.userCommunity && walletAddress.length > 0
+                        ? props.navigation.navigate(Screens.CreateCommunity)
+                        : props.navigation.navigate(Screens.Auth)
+                }
             >
-                <Button
-                    mode="text"
-                    uppercase={false}
-                    labelStyle={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 18,
-                        lineHeight: 26,
-                        height: 26,
-                        textAlign: 'center',
-                        letterSpacing: 0.366667,
-                        color: ipctColors.blueRibbon,
-                        // marginLeft: 8.4,
-                        marginRight: 16,
-                    }}
-                    onPress={() =>
-                        props.navigation.navigate(Screens.CreateCommunity)
-                    }
-                >
-                    {i18n.t('create')}
-                </Button>
-            </View>
-        )
+                {i18n.t('create')}
+            </Button>
+        </View>
     );
 }
 

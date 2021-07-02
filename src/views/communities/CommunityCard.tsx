@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     },
     card: {
         marginHorizontal: 16,
-        minWidth: 303,
+        minWidth: 290,
         marginBottom: 22,
         // marginTop: 8,
         padding: 0,

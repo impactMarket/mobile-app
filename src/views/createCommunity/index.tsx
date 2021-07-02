@@ -193,7 +193,10 @@ function CreateCommunityScreen() {
     const [isAlertVisible, setIsAlertVisible] = useState(!userCommunity);
     // const [communityLogo, setCommunityLogo] = useState('');
     const [showWebview, setShowWebview] = useState(false);
-    // setToggleInformativeModal(false);
+    const [
+        toggleImageDimensionsModal,
+        setToggleImageDimensionsModal,
+    ] = useState<boolean>(false);
 
     const [claimAmount, setClaimAmount] = useState('');
     const [baseInterval, setBaseInterval] = useState('86400');
@@ -210,6 +213,11 @@ function CreateCommunityScreen() {
     const modalizeVisibilityRef = useRef<Modalize>(null);
     const modalizeClaimImcrementRef = useRef<Modalize>(null);
     const modalizeGenericErrorRef = useRef<Modalize>(null);
+
+    enum imageTypes {
+        COVER_IMAGE = 'COVER_IMAGE',
+        PROFILE_IMAGE = 'PROFILE_IMAGE',
+    }
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -736,18 +744,34 @@ function CreateCommunityScreen() {
         },
         pickImage = async (
             cb: Dispatch<React.SetStateAction<string>>,
-            cbv: Dispatch<React.SetStateAction<boolean>>
+            cbv: Dispatch<React.SetStateAction<boolean>>,
+            type: string
         ) => {
             const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                // allowsEditing: true,
-                // aspect: [1, 1],
                 quality: 1,
             });
 
             if (!result.cancelled) {
-                cb(result.uri);
-                cbv(true);
+                if (type === imageTypes.COVER_IMAGE) {
+                    Image.getSize(result.uri, (width, height) => {
+                        if (width <= 784 && height <= 784) {
+                            cb(result.uri);
+                            cbv(true);
+                        } else {
+                            setToggleImageDimensionsModal(true);
+                        }
+                    });
+                } else {
+                    Image.getSize(result.uri, (width, height) => {
+                        if (width <= 300 && height <= 300) {
+                            cb(result.uri);
+                            cbv(true);
+                        } else {
+                            setToggleImageDimensionsModal(true);
+                        }
+                    });
+                }
             }
         },
         renderCurrencyContent = () => (
@@ -1015,8 +1039,8 @@ function CreateCommunityScreen() {
 
                 <Text
                     style={[
-                        styles.createCommunityDescription,
-                        { flexWrap: 'wrap', marginHorizontal: 34 },
+                        styles.createCommunityAlertDescription,
+                        { flexWrap: 'wrap', marginHorizontal: 42 },
                     ]}
                 >
                     {i18n.t('createCommunityAlert')}
@@ -1047,6 +1071,91 @@ function CreateCommunityScreen() {
                 />
             );
         };
+
+    if (toggleImageDimensionsModal) {
+        return (
+            <RNPortal>
+                <Modal visible dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalErrorTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => {
+                                    setToggleImageDimensionsModal(false);
+                                }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                paddingVertical: 16,
+                                paddingHorizontal: 22,
+                                borderStyle: 'solid',
+                                borderColor: '#EB5757',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <WarningRedTriangle
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    marginRight: 16,
+                                    marginTop: 8,
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                    // textAlign: 'justify',
+                                    marginRight: 12,
+                                }}
+                            >
+                                {i18n.t('imageDimensionsNotFit')}
+                            </Text>
+                        </View>
+                        <Button
+                            modeType="gray"
+                            style={{ width: '100%' }}
+                            onPress={() => {
+                                setToggleImageDimensionsModal(false);
+                            }}
+                        >
+                            {i18n.t('close')}
+                        </Button>
+                    </Card>
+                </Modal>
+            </RNPortal>
+        );
+    }
 
     if (toggleMissingFieldsModal) {
         return (
@@ -1112,8 +1221,8 @@ function CreateCommunityScreen() {
                                     fontSize: 14,
                                     lineHeight: 24,
                                     color: ipctColors.almostBlack,
-                                    textAlign: 'justify',
-                                    marginRight: 36,
+                                    // textAlign: 'justify',
+                                    marginRight: 12,
                                 }}
                             >
                                 {i18n.t('missingFieldError')}
@@ -1121,7 +1230,6 @@ function CreateCommunityScreen() {
                         </View>
                         <Button
                             modeType="gray"
-                            bold
                             style={{ width: '100%' }}
                             onPress={() => {
                                 setSending(false);
@@ -1231,7 +1339,7 @@ function CreateCommunityScreen() {
                                     lineHeight: 24,
                                     color: ipctColors.almostBlack,
                                     width: '100%',
-                                    marginVertical: 16,
+                                    marginVertical: 12,
                                     textAlign:
                                         sendingSuccess || sending
                                             ? 'center'
@@ -1269,7 +1377,6 @@ function CreateCommunityScreen() {
                             </Text>
                             <Button
                                 modeType="gray"
-                                bold
                                 style={{ width: '100%' }}
                                 onPress={() => {
                                     setSending(false);
@@ -1411,7 +1518,8 @@ function CreateCommunityScreen() {
                                             onPress={() =>
                                                 pickImage(
                                                     setCoverImage,
-                                                    setIsCoverImageValid
+                                                    setIsCoverImageValid,
+                                                    imageTypes.COVER_IMAGE
                                                 )
                                             }
                                         >
@@ -1469,7 +1577,8 @@ function CreateCommunityScreen() {
                                             onPress={() =>
                                                 pickImage(
                                                     setProfileImage,
-                                                    setIsProfileImageValid
+                                                    setIsProfileImageValid,
+                                                    imageTypes.PROFILE_IMAGE
                                                 )
                                             }
                                         >
@@ -2264,6 +2373,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Regular',
         fontSize: 14,
         lineHeight: 24,
+    },
+    createCommunityAlertDescription: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 20,
     },
     uploadContainer: {
         flexDirection: 'row',

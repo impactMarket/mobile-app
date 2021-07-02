@@ -5,8 +5,15 @@ import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback } from 'react';
-import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import {
+    Dimensions,
+    Pressable,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    View,
+} from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
@@ -105,7 +112,15 @@ export default function Stories() {
                     (userCommunityMetadata.isBeneficiary ||
                         userCommunityMetadata.isManager) &&
                     userCommunityMetadata.metadata.status === 'valid' && (
-                        <View style={{ flexDirection: 'column' }}>
+                        <View
+                            style={{
+                                flexDirection: 'column',
+                                width: 114,
+                                minHeight:
+                                    Dimensions.get('screen').height * 0.214,
+                                // maxHeight: 167,
+                            }}
+                        >
                             <NewStoryCard key="newStory" />
                             <MyStoriesCard />
                         </View>

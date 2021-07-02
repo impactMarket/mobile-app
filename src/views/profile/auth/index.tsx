@@ -277,7 +277,7 @@ function Auth() {
                 <Button
                     modeType="default"
                     bold
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', marginBottom: 16 }}
                     labelStyle={styles.buttomStoreText}
                     onPress={() => Linking.openURL(iosURL)}
                 >
@@ -317,14 +317,14 @@ function Auth() {
                         navigation.navigate(Screens.Communities);
                     }
                 )}
-                adjustToContentHeight
+                adjustToContentHeight={Dimensions.get('window').height >= 720}
                 onClose={() => {
                     navigation.navigate(Screens.Communities);
                 }}
             >
                 <ScrollView
                     style={{
-                        height: 500,
+                        minHeight: 500,
                     }}
                 >
                     <View style={{ width: '100%', paddingHorizontal: 22 }}>
