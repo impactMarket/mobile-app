@@ -418,7 +418,7 @@ export default {
             yourNetworkisOffline: 'Ouch! Seems like you are offline.',
             yourNetworkisOnline: 'Hurray! Your network is back online!',
             submitAddStoriesToStateFailure:
-                'Oops! We could not upddate all stories at this time. Please try again later',
+                'Oops! We could not update all stories at this time. Please try again later',
         },
     },
 };

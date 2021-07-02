@@ -27,7 +27,6 @@ export function* startWatchingNetworkConnectivity(): any {
                     message: i18n.t('sagas.messages.yourNetworkisOffline'),
                     type: 'danger',
                     autoHide: !netStatus.isConnected,
-                    duration: 500000,
                 });
             }
         }
