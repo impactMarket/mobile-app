@@ -1144,7 +1144,7 @@ function CreateCommunityScreen() {
                         <View
                             style={{
                                 paddingVertical: 14,
-                                height: sending || sendingSuccess ? 220 : 440,
+                                height: sending || sendingSuccess ? 234 : 400,
                                 width: '88%',
                                 alignItems: 'center',
                                 alignSelf: 'center',
