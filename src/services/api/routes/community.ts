@@ -11,6 +11,7 @@ import {
     ManagerAttributes,
     UbiRequestChangeParams,
 } from 'helpers/types/models';
+import path from 'path';
 import * as mime from 'react-native-mime-types';
 
 import { ApiRequests, getRequest } from '../base';
@@ -128,15 +129,22 @@ class ApiRouteCommunity {
         uri: string,
         details: CommunityCreationAttributes
     ): Promise<{ data: CommunityAttributes; error: any }> {
+        const mimetype = mime
+            .contentType(path.basename(uri))
+            .match(/\/(\w+);?/)[1];
         const preSigned = (
             await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
-                '/community/media/' +
-                    mime.contentType(uri).match(/\/(\w+);/)![1],
+                '/community/media/' + mimetype,
                 true
             )
         ).data;
         const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
             httpMethod: 'PUT',
+            mimeType: mimetype,
+            uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
+            headers: {
+                'Content-Type': 'image/' + mimetype,
+            },
         });
         if (ru.status >= 400) {
             throw new Error(ru.body.toString());
@@ -153,18 +161,22 @@ class ApiRouteCommunity {
         details: CommunityEditionAttributes
     ): Promise<CommunityAttributes> {
         if (uri) {
+            const mimetype = mime
+                .contentType(path.basename(uri))
+                .match(/\/(\w+);?/)[1];
             const preSigned = (
                 await this.api.get<{
                     uploadURL: string;
                     media: AppMediaContent;
-                }>(
-                    '/community/media/' +
-                        mime.contentType(uri).match(/\/(\w+);/)![1],
-                    true
-                )
+                }>('/community/media/' + mimetype, true)
             ).data;
             const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
                 httpMethod: 'PUT',
+                mimeType: mimetype,
+                uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
+                headers: {
+                    'Content-Type': 'image/' + mimetype,
+                },
             });
             if (ru.status >= 400) {
                 throw new Error(ru.body.toString());

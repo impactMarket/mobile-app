@@ -1,6 +1,7 @@
 import * as FileSystem from 'expo-file-system';
 import { IUserHello, IUserAuth } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
+import path from 'path';
 import * as mime from 'react-native-mime-types';
 
 import { ApiRequests } from '../base';
@@ -65,14 +66,22 @@ class ApiRouteUser {
     }
 
     static async updateProfilePicture(uri: string): Promise<AppMediaContent> {
+        const mimetype = mime
+            .contentType(path.basename(uri))
+            .match(/\/(\w+);?/)[1];
         const preSigned = (
             await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
-                '/user/media/' + mime.contentType(uri).match(/\/(\w+);/)![1],
+                '/user/media/' + mimetype,
                 true
             )
         ).data;
         const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
             httpMethod: 'PUT',
+            mimeType: mimetype,
+            uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
+            headers: {
+                'Content-Type': 'image/' + mimetype,
+            },
         });
         if (ru.status >= 400) {
             throw new Error(ru.body.toString());
