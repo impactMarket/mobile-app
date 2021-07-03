@@ -149,6 +149,19 @@ class ApiRouteCommunity {
         if (ru.status >= 400) {
             throw new Error(ru.body.toString());
         }
+        // wait until image exists on real endpoint
+        // TODO: improve this
+        const delay = (ms: number) =>
+            new Promise((resolve) => setTimeout(resolve, ms));
+        let tries = 3;
+        while (tries-- > 0) {
+            delay(1000);
+            const { status } = await this.api.head(preSigned.media.url);
+            if (status === 200) {
+                break;
+            }
+        }
+        //
         details = {
             ...details,
             coverMediaId: preSigned.media.id,
@@ -181,6 +194,19 @@ class ApiRouteCommunity {
             if (ru.status >= 400) {
                 throw new Error(ru.body.toString());
             }
+            // wait until image exists on real endpoint
+            // TODO: improve this
+            const delay = (ms: number) =>
+                new Promise((resolve) => setTimeout(resolve, ms));
+            let tries = 3;
+            while (tries-- > 0) {
+                delay(1000);
+                const { status } = await this.api.head(preSigned.media.url);
+                if (status === 200) {
+                    break;
+                }
+            }
+            //
             details = {
                 ...details,
                 coverMediaId: preSigned.media.id,
