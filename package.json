@@ -97,6 +97,7 @@
         "react-native-btr": "2.1.2",
         "react-native-elements": "1.2.7",
         "react-native-gesture-handler": "~1.8.0",
+        "react-native-mime-types": "2.3.0",
         "react-native-modalize": "^2.0.8",
         "react-native-paper": "4.5.0",
         "react-native-portalize": "^1.0.7",
@@ -141,7 +142,6 @@
         "eslint": "7.23.0",
         "eslint-config-prettier": "8.1.0",
         "eslint-config-universe": "7.0.1",
-
         "eslint-plugin-tsc": "^2.0.0",
         "husky": "^6.0.0",
         "jest": "^27.0.4",
