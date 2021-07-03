@@ -1,5 +1,6 @@
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
 // import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import {
     ICommunitiesListStories,
@@ -23,15 +24,36 @@ axios.defaults.baseURL = config.baseApiUrl;
 class ApiRouteStory {
     static api = new ApiRequests();
 
-    static async addPicture(mediaURI: string): Promise<AppMediaContent> {
-        return this.api.uploadSingleImage('/story/picture', mediaURI);
-    }
+    // static async addPicture(mediaURI: string): Promise<AppMediaContent> {
+    //     return this.api.uploadSingleImage('/story/picture', mediaURI);
+    // }
 
-    static async add(story: {
-        communityId: number;
-        message?: string;
-        mediaId?: number;
-    }): Promise<ICommunityStory> {
+    static async add(
+        uri: string | undefined,
+        story: {
+            communityId: number;
+            message?: string;
+            mediaId?: number;
+        }
+    ): Promise<ICommunityStory> {
+        if (uri) {
+            const uriParts = uri.split('.');
+            const fileType = uriParts[uriParts.length - 1];
+            //
+            const preSigned = (
+                await this.api.get<{
+                    uploadURL: string;
+                    media: AppMediaContent;
+                }>('/story/media/' + fileType, true)
+            ).data;
+            await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+                httpMethod: 'PUT',
+            });
+            story = {
+                ...story,
+                mediaId: preSigned.media.id,
+            };
+        }
         return (await this.api.post<ICommunityStory>('/story', story)).data;
     }
 

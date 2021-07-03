@@ -147,8 +147,27 @@ class ApiRouteCommunity {
     }
 
     static async edit(
+        uri: string | undefined,
         details: CommunityEditionAttributes
     ): Promise<CommunityAttributes> {
+        if (uri) {
+            const uriParts = uri.split('.');
+            const fileType = uriParts[uriParts.length - 1];
+            //
+            const preSigned = (
+                await this.api.get<{
+                    uploadURL: string;
+                    media: AppMediaContent;
+                }>('/community/media/' + fileType, true)
+            ).data;
+            await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+                httpMethod: 'PUT',
+            });
+            details = {
+                ...details,
+                coverMediaId: preSigned.media.id,
+            };
+        }
         return this.api.put('/community', details);
     }
 
