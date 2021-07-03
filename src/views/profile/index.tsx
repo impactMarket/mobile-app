@@ -175,10 +175,11 @@ function ProfileScreen() {
             setSending(true);
             setUserAvatarImage(avatar);
 
-            const res = (await Api.upload.uploadImage(
-                avatar,
-                imageTargets.PROFILE
-            )) as any;
+            // const res = (await Api.upload.uploadImage(
+            //     avatar,
+            //     imageTargets.PROFILE
+            // )) as any;
+            const res = await Api.user.updateProfilePicture(avatar);
             setSending(false);
             CacheStore.cacheUser({
                 // TODO: we should use the generic method instead
@@ -194,13 +195,13 @@ function ProfileScreen() {
                 currency,
                 gender,
                 language,
-                avatar: res.data.data.url,
+                avatar: res.url,
                 username: name,
                 //TODO: Change these props below to be optional
                 blocked: false,
                 suspect: false,
             });
-            dispatch(setUserMetadata({ ...user, avatar: res.data.data.url }));
+            dispatch(setUserMetadata({ ...user, avatar: res.url }));
         } catch (e) {
             Alert.alert(
                 i18n.t('failure'),

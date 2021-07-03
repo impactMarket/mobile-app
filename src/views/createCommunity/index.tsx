@@ -472,19 +472,18 @@ function CreateCommunityScreen() {
 
                 if (profileImage.length > 0 && profileImage !== avatar) {
                     try {
-                        const res = (await Api.upload.uploadImage(
-                                profileImage,
-                                imageTargets.PROFILE
-                            )) as any,
-                            cachedUser = (await CacheStore.getUser())!;
+                        const res = await Api.user.updateProfilePicture(
+                            profileImage
+                        );
+                        const cachedUser = (await CacheStore.getUser())!;
                         await CacheStore.cacheUser({
                             ...cachedUser,
-                            avatar: res.data.data.url as string,
+                            avatar: res.url,
                         });
                         dispatch(
                             setUserMetadata({
                                 ...user,
-                                avatar: res.data.data.url,
+                                avatar: res.url,
                             })
                         );
                     } catch (e) {
@@ -514,7 +513,7 @@ function CreateCommunityScreen() {
                     contractParams,
                     ...privateParamsIfAvailable,
                 };
-                const communityApiRequestResult: any = await Api.community.create(
+                const communityApiRequestResult = await Api.community.create(
                     coverImage,
                     communityDetails
                 );
@@ -604,94 +603,97 @@ function CreateCommunityScreen() {
                 setSending(true);
                 setToggleInformativeModal(true);
 
-                if (profileImage !== avatar) {
-                    const res = (await Api.upload.uploadImage(
-                            profileImage,
-                            imageTargets.PROFILE
-                        )) as any,
-                        cachedUser = (await CacheStore.getUser())!;
-                    await CacheStore.cacheUser({
-                        ...cachedUser,
-                        avatar: res.data.data.url as string,
-                    });
-                    dispatch(
-                        setUserMetadata({ ...user, avatar: res.data.data.url })
+                // if (profileImage !== avatar) {
+                //     const res = (await Api.upload.uploadImage(
+                //             profileImage,
+                //             imageTargets.PROFILE
+                //         )) as any,
+                //         cachedUser = (await CacheStore.getUser())!;
+                //     await CacheStore.cacheUser({
+                //         ...cachedUser,
+                //         avatar: res.data.data.url as string,
+                //     });
+                //     dispatch(
+                //         setUserMetadata({ ...user, avatar: res.data.data.url })
+                //     );
+                // }
+
+                // if (coverImage !== initialData.coverImage) {
+                // const apiRequestResult = await Api.upload.uploadImage(
+                //     coverImage,
+                //     imageTargets.COVER
+                // );
+                const communityDetails: CommunityEditionAttributes = {
+                        name,
+                        description,
+                        language: userLanguage,
+                        city,
+                        country,
+                        email,
+                        currency,
+                        coverMediaId: 0,
+                    },
+                    communityApiRequestResult = await Api.community.edit(
+                        coverImage !== initialData.coverImage
+                            ? coverImage
+                            : undefined,
+                        communityDetails
                     );
-                }
 
-                if (coverImage !== initialData.coverImage) {
-                    const apiRequestResult = await Api.upload.uploadImage(
-                        coverImage,
-                        imageTargets.COVER
+                if (communityApiRequestResult) {
+                    await updateCommunityInfo(
+                        communityApiRequestResult.id,
+                        dispatch
                     );
-                    const communityDetails: CommunityEditionAttributes = {
-                            name,
-                            description,
-                            language: userLanguage,
-                            city,
-                            country,
-                            email,
-                            currency,
-                            coverMediaId: apiRequestResult?.data.data.id,
-                        },
-                        communityApiRequestResult = await Api.community.edit(
-                            communityDetails
-                        );
 
-                    if (communityApiRequestResult) {
-                        await updateCommunityInfo(
-                            communityApiRequestResult.id,
-                            dispatch
-                        );
+                    const community = await Api.community.findById(
+                        communityApiRequestResult.id
+                    );
 
-                        const community = await Api.community.findById(
-                            communityApiRequestResult.id
-                        );
-
-                        if (community !== undefined) {
-                            batch(() => {
-                                dispatch(setCommunityMetadata(community));
-                                dispatch(setUserIsCommunityManager(true));
-                            });
-                        }
+                    if (community !== undefined) {
+                        batch(() => {
+                            dispatch(setCommunityMetadata(community));
+                            dispatch(setUserIsCommunityManager(true));
+                        });
                     }
-                    setSending(false);
-                    setSendingSuccess(true);
-                } else {
-                    const communityDetails: CommunityEditionAttributes = {
-                            name,
-                            description,
-                            language: userLanguage,
-                            city,
-                            country,
-                            email,
-                            currency,
-                            coverMediaId: userCommunity.coverMediaId,
-                        },
-                        communityApiRequestResult = await Api.community.edit(
-                            communityDetails
-                        );
-
-                    if (communityApiRequestResult) {
-                        await updateCommunityInfo(
-                            communityApiRequestResult.id,
-                            dispatch
-                        );
-
-                        const community = await Api.community.findById(
-                            communityApiRequestResult.id
-                        );
-
-                        if (community !== undefined) {
-                            batch(() => {
-                                dispatch(setCommunityMetadata(community));
-                                dispatch(setUserIsCommunityManager(true));
-                            });
-                        }
-                    }
-                    setSending(false);
-                    setSendingSuccess(true);
                 }
+                setSending(false);
+                setSendingSuccess(true);
+                // } else {
+                //     const communityDetails: CommunityEditionAttributes = {
+                //             name,
+                //             description,
+                //             language: userLanguage,
+                //             city,
+                //             country,
+                //             email,
+                //             currency,
+                //             coverMediaId: userCommunity.coverMediaId,
+                //         },
+                //         communityApiRequestResult = await Api.community.edit(
+                //             communityDetails
+                //         );
+
+                //     if (communityApiRequestResult) {
+                //         await updateCommunityInfo(
+                //             communityApiRequestResult.id,
+                //             dispatch
+                //         );
+
+                //         const community = await Api.community.findById(
+                //             communityApiRequestResult.id
+                //         );
+
+                //         if (community !== undefined) {
+                //             batch(() => {
+                //                 dispatch(setCommunityMetadata(community));
+                //                 dispatch(setUserIsCommunityManager(true));
+                //             });
+                //         }
+                //     }
+                setSending(false);
+                setSendingSuccess(true);
+                // }
             } catch (e) {
                 Sentry.Native.captureException(e);
                 setSending(false);
