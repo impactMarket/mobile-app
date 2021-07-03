@@ -48,9 +48,12 @@ class ApiRouteStory {
                     true
                 )
             ).data;
-            await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+            const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
                 httpMethod: 'PUT',
             });
+            if (ru.status >= 400) {
+                throw new Error(ru.body.toString());
+            }
             story = {
                 ...story,
                 mediaId: preSigned.media.id,
