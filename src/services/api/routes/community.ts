@@ -128,7 +128,6 @@ class ApiRouteCommunity {
         uri: string,
         details: CommunityCreationAttributes
     ): Promise<{ data: CommunityAttributes; error: any }> {
-        //
         const preSigned = (
             await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
                 '/community/media/' +
@@ -136,9 +135,12 @@ class ApiRouteCommunity {
                 true
             )
         ).data;
-        await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+        const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
             httpMethod: 'PUT',
         });
+        if (ru.status >= 400) {
+            throw new Error(ru.body.toString());
+        }
         details = {
             ...details,
             coverMediaId: preSigned.media.id,
@@ -151,18 +153,22 @@ class ApiRouteCommunity {
         details: CommunityEditionAttributes
     ): Promise<CommunityAttributes> {
         if (uri) {
-            const uriParts = uri.split('.');
-            const fileType = uriParts[uriParts.length - 1];
-            //
             const preSigned = (
                 await this.api.get<{
                     uploadURL: string;
                     media: AppMediaContent;
-                }>('/community/media/' + fileType, true)
+                }>(
+                    '/community/media/' +
+                        mime.contentType(uri).match(/\/(\w+);/)![1],
+                    true
+                )
             ).data;
-            await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+            const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
                 httpMethod: 'PUT',
             });
+            if (ru.status >= 400) {
+                throw new Error(ru.body.toString());
+            }
             details = {
                 ...details,
                 coverMediaId: preSigned.media.id,
