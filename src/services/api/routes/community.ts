@@ -11,6 +11,7 @@ import {
     ManagerAttributes,
     UbiRequestChangeParams,
 } from 'helpers/types/models';
+import * as mime from 'react-native-mime-types';
 
 import { ApiRequests, getRequest } from '../base';
 
@@ -127,12 +128,11 @@ class ApiRouteCommunity {
         uri: string,
         details: CommunityCreationAttributes
     ): Promise<{ data: CommunityAttributes; error: any }> {
-        const uriParts = uri.split('.');
-        const fileType = uriParts[uriParts.length - 1];
         //
         const preSigned = (
             await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
-                '/community/media/' + fileType,
+                '/community/media/' +
+                    mime.contentType(uri).match(/\/(\w+);/)![1],
                 true
             )
         ).data;

@@ -8,6 +8,7 @@ import {
     ICommunityStory,
 } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
+import * as mime from 'react-native-mime-types';
 
 import config from '../../../../config';
 import {
@@ -37,14 +38,15 @@ class ApiRouteStory {
         }
     ): Promise<ICommunityStory> {
         if (uri) {
-            const uriParts = uri.split('.');
-            const fileType = uriParts[uriParts.length - 1];
-            //
             const preSigned = (
                 await this.api.get<{
                     uploadURL: string;
                     media: AppMediaContent;
-                }>('/story/media/' + fileType, true)
+                }>(
+                    '/story/media/' +
+                        mime.contentType(uri).match(/\/(\w+);/)![1],
+                    true
+                )
             ).data;
             await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
                 httpMethod: 'PUT',
