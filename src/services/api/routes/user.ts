@@ -1,4 +1,6 @@
+import * as FileSystem from 'expo-file-system';
 import { IUserHello, IUserAuth } from 'helpers/types/endpoints';
+import { AppMediaContent } from 'helpers/types/models';
 
 import { ApiRequests } from '../base';
 
@@ -59,6 +61,25 @@ class ApiRouteUser {
                 gps,
             })
         ).data;
+    }
+
+    static async updateProfilePicture(uri: string): Promise<AppMediaContent> {
+        const uriParts = uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+        //
+        const preSigned = (
+            await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
+                '/user/media/' + fileType,
+                true
+            )
+        ).data;
+        await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+            httpMethod: 'PUT',
+        });
+        await this.api.put<void>('/user/avatar', {
+            mediaId: preSigned.media.id,
+        });
+        return preSigned.media;
     }
 
     static async exists(address: string): Promise<boolean> {
