@@ -1,28 +1,52 @@
 {
-    "compilerOptions": {
-        "baseUrl": "src",
-        "paths": {
-            "assets": ["./src/assets"],
-            "components": ["./src/components"],
-            "helpers": ["./src/helpers"],
-            "navigator": ["./src/navigator"],
-            "services": ["src/helpers/reduxces"],
-            "styles": ["./src/styles"],
-            "views": ["./src/views"]
-        },
-        "allowSyntheticDefaultImports": true,
-        "jsx": "react-native",
-        "lib": ["dom", "esnext"],
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "noEmit": true,
-        "skipLibCheck": true,
-        "resolveJsonModule": true,
-        "strict": true,
-        "sourceMap": true,
-        "inlineSources": true,
-        "sourceRoot": "/",
-        "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-        "exclude": ["node_modules"]
-    }
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "assets": [
+        "./src/assets"
+      ],
+      "components": [
+        "./src/components"
+      ],
+      "helpers": [
+        "./src/helpers"
+      ],
+      "navigator": [
+        "./src/navigator"
+      ],
+      "services": [
+        "src/helpers/reduxces"
+      ],
+      "styles": [
+        "./src/styles"
+      ],
+      "views": [
+        "./src/views"
+      ]
+    },
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-native",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/",
+    "include": [
+      "next-env.d.ts",
+      "**/*.ts",
+      "**/*.tsx"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+  },
+  "extends": "expo/tsconfig.base"
 }

@@ -139,7 +139,7 @@ function CreateCommunityScreen() {
     };
     const [sending, setSending] = useState(false);
     const [sendingSuccess, setSendingSuccess] = useState(false);
-    const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
+    const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
     const [isNameValid, setIsNameValid] = useState(true);
     const [isEditable, setIsEditable] = useState(!!userCommunity);
     const [genericErrorTitle, setGenericErrorTitle] = useState(
