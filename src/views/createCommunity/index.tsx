@@ -465,11 +465,6 @@ function CreateCommunityScreen() {
                     };
                 }
 
-                // const apiRequestResult = await Api.upload.uploadImage(
-                //     coverImage,
-                //     imageTargets.COVER
-                // );
-
                 if (profileImage.length > 0 && profileImage !== avatar) {
                     try {
                         const res = await Api.user.updateProfilePicture(
@@ -491,7 +486,6 @@ function CreateCommunityScreen() {
                     }
                 }
 
-                // if (apiRequestResult) {
                 const communityDetails: CommunityCreationAttributes = {
                     requestByAddress: userAddress,
                     name,
@@ -540,11 +534,6 @@ function CreateCommunityScreen() {
                     setSending(false);
                     setSendingSuccess(false);
                 }
-                // } else {
-                //     Clipboard.setString('error uploading cover image');
-                //     setSending(false);
-                //     setSendingSuccess(false);
-                // }
             } catch (e) {
                 Clipboard.setString(e.toString());
                 Sentry.Native.captureException(e);
@@ -603,26 +592,6 @@ function CreateCommunityScreen() {
                 setSending(true);
                 setToggleInformativeModal(true);
 
-                // if (profileImage !== avatar) {
-                //     const res = (await Api.upload.uploadImage(
-                //             profileImage,
-                //             imageTargets.PROFILE
-                //         )) as any,
-                //         cachedUser = (await CacheStore.getUser())!;
-                //     await CacheStore.cacheUser({
-                //         ...cachedUser,
-                //         avatar: res.data.data.url as string,
-                //     });
-                //     dispatch(
-                //         setUserMetadata({ ...user, avatar: res.data.data.url })
-                //     );
-                // }
-
-                // if (coverImage !== initialData.coverImage) {
-                // const apiRequestResult = await Api.upload.uploadImage(
-                //     coverImage,
-                //     imageTargets.COVER
-                // );
                 const communityDetails: CommunityEditionAttributes = {
                         name,
                         description,
@@ -659,41 +628,8 @@ function CreateCommunityScreen() {
                 }
                 setSending(false);
                 setSendingSuccess(true);
-                // } else {
-                //     const communityDetails: CommunityEditionAttributes = {
-                //             name,
-                //             description,
-                //             language: userLanguage,
-                //             city,
-                //             country,
-                //             email,
-                //             currency,
-                //             coverMediaId: userCommunity.coverMediaId,
-                //         },
-                //         communityApiRequestResult = await Api.community.edit(
-                //             communityDetails
-                //         );
-
-                //     if (communityApiRequestResult) {
-                //         await updateCommunityInfo(
-                //             communityApiRequestResult.id,
-                //             dispatch
-                //         );
-
-                //         const community = await Api.community.findById(
-                //             communityApiRequestResult.id
-                //         );
-
-                //         if (community !== undefined) {
-                //             batch(() => {
-                //                 dispatch(setCommunityMetadata(community));
-                //                 dispatch(setUserIsCommunityManager(true));
-                //             });
-                //         }
-                //     }
                 setSending(false);
                 setSendingSuccess(true);
-                // }
             } catch (e) {
                 Sentry.Native.captureException(e);
                 setSending(false);
