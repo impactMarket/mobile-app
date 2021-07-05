@@ -101,7 +101,7 @@ function StoriesScreen() {
         <FlatList
             data={stories}
             style={{
-                paddingHorizontal: 14,
+                marginHorizontal: 12,
             }}
             columnWrapperStyle={{ justifyContent: 'space-between' }}
             keyExtractor={(item) => item.name}
