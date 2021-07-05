@@ -129,8 +129,16 @@ Sentry.init({
     dsn: process.env.EXPO_SENTRY_DNS,
     // enableInExpoDevelopment: true,
     debug: true,
-    sampleRate: 0.1,
-    tracesSampleRate: 0.1,
+    // sampleRate: 0.1,
+    // tracesSampleRate: 0.1,
+    tracesSampler: (samplingContext) => {
+        // Examine provided context data (including parent decision, if any) along
+        // with anything in the global namespace to compute the sample rate or
+        // sampling decision for this transaction
+
+        console.log('samplingContext', samplingContext);
+        return 0.1;
+    },
 });
 
 const prefix = Linking.makeUrl('/');
