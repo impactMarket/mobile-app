@@ -2,6 +2,11 @@
 
 exports[`Stories screen test should render StoriesScreen correctly 1`] = `
 <RCTScrollView
+  contentContainerStyle={
+    Object {
+      "marginHorizontal": 22,
+    }
+  }
   data={Array []}
   disableVirtualization={false}
   getItem={[Function]}
@@ -24,7 +29,7 @@ exports[`Stories screen test should render StoriesScreen correctly 1`] = `
   stickyHeaderIndices={Array []}
   style={
     Object {
-      "marginHorizontal": 12,
+      "paddingHorizontal": 14,
     }
   }
   updateCellsBatchingPeriod={50}
