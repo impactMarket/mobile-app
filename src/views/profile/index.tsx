@@ -4,13 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 // Components
+import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import ArrowForwardSvg from 'components/svg/ArrowForwardSvg';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CheckSvg from 'components/svg/CheckSvg';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
@@ -42,8 +45,12 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
+
 import {
     Portal,
+    Button as RNButton,
+    Card,
+    Modal,
     Paragraph,
     RadioButton,
     Text,
@@ -95,6 +102,10 @@ function ProfileScreen() {
     const [age, setAge] = useState('');
     const [children, setChildren] = useState('');
     const [sending, setSending] = useState(false);
+    const [
+        toggleImageDimensionsModal,
+        setToggleImageDimensionsModal,
+    ] = useState<boolean>(false);
 
     const [selectedCurrencyId, setSelectedCurrencyId] = useState<string | null>(
         null
@@ -248,7 +259,7 @@ function ProfileScreen() {
                     if (width >= 300 && height >= 300) {
                         handleChangeAvatar(result.uri);
                     } else {
-                        Alert.alert(i18n.t('imageDimensionsNotFit'));
+                        setToggleImageDimensionsModal(true);
                     }
                 },
                 (error) => {
@@ -419,6 +430,91 @@ function ProfileScreen() {
             </RadioButton.Group>
         </View>
     );
+
+    if (toggleImageDimensionsModal) {
+        return (
+            <Portal>
+                <Modal visible dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalErrorTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => {
+                                    setToggleImageDimensionsModal(false);
+                                }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                paddingVertical: 16,
+                                paddingHorizontal: 22,
+                                borderStyle: 'solid',
+                                borderColor: '#EB5757',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <WarningRedTriangle
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    marginRight: 16,
+                                    marginTop: 8,
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                    // textAlign: 'justify',
+                                    marginRight: 12,
+                                }}
+                            >
+                                {i18n.t('imageDimensionsNotFit')}
+                            </Text>
+                        </View>
+                        <Button
+                            modeType="gray"
+                            style={{ width: '100%' }}
+                            onPress={() => {
+                                setToggleImageDimensionsModal(false);
+                            }}
+                        >
+                            {i18n.t('close')}
+                        </Button>
+                    </Card>
+                </Modal>
+            </Portal>
+        );
+    }
 
     return (
         <>
