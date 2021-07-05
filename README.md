@@ -16,16 +16,18 @@ Use the package manager [yarn](https://yarnpkg.com/) to install dependencies.
 yarn
 ```
 
-Replace .env variables.
-EXPO_API_BASE_URL=(the base url)
-EXPO_ENCRYPTION_KEY=(any string 32 character long)
-EXPO_ENCRYPTION_IV=(any string 16 character long)
+Replace .env variables (use .env.example as an example)
 
 ## Usage
 
 Install [expo](https://expo.io/) on your smartphone, start the app with `yarn start` and scan the QR.
 
 If you have an android, you can try our demo [here](https://expo.io/@impactmarket/).
+
+## Devices used in manual tests
+
+* [BLU Advance L5 (Android 8.1, 4", 512MB RAM, 1.3GHz processor with Mali-400 GPU)](https://www.amazon.com/Advance-A390L-Unlocked-Phone-Camera/dp/B07Z6Q9NCZ/)
+* [SLIDE SP4514 (Android 6.0, 4.5", 1GB RAM, 1GHz processor)](https://www.amazon.com/dp/B06ZZ4KZF9?psc=1&ref=ppx_yo2_dt_b_product_details)
 
 ## License
 [Apache-2.0](LICENSE)
