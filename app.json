@@ -9,9 +9,13 @@
         "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarket",
         "splash": {
-            "image": "./src/assets/images/splash.png",
-            "resizeMode": "cover",
-            "backgroundColor": "#2362FB"
+            "resizeMode": "native",
+            "backgroundColor": "#2362FB",
+            "mdpi": "./src/assets/images/splash.png",
+            "hdpi": "./src/assets/images/splash@1.5x.png",
+            "xhdpi": "./src/assets/images/splash@2x.png",
+            "xxhdpi": "./src/assets/images/splash@3x.png",
+            "xxxhdpi": "./src/assets/images/splash@4x.png"
         },
         "updates": {
             "enabled": false,
