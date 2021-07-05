@@ -7,8 +7,13 @@ import {
 import {
     CommunityAttributes,
     ManagerAttributes,
+    UbiCommunity,
+    UbiCommunitySuspect,
     UbiRequestChangeParams,
 } from 'helpers/types/models';
+import { UbiCommunityContract } from 'helpers/types/ubi/ubiCommunityContract';
+import { UbiCommunityDailyMetrics } from 'helpers/types/ubi/ubiCommunityDailyMetrics';
+import { UbiCommunityState } from 'helpers/types/ubi/ubiCommunityState';
 
 import { ApiRequests, getRequest } from '../base';
 
@@ -102,18 +107,70 @@ class ApiRouteCommunity {
     }
 
     static async findById(id: number): Promise<CommunityAttributes> {
-        return (await this.api.get<CommunityAttributes>('/community/' + id))
+        // TODO: should request in parallel
+        const community = (await this.api.get<UbiCommunity>(`/community/${id}`))
             .data;
+        const metrics = (
+            await this.api.get<UbiCommunityDailyMetrics>(
+                `/community/${id}/metrics`
+            )
+        ).data;
+        const contract = (
+            await this.api.get<UbiCommunityContract>(
+                `/community/${id}/contract`
+            )
+        ).data;
+        const state = (
+            await this.api.get<UbiCommunityState>(`/community/${id}/state`)
+        ).data;
+        const suspect = (
+            await this.api.get<UbiCommunitySuspect>(`/community/${id}/suspect`)
+        ).data;
+        // TODO: does not need to be array, we should fix
+        return {
+            metrics: [metrics],
+            ...contract,
+            ...state,
+            suspect: [suspect],
+            ...community,
+        };
     }
 
     static async findByContractAddress(
         address: string
     ): Promise<CommunityAttributes> {
-        return (
-            await this.api.get<CommunityAttributes>(
-                '/community/address/' + address
+        // TODO: should request in parallel
+        const community = (
+            await this.api.get<UbiCommunity>(`/community/address/${address}`)
+        ).data;
+        const metrics = (
+            await this.api.get<UbiCommunityDailyMetrics>(
+                `/community/${community.id}/metrics`
             )
         ).data;
+        const contract = (
+            await this.api.get<UbiCommunityContract>(
+                `/community/${community.id}/contract`
+            )
+        ).data;
+        const state = (
+            await this.api.get<UbiCommunityState>(
+                `/community/${community.id}/state`
+            )
+        ).data;
+        const suspect = (
+            await this.api.get<UbiCommunitySuspect>(
+                `/community/${community.id}/suspect`
+            )
+        ).data;
+        // TODO: does not need to be array, we should fix
+        return {
+            metrics: [metrics],
+            ...contract,
+            ...state,
+            suspect: [suspect],
+            ...community,
+        };
     }
 
     static async pastSSI(id: number): Promise<number[]> {
