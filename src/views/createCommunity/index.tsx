@@ -754,23 +754,39 @@ function CreateCommunityScreen() {
 
             if (!result.cancelled) {
                 if (type === imageTypes.COVER_IMAGE) {
-                    Image.getSize(result.uri, (width, height) => {
-                        if (width >= 784 && height >= 784) {
+                    Image.getSize(
+                        result.uri,
+                        (width, height) => {
+                            if (width >= 784 && height >= 784) {
+                                cb(result.uri);
+                                cbv(true);
+                            } else {
+                                setToggleImageDimensionsModal(true);
+                            }
+                        },
+                        (error) => {
                             cb(result.uri);
                             cbv(true);
-                        } else {
-                            setToggleImageDimensionsModal(true);
+                            Sentry.Native.captureException(error);
                         }
-                    });
+                    );
                 } else {
-                    Image.getSize(result.uri, (width, height) => {
-                        if (width >= 300 && height >= 300) {
+                    Image.getSize(
+                        result.uri,
+                        (width, height) => {
+                            if (width >= 300 && height >= 300) {
+                                cb(result.uri);
+                                cbv(true);
+                            } else {
+                                setToggleImageDimensionsModal(true);
+                            }
+                        },
+                        (error) => {
                             cb(result.uri);
                             cbv(true);
-                        } else {
-                            setToggleImageDimensionsModal(true);
+                            Sentry.Native.captureException(error);
                         }
-                    });
+                    );
                 }
             }
         },
@@ -778,7 +794,6 @@ function CreateCommunityScreen() {
             <View
                 style={{
                     padding: 20,
-                    // height: Dimensions.get('screen').height * 0.9,
                 }}
             >
                 <Searchbar
