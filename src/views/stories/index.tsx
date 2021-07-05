@@ -103,9 +103,6 @@ function StoriesScreen() {
             style={{
                 paddingHorizontal: 14,
             }}
-            contentContainerStyle={{
-                marginHorizontal: 22,
-            }}
             columnWrapperStyle={{ justifyContent: 'space-between' }}
             keyExtractor={(item) => item.name}
             showsVerticalScrollIndicator={false}
