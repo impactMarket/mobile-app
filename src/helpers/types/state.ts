@@ -62,8 +62,12 @@ export interface IAppState {
     };
 }
 
+export interface IOfflineState {
+    queue: [];
+    isConnected: true;
+}
 export interface IRootState {
-    offline?: any;
+    offline?: IOfflineState;
     user: IUserState;
     auth: IAuthState;
     app: IAppState;
