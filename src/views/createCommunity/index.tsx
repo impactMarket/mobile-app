@@ -1259,7 +1259,7 @@ function CreateCommunityScreen() {
         );
     }
 
-    if (toggleInformativeModal) {
+    if (!toggleInformativeModal) {
         return (
             <RNPortal>
                 <Modal visible dismissable={false}>
@@ -1338,7 +1338,7 @@ function CreateCommunityScreen() {
                                                 fontSize: 14,
                                                 lineHeight: 24,
                                                 color: ipctColors.almostBlack,
-                                                textAlign: 'justify',
+                                                textAlign: 'left',
                                                 marginRight: 36,
                                             }}
                                         >
