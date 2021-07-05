@@ -186,10 +186,6 @@ function ProfileScreen() {
             setSending(true);
             setUserAvatarImage(avatar);
 
-            // const res = (await Api.upload.uploadImage(
-            //     avatar,
-            //     imageTargets.PROFILE
-            // )) as any;
             const res = await Api.user.updateProfilePicture(avatar);
             setSending(false);
             CacheStore.cacheUser({

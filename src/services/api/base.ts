@@ -303,17 +303,6 @@ class ApiRequests {
     }
 
     head(endpoint: string) {
-        // let response: T | undefined;
-        // try {
-        // handle success
-        // const requestOptions = {
-        //     headers: {
-        //         Authorization: `Bearer ${this.token}`,
-        //         'Content-Type': 'application/json',
-        //         Accept: 'application/json',
-        //     },
-        //     data: { id },
-        // };
         try {
             const r = fetch(endpoint, { method: 'HEAD' });
             return r;
@@ -323,19 +312,6 @@ class ApiRequests {
                 status: 404,
             };
         }
-        // if (result.status === 401) {
-        //     await AsyncStorage.clear();
-        //     DevSettings.reload();
-        //     return undefined;
-        // }
-        // if (result.status >= 400) {
-        //     return undefined;
-        // }
-        // response = result.data as T;
-        // } catch (e) {
-        //     Sentry.Native.captureException(e);
-        // }
-        // return response;
     }
 
     async uploadSingleImage(

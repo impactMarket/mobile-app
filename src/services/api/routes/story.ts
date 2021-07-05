@@ -1,7 +1,5 @@
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
-// import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import {
     ICommunitiesListStories,
     ICommunityStories,
@@ -12,23 +10,12 @@ import path from 'path';
 import * as mime from 'react-native-mime-types';
 
 import config from '../../../../config';
-import {
-    // getRequest,
-    // postRequest,
-    // deleteRequest,
-    // putRequest,
-    ApiRequests,
-} from '../base';
-// import * as Sentry from 'sentry-expo';
+import { ApiRequests } from '../base';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
 class ApiRouteStory {
     static api = new ApiRequests();
-
-    // static async addPicture(mediaURI: string): Promise<AppMediaContent> {
-    //     return this.api.uploadSingleImage('/story/picture', mediaURI);
-    // }
 
     static async add(
         uri: string | undefined,
