@@ -628,8 +628,6 @@ function CreateCommunityScreen() {
                 }
                 setSending(false);
                 setSendingSuccess(true);
-                setSending(false);
-                setSendingSuccess(true);
             } catch (e) {
                 Sentry.Native.captureException(e);
                 setSending(false);
