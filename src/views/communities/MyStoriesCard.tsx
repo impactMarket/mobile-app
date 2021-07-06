@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
-import { addMyStoriesToState } from 'helpers/redux/actions/stories';
+import { addMyStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
@@ -14,7 +14,7 @@ export default function MyStoriesCard() {
 
     const fetchMyStories = async () => {
         await Api.story.me().then((s) => {
-            dispatch(addMyStoriesToState(s.stories));
+            dispatch(addMyStoriesToStateRequest(s.stories));
         });
     };
 

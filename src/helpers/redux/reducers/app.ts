@@ -14,7 +14,8 @@ const INITIAL_STATE_APP: IAppState = {
     kit: undefined as any,
     exchangeRates: undefined as any, // save exhangeRates on load
     suspectWrongDateTime: false,
-    hasAcceptedRulesAlready: false,
+    hasBeneficiaryAcceptedRulesAlready: false,
+    hasManagerAcceptedRulesAlready: false,
     timeDiff: 0,
     fromWelcomeScreen: '',
 };

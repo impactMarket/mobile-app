@@ -45,6 +45,7 @@ export interface IModalDonateState {
 export interface IStoriesState {
     stories: ICommunitiesListStories[];
     myStories: ICommunityStory[];
+    refreshing: boolean;
 }
 
 export interface IAppState {
@@ -61,7 +62,12 @@ export interface IAppState {
     };
 }
 
+export interface IOfflineState {
+    queue: [];
+    isConnected: true;
+}
 export interface IRootState {
+    offline?: IOfflineState;
     user: IUserState;
     auth: IAuthState;
     app: IAppState;

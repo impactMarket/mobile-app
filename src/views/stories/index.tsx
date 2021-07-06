@@ -3,38 +3,40 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addStoriesToState } from 'helpers/redux/actions/stories';
-import { ICommunitiesListStories } from 'helpers/types/endpoints';
-import React, { useEffect, useState } from 'react';
+import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
+import { IRootState } from 'helpers/types/state';
+import React, { useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useDispatch } from 'react-redux';
-import Api from 'services/api';
+import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
-
-interface ICommunityStoriesBox extends ICommunitiesListStories {
-    empty: boolean;
-}
 
 function StoriesScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const [stories, setStories] = useState<ICommunityStoriesBox[]>([]);
-
-    const [refreshing, setRefreshing] = useState(false);
+    const stories = useSelector((state: IRootState) => state.stories.stories);
+    const refreshing = useSelector(
+        (state: IRootState) => state.stories.refreshing
+    );
 
     useEffect(() => {
-        setRefreshing(true);
-
-        Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-            setStories(s.data);
-            dispatch(addStoriesToState(s.data));
-        });
-
-        setRefreshing(false);
+        dispatch(addStoriesToStateRequest(0, 5));
     }, []);
+
+    /**
+     * Code Before Sagas
+     * */
+    // useEffect(() => {
+    // setRefreshing(true);
+    // Api.story.list<ICommunityStoriesBox[]>().then((s) => {
+    //     setStories(s.data);
+    //     dispatch(addStoriesToState(s.data));
+    // });
+
+    // setRefreshing(false);
+    // }, []);
 
     if (refreshing) {
         return (
