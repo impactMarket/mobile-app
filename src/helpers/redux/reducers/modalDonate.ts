@@ -61,13 +61,6 @@ export const modalDonateReducer = (
                 modalConfirmOpen: false,
                 modalErrorOpen: false,
             };
-        case modalDonateAction.GO_BACK_TO_DONATE:
-            return {
-                ...state,
-                modalDonateOpen: true,
-                modalConfirmOpen: false,
-                modalErrorOpen: false,
-            };
         case modalDonateAction.IN_PROGRESS:
             return {
                 ...state,

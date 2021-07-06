@@ -35,10 +35,12 @@ import {
 } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { resetUserApp, setUserLanguage } from 'helpers/redux/actions/user';
+import rootSagas from 'helpers/redux/sagas';
 import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
 import React from 'react';
 import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
+import FlashMessage from 'react-native-flash-message';
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -51,7 +53,13 @@ import {
     Headline,
 } from 'react-native-paper';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import {
+    offlineMiddleware,
+    suspendSaga,
+    consumeActionMiddleware,
+} from 'redux-offline-queue';
+import createSagaMiddleware from 'redux-saga';
 import { gt as semverGt, gte as semverGte } from 'semver';
 import * as Sentry from 'sentry-expo';
 import CacheStore from 'services/cacheStore';
@@ -69,7 +77,16 @@ import { ipctColors } from './src/styles';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
-const store = createStore(combinedReducer);
+
+const middlewares = [];
+const sagaMiddleware = createSagaMiddleware();
+
+middlewares.push(offlineMiddleware());
+middlewares.push(suspendSaga(sagaMiddleware));
+middlewares.push(consumeActionMiddleware());
+
+const store = createStore(combinedReducer, applyMiddleware(...middlewares));
+sagaMiddleware.run(rootSagas);
 const fonts = {
     regular: {
         fontFamily: 'Gelion-Regular',
@@ -167,6 +184,7 @@ export default class App extends React.Component<any, IAppState> {
                 startNotificationsListeners(kit, store.dispatch)
             );
         }
+
         if (config.testnet) {
             this.setState({ testnetWarningOpen: true });
             setTimeout(
@@ -399,6 +417,7 @@ export default class App extends React.Component<any, IAppState> {
                         backgroundColor="rgba(0, 0, 0, 0.2)"
                         translucent
                     />
+                    <FlashMessage position="top" />
                     {config.testnet && testnetWarningView}
                     <NavigationContainer
                         theme={navigationTheme}

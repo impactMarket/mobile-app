@@ -2,9 +2,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addStoriesToState } from 'helpers/redux/actions/stories';
+import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
-import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useCallback } from 'react';
 import {
@@ -17,7 +16,6 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 import MyStoriesCard from './MyStoriesCard';
@@ -27,14 +25,18 @@ import StoriesCard from './StoriesCard';
 export default function Stories() {
     const dispatch = useDispatch();
 
-    const [storiesCommunity, setStoriesCommunity] = useState<
-        ICommunitiesListStories[]
-    >([]);
-    const [countStories, setCountStories] = useState(0);
-    const [refreshing, setRefreshing] = useState(false);
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+
+    const storiesCommunity = useSelector(
+        (state: IRootState) => state.stories.stories
+    );
+
+    const refreshing = useSelector(
+        (state: IRootState) => state.stories.refreshing
+    );
+
     const userCommunityMetadata = useSelector(
         (state: IRootState) => state.user.community
     );
@@ -42,15 +44,12 @@ export default function Stories() {
     // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
     useFocusEffect(
         useCallback(() => {
-            setRefreshing(true);
-            Api.story.list<ICommunitiesListStories[]>(0, 5).then((s) => {
-                setStoriesCommunity(s.data);
-                setCountStories(s.count);
-                dispatch(addStoriesToState(s.data));
-                setRefreshing(false);
-            });
+            dispatch(addStoriesToStateRequest(0, 5));
         }, [])
     );
+    /**
+     * Code Before Sagas
+     * */
 
     // useEffect(() => {
     //     setRefreshing(true);
@@ -100,7 +99,9 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} ({countStories})
+                        {i18n.t('viewAll')} (
+                        {storiesCommunity?.length ? storiesCommunity.length : 0}
+                        )
                     </Text>
                 </Pressable>
             </View>
@@ -131,24 +132,25 @@ export default function Stories() {
                         color={ipctColors.blueRibbon}
                     />
                 )}
-                {storiesCommunity.map((s) => (
-                    <StoriesCard
-                        key={s.id}
-                        communityId={s.id}
-                        communityName={s.name}
-                        imageURI={
-                            s.story.media
-                                ? chooseMediaThumbnail(s.story.media, {
-                                      width: 84,
-                                      heigth: 140,
-                                  })
-                                : chooseMediaThumbnail(s.cover, {
-                                      width: 88,
-                                      heigth: 88,
-                                  })
-                        }
-                    />
-                ))}
+                {storiesCommunity.length > 0 &&
+                    storiesCommunity.map((s) => (
+                        <StoriesCard
+                            key={s.id}
+                            communityId={s.id}
+                            communityName={s.name}
+                            imageURI={
+                                s.story.media
+                                    ? chooseMediaThumbnail(s.story.media, {
+                                          width: 84,
+                                          heigth: 140,
+                                      })
+                                    : chooseMediaThumbnail(s.cover, {
+                                          width: 88,
+                                          heigth: 88,
+                                      })
+                            }
+                        />
+                    ))}
             </ScrollView>
         </SafeAreaView>
     );

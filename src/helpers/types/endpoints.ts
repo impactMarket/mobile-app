@@ -108,7 +108,6 @@ export interface ICommunitiesListStories {
         message: string | null;
     }; // most recent
 }
-
 export interface ICommunityStories {
     id: number;
     name: string;
