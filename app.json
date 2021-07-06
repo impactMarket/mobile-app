@@ -4,7 +4,7 @@
         "slug": "impact-market",
         "privacy": "public",
         "platforms": ["ios", "android"],
-        "version": "1.1.1",
+        "version": "1.1.4",
         "orientation": "portrait",
         "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarket",
@@ -27,7 +27,7 @@
             "icon": "./src/assets/images/logo/ios.png",
             "googleServicesFile": "./src/assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
-            "buildNumber": "1.1.1",
+            "buildNumber": "1.1.4",
             "supportsTablet": true
         },
         "android": {
@@ -35,7 +35,7 @@
             "icon": "./src/assets/images/logo/android.png",
             "googleServicesFile": "./src/assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
-            "versionCode": 72,
+            "versionCode": 75,
             "adaptiveIcon": {
                 "backgroundImage": "./src/assets/images/logo.png",
                 "backgroundColor": "#2362FB"
