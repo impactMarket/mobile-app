@@ -108,7 +108,7 @@ export default function Stories() {
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ padding: 18 }}
+                contentContainerStyle={{ padding: 14 }}
             >
                 {userAddress.length > 0 &&
                     (userCommunityMetadata.isBeneficiary ||
@@ -118,9 +118,7 @@ export default function Stories() {
                             style={{
                                 flexDirection: 'column',
                                 width: 114,
-                                minHeight:
-                                    Dimensions.get('screen').height * 0.214,
-                                // maxHeight: 167,
+                                height: 167,
                             }}
                         >
                             <NewStoryCard key="newStory" />

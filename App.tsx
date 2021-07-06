@@ -225,7 +225,7 @@ export default class App extends React.Component<any, IAppState> {
     handleUpdateClick = () => {
         const androidURL =
             'https://play.google.com/store/apps/details?id=com.impactmarket.mobile';
-        const iosURL = 'https://testflight.apple.com/join/o19f5StV';
+        const iosURL = 'https://apps.apple.com/app/impactmarket/id1530870911';
         if (Device.osName === 'iOS') {
             Linking.openURL(iosURL);
         } else {

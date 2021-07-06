@@ -107,16 +107,15 @@ function NewStoryScreen() {
     const submitNewStory = async () => {
         setSubmitting(true);
         try {
-            let media: AppMediaContent | undefined;
             if (storyMedia.length > 0 || storyText.length > 0) {
-                if (storyMedia.length > 0) {
-                    media = await Api.story.addPicture(storyMedia);
-                }
-                const r = await Api.story.add({
-                    communityId: userCommunity.id,
-                    message: storyText.length > 0 ? storyText : undefined,
-                    mediaId: media?.id,
-                });
+                const r = await Api.story.add(
+                    storyMedia.length > 0 ? storyMedia : undefined,
+                    {
+                        communityId: userCommunity.id,
+                        message: storyText.length > 0 ? storyText : undefined,
+                        mediaId: 0,
+                    }
+                );
 
                 setSubmitedResult(r);
                 Alert.alert(
