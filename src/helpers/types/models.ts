@@ -33,7 +33,7 @@ export interface UbiCommunitySuspect {
     suspect: number;
     createdAt: boolean;
 }
-export interface CommunityAttributes {
+export interface UbiCommunity {
     id: number; // Note that the `null assertion` `!` is required in strict mode.
     publicId: string;
     requestByAddress: string;
@@ -59,8 +59,11 @@ export interface CommunityAttributes {
     createdAt: Date;
     updatedAt: Date;
 
-    metrics?: UbiCommunityDailyMetrics[];
     cover?: AppMediaContent;
+}
+export interface CommunityAttributes extends UbiCommunity {
+    metrics?: UbiCommunityDailyMetrics[];
+    // cover?: AppMediaContent;
     contract?: UbiCommunityContract;
     state?: UbiCommunityState;
     // storyCommunity?: StoryCommunity[];
