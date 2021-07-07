@@ -7,18 +7,12 @@ import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import Api from 'services/api';
 import { takeLatest, call, put, all } from 'typed-redux-saga';
 
-const getStories = (start: number, end: number) =>
-    Api.story.list<ICommunitiesListStories[]>(start, end);
+const getStories = () => Api.story.list<ICommunitiesListStories[]>();
 
-export function* submitAddStoriesToStateRequest({ payload }: any) {
+export function* submitAddStoriesToStateRequest() {
     try {
-        const { start, end } = payload;
+        const stories: ICommunitiesListStories[] = yield call(getStories);
 
-        const stories: ICommunitiesListStories[] = yield call(
-            getStories,
-            start,
-            end
-        );
         const { data } = stories;
 
         yield put(addStoriesToStateSuccess(data));

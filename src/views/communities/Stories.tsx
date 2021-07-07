@@ -44,21 +44,9 @@ export default function Stories() {
     // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
     useFocusEffect(
         useCallback(() => {
-            dispatch(addStoriesToStateRequest(0, 5));
+            dispatch(addStoriesToStateRequest());
         }, [])
     );
-    /**
-     * Code Before Sagas
-     * */
-
-    // useEffect(() => {
-    //     setRefreshing(true);
-    //     Api.story.list<ICommunitiesListStories[]>().then((s) => {
-    //         setStoriesCommunity(s);
-    //         dispatch(addStoriesToState(s));
-    //         setRefreshing(false);
-    //     });
-    // }, []);
 
     return (
         <SafeAreaView>
@@ -133,7 +121,7 @@ export default function Stories() {
                     />
                 )}
                 {storiesCommunity.length > 0 &&
-                    storiesCommunity.map((s) => (
+                    storiesCommunity.slice(0, 5).map((s, index) => (
                         <StoriesCard
                             key={s.id}
                             communityId={s.id}

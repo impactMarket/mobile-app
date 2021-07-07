@@ -11,13 +11,9 @@ markActionsOffline(storiesAction, [
     addMyStoriesToStateRequest,
 ]);
 
-export function addStoriesToStateRequest(
-    start: number,
-    end: number
-): StoriesActionTypes {
+export function addStoriesToStateRequest(): StoriesActionTypes {
     return {
         type: storiesAction.INIT_REQUEST,
-        payload: { start, end },
     };
 }
 

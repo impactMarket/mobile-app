@@ -169,7 +169,6 @@ interface CloseModalDonateAction {
 
 interface InitLoadStoriesActionRequest {
     type: typeof storiesAction.INIT_REQUEST;
-    payload: { start: number; end: number };
 }
 
 interface InitLoadStoriesActionSuccess {
