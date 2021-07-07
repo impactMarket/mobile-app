@@ -169,11 +169,12 @@ interface CloseModalDonateAction {
 
 interface InitLoadStoriesActionRequest {
     type: typeof storiesAction.INIT_REQUEST;
+    payload: { start: number; end: number };
 }
 
 interface InitLoadStoriesActionSuccess {
     type: typeof storiesAction.INIT_SUCCESS;
-    payload: ICommunitiesListStories[];
+    payload: { data: ICommunitiesListStories[]; count: number };
 }
 
 interface InitLoadStoriesActionFailure {
@@ -196,7 +197,7 @@ interface LoadMyStoriesActionFailure {
 
 interface LoadMoreStoriesAction {
     type: typeof storiesAction.CONCAT;
-    payload: ICommunitiesListStories[];
+    payload: { data: ICommunitiesListStories[]; count: number };
 }
 
 interface SetAppPushNotificationListeners {

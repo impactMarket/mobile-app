@@ -3,9 +3,12 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
+import {
+    addStoriesToStateRequest,
+    // addMoreStoriesToStateRequest,
+} from 'helpers/redux/actions/stories';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,28 +18,44 @@ import StoriesCard from 'views/communities/StoriesCard';
 function StoriesScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    // const [reachedEndList, setReachedEndList] = useState(false);
+    // const [storiesOffset, setStoriesOffset] = useState(0);
 
-    const stories = useSelector((state: IRootState) => state.stories.stories);
+    const stories = useSelector(
+        (state: IRootState) => state.stories.stories.data
+    );
+    const storiesCount = useSelector(
+        (state: IRootState) => state.stories.stories.count
+    );
+
     const refreshing = useSelector(
         (state: IRootState) => state.stories.refreshing
     );
 
     useEffect(() => {
-        dispatch(addStoriesToStateRequest(0, 5));
+        //TODO: improve pagingEnabled list
+        dispatch(addStoriesToStateRequest(0, storiesCount));
     }, []);
 
-    /**
-     * Code Before Sagas
-     * */
-    // useEffect(() => {
-    // setRefreshing(true);
-    // Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-    //     setStories(s.data);
-    //     dispatch(addStoriesToState(s.data));
-    // });
+    // const handleOnEndReached = () => {
+    //     if (!reachedEndList && !refreshing) {
+    //         setStoriesOffset(storiesOffset + 12);
+    //         dispatch(
+    //             addMoreStoriesToStateRequest(storiesOffset, storiesOffset + 12)
+    //         );
 
-    // setRefreshing(false);
-    // }, []);
+    //         console.log('handleOnEndReached');
+    //         console.log({ storiesOffset });
+    //         console.log({ stories: stories.length });
+    //         console.log({ refreshing });
+    //         console.log({ reachedEndList });
+    //         if (stories.length <= 12) {
+    //             setReachedEndList(true);
+    //         } else {
+    //             setReachedEndList(false);
+    //         }
+    //     }
+    // };
 
     if (refreshing) {
         return (
@@ -102,12 +121,17 @@ function StoriesScreen() {
     ) : (
         <FlatList
             data={stories}
+            refreshing={refreshing}
+            // onRefresh={() => handleOnEndReached()}
             style={{
                 marginHorizontal: 12,
             }}
             columnWrapperStyle={{ justifyContent: 'space-between' }}
             keyExtractor={(item) => item.name}
             showsVerticalScrollIndicator={false}
+            // onEndReached={() => handleOnEndReached()}
+            onEndReachedThreshold={0.1}
+            removeClippedSubviews // Unmount components when outside of window
             numColumns={3} // Número de colunas
             renderItem={({ item }) => {
                 if (item.empty) {

@@ -5,15 +5,8 @@ import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useCallback } from 'react';
-import {
-    Dimensions,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    View,
-} from 'react-native';
+import React, { useCallback } from 'react';
+import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
@@ -29,8 +22,16 @@ export default function Stories() {
         (state: IRootState) => state.user.wallet.address
     );
 
+    /**
+     * TODO: Inprove state levels
+     **/
+
     const storiesCommunity = useSelector(
-        (state: IRootState) => state.stories.stories
+        (state: IRootState) => state.stories.stories.data
+    );
+
+    const storiesCount = useSelector(
+        (state: IRootState) => state.stories.stories.count
     );
 
     const refreshing = useSelector(
@@ -44,7 +45,7 @@ export default function Stories() {
     // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
     useFocusEffect(
         useCallback(() => {
-            dispatch(addStoriesToStateRequest());
+            dispatch(addStoriesToStateRequest(0, 5));
         }, [])
     );
 
@@ -87,9 +88,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} (
-                        {storiesCommunity?.length ? storiesCommunity.length : 0}
-                        )
+                        {i18n.t('viewAll')} ({storiesCount})
                     </Text>
                 </Pressable>
             </View>
@@ -120,7 +119,7 @@ export default function Stories() {
                         color={ipctColors.blueRibbon}
                     />
                 )}
-                {storiesCommunity.length > 0 &&
+                {storiesCount > 0 &&
                     storiesCommunity.slice(0, 5).map((s, index) => (
                         <StoriesCard
                             key={s.id}

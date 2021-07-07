@@ -3,7 +3,7 @@ import { StoriesActionTypes } from 'helpers/types/redux';
 import { IStoriesState } from 'helpers/types/state';
 
 const INITIAL_STATE_STORIES: IStoriesState = {
-    stories: [],
+    stories: { data: [], count: 0 },
     myStories: [],
     refreshing: false,
 };
@@ -35,7 +35,7 @@ export const storiesReducer = (
         case storiesAction.CONCAT:
             return {
                 ...state,
-                stories: state.stories.concat(action.payload),
+                stories: state.stories.data.concat(action.payload.data),
             };
 
         case storiesAction.USER_STORIES_SUCCESS:

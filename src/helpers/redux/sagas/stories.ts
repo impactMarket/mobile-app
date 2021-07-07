@@ -3,19 +3,28 @@ import {
     addStoriesToStateSuccess,
     addStoriesToStateFailure,
 } from 'helpers/redux/actions/stories';
-import { ICommunitiesListStories } from 'helpers/types/endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunitiesListStoriesResponse,
+} from 'helpers/types/endpoints';
 import Api from 'services/api';
 import { takeLatest, call, put, all } from 'typed-redux-saga';
 
-const getStories = () => Api.story.list<ICommunitiesListStories[]>();
+const getStories = (start: number, end: number) =>
+    Api.story.list<ICommunitiesListStories[]>(start, end);
 
-export function* submitAddStoriesToStateRequest() {
+export function* submitAddStoriesToStateRequest({ payload }: any) {
     try {
-        const stories: ICommunitiesListStories[] = yield call(getStories);
+        const { start, end } = payload;
 
-        const { data } = stories;
+        const stories: ICommunitiesListStoriesResponse = yield call(
+            getStories,
+            start,
+            end
+        );
+        const { data, count } = stories;
 
-        yield put(addStoriesToStateSuccess(data));
+        yield put(addStoriesToStateSuccess(data, count));
     } catch (err) {
         yield put(addStoriesToStateFailure());
     }

@@ -11,18 +11,33 @@ markActionsOffline(storiesAction, [
     addMyStoriesToStateRequest,
 ]);
 
-export function addStoriesToStateRequest(): StoriesActionTypes {
+export function addStoriesToStateRequest(
+    start: number,
+    end: number
+): StoriesActionTypes {
     return {
         type: storiesAction.INIT_REQUEST,
+        payload: { start, end },
+    };
+}
+
+export function addMoreStoriesToStateRequest(
+    data: ICommunitiesListStories[],
+    count: number
+): StoriesActionTypes {
+    return {
+        type: storiesAction.CONCAT,
+        payload: { data, count },
     };
 }
 
 export function addStoriesToStateSuccess(
-    stories: ICommunitiesListStories[]
+    data: ICommunitiesListStories[],
+    count: number
 ): StoriesActionTypes {
     return {
         type: storiesAction.INIT_SUCCESS,
-        payload: stories,
+        payload: { data, count },
     };
 }
 
