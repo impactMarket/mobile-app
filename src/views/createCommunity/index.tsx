@@ -159,6 +159,9 @@ function CreateCommunityScreen() {
     const [isClaimAmountValid, setIsClaimAmountValid] = useState(true);
     const [isEnablingGPS, setIsEnablingGPS] = useState(false);
     const [isEnabledGPS, setIsEnabledGPS] = useState(true);
+    const [url, setUrl] = useState<string>(
+        'https://impactmarket.uvdesk.com/en/customer/create-ticket/'
+    );
     const [
         isIncrementalIntervalValid,
         setIsIncrementalIntervalValid,
@@ -1009,13 +1012,12 @@ function CreateCommunityScreen() {
                 </TouchableOpacity>
             </View>
         ),
-        renderWebview = () => {
+        renderWebview = (url: string) => {
             return (
                 <WebView
                     originWhitelist={['*']}
                     source={{
-                        uri:
-                            'https://impactmarket.uvdesk.com/en/customer/create-ticket/',
+                        uri: url,
                     }}
                     style={{
                         height: Dimensions.get('screen').height * 0.85,
@@ -1196,7 +1198,7 @@ function CreateCommunityScreen() {
         );
     }
 
-    if (toggleInformativeModal) {
+    if (!toggleInformativeModal) {
         return (
             <RNPortal>
                 <Modal visible dismissable={false}>
@@ -1279,7 +1281,30 @@ function CreateCommunityScreen() {
                                                 marginRight: 36,
                                             }}
                                         >
-                                            {i18n.t('communityRequestError')}
+                                            <Trans
+                                                i18nKey="communityRequestError"
+                                                components={{
+                                                    webview: (
+                                                        <Text
+                                                            onPress={() => {
+                                                                setToggleInformativeModal(
+                                                                    false
+                                                                );
+                                                                setShowWebview(
+                                                                    true
+                                                                );
+                                                            }}
+                                                            style={{
+                                                                fontFamily:
+                                                                    'Inter-Bold',
+                                                                fontSize: 14,
+                                                                color:
+                                                                    ipctColors.blueRibbon,
+                                                            }}
+                                                        />
+                                                    ),
+                                                }}
+                                            />
                                         </Text>
                                     </View>
                                 </>
@@ -1306,9 +1331,12 @@ function CreateCommunityScreen() {
                                     <Trans
                                         i18nKey="communityRequestErrorDetails"
                                         components={{
-                                            webview: (
+                                            bold: (
                                                 <Text
                                                     onPress={() => {
+                                                        setUrl(
+                                                            'https://docs.impactmarket.com/general/others#submitting-a-ticket'
+                                                        );
                                                         setToggleInformativeModal(
                                                             false
                                                         );
@@ -1365,7 +1393,7 @@ function CreateCommunityScreen() {
                 keyboardVerticalOffset={140}
             >
                 {showWebview ? (
-                    renderWebview()
+                    renderWebview(url)
                 ) : (
                     <ScrollView>
                         {isAlertVisible && renderCreateCommunityAlert()}
