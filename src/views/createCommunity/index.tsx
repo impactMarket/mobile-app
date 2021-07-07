@@ -1198,7 +1198,7 @@ function CreateCommunityScreen() {
         );
     }
 
-    if (!toggleInformativeModal) {
+    if (toggleInformativeModal) {
         return (
             <RNPortal>
                 <Modal visible dismissable={false}>
