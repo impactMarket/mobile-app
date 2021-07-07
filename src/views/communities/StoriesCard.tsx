@@ -23,7 +23,7 @@ export default function StoriesCard(props: {
                     minWidth: isSmallScreen ? 91.6 : 112,
                     height: 167,
                     borderRadius: 8,
-                    marginHorizontal: 4,
+                    marginHorizontal: 6,
                 }}
                 onPress={() =>
                     navigation.navigate(Screens.StoriesCarousel, {
