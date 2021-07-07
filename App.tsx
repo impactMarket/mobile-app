@@ -690,7 +690,7 @@ export default class App extends React.Component<any, IAppState> {
                         store.dispatch(resetUserApp());
                         return;
                     }
-                    const exchangeRates = userWelcome.rates;
+                    const exchangeRates = await Api.system.getExchangeRate();
                     const userRates: { [key: string]: number } = {};
                     Object.assign(
                         userRates,

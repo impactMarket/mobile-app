@@ -71,14 +71,13 @@ export interface CommunityCreationAttributes {
 export interface IUserBaseAuth {
     isBeneficiary: boolean;
     isManager: boolean;
-    community?: CommunityAttributes;
+    communityId?: number;
     suspect: UserAttributes['suspect'];
     blocked: boolean;
 }
 
 export interface IUserHello extends IUserBaseAuth {
-    rates: { currency: string; rate: number }[];
-    verifiedPN: boolean | undefined;
+    verifiedPN?: boolean;
 }
 
 export interface IUserAuth extends IUserBaseAuth {

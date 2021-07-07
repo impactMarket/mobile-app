@@ -90,6 +90,10 @@ export async function welcomeUser(
         i18n.changeLanguage(language);
         moment.locale(language);
     }
+    let community: CommunityAttributes | undefined;
+    if (user.isBeneficiary || user.isManager) {
+        community = await Api.community.findById(user.communityId!);
+    }
     batch(() => {
         dispatch(
             setUserWallet({
@@ -122,13 +126,13 @@ export async function welcomeUser(
             setUserExchangeRate(rates[userMetadata.currency.toUpperCase()])
         );
         // dispatch(setAppExchangeRatesAction(allExchangeRates));
-        if (user.isBeneficiary || user.isManager) {
-            const c = user.community!;
+        if (community) {
+            // const c = await Api.community.findById(user.communityId!);
             const communityContract = new kit.web3.eth.Contract(
                 CommunityContractABI as any,
-                c.contractAddress!
+                community.contractAddress!
             );
-            dispatch(setCommunityMetadata(c));
+            dispatch(setCommunityMetadata(community));
             dispatch(setCommunityContract(communityContract));
             dispatch(setUserIsBeneficiary(user.isBeneficiary));
             dispatch(setUserIsCommunityManager(user.isManager));
