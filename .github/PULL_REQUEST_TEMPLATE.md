@@ -23,7 +23,7 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 * Hardware:
 * SDK:
 
-# Screenshots
+# Screenshots/Videos
 Please add any screenshots that can be helpful in case there was some UI improvents. Screenshots from multiple devices are a must.
 
 # Checklist:
