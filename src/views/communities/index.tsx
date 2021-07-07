@@ -119,32 +119,32 @@ function CommunitiesScreen() {
             if (communtiesOrder === 'nearest' && userLocation) {
                 Api.community
                     .list({
-                        offset: communtiesOffset + 10,
-                        limit: 10,
+                        offset: communtiesOffset + 5,
+                        limit: 5,
                         orderBy: 'nearest',
                         lat: userLocation.coords.latitude,
                         lng: userLocation.coords.longitude,
                     })
                     .then((c) => {
-                        if (c.length < 10) {
+                        if (c.length < 5) {
                             setReachedEndList(true);
                         }
                         setCommunities(communities.concat(c));
-                        setCommuntiesOffset(communtiesOffset + 10);
+                        setCommuntiesOffset(communtiesOffset + 5);
                     })
                     .finally(() => setRefreshing(false));
             } else {
                 Api.community
                     .list({
-                        offset: communtiesOffset + 10,
-                        limit: 10,
+                        offset: communtiesOffset + 5,
+                        limit: 5,
                     })
                     .then((c) => {
-                        if (c.length < 10) {
+                        if (c.length < 5) {
                             setReachedEndList(true);
                         }
                         setCommunities(communities.concat(c));
-                        setCommuntiesOffset(communtiesOffset + 10);
+                        setCommuntiesOffset(communtiesOffset + 5);
                     })
                     .finally(() => setRefreshing(false));
             }
