@@ -670,17 +670,17 @@ export default class App extends React.Component<any, IAppState> {
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             if (address !== null && phoneNumber !== null) {
                 const pushNotificationToken = await registerForPushNotifications();
-                store.dispatch(
-                    setPushNotificationsToken(pushNotificationToken)
-                );
-                setPushNotificationListeners(
-                    startNotificationsListeners(kit, store.dispatch)
-                );
+                if (pushNotificationToken) {
+                    store.dispatch(
+                        setPushNotificationsToken(pushNotificationToken)
+                    );
+                    setPushNotificationListeners(
+                        startNotificationsListeners(kit, store.dispatch)
+                    );
+                }
 
-                const userWelcome = await Api.user.hello(
-                    address,
-                    pushNotificationToken,
-                    phoneNumber
+                const userWelcome = await Api.user.welcome(
+                    pushNotificationToken
                 );
 
                 if (userWelcome !== undefined) {

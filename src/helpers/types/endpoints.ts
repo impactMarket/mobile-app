@@ -76,9 +76,7 @@ export interface IUserBaseAuth {
     blocked: boolean;
 }
 
-export interface IUserHello extends IUserBaseAuth {
-    verifiedPN?: boolean;
-}
+export interface IUserHello extends IUserBaseAuth {}
 
 export interface IUserAuth extends IUserBaseAuth {
     avatar: AppMediaContent | null;

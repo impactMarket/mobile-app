@@ -167,8 +167,8 @@ function Auth() {
             userAddress,
             language,
             currency,
-            pushNotificationToken,
-            dappkitResponse.phoneNumber
+            dappkitResponse.phoneNumber,
+            pushNotificationToken
         );
 
         if (user === undefined) {
@@ -211,10 +211,12 @@ function Auth() {
                 dispatch,
                 user.user
             );
-            dispatch(setPushNotificationsToken(pushNotificationToken));
-            setPushNotificationListeners(
-                startNotificationsListeners(kit, dispatch)
-            );
+            if (pushNotificationToken) {
+                dispatch(setPushNotificationsToken(pushNotificationToken));
+                setPushNotificationListeners(
+                    startNotificationsListeners(kit, dispatch)
+                );
+            }
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             analytics('login', { device: Device.brand, success: 'false' });
