@@ -223,12 +223,6 @@ function CreateCommunityScreen() {
         PROFILE_IMAGE = 'PROFILE_IMAGE',
     }
 
-    const CREATE_TICKET =
-        'https://impactmarket.uvdesk.com/en/customer/create-ticket/';
-
-    const FAQ_TICKET =
-        'https://docs.impactmarket.com/general/others#submitting-a-ticket';
-
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () =>
@@ -1018,20 +1012,24 @@ function CreateCommunityScreen() {
                     />
                 </TouchableOpacity>
             </View>
-        ),
-        renderWebview = (url: string) => {
-            return (
-                <WebView
-                    originWhitelist={['*']}
-                    source={{
-                        uri: url,
-                    }}
-                    style={{
-                        height: Dimensions.get('screen').height * 0.85,
-                    }}
-                />
-            );
-        };
+        );
+    const CREATE_TICKET =
+        'https://impactmarket.uvdesk.com/en/customer/create-ticket/';
+
+    const FAQ_TICKET =
+        'https://docs.impactmarket.com/general/others#submitting-a-ticket';
+
+    const handleWebviewTicket = () => {
+        setToggleInformativeModal(false);
+        setShowWeviewTicket(true);
+        modalizeWebViewRef.current?.open();
+    };
+
+    const handleWebviewFAQ = () => {
+        setToggleInformativeModal(false);
+        setShowWeviewFAQ(true);
+        modalizeWebViewRef.current?.open();
+    };
 
     if (toggleImageDimensionsModal) {
         return (
@@ -1293,15 +1291,9 @@ function CreateCommunityScreen() {
                                                 components={{
                                                     webview: (
                                                         <Text
-                                                            onPress={() => {
-                                                                setToggleInformativeModal(
-                                                                    false
-                                                                );
-                                                                setShowWeviewTicket(
-                                                                    true
-                                                                );
-                                                                modalizeWebViewRef.current?.open();
-                                                            }}
+                                                            onPress={
+                                                                handleWebviewTicket
+                                                            }
                                                             style={{
                                                                 fontFamily:
                                                                     'Inter-Bold',
@@ -1341,13 +1333,7 @@ function CreateCommunityScreen() {
                                         components={{
                                             bold: (
                                                 <Text
-                                                    onPress={() => {
-                                                        setToggleInformativeModal(
-                                                            false
-                                                        );
-                                                        setShowWeviewFAQ(true);
-                                                        modalizeWebViewRef.current?.open();
-                                                    }}
+                                                    onPress={handleWebviewFAQ}
                                                     style={{
                                                         fontFamily:
                                                             'Inter-Bold',
@@ -2232,11 +2218,7 @@ function CreateCommunityScreen() {
                 </Modalize>
                 <Modalize
                     ref={modalizeWebViewRef}
-                    HeaderComponent={renderHeader(
-                        null,
-                        modalizeWebViewRef,
-                        true
-                    )}
+                    HeaderComponent={renderHeader(null, modalizeWebViewRef)}
                     adjustToContentHeight
                 >
                     {showWeviewTicket ? (
@@ -2247,7 +2229,7 @@ function CreateCommunityScreen() {
                                     'https://impactmarket.uvdesk.com/en/customer/create-ticket/',
                             }}
                             style={{
-                                height: Dimensions.get('screen').height * 0.85,
+                                height: Dimensions.get('screen').height,
                             }}
                         />
                     ) : (
@@ -2258,7 +2240,7 @@ function CreateCommunityScreen() {
                                     'https://docs.impactmarket.com/general/others#submitting-a-ticket',
                             }}
                             style={{
-                                height: Dimensions.get('screen').height * 0.85,
+                                height: Dimensions.get('screen').height,
                             }}
                         />
                     )}
