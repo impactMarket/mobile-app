@@ -369,10 +369,10 @@ function CreateCommunityScreen() {
                 setIsEmailValid(false);
             }
 
-            // const _isEnabledGPS = gpsLocation !== undefined;
-            // if (!_isEnabledGPS) {
-            //     setIsEnabledGPS(false);
-            // }
+            const _isEnabledGPS = gpsLocation !== undefined;
+            if (!_isEnabledGPS) {
+                setIsEnabledGPS(false);
+            }
             const _isClaimAmountValid =
                 claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
             if (!_isClaimAmountValid) {
