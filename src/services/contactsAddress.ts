@@ -2,7 +2,6 @@ import { ContractKit } from '@celo/contractkit';
 // import { fetchContacts } from '@celo/dappkit';
 // import { PhoneNumberUtils } from '@celo/utils';
 // import * as Contacts from 'expo-contacts';
-import * as Permissions from 'expo-permissions';
 // import * as SQLite from 'expo-sqlite';
 
 export const getCacheContactsAddress = async () => {
