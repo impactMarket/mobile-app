@@ -341,7 +341,8 @@ export default {
             'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
         btnText: 'Reportar',
         label: 'Descreva a potencial atividade ilegal',
-        alertCongrat: 'Parabéns, seu relatório foi submetido!',
+        alertCongrat: 'Obrigado por denunciar potenciais atividades ilegais.',
+        alertCongratLink: 'Saiba mais sobre denúncia anônima.',
         alertFailure: 'Erro ao submeter seu relatório!',
     },
     ubiParamsUpdated:
