@@ -50,6 +50,7 @@ import {
     Dimensions,
     KeyboardAvoidingView,
     Platform,
+    ActivityIndicator,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
@@ -159,6 +160,7 @@ function CreateCommunityScreen() {
     const [isClaimAmountValid, setIsClaimAmountValid] = useState(true);
     const [isEnablingGPS, setIsEnablingGPS] = useState(false);
     const [isEnabledGPS, setIsEnabledGPS] = useState(true);
+    const [isVisible, setVisible] = useState(false);
     const [
         isIncrementalIntervalValid,
         setIsIncrementalIntervalValid,
@@ -241,7 +243,18 @@ function CreateCommunityScreen() {
                 ),
             headerLeft: () => (showWebview ? null : <BackSvg />),
             headerTitle: () =>
-                showWebview ? null : (
+                showWebview ? (
+                    <Text
+                        style={{
+                            fontFamily: 'Manrope-Bold',
+                            fontSize: 22,
+                            lineHeight: 28,
+                            color: '#333239',
+                        }}
+                    >
+                        {i18n.t('submitTicket')}
+                    </Text>
+                ) : (
                     <Text
                         style={{
                             fontFamily: 'Manrope-Bold',
@@ -1037,16 +1050,41 @@ function CreateCommunityScreen() {
         ),
         renderWebview = () => {
             return (
-                <WebView
-                    originWhitelist={['*']}
-                    source={{
-                        uri:
-                            'https://impactmarket.uvdesk.com/en/customer/create-ticket/',
-                    }}
-                    style={{
-                        height: Dimensions.get('screen').height * 0.85,
-                    }}
-                />
+                <>
+                    {isVisible ? (
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Image
+                                style={{
+                                    height: 58,
+                                    width: 58,
+                                    alignSelf: 'center',
+                                }}
+                                source={require('../../assets/images/waitingTx.gif')}
+                            />
+                        </View>
+                    ) : null}
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{
+                            uri:
+                                'https://impactmarket.uvdesk.com/en/customer/create-ticket/',
+                        }}
+                        style={{
+                            height: Dimensions.get('screen').height * 0.85,
+                        }}
+                        //Enable Javascript support
+                        javaScriptEnabled={true}
+                        //For the Cache
+                        domStorageEnabled={true}
+                        onLoadStart={() => setVisible(true)}
+                        onLoad={() => setVisible(false)}
+                    />
+                </>
             );
         };
 
