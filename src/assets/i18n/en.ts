@@ -338,11 +338,15 @@ export default {
     report: 'Report',
     reportIlegal: {
         title: 'Report illegal activity',
+        category: 'Category',
+        general: 'General',
+        selectCategory: 'Select category',
+        potencialFraud: 'Potencial Fraud',
         message:
             'If you think there is something suspicious with your community, money distribution, or behavior, like potential fraud or corruption, let us know in an anonymous way.',
         btnText: 'Report',
         label: 'Describe the potential  ilegal activity...',
-        alertCongrat: 'Thank you for reporting potential illegal activity!',
+        alertCongrat: 'Thank you for reporting potential illegal activity.',
         alertCongratLink: 'Know more about anonymous reporting.',
         alertFailure: 'Error uploading report!',
     },

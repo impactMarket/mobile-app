@@ -338,6 +338,10 @@ export default {
     report: 'Relatório',
     reportIlegal: {
         title: 'Denunciar atividade ilegal',
+        category: 'Categoria',
+        general: 'General',
+        selectCategory: 'Selectionar categoria',
+        potencialFraud: 'Potencial fraude',
         message:
             'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
         btnText: 'Reportar',
