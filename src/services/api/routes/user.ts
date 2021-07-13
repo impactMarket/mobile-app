@@ -11,12 +11,14 @@ class ApiRouteUser {
 
     static async report(
         communityId: string,
-        message: string
+        message: string,
+        category: string | undefined
     ): Promise<boolean> {
         return (
             await this.api.post<boolean>(`/user/report`, {
                 communityId,
                 message,
+                category,
             })
         ).data;
     }
