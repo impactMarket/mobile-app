@@ -1,15 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
-import { Screens } from 'helpers/constants';
-import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import { Card, Text, IconButton } from 'react-native-paper';
-import { View, Dimensions } from 'react-native';
-import { SHOW_REPORT_CARD } from 'helpers/constants';
-
-import ReportSvg from './ReportSvg';
-
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import { SHOW_REPORT_CARD } from 'helpers/constants';
+import * as React from 'react';
+import { View, Dimensions } from 'react-native';
+import { Card, Text, IconButton } from 'react-native-paper';
+
 import AnonymousIconCardSvg from '../AnonymousIconCardSvg';
 
 const ReportCard = ({
