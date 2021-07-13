@@ -2,7 +2,6 @@ import { ContractKit } from '@celo/contractkit';
 import { Subscription } from '@unimodules/core';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 import { Screens } from 'helpers/constants';
 import {
     setCommunityContract,
@@ -23,14 +22,14 @@ export async function registerForPushNotifications(): Promise<string> {
     let token = '';
     try {
         if (Constants.isDevice) {
-            const { status: existingStatus } = await Permissions.getAsync(
-                Permissions.NOTIFICATIONS
-            );
+            const {
+                status: existingStatus,
+            } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
-                const { status } = await Permissions.askAsync(
-                    Permissions.NOTIFICATIONS
-                );
+                const {
+                    status,
+                } = await Notifications.requestPermissionsAsync();
                 finalStatus = status;
             }
             if (finalStatus !== 'granted') {

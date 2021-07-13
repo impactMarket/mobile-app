@@ -22,7 +22,7 @@ function CommunitiesScreen() {
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
     const [userLocation, setUserLocation] = useState<
-        Location.LocationObject | undefined
+        Location.LocationData | undefined
     >(undefined);
 
     const [refreshing, setRefreshing] = useState(true);
