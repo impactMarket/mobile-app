@@ -109,9 +109,9 @@ export default {
     missingFieldError:
         'Todos os campos marcados como obrigatórios precisam ser informados. Verifique o que está faltando e tente novamente. ',
     communityRequestError:
-        'Ocorreu um erro ao enviar as informações da comunidade. Verifique sua conexão com a Internet e tente novamente mais tarde.',
+        'Ocorreu um erro ao enviar as informações da comunidade. Se você não conseguir criar/editar esta comunidade, <webview>envie um tíquete</webview>.',
     communityRequestErrorDetails:
-        'Se você não conseguir criar/editar esta comunidade, <webview>envie um tíquete</webview> descrevendo o problema.',
+        'Se tens dúvida de como submeter um ticket, por favor <bold>clique aqui</bold>',
     communityRequestSuccess:
         'As informações da sua comunidade foram enviadas com sucesso.',
     failure: 'Falhou',
