@@ -188,6 +188,7 @@ function CreateCommunityScreen() {
     const [searchCountryISOResult, setSearchCountryISOResult] = useState<
         string[]
     >([]);
+    const [webviewURL, setWebviewURL] = useState<string>('');
     const [country, setCountry] = useState(initialData.country || '');
     const [email, setEmail] = useState(initialData.email || '');
     const [coverImage, setCoverImage] = useState(initialData.coverImage || '');
@@ -319,9 +320,10 @@ function CreateCommunityScreen() {
         }
     }, [userIsManager, userCommunity]);
 
-    const handleWebViewRequest = () => {
+    const handleWebViewRequest = (url: string) => {
         setToggleInformativeModal(false);
         setShowWebview(true);
+        setWebviewURL(url);
     };
 
     const handleGenericHelpTexts = ({
@@ -1070,16 +1072,8 @@ function CreateCommunityScreen() {
                     ) : null}
                     <WebView
                         originWhitelist={['*']}
-                        source={{
-                            uri:
-                                'https://impactmarket.uvdesk.com/en/customer/create-ticket/',
-                        }}
-                        style={{
-                            height: Dimensions.get('screen').height * 0.85,
-                        }}
-                        //Enable Javascript support
+                        source={{ uri: webviewURL }}
                         javaScriptEnabled={true}
-                        //For the Cache
                         domStorageEnabled={true}
                         onLoadStart={() => setVisible(true)}
                         onLoad={() => setVisible(false)}
@@ -1343,7 +1337,27 @@ function CreateCommunityScreen() {
                                                 marginRight: 36,
                                             }}
                                         >
-                                            {i18n.t('communityRequestError')}
+                                            <Trans
+                                                i18nKey="communityRequestError"
+                                                components={{
+                                                    webview: (
+                                                        <Text
+                                                            onPress={() =>
+                                                                handleWebViewRequest(
+                                                                    'https://impactmarket.uvdesk.com/en/customer/create-ticket/'
+                                                                )
+                                                            }
+                                                            style={{
+                                                                fontFamily:
+                                                                    'Inter-Bold',
+                                                                fontSize: 14,
+                                                                color:
+                                                                    ipctColors.blueRibbon,
+                                                            }}
+                                                        />
+                                                    ),
+                                                }}
+                                            />
                                         </Text>
                                     </View>
                                 </>
@@ -1370,10 +1384,12 @@ function CreateCommunityScreen() {
                                     <Trans
                                         i18nKey="communityRequestErrorDetails"
                                         components={{
-                                            webview: (
+                                            bold: (
                                                 <Text
-                                                    onPress={
-                                                        handleWebViewRequest
+                                                    onPress={() =>
+                                                        handleWebViewRequest(
+                                                            'https://docs.impactmarket.com/general/others#submitting-a-ticket'
+                                                        )
                                                     }
                                                     style={{
                                                         fontFamily:
