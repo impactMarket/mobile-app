@@ -18,11 +18,19 @@ import {
     UbiRequestChangeParams,
 } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, RefreshControl, Alert } from 'react-native';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
+import {
+    StyleSheet,
+    View,
+    Text,
+    RefreshControl,
+    Dimensions,
+    Alert,
+} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 // services
 import { ActivityIndicator, Portal, Paragraph } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
@@ -33,6 +41,7 @@ import { ipctColors } from 'styles/index';
 
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
@@ -103,6 +112,24 @@ function CommunityManagerScreen() {
         }
         loadCommunityRulesStats();
     });
+
+    useLayoutEffect(() => {
+        if (openHelpCenter) {
+            navigation.setOptions({
+                headerShown: !openHelpCenter,
+                headerRight: () => (
+                    <CloseStorySvg
+                        style={{
+                            alignSelf: 'flex-end',
+                            marginTop: 14,
+                            marginRight: 10,
+                        }}
+                        onPress={() => setOpenHelpCenter(false)}
+                    />
+                ),
+            });
+        }
+    }, [openHelpCenter]);
 
     const onRefresh = () => {
         updateCommunityInfo(community.id, dispatch).then(async () => {
@@ -279,41 +306,61 @@ function CommunityManagerScreen() {
             );
         }
 
+        const renderHelpCenter = () => {
+            if (openHelpCenter) {
+                return (
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{ uri: 'https://docs.impactmarket.com/' }}
+                        style={{
+                            height: Dimensions.get('screen').height * 0.85,
+                        }}
+                    />
+                );
+            }
+        };
+
         return (
             <ScrollView>
-                <Text
-                    style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 15,
-                        lineHeight: 24,
-                        marginHorizontal: 18,
-                        letterSpacing: 0,
-                        textAlign: 'left',
-                    }}
-                >
-                    {i18n.t('pendingApprovalMessage')}{' '}
-                </Text>
-                <Button
-                    modeType="gray"
-                    style={{
-                        marginHorizontal: 18,
-                        marginTop: 16,
-                        marginBottom: 16,
-                        // width: '100%',
-                    }}
-                    labelStyle={{
-                        fontSize: 18,
-                        lineHeight: 18,
-                        letterSpacing: 0.3,
-                    }}
-                    onPress={() => {
-                        setOpenHelpCenter(true);
-                    }}
-                >
-                    {i18n.t('openHelpCenter')}
-                </Button>
-                {!hasManagerAcceptedRulesAlready && (
-                    <CommunityRules caller="MANAGER" />
+                {openHelpCenter ? (
+                    renderHelpCenter()
+                ) : (
+                    <>
+                        <Text
+                            style={{
+                                fontFamily: 'Inter-Regular',
+                                fontSize: 15,
+                                lineHeight: 24,
+                                marginHorizontal: 18,
+                                letterSpacing: 0,
+                                textAlign: 'left',
+                            }}
+                        >
+                            {i18n.t('pendingApprovalMessage')}{' '}
+                        </Text>
+                        <Button
+                            modeType="gray"
+                            style={{
+                                marginHorizontal: 18,
+                                marginTop: 16,
+                                marginBottom: 16,
+                                // width: '100%',
+                            }}
+                            labelStyle={{
+                                fontSize: 18,
+                                lineHeight: 18,
+                                letterSpacing: 0.3,
+                            }}
+                            onPress={() => {
+                                setOpenHelpCenter(true);
+                            }}
+                        >
+                            {i18n.t('openHelpCenter')}
+                        </Button>
+                        {!hasManagerAcceptedRulesAlready && (
+                            <CommunityRules caller="MANAGER" />
+                        )}
+                    </>
                 )}
             </ScrollView>
         );
