@@ -15,7 +15,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
-import { Screens, celoNetwork, imageTargets } from 'helpers/constants';
+import { Screens, celoNetwork } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     amountToCurrency,
@@ -231,7 +231,28 @@ function CreateCommunityScreen() {
                         }
                         submitting={sending}
                     />
-                ) : null,
+                ) : (
+                    <CloseStorySvg
+                        style={{ marginRight: 26 }}
+                        onPress={() => {
+                            setShowWebview(false);
+                        }}
+                    />
+                ),
+            headerLeft: () => (showWebview ? null : <BackSvg />),
+            headerTitle: () =>
+                showWebview ? null : (
+                    <Text
+                        style={{
+                            fontFamily: 'Manrope-Bold',
+                            fontSize: 22,
+                            lineHeight: 28,
+                            color: '#333239',
+                        }}
+                    >
+                        {i18n.t('applyCommunity')}
+                    </Text>
+                ),
         });
         // TODO: this next line should change though.
     }, [
@@ -284,6 +305,11 @@ function CreateCommunityScreen() {
             setIsEditable(true);
         }
     }, [userIsManager, userCommunity]);
+
+    const handleWebViewRequest = () => {
+        setToggleInformativeModal(false);
+        setShowWebview(true);
+    };
 
     const handleGenericHelpTexts = ({
             title,
@@ -364,10 +390,10 @@ function CreateCommunityScreen() {
                 setIsEmailValid(false);
             }
 
-            const _isEnabledGPS = gpsLocation !== undefined;
-            if (!_isEnabledGPS) {
-                setIsEnabledGPS(false);
-            }
+            // const _isEnabledGPS = gpsLocation !== undefined;
+            // if (!_isEnabledGPS) {
+            //     setIsEnabledGPS(false);
+            // }
             const _isClaimAmountValid =
                 claimAmount.length > 0 && /^\d*[\.\,]?\d*$/.test(claimAmount);
             if (!_isClaimAmountValid) {
@@ -1308,12 +1334,9 @@ function CreateCommunityScreen() {
                                         components={{
                                             webview: (
                                                 <Text
-                                                    onPress={() => {
-                                                        setToggleInformativeModal(
-                                                            false
-                                                        );
-                                                        setShowWebview(true);
-                                                    }}
+                                                    onPress={
+                                                        handleWebViewRequest
+                                                    }
                                                     style={{
                                                         fontFamily:
                                                             'Inter-Bold',
