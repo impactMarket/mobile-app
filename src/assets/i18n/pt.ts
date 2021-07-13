@@ -2,7 +2,7 @@ export default {
     testnetWarning:
         'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
     pendingApprovalMessage:
-        'Estamos revisando seu envio e entraremos em contato em X dias ou menos. Se você tiver outras perguntas, visite nossa Central de Ajuda para ler nosso F.A.Q.s ou enviar um tíquete.',
+        'Estamos revisando seu envio e entraremos em contato dentro de poucas semanas. Se você tiver outras perguntas, visite nossa Central de Ajuda para ler nosso F.A.Q.s ou enviar um tíquete.',
     pendingApproval: 'Pedido Pendente',
     fullDashboard: 'Painel Completo',
     editCommunityDetails: 'Editar detalhes da comunidade',
@@ -63,7 +63,7 @@ export default {
     createCommunityDescription:
         'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
     createCommunityAlert:
-        'Após o envio, entraremos em contato com você em 14 dias ou menos.',
+        'Após o envio, entraremos em contato com você dentro de poucas semanas.',
     selectCoverImage: 'Selecione Imagem de Capa',
     imageDimensionsNotFit: 'Selectione uma Imagem com as dimensões corretas',
     contractIncrementTitle: 'Incremento de tempo total após cada pedido',
