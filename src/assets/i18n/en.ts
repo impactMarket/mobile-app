@@ -2,7 +2,7 @@ export default {
     testnetWarning:
         "A friendly reminder you're using the Alfajores network build - the balances are not real.",
     pendingApprovalMessage:
-        'We are reviewing your submission and will contact you in X days or less. If you have any additional questions visit our Help Center to read our F.A.Q.s or submit a ticket.',
+        'We are reviewing your submission and will contact you in a few weeks. If you have any additional questions visit our Help Center to read our F.A.Q.s or submit a ticket.',
     pendingApproval: 'Pending Approval',
     fullDashboard: 'Full Dashboard',
     editCommunityDetails: 'Edit community details',
@@ -71,7 +71,7 @@ export default {
     createCommunityDescription:
         'By creating a new community, you are initiating a new basic income mechanism for your community where each beneficiary you add will have equal access to claim a recurring amount defined by you in this form.',
     createCommunityAlert:
-        'After submitting, we’ll will contact you in 14 days or less.',
+        'After submitting, we’ll will contact you in a few weeks.',
     selectCoverImage: 'Select Cover Image',
     imageDimensionsNotFit: 'Select an image with the correct dimensions',
     changeCoverImage: 'Cover Image',
