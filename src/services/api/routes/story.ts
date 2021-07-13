@@ -1,37 +1,69 @@
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-// import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
+import * as FileSystem from 'expo-file-system';
 import {
     ICommunitiesListStories,
     ICommunityStories,
     ICommunityStory,
 } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
+import path from 'path';
+import * as mime from 'react-native-mime-types';
 
 import config from '../../../../config';
-import {
-    // getRequest,
-    // postRequest,
-    // deleteRequest,
-    // putRequest,
-    ApiRequests,
-} from '../base';
-// import * as Sentry from 'sentry-expo';
+import { ApiRequests } from '../base';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
 class ApiRouteStory {
     static api = new ApiRequests();
 
-    static async addPicture(mediaURI: string): Promise<AppMediaContent> {
-        return this.api.uploadSingleImage('/story/picture', mediaURI);
-    }
-
-    static async add(story: {
-        communityId: number;
-        message?: string;
-        mediaId?: number;
-    }): Promise<ICommunityStory> {
+    static async add(
+        uri: string | undefined,
+        story: {
+            communityId: number;
+            message?: string;
+            mediaId?: number;
+        }
+    ): Promise<ICommunityStory> {
+        if (uri) {
+            const mimetype = mime
+                .contentType(path.basename(uri))
+                .match(/\/(\w+);?/)[1];
+            const preSigned = (
+                await this.api.get<{
+                    uploadURL: string;
+                    media: AppMediaContent;
+                }>('/story/media/' + mimetype, true)
+            ).data;
+            const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+                httpMethod: 'PUT',
+                mimeType: mimetype,
+                uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
+                headers: {
+                    'Content-Type': 'image/' + mimetype,
+                },
+            });
+            if (ru.status >= 400) {
+                throw new Error(ru.body.toString());
+            }
+            // wait until image exists on real endpoint
+            // TODO: improve this
+            const delay = (ms: number) =>
+                new Promise((resolve) => setTimeout(resolve, ms));
+            let tries = 3;
+            while (tries-- > 0) {
+                delay(1000);
+                const { status } = await this.api.head(preSigned.media.url);
+                if (status === 200) {
+                    break;
+                }
+            }
+            //
+            story = {
+                ...story,
+                mediaId: preSigned.media.id,
+            };
+        }
         return (await this.api.post<ICommunityStory>('/story', story)).data;
     }
 

@@ -412,4 +412,13 @@ export default {
         errorUploadAvatar:
             'An error happened while uploading your profile picture!',
     },
+    sagas: {
+        messages: {
+            submitAddStoriesToStateSuccess: 'Hurray! See the latest stories.',
+            yourNetworkisOffline: 'Ouch! Seems like you are offline.',
+            yourNetworkisOnline: 'Hurray! Your network is back online!',
+            submitAddStoriesToStateFailure:
+                'Oops! We could not update all stories at this time. Please try again later',
+        },
+    },
 };

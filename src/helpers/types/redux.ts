@@ -11,6 +11,8 @@ import {
     SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
     SET_CELO_KIT,
+    SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS,
+    SET_APP_MANAGER_HAS_ACCEPTED_TERMS,
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
     RESET_USER_APP,
@@ -68,6 +70,16 @@ interface UserSetIsSuspectAction {
 
 interface UserSetIsCommunityManagerAction {
     type: typeof SET_USER_IS_COMMUNITY_MANAGER;
+    payload: boolean;
+}
+
+interface UserSetBeneficiaryAcceptedRulesAction {
+    type: typeof SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS;
+    payload: boolean;
+}
+
+interface UserSetManagerAcceptedRulesAction {
+    type: typeof SET_APP_MANAGER_HAS_ACCEPTED_TERMS;
     payload: boolean;
 }
 
@@ -155,14 +167,32 @@ interface CloseModalDonateAction {
     type: typeof modalDonateAction.CLOSE;
 }
 
-interface InitLoadStoriesAction {
-    type: typeof storiesAction.INIT;
+interface InitLoadStoriesActionRequest {
+    type: typeof storiesAction.INIT_REQUEST;
+    payload: { start: number; end: number };
+}
+
+interface InitLoadStoriesActionSuccess {
+    type: typeof storiesAction.INIT_SUCCESS;
     payload: ICommunitiesListStories[];
 }
 
-interface LoadMyStoriesAction {
-    type: typeof storiesAction.USER_STORIES;
+interface InitLoadStoriesActionFailure {
+    type: typeof storiesAction.INIT_FAILURE;
+}
+
+interface LoadMyStoriesActionRequest {
+    type: typeof storiesAction.USER_STORIES_REQUEST;
     payload: ICommunityStory[];
+}
+
+interface LoadMyStoriesActionSuccess {
+    type: typeof storiesAction.USER_STORIES_SUCCESS;
+    payload: ICommunityStory[];
+}
+
+interface LoadMyStoriesActionFailure {
+    type: typeof storiesAction.USER_STORIES_FAILURE;
 }
 
 interface LoadMoreStoriesAction {
@@ -201,7 +231,9 @@ export type AppActionTypes =
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime
     | SetAppFromWelcomeScreen
-    | SetAppPushNotificationListeners;
+    | SetAppPushNotificationListeners
+    | UserSetBeneficiaryAcceptedRulesAction
+    | UserSetManagerAcceptedRulesAction;
 
 export type ModalActionTypes =
     | OpenModalDonateAction
@@ -212,9 +244,13 @@ export type ModalActionTypes =
     | CloseModalDonateAction;
 
 export type StoriesActionTypes =
-    | InitLoadStoriesAction
+    | InitLoadStoriesActionRequest
+    | InitLoadStoriesActionSuccess
+    | InitLoadStoriesActionFailure
     | LoadMoreStoriesAction
-    | LoadMyStoriesAction;
+    | LoadMyStoriesActionRequest
+    | LoadMyStoriesActionSuccess
+    | LoadMyStoriesActionFailure;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes

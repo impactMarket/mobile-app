@@ -83,9 +83,13 @@ export enum imageTargets {
 }
 
 export enum storiesAction {
-    INIT = 'stories/init',
+    INIT_REQUEST = 'stories/init_request',
+    INIT_SUCCESS = 'stories/init_success',
+    INIT_FAILURE = 'stories/init_failure',
     CONCAT = 'stories/concat',
-    USER_STORIES = 'stories/user',
+    USER_STORIES_REQUEST = 'stories/user_request',
+    USER_STORIES_SUCCESS = 'stories/user_success',
+    USER_STORIES_FAILURE = 'stories/user_failure',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

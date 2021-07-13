@@ -10,15 +10,20 @@ export default function StoriesCard(props: {
     communityId: number;
 }) {
     const navigation = useNavigation();
+
+    const { height } = Dimensions.get('window');
+
+    const isSmallScreen = height < 600;
+
     return (
         <View style={{ flexDirection: 'column' }}>
             <Pressable
                 style={{
                     backgroundColor: ipctColors.blueRibbon,
-                    width: Dimensions.get('screen').width * 0.28,
+                    minWidth: isSmallScreen ? 91.6 : 112,
                     height: 167,
                     borderRadius: 8,
-                    marginRight: Dimensions.get('screen').width * 0.04,
+                    marginHorizontal: 6,
                 }}
                 onPress={() =>
                     navigation.navigate(Screens.StoriesCarousel, {
@@ -40,7 +45,6 @@ export default function StoriesCard(props: {
                     fontFamily: 'Inter-Regular',
                     fontSize: 12,
                     lineHeight: 20,
-                    marginHorizontal: 5.92,
                     color: ipctColors.almostBlack,
                     marginTop: 8,
                     flexWrap: 'wrap',

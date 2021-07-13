@@ -1,3 +1,4 @@
+import * as FileSystem from 'expo-file-system';
 import {
     CommunityCreationAttributes,
     IManagerDetailsBeneficiary,
@@ -5,10 +6,18 @@ import {
     IManagerDetailsManager,
 } from 'helpers/types/endpoints';
 import {
+    AppMediaContent,
     CommunityAttributes,
     ManagerAttributes,
+    UbiCommunity,
+    UbiCommunitySuspect,
     UbiRequestChangeParams,
 } from 'helpers/types/models';
+import { UbiCommunityContract } from 'helpers/types/ubi/ubiCommunityContract';
+import { UbiCommunityDailyMetrics } from 'helpers/types/ubi/ubiCommunityDailyMetrics';
+import { UbiCommunityState } from 'helpers/types/ubi/ubiCommunityState';
+import path from 'path';
+import * as mime from 'react-native-mime-types';
 
 import { ApiRequests, getRequest } from '../base';
 
@@ -102,18 +111,70 @@ class ApiRouteCommunity {
     }
 
     static async findById(id: number): Promise<CommunityAttributes> {
-        return (await this.api.get<CommunityAttributes>('/community/' + id))
+        // TODO: should request in parallel
+        const community = (await this.api.get<UbiCommunity>(`/community/${id}`))
             .data;
+        const metrics = (
+            await this.api.get<UbiCommunityDailyMetrics>(
+                `/community/${id}/metrics`
+            )
+        ).data;
+        const contract = (
+            await this.api.get<UbiCommunityContract>(
+                `/community/${id}/contract`
+            )
+        ).data;
+        const state = (
+            await this.api.get<UbiCommunityState>(`/community/${id}/state`)
+        ).data;
+        const suspect = (
+            await this.api.get<UbiCommunitySuspect>(`/community/${id}/suspect`)
+        ).data;
+        // TODO: does not need to be array, we should fix
+        return {
+            metrics: [metrics],
+            ...contract,
+            ...state,
+            suspect: [suspect],
+            ...community,
+        };
     }
 
     static async findByContractAddress(
         address: string
     ): Promise<CommunityAttributes> {
-        return (
-            await this.api.get<CommunityAttributes>(
-                '/community/address/' + address
+        // TODO: should request in parallel
+        const community = (
+            await this.api.get<UbiCommunity>(`/community/address/${address}`)
+        ).data;
+        const metrics = (
+            await this.api.get<UbiCommunityDailyMetrics>(
+                `/community/${community.id}/metrics`
             )
         ).data;
+        const contract = (
+            await this.api.get<UbiCommunityContract>(
+                `/community/${community.id}/contract`
+            )
+        ).data;
+        const state = (
+            await this.api.get<UbiCommunityState>(
+                `/community/${community.id}/state`
+            )
+        ).data;
+        const suspect = (
+            await this.api.get<UbiCommunitySuspect>(
+                `/community/${community.id}/suspect`
+            )
+        ).data;
+        // TODO: does not need to be array, we should fix
+        return {
+            metrics: [metrics],
+            ...contract,
+            ...state,
+            suspect: [suspect],
+            ...community,
+        };
     }
 
     static async pastSSI(id: number): Promise<number[]> {
@@ -122,14 +183,92 @@ class ApiRouteCommunity {
     }
 
     static async create(
+        uri: string,
         details: CommunityCreationAttributes
     ): Promise<{ data: CommunityAttributes; error: any }> {
+        const mimetype = mime
+            .contentType(path.basename(uri))
+            .match(/\/(\w+);?/)[1];
+        const preSigned = (
+            await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
+                '/community/media/' + mimetype,
+                true
+            )
+        ).data;
+        const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+            httpMethod: 'PUT',
+            mimeType: mimetype,
+            uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
+            headers: {
+                'Content-Type': 'image/' + mimetype,
+            },
+        });
+        if (ru.status >= 400) {
+            throw new Error(ru.body.toString());
+        }
+        // wait until image exists on real endpoint
+        // TODO: improve this
+        const delay = (ms: number) =>
+            new Promise((resolve) => setTimeout(resolve, ms));
+        let tries = 3;
+        while (tries-- > 0) {
+            delay(1000);
+            const { status } = await this.api.head(preSigned.media.url);
+            if (status === 200) {
+                break;
+            }
+        }
+        //
+        details = {
+            ...details,
+            coverMediaId: preSigned.media.id,
+        };
         return this.api.post<CommunityAttributes>('/community/create', details);
     }
 
     static async edit(
+        uri: string | undefined,
         details: CommunityEditionAttributes
     ): Promise<CommunityAttributes> {
+        if (uri) {
+            const mimetype = mime
+                .contentType(path.basename(uri))
+                .match(/\/(\w+);?/)[1];
+            const preSigned = (
+                await this.api.get<{
+                    uploadURL: string;
+                    media: AppMediaContent;
+                }>('/community/media/' + mimetype, true)
+            ).data;
+            const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
+                httpMethod: 'PUT',
+                mimeType: mimetype,
+                uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
+                headers: {
+                    'Content-Type': 'image/' + mimetype,
+                },
+            });
+            if (ru.status >= 400) {
+                throw new Error(ru.body.toString());
+            }
+            // wait until image exists on real endpoint
+            // TODO: improve this
+            const delay = (ms: number) =>
+                new Promise((resolve) => setTimeout(resolve, ms));
+            let tries = 3;
+            while (tries-- > 0) {
+                delay(1000);
+                const { status } = await this.api.head(preSigned.media.url);
+                if (status === 200) {
+                    break;
+                }
+            }
+            //
+            details = {
+                ...details,
+                coverMediaId: preSigned.media.id,
+            };
+        }
         return this.api.put('/community', details);
     }
 

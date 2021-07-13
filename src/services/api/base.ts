@@ -302,6 +302,18 @@ class ApiRequests {
         // return response;
     }
 
+    head(endpoint: string) {
+        try {
+            const r = fetch(endpoint, { method: 'HEAD' });
+            return r;
+        } catch (e) {
+            console.log(e);
+            return {
+                status: 404,
+            };
+        }
+    }
+
     async uploadSingleImage(
         endpoint: string,
         mediaURI: string
