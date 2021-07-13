@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { SHOW_REPORT_CARD } from 'helpers/constants';
 import * as React from 'react';
@@ -13,8 +12,6 @@ const ReportCard = ({
 }: {
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const navigation = useNavigation();
-
     const registerFirstAccessReport = async () => {
         await AsyncStorage.setItem(SHOW_REPORT_CARD, 'false');
     };
