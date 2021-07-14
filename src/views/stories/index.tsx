@@ -3,10 +3,20 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
+import {
+    addStoriesToStateRequest,
+    addMoreStoriesToStateRequest,
+} from 'helpers/redux/actions/stories';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import {
+    View,
+    FlatList,
+    StyleSheet,
+    Text,
+    Pressable,
+    RefreshControl,
+} from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
@@ -16,27 +26,20 @@ function StoriesScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const stories = useSelector((state: IRootState) => state.stories.stories);
+    const stories = useSelector(
+        (state: IRootState) => state.stories.stories.data
+    );
+
+    const storiesCount = useSelector(
+        (state: IRootState) => state.stories.stories.count
+    );
     const refreshing = useSelector(
         (state: IRootState) => state.stories.refreshing
     );
 
     useEffect(() => {
-        dispatch(addStoriesToStateRequest(0, 5));
+        dispatch(addStoriesToStateRequest(0, 12));
     }, []);
-
-    /**
-     * Code Before Sagas
-     * */
-    // useEffect(() => {
-    // setRefreshing(true);
-    // Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-    //     setStories(s.data);
-    //     dispatch(addStoriesToState(s.data));
-    // });
-
-    // setRefreshing(false);
-    // }, []);
 
     if (refreshing) {
         return (
@@ -47,7 +50,14 @@ function StoriesScreen() {
             />
         );
     }
-    return refreshing && stories.length === 0 ? (
+
+    const handleOnEndReached = () => {
+        dispatch(
+            addMoreStoriesToStateRequest(stories?.length, stories?.length + 6)
+        );
+    };
+
+    return refreshing || storiesCount === 0 ? (
         <View
             style={{
                 flex: 1,
@@ -108,6 +118,20 @@ function StoriesScreen() {
             keyExtractor={(item) => item.name}
             showsVerticalScrollIndicator={false}
             numColumns={3} // Número de colunas
+            onEndReachedThreshold={0.7}
+            onEndReached={handleOnEndReached}
+            refreshControl={
+                <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={handleOnEndReached}
+                />
+            }
+            // Performance settings
+            removeClippedSubviews // Unmount components when outside of window
+            initialNumToRender={12} // Reduce initial render amount
+            maxToRenderPerBatch={1} // Reduce number in each render batch
+            updateCellsBatchingPeriod={100} // Increase time between renders
+            windowSize={12} // Reduce the window size
             renderItem={({ item }) => (
                 <StoriesCard
                     key={item.id}

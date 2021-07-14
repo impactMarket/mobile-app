@@ -16,7 +16,7 @@ interface IStoriesCarouselScreen {
 }
 function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     const storiesListState = useSelector(
-        (state: IRootState) => state.stories.stories
+        (state: IRootState) => state.stories.stories.data
     );
 
     const flatListRef = useRef<FlatList<ICommunitiesListStories> | null>(null);
