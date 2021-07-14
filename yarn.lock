@@ -1174,17 +1174,17 @@
     deepmerge "^3.2.0"
     hoist-non-react-statics "^3.3.0"
 
-"@celo/base@1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@celo/base/-/base-1.2.2.tgz#8844abc0d9ee3c0375977090dc861afebdb36d25"
-  integrity sha512-D7j9YfEJmAmI/7m1rLERr4ACkTbWInN6mjtwudndBCJvXurxJqfERcRTuqjmMzA63ktx3SDNsEks1g5FS6ZO2A==
+"@celo/base@1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@celo/base/-/base-1.2.4.tgz#4d3f1d6cf395e5c9e4c725ea392a049551c00edb"
+  integrity sha512-El1OZzs36ZPf/cdIZ/Tytk450s6Q6HWWkHPXGbze5Mb6qDpd8azud7PhXT92d/Jp3x1syPxij8kVIIpqo959uw==
 
-"@celo/connect@1.2.2", "@celo/connect@^1.2.0":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@celo/connect/-/connect-1.2.2.tgz#cccc267dc04d8ca97e615722d851f0c68aa98724"
-  integrity sha512-o5n0RBnbUNnTo/9f/NXH/R52TaychLZt5+3De1frdsYuaE7/QSJ5CxzMG79bLo3OkNneZJ8tj0FzXLZzMpqymA==
+"@celo/connect@1.2.4", "@celo/connect@^1.2.0":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@celo/connect/-/connect-1.2.4.tgz#d52045637105f69a558128c5b9b953af8ba4d717"
+  integrity sha512-the4Uv/d3rbvYW6EaKwj3OfvrhrbZgZefLH27QsT8FhwDLbNVV9ARVDKVigcW77ZDbwAyMDhwCYWxm47zftJpA==
   dependencies:
-    "@celo/utils" "1.2.2"
+    "@celo/utils" "1.2.4"
     "@types/debug" "^4.1.5"
     "@types/utf8" "^2.1.6"
     bignumber.js "^9.0.0"
@@ -1192,14 +1192,14 @@
     utf8 "3.0.0"
 
 "@celo/contractkit@^1.2.0":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@celo/contractkit/-/contractkit-1.2.2.tgz#b5ba51689359828449d64410c517f69af1a54e69"
-  integrity sha512-YRYo9uMM0jF5BqdEK8m2uQWXF2QmHN1gD4/MxiU4gIGS9NoPmQCXQTRhJwSeCi703fYYKjs+uoKIkXrryNYzwQ==
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@celo/contractkit/-/contractkit-1.2.4.tgz#63261b600f53d08ec78cd3c4cb6389f99eefc9a3"
+  integrity sha512-JciCKqU1xd9Me7ROnIWde4CVOO+jJSK0mAre2RIE07XG6bt77RfIjkioX56YSoxSsm/ulqLWS5bC2mJgCl7iTg==
   dependencies:
-    "@celo/base" "1.2.2"
-    "@celo/connect" "1.2.2"
-    "@celo/utils" "1.2.2"
-    "@celo/wallet-local" "1.2.2"
+    "@celo/base" "1.2.4"
+    "@celo/connect" "1.2.4"
+    "@celo/utils" "1.2.4"
+    "@celo/wallet-local" "1.2.4"
     "@types/debug" "^4.1.5"
     bignumber.js "^9.0.0"
     cross-fetch "3.0.4"
@@ -1219,12 +1219,12 @@
     "@celo/utils" "^1.2.0"
     react-native "^0.63.4"
 
-"@celo/utils@1.2.2", "@celo/utils@^1.2.0":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@celo/utils/-/utils-1.2.2.tgz#7ab892f2caab8a945da066ca06a7d6f5b3a7cf1f"
-  integrity sha512-cKO3lGYA/IMNaI9jKpgqid7LjXYFeK8dt4g4uKW4k4MQIcjfLjkpDhIHpQidk4oPyAOygsf/62BazL0T9YBsoQ==
+"@celo/utils@1.2.4", "@celo/utils@^1.2.0":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@celo/utils/-/utils-1.2.4.tgz#01b0e9ff6bb1f9c2792ae7ba624b1297a18792e9"
+  integrity sha512-FaO70pCWOsPp9MK0A+hUEGLycmqclzywexjvQfmi3KAE+5hy1zlgCmzIgigAkNanYlnbsLhrf/Gro0AVT9RBCQ==
   dependencies:
-    "@celo/base" "1.2.2"
+    "@celo/base" "1.2.4"
     "@types/country-data" "^0.0.0"
     "@types/elliptic" "^6.4.9"
     "@types/ethereumjs-util" "^5.2.0"
@@ -1252,14 +1252,14 @@
     web3-eth-abi "1.3.6"
     web3-utils "1.3.6"
 
-"@celo/wallet-base@1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@celo/wallet-base/-/wallet-base-1.2.2.tgz#849ec1851cec7288ebddea25c51c40d1956d9ab2"
-  integrity sha512-2LB9lA6hDawAUdx3hLKe/aZV0nOL2sWIhgDPZTJdgRyn9wj4ybjG/vXlQBbcxc5m0UCZeFvejs5hbN/LhIGxpQ==
+"@celo/wallet-base@1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@celo/wallet-base/-/wallet-base-1.2.4.tgz#6918ba4d6167bf5e8def8278c06c6ff1b9d5a7b1"
+  integrity sha512-gZapmCg9wzIngCI/woE1yoA9Oeu0oTrXetmnHiBTTZYBuFAeCn+u3asF/qnBUVz/NV6aoGvXM+QZJlDWlx4fJw==
   dependencies:
-    "@celo/base" "1.2.2"
-    "@celo/connect" "1.2.2"
-    "@celo/utils" "1.2.2"
+    "@celo/base" "1.2.4"
+    "@celo/connect" "1.2.4"
+    "@celo/utils" "1.2.4"
     "@types/debug" "^4.1.5"
     "@types/ethereumjs-util" "^5.2.0"
     bignumber.js "^9.0.0"
@@ -1267,14 +1267,14 @@
     eth-lib "^0.2.8"
     ethereumjs-util "^5.2.0"
 
-"@celo/wallet-local@1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@celo/wallet-local/-/wallet-local-1.2.2.tgz#db9b4b8583c60a1291ed6c555d47e6d1ebf30c11"
-  integrity sha512-+dy8mu7864pK5KUTWGLvS7hkTPYL18nSG0pIWieRGeXHZOp/AYss1mZONM9/jKK6YqypomFHN3YlMUEdaLICOw==
+"@celo/wallet-local@1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@celo/wallet-local/-/wallet-local-1.2.4.tgz#356e73783016ef0de2e2e05643ac936a6c1d7bbc"
+  integrity sha512-cM5vPRhrZJN/LSB4FX//GAmp5KVLCgKx8EzPseKDb0pLMo0kbjXISI4wHzHdyoMB3ODvw5P91svg4NfZ6fOBvw==
   dependencies:
-    "@celo/connect" "1.2.2"
-    "@celo/utils" "1.2.2"
-    "@celo/wallet-base" "1.2.2"
+    "@celo/connect" "1.2.4"
+    "@celo/utils" "1.2.4"
+    "@celo/wallet-base" "1.2.4"
     "@types/ethereumjs-util" "^5.2.0"
     eth-lib "^0.2.8"
     ethereumjs-util "^5.2.0"
@@ -3808,9 +3808,9 @@
   integrity sha512-7eQ2xYLLI/LsicL2nejW9Wyko3lcpN6O/z0ZLHrEQsg280zIdCv1t/0m6UtBjUHokCGBQ3gYTbHzDkZ1xOBwwg==
 
 "@types/node@*":
-  version "16.3.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.3.1.tgz#24691fa2b0c3ec8c0d34bfcfd495edac5593ebb4"
-  integrity sha512-N87VuQi7HEeRJkhzovao/JviiqKjDKMVKxKMfUvSKw+MbkbW8R0nA3fi/MQhhlxV2fQ+2ReM+/Nt4efdrJx3zA==
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.3.2.tgz#655432817f83b51ac869c2d51dd8305fb8342e16"
+  integrity sha512-jJs9ErFLP403I+hMLGnqDRWT0RYKSvArxuBVh2veudHV7ifEC1WAmjJADacZ7mRbA2nWgHtn8xyECMAot0SkAw==
 
 "@types/node@10.12.18":
   version "10.12.18"
@@ -5004,9 +5004,9 @@ bip32@2.0.5:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
-"bip39@https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2":
+"bip39@git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2":
   version "3.0.3"
-  resolved "https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
+  resolved "git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
   dependencies:
     "@types/node" "11.11.6"
     create-hash "^1.1.0"
@@ -5018,9 +5018,9 @@ blakejs@^1.1.0:
   resolved "https://registry.yarnpkg.com/blakejs/-/blakejs-1.1.1.tgz#bf313053978b2cd4c444a48795710be05c785702"
   integrity sha512-bLG6PHOCZJKNshTjGRBvET0vTciwQE6zFKOKKXPDJfwFBd4Ac0yBfPZqcGvGJap50l7ktvlpFqc2jGVaUgbJgg==
 
-"bls12377js@https://github.com/celo-org/bls12377js#cb38a4cfb643c778619d79b20ca3e5283a2122a6":
+"bls12377js@git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6":
   version "0.1.0"
-  resolved "https://github.com/celo-org/bls12377js#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
+  resolved "git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
   dependencies:
     "@stablelib/blake2xs" "0.10.4"
     "@types/node" "^12.11.7"
@@ -5421,9 +5421,9 @@ camelize@^1.0.0:
   integrity sha1-FkpUg+Yw+kMh5a8HAg5TGDGyYJs=
 
 caniuse-lite@^1.0.30001219:
-  version "1.0.30001244"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001244.tgz#a6dc49ad5fa02d81d04373ec3f5ceabc3da06abf"
-  integrity sha512-Wb4UFZPkPoJoKKVfELPWytRzpemjP/s0pe22NriANru1NoI+5bGNxzKtk7edYL8rmCWTfQO8eRiF0pn1Dqzx7Q==
+  version "1.0.30001245"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001245.tgz#45b941bbd833cb0fa53861ff2bae746b3c6ca5d4"
+  integrity sha512-768fM9j1PKXpOCKws6eTo3RHmvTUsG9UrpT4WoREFeZgJBTi4/X9g565azS/rVUGtqb8nt7FjLeF5u4kukERnA==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -6588,9 +6588,9 @@ ejs@^3.1.5:
     jake "^10.6.1"
 
 electron-to-chromium@^1.3.723:
-  version "1.3.774"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.774.tgz#4d6661a23119e35151646c9543b346bb3beca423"
-  integrity sha512-Fggh17Q1yyv1uMzq8Qn1Ci58P50qcRXMXd2MBcB9sxo6rJxjUutWcNw8uCm3gFWMdcblBO6mDT5HzX/RVRRECA==
+  version "1.3.775"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.775.tgz#046517d1f2cea753e06fff549995b9dc45e20082"
+  integrity sha512-EGuiJW4yBPOTj2NtWGZcX93ZE8IGj33HJAx4d3ouE2zOfW2trbWU+t1e0yzLr1qQIw81++txbM3BH52QwSRE6Q==
 
 elliptic@6.5.4, elliptic@^6.4.0, elliptic@^6.5.2, elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -7447,10 +7447,10 @@ expo-network@3.2.0:
   resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-3.2.0.tgz#3329d37e9b4f5fbfc158e8fc7f3d440331bdcd35"
   integrity sha512-a1nwP3mwYLQmOiUUG3wmSn7auWy7pXCjqriu4+QsH3Fhkcr9OA0XnPSMEDiDM5rQeuZq//q+JndKCHRYzV6YKw==
 
-expo-notifications@0.12.2:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.12.2.tgz#54b29b522e0a441f44b2749d86d3e9448f1f423d"
-  integrity sha512-SCI2nBdhZXZxR2LR4/ixcit/tNOkC7eHD+fWkTpxky/I4ZSBCpP/nhrdD5Sr0G3o/r86/OSXY8XRRrp2pKG8iA==
+expo-notifications@0.12.3:
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.12.3.tgz#19a574a05634540670a69e242de5c8cb3b8d14d5"
+  integrity sha512-4N8uoDJwYYXeIH+iGtjA9H6dF4yaEdDyFoYcUbHwsC1MUCL9CquDXpxoO1X2GCBFpwE0kqkyXTOCDqLAQlj5PA==
   dependencies:
     "@expo/config-plugins" "^3.0.0"
     "@expo/image-utils" "^0.3.10"
@@ -7503,20 +7503,20 @@ expo-structured-headers@~1.1.1:
   resolved "https://registry.yarnpkg.com/expo-structured-headers/-/expo-structured-headers-1.1.1.tgz#95e28ff8686a2c06fe6ad1decdbb94cc44716683"
   integrity sha512-OxDsWTDxwAhfW82DDXYTcT9UzSk2fYUb3YHiz/tQ1MObQMh0QVHgxcTe9vvtzguc6O4A2Y+f8tO1g3LcUEN2lg==
 
-expo-updates-interface@~0.2.1:
+expo-updates-interface@~0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.2.2.tgz#f754ce2c562f427d87893a9d22a4cbab39e0defd"
   integrity sha512-Gvjk/6DntlPfkoRrrmbl9jzD2YtlNVa9jV9/T1+zdvg9XvO7H+BUgAQ1NYFFx/3Wdk03z+xfCYugRWk9X5nZ5A==
 
-expo-updates@0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.8.0.tgz#81e177811b3b70a40a0554d2cba820776eec4541"
-  integrity sha512-9V/MF7+oJjxASs15mXVYlW8zJE4RnZkUUva/xopPuoYcCVkbCKHKRQGjAlhD638JNjQL7/D8PO8Dd2GNQwj6ww==
+expo-updates@0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.8.1.tgz#784833a89503173a3ee9ae09eafd10e89d0706a0"
+  integrity sha512-DRD9kAfx5Y3spbYSIqKtvFrTIE60d+jDlSv96uZP/wf1V//tNHvENx2ZPJCGhfBs+8tH8/33iJ/MxLB/TvJWyA==
   dependencies:
     "@expo/config-plugins" "^3.0.0"
     "@expo/metro-config" "^0.1.70"
     expo-structured-headers "~1.1.1"
-    expo-updates-interface "~0.2.1"
+    expo-updates-interface "~0.2.2"
     fbemitter "^2.1.1"
     resolve-from "^5.0.0"
     uuid "^3.4.0"
@@ -14646,7 +14646,7 @@ typescript-tuple@^2.2.1:
   dependencies:
     typescript-compare "^0.0.2"
 
-typescript@4.0.0:
+typescript@4.3.5:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
   integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
