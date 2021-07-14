@@ -175,34 +175,39 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     isManager === false
                 ) {
                     try {
-                        if (!(await Location.hasServicesEnabledAsync())) {
-                            return;
+                        const enabled = await Location.hasServicesEnabledAsync();
+                        const permission = await Location.getForegroundPermissionsAsync();
+                        if (!enabled) {
+                            if (
+                                permission.status !==
+                                Location.PermissionStatus.GRANTED
+                            ) {
+                                // if not enabled and previously not allowed, return
+                                return;
+                            }
                         }
                         if (
-                            (await Location.getPermissionsAsync()).status !==
-                            'granted'
+                            permission.status !==
+                            Location.PermissionStatus.GRANTED
                         ) {
-                            return;
-                        }
-                        if (
-                            (await Location.getProviderStatusAsync())
-                                .locationServicesEnabled
-                        ) {
-                            return;
+                            if (enabled) {
+                                // if not previously allowed, but enabled, request permission
+                                await Location.requestForegroundPermissionsAsync();
+                            }
+                            //else would be "if not enabled and previously not allowed, return", same as above
                         }
 
-                        const loc = await Location.getCurrentPositionAsync({
+                        const {
+                            coords: { latitude, longitude },
+                        } = await Location.getCurrentPositionAsync({
                             accuracy: Location.Accuracy.Low,
                         });
                         await Api.user.addClaimLocation(
                             communityMetadata.publicId,
                             {
-                                latitude:
-                                    loc.coords.latitude +
-                                    config.locationErrorMargin,
+                                latitude: latitude + config.locationErrorMargin,
                                 longitude:
-                                    loc.coords.longitude +
-                                    config.locationErrorMargin,
+                                    longitude + config.locationErrorMargin,
                             }
                         );
                         analytics('claim_location', {
