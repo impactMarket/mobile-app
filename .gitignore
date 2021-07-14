@@ -71,3 +71,4 @@ firebase/
 *.p12
 *.p8
 *.key
+*api*.json
