@@ -139,13 +139,25 @@ Notifications.setNotificationHandler({
     }),
 });
 
+// Construct a new instrumentation instance. This is needed to communicate between the integration and React
+const routingInstrumentation = new Sentry.Native.ReactNavigationV5Instrumentation();
+
 Sentry.init({
-    release: 'impactmarket@' + process.env.npm_package_version,
-    environment:
-        process.env.NODE_ENV === 'development' ? 'development' : 'production',
+    // release: 'impactmarket@' + process.env.REACT_APP_RELEASE_VERSION, // https://docs.sentry.io/product/sentry-basics/guides/integrate-frontend/upload-source-maps/
+    // environment -> use SENTRY_ENVIRONMENT
     dsn: process.env.EXPO_SENTRY_DNS,
     // enableInExpoDevelopment: true,
     debug: true,
+    integrations: [
+        new Sentry.Native.ReactNativeTracing({
+            routingInstrumentation,
+            // ... other options
+        }),
+    ],
+    beforeBreadcrumb(breadcrumb, hint) {
+        console.log('beforeBreadcrumb', breadcrumb, hint);
+        return breadcrumb;
+    },
     // sampleRate: 0.1,
     // tracesSampleRate: 0.1,
     tracesSampler: (samplingContext) => {
@@ -439,6 +451,9 @@ export default class App extends React.Component<any, IAppState> {
                             if (currentRouteName !== undefined) {
                                 Analytics.setCurrentScreen(currentRouteName);
                             }
+                            routingInstrumentation.registerNavigationContainer(
+                                navigationRef
+                            );
                             // Save the current route name for later comparision
                             this.currentRouteName = currentRouteName;
                             (isReadyRef.current as any) = true; // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
