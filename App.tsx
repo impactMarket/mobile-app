@@ -146,7 +146,7 @@ Sentry.init({
     // release: 'impactmarket@' + process.env.REACT_APP_RELEASE_VERSION, // https://docs.sentry.io/product/sentry-basics/guides/integrate-frontend/upload-source-maps/
     // environment -> use SENTRY_ENVIRONMENT
     dsn: process.env.EXPO_SENTRY_DNS,
-    // enableInExpoDevelopment: true,
+    enableInExpoDevelopment: false,
     debug: true,
     integrations: [
         new Sentry.Native.ReactNativeTracing({
