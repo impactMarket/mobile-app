@@ -668,6 +668,13 @@ export default class App extends React.Component<any, IAppState> {
             store.dispatch(setCeloKit(kit));
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
+            const exchangeRates = await Api.system.getExchangeRate();
+            const userRates: { [key: string]: number } = {};
+            Object.assign(
+                userRates,
+                ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
+            );
+            store.dispatch(setAppExchangeRatesAction(userRates));
             if (address !== null && phoneNumber !== null) {
                 const pushNotificationToken = await registerForPushNotifications();
                 if (pushNotificationToken) {
@@ -690,13 +697,7 @@ export default class App extends React.Component<any, IAppState> {
                         store.dispatch(resetUserApp());
                         return;
                     }
-                    const exchangeRates = await Api.system.getExchangeRate();
-                    const userRates: { [key: string]: number } = {};
-                    Object.assign(
-                        userRates,
-                        ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
-                    );
-                    store.dispatch(setAppExchangeRatesAction(userRates));
+
                     await welcomeUser(
                         address,
                         phoneNumber,
@@ -707,26 +708,6 @@ export default class App extends React.Component<any, IAppState> {
                         userMetadata
                     );
                     loggedIn = true;
-                }
-            }
-            if (!loggedIn) {
-                const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
-                const cachedValues = await CacheStore.getExchangeRates();
-                if (
-                    new Date().getTime() - lastUpdate > 3600000 ||
-                    cachedValues === null
-                ) {
-                    // 1h in ms
-                    const exchangeRates = await Api.system.getExchangeRate();
-                    const userRates: { [key: string]: number } = {};
-                    Object.assign(
-                        userRates,
-                        ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
-                    );
-                    store.dispatch(setAppExchangeRatesAction(userRates));
-                    CacheStore.cacheExchangeRates(userRates);
-                } else {
-                    store.dispatch(setAppExchangeRatesAction(cachedValues));
                 }
             }
             this.setState({

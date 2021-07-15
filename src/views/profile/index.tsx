@@ -308,7 +308,7 @@ function ProfileScreen() {
         Api.user.setCurrency(currency);
         updateUserMetadataCache();
         // update exchange rate!
-        const exchangeRate = (rates as any)[currency.toUpperCase()].rate;
+        const exchangeRate = rates[currency.toUpperCase()];
         batch(() => {
             dispatch(setUserMetadata({ ...user, currency }));
             dispatch(setUserExchangeRate(exchangeRate));
