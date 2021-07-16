@@ -7,7 +7,6 @@ import {
     useFocusEffect,
 } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
-import currenciesJSON from 'assets/currencies.json';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
@@ -26,12 +25,12 @@ import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
+import parsePhoneNumber from 'libphonenumber-js';
 import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
     Text,
     View,
-    Alert,
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
@@ -63,13 +62,6 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
-const currencies: {
-    [key: string]: {
-        symbol: string;
-        name: string;
-        symbol_native: string;
-    };
-} = currenciesJSON;
 function Auth() {
     const navigation = useNavigation();
 
@@ -78,7 +70,7 @@ function Auth() {
     const kit = useSelector((state: IRootState) => state.app.kit);
     const [connecting, setConnecting] = useState(false);
     const [toggleInformativeModal, setToggleInformativeModal] = useState(true);
-    const [loadRefs, setLoadRefs] = useState(false);
+    const [, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
 
@@ -149,18 +141,11 @@ function Auth() {
             language = 'en';
         }
         let currency = '';
-        for (const [, value] of Object.entries(countries)) {
-            if (
-                value.phone ===
-                dappkitResponse.phoneNumber.slice(1, value.phone.length + 1)
-            ) {
-                if (value.currency in currencies) {
-                    currency = value.currency;
-                } else {
-                    currency = 'USD';
-                }
-                break;
-            }
+        const phoneNumber = parsePhoneNumber(dappkitResponse.phoneNumber);
+        if (phoneNumber && phoneNumber.country) {
+            currency = countries[phoneNumber.country].currency;
+        } else {
+            currency = 'USD';
         }
 
         const user = await Api.user.auth(
