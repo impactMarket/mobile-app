@@ -188,6 +188,15 @@ export function getCountryFromPhoneNumber(pnumber: string) {
     return 'Unknown';
 }
 
+export function getCurrencyFromPhoneNumber(pnumber: string) {
+    const phoneNumber = parsePhoneNumber(pnumber);
+    if (phoneNumber && phoneNumber.country) {
+        return countries[phoneNumber.country].currency;
+    } else {
+        return 'USD';
+    }
+}
+
 export async function updateCommunityInfo(
     communityId: number,
     dispatch: Dispatch<any>

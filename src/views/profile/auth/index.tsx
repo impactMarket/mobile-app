@@ -6,7 +6,6 @@ import {
     useNavigation,
     useFocusEffect,
 } from '@react-navigation/native';
-import countriesJSON from 'assets/countries.json';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
@@ -20,12 +19,15 @@ import {
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
-import { makeDeeplinkUrl, welcomeUser } from 'helpers/index';
+import {
+    getCurrencyFromPhoneNumber,
+    makeDeeplinkUrl,
+    welcomeUser,
+} from 'helpers/index';
 import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
-import parsePhoneNumber from 'libphonenumber-js';
 import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
@@ -51,17 +53,6 @@ import { ipctColors } from 'styles/index';
 import Web3 from 'web3';
 
 import config from '../../../../config';
-
-const countries: {
-    [key: string]: {
-        name: string;
-        native: string;
-        phone: string;
-        currency: string;
-        languages: string[];
-        emoji: string;
-    };
-} = countriesJSON;
 function Auth() {
     const navigation = useNavigation();
 
@@ -140,13 +131,9 @@ function Auth() {
         if (!supportedLanguages.includes(language)) {
             language = 'en';
         }
-        let currency = '';
-        const phoneNumber = parsePhoneNumber(dappkitResponse.phoneNumber);
-        if (phoneNumber && phoneNumber.country) {
-            currency = countries[phoneNumber.country].currency;
-        } else {
-            currency = 'USD';
-        }
+        const currency = getCurrencyFromPhoneNumber(
+            dappkitResponse.phoneNumber
+        );
 
         const user = await Api.user.auth(
             userAddress,
