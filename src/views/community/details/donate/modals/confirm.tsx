@@ -69,7 +69,6 @@ class ConfirmModal extends Component<
             kit
         )
             .then((tx) => {
-                console.log('tx', tx);
                 if (tx === undefined) {
                     return;
                 }
