@@ -622,12 +622,21 @@ export default class App extends React.Component<any, IAppState> {
         if (timeDiff < -10000 || timeDiff > 10000) {
             store.dispatch(setAppSuspectWrongDateTime(true, timeDiff));
         }
-        if (Constants.manifest.version) {
+        let manifestVersion = '';
+        if (Constants.manifest2 !== null) {
+            manifestVersion = Constants.manifest2.runtimeVersion;
+        } else if (
+            Constants.manifest !== null &&
+            Constants.manifest.version !== undefined
+        ) {
+            manifestVersion = Constants.manifest.version;
+        }
+        if (manifestVersion.length > 0) {
             let lastVersionFromCache = await CacheStore.getLastVersion();
             if (lastVersionFromCache === null) {
-                lastVersionFromCache = Constants.manifest.version;
+                lastVersionFromCache = manifestVersion;
             }
-            if (!semverGte(Constants.manifest.version, version.minimal)) {
+            if (!semverGte(manifestVersion, version.minimal)) {
                 // id the user does not have the minimal required version
                 // block until update
                 this.setState({
