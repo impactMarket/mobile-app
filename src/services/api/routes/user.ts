@@ -23,17 +23,18 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async hello(
-        address: string,
-        token: string,
-        phone: string
+    static async welcome(
+        pushNotificationToken?: string
     ): Promise<IUserHello | undefined> {
         return (
-            await this.api.post<IUserHello | undefined>(`/user/welcome`, {
-                address,
-                token,
-                phone,
-            })
+            await this.api.post<IUserHello | undefined>(
+                `/user/welcome`,
+                pushNotificationToken
+                    ? {
+                          pushNotificationToken,
+                      }
+                    : {}
+            )
         ).data;
     }
 
@@ -41,18 +42,29 @@ class ApiRouteUser {
         address: string,
         language: string,
         currency: string,
-        pushNotificationToken: string,
-        phone: string
+        phone: string,
+        pushNotificationToken?: string
     ): Promise<IUserAuth | undefined> {
-        return (
-            await this.api.post<IUserAuth | undefined>('/user/auth', {
-                address,
-                language,
-                currency,
+        let auth: {
+            address: string;
+            language: string;
+            currency: string;
+            phone: string;
+            pushNotificationToken?: string;
+        } = {
+            address,
+            language,
+            currency,
+            phone,
+        };
+        if (pushNotificationToken) {
+            auth = {
+                ...auth,
                 pushNotificationToken,
-                phone,
-            })
-        ).data;
+            };
+        }
+        return (await this.api.post<IUserAuth | undefined>('/user/auth', auth))
+            .data;
     }
 
     static async addClaimLocation(

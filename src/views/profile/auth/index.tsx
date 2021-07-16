@@ -26,7 +26,6 @@ import {
 } from 'helpers/index';
 import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
-import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useRef } from 'react';
 import {
@@ -40,7 +39,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Api from 'services/api';
@@ -57,8 +56,10 @@ function Auth() {
     const navigation = useNavigation();
 
     const dispatch = useDispatch();
-    const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
     const [connecting, setConnecting] = useState(false);
     const [toggleInformativeModal, setToggleInformativeModal] = useState(true);
     const [, setLoadRefs] = useState(false);
@@ -103,9 +104,9 @@ function Auth() {
             });
 
             dappkitResponse = await waitForAccountAuth(requestId);
-            userAddress = store
-                .getState()
-                .app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
+            userAddress = kit.web3.utils.toChecksumAddress(
+                dappkitResponse.address
+            );
         } catch (e) {
             Sentry.Native.captureException(e);
             analytics('login', { device: Device.brand, success: 'false' });
@@ -139,8 +140,8 @@ function Auth() {
             userAddress,
             language,
             currency,
-            pushNotificationToken,
-            dappkitResponse.phoneNumber
+            dappkitResponse.phoneNumber,
+            pushNotificationToken
         );
 
         if (user === undefined) {
@@ -178,15 +179,17 @@ function Auth() {
                 userAddress,
                 dappkitResponse.phoneNumber,
                 user,
-                store.getState().app.exchangeRates,
+                exchangeRates,
                 newKitFromWeb3(new Web3(config.jsonRpc)),
                 dispatch,
                 user.user
             );
-            dispatch(setPushNotificationsToken(pushNotificationToken));
-            setPushNotificationListeners(
-                startNotificationsListeners(kit, dispatch)
-            );
+            if (pushNotificationToken) {
+                dispatch(setPushNotificationsToken(pushNotificationToken));
+                setPushNotificationListeners(
+                    startNotificationsListeners(kit, dispatch)
+                );
+            }
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             analytics('login', { device: Device.brand, success: 'false' });
