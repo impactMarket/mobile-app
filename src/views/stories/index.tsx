@@ -8,15 +8,8 @@ import {
     addMoreStoriesToStateRequest,
 } from 'helpers/redux/actions/stories';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback, useEffect } from 'react';
-import {
-    View,
-    FlatList,
-    StyleSheet,
-    Text,
-    Pressable,
-    RefreshControl,
-} from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
@@ -25,6 +18,16 @@ import StoriesCard from 'views/communities/StoriesCard';
 function StoriesScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const [reachedEndList, setReachedEndList] = useState(false);
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    useEffect(() => {
+        if (stories.length < storiesCount) {
+            dispatch(addStoriesToStateRequest(0, 12));
+        }
+        console.log({ length: stories?.length });
+        console.log({ storiesCount });
+    }, []);
 
     const stories = useSelector(
         (state: IRootState) => state.stories.stories.data
@@ -33,13 +36,22 @@ function StoriesScreen() {
     const storiesCount = useSelector(
         (state: IRootState) => state.stories.stories.count
     );
-    const refreshing = useSelector(
-        (state: IRootState) => state.stories.refreshing
-    );
 
-    useEffect(() => {
-        dispatch(addStoriesToStateRequest(0, 12));
-    }, []);
+    const handleOnEndReached = (info: { distanceFromEnd: number }) => {
+        if (!refreshing && !reachedEndList) {
+            setRefreshing(true);
+            dispatch(
+                addMoreStoriesToStateRequest(
+                    stories.length,
+                    stories.length + 12
+                )
+            );
+            if (stories.length === storiesCount) {
+                setReachedEndList(true);
+            }
+            setRefreshing(false);
+        }
+    };
 
     const renderItem = useCallback(
         ({ item }) => (
@@ -74,12 +86,6 @@ function StoriesScreen() {
             />
         );
     }
-
-    const handleOnEndReached = () => {
-        dispatch(
-            addMoreStoriesToStateRequest(stories?.length, stories?.length + 6)
-        );
-    };
 
     return refreshing || storiesCount === 0 ? (
         <View
@@ -141,20 +147,10 @@ function StoriesScreen() {
             }}
             keyExtractor={keyExtractor}
             showsVerticalScrollIndicator={false}
-            numColumns={3} // Número de colunas
+            numColumns={3}
+            renderItem={renderItem}
             onEndReachedThreshold={0.7}
             onEndReached={handleOnEndReached}
-            // refreshControl={
-            //     <RefreshControl
-            //         refreshing={refreshing}
-            //         onRefresh={handleOnEndReached}
-            //     />
-            // }
-            // Performance settings
-            removeClippedSubviews // Unmount components when outside of window
-            initialNumToRender={12} // Reduce initial render amount
-            windowSize={12} // Reduce the window size
-            renderItem={renderItem}
         />
     );
 }

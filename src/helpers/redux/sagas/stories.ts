@@ -41,9 +41,9 @@ export function* submitAddMoreStoriesToStateRequest({ payload }: any) {
             start,
             end
         );
-        const { data, count } = stories;
+        const { data } = stories;
 
-        yield put(addMoreStoriesToStateSuccess(data, count));
+        yield put(addMoreStoriesToStateSuccess(data));
     } catch (err) {
         yield put(addMoreStoriesToStateFailure());
     }

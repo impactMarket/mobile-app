@@ -1,6 +1,7 @@
 import { storiesAction } from 'helpers/constants';
 import { StoriesActionTypes } from 'helpers/types/redux';
 import { IStoriesState } from 'helpers/types/state';
+import stories from '../sagas/stories';
 
 const INITIAL_STATE_STORIES: IStoriesState = {
     stories: { data: [], count: 0 },
@@ -47,8 +48,7 @@ export const storiesReducer = (
         case storiesAction.MORE_SUCCESS:
             return {
                 ...state,
-                //TODO: add concat for this data
-                stories: action.payload,
+                stories: state.stories.data.concat(action.payload.data),
                 refreshing: false,
             };
 
