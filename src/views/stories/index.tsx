@@ -41,6 +41,30 @@ function StoriesScreen() {
         dispatch(addStoriesToStateRequest(0, 12));
     }, []);
 
+    const renderItem = useCallback(
+        ({ item }) => (
+            <StoriesCard
+                key={item.id}
+                communityId={item.id}
+                communityName={item.name}
+                imageURI={
+                    item.story?.media
+                        ? chooseMediaThumbnail(item.story.media, {
+                              width: 84,
+                              heigth: 140,
+                          })
+                        : chooseMediaThumbnail(item.cover, {
+                              width: 88,
+                              heigth: 88,
+                          })
+                }
+            />
+        ),
+        []
+    );
+
+    const keyExtractor = useCallback((item) => item.name, []);
+
     if (refreshing) {
         return (
             <ActivityIndicator
@@ -115,41 +139,22 @@ function StoriesScreen() {
             style={{
                 alignSelf: 'center',
             }}
-            keyExtractor={(item) => item.name}
+            keyExtractor={keyExtractor}
             showsVerticalScrollIndicator={false}
             numColumns={3} // Número de colunas
             onEndReachedThreshold={0.7}
             onEndReached={handleOnEndReached}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={handleOnEndReached}
-                />
-            }
+            // refreshControl={
+            //     <RefreshControl
+            //         refreshing={refreshing}
+            //         onRefresh={handleOnEndReached}
+            //     />
+            // }
             // Performance settings
             removeClippedSubviews // Unmount components when outside of window
             initialNumToRender={12} // Reduce initial render amount
-            maxToRenderPerBatch={1} // Reduce number in each render batch
-            updateCellsBatchingPeriod={100} // Increase time between renders
             windowSize={12} // Reduce the window size
-            renderItem={({ item }) => (
-                <StoriesCard
-                    key={item.id}
-                    communityId={item.id}
-                    communityName={item.name}
-                    imageURI={
-                        item.story?.media
-                            ? chooseMediaThumbnail(item.story.media, {
-                                  width: 84,
-                                  heigth: 140,
-                              })
-                            : chooseMediaThumbnail(item.cover, {
-                                  width: 88,
-                                  heigth: 88,
-                              })
-                    }
-                />
-            )}
+            renderItem={renderItem}
         />
     );
 }
