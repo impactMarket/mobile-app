@@ -428,7 +428,6 @@ function CreateCommunityScreen() {
                 _isProfileImageValid;
 
             if (!isSubmitAvailable) {
-                console.log('setToggleMissingFieldsModal 1');
                 setToggleMissingFieldsModal(true);
                 return;
             }
@@ -571,7 +570,6 @@ function CreateCommunityScreen() {
                 Sentry.Native.captureException(e);
                 setSending(false);
                 setSendingSuccess(false);
-                console.log({ e });
             }
         },
         submitEditCommunity = async () => {
@@ -664,7 +662,6 @@ function CreateCommunityScreen() {
                 Sentry.Native.captureException(e);
                 setSending(false);
                 setSendingSuccess(false);
-                console.log({ e });
             }
         },
         enableGPSLocation = async () => {

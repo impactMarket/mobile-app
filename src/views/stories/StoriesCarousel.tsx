@@ -64,7 +64,6 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
             setIndex(index + 1);
         }
     };
-    console.log({ index });
     // if (index === -1) {
     //     return null;
     // }
