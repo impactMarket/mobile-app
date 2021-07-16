@@ -2,10 +2,9 @@ import { ContractKit } from '@celo/contractkit';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
-import * as Network from 'expo-network';
 import { IUserBaseAuth } from 'helpers/types/endpoints';
+import parsePhoneNumber from 'libphonenumber-js';
 import moment from 'moment';
 import { PixelRatio } from 'react-native';
 import { batch } from 'react-redux';
@@ -30,6 +29,17 @@ import {
     CommunityAttributes,
     UserAttributes,
 } from './types/models';
+
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        phone: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
@@ -169,11 +179,11 @@ export function calculateCommunityProgress(
     return parseFloat(result.decimalPlaces(5, 1).toString());
 }
 
-export function getCountryFromPhoneNumber(phoneNumber: string) {
-    for (const [key, value] of Object.entries(countriesJSON)) {
-        if (value.phone === phoneNumber.slice(1, value.phone.length + 1)) {
-            return `${value.emoji} ${value.name}`;
-        }
+export function getCountryFromPhoneNumber(pnumber: string) {
+    const phoneNumber = parsePhoneNumber(pnumber);
+    if (phoneNumber && phoneNumber.country) {
+        const { emoji, name } = countries[phoneNumber.country];
+        return `${emoji} ${name}`;
     }
     return 'Unknown';
 }
