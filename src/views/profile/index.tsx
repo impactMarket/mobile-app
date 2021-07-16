@@ -718,7 +718,12 @@ function ProfileScreen() {
                             }}
                         >
                             <Text style={{ fontWeight: '700' }}>Build: </Text>
-                            {Constants.manifest.version}
+                            {Constants.manifest2 !== null
+                                ? Constants.manifest2.runtimeVersion
+                                : Constants.manifest !== null &&
+                                  Constants.manifest.version !== undefined
+                                ? Constants.manifest.version
+                                : 'unkown'}
                         </Text>
                         <Text
                             style={{
