@@ -60,7 +60,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         Api.community
             .findById(props.route.params.communityId)
             .then((c) => {
-                // console.log({ c });
                 setCommunity(c);
                 if (props.route.params.openDonate === true) {
                     dispatch({

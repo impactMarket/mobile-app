@@ -216,10 +216,6 @@ export default function Container({
                                                             text: i18n.t(
                                                                 'cancel'
                                                             ),
-                                                            onPress: () =>
-                                                                console.log(
-                                                                    'Cancel Pressed'
-                                                                ),
                                                             style: 'cancel',
                                                         },
                                                         {
@@ -289,10 +285,6 @@ export default function Container({
                                                 [
                                                     {
                                                         text: i18n.t('cancel'),
-                                                        onPress: () =>
-                                                            console.log(
-                                                                'Cancel Pressed'
-                                                            ),
                                                         style: 'cancel',
                                                     },
                                                     {

@@ -113,7 +113,6 @@ function CommunitiesScreen() {
     };
 
     const handleOnEndReached = (info: { distanceFromEnd: number }) => {
-        console.log(info);
         if (!refreshing && !reachedEndList) {
             setRefreshing(true);
             if (communtiesOrder === 'nearest' && userLocation) {

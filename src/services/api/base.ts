@@ -307,7 +307,6 @@ class ApiRequests {
             const r = fetch(endpoint, { method: 'HEAD' });
             return r;
         } catch (e) {
-            console.log(e);
             return {
                 status: 404,
             };
@@ -325,7 +324,6 @@ class ApiRequests {
         const fileType = uriParts[uriParts.length - 1];
 
         const formData = new FormData();
-        // console.log(mediaURI.length);
         if (mediaURI.length > 0) {
             formData.append('imageFile', {
                 uri: mediaURI,
