@@ -11,31 +11,6 @@ markActionsOffline(storiesAction, [
     addMyStoriesToStateRequest,
 ]);
 
-export function addMoreStoriesToStateRequest(
-    start: number,
-    end: number
-): StoriesActionTypes {
-    return {
-        type: storiesAction.MORE_REQUEST,
-        payload: { start, end },
-    };
-}
-
-export function addMoreStoriesToStateSuccess(
-    data: ICommunitiesListStories[]
-): StoriesActionTypes {
-    return {
-        type: storiesAction.MORE_SUCCESS,
-        payload: { data },
-    };
-}
-
-export function addMoreStoriesToStateFailure(): StoriesActionTypes {
-    return {
-        type: storiesAction.MORE_FAILURE,
-    };
-}
-
 export function addStoriesToStateRequest(
     start: number,
     end: number

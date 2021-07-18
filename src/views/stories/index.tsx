@@ -3,12 +3,9 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import {
-    addStoriesToStateRequest,
-    addMoreStoriesToStateRequest,
-} from 'helpers/redux/actions/stories';
+import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,39 +15,27 @@ import StoriesCard from 'views/communities/StoriesCard';
 function StoriesScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [reachedEndList, setReachedEndList] = useState(false);
-    const [refreshing, setRefreshing] = React.useState(false);
-
-    useEffect(() => {
-        if (stories.length < storiesCount) {
-            dispatch(addStoriesToStateRequest(0, 12));
-        }
-        console.log({ length: stories?.length });
-        console.log({ storiesCount });
-    }, []);
-
-    const stories = useSelector(
-        (state: IRootState) => state.stories.stories.data
-    );
+    const [refreshing, setRefreshing] = useState(false);
 
     const storiesCount = useSelector(
         (state: IRootState) => state.stories.stories.count
     );
 
-    const handleOnEndReached = (info: { distanceFromEnd: number }) => {
-        if (!refreshing && !reachedEndList) {
-            setRefreshing(true);
-            dispatch(
-                addMoreStoriesToStateRequest(
-                    stories.length,
-                    stories.length + 12
-                )
-            );
-            if (stories.length === storiesCount) {
-                setReachedEndList(true);
-            }
-            setRefreshing(false);
-        }
+    const stories = useSelector(
+        (state: IRootState) => state.stories.stories.data
+    );
+
+    const handleOnEndReached = async () => {
+        setRefreshing(true);
+
+        dispatch(
+            addStoriesToStateRequest(stories?.length, stories?.length + 12)
+        );
+        console.log({ stories: stories?.length });
+        console.log({ stories12: stories?.length + 12 });
+        console.log({ storiesCount });
+
+        setRefreshing(false);
     };
 
     const renderItem = useCallback(
@@ -149,8 +134,8 @@ function StoriesScreen() {
             showsVerticalScrollIndicator={false}
             numColumns={3}
             renderItem={renderItem}
-            onEndReachedThreshold={0.7}
             onEndReached={handleOnEndReached}
+            onEndReachedThreshold={0.3}
         />
     );
 }
