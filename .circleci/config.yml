@@ -117,15 +117,15 @@ jobs:
             sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
 
       - run:
-        name: Publish to Expo
-        command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
+          name: Publish to Expo
+          command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
 
   unit_test:
     working_directory: ~/my-app
     docker:
       - image: circleci/node:14.15.1
     environment:
-      - NODE_ENV: development
+      NODE_ENV: development
     steps:
       - checkout
 
@@ -142,7 +142,7 @@ jobs:
     docker:
       - image: circleci/node:14.15.1
     environment:
-      - NODE_ENV: development
+      NODE_ENV: development
     steps:
       - checkout
 
