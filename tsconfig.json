@@ -10,10 +10,8 @@
             "styles": ["./src/styles"],
             "views": ["./src/views"]
         },
-        "strict": true,
         "sourceMap": true,
         "inlineSources": true
     },
-    "exclude": ["./node_modules/**/*"],
     "extends": "expo/tsconfig.base"
 }

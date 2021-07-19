@@ -1,4 +1,5 @@
 import combinedReducer from 'helpers/redux/reducers';
+import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { create } from 'react-test-renderer';
@@ -8,7 +9,7 @@ import Donate from '../index';
 
 const store = createStore(combinedReducer);
 
-const mockedCommunityAttributes = {
+const mockedCommunityAttributes: CommunityAttributes = {
     id: 2,
     publicId: '5',
     requestByAddress: '',

@@ -245,10 +245,12 @@ function ProfileScreen() {
     };
 
     const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
+        const result = (await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             quality: 1,
-        });
+        })) as {
+            cancelled: false;
+        } & ImageInfo;
 
         if (!result.cancelled) {
             Image.getSize(

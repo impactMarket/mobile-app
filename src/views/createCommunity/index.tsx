@@ -83,6 +83,7 @@ import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 
 const countries: {
     [key: string]: {
@@ -712,10 +713,12 @@ function CreateCommunityScreen() {
             cbv: Dispatch<React.SetStateAction<boolean>>,
             type: string
         ) => {
-            const result = await ImagePicker.launchImageLibraryAsync({
+            const result = (await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 quality: 1,
-            });
+            })) as {
+                cancelled: false;
+            } & ImageInfo;
 
             if (!result.cancelled) {
                 if (type === imageTypes.COVER_IMAGE) {
