@@ -1,62 +1,4 @@
 version: 2.1
-publish: &publish
-    working_directory: ~/publish-to-expo
-    docker:
-        - image: circleci/node:14.15.1
-    steps:
-        - checkout
-
-        - run:
-              name: decrypt google-services.json
-              command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
-
-        - run:
-              name: decrypt GoogleService-Info.plist
-              command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
-
-        - run:
-              name: Installing dependencies
-              command: yarn
-
-        - run:
-              name: Add global expo-cli
-              command: yarn global add expo-cli
-
-        - run:
-              name: Login into Expo
-              command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-
-        - run:
-              name: Publish to Expo
-              command: npx expo-cli publish --non-interactive
-              environment:
-                  EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
-                  EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
-                  EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
-                  EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
-                  EXPO_IS_TESTNET: true
-                  NODE_OPTIONS: --max_old_space_size=3072
-
-        - run:
-              name: Publish to Expo
-              command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
-
-test: &test
-    working_directory: ~/my-app
-    docker:
-        - image: circleci/node:14.15.1
-    environment:
-        - NODE_ENV: development
-    steps:
-        - checkout
-
-        - run:
-              name: Installing dependencies
-              command: yarn
-
-        - run:
-              name: test
-              command: yarn test
 
 commands:
     install_macos_deps:
@@ -126,9 +68,78 @@ commands:
 
 jobs:
     publish_to_expo:
-        <<: *publish
-    test_app:
-        <<: *test
+        working_directory: ~/publish-to-expo
+        docker:
+            - image: circleci/node:14.15.1
+        steps:
+            - checkout
+
+            - run:
+                name: decrypt google-services.json
+                command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+
+            - run:
+                name: decrypt GoogleService-Info.plist
+                command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+
+            - run:
+                name: Installing dependencies
+                command: yarn
+
+            - run:
+                name: Add global expo-cli
+                command: yarn global add expo-cli
+
+            - run:
+                name: Login into Expo
+                command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+
+            - run:
+                name: Publish to Expo
+                command: npx expo-cli publish --non-interactive
+                environment:
+                    EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
+                    EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
+                    EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
+                    EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
+                    EXPO_IS_TESTNET: true
+                    NODE_OPTIONS: --max_old_space_size=3072
+
+            - run:
+                name: Publish to Expo
+                command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
+    unit_test:
+        working_directory: ~/my-app
+        docker:
+            - image: circleci/node:14.15.1
+        environment:
+            - NODE_ENV: development
+        steps:
+            - checkout
+
+            - run:
+                name: Installing dependencies
+                command: yarn
+
+            - run:
+                name: test
+                command: yarn test
+    type_checks:
+        working_directory: ~/my-app
+        docker:
+            - image: circleci/node:14.15.1
+        environment:
+            - NODE_ENV: development
+        steps:
+            - checkout
+
+            - run:
+                name: Installing dependencies
+                command: yarn
+
+            - run:
+                name: typescript verifications
+                command: yarn tsc
     fastlane_release:
         working_directory: ~/deploy-app
         docker:
@@ -269,23 +280,13 @@ executors:
 
 workflows:
     version: 2
-    # deploy:
-    #   jobs:
-    #     - fastlane_release:
-    #         filters:
-    #             branches:
-    #               only:
-    #                 - production
     expo:
         jobs:
-            - publish_to_expo:
-                  filters:
-                      branches:
-                          only:
-                              - staging
+            - publish_to_expo
     everyday:
         jobs:
-            - test_app
+            - unit_test
+            - type_checks
     builds:
         jobs:
             #- publish_app
