@@ -63,6 +63,7 @@ import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 // Styles
 import { ipctColors } from 'styles/index';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 
 // Constants
 const currencies: {

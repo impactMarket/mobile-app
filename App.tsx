@@ -81,7 +81,7 @@ const kit = newKitFromWeb3(new Web3(config.jsonRpc));
 const middlewares = [];
 const sagaMiddleware = createSagaMiddleware();
 
-middlewares.push(offlineMiddleware());
+middlewares.push(offlineMiddleware({}));
 middlewares.push(suspendSaga(sagaMiddleware));
 middlewares.push(consumeActionMiddleware());
 

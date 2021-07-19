@@ -18,21 +18,17 @@ interface IBottomPopupProps {
     hasCloseBtn?: boolean;
     title?: string;
     titleStyle?: StyleProp<TextStyle>;
-    setIsVisible?: (event: GestureResponderEvent) => void;
+    toggleVisibility?: () => void;
 }
 export default class BottomPopup extends React.Component<
     IBottomPopupProps,
     object
 > {
-    constructor(props: any) {
-        super(props);
-    }
-
     render() {
         const {
             children,
             isVisible,
-            setIsVisible,
+            toggleVisibility,
             title,
             titleStyle,
             hasCloseBtn,
@@ -40,8 +36,8 @@ export default class BottomPopup extends React.Component<
         return (
             <BottomSheet
                 visible={isVisible}
-                onBackButtonPress={setIsVisible}
-                onBackdropPress={setIsVisible}
+                onBackButtonPress={toggleVisibility}
+                onBackdropPress={toggleVisibility}
             >
                 <Card
                     style={{
@@ -78,9 +74,9 @@ export default class BottomPopup extends React.Component<
                                     {i18n.t(title)}
                                 </Headline>
                             )}
-                            {hasCloseBtn && (
+                            {hasCloseBtn && toggleVisibility && (
                                 <CloseStorySvg
-                                    onPress={() => setIsVisible(!isVisible)}
+                                    onPress={() => toggleVisibility()}
                                 />
                             )}
                         </View>

@@ -141,9 +141,9 @@ async function deleteRequest<T>(
     return response;
 }
 
-interface IApiResult {
+export interface IApiResult<T> {
     success: boolean;
-    data: any;
+    data: T;
     error: any;
     count: number;
 }
@@ -178,7 +178,7 @@ class ApiRequests {
         // if (result.status >= 400) {
         //     return undefined;
         // }
-        const r = apiResult.data as IApiResult;
+        const r = apiResult.data as IApiResult<T>;
         let result: any = { data: r.data as T };
         if (r.count !== undefined) {
             result = { ...result, count: r.count };
@@ -219,7 +219,7 @@ class ApiRequests {
         // if (result.status >= 400) {
         //     return undefined;
         // }
-        const r = apiResult.data as IApiResult;
+        const r = apiResult.data as IApiResult<T>;
         let result: any = { data: r.data as T };
         if (r.error !== undefined) {
             result = { ...result, error: r.error };
@@ -261,7 +261,7 @@ class ApiRequests {
         //         return undefined;
         //     }
         //     response = result.data as T;
-        const r = result.data as IApiResult;
+        const r = result.data as IApiResult<T>;
         return r.data as T;
         // } catch (e) {
         //     Sentry.Native.captureException(e);
@@ -294,7 +294,7 @@ class ApiRequests {
         //     return undefined;
         // }
         // response = result.data as T;
-        const r = result.data as IApiResult;
+        const r = result.data as IApiResult<T>;
         return r.data as T;
         // } catch (e) {
         //     Sentry.Native.captureException(e);
@@ -340,7 +340,7 @@ class ApiRequests {
             },
         };
         const result = await axios.post(endpoint, formData, requestHeaders);
-        const r = result.data as IApiResult;
+        const r = result.data as IApiResult<any>;
         return r.data as AppMediaContent;
         //     response = result.data;
         // } catch (e) {

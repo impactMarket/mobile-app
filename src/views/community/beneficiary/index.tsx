@@ -51,7 +51,7 @@ import Claim from './Claim';
 import BlockedAccount from './cards/BlockedAccount';
 
 function BeneficiaryScreen() {
-    let timeoutTimeDiff: number | undefined;
+    let timeoutTimeDiff: NodeJS.Timer | undefined;
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false);
@@ -161,7 +161,9 @@ function BeneficiaryScreen() {
             clearInterval(timeoutTimeDiff);
         }
         return () => {
-            clearInterval(timeoutTimeDiff);
+            if (timeoutTimeDiff !== undefined) {
+                clearInterval(timeoutTimeDiff);
+            }
         };
     }, [suspectWrongDateTime]);
 

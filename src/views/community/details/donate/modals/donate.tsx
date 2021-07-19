@@ -56,7 +56,11 @@ class DonateModal extends Component<
 
     handleConfirmDonateWithCeloWallet = () => {
         const { exchangeRate, userBalance, community } = this.props;
-        if (community === undefined) {
+        if (
+            community === undefined ||
+            community.contract === undefined ||
+            community.state === undefined
+        ) {
             return;
         }
         const { amountDonate } = this.state;
@@ -114,7 +118,11 @@ class DonateModal extends Component<
         } = this.props;
         const { amountDonate, donating, showCopiedToClipboard } = this.state;
 
-        if (community === undefined) {
+        if (
+            community === undefined ||
+            community.contract === undefined ||
+            community.state === undefined
+        ) {
             return null;
         }
 

@@ -357,7 +357,7 @@ function Carousel(props: {
             />
             <BottomPopup
                 isVisible={openPopup}
-                setIsVisible={togglePopup}
+                toggleVisibility={togglePopup}
                 title={i18n.t('story')}
             >
                 <View
