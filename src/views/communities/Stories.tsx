@@ -18,6 +18,13 @@ import StoriesCard from './StoriesCard';
 export default function Stories() {
     const dispatch = useDispatch();
 
+    // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
+    useFocusEffect(
+        useCallback(() => {
+            dispatch(addStoriesToStateRequest(0, 5));
+        }, [])
+    );
+
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
@@ -37,25 +44,6 @@ export default function Stories() {
     const userCommunityMetadata = useSelector(
         (state: IRootState) => state.user.community
     );
-
-    // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
-    useFocusEffect(
-        useCallback(() => {
-            dispatch(addStoriesToStateRequest(0, 5));
-        }, [])
-    );
-    /**
-     * Code Before Sagas
-     * */
-
-    // useEffect(() => {
-    //     setRefreshing(true);
-    //     Api.story.list<ICommunitiesListStories[]>().then((s) => {
-    //         setStoriesCommunity(s);
-    //         dispatch(addStoriesToState(s));
-    //         setRefreshing(false);
-    //     });
-    // }, []);
 
     return (
         <SafeAreaView>
@@ -128,6 +116,7 @@ export default function Stories() {
                     />
                 )}
                 {storiesCount > 0 &&
+                    !refreshing &&
                     storiesCommunity.map((s, index) => (
                         <StoriesCard
                             key={s.id}
