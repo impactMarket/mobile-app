@@ -3,6 +3,7 @@ version: 2.1
 jobs:
   publish_to_expo:
     working_directory: ~/publish-to-expo
+    resource_class: medium+
     docker:
       - image: circleci/node:14.15.1
     environment:
