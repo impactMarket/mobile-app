@@ -3,7 +3,7 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
+import { addStoriesToStateSuccess } from 'helpers/redux/actions/stories';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -15,6 +15,7 @@ import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
 
 function StoriesScreen() {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const [refreshing, setRefreshing] = useState(false);
     const [stories, setStories] = useState<ICommunitiesListStories[]>([]);
@@ -29,6 +30,7 @@ function StoriesScreen() {
             const end = stories.length ? stories?.length + 12 : 12;
             const newStories = await getStories(start, end);
             setStories([...stories, ...newStories.data]);
+            dispatch(addStoriesToStateSuccess(newStories.data, storiesCount));
         };
         fetchFirst();
     }, []);
@@ -40,12 +42,11 @@ function StoriesScreen() {
     const handleOnEndReached = async () => {
         setRefreshing(true);
         if (stories.length < storiesCount) {
-            console.log({ storiesCount });
-            console.log({ stories: stories.length });
             const start = stories.length ?? 0;
             const end = stories.length ? stories?.length + 12 : 12;
             const newStories = await getStories(start, end);
             setStories([...stories, ...newStories.data]);
+            dispatch(addStoriesToStateSuccess(newStories.data, storiesCount));
         }
         setRefreshing(false);
     };
@@ -147,7 +148,7 @@ function StoriesScreen() {
             numColumns={3}
             renderItem={renderItem}
             onEndReached={handleOnEndReached}
-            onEndReachedThreshold={0.3}
+            onEndReachedThreshold={0.7}
         />
     );
 }
