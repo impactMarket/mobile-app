@@ -3,7 +3,6 @@ version: 2.1
 jobs:
   publish_to_expo:
     working_directory: ~/publish-to-expo
-    resource_class: medium+
     docker:
       - image: circleci/node:14.15.1
     environment:
@@ -12,6 +11,7 @@ jobs:
       EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
       EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
       EXPO_IS_TESTNET: true
+      NODE_OPTIONS: --max_old_space_size=3072
       SENTRY_ORG: impactmarket
       SENTRY_PROJECT: impactmarket
       SENTRY_ENVIRONMENT: dev
@@ -46,7 +46,7 @@ jobs:
             export SENTRY_RELEASE=$(sentry-cli releases propose-version)
             sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
             sentry-cli releases set-commits $SENTRY_RELEASE --auto
-            npx expo-cli publish --non-interactive
+            npx expo-cli publish --non-interactive --max-workers 1
             sentry-cli releases finalize $SENTRY_RELEASE
             sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
 
