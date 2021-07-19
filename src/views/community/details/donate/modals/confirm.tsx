@@ -61,41 +61,59 @@ class ConfirmModal extends Component<
             this.props.dismissModal();
         });
         navigationRef.current?.navigate(Screens.WaitingTx);
-        celoWalletRequest(
-            userAddress,
-            stableToken.address,
-            txObject,
-            'donatetocommunity',
-            kit
-        )
-            .then((tx) => {
-                if (tx === undefined) {
-                    return;
-                }
-                // TODO: wait for tx confirmation and request UI update
-                // update donated values
-                setTimeout(async () => {
-                    const newBalanceStr = (
-                        await getUserBalance(kit, userAddress)
-                    ).toString();
-                    updateUserBalance(newBalanceStr);
-                }, 1200);
-                this.props.setInProgress(false);
-                analytics('donate', { device: Device.brand, success: 'true' });
-            })
-            .catch((e) => {
-                Sentry.Native.captureException(e);
-                analytics('donate', { device: Device.brand, success: 'false' });
-                // TODO: 'nonce too low' have happened here!
-                navigationRef.current?.goBack();
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorDonating'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-            })
-            .finally(() => this.setState({ donating: false }));
+        const executeTx = () =>
+            celoWalletRequest(
+                userAddress,
+                stableToken.address,
+                txObject,
+                'donatetocommunity',
+                kit
+            )
+                .then((tx) => {
+                    if (tx === undefined || (tx as any) === {}) {
+                        throw new Error('invalid tx response');
+                    }
+                    // TODO: wait for tx confirmation and request UI update
+                    // update donated values
+                    setTimeout(async () => {
+                        const newBalanceStr = (
+                            await getUserBalance(kit, userAddress)
+                        ).toString();
+                        updateUserBalance(newBalanceStr);
+                    }, 1200);
+                    this.props.setInProgress(false);
+                    analytics('donate', {
+                        device: Device.brand,
+                        success: 'true',
+                    });
+                })
+                .catch((e) => {
+                    Sentry.Native.withScope((scope) => {
+                        scope.setTag('ipct-activity', 'donate');
+                        Sentry.Native.captureException(e);
+                    });
+                    console.log(e);
+                    analytics('donate', {
+                        device: Device.brand,
+                        success: 'false',
+                    });
+                    // TODO: 'nonce too low' have happened here!
+                    Alert.alert(
+                        i18n.t('failure'),
+                        i18n.t('errorDonating'),
+                        [
+                            { text: 'Try again', onPress: () => executeTx() },
+                            {
+                                text: 'Go Back',
+                                onPress: () => navigationRef.current?.goBack(),
+                                style: 'cancel',
+                            },
+                        ],
+                        { cancelable: false }
+                    );
+                })
+                .finally(() => this.setState({ donating: false }));
+        executeTx();
     };
 
     render() {
