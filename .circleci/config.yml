@@ -71,6 +71,17 @@ jobs:
     working_directory: ~/publish-to-expo
     docker:
       - image: circleci/node:14.15.1
+    environment:
+      EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
+      EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
+      EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
+      EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
+      EXPO_IS_TESTNET: true
+      NODE_OPTIONS: --max_old_space_size=3072
+      SENTRY_ORG: impactmarket
+      SENTRY_PROJECT: impactmarket
+      SENTRY_ENVIRONMENT: dev
+      SENTRY_DEPLOY_ENV: dev
     steps:
       - checkout
 
@@ -95,19 +106,20 @@ jobs:
           command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
       - run:
-          name: Publish to Expo
-          command: npx expo-cli publish --non-interactive
-          environment:
-            EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
-            EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
-            EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
-            EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
-            EXPO_IS_TESTNET: true
-            NODE_OPTIONS: --max_old_space_size=3072
+          name: Publish to Expo and Create release, notify Sentry of deploy
+          command: |
+            curl -sL https://sentry.io/get-cli/ | bash
+            export SENTRY_RELEASE=$(sentry-cli releases propose-version)
+            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+            sentry-cli releases set-commits $SENTRY_RELEASE --auto
+            npx expo-cli publish --non-interactive
+            sentry-cli releases finalize $SENTRY_RELEASE
+            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
 
       - run:
-          name: Publish to Expo
-          command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
+        name: Publish to Expo
+        command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
+
   unit_test:
     working_directory: ~/my-app
     docker:
@@ -124,6 +136,7 @@ jobs:
       - run:
           name: test
           command: yarn test
+
   type_checks:
     working_directory: ~/my-app
     docker:
@@ -140,6 +153,7 @@ jobs:
       - run:
           name: typescript verifications
           command: yarn tsc
+
   fastlane_release:
     working_directory: ~/deploy-app
     docker:
