@@ -767,4 +767,4 @@ class App extends React.Component<any, IAppState> {
     };
 }
 
-export default Sentry.Native.withProfiler(App, { name: 'impactMarket' });
+export default Sentry.Native.withProfiler(App, { name: 'App' });

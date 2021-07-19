@@ -526,4 +526,4 @@ const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(Claim);
+export default Sentry.Native.withProfiler(connector(Claim), { name: 'Claim' });
