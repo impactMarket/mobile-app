@@ -17,12 +17,12 @@ import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
+import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
-import * as Sentry from 'sentry-expo';
 
 import config from '../../../../config';
 
