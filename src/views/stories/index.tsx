@@ -24,14 +24,17 @@ function StoriesScreen() {
         return await Api.story.list<ICommunitiesListStories[]>(start, end);
     };
 
-    useEffect(() => {
-        const fetchFirst = async () => {
+    const fetchFirst = async () => {
+        if (stories.length < storiesCount) {
             const start = stories.length ?? 0;
             const end = stories.length ? stories?.length + 12 : 12;
             const newStories = await getStories(start, end);
             setStories([...stories, ...newStories.data]);
             dispatch(addStoriesToStateSuccess(newStories.data, storiesCount));
-        };
+        }
+    };
+
+    useEffect(() => {
         fetchFirst();
     }, []);
 
@@ -41,13 +44,7 @@ function StoriesScreen() {
 
     const handleOnEndReached = async () => {
         setRefreshing(true);
-        if (stories.length < storiesCount) {
-            const start = stories.length ?? 0;
-            const end = stories.length ? stories?.length + 12 : 12;
-            const newStories = await getStories(start, end);
-            setStories([...stories, ...newStories.data]);
-            dispatch(addStoriesToStateSuccess(newStories.data, storiesCount));
-        }
+        fetchFirst();
         setRefreshing(false);
     };
 
@@ -148,7 +145,7 @@ function StoriesScreen() {
             numColumns={3}
             renderItem={renderItem}
             onEndReached={handleOnEndReached}
-            onEndReachedThreshold={0.7}
+            onEndReachedThreshold={0.1}
         />
     );
 }
