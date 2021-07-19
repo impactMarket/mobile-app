@@ -71,7 +71,7 @@ jobs:
           name: test
           command: yarn test
 
-  type_checks:
+  type_check:
     working_directory: ~/my-app
     docker:
       - image: circleci/node:14.15.1
@@ -96,4 +96,4 @@ workflows:
   everyday:
     jobs:
       - unit_test
-      - type_checks
+      - type_check
