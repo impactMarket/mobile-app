@@ -10,8 +10,9 @@ import {
 import Api from 'services/api';
 import { takeLatest, call, put, all } from 'typed-redux-saga';
 
-const getStories = async (start: number, end: number) =>
-    await Api.story.list<ICommunitiesListStories[]>(start, end);
+const getStories = async (start: number, end: number) => {
+    return await Api.story.list<ICommunitiesListStories[]>(start, end);
+};
 
 export function* submitAddStoriesToStateRequest({ payload }: any) {
     try {

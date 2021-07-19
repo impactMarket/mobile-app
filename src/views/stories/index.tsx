@@ -4,37 +4,49 @@ import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
+import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
 
 function StoriesScreen() {
     const navigation = useNavigation();
-    const dispatch = useDispatch();
     const [refreshing, setRefreshing] = useState(false);
+    const [stories, setStories] = useState<ICommunitiesListStories[]>([]);
+
+    const getStories = async (start: number, end: number) => {
+        return await Api.story.list<ICommunitiesListStories[]>(start, end);
+    };
+
+    useEffect(() => {
+        const fetchFirst = async () => {
+            const start = stories.length ?? 0;
+            const end = stories.length ? stories?.length + 12 : 12;
+            const newStories = await getStories(start, end);
+            setStories([...stories, ...newStories.data]);
+        };
+        fetchFirst();
+    }, []);
 
     const storiesCount = useSelector(
         (state: IRootState) => state.stories.stories.count
     );
 
-    const stories = useSelector(
-        (state: IRootState) => state.stories.stories.data
-    );
-
     const handleOnEndReached = async () => {
         setRefreshing(true);
-
-        dispatch(
-            addStoriesToStateRequest(stories?.length, stories?.length + 12)
-        );
-        console.log({ stories: stories?.length });
-        console.log({ stories12: stories?.length + 12 });
-        console.log({ storiesCount });
-
+        if (stories.length < storiesCount) {
+            console.log({ storiesCount });
+            console.log({ stories: stories.length });
+            const start = stories.length ?? 0;
+            const end = stories.length ? stories?.length + 12 : 12;
+            const newStories = await getStories(start, end);
+            setStories([...stories, ...newStories.data]);
+        }
         setRefreshing(false);
     };
 
