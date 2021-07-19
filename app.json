@@ -9,7 +9,8 @@
         "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarket",
         "splash": {
-            "resizeMode": "native",
+            "resizeMode": "cover",
+            "image": "./src/assets/images/splash@3x.png",
             "backgroundColor": "#2362FB",
             "mdpi": "./src/assets/images/splash.png",
             "hdpi": "./src/assets/images/splash@1.5x.png",
