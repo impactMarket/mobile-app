@@ -9,6 +9,8 @@
         "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*",
         "prettier": "prettier --write ./**/*.{ts,tsx}",
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
+        "prettier-no-fix": "prettier ./**/*.{ts,tsx}",
+        "eslint-no-fix": "eslint ./**/*.{ts,tsx}",
         "test": "jest --maxWorkers=50%",
         "test:watch": "jest --watch --maxWorkers=25%"
     },

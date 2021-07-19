@@ -85,8 +85,16 @@ jobs:
           command: yarn
 
       - run:
-          name: typescript verifications
+          name: tsc
           command: yarn tsc
+
+      - run:
+          name: eslint
+          command: yarn eslint-no-fix
+
+      - run:
+          name: prettier
+          command: yarn prettier-no-fix
 
 workflows:
   version: 2
