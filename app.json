@@ -4,12 +4,13 @@
         "slug": "impact-market",
         "privacy": "public",
         "platforms": ["ios", "android"],
-        "version": "1.1.7",
+        "version": "1.1.8",
         "orientation": "portrait",
         "icon": "./src/assets/images/logo.png",
         "scheme": "impactmarket",
         "splash": {
-            "resizeMode": "native",
+            "resizeMode": "cover",
+            "image": "./src/assets/images/splash@3x.png",
             "backgroundColor": "#2362FB",
             "mdpi": "./src/assets/images/splash.png",
             "hdpi": "./src/assets/images/splash@1.5x.png",
@@ -31,7 +32,7 @@
             "icon": "./src/assets/images/logo/ios.png",
             "googleServicesFile": "./src/assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
-            "buildNumber": "1.1.7",
+            "buildNumber": "1.1.8",
             "supportsTablet": true
         },
         "android": {
@@ -39,7 +40,7 @@
             "icon": "./src/assets/images/logo/android.png",
             "googleServicesFile": "./src/assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
-            "versionCode": 77,
+            "versionCode": 78,
             "adaptiveIcon": {
                 "backgroundImage": "./src/assets/images/logo.png",
                 "backgroundColor": "#2362FB"
