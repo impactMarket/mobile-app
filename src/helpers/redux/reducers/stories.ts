@@ -16,7 +16,10 @@ export const storiesReducer = (
         case storiesAction.INIT_SUCCESS:
             return {
                 ...state,
-                stories: { ...state.stories, ...action.payload },
+                stories: {
+                    data: [...state.stories.data, ...action.payload.data],
+                    count: action.payload.count,
+                },
                 refreshing: false,
             };
 

@@ -5,7 +5,7 @@ import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,9 @@ export default function Stories() {
     // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
     useFocusEffect(
         useCallback(() => {
-            dispatch(addStoriesToStateRequest(0, 5));
+            if (storiesCount === 0) {
+                dispatch(addStoriesToStateRequest(0, 5));
+            }
         }, [])
     );
 
@@ -32,6 +34,10 @@ export default function Stories() {
     const storiesCommunity = useSelector(
         (state: IRootState) => state.stories.stories.data
     );
+
+    storiesCommunity.map((item) => {
+        console.log(item.name);
+    });
 
     const storiesCount = useSelector(
         (state: IRootState) => state.stories.stories.count
@@ -116,8 +122,7 @@ export default function Stories() {
                     />
                 )}
                 {storiesCount > 0 &&
-                    !refreshing &&
-                    storiesCommunity.map((s, index) => (
+                    storiesCommunity.slice(0, 5).map((s, index) => (
                         <StoriesCard
                             key={s.id}
                             communityId={s.id}
