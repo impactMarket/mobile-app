@@ -35,10 +35,6 @@ export default function Stories() {
         (state: IRootState) => state.stories.stories.data
     );
 
-    storiesCommunity.map((item) => {
-        console.log(item.name);
-    });
-
     const storiesCount = useSelector(
         (state: IRootState) => state.stories.stories.count
     );
@@ -122,6 +118,9 @@ export default function Stories() {
                     />
                 )}
                 {storiesCount > 0 &&
+                    /*** This is a hack to make the viewport smaller after user scrolls on stories main page.
+                     * Pay attention we don't fetch more than 5 stories when first loading this pages.
+                     ***/
                     storiesCommunity.slice(0, 5).map((s, index) => (
                         <StoriesCard
                             key={s.id}
