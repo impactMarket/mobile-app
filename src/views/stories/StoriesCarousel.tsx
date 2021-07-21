@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import Carousel from './Carousel';
@@ -20,15 +20,14 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     );
 
     const flatListRef = useRef<FlatList<ICommunitiesListStories> | null>(null);
-    const [index, setIndex] = useState(-1);
+    const [index, setIndex] = useState<number>(-1);
 
     useEffect(() => {
-        setIndex(
-            storiesListState.findIndex(
-                (s) => s.id === props.route.params.communityId
-            )
+        const newIndex = storiesListState.findIndex(
+            (s) => s.id === props.route.params.communityId
         );
-    }, [storiesListState, props.route.params.communityId]);
+        setIndex(newIndex);
+    }, [props.route.params.communityId]);
 
     const indexRef = useRef(index);
 
@@ -64,10 +63,32 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
             setIndex(index + 1);
         }
     };
-    console.log({ index });
-    // if (index === -1) {
-    //     return null;
-    // }
+
+    const renderCommunityStories = useCallback(({ item }) => {
+        return (
+            <Carousel
+                communityId={item.id}
+                goToOtherCommunity={goToOtherCommunity}
+            />
+        );
+    }, []);
+
+    const keyExtractor = useCallback((item) => item.id.toString(), []);
+
+    const ITEM_WIDTH = Dimensions.get('screen').width;
+
+    const getItemLayout = useCallback(
+        (data, index) => ({
+            length: ITEM_WIDTH,
+            offset: ITEM_WIDTH * index,
+            index,
+        }),
+        []
+    );
+
+    if (index === -1) {
+        return null;
+    }
 
     return (
         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -76,18 +97,11 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
             <FlatList
                 data={storiesListState}
                 ref={flatListRef}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={keyExtractor}
                 style={{
                     flex: 1,
                 }}
-                renderItem={({ item }) => {
-                    return (
-                        <Carousel
-                            communityId={item.id}
-                            goToOtherCommunity={goToOtherCommunity}
-                        />
-                    );
-                }}
+                renderItem={renderCommunityStories}
                 initialScrollIndex={index}
                 onScrollToIndexFailed={(info) => {
                     const wait = new Promise((resolve) =>
@@ -104,9 +118,10 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 onScroll={onScroll}
+                getItemLayout={getItemLayout}
                 // Performance settings
                 removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={10} // Reduce initial render amount
+                initialNumToRender={5} // Reduce initial render amount
                 maxToRenderPerBatch={1} // Reduce number in each render batch
             />
         </View>

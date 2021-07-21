@@ -2,6 +2,8 @@ import { storiesAction } from 'helpers/constants';
 import {
     addStoriesToStateSuccess,
     addStoriesToStateFailure,
+    addMoreStoriesToStateSuccess,
+    addMoreStoriesToStateFailure,
 } from 'helpers/redux/actions/stories';
 import {
     ICommunitiesListStories,
@@ -31,6 +33,24 @@ export function* submitAddStoriesToStateRequest({ payload }: any) {
     }
 }
 
+export function* submitAddMoretoriesToStateRequest({ payload }: any) {
+    try {
+        const { start, end } = payload;
+
+        const stories: ICommunitiesListStoriesResponse = yield call(
+            getStories,
+            start,
+            end
+        );
+        const { data } = stories;
+
+        yield put(addMoreStoriesToStateSuccess(data));
+    } catch (err) {
+        yield put(addMoreStoriesToStateFailure());
+    }
+}
+
 export default all([
     takeLatest(storiesAction.INIT_REQUEST, submitAddStoriesToStateRequest),
+    takeLatest(storiesAction.MORE_REQUEST, submitAddMoretoriesToStateRequest),
 ]);

@@ -5,7 +5,7 @@ import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,9 +21,7 @@ export default function Stories() {
     // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
     useFocusEffect(
         useCallback(() => {
-            if (storiesCount === 0) {
-                dispatch(addStoriesToStateRequest(0, 5));
-            }
+            dispatch(addStoriesToStateRequest(0, 5));
         }, [])
     );
 
@@ -90,56 +88,57 @@ export default function Stories() {
                     </Text>
                 </Pressable>
             </View>
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ padding: 14 }}
-            >
-                {userAddress.length > 0 &&
-                    (userCommunityMetadata.isBeneficiary ||
-                        userCommunityMetadata.isManager) &&
-                    userCommunityMetadata.metadata.status === 'valid' && (
-                        <View
-                            style={{
-                                flexDirection: 'column',
-                                width: 114,
-                                height: 167,
-                            }}
-                        >
-                            <NewStoryCard key="newStory" />
-                            <MyStoriesCard />
-                        </View>
-                    )}
-                {refreshing && (
-                    <ActivityIndicator
-                        style={{ marginBottom: 22 }}
-                        animating
-                        color={ipctColors.blueRibbon}
-                    />
-                )}
-                {storiesCount > 0 &&
-                    /*** This is a hack to make the viewport smaller after user scrolls on stories main page.
-                     * Pay attention we don't fetch more than 5 stories when first loading this pages.
-                     ***/
-                    storiesCommunity.slice(0, 5).map((s, index) => (
-                        <StoriesCard
-                            key={s.id}
-                            communityId={s.id}
-                            communityName={s.name}
-                            imageURI={
-                                s.story.media
-                                    ? chooseMediaThumbnail(s.story.media, {
-                                          width: 84,
-                                          heigth: 140,
-                                      })
-                                    : chooseMediaThumbnail(s.cover, {
-                                          width: 88,
-                                          heigth: 88,
-                                      })
-                            }
-                        />
-                    ))}
-            </ScrollView>
+            {refreshing ? (
+                <ActivityIndicator
+                    style={{ marginBottom: 22 }}
+                    animating
+                    color={ipctColors.blueRibbon}
+                />
+            ) : (
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ padding: 14 }}
+                >
+                    {userAddress.length > 0 &&
+                        (userCommunityMetadata.isBeneficiary ||
+                            userCommunityMetadata.isManager) &&
+                        userCommunityMetadata.metadata.status === 'valid' && (
+                            <View
+                                style={{
+                                    flexDirection: 'column',
+                                    width: 114,
+                                    height: 167,
+                                }}
+                            >
+                                <NewStoryCard key="newStory" />
+                                <MyStoriesCard />
+                            </View>
+                        )}
+                    {storiesCount > 0 &&
+                        /*** This is a hack to make the viewport smaller after user scrolls on stories main page.
+                         * Pay attention we don't fetch more than 5 stories when first loading this pages.
+                         ***/
+                        storiesCommunity.slice(0, 5).map((s, index) => (
+                            <StoriesCard
+                                key={index}
+                                communityId={s.id}
+                                communityName={s.name}
+                                imageURI={
+                                    s.story.media
+                                        ? chooseMediaThumbnail(s.story.media, {
+                                              width: 84,
+                                              heigth: 140,
+                                          })
+                                        : chooseMediaThumbnail(s.cover, {
+                                              width: 88,
+                                              heigth: 88,
+                                          })
+                                }
+                            />
+                        ))}
+                </ScrollView>
+            )}
         </SafeAreaView>
     );
 }

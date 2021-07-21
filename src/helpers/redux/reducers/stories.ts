@@ -17,7 +17,7 @@ export const storiesReducer = (
             return {
                 ...state,
                 stories: {
-                    data: [...state.stories.data, ...action.payload.data],
+                    data: action.payload.data,
                     count: action.payload.count,
                 },
                 refreshing: false,
@@ -30,6 +30,27 @@ export const storiesReducer = (
             };
 
         case storiesAction.INIT_FAILURE:
+            return {
+                ...state,
+                refreshing: false,
+            };
+
+        case storiesAction.MORE_SUCCESS:
+            return {
+                ...state,
+                stories: {
+                    data: [...state.stories.data, ...action.payload.data],
+                },
+                refreshing: false,
+            };
+
+        case storiesAction.MORE_REQUEST:
+            return {
+                ...state,
+                refreshing: true,
+            };
+
+        case storiesAction.MORE_FAILURE:
             return {
                 ...state,
                 refreshing: false,

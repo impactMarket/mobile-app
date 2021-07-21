@@ -3,7 +3,7 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addStoriesToStateSuccess } from 'helpers/redux/actions/stories';
+import { addMoreStoriesToStateSuccess } from 'helpers/redux/actions/stories';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,30 +17,53 @@ import StoriesCard from 'views/communities/StoriesCard';
 function StoriesScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+
+    const cachedStories = useSelector(
+        (state: IRootState) => state.stories.stories.data
+    );
+
     const [refreshing, setRefreshing] = useState(false);
-    const [stories, setStories] = useState<ICommunitiesListStories[]>([]);
+    const [stories, setStories] = useState<ICommunitiesListStories[]>(
+        cachedStories
+    );
+
+    const [storiesCount, setStoriesCount] = useState<number>(0);
+
+    const cachedStoriesCount = useSelector(
+        (state: IRootState) => state.stories.stories.count
+    );
 
     const getStories = async (start: number, end: number) => {
         return await Api.story.list<ICommunitiesListStories[]>(start, end);
     };
 
+    const calcEndList = async (
+        storiesLength: number,
+        maxListLength: number
+    ) => {
+        const end =
+            maxListLength - storiesLength < 12
+                ? maxListLength - storiesLength
+                : storiesLength + 12;
+        return end;
+    };
+
     const fetchFirst = async () => {
         if (stories.length < storiesCount) {
             const start = stories.length ?? 0;
-            const end = stories.length ? stories?.length + 12 : 12;
+            const end = await calcEndList(stories.length, storiesCount);
             const newStories = await getStories(start, end);
             setStories([...stories, ...newStories.data]);
-            dispatch(addStoriesToStateSuccess(newStories.data, storiesCount));
+            dispatch(addMoreStoriesToStateSuccess(newStories.data));
         }
     };
 
     useEffect(() => {
         fetchFirst();
+        if (cachedStoriesCount) {
+            setStoriesCount(cachedStoriesCount);
+        }
     }, []);
-
-    const storiesCount = useSelector(
-        (state: IRootState) => state.stories.stories.count
-    );
 
     const handleOnEndReached = async () => {
         setRefreshing(true);
