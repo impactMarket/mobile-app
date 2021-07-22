@@ -285,10 +285,10 @@ function ProfileScreen() {
         const currencyResult: string[] = [];
         for (const [key, value] of Object.entries(currencies)) {
             if (
-                value.name.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
-                value.symbol.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
-                value.symbol_native.toLowerCase().indexOf(e.toLowerCase()) !==
-                    -1
+                value.name.toLowerCase().indexOf(e.toLowerCase()) !== -1
+                // value.symbol.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
+                // value.symbol_native.toLowerCase().indexOf(e.toLowerCase()) !==
+                //     -1
             ) {
                 currencyResult.push(key);
             }
