@@ -153,7 +153,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         )
             .then(async (tx) => {
                 if (tx === undefined) {
-                    return;
+                    throw new Error('invalid valora response');
                 }
                 CacheStore.resetClaimFails();
                 setTimeout(async () => {
