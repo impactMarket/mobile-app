@@ -40,6 +40,8 @@ export const storiesReducer = (
                 ...state,
                 stories: {
                     data: [...state.stories.data, ...action.payload.data],
+                    count:
+                        state.stories.data.length + action.payload.data.length,
                 },
                 refreshing: false,
             };

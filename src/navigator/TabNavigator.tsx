@@ -159,7 +159,7 @@ function TabNavigator({
         <Tab.Screen
             name={Screens.Beneficiary}
             component={WelcomeRulesScreen}
-            options={WelcomeRulesScreen.navigationOptions}
+            // options={WelcomeRulesScreen.navigationOptions}
         />
     );
     const tabManager = (
