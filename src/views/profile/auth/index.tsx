@@ -6,8 +6,6 @@ import {
     useNavigation,
     useFocusEffect,
 } from '@react-navigation/native';
-import countriesJSON from 'assets/countries.json';
-import currenciesJSON from 'assets/currencies.json';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
@@ -21,17 +19,19 @@ import {
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
-import { makeDeeplinkUrl, welcomeUser } from 'helpers/index';
+import {
+    getCurrencyFromPhoneNumber,
+    makeDeeplinkUrl,
+    welcomeUser,
+} from 'helpers/index';
 import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
-import { IStoreCombinedActionsTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
     Text,
     View,
-    Alert,
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
@@ -39,7 +39,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Api from 'services/api';
@@ -52,33 +52,17 @@ import { ipctColors } from 'styles/index';
 import Web3 from 'web3';
 
 import config from '../../../../config';
-
-const countries: {
-    [key: string]: {
-        name: string;
-        native: string;
-        phone: string;
-        currency: string;
-        languages: string[];
-        emoji: string;
-    };
-} = countriesJSON;
-const currencies: {
-    [key: string]: {
-        symbol: string;
-        name: string;
-        symbol_native: string;
-    };
-} = currenciesJSON;
 function Auth() {
     const navigation = useNavigation();
 
     const dispatch = useDispatch();
-    const store = useStore<IRootState, IStoreCombinedActionsTypes>();
     const kit = useSelector((state: IRootState) => state.app.kit);
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
     const [connecting, setConnecting] = useState(false);
     const [toggleInformativeModal, setToggleInformativeModal] = useState(true);
-    const [loadRefs, setLoadRefs] = useState(false);
+    const [, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
 
@@ -120,9 +104,9 @@ function Auth() {
             });
 
             dappkitResponse = await waitForAccountAuth(requestId);
-            userAddress = store
-                .getState()
-                .app.kit.web3.utils.toChecksumAddress(dappkitResponse.address);
+            userAddress = kit.web3.utils.toChecksumAddress(
+                dappkitResponse.address
+            );
         } catch (e) {
             Sentry.Native.captureException(e);
             analytics('login', { device: Device.brand, success: 'false' });
@@ -148,27 +132,16 @@ function Auth() {
         if (!supportedLanguages.includes(language)) {
             language = 'en';
         }
-        let currency = '';
-        for (const [, value] of Object.entries(countries)) {
-            if (
-                value.phone ===
-                dappkitResponse.phoneNumber.slice(1, value.phone.length + 1)
-            ) {
-                if (value.currency in currencies) {
-                    currency = value.currency;
-                } else {
-                    currency = 'USD';
-                }
-                break;
-            }
-        }
+        const currency = getCurrencyFromPhoneNumber(
+            dappkitResponse.phoneNumber
+        );
 
         const user = await Api.user.auth(
             userAddress,
             language,
             currency,
-            pushNotificationToken,
-            dappkitResponse.phoneNumber
+            dappkitResponse.phoneNumber,
+            pushNotificationToken
         );
 
         if (user === undefined) {
@@ -206,15 +179,17 @@ function Auth() {
                 userAddress,
                 dappkitResponse.phoneNumber,
                 user,
-                store.getState().app.exchangeRates,
+                exchangeRates,
                 newKitFromWeb3(new Web3(config.jsonRpc)),
                 dispatch,
                 user.user
             );
-            dispatch(setPushNotificationsToken(pushNotificationToken));
-            setPushNotificationListeners(
-                startNotificationsListeners(kit, dispatch)
-            );
+            if (pushNotificationToken) {
+                dispatch(setPushNotificationsToken(pushNotificationToken));
+                setPushNotificationListeners(
+                    startNotificationsListeners(kit, dispatch)
+                );
+            }
             analytics('login', { device: Device.brand, success: 'true' });
         } catch (error) {
             analytics('login', { device: Device.brand, success: 'false' });

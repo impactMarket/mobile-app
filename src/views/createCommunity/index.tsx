@@ -20,7 +20,11 @@ import {
     formatInputAmountToTransfer,
     amountToCurrency,
 } from 'helpers/currency';
-import { validateEmail, updateCommunityInfo } from 'helpers/index';
+import {
+    validateEmail,
+    updateCommunityInfo,
+    getCurrencyFromPhoneNumber,
+} from 'helpers/index';
 import {
     setCommunityMetadata,
     setUserIsCommunityManager,
@@ -290,20 +294,7 @@ function CreateCommunityScreen() {
 
     useEffect(() => {
         const setCountryAndCurrencyBasedOnPhoneNumber = () => {
-            for (const [key, value] of Object.entries(countries)) {
-                if (
-                    value.phone ===
-                    userPhoneNumber.slice(1, value.phone.length + 1)
-                ) {
-                    setCountry(key);
-                    if (value.currency in currencies) {
-                        setCurrency(value.currency);
-                    } else {
-                        setCurrency('USD');
-                    }
-                    break;
-                }
-            }
+            setCurrency(getCurrencyFromPhoneNumber(userPhoneNumber));
         };
         setCountryAndCurrencyBasedOnPhoneNumber();
         renderAvailableCountries();
@@ -437,7 +428,6 @@ function CreateCommunityScreen() {
                 _isProfileImageValid;
 
             if (!isSubmitAvailable) {
-                console.log('setToggleMissingFieldsModal 1');
                 setToggleMissingFieldsModal(true);
                 return;
             }
@@ -580,7 +570,6 @@ function CreateCommunityScreen() {
                 Sentry.Native.captureException(e);
                 setSending(false);
                 setSendingSuccess(false);
-                console.log({ e });
             }
         },
         submitEditCommunity = async () => {
@@ -673,7 +662,6 @@ function CreateCommunityScreen() {
                 Sentry.Native.captureException(e);
                 setSending(false);
                 setSendingSuccess(false);
-                console.log({ e });
             }
         },
         enableGPSLocation = async () => {

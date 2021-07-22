@@ -61,7 +61,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
         } else if (index < storiesListState.length - 1 && next) {
             flatListRef.current?.scrollToIndex({ index: index + 1 });
             setIndex(index + 1);
-        }
+        
     };
 
     const renderCommunityStories = useCallback(({ item }) => {

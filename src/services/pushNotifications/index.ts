@@ -13,13 +13,14 @@ import { navigationRef } from 'helpers/rootNavigation';
 import { Platform } from 'react-native';
 import { batch } from 'react-redux';
 import { Dispatch } from 'redux';
-import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 
-export async function registerForPushNotifications(): Promise<string> {
-    let token = '';
+export async function registerForPushNotifications(): Promise<
+    string | undefined
+> {
+    let token: string | undefined = undefined;
     try {
         if (Constants.isDevice) {
             const {
@@ -33,11 +34,11 @@ export async function registerForPushNotifications(): Promise<string> {
                 finalStatus = status;
             }
             if (finalStatus !== 'granted') {
-                return '';
+                return undefined;
             }
             token = (await Notifications.getExpoPushTokenAsync()).data;
         } else {
-            return '';
+            return undefined;
         }
 
         if (Platform.OS === 'android') {

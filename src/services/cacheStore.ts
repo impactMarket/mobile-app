@@ -226,37 +226,4 @@ export default class CacheStore {
         }
         return appNeedsUpdate === 'true';
     }
-
-    // exchange rates cache
-
-    static async cacheExchangeRates(exchangeRates: { [key: string]: number }) {
-        await AsyncStorage.setItem(
-            CACHE_STORE_EXCHANGE_RATES,
-            JSON.stringify(exchangeRates)
-        );
-        await AsyncStorage.setItem(
-            CACHE_STORE_LAST_EXCHANGE_RATES,
-            new Date().getTime().toString()
-        );
-    }
-
-    static async getExchangeRates(): Promise<{ [key: string]: number } | null> {
-        const exchangeRates = await AsyncStorage.getItem(
-            CACHE_STORE_EXCHANGE_RATES
-        );
-        if (exchangeRates === null) {
-            return null;
-        }
-        return JSON.parse(exchangeRates);
-    }
-
-    static async getLastExchangeRatesUpdate(): Promise<number> {
-        const updateDate = await AsyncStorage.getItem(
-            CACHE_STORE_LAST_EXCHANGE_RATES
-        );
-        if (updateDate === null) {
-            return 0;
-        }
-        return parseInt(updateDate);
-    }
 }

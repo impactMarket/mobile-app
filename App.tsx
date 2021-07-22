@@ -139,12 +139,48 @@ Notifications.setNotificationHandler({
     }),
 });
 
+// Construct a new instrumentation instance. This is needed to communicate between the integration and React
+const routingInstrumentation = new Sentry.Native.ReactNavigationV5Instrumentation();
+
 Sentry.init({
+    // release: 'impactmarket@' + process.env.REACT_APP_RELEASE_VERSION, // https://docs.sentry.io/product/sentry-basics/guides/integrate-frontend/upload-source-maps/
+    environment:
+        process.env.SENTRY_ENVIRONMENT !== undefined
+            ? process.env.SENTRY_ENVIRONMENT
+            : 'dev',
     dsn: process.env.EXPO_SENTRY_DNS,
     enableInExpoDevelopment: true,
     debug: true,
-    sampleRate: 0.1,
-    tracesSampleRate: 0.1,
+    integrations: [
+        new Sentry.Native.ReactNativeTracing({
+            routingInstrumentation,
+            // ... other options
+        }),
+    ],
+    // sampleRate: 0.1,
+    // tracesSampleRate: 0.1,
+    tracesSampler: (samplingContext) => {
+        // Examine provided context data (including parent decision, if any) along
+        // with anything in the global namespace to compute the sample rate or
+        // sampling decision for this transaction
+
+        console.log('samplingContext', samplingContext.transactionContext.tags);
+        // if ipct-activity is donate or claim, send all error to sentry
+        if (
+            samplingContext.transactionContext.tags &&
+            (samplingContext.transactionContext.tags['ipct-activity'] ===
+                'donate' ||
+                samplingContext.transactionContext.tags['ipct-activity'] ===
+                    'claim')
+        ) {
+            return 1;
+        }
+        return 0.1;
+    },
+    beforeSend(event, hint) {
+        console.log('beforeSend', event, hint);
+        return event;
+    },
 });
 
 const prefix = Linking.makeUrl('/');
@@ -158,7 +194,7 @@ interface IAppState {
     blockUserToUpdateApp: boolean;
     netAvailable: boolean;
 }
-export default class App extends React.Component<any, IAppState> {
+class App extends React.Component<any, IAppState> {
     private currentRouteName: string | undefined = '';
     private linking = {
         prefixes: [prefix],
@@ -428,6 +464,9 @@ export default class App extends React.Component<any, IAppState> {
                             if (currentRouteName !== undefined) {
                                 Analytics.setCurrentScreen(currentRouteName);
                             }
+                            routingInstrumentation.registerNavigationContainer(
+                                navigationRef
+                            );
                             // Save the current route name for later comparision
                             this.currentRouteName = currentRouteName;
                             (isReadyRef.current as any) = true; // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
@@ -622,12 +661,21 @@ export default class App extends React.Component<any, IAppState> {
         if (timeDiff < -10000 || timeDiff > 10000) {
             store.dispatch(setAppSuspectWrongDateTime(true, timeDiff));
         }
-        if (Constants.manifest.version) {
+        let manifestVersion = '';
+        if (Constants.manifest2 !== null) {
+            manifestVersion = Constants.manifest2.runtimeVersion;
+        } else if (
+            Constants.manifest !== null &&
+            Constants.manifest.version !== undefined
+        ) {
+            manifestVersion = Constants.manifest.version;
+        }
+        if (manifestVersion.length > 0) {
             let lastVersionFromCache = await CacheStore.getLastVersion();
             if (lastVersionFromCache === null) {
-                lastVersionFromCache = Constants.manifest.version;
+                lastVersionFromCache = manifestVersion;
             }
-            if (!semverGte(Constants.manifest.version, version.minimal)) {
+            if (!semverGte(manifestVersion, version.minimal)) {
                 // id the user does not have the minimal required version
                 // block until update
                 this.setState({
@@ -668,19 +716,26 @@ export default class App extends React.Component<any, IAppState> {
             store.dispatch(setCeloKit(kit));
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
+            const exchangeRates = await Api.system.getExchangeRate();
+            const userRates: { [key: string]: number } = {};
+            Object.assign(
+                userRates,
+                ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
+            );
+            store.dispatch(setAppExchangeRatesAction(userRates));
             if (address !== null && phoneNumber !== null) {
                 const pushNotificationToken = await registerForPushNotifications();
-                store.dispatch(
-                    setPushNotificationsToken(pushNotificationToken)
-                );
-                setPushNotificationListeners(
-                    startNotificationsListeners(kit, store.dispatch)
-                );
+                if (pushNotificationToken) {
+                    store.dispatch(
+                        setPushNotificationsToken(pushNotificationToken)
+                    );
+                    setPushNotificationListeners(
+                        startNotificationsListeners(kit, store.dispatch)
+                    );
+                }
 
-                const userWelcome = await Api.user.hello(
-                    address,
-                    pushNotificationToken,
-                    phoneNumber
+                const userWelcome = await Api.user.welcome(
+                    pushNotificationToken
                 );
 
                 if (userWelcome !== undefined) {
@@ -690,13 +745,7 @@ export default class App extends React.Component<any, IAppState> {
                         store.dispatch(resetUserApp());
                         return;
                     }
-                    const exchangeRates = userWelcome.rates;
-                    const userRates: { [key: string]: number } = {};
-                    Object.assign(
-                        userRates,
-                        ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
-                    );
-                    store.dispatch(setAppExchangeRatesAction(userRates));
+
                     await welcomeUser(
                         address,
                         phoneNumber,
@@ -709,26 +758,6 @@ export default class App extends React.Component<any, IAppState> {
                     loggedIn = true;
                 }
             }
-            if (!loggedIn) {
-                const lastUpdate = await CacheStore.getLastExchangeRatesUpdate();
-                const cachedValues = await CacheStore.getExchangeRates();
-                if (
-                    new Date().getTime() - lastUpdate > 3600000 ||
-                    cachedValues === null
-                ) {
-                    // 1h in ms
-                    const exchangeRates = await Api.system.getExchangeRate();
-                    const userRates: { [key: string]: number } = {};
-                    Object.assign(
-                        userRates,
-                        ...exchangeRates.map((y) => ({ [y.currency]: y.rate }))
-                    );
-                    store.dispatch(setAppExchangeRatesAction(userRates));
-                    CacheStore.cacheExchangeRates(userRates);
-                } else {
-                    store.dispatch(setAppExchangeRatesAction(cachedValues));
-                }
-            }
             this.setState({
                 loggedIn,
             });
@@ -737,3 +766,5 @@ export default class App extends React.Component<any, IAppState> {
         }
     };
 }
+
+export default Sentry.Native.withProfiler(App, { name: 'App' });

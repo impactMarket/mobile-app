@@ -308,7 +308,7 @@ function ProfileScreen() {
         Api.user.setCurrency(currency);
         updateUserMetadataCache();
         // update exchange rate!
-        const exchangeRate = (rates as any)[currency.toUpperCase()].rate;
+        const exchangeRate = rates[currency.toUpperCase()];
         batch(() => {
             dispatch(setUserMetadata({ ...user, currency }));
             dispatch(setUserExchangeRate(exchangeRate));
@@ -718,7 +718,12 @@ function ProfileScreen() {
                             }}
                         >
                             <Text style={{ fontWeight: '700' }}>Build: </Text>
-                            {Constants.manifest.version}
+                            {Constants.manifest2 !== null
+                                ? Constants.manifest2.runtimeVersion
+                                : Constants.manifest !== null &&
+                                  Constants.manifest.version !== undefined
+                                ? Constants.manifest.version
+                                : 'unkown'}
                         </Text>
                         <Text
                             style={{
