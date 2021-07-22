@@ -100,7 +100,11 @@ workflows:
   version: 2
   expo:
     jobs:
-      - publish_to_expo
+      - publish_to_expo:
+          filters:
+            branches:
+              only:
+                - master
   everyday:
     jobs:
       - unit_test
