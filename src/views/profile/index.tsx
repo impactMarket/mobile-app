@@ -18,6 +18,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Linking from 'expo-linking';
 import { imageTargets } from 'helpers/constants';
 // Helpers
@@ -45,7 +46,6 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
-
 import {
     Portal,
     Button as RNButton,
@@ -63,7 +63,6 @@ import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 // Styles
 import { ipctColors } from 'styles/index';
-import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 
 // Constants
 const currencies: {
@@ -279,28 +278,21 @@ function ProfileScreen() {
 
     const handleSearchCurrency = (e: string) => {
         setSearchCurrency(e);
+
+        if (searchCurrency.length <= 0) {
+            return;
+        }
         const currencyResult: string[] = [];
         for (const [key, value] of Object.entries(currencies)) {
             if (
-                key.toLowerCase().indexOf(searchCurrency.toLowerCase()) !==
-                    -1 ||
-                value.name
-                    .toLowerCase()
-                    .indexOf(searchCurrency.toLowerCase()) !== -1 ||
-                value.symbol
-                    .toLowerCase()
-                    .indexOf(searchCurrency.toLowerCase()) !== -1 ||
-                value.symbol_native
-                    .toLowerCase()
-                    .indexOf(searchCurrency.toLowerCase()) !== -1
+                value.name.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
+                value.symbol.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
+                value.symbol_native.toLowerCase().indexOf(e.toLowerCase()) !==
+                    -1
             ) {
                 currencyResult.push(key);
             }
         }
-        //
-        // if (currencyResult.length > 15) {
-        //     setTooManyResultForQuery(true);
-        // } else {
         setSearchCurrencyResult(currencyResult);
         setShowingResults(true);
         // }
