@@ -10,6 +10,7 @@ import {
     ICommunitiesListStoriesResponse,
 } from 'helpers/types/endpoints';
 import Api from 'services/api';
+import { IApiResult } from 'services/api/base';
 import { takeLatest, call, put, all } from 'typed-redux-saga';
 
 const getStories = async (start: number, end: number) => {
@@ -20,7 +21,7 @@ export function* submitAddStoriesToStateRequest({ payload }: any) {
     try {
         const { start, end } = payload;
 
-        const stories: ICommunitiesListStoriesResponse = yield call(
+        const stories: IApiResult<ICommunitiesListStories[]> = yield call(
             getStories,
             start,
             end

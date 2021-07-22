@@ -63,6 +63,7 @@ import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 // Styles
 import { ipctColors } from 'styles/index';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 
 // Constants
 const currencies: {
@@ -244,10 +245,12 @@ function ProfileScreen() {
     };
 
     const pickImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
+        const result = (await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             quality: 1,
-        });
+        })) as {
+            cancelled: false;
+        } & ImageInfo;
 
         if (!result.cancelled) {
             Image.getSize(

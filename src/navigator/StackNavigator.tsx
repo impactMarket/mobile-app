@@ -42,7 +42,7 @@ const commonScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.CreateCommunity}
             component={CreateCommunityScreen}
-            options={CreateCommunityScreen.navigationOptions}
+            // options={CreateCommunityScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.WaitingTx}
@@ -96,7 +96,7 @@ const beneficiaryScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.AnonymousReport}
             component={AnonymousReportScreen}
-            options={AnonymousReportScreen.navigationOptions}
+            // options={AnonymousReportScreen.navigationOptions}
         />
     </>
 );

@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
 
-function CommunityRules({ caller }) {
+function CommunityRules({ caller }: { caller: string }) {
     const dispatch = useDispatch();
     const handleAcceptRules = async () => {
         if (caller === 'MANAGER') {

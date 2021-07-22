@@ -12,7 +12,7 @@ const routeParams = { communityId: 2, openDonate: true, fromStories: false };
 
 const tree = create(
     <Provider store={store}>
-        <CommunityDetailsScreen props={routeParams} />
+        <CommunityDetailsScreen route={{ params: routeParams }} />
     </Provider>
 ).toJSON();
 

@@ -83,12 +83,12 @@ import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 
 const countries: {
     [key: string]: {
         name: string;
         native: string;
-        phone: string;
         currency: string;
         languages: string[];
         emoji: string;
@@ -144,7 +144,7 @@ function CreateCommunityScreen() {
     };
     const [sending, setSending] = useState(false);
     const [sendingSuccess, setSendingSuccess] = useState(false);
-    const [gpsLocation, setGpsLocation] = useState<Location.LocationData>();
+    const [gpsLocation, setGpsLocation] = useState<Location.LocationObject>();
     const [isNameValid, setIsNameValid] = useState(true);
     const [isEditable, setIsEditable] = useState(!!userCommunity);
     const [genericErrorTitle, setGenericErrorTitle] = useState(
@@ -713,10 +713,12 @@ function CreateCommunityScreen() {
             cbv: Dispatch<React.SetStateAction<boolean>>,
             type: string
         ) => {
-            const result = await ImagePicker.launchImageLibraryAsync({
+            const result = (await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 quality: 1,
-            });
+            })) as {
+                cancelled: false;
+            } & ImageInfo;
 
             if (!result.cancelled) {
                 if (type === imageTypes.COVER_IMAGE) {

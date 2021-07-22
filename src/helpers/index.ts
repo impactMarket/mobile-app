@@ -34,7 +34,6 @@ const countries: {
     [key: string]: {
         name: string;
         native: string;
-        phone: string;
         currency: string;
         languages: string[];
         emoji: string;

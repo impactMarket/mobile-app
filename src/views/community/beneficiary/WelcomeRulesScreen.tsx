@@ -42,7 +42,7 @@ function WelcomeRulesScreen() {
         }
     }, [hasBeneficiaryAcceptedRulesAlready, hasManagerAcceptedRulesAlready]);
 
-    if (community === undefined) {
+    if (community === undefined || community.contract === undefined) {
         return (
             <View
                 style={{

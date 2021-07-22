@@ -44,7 +44,7 @@ function ThreeDotsSvg(props: IThreeDotsProps) {
 
             <BottomPopup
                 isVisible={openThreeDotsMenu}
-                setIsVisible={toggleThreeDotsMenu}
+                toggleVisibility={toggleThreeDotsMenu}
                 title={title}
                 titleStyle={titleStyle}
                 hasCloseBtn={hasCloseBtn}

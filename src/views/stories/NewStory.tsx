@@ -6,6 +6,7 @@ import Input from 'components/core/Input';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import { ICommunityStory } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
@@ -153,12 +154,14 @@ function NewStoryScreen() {
             return;
         }
 
-        const result = await ImagePicker.launchImageLibraryAsync({
+        const result = (await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             // allowsEditing: true,
             // aspect: [1, 1],
             quality: 1,
-        });
+        })) as {
+            cancelled: false;
+        } & ImageInfo;
 
         if (!result.cancelled) {
             setStoryMedia(result.uri);
