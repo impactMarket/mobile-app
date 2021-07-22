@@ -182,9 +182,8 @@ function BeneficiaryScreen() {
         const isLocationAvailable = async () => {
             const availableGPSToRequest =
                 (await Location.hasServicesEnabledAsync()) &&
-                (await Location.getPermissionsAsync()).status === 'granted' &&
-                (await Location.getProviderStatusAsync())
-                    .locationServicesEnabled;
+                (await Location.getForegroundPermissionsAsync()).status ===
+                    Location.PermissionStatus.GRANTED;
             setAskLocationOnOpen(!availableGPSToRequest);
         };
 
@@ -418,12 +417,21 @@ function BeneficiaryScreen() {
                         try {
                             const {
                                 status,
-                            } = await Location.requestPermissionsAsync();
-                            if (status !== 'granted') {
+                            } = await Location.requestForegroundPermissionsAsync();
+                            if (status !== Location.PermissionStatus.GRANTED) {
                                 Alert.alert(
                                     i18n.t('failure'),
                                     i18n.t('errorGettingGPSLocation'),
-                                    [{ text: 'OK' }],
+                                    [
+                                        {
+                                            text: i18n.t('tryAgain'),
+                                            onPress: async () =>
+                                                await Location.requestForegroundPermissionsAsync(),
+                                        },
+                                        {
+                                            text: i18n.t('cancel'),
+                                        },
+                                    ],
                                     { cancelable: false }
                                 );
                                 return;

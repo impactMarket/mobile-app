@@ -17,12 +17,12 @@ import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
+import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
-import * as Sentry from 'sentry-expo';
 
 import config from '../../../../config';
 
@@ -153,7 +153,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         )
             .then(async (tx) => {
                 if (tx === undefined) {
-                    return;
+                    throw new Error('invalid valora response');
                 }
                 CacheStore.resetClaimFails();
                 setTimeout(async () => {
@@ -175,34 +175,39 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     isManager === false
                 ) {
                     try {
-                        if (!(await Location.hasServicesEnabledAsync())) {
-                            return;
+                        const enabled = await Location.hasServicesEnabledAsync();
+                        const permission = await Location.getForegroundPermissionsAsync();
+                        if (!enabled) {
+                            if (
+                                permission.status !==
+                                Location.PermissionStatus.GRANTED
+                            ) {
+                                // if not enabled and previously not allowed, return
+                                return;
+                            }
                         }
                         if (
-                            (await Location.getPermissionsAsync()).status !==
-                            'granted'
+                            permission.status !==
+                            Location.PermissionStatus.GRANTED
                         ) {
-                            return;
-                        }
-                        if (
-                            (await Location.getProviderStatusAsync())
-                                .locationServicesEnabled
-                        ) {
-                            return;
+                            if (enabled) {
+                                // if not previously allowed, but enabled, request permission
+                                await Location.requestForegroundPermissionsAsync();
+                            }
+                            //else would be "if not enabled and previously not allowed, return", same as above
                         }
 
-                        const loc = await Location.getCurrentPositionAsync({
+                        const {
+                            coords: { latitude, longitude },
+                        } = await Location.getCurrentPositionAsync({
                             accuracy: Location.Accuracy.Low,
                         });
                         await Api.user.addClaimLocation(
                             communityMetadata.publicId,
                             {
-                                latitude:
-                                    loc.coords.latitude +
-                                    config.locationErrorMargin,
+                                latitude: latitude + config.locationErrorMargin,
                                 longitude:
-                                    loc.coords.longitude +
-                                    config.locationErrorMargin,
+                                    longitude + config.locationErrorMargin,
                             }
                         );
                         analytics('claim_location', {
