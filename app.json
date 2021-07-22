@@ -1,5 +1,6 @@
 {
     "expo": {
+        "sdkVersion": "42.0.0",
         "name": "impactMarket",
         "slug": "impact-market",
         "privacy": "public",
