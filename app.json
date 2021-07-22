@@ -10,13 +10,8 @@
         "scheme": "impactmarket",
         "splash": {
             "resizeMode": "cover",
-            "image": "./src/assets/images/splash@3x.png",
-            "backgroundColor": "#2362FB",
-            "mdpi": "./src/assets/images/splash.png",
-            "hdpi": "./src/assets/images/splash@1.5x.png",
-            "xhdpi": "./src/assets/images/splash@2x.png",
-            "xxhdpi": "./src/assets/images/splash@3x.png",
-            "xxxhdpi": "./src/assets/images/splash@4x.png"
+            "image": "./src/assets/images/splash@4x.png",
+            "backgroundColor": "#2362FB"
         },
         "updates": {
             "enabled": false,
@@ -51,7 +46,16 @@
                 "ACCESS_FINE_LOCATION",
                 "READ_EXTERNAL_STORAGE",
                 "WRITE_EXTERNAL_STORAGE"
-            ]
+            ],
+            "splash": {
+                "resizeMode": "native",
+                "backgroundColor": "#2362FB",
+                "mdpi": "./src/assets/images/splash@0.5x.png",
+                "hdpi": "./src/assets/images/splash@0.5x.png",
+                "xhdpi": "./src/assets/images/splash@2x.png",
+                "xxhdpi": "./src/assets/images/splash@2x.png",
+                "xxxhdpi": "./src/assets/images/splash@2x.png"
+            }
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
         "githubUrl": "https://github.com/impactMarket/mobile-app",
