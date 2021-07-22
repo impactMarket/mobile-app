@@ -43,6 +43,7 @@ import {
     Snackbar,
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
@@ -632,4 +633,6 @@ const styles = StyleSheet.create({
     },
 });
 
-export default BeneficiaryScreen;
+export default Sentry.Native.withProfiler(BeneficiaryScreen, {
+    name: 'BeneficiaryScreen',
+});

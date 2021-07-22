@@ -174,7 +174,7 @@ interface InitLoadStoriesActionRequest {
 
 interface InitLoadStoriesActionSuccess {
     type: typeof storiesAction.INIT_SUCCESS;
-    payload: ICommunitiesListStories[];
+    payload: { data: ICommunitiesListStories[]; count: number };
 }
 
 interface InitLoadStoriesActionFailure {
@@ -195,9 +195,18 @@ interface LoadMyStoriesActionFailure {
     type: typeof storiesAction.USER_STORIES_FAILURE;
 }
 
-interface LoadMoreStoriesAction {
-    type: typeof storiesAction.CONCAT;
-    payload: ICommunitiesListStories[];
+interface MoreLoadStoriesActionRequest {
+    type: typeof storiesAction.MORE_REQUEST;
+    payload: { start: number; end: number };
+}
+
+interface MoreLoadStoriesActionSuccess {
+    type: typeof storiesAction.MORE_SUCCESS;
+    payload: { data: ICommunitiesListStories[] };
+}
+
+interface MoreLoadStoriesActionFailure {
+    type: typeof storiesAction.MORE_FAILURE;
 }
 
 interface SetAppPushNotificationListeners {
@@ -247,7 +256,9 @@ export type StoriesActionTypes =
     | InitLoadStoriesActionRequest
     | InitLoadStoriesActionSuccess
     | InitLoadStoriesActionFailure
-    | LoadMoreStoriesAction
+    | MoreLoadStoriesActionRequest
+    | MoreLoadStoriesActionSuccess
+    | MoreLoadStoriesActionFailure
     | LoadMyStoriesActionRequest
     | LoadMyStoriesActionSuccess
     | LoadMyStoriesActionFailure;

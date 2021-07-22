@@ -139,12 +139,48 @@ Notifications.setNotificationHandler({
     }),
 });
 
+// Construct a new instrumentation instance. This is needed to communicate between the integration and React
+const routingInstrumentation = new Sentry.Native.ReactNavigationV5Instrumentation();
+
 Sentry.init({
+    // release: 'impactmarket@' + process.env.REACT_APP_RELEASE_VERSION, // https://docs.sentry.io/product/sentry-basics/guides/integrate-frontend/upload-source-maps/
+    environment:
+        process.env.SENTRY_ENVIRONMENT !== undefined
+            ? process.env.SENTRY_ENVIRONMENT
+            : 'dev',
     dsn: process.env.EXPO_SENTRY_DNS,
     enableInExpoDevelopment: true,
     debug: true,
-    sampleRate: 0.1,
-    tracesSampleRate: 0.1,
+    integrations: [
+        new Sentry.Native.ReactNativeTracing({
+            routingInstrumentation,
+            // ... other options
+        }),
+    ],
+    // sampleRate: 0.1,
+    // tracesSampleRate: 0.1,
+    tracesSampler: (samplingContext) => {
+        // Examine provided context data (including parent decision, if any) along
+        // with anything in the global namespace to compute the sample rate or
+        // sampling decision for this transaction
+
+        console.log('samplingContext', samplingContext.transactionContext.tags);
+        // if ipct-activity is donate or claim, send all error to sentry
+        if (
+            samplingContext.transactionContext.tags &&
+            (samplingContext.transactionContext.tags['ipct-activity'] ===
+                'donate' ||
+                samplingContext.transactionContext.tags['ipct-activity'] ===
+                    'claim')
+        ) {
+            return 1;
+        }
+        return 0.1;
+    },
+    beforeSend(event, hint) {
+        console.log('beforeSend', event, hint);
+        return event;
+    },
 });
 
 const prefix = Linking.makeUrl('/');
@@ -158,7 +194,7 @@ interface IAppState {
     blockUserToUpdateApp: boolean;
     netAvailable: boolean;
 }
-export default class App extends React.Component<any, IAppState> {
+class App extends React.Component<any, IAppState> {
     private currentRouteName: string | undefined = '';
     private linking = {
         prefixes: [prefix],
@@ -428,6 +464,9 @@ export default class App extends React.Component<any, IAppState> {
                             if (currentRouteName !== undefined) {
                                 Analytics.setCurrentScreen(currentRouteName);
                             }
+                            routingInstrumentation.registerNavigationContainer(
+                                navigationRef
+                            );
                             // Save the current route name for later comparision
                             this.currentRouteName = currentRouteName;
                             (isReadyRef.current as any) = true; // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
@@ -727,3 +766,5 @@ export default class App extends React.Component<any, IAppState> {
         }
     };
 }
+
+export default Sentry.Native.withProfiler(App, { name: 'App' });

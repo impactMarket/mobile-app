@@ -319,7 +319,10 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 }
                 if (error === 'unknown') {
                     //only submit to sentry if it's unknown
-                    Sentry.Native.captureException(e);
+                    Sentry.Native.withScope((scope) => {
+                        scope.setTag('ipct-activity', 'claim');
+                        Sentry.Native.captureException(e);
+                    });
                 }
                 Alert.alert(
                     i18n.t('failure'),
@@ -523,4 +526,4 @@ const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(Claim);
+export default Sentry.Native.withProfiler(connector(Claim), { name: 'Claim' });

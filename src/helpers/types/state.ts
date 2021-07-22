@@ -1,7 +1,7 @@
 import { ContractKit } from '@celo/contractkit';
 import { Subscription } from '@unimodules/core';
 
-import { ICommunitiesListStories, ICommunityStory } from './endpoints';
+import { ICommunitiesListStoriesResponse, ICommunityStory } from './endpoints';
 import { CommunityAttributes, UserAttributes } from './models';
 
 export interface IUserWallet {
@@ -43,7 +43,7 @@ export interface IModalDonateState {
     submitting: boolean;
 }
 export interface IStoriesState {
-    stories: ICommunitiesListStories[];
+    stories: ICommunitiesListStoriesResponse;
     myStories: ICommunityStory[];
     refreshing: boolean;
 }
