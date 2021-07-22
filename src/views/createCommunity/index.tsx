@@ -14,6 +14,7 @@ import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
+import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
 import { Screens, celoNetwork } from 'helpers/constants';
 import {
@@ -83,7 +84,6 @@ import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
-import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 
 const countries: {
     [key: string]: {
@@ -945,9 +945,12 @@ function CreateCommunityScreen() {
             const currencyResult: string[] = [];
             for (const [key, value] of Object.entries(currencies)) {
                 if (
-                    value.name.indexOf(searchCurrency) !== -1 ||
-                    value.symbol.indexOf(searchCurrency) !== -1 ||
-                    value.symbol_native.indexOf(searchCurrency) !== -1
+                    value.name.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
+                    value.symbol.toLowerCase().indexOf(e.toLowerCase()) !==
+                        -1 ||
+                    value.symbol_native
+                        .toLowerCase()
+                        .indexOf(e.toLowerCase()) !== -1
                 ) {
                     currencyResult.push(key);
                 }
@@ -1063,8 +1066,8 @@ function CreateCommunityScreen() {
                     <WebView
                         originWhitelist={['*']}
                         source={{ uri: webviewURL }}
-                        javaScriptEnabled={true}
-                        domStorageEnabled={true}
+                        javaScriptEnabled
+                        domStorageEnabled
                         onLoadStart={() => setVisible(true)}
                         onLoad={() => setVisible(false)}
                     />
