@@ -604,7 +604,11 @@ class App extends React.Component<any, IAppState> {
             await this._checkAcceptanceOfRules();
             this.setState({ isAppReady: true });
             // just at the end, so when we hide, app is ready!
-            SplashScreen.hideAsync();
+            // hack found on https://stackoverflow.com/questions/64780275/at-using-expo-after-splash-screen-blinkflash-with-white-screen
+            // to allow app finish load all resources before hide splash screen
+            setTimeout(() => {
+                SplashScreen.hideAsync();
+            }, 300);
         } catch (e) {
             Sentry.Native.captureException(e);
             return (
