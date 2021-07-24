@@ -118,32 +118,32 @@ function CommunitiesScreen() {
             if (communtiesOrder === 'nearest' && userLocation) {
                 Api.community
                     .list({
-                        offset: communtiesOffset + 5,
-                        limit: 5,
+                        offset: communtiesOffset + 10,
+                        limit: 10,
                         orderBy: 'nearest',
                         lat: userLocation.coords.latitude,
                         lng: userLocation.coords.longitude,
                     })
                     .then((c) => {
-                        if (c.length < 5) {
+                        if (c.length < 10) {
                             setReachedEndList(true);
                         }
                         setCommunities(communities.concat(c));
-                        setCommuntiesOffset(communtiesOffset + 5);
+                        setCommuntiesOffset(communtiesOffset + 10);
                     })
                     .finally(() => setRefreshing(false));
             } else {
                 Api.community
                     .list({
-                        offset: communtiesOffset + 5,
-                        limit: 5,
+                        offset: communtiesOffset + 10,
+                        limit: 10,
                     })
                     .then((c) => {
-                        if (c.length < 5) {
+                        if (c.length < 10) {
                             setReachedEndList(true);
                         }
                         setCommunities(communities.concat(c));
-                        setCommuntiesOffset(communtiesOffset + 5);
+                        setCommuntiesOffset(communtiesOffset + 10);
                     })
                     .finally(() => setRefreshing(false));
             }
