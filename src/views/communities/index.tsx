@@ -25,7 +25,7 @@ function CommunitiesScreen() {
         Location.LocationObject | undefined
     >(undefined);
 
-    const [refreshing, setRefreshing] = useState(false);
+    const [refreshing, setRefreshing] = useState(true);
     const [communities, setCommunities] = useState<CommunityAttributes[]>([]);
     const [reachedEndList, setReachedEndList] = useState(false);
 

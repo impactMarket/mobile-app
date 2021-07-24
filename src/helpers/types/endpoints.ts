@@ -94,10 +94,6 @@ export interface ICommunityStory {
     userReported: boolean;
 }
 
-export interface ICommunitiesListStoriesResponse {
-    data: ICommunitiesListStories[];
-    count: number;
-}
 export interface ICommunitiesListStories {
     id: number;
     name: string;

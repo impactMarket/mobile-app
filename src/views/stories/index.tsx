@@ -3,97 +3,40 @@ import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { addMoreStoriesToStateSuccess } from 'helpers/redux/actions/stories';
-import { ICommunitiesListStories } from 'helpers/types/endpoints';
+import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
 
 function StoriesScreen() {
-    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
-    const cachedStories = useSelector(
-        (state: IRootState) => state.stories.stories.data
+    const stories = useSelector((state: IRootState) => state.stories.stories);
+    const refreshing = useSelector(
+        (state: IRootState) => state.stories.refreshing
     );
-
-    const [refreshing, setRefreshing] = useState(false);
-    const [stories, setStories] = useState<ICommunitiesListStories[]>(
-        cachedStories
-    );
-
-    const [storiesCount, setStoriesCount] = useState<number>(0);
-
-    const cachedStoriesCount = useSelector(
-        (state: IRootState) => state.stories.stories.count
-    );
-
-    const getStories = async (start: number, end: number) => {
-        return await Api.story.list<ICommunitiesListStories[]>(start, end);
-    };
-
-    const calcEndList = async (
-        storiesLength: number,
-        maxListLength: number
-    ) => {
-        const end =
-            maxListLength - storiesLength < 12
-                ? maxListLength - storiesLength
-                : storiesLength + 12;
-        return end;
-    };
-
-    const fetchFirst = async () => {
-        if (stories.length < storiesCount) {
-            const start = stories.length ?? 0;
-            const end = await calcEndList(stories.length, storiesCount);
-            const newStories = await getStories(start, end);
-            setStories([...stories, ...newStories.data]);
-            dispatch(addMoreStoriesToStateSuccess(newStories.data));
-        }
-    };
 
     useEffect(() => {
-        fetchFirst();
-        if (cachedStoriesCount) {
-            setStoriesCount(cachedStoriesCount);
-        }
+        dispatch(addStoriesToStateRequest(0, 5));
     }, []);
 
-    const handleOnEndReached = async () => {
-        setRefreshing(true);
-        fetchFirst();
-        setRefreshing(false);
-    };
+    /**
+     * Code Before Sagas
+     * */
+    // useEffect(() => {
+    // setRefreshing(true);
+    // Api.story.list<ICommunityStoriesBox[]>().then((s) => {
+    //     setStories(s.data);
+    //     dispatch(addStoriesToState(s.data));
+    // });
 
-    const renderItem = useCallback(
-        ({ item }) => (
-            <StoriesCard
-                key={item.id}
-                communityId={item.id}
-                communityName={item.name}
-                imageURI={
-                    item.story?.media
-                        ? chooseMediaThumbnail(item.story.media, {
-                              width: 84,
-                              heigth: 140,
-                          })
-                        : chooseMediaThumbnail(item.cover, {
-                              width: 88,
-                              heigth: 88,
-                          })
-                }
-            />
-        ),
-        []
-    );
-
-    const keyExtractor = useCallback((item) => item.name, []);
+    // setRefreshing(false);
+    // }, []);
 
     if (refreshing) {
         return (
@@ -104,8 +47,7 @@ function StoriesScreen() {
             />
         );
     }
-
-    return refreshing || storiesCount === 0 ? (
+    return refreshing && stories.length === 0 ? (
         <View
             style={{
                 flex: 1,
@@ -163,12 +105,27 @@ function StoriesScreen() {
             style={{
                 alignSelf: 'center',
             }}
-            keyExtractor={keyExtractor}
+            keyExtractor={(item) => item.name}
             showsVerticalScrollIndicator={false}
-            numColumns={3}
-            renderItem={renderItem}
-            onEndReached={handleOnEndReached}
-            onEndReachedThreshold={0.1}
+            numColumns={3} // Número de colunas
+            renderItem={({ item }) => (
+                <StoriesCard
+                    key={item.id}
+                    communityId={item.id}
+                    communityName={item.name}
+                    imageURI={
+                        item.story?.media
+                            ? chooseMediaThumbnail(item.story.media, {
+                                  width: 84,
+                                  heigth: 140,
+                              })
+                            : chooseMediaThumbnail(item.cover, {
+                                  width: 88,
+                                  heigth: 88,
+                              })
+                    }
+                />
+            )}
         />
     );
 }

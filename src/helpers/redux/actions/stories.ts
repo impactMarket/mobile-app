@@ -22,43 +22,17 @@ export function addStoriesToStateRequest(
 }
 
 export function addStoriesToStateSuccess(
-    data: ICommunitiesListStories[],
-    count: number
+    stories: ICommunitiesListStories[]
 ): StoriesActionTypes {
     return {
         type: storiesAction.INIT_SUCCESS,
-        payload: { data, count },
+        payload: stories,
     };
 }
 
 export function addStoriesToStateFailure(): StoriesActionTypes {
     return {
         type: storiesAction.INIT_FAILURE,
-    };
-}
-
-export function addMoreStoriesToStateRequest(
-    start: number,
-    end: number
-): StoriesActionTypes {
-    return {
-        type: storiesAction.MORE_REQUEST,
-        payload: { start, end },
-    };
-}
-
-export function addMoreStoriesToStateSuccess(
-    data: ICommunitiesListStories[]
-): StoriesActionTypes {
-    return {
-        type: storiesAction.MORE_SUCCESS,
-        payload: { data },
-    };
-}
-
-export function addMoreStoriesToStateFailure(): StoriesActionTypes {
-    return {
-        type: storiesAction.MORE_FAILURE,
     };
 }
 
