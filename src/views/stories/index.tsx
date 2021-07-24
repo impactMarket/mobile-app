@@ -103,29 +103,35 @@ function StoriesScreen() {
         <FlatList
             data={stories}
             style={{
-                alignSelf: 'center',
+                marginHorizontal: 12,
             }}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
             keyExtractor={(item) => item.name}
             showsVerticalScrollIndicator={false}
             numColumns={3} // Número de colunas
-            renderItem={({ item }) => (
-                <StoriesCard
-                    key={item.id}
-                    communityId={item.id}
-                    communityName={item.name}
-                    imageURI={
-                        item.story?.media
-                            ? chooseMediaThumbnail(item.story.media, {
-                                  width: 84,
-                                  heigth: 140,
-                              })
-                            : chooseMediaThumbnail(item.cover, {
-                                  width: 88,
-                                  heigth: 88,
-                              })
-                    }
-                />
-            )}
+            renderItem={({ item }) => {
+                if (item.empty) {
+                    return <View style={[styles.item, styles.itemEmpty]} />;
+                }
+                return (
+                    <StoriesCard
+                        key={item.id}
+                        communityId={item.id}
+                        communityName={item.name}
+                        imageURI={
+                            item.story?.media
+                                ? chooseMediaThumbnail(item.story.media, {
+                                      width: 84,
+                                      heigth: 140,
+                                  })
+                                : chooseMediaThumbnail(item.cover, {
+                                      width: 88,
+                                      heigth: 88,
+                                  })
+                        }
+                    />
+                );
+            }}
         />
     );
 }

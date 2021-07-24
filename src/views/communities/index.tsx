@@ -6,8 +6,8 @@ import * as Location from 'expo-location';
 import { ITabBarIconProps } from 'helpers/types/common';
 // import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Alert, FlatList, View } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Alert, FlatList, Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
 import Api from 'services/api';
@@ -118,32 +118,32 @@ function CommunitiesScreen() {
             if (communtiesOrder === 'nearest' && userLocation) {
                 Api.community
                     .list({
-                        offset: communtiesOffset + 10,
-                        limit: 10,
+                        offset: communtiesOffset + 5,
+                        limit: 5,
                         orderBy: 'nearest',
                         lat: userLocation.coords.latitude,
                         lng: userLocation.coords.longitude,
                     })
                     .then((c) => {
-                        if (c.length < 10) {
+                        if (c.length < 5) {
                             setReachedEndList(true);
                         }
                         setCommunities(communities.concat(c));
-                        setCommuntiesOffset(communtiesOffset + 10);
+                        setCommuntiesOffset(communtiesOffset + 5);
                     })
                     .finally(() => setRefreshing(false));
             } else {
                 Api.community
                     .list({
-                        offset: communtiesOffset + 10,
-                        limit: 10,
+                        offset: communtiesOffset + 5,
+                        limit: 5,
                     })
                     .then((c) => {
-                        if (c.length < 10) {
+                        if (c.length < 5) {
                             setReachedEndList(true);
                         }
                         setCommunities(communities.concat(c));
-                        setCommuntiesOffset(communtiesOffset + 10);
+                        setCommuntiesOffset(communtiesOffset + 5);
                     })
                     .finally(() => setRefreshing(false));
             }
@@ -180,45 +180,37 @@ function CommunitiesScreen() {
         );
     };
 
-    const ITEM_HEIGHT = 147;
-
-    const getItemLayout = useCallback(
-        (data, index) => ({
-            length: ITEM_HEIGHT,
-            offset: ITEM_HEIGHT * index,
-            index,
-        }),
-        []
-    );
-
-    const renderItem = useCallback(
-        ({ item, index }: { item: CommunityAttributes; index: number }) =>
-            index === 0 ? filterHeader() : <CommunityCard community={item} />,
-        []
-    );
-
-    const keyExtractor = useCallback((item) => item.publicId, []);
-
     return (
         <>
             <FlatList
-                ref={flatListRef}
                 data={[
                     { publicId: 'for-compliance-sake-really' } as any,
                 ].concat(communities)}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
+                renderItem={({
+                    item,
+                    index,
+                }: {
+                    item: CommunityAttributes;
+                    index: number;
+                }) =>
+                    index === 0 ? (
+                        filterHeader()
+                    ) : (
+                        <CommunityCard community={item} />
+                    )
+                }
+                ref={flatListRef}
+                keyExtractor={(item) => item.publicId}
                 onEndReachedThreshold={0.7}
                 onEndReached={handleOnEndReached}
                 showsVerticalScrollIndicator={false}
                 // Performance settings
                 removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={4} // Reduce initial render amount
-                maxToRenderPerBatch={4} // Reduce number in each render batch
+                initialNumToRender={2} // Reduce initial render amount
+                maxToRenderPerBatch={1} // Reduce number in each render batch
                 updateCellsBatchingPeriod={100} // Increase time between renders
-                windowSize={5} // Reduce the window size
+                windowSize={7} // Reduce the window size
                 style={{ paddingTop: 20 }}
-                getItemLayout={getItemLayout}
             />
             <Portal>
                 <Modalize
