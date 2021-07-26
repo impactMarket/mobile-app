@@ -226,6 +226,7 @@ function CommunityManagerScreen() {
                                     }
                                     isSuspeciousDetected={
                                         _community.suspect !== undefined &&
+                                        _community.suspect !== null &&
                                         _community.suspect.length > 0
                                     }
                                 />
