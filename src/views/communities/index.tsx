@@ -209,13 +209,13 @@ function CommunitiesScreen() {
                 }
                 ref={flatListRef}
                 keyExtractor={(item) => item.publicId}
-                onEndReachedThreshold={0.7}
+                onEndReachedThreshold={0.5}
                 onEndReached={handleOnEndReached}
                 showsVerticalScrollIndicator={false}
                 // Performance settings
                 // removeClippedSubviews // Unmount components when outside of window
-                // initialNumToRender={2} // Reduce initial render amount
-                // maxToRenderPerBatch={1} // Reduce number in each render batch
+                // initialNumToRender={4} // Reduce initial render amount
+                // maxToRenderPerBatch={2} // Reduce number in each render batch
                 // updateCellsBatchingPeriod={100} // Increase time between renders
                 // windowSize={7} // Reduce the window size
                 style={{ paddingTop: 20 }}

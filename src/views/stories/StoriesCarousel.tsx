@@ -20,15 +20,19 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     );
 
     const flatListRef = useRef<FlatList<ICommunitiesListStories> | null>(null);
-    const [index, setIndex] = useState(-1);
+    const [index, setIndex] = useState(
+        storiesListState.findIndex(
+            (s) => s.id === props.route.params.communityId
+        )
+    );
 
-    useEffect(() => {
-        setIndex(
-            storiesListState.findIndex(
-                (s) => s.id === props.route.params.communityId
-            )
-        );
-    }, [storiesListState, props.route.params.communityId]);
+    // useEffect(() => {
+    //     setIndex(
+    //         storiesListState.findIndex(
+    //             (s) => s.id === props.route.params.communityId
+    //         )
+    //     );
+    // }, [storiesListState, props.route.params.communityId]);
 
     const indexRef = useRef(index);
 

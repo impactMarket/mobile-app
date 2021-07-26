@@ -5,10 +5,11 @@ import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
 
@@ -16,27 +17,29 @@ function StoriesScreen() {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const stories = useSelector((state: IRootState) => state.stories.stories);
-    const refreshing = useSelector(
-        (state: IRootState) => state.stories.refreshing
-    );
+    // const stories = useSelector((state: IRootState) => state.stories.stories);
+    // const refreshing = useSelector(
+    //     (state: IRootState) => state.stories.refreshing
+    // );
+    const [refreshing, setRefreshing] = useState(false);
+    const [stories, setStories] = useState([]);
 
-    useEffect(() => {
-        dispatch(addStoriesToStateRequest(0, 5));
-    }, []);
+    // useEffect(() => {
+    //     dispatch(addStoriesToStateRequest(0, 5));
+    // }, []);
 
     /**
      * Code Before Sagas
      * */
-    // useEffect(() => {
-    // setRefreshing(true);
-    // Api.story.list<ICommunityStoriesBox[]>().then((s) => {
-    //     setStories(s.data);
-    //     dispatch(addStoriesToState(s.data));
-    // });
+    useEffect(() => {
+        setRefreshing(true);
+        Api.story.list<any[]>().then((s) => {
+            setStories(s.data);
+            dispatch(addStoriesToStateRequest(0, s.count));
+        });
 
-    // setRefreshing(false);
-    // }, []);
+        setRefreshing(false);
+    }, []);
 
     if (refreshing) {
         return (
@@ -110,9 +113,6 @@ function StoriesScreen() {
             showsVerticalScrollIndicator={false}
             numColumns={3} // Número de colunas
             renderItem={({ item }) => {
-                if (item.empty) {
-                    return <View style={[styles.item, styles.itemEmpty]} />;
-                }
                 return (
                     <StoriesCard
                         key={item.id}

@@ -4,8 +4,9 @@ import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
+import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
     Dimensions,
     Pressable,
@@ -16,6 +17,7 @@ import {
 } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 import MyStoriesCard from './MyStoriesCard';
@@ -23,42 +25,47 @@ import NewStoryCard from './NewStoryCard';
 import StoriesCard from './StoriesCard';
 
 export default function Stories() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
 
-    const storiesCommunity = useSelector(
-        (state: IRootState) => state.stories.stories
-    );
+    // const storiesCommunity = useSelector(
+    //     (state: IRootState) => state.stories.stories
+    // );
 
-    const refreshing = useSelector(
-        (state: IRootState) => state.stories.refreshing
-    );
+    // const refreshing = useSelector(
+    //     (state: IRootState) => state.stories.refreshing
+    // );
+    const [refreshing, setRefreshing] = useState(false);
 
     const userCommunityMetadata = useSelector(
         (state: IRootState) => state.user.community
     );
 
+    const [storiesCommunity, setStoriesCommunity] = useState([]);
+    const [countStories, setCountStories] = useState(0);
+
     // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
-    useFocusEffect(
-        useCallback(() => {
-            dispatch(addStoriesToStateRequest(0, 5));
-        }, [])
-    );
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         dispatch(addStoriesToStateRequest(0, 5));
+    //     }, [])
+    // );
     /**
      * Code Before Sagas
      * */
 
-    // useEffect(() => {
-    //     setRefreshing(true);
-    //     Api.story.list<ICommunitiesListStories[]>().then((s) => {
-    //         setStoriesCommunity(s);
-    //         dispatch(addStoriesToState(s));
-    //         setRefreshing(false);
-    //     });
-    // }, []);
+    useEffect(() => {
+        setRefreshing(true);
+        Api.story.list<ICommunitiesListStories[]>(0, 5).then((s) => {
+            setStoriesCommunity(s.data);
+            setCountStories(s.count);
+            // dispatch(addStoriesToState(s));
+            setRefreshing(false);
+        });
+    }, []);
 
     return (
         <SafeAreaView>
@@ -99,9 +106,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} (
-                        {storiesCommunity?.length ? storiesCommunity.length : 0}
-                        )
+                        {i18n.t('viewAll')} ({countStories})
                     </Text>
                 </Pressable>
             </View>
