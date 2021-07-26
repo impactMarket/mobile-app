@@ -132,11 +132,11 @@ class ApiRouteCommunity {
         ).data;
         // TODO: does not need to be array, we should fix
         return {
+            ...community,
             metrics: [metrics],
             ...contract,
             ...state,
             suspect: [suspect],
-            ...community,
         };
     }
 
@@ -169,11 +169,11 @@ class ApiRouteCommunity {
         ).data;
         // TODO: does not need to be array, we should fix
         return {
+            ...community,
             metrics: [metrics],
             ...contract,
             ...state,
             suspect: [suspect],
-            ...community,
         };
     }
 
