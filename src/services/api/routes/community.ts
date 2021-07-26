@@ -130,13 +130,12 @@ class ApiRouteCommunity {
         const suspect = (
             await this.api.get<UbiCommunitySuspect>(`/community/${id}/suspect`)
         ).data;
-        // TODO: does not need to be array, we should fix
         return {
             ...community,
-            metrics: [metrics],
-            ...contract,
-            ...state,
-            suspect: suspect !== null ? [suspect] : null,
+            metrics,
+            contract,
+            state,
+            suspect,
         };
     }
 
@@ -167,13 +166,12 @@ class ApiRouteCommunity {
                 `/community/${community.id}/suspect`
             )
         ).data;
-        // TODO: does not need to be array, we should fix
         return {
             ...community,
-            metrics: [metrics],
-            ...contract,
-            ...state,
-            suspect: suspect !== null ? [suspect] : null,
+            metrics,
+            contract,
+            state,
+            suspect,
         };
     }
 
