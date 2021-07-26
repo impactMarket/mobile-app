@@ -142,7 +142,15 @@ function CommunitiesScreen() {
                         if (c.length < 5) {
                             setReachedEndList(true);
                         }
-                        setCommunities(communities.concat(c));
+                        // TODO: until the backend issue is fixed
+                        setCommunities([
+                            ...new Map(
+                                [...communities, ...c].map((item) => [
+                                    item.id,
+                                    item,
+                                ])
+                            ).values(),
+                        ]);
                         setCommuntiesOffset(communtiesOffset + 5);
                     })
                     .finally(() => setRefreshing(false));
@@ -169,13 +177,13 @@ function CommunitiesScreen() {
                         onPress={() => modalizeOrderRef.current?.open()}
                     />
                 </View>
-                {refreshing && (
+                {/* {refreshing && (
                     <ActivityIndicator
                         style={{ marginBottom: 22 }}
                         animating
                         color={ipctColors.blueRibbon}
                     />
-                )}
+                )} */}
             </>
         );
     };
@@ -205,11 +213,11 @@ function CommunitiesScreen() {
                 onEndReached={handleOnEndReached}
                 showsVerticalScrollIndicator={false}
                 // Performance settings
-                removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={2} // Reduce initial render amount
-                maxToRenderPerBatch={1} // Reduce number in each render batch
-                updateCellsBatchingPeriod={100} // Increase time between renders
-                windowSize={7} // Reduce the window size
+                // removeClippedSubviews // Unmount components when outside of window
+                // initialNumToRender={2} // Reduce initial render amount
+                // maxToRenderPerBatch={1} // Reduce number in each render batch
+                // updateCellsBatchingPeriod={100} // Increase time between renders
+                // windowSize={7} // Reduce the window size
                 style={{ paddingTop: 20 }}
             />
             <Portal>
