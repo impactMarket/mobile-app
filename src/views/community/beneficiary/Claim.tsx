@@ -202,14 +202,10 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                         } = await Location.getCurrentPositionAsync({
                             accuracy: Location.Accuracy.Low,
                         });
-                        await Api.user.addClaimLocation(
-                            communityMetadata.publicId,
-                            {
-                                latitude: latitude + config.locationErrorMargin,
-                                longitude:
-                                    longitude + config.locationErrorMargin,
-                            }
-                        );
+                        await Api.user.addClaimLocation(communityMetadata.id, {
+                            latitude: latitude + config.locationErrorMargin,
+                            longitude: longitude + config.locationErrorMargin,
+                        });
                         analytics('claim_location', {
                             device: Device.brand,
                             success: 'true',

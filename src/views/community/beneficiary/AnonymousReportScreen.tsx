@@ -72,7 +72,7 @@ function AnonymousReportScreen() {
         }
         setSubmitting(true);
         Api.user
-            .report(userCommunity.publicId, reportInput, category)
+            .report(userCommunity.id, reportInput, category)
             .then((r) => {
                 setSubmittedWithSuccess(true);
                 navigation.goBack();
