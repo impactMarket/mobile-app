@@ -136,7 +136,7 @@ class ApiRouteCommunity {
             metrics: [metrics],
             ...contract,
             ...state,
-            suspect: [suspect],
+            suspect: suspect !== null ? [suspect] : null,
         };
     }
 
@@ -173,7 +173,7 @@ class ApiRouteCommunity {
             metrics: [metrics],
             ...contract,
             ...state,
-            suspect: [suspect],
+            suspect: suspect !== null ? [suspect] : null,
         };
     }
 
