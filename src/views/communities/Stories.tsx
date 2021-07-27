@@ -25,7 +25,7 @@ import NewStoryCard from './NewStoryCard';
 import StoriesCard from './StoriesCard';
 
 export default function Stories() {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
@@ -63,6 +63,7 @@ export default function Stories() {
             setStoriesCommunity(s.data);
             setCountStories(s.count);
             // dispatch(addStoriesToState(s));
+            dispatch(addStoriesToStateRequest(0, 5));
             setRefreshing(false);
         });
     }, []);
