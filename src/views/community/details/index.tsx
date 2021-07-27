@@ -119,7 +119,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 }}
                             >
                                 <Headline style={styles.ssiHeadline}>
-                                    {community.metrics.map((m) => m.ssi)}
+                                    {community.metrics.ssi}
                                 </Headline>
                                 <Text
                                     style={{
