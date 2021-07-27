@@ -61,7 +61,6 @@ export default function CarouselSlide({
                             resizeMode: 'contain',
                             zIndex: 5,
                         }}
-                        onLoadStart={() => setIsLoading(true)}
                         onLoadEnd={() => setIsLoading(false)}
                     />
                 </View>

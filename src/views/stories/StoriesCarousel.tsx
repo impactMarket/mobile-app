@@ -108,9 +108,9 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                 showsHorizontalScrollIndicator={false}
                 onScroll={onScroll}
                 // Performance settings
-                removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={10} // Reduce initial render amount
-                maxToRenderPerBatch={1} // Reduce number in each render batch
+                // removeClippedSubviews // Unmount components when outside of window
+                initialNumToRender={5} // Reduce initial render amount
+                maxToRenderPerBatch={3} // Reduce number in each render batch
             />
         </View>
     );
