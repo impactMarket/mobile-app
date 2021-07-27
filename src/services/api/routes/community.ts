@@ -208,7 +208,7 @@ class ApiRouteCommunity {
         // TODO: improve this
         const delay = (ms: number) =>
             new Promise((resolve) => setTimeout(resolve, ms));
-        let tries = 3;
+        let tries = 10;
         while (tries-- > 0) {
             delay(1000);
             const { status } = await this.api.head(preSigned.media.url);
@@ -253,7 +253,7 @@ class ApiRouteCommunity {
             // TODO: improve this
             const delay = (ms: number) =>
                 new Promise((resolve) => setTimeout(resolve, ms));
-            let tries = 3;
+            let tries = 10;
             while (tries-- > 0) {
                 delay(1000);
                 const { status } = await this.api.head(preSigned.media.url);
