@@ -33,7 +33,7 @@ import { ipctColors } from 'styles/index';
 
 import CarouselSlide from './CarouselSlide';
 
-export default function Container({
+function Container({
     story,
     community,
     communityId,
@@ -81,6 +81,7 @@ export default function Container({
             btnFn={setToggleInformativeModal(false)}
         />
     );
+
     return (
         <>
             {toggleInformativeModal && renderInformativeModal()}
@@ -427,3 +428,5 @@ const styles = StyleSheet.create({
         marginRight: 16,
     },
 });
+
+export default Container;
