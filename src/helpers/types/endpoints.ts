@@ -37,10 +37,6 @@ export interface IManagerDetailsBeneficiary {
 export interface CommunityEditionAttributes {
     name: string;
     description: string;
-    language: string;
-    city: string;
-    country: string;
-    email: string;
     currency: string;
     coverMediaId: number;
 }
