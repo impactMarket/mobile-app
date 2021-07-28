@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
 import React from 'react';
-import { View, Text, Pressable, Image, Dimensions } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
+import { scale } from 'react-native-size-matters';
 import { ipctColors } from 'styles/index';
 
 export default function StoriesCard(props: {
@@ -11,16 +12,12 @@ export default function StoriesCard(props: {
 }) {
     const navigation = useNavigation();
 
-    const { height } = Dimensions.get('window');
-
-    const isSmallScreen = height < 600;
-
     return (
         <View style={{ flexDirection: 'column' }}>
             <Pressable
                 style={{
                     backgroundColor: ipctColors.blueRibbon,
-                    minWidth: isSmallScreen ? 91.6 : 112,
+                    width: scale(98),
                     height: 167,
                     borderRadius: 8,
                     marginHorizontal: 4,
