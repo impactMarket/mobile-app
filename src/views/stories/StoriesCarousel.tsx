@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, FlatList } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { Dimensions, View, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import Carousel from './Carousel';
@@ -72,6 +72,7 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
     //     return null;
     // }
 
+    const ITEM_WIDTH = Dimensions.get('screen').width;
     return (
         <View style={{ flex: 1, flexDirection: 'row' }}>
             <StatusBar hidden />
@@ -83,15 +84,18 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
                 style={{
                     flex: 1,
                 }}
-                renderItem={({ item }) => {
-                    return (
-                        <Carousel
-                            communityId={item.id}
-                            goToOtherCommunity={goToOtherCommunity}
-                        />
-                    );
-                }}
+                renderItem={({ item }) => (
+                    <Carousel
+                        communityId={item.id}
+                        goToOtherCommunity={goToOtherCommunity}
+                    />
+                )}
                 initialScrollIndex={index}
+                getItemLayout={(d, i) => ({
+                    length: ITEM_WIDTH,
+                    offset: ITEM_WIDTH * i,
+                    index: i,
+                })}
                 onScrollToIndexFailed={(info) => {
                     const wait = new Promise((resolve) =>
                         setTimeout(resolve, 300)
