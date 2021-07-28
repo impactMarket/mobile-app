@@ -1,20 +1,16 @@
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
-import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
-import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
-import { View, FlatList, StyleSheet, Text, Pressable } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
 
 function StoriesScreen() {
-    const navigation = useNavigation();
     const dispatch = useDispatch();
 
     // const stories = useSelector((state: IRootState) => state.stories.stories);
@@ -36,9 +32,8 @@ function StoriesScreen() {
         Api.story.list<any[]>().then((s) => {
             setStories(s.data);
             dispatch(addStoriesToStateRequest(0, s.count));
+            setRefreshing(false);
         });
-
-        setRefreshing(false);
     }, []);
 
     if (refreshing) {
@@ -50,59 +45,7 @@ function StoriesScreen() {
             />
         );
     }
-    return refreshing && stories.length === 0 ? (
-        <View
-            style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '90%',
-                alignSelf: 'center',
-            }}
-        >
-            <Text style={styles.title}>{i18n.t('emptyStoriesTitle')}</Text>
-            <Text style={styles.text}>{i18n.t('emptyStoriesDescription')}</Text>
-            <Pressable
-                style={{
-                    width: '80%',
-                    height: 44,
-                    marginTop: 24,
-                }}
-                onPress={() => navigation.navigate(Screens.NewStory)}
-            >
-                <View
-                    style={{
-                        backgroundColor: ipctColors.blueRibbon,
-                        borderRadius: 6,
-                        shadowColor: '#E1E4E7',
-                        shadowOffset: {
-                            width: 0,
-                            height: 2,
-                        },
-                        shadowOpacity: 14,
-                        elevation: 4,
-                        width: '100%',
-                        height: '100%',
-                        flex: 1,
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Bold',
-                            fontSize: 13,
-                            lineHeight: 16,
-                            color: ipctColors.white,
-                        }}
-                    >
-                        {i18n.t('createStory')}
-                    </Text>
-                </View>
-            </Pressable>
-        </View>
-    ) : (
+    return (
         <FlatList
             data={stories}
             style={{
