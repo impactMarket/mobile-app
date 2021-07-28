@@ -58,9 +58,9 @@ export default {
     needLoginToCreateCommunity:
         'É necessário estar conectado com a app Valora para criar uma comunidade.',
     communityDetails: 'Detalhes da Comunidade',
-    applyCommunity: 'Criar Comunidade',
+    applyCommunity: 'Criar',
     submitTicket: 'Crie um Ticket',
-    editCommunity: 'Editar Comunidade',
+    editCommunity: 'Editar',
     createCommunityDescription:
         'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
     createCommunityAlert:
@@ -76,7 +76,7 @@ export default {
     changeProfileImage: 'Sua Imagem de Perfil',
     changeLogoImage: 'Logomarca',
     communityName: 'Nome da Comunidade',
-    shortDescription: 'Descrição',
+    shortDescription: 'Descrição (Min 240 Caractéres)',
     city: 'Cidade',
     getGPSLocation: 'Obter Localização GPS',
     validCoordinates: 'Coordenadas Válidas',
@@ -207,6 +207,7 @@ export default {
     profileImageRequired: 'Sua Imagem de Perfil é obrigatória!',
     communityNameRequired: 'Nome da comunidade é obrigatório!',
     communityDescriptionRequired: 'Descrição da comunidade é obrigatório!',
+    communityDescriptionTooShort: 'Esta descrição é muito curta!',
     cityRequired: 'Cidade é obrigatório!',
     countryRequired: 'País é obrigatório!',
     enablingGPSRequired: 'Ativar o GPS é obrigatório!',

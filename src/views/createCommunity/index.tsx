@@ -158,6 +158,7 @@ function CreateCommunityScreen() {
     // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
 
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
+    const [isDescriptionTooShort, setIsDescriptionTooShort] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
     const [isCountryValid, setIsCountryValid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true);
@@ -383,6 +384,10 @@ function CreateCommunityScreen() {
             if (!_isDescriptionValid) {
                 setIsDescriptionValid(false);
             }
+            const _isDescriptionTooShort = description.length > 240;
+            if (!_isDescriptionTooShort) {
+                setIsDescriptionTooShort(false);
+            }
             const _isCityValid = city.length > 0;
             if (!_isCityValid) {
                 setIsCityValid(false);
@@ -418,6 +423,7 @@ function CreateCommunityScreen() {
             const isSubmitAvailable =
                 _isNameValid &&
                 _isDescriptionValid &&
+                _isDescriptionTooShort &&
                 _isCityValid &&
                 _isCountryValid &&
                 _isEmailValid &&
@@ -591,6 +597,10 @@ function CreateCommunityScreen() {
             if (!_isDescriptionValid) {
                 setIsDescriptionValid(false);
             }
+            const _isDescriptionTooShort = description.length > 240;
+            if (!_isDescriptionTooShort) {
+                setIsDescriptionTooShort(false);
+            }
             // const _isCityValid = city.length > 0;
             // if (!_isCityValid) {
             //     setIsCityValid(false);
@@ -607,6 +617,7 @@ function CreateCommunityScreen() {
             const isSubmitEditAvailable =
                 _isNameValid &&
                 _isDescriptionValid &&
+                _isDescriptionTooShort &&
                 // _isCityValid &&
                 // _isCountryValid &&
                 // _isEmailValid &&
@@ -625,7 +636,7 @@ function CreateCommunityScreen() {
                     name,
                     description,
                     currency,
-                    coverMediaId: 0, // default!
+                    coverMediaId: -1, // default!
                 };
                 const communityApiRequestResult = await Api.community.edit(
                     coverImage !== initialData.coverImage
@@ -1714,7 +1725,7 @@ function CreateCommunityScreen() {
                                         }
                                         onEndEditing={() =>
                                             setIsDescriptionValid(
-                                                description.length > 0
+                                                description.length >= 240
                                             )
                                         }
                                         multiline
@@ -1729,6 +1740,16 @@ function CreateCommunityScreen() {
                                         style={styles.errorText}
                                     >
                                         {i18n.t('communityDescriptionRequired')}
+                                    </HelperText>
+                                )}
+                                {!isDescriptionTooShort && (
+                                    <HelperText
+                                        type="error"
+                                        padding="none"
+                                        visible
+                                        style={styles.errorText}
+                                    >
+                                        {i18n.t('communityDescriptionTooShort')}
                                     </HelperText>
                                 )}
 
