@@ -18,7 +18,6 @@ import {
 } from 'react-native';
 import {
     ActivityIndicator,
-    IconButton,
     List,
     Paragraph,
     Searchbar,
@@ -52,13 +51,6 @@ function AddedBeneficiaryScreen() {
     const [refreshing, setRefreshing] = React.useState(false);
     const [reachedEndList, setReachedEndList] = useState(false);
     const [searchBeneficiary, setSearchBeneficiary] = useState('');
-    const [searchResults, setSearchResults] = useState<
-        IManagerDetailsBeneficiary[]
-    >([]);
-    const [showingSearchResults, setShowingSearchResults] = useState(false);
-
-    // TODO: need to be adjusted regarding the API response and index identifier to beneficiary
-    const [isSuspeciousDetected, setIsSuspeciousDetected] = useState(false);
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
@@ -76,7 +68,7 @@ function AddedBeneficiaryScreen() {
     useEffect(() => {
         const loadActiveBeneficiaries = () => {
             Api.community.listBeneficiaries(true, 0, 10).then((l) => {
-                if (l.length < 10) {
+                if (l.length <= 10) {
                     setReachedEndList(true);
                 }
                 setBeneficiaries(l);
@@ -271,23 +263,22 @@ function AddedBeneficiaryScreen() {
     );
 
     const handleSearchBeneficiary = () => {
+        setRefreshing(true);
         if (beneficiaries.length > 30) {
             flatListRef.current?.scrollToIndex({ index: 0 });
         }
         Api.community
             .findBeneficiary(searchBeneficiary, true)
             .then((r) => {
-                setSearchResults(r);
                 if (r.length > 0) {
-                    setReachedEndList(true);
+                    if (r.length <= 10) {
+                        setReachedEndList(true);
+                    }
                     setRemoving(Array(r.length).fill(false));
-                    setRefreshing(false);
                 }
-                setShowingSearchResults(true);
+                setBeneficiaries(r);
             })
-            .catch((e) => {
-                // an error occurred while searching
-            });
+            .finally(() => setRefreshing(false));
     };
 
     const formatAddressOrName = (from: IManagerDetailsBeneficiary) => {
@@ -307,7 +298,7 @@ function AddedBeneficiaryScreen() {
     };
 
     const renderBeneficiariesList = () => {
-        if (showingSearchResults && searchResults.length === 0) {
+        if (beneficiaries.length === 0) {
             return (
                 <Paragraph
                     style={{
@@ -321,7 +312,7 @@ function AddedBeneficiaryScreen() {
         }
         return (
             <FlatList
-                data={showingSearchResults ? searchResults : beneficiaries}
+                data={beneficiaries}
                 style={{ paddingHorizontal: 15 }}
                 renderItem={listRenderItem}
                 ref={flatListRef}
@@ -332,14 +323,8 @@ function AddedBeneficiaryScreen() {
                         onRefresh={onRefresh}
                     />
                 }
-                onEndReachedThreshold={0.7}
+                onEndReachedThreshold={0.5}
                 onEndReached={handleOnEndReached}
-                // Performance settings
-                removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={2} // Reduce initial render amount
-                maxToRenderPerBatch={1} // Reduce number in each render batch
-                updateCellsBatchingPeriod={100} // Increase time between renders
-                windowSize={7} // Reduce the window size
             />
         );
     };
@@ -356,19 +341,18 @@ function AddedBeneficiaryScreen() {
                     borderRadius: 6,
                     marginBottom: 15,
                 }}
-                // clearIcon={(p) => (
-                //     <IconButton
-                //         icon="close"
-                //         onPress={() => {
-                //             setSearchBeneficiary('');
-                //             setSearchResults([]);
-                //             setShowingSearchResults(false);
-                //         }}
-                //     />
-                // )}
                 onChangeText={(e) => {
-                    if (e.length === 0 && searchResults.length > 0) {
-                        setSearchResults([]);
+                    if (e.length === 0) {
+                        setRefreshing(true);
+                        Api.community
+                            .listBeneficiaries(true, 0, 10)
+                            .then((l) => {
+                                setReachedEndList(l.length <= 10);
+                                setBeneficiaries(l);
+                                setBeneficiariesOffset(0);
+                                setRemoving(Array(l.length).fill(false));
+                            })
+                            .finally(() => setRefreshing(false));
                     }
                     setSearchBeneficiary(e);
                 }}
