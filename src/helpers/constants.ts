@@ -8,6 +8,7 @@ export enum Screens {
     NewStory = 'NewStory',
     StoriesCarousel = 'StoriesCarousel',
     Carousel = 'Carousel',
+    ListCommunities = 'ListCommunitiesScreen',
     //
     ClaimExplained = 'ClaimExplained',
     AnonymousReport = 'AnonymousReport',
