@@ -14,6 +14,7 @@ export function* startWatchingNetworkConnectivity(): any {
     try {
         for (;;) {
             const netStatus = yield take(channel);
+            console.log({ netStatus: netStatus.details.strength });
 
             if (netStatus.isConnected) {
                 yield put({ type: ONLINE });
@@ -21,6 +22,17 @@ export function* startWatchingNetworkConnectivity(): any {
                     message: i18n.t('sagas.messages.yourNetworkisOnline'),
                     type: 'success',
                 });
+            } else if (
+                netStatus.details.type !== 'none' ||
+                netStatus.details.type !== 'unknown'
+            ) {
+                if (netStatus.details.strength < 50) {
+                    showMessage({
+                        message: i18n.t('sagas.messages.yourNetworkisWeak'),
+                        type: 'warning',
+                        autoHide: !netStatus.isConnected,
+                    });
+                }
             } else {
                 yield put({ type: OFFLINE });
                 showMessage({
