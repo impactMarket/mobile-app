@@ -52,10 +52,8 @@ import {
     Image,
     FlatList,
     TouchableOpacity,
-    Dimensions,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
@@ -157,6 +155,7 @@ function CreateCommunityScreen() {
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
     // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
 
+    const [isDirty, setIsDirty] = useState(false);
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const [isDescriptionTooShort, setIsDescriptionTooShort] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
@@ -173,6 +172,8 @@ function CreateCommunityScreen() {
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
     const [showingResults, setShowingResults] = useState(false);
+
+    const [toggleLeaveFormModal, setToggleLeaveFormModal] = useState(false);
     const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
     const [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(
         false
@@ -227,6 +228,27 @@ function CreateCommunityScreen() {
         PROFILE_IMAGE = 'PROFILE_IMAGE',
     }
 
+    useEffect(() => {
+        setIsDirty(true);
+    }, [name, description, city, country, email]);
+
+    function CustomBackBtn() {
+        if (isDirty) {
+            return (
+                <TouchableOpacity
+                    onPress={() => setToggleLeaveFormModal(true)}
+                    hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                >
+                    <View>
+                        <BackSvg notFire />
+                    </View>
+                </TouchableOpacity>
+            );
+        } else {
+            return <BackSvg />;
+        }
+    }
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () =>
@@ -247,7 +269,7 @@ function CreateCommunityScreen() {
                         }}
                     />
                 ),
-            headerLeft: () => (showWebview ? null : <BackSvg />),
+            headerLeft: () => (showWebview ? null : <CustomBackBtn />),
             headerTitle: () =>
                 showWebview ? (
                     <Text
@@ -1020,6 +1042,7 @@ function CreateCommunityScreen() {
                     {i18n.t('createCommunityAlert')}
                 </Text>
                 <TouchableOpacity
+                    hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
                     onPress={() => setIsAlertVisible(!isAlertVisible)}
                 >
                     <Icon
@@ -1229,6 +1252,95 @@ function CreateCommunityScreen() {
                         >
                             {i18n.t('close')}
                         </Button>
+                    </Card>
+                </Modal>
+            </RNPortal>
+        );
+    }
+
+    if (toggleLeaveFormModal) {
+        return (
+            <RNPortal>
+                <Modal visible dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalLeaveTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                }}
+                            >
+                                {i18n.t('modalLeaveDescription')}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                            }}
+                        >
+                            <Button
+                                modeType="gray"
+                                style={{ flex: 1, marginRight: 5 }}
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                    navigation.goBack();
+                                }}
+                            >
+                                {i18n.t('leave')}
+                            </Button>
+                            <Button
+                                modeType="default"
+                                style={{ flex: 1, marginLeft: 5 }}
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                }}
+                            >
+                                {i18n.t('stay')}
+                            </Button>
+                        </View>
                     </Card>
                 </Modal>
             </RNPortal>
@@ -2330,9 +2442,10 @@ function CreateCommunityScreen() {
         </>
     );
 }
-CreateCommunityScreen.navigationOptions = (isEditable: boolean) => {
+
+CreateCommunityScreen.navigationOptions = () => {
     return {
-        headerLeft: () => <BackSvg />,
+        // headerLeft: () => <CustomBackBtn />,
         headerTitle: i18n.t('applyCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
@@ -2369,7 +2482,6 @@ const styles = StyleSheet.create({
     },
     //
     textNote: {
-        // color: 'grey',
         fontFamily: 'Gelion-Regular',
     },
     communityName: {
@@ -2488,11 +2600,11 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     createCommunityAlert: {
-        flex: 1,
+        display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'space-around',
-        height: 80,
+        minHeight: 80,
         width: '90%',
         marginHorizontal: 20,
         marginTop: 20,
@@ -2500,7 +2612,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 2,
         borderStyle: 'solid',
-        paddingTop: 16,
+        paddingVertical: 12,
     },
     errorText: {
         fontFamily: 'Inter-Regular',
