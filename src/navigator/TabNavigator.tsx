@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 import CommunitiesScreen from 'views/communities';
-import WelcomeRulesScreen from 'views/community/beneficiary';
+import BeneficiaryScreen from 'views/community/beneficiary';
 import CommunityManagerScreen from 'views/community/manager';
 import ProfileScreen from 'views/profile';
 import Login from 'views/profile/auth';
@@ -158,8 +158,8 @@ function TabNavigator({
     const tabBeneficiary = (
         <Tab.Screen
             name={Screens.Beneficiary}
-            component={WelcomeRulesScreen}
-            // options={WelcomeRulesScreen.navigationOptions}
+            component={BeneficiaryScreen}
+            options={(BeneficiaryScreen as any).navigationOptions}
         />
     );
     const tabManager = (

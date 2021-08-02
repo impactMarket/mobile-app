@@ -10,7 +10,7 @@ class ApiRouteUser {
     static api = new ApiRequests();
 
     static async report(
-        communityId: string,
+        communityId: number,
         message: string,
         category: string | undefined
     ): Promise<boolean> {
@@ -68,7 +68,7 @@ class ApiRouteUser {
     }
 
     static async addClaimLocation(
-        communityId: string,
+        communityId: number,
         gps: any
     ): Promise<boolean> {
         return (

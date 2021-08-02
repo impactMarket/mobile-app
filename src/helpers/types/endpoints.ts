@@ -37,10 +37,6 @@ export interface IManagerDetailsBeneficiary {
 export interface CommunityEditionAttributes {
     name: string;
     description: string;
-    language: string;
-    city: string;
-    country: string;
-    email: string;
     currency: string;
     coverMediaId: number;
 }
@@ -94,10 +90,6 @@ export interface ICommunityStory {
     userReported: boolean;
 }
 
-export interface ICommunitiesListStoriesResponse {
-    data: ICommunitiesListStories[];
-    count: number;
-}
 export interface ICommunitiesListStories {
     id: number;
     name: string;

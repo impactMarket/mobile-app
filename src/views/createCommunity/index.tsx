@@ -158,6 +158,7 @@ function CreateCommunityScreen() {
     // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
 
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
+    const [isDescriptionTooShort, setIsDescriptionTooShort] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
     const [isCountryValid, setIsCountryValid] = useState(true);
     const [isEmailValid, setIsEmailValid] = useState(true);
@@ -383,6 +384,10 @@ function CreateCommunityScreen() {
             if (!_isDescriptionValid) {
                 setIsDescriptionValid(false);
             }
+            const _isDescriptionTooShort = description.length > 240;
+            if (!_isDescriptionTooShort) {
+                setIsDescriptionTooShort(false);
+            }
             const _isCityValid = city.length > 0;
             if (!_isCityValid) {
                 setIsCityValid(false);
@@ -418,6 +423,7 @@ function CreateCommunityScreen() {
             const isSubmitAvailable =
                 _isNameValid &&
                 _isDescriptionValid &&
+                _isDescriptionTooShort &&
                 _isCityValid &&
                 _isCountryValid &&
                 _isEmailValid &&
@@ -578,10 +584,10 @@ function CreateCommunityScreen() {
                 setIsCoverImageValid(false);
             }
             //TODO: Will be added in later version
-            const _isProfileImageValid = profileImage.length > 0;
-            if (!_isProfileImageValid) {
-                setIsProfileImageValid(false);
-            }
+            // const _isProfileImageValid = profileImage.length > 0;
+            // if (!_isProfileImageValid) {
+            //     setIsProfileImageValid(false);
+            // }
 
             const _isNameValid = name.length > 0;
             if (!_isNameValid) {
@@ -591,27 +597,31 @@ function CreateCommunityScreen() {
             if (!_isDescriptionValid) {
                 setIsDescriptionValid(false);
             }
-            const _isCityValid = city.length > 0;
-            if (!_isCityValid) {
-                setIsCityValid(false);
+            const _isDescriptionTooShort = description.length > 240;
+            if (!_isDescriptionTooShort) {
+                setIsDescriptionTooShort(false);
             }
-            const _isCountryValid = country.length > 0;
-            if (!_isCountryValid) {
-                setIsCountryValid(false);
-            }
-            const _isEmailValid = validateEmail(email);
-            if (!_isEmailValid) {
-                setIsEmailValid(false);
-            }
+            // const _isCityValid = city.length > 0;
+            // if (!_isCityValid) {
+            //     setIsCityValid(false);
+            // }
+            // const _isCountryValid = country.length > 0;
+            // if (!_isCountryValid) {
+            //     setIsCountryValid(false);
+            // }
+            // const _isEmailValid = validateEmail(email);
+            // if (!_isEmailValid) {
+            //     setIsEmailValid(false);
+            // }
 
             const isSubmitEditAvailable =
                 _isNameValid &&
                 _isDescriptionValid &&
-                _isCityValid &&
-                _isCountryValid &&
-                _isEmailValid &&
-                _isCoverImageValid &&
-                _isProfileImageValid;
+                _isDescriptionTooShort &&
+                // _isCityValid &&
+                // _isCountryValid &&
+                // _isEmailValid &&
+                _isCoverImageValid;
 
             if (!isSubmitEditAvailable) {
                 setToggleMissingFieldsModal(true);
@@ -623,21 +633,17 @@ function CreateCommunityScreen() {
                 setToggleInformativeModal(true);
 
                 const communityDetails: CommunityEditionAttributes = {
-                        name,
-                        description,
-                        language: userLanguage,
-                        city,
-                        country,
-                        email,
-                        currency,
-                        coverMediaId: 0,
-                    },
-                    communityApiRequestResult = await Api.community.edit(
-                        coverImage !== initialData.coverImage
-                            ? coverImage
-                            : undefined,
-                        communityDetails
-                    );
+                    name,
+                    description,
+                    currency,
+                    coverMediaId: -1, // default!
+                };
+                const communityApiRequestResult = await Api.community.edit(
+                    coverImage !== initialData.coverImage
+                        ? coverImage
+                        : undefined,
+                    communityDetails
+                );
 
                 if (communityApiRequestResult) {
                     await updateCommunityInfo(
@@ -720,41 +726,23 @@ function CreateCommunityScreen() {
                 cancelled: false;
             } & ImageInfo;
 
+            const { width, height } = result;
+
             if (!result.cancelled) {
                 if (type === imageTypes.COVER_IMAGE) {
-                    Image.getSize(
-                        result.uri,
-                        (width, height) => {
-                            if (width >= 784 && height >= 784) {
-                                cb(result.uri);
-                                cbv(true);
-                            } else {
-                                setToggleImageDimensionsModal(true);
-                            }
-                        },
-                        (error) => {
-                            cb(result.uri);
-                            cbv(true);
-                            Sentry.Native.captureException(error);
-                        }
-                    );
+                    if (width >= 784 && height >= 784) {
+                        cb(result.uri);
+                        cbv(true);
+                    } else {
+                        setToggleImageDimensionsModal(true);
+                    }
                 } else {
-                    Image.getSize(
-                        result.uri,
-                        (width, height) => {
-                            if (width >= 300 && height >= 300) {
-                                cb(result.uri);
-                                cbv(true);
-                            } else {
-                                setToggleImageDimensionsModal(true);
-                            }
-                        },
-                        (error) => {
-                            cb(result.uri);
-                            cbv(true);
-                            Sentry.Native.captureException(error);
-                        }
-                    );
+                    if (width >= 300 && height >= 300) {
+                        cb(result.uri);
+                        cbv(true);
+                    } else {
+                        setToggleImageDimensionsModal(true);
+                    }
                 }
             }
         },
@@ -1737,7 +1725,7 @@ function CreateCommunityScreen() {
                                         }
                                         onEndEditing={() =>
                                             setIsDescriptionValid(
-                                                description.length > 0
+                                                description.length >= 240
                                             )
                                         }
                                         multiline
@@ -1754,165 +1742,201 @@ function CreateCommunityScreen() {
                                         {i18n.t('communityDescriptionRequired')}
                                     </HelperText>
                                 )}
-
-                                <View style={{ marginTop: 28 }}>
-                                    <Input
-                                        style={styles.inputTextField}
-                                        label={i18n.t('city')}
-                                        value={city}
-                                        maxLength={32}
-                                        onChangeText={(value) => setCity(value)}
-                                        onEndEditing={() =>
-                                            setIsCityValid(city.length > 0)
-                                        }
-                                    />
-                                    {!isCityValid && (
-                                        <HelperText
-                                            type="error"
-                                            visible
-                                            padding="none"
-                                            style={styles.errorText}
-                                        >
-                                            {i18n.t('cityRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-
-                                <View style={{ marginTop: 28 }}>
-                                    <Select
-                                        label={i18n.t('country')}
-                                        value={
-                                            country.length > 0
-                                                ? `${countries[country].emoji} ${countries[country].name}`
-                                                : 'Select Country'
-                                        }
-                                        onPress={() =>
-                                            modalizeCountryRef.current?.open()
-                                        }
-                                    />
-                                    {!isCountryValid && (
-                                        <HelperText
-                                            type="error"
-                                            padding="none"
-                                            visible
-                                            style={styles.errorText}
-                                        >
-                                            {i18n.t('countryRequired')}
-                                        </HelperText>
-                                    )}
-                                </View>
-                                {gpsLocation === undefined ? (
-                                    <View
-                                        style={{
-                                            marginVertical: 16,
-                                            marginBottom: 24,
-                                        }}
+                                {!isDescriptionTooShort && (
+                                    <HelperText
+                                        type="error"
+                                        padding="none"
+                                        visible
+                                        style={styles.errorText}
                                     >
-                                        <RNButton
-                                            mode="contained"
-                                            style={[
-                                                styles.gpsBtn,
-                                                { paddingVertical: 0 },
-                                            ]}
-                                            onPress={() => enableGPSLocation()}
-                                            loading={isEnablingGPS}
-                                            uppercase={false}
-                                        >
-                                            <Text
-                                                style={[
-                                                    { color: ipctColors.white },
-                                                    styles.gpsBtnText,
-                                                ]}
-                                            >
-                                                {i18n.t('getGPSLocation')}
-                                            </Text>
-                                        </RNButton>
-                                        {!isEnabledGPS && (
-                                            <HelperText
-                                                type="error"
-                                                padding="none"
-                                                visible
-                                                style={styles.errorText}
-                                            >
-                                                {i18n.t('enablingGPSRequired')}
-                                            </HelperText>
-                                        )}
-                                    </View>
-                                ) : (
-                                    <View
-                                        style={{
-                                            marginVertical: 16,
-                                            marginBottom: 24,
-                                        }}
-                                    >
-                                        <TouchableOpacity
-                                            style={[
-                                                {
-                                                    backgroundColor: '#E9EDF4',
-                                                    borderWidth: 0,
-                                                },
-                                                styles.gpsBtn,
-                                            ]}
-                                        >
+                                        {i18n.t('communityDescriptionTooShort')}
+                                    </HelperText>
+                                )}
+
+                                {!isEditable && (
+                                    <>
+                                        <View style={{ marginTop: 28 }}>
+                                            <Input
+                                                style={styles.inputTextField}
+                                                label={i18n.t('city')}
+                                                value={city}
+                                                maxLength={32}
+                                                onChangeText={(value) =>
+                                                    setCity(value)
+                                                }
+                                                onEndEditing={() =>
+                                                    setIsCityValid(
+                                                        city.length > 0
+                                                    )
+                                                }
+                                            />
+                                            {!isCityValid && (
+                                                <HelperText
+                                                    type="error"
+                                                    visible
+                                                    padding="none"
+                                                    style={styles.errorText}
+                                                >
+                                                    {i18n.t('cityRequired')}
+                                                </HelperText>
+                                            )}
+                                        </View>
+
+                                        <View style={{ marginTop: 28 }}>
+                                            <Select
+                                                label={i18n.t('country')}
+                                                value={
+                                                    country.length > 0
+                                                        ? `${countries[country].emoji} ${countries[country].name}`
+                                                        : 'Select Country'
+                                                }
+                                                onPress={() =>
+                                                    modalizeCountryRef.current?.open()
+                                                }
+                                            />
+                                            {!isCountryValid && (
+                                                <HelperText
+                                                    type="error"
+                                                    padding="none"
+                                                    visible
+                                                    style={styles.errorText}
+                                                >
+                                                    {i18n.t('countryRequired')}
+                                                </HelperText>
+                                            )}
+                                        </View>
+                                        {gpsLocation === undefined ? (
                                             <View
                                                 style={{
-                                                    flexDirection: 'row',
-                                                    alignSelf: 'center',
-                                                    alignItems: 'center',
+                                                    marginVertical: 16,
+                                                    marginBottom: 24,
                                                 }}
                                             >
-                                                <Icon
-                                                    name="check-circle-outline"
-                                                    size={22}
-                                                    color={
-                                                        ipctColors.greenishTeal
+                                                <RNButton
+                                                    mode="contained"
+                                                    style={[
+                                                        styles.gpsBtn,
+                                                        { paddingVertical: 0 },
+                                                    ]}
+                                                    onPress={() =>
+                                                        enableGPSLocation()
                                                     }
-                                                />
-                                                <Text
+                                                    loading={isEnablingGPS}
+                                                    uppercase={false}
+                                                >
+                                                    <Text
+                                                        style={[
+                                                            {
+                                                                color:
+                                                                    ipctColors.white,
+                                                            },
+                                                            styles.gpsBtnText,
+                                                        ]}
+                                                    >
+                                                        {i18n.t(
+                                                            'getGPSLocation'
+                                                        )}
+                                                    </Text>
+                                                </RNButton>
+                                                {!isEnabledGPS && (
+                                                    <HelperText
+                                                        type="error"
+                                                        padding="none"
+                                                        visible
+                                                        style={styles.errorText}
+                                                    >
+                                                        {i18n.t(
+                                                            'enablingGPSRequired'
+                                                        )}
+                                                    </HelperText>
+                                                )}
+                                            </View>
+                                        ) : (
+                                            <View
+                                                style={{
+                                                    marginVertical: 16,
+                                                    marginBottom: 24,
+                                                }}
+                                            >
+                                                <TouchableOpacity
                                                     style={[
                                                         {
-                                                            color:
-                                                                ipctColors.darBlue,
-                                                            marginLeft: 10,
+                                                            backgroundColor:
+                                                                '#E9EDF4',
+                                                            borderWidth: 0,
                                                         },
-                                                        styles.gpsBtnText,
+                                                        styles.gpsBtn,
                                                     ]}
                                                 >
-                                                    {i18n.t('validCoordinates')}
-                                                </Text>
+                                                    <View
+                                                        style={{
+                                                            flexDirection:
+                                                                'row',
+                                                            alignSelf: 'center',
+                                                            alignItems:
+                                                                'center',
+                                                        }}
+                                                    >
+                                                        <Icon
+                                                            name="check-circle-outline"
+                                                            size={22}
+                                                            color={
+                                                                ipctColors.greenishTeal
+                                                            }
+                                                        />
+                                                        <Text
+                                                            style={[
+                                                                {
+                                                                    color:
+                                                                        ipctColors.darBlue,
+                                                                    marginLeft: 10,
+                                                                },
+                                                                styles.gpsBtnText,
+                                                            ]}
+                                                        >
+                                                            {i18n.t(
+                                                                'validCoordinates'
+                                                            )}
+                                                        </Text>
+                                                    </View>
+                                                </TouchableOpacity>
                                             </View>
-                                        </TouchableOpacity>
-                                    </View>
+                                        )}
+                                        <View>
+                                            <Input
+                                                style={styles.inputTextField}
+                                                label={i18n.t('email')}
+                                                value={email}
+                                                maxLength={64}
+                                                keyboardType="email-address"
+                                                onChangeText={(value) =>
+                                                    setEmail(value)
+                                                }
+                                                onEndEditing={() =>
+                                                    setIsEmailValid(
+                                                        validateEmail(email)
+                                                    )
+                                                }
+                                            />
+                                            {!isEmailValid && (
+                                                <HelperText
+                                                    type="error"
+                                                    padding="none"
+                                                    visible
+                                                    style={styles.errorText}
+                                                >
+                                                    {!email
+                                                        ? i18n.t(
+                                                              'emailRequired'
+                                                          )
+                                                        : i18n.t(
+                                                              'emailInvalidFormat'
+                                                          )}
+                                                </HelperText>
+                                            )}
+                                        </View>
+                                    </>
                                 )}
-                                <View>
-                                    <Input
-                                        style={styles.inputTextField}
-                                        label={i18n.t('email')}
-                                        value={email}
-                                        maxLength={64}
-                                        keyboardType="email-address"
-                                        onChangeText={(value) =>
-                                            setEmail(value)
-                                        }
-                                        onEndEditing={() =>
-                                            setIsEmailValid(
-                                                validateEmail(email)
-                                            )
-                                        }
-                                    />
-                                    {!isEmailValid && (
-                                        <HelperText
-                                            type="error"
-                                            padding="none"
-                                            visible
-                                            style={styles.errorText}
-                                        >
-                                            {!email
-                                                ? i18n.t('emailRequired')
-                                                : i18n.t('emailInvalidFormat')}
-                                        </HelperText>
-                                    )}
-                                </View>
                             </View>
 
                             <View style={{ marginTop: 28 }}>

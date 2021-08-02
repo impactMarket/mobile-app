@@ -78,9 +78,6 @@ function Carousel(props: {
         }
     }, []);
 
-    // console.log({ stories: stories.length });
-    // console.log({ communityId: props.communityId });
-
     const handlePressPrevious = () => {
         if (index === 0 && caller !== 'MY_STORIES') {
             props.goToOtherCommunity(false);

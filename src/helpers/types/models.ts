@@ -62,17 +62,11 @@ export interface UbiCommunity {
     cover?: AppMediaContent;
 }
 export interface CommunityAttributes extends UbiCommunity {
-    metrics?: UbiCommunityDailyMetrics[];
-    // cover?: AppMediaContent;
+    metrics?: UbiCommunityDailyMetrics;
     contract?: UbiCommunityContract;
     state?: UbiCommunityState;
-    // storyCommunity?: StoryCommunity[];
-    suspect?: UbiCommunitySuspect[];
-    // beneficiaries?: BeneficiaryAttributes[];
+    suspect?: UbiCommunitySuspect;
     organization?: UbiOrganization;
-    // claimLocation?: ClaimLocationAttributes[];
-    // demographics?: UbiCommunityDemographics[];
-    // dailyState?: UbiCommunityDailyState[];
 }
 
 export interface AppMediaThumbnail {

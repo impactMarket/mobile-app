@@ -230,10 +230,7 @@ function AddBeneficiaryScreen() {
                     {i18n.t('addBeneficiary')}
                 </Button>
                 {/* Accessing community details to check suspicious activity */}
-                {communityMetadata.suspect &&
-                    communityMetadata.suspect.length > 0 && (
-                        <SuspiciousActivity />
-                    )}
+                {communityMetadata.suspect !== null && <SuspiciousActivity />}
             </View>
             <ScanQR
                 isVisible={usingCamera}

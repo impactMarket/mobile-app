@@ -6,8 +6,8 @@ import * as Location from 'expo-location';
 import { ITabBarIconProps } from 'helpers/types/common';
 // import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Alert, FlatList, View } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Alert, FlatList, Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
 import Api from 'services/api';
@@ -25,7 +25,7 @@ function CommunitiesScreen() {
         Location.LocationObject | undefined
     >(undefined);
 
-    const [refreshing, setRefreshing] = useState(false);
+    const [refreshing, setRefreshing] = useState(true);
     const [communities, setCommunities] = useState<CommunityAttributes[]>([]);
     const [reachedEndList, setReachedEndList] = useState(false);
 
@@ -142,7 +142,15 @@ function CommunitiesScreen() {
                         if (c.length < 5) {
                             setReachedEndList(true);
                         }
-                        setCommunities(communities.concat(c));
+                        // TODO: until the backend issue is fixed
+                        setCommunities([
+                            ...new Map(
+                                [...communities, ...c].map((item) => [
+                                    item.id,
+                                    item,
+                                ])
+                            ).values(),
+                        ]);
                         setCommuntiesOffset(communtiesOffset + 5);
                     })
                     .finally(() => setRefreshing(false));
@@ -169,56 +177,48 @@ function CommunitiesScreen() {
                         onPress={() => modalizeOrderRef.current?.open()}
                     />
                 </View>
-                {refreshing && (
+                {/* {refreshing && (
                     <ActivityIndicator
                         style={{ marginBottom: 22 }}
                         animating
                         color={ipctColors.blueRibbon}
                     />
-                )}
+                )} */}
             </>
         );
     };
 
-    const ITEM_HEIGHT = 147;
-
-    const getItemLayout = useCallback(
-        (data, index) => ({
-            length: ITEM_HEIGHT,
-            offset: ITEM_HEIGHT * index,
-            index,
-        }),
-        []
-    );
-
-    const renderItem = useCallback(
-        ({ item, index }: { item: CommunityAttributes; index: number }) =>
-            index === 0 ? filterHeader() : <CommunityCard community={item} />,
-        []
-    );
-
-    const keyExtractor = useCallback((item) => item.publicId, []);
-
     return (
         <>
             <FlatList
-                ref={flatListRef}
                 data={[
                     { publicId: 'for-compliance-sake-really' } as any,
                 ].concat(communities)}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-                onEndReachedThreshold={0.7}
+                renderItem={({
+                    item,
+                    index,
+                }: {
+                    item: CommunityAttributes;
+                    index: number;
+                }) =>
+                    index === 0 ? (
+                        filterHeader()
+                    ) : (
+                        <CommunityCard community={item} />
+                    )
+                }
+                ref={flatListRef}
+                keyExtractor={(item) => item.publicId}
+                onEndReachedThreshold={0.5}
                 onEndReached={handleOnEndReached}
                 showsVerticalScrollIndicator={false}
                 // Performance settings
-                removeClippedSubviews // Unmount components when outside of window
-                initialNumToRender={4} // Reduce initial render amount
-                maxToRenderPerBatch={4} // Reduce number in each render batch
-                updateCellsBatchingPeriod={100} // Increase time between renders
-                windowSize={5} // Reduce the window size
+                // removeClippedSubviews // Unmount components when outside of window
+                // initialNumToRender={4} // Reduce initial render amount
+                // maxToRenderPerBatch={2} // Reduce number in each render batch
+                // updateCellsBatchingPeriod={100} // Increase time between renders
+                // windowSize={7} // Reduce the window size
                 style={{ paddingTop: 20 }}
-                getItemLayout={getItemLayout}
             />
             <Portal>
                 <Modalize

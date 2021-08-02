@@ -130,13 +130,12 @@ class ApiRouteCommunity {
         const suspect = (
             await this.api.get<UbiCommunitySuspect>(`/community/${id}/suspect`)
         ).data;
-        // TODO: does not need to be array, we should fix
         return {
-            metrics: [metrics],
-            ...contract,
-            ...state,
-            suspect: [suspect],
             ...community,
+            metrics,
+            contract,
+            state,
+            suspect,
         };
     }
 
@@ -167,13 +166,12 @@ class ApiRouteCommunity {
                 `/community/${community.id}/suspect`
             )
         ).data;
-        // TODO: does not need to be array, we should fix
         return {
-            metrics: [metrics],
-            ...contract,
-            ...state,
-            suspect: [suspect],
             ...community,
+            metrics,
+            contract,
+            state,
+            suspect,
         };
     }
 
@@ -210,7 +208,7 @@ class ApiRouteCommunity {
         // TODO: improve this
         const delay = (ms: number) =>
             new Promise((resolve) => setTimeout(resolve, ms));
-        let tries = 3;
+        let tries = 10;
         while (tries-- > 0) {
             delay(1000);
             const { status } = await this.api.head(preSigned.media.url);
@@ -255,7 +253,7 @@ class ApiRouteCommunity {
             // TODO: improve this
             const delay = (ms: number) =>
                 new Promise((resolve) => setTimeout(resolve, ms));
-            let tries = 3;
+            let tries = 10;
             while (tries-- > 0) {
                 delay(1000);
                 const { status } = await this.api.head(preSigned.media.url);
