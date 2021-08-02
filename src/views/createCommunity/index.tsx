@@ -1239,11 +1239,17 @@ function CreateCommunityScreen() {
         return (
             <RNPortal>
                 <Modal visible dismissable={false}>
-                    <Card style={{ marginHorizontal: 22, borderRadius: 12 }}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                        }}
+                    >
                         <View
                             style={{
                                 paddingVertical: 14,
-                                height: sending || sendingSuccess ? 234 : 400,
+                                display: 'flex',
+                                // height: sending || sendingSuccess ? 234 : 400,
                                 width: '88%',
                                 alignItems: 'center',
                                 alignSelf: 'center',
