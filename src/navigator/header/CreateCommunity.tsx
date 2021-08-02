@@ -39,11 +39,10 @@ function CreateCommunity(props: {
                     // marginLeft: 8.4,
                     marginRight: 16,
                 }}
-                onPress={
-                    () =>
-                        // !props.userCommunity && walletAddress.length > 0
-                        props.navigation.navigate(Screens.CreateCommunity)
-                    // : props.navigation.navigate(Screens.Auth)
+                onPress={() =>
+                    !props.userCommunity && walletAddress.length > 0
+                        ? props.navigation.navigate(Screens.CreateCommunity)
+                        : props.navigation.navigate(Screens.Auth)
                 }
             >
                 {i18n.t('create')}
