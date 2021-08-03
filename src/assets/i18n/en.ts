@@ -129,6 +129,11 @@ export default {
     errorUpdatingCommunity: 'An error happened while updating your community!',
     submissionFailed: 'Submission failed',
     modalErrorTitle: 'Ooops!',
+    stay: 'Stay',
+    leave: 'Leave',
+    modalLeaveTitle: 'Leave form',
+    modalLeaveDescription:
+        'All content entered will be lost. Are you sure you want to leave this form?',
     modalErrorDescription: 'Something went wrong. Please try again later.',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
