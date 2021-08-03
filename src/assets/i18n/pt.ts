@@ -194,9 +194,11 @@ export default {
     notFundsToAddBeneficiary:
         'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
     claimExplained1:
-        'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
+        '<bold>Cada comunidade possui um grupo de beneficiários</bold>, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
     claimExplained2:
-        'Existe um tempo minimo que terá de esperar antes de poder pegar novamente, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
+        '<bold>Existe um tempo minimo que terá de esperar antes de poder pegar novamente</bold>, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
+    claimExplained3:
+        '<bold>Se a sua comunidade ficar sem fundos</bold>, você não poderá solicitar. A única maneira de começar a solicitar novamente é quando a comunidade recebe fundos adicionais por meio de doações.',
     claimAmountHelp:
         'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir/pegar de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
     totalClaimPerBeneficiaryHelp:
@@ -305,6 +307,12 @@ export default {
     unknown: 'Desconhecido.',
     clockNotSynced:
         'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
+    communityFundsRunOut: {
+        title: 'Comunidade sem fundos',
+        description:
+            'Entendemos o inconveniente e sabemos o quanto você precisa desse valor. <bold> Você será notificado quando os fundos estiverem disponíveis novamente. </bold>',
+        callToAction: 'Por que os fundos acabam?',
+    },
     communityWentOutOfFunds:
         'Parece que a comunidade ficou sem fundos. Tente novamente mais tarde.',
     notEnoughForTransaction:
