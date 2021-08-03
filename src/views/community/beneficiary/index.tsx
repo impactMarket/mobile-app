@@ -403,9 +403,9 @@ function BeneficiaryScreen() {
                         </View>
                     </View>
                 </BaseCommunity>
-                {showReportCard !== 'false' && !openModal && (
+                {/* {showReportCard !== 'false' && !openModal && (
                     <ReportCard setOpenModal={setOpenModal} />
-                )}
+                )} */}
             </ScrollView>
             <Snackbar
                 visible={askLocationOnOpen}

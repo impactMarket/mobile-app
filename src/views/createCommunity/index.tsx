@@ -52,10 +52,8 @@ import {
     Image,
     FlatList,
     TouchableOpacity,
-    Dimensions,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {

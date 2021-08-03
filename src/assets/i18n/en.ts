@@ -195,9 +195,11 @@ export default {
     notFundsToAddBeneficiary:
         'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
     claimExplained1:
-        'Each community has a group of beneficiaries, added by the coommunity managers, that can access a basic income under a set of rules. For example, each beneficiary can claim $1/day up to $500.',
+        '<bold>Each community has a group of beneficiaries</bold>, added by the coommunity managers, that can access a basic income under a set of rules. For example, each beneficiary can claim $1/day up to $500.',
     claimExplained2:
-        'There is a minimum time you have to wait before being able to claim again, but there is no maximum. You should only claim when you need those funds. The more you claim, the more time you have to wait to claim again.',
+        '<bold>There is a minimum time you have to wait before being able to claim again</bold>, but there is no maximum. You should only claim when you need those funds. The more you claim, the more time you have to wait to claim again.',
+    claimExplained3:
+        '<bold>If your community have run out of funds</bold> you will not be able to claim. The only way to start claiming again is when the community gets additional funds through donations.',
     claimAmountHelp:
         'This is the UBI amount, in $cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
     totalClaimPerBeneficiaryHelp:
@@ -303,6 +305,12 @@ export default {
     unknown: 'Unknown.',
     clockNotSynced:
         'It seems like your date or time is incorrect. Please, fix it before trying again.',
+    communityFundsRunOut: {
+        title: 'Community funds run out',
+        description:
+            'We understand the inconvenience and we know how much you need this allowance.  <bold>You will be notified when funds are available again.</bold>',
+        callToAction: 'Why funds run out?',
+    },
     communityWentOutOfFunds:
         'It seems like your community run out of funds. Please try again later',
     notEnoughForTransaction:

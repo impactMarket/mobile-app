@@ -1,14 +1,62 @@
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as React from 'react';
+import { Trans } from 'react-i18next';
 import { Text, ScrollView, StyleSheet } from 'react-native';
+import { ipctColors } from 'styles/index';
 
 function ClaimExplainedScreen() {
     return (
         <>
             <ScrollView style={styles.contentView}>
-                <Text style={styles.textInfo}>{i18n.t('claimExplained1')}</Text>
-                <Text style={styles.textInfo}>{i18n.t('claimExplained2')}</Text>
+                <Text style={styles.textInfo}>
+                    <Trans
+                        i18nKey="claimExplained1"
+                        components={{
+                            bold: (
+                                <Text
+                                    style={{
+                                        fontFamily: 'Inter-Bold',
+                                        fontSize: 14,
+                                        color: ipctColors.almostBlack,
+                                    }}
+                                />
+                            ),
+                        }}
+                    />
+                </Text>
+                <Text style={styles.textInfo}>
+                    <Trans
+                        i18nKey="claimExplained2"
+                        components={{
+                            bold: (
+                                <Text
+                                    style={{
+                                        fontFamily: 'Inter-Bold',
+                                        fontSize: 14,
+                                        color: ipctColors.almostBlack,
+                                    }}
+                                />
+                            ),
+                        }}
+                    />
+                </Text>
+                <Text style={styles.textInfo}>
+                    <Trans
+                        i18nKey="claimExplained3"
+                        components={{
+                            bold: (
+                                <Text
+                                    style={{
+                                        fontFamily: 'Inter-Bold',
+                                        fontSize: 14,
+                                        color: ipctColors.almostBlack,
+                                    }}
+                                />
+                            ),
+                        }}
+                    />
+                </Text>
             </ScrollView>
         </>
     );
@@ -26,7 +74,7 @@ const styles = StyleSheet.create({
     },
     textInfo: {
         fontFamily: 'Gelion-Regular',
-        textAlign: 'center',
+        textAlign: 'left',
         marginVertical: 20,
         fontSize: 18,
     },
