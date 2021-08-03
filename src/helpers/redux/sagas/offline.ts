@@ -13,7 +13,27 @@ export function* startWatchingNetworkConnectivity(): any {
 
     try {
         for (;;) {
+            // This channel only get's initialized after the first connection state change has been detected.
+            // After this event, the channel will remain listening for further connection state changes.
             const netStatus = yield take(channel);
+
+            // Signal strength is only present in the wifi network and varies between 0..100.
+            // In this case we are showing the toast only when the strength is lower than 40.
+            if (netStatus.type === 'wifi' && netStatus.details.strength <= 40) {
+                showMessage({
+                    message: i18n.t('sagas.messages.yourNetworkisWeak'),
+                    type: 'warning',
+                });
+            } else if (
+                // in order to check the "strength" of wifi network we check if the connection is a 4g generation.
+                netStatus.type === 'cellular' &&
+                netStatus.details.cellularGeneration !== '4g'
+            ) {
+                showMessage({
+                    message: i18n.t('sagas.messages.yourNetworkisWeak'),
+                    type: 'warning',
+                });
+            }
 
             if (netStatus.isConnected) {
                 yield put({ type: ONLINE });

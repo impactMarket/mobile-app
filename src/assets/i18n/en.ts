@@ -129,6 +129,11 @@ export default {
     errorUpdatingCommunity: 'An error happened while updating your community!',
     submissionFailed: 'Submission failed',
     modalErrorTitle: 'Ooops!',
+    stay: 'Stay',
+    leave: 'Leave',
+    modalLeaveTitle: 'Leave form',
+    modalLeaveDescription:
+        'All content entered will be lost. Are you sure you want to leave this form?',
     modalErrorDescription: 'Something went wrong. Please try again later.',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
@@ -431,6 +436,8 @@ export default {
         messages: {
             submitAddStoriesToStateSuccess: 'Hurray! See the latest stories.',
             yourNetworkisOffline: 'Ouch! Seems like you are offline.',
+            yourNetworkisWeak:
+                'Hmmm! Seems like you are facing network issues.',
             yourNetworkisOnline: 'Hurray! Your network is back online!',
             submitAddStoriesToStateFailure:
                 'Oops! We could not update all stories at this time. Please try again later',

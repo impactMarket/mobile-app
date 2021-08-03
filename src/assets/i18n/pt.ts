@@ -124,6 +124,11 @@ export default {
     communityUpdated: 'Os dados da comunidade foram atualizados!',
     submissionFailed: 'Falha no envio',
     modalErrorTitle: 'Ooops!',
+    modalLeaveTitle: 'Sair do formulário',
+    stay: 'Ficar',
+    leave: 'Sair',
+    modalLeaveDescription:
+        'Todo o conteúdo inserido será perdido. Tem certeza que deseja sair deste formulário?',
     modalErrorDescription:
         'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
     errorUpdatingCommunity:
@@ -432,6 +437,8 @@ export default {
         messages: {
             yourNetworkisOffline: 'Ouch! Parece que você está offline.',
             yourNetworkisOnline: 'Hurray! Sua rede está online novamente!',
+            yourNetworkisWeak:
+                'Hmmm! Parece que você está a ter problemas com a rede.',
             submitAddStoriesToStateSuccess:
                 'Hurray! Veja as stories mais recentes.',
             submitAddStoriesToStateFailure:
