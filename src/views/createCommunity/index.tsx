@@ -1258,95 +1258,6 @@ function CreateCommunityScreen() {
         );
     }
 
-    if (toggleLeaveFormModal) {
-        return (
-            <RNPortal>
-                <Modal visible dismissable={false}>
-                    <Card
-                        style={{
-                            marginHorizontal: 22,
-                            borderRadius: 12,
-                            paddingHorizontal: 22,
-                            paddingVertical: 16,
-                        }}
-                    >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                width: '100%',
-                                marginBottom: 13.5,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontFamily: 'Manrope-Bold',
-                                    fontSize: 18,
-                                    lineHeight: 20,
-                                    textAlign: 'left',
-                                }}
-                            >
-                                {i18n.t('modalLeaveTitle')}
-                            </Text>
-                            <CloseStorySvg
-                                onPress={() => {
-                                    setToggleLeaveFormModal(false);
-                                }}
-                            />
-                        </View>
-                        <View
-                            style={{
-                                width: '100%',
-                                flexDirection: 'row',
-                                marginBottom: 16,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontFamily: 'Inter-Regular',
-                                    fontSize: 14,
-                                    lineHeight: 24,
-                                    color: ipctColors.almostBlack,
-                                }}
-                            >
-                                {i18n.t('modalLeaveDescription')}
-                            </Text>
-                        </View>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                width: '100%',
-                            }}
-                        >
-                            <Button
-                                modeType="gray"
-                                style={{ flex: 1, marginRight: 5 }}
-                                onPress={() => {
-                                    setToggleLeaveFormModal(false);
-                                    navigation.goBack();
-                                }}
-                            >
-                                {i18n.t('leave')}
-                            </Button>
-                            <Button
-                                modeType="default"
-                                style={{ flex: 1, marginLeft: 5 }}
-                                onPress={() => {
-                                    setToggleLeaveFormModal(false);
-                                }}
-                            >
-                                {i18n.t('stay')}
-                            </Button>
-                        </View>
-                    </Card>
-                </Modal>
-            </RNPortal>
-        );
-    }
-
     if (toggleInformativeModal) {
         return (
             <RNPortal>
@@ -2359,6 +2270,88 @@ function CreateCommunityScreen() {
                 )}
             </KeyboardAvoidingView>
             <RNPortal>
+                <Modal visible={toggleLeaveFormModal} dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalLeaveTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                }}
+                            >
+                                {i18n.t('modalLeaveDescription')}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                            }}
+                        >
+                            <Button
+                                modeType="gray"
+                                style={{ flex: 1, marginRight: 5 }}
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                    navigation.goBack();
+                                }}
+                            >
+                                {i18n.t('leave')}
+                            </Button>
+                            <Button
+                                modeType="default"
+                                style={{ flex: 1, marginLeft: 5 }}
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                }}
+                            >
+                                {i18n.t('stay')}
+                            </Button>
+                        </View>
+                    </Card>
+                </Modal>
                 <Modalize ref={modalizeGenericErrorRef} adjustToContentHeight>
                     <View
                         style={{
