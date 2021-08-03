@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
@@ -10,7 +9,7 @@ import WaitingRedSvg from 'components/svg/WaitingRedSvg';
 import ReportCard from 'components/svg/header/ReportCard';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
-import { Screens, SHOW_REPORT_CARD } from 'helpers/constants';
+import { Screens } from 'helpers/constants';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import {
     setAppSuspectWrongDateTime,
@@ -21,7 +20,6 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-
 // redux Actions
 import { Trans } from 'react-i18next';
 import {
@@ -405,9 +403,9 @@ function BeneficiaryScreen() {
                         </View>
                     </View>
                 </BaseCommunity>
-                {/* {showReportCard !== 'false' && !openModal && (
+                {showReportCard !== 'false' && !openModal && (
                     <ReportCard setOpenModal={setOpenModal} />
-                )} */}
+                )}
             </ScrollView>
             <Snackbar
                 visible={askLocationOnOpen}
