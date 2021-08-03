@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     },
     bottomSheetHeaderText: {
         fontSize: 22,
+        flex: 1,
         lineHeight: 28,
         fontFamily: 'Manrope-Bold',
     },
