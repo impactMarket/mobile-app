@@ -54,6 +54,7 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     Platform,
+    Keyboard,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
@@ -155,7 +156,6 @@ function CreateCommunityScreen() {
     const [isProfileImageValid, setIsProfileImageValid] = useState(true);
     // const [isCommunityLogoValid, setIsCommunityLogoValid] = useState(true);
 
-    const [isDirty, setIsDirty] = useState(false);
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const [isDescriptionTooShort, setIsDescriptionTooShort] = useState(true);
     const [isCityValid, setIsCityValid] = useState(true);
@@ -228,26 +228,38 @@ function CreateCommunityScreen() {
         PROFILE_IMAGE = 'PROFILE_IMAGE',
     }
 
-    useEffect(() => {
-        setIsDirty(true);
-    }, [name, description, city, country, email]);
+    const handlePressGoBack = () => {
+        const _isCoverImageValid = coverImage.length > 0;
+        const _isProfileImageValid = profileImage.length > 0;
+        const _isNameValid = name.length > 0;
+        const _isDescriptionValid = description.length > 0;
+        const _isCityValid = city.length > 0;
+        const _isCountryValid = country.length > 0;
+        const _isEmailValid = email.length > 0;
+        const _isEnabledGPS = gpsLocation !== undefined;
+        const _isClaimAmountValid = claimAmount.length > 0;
+        const _isMaxClaimValid = maxClaim.length > 0;
+        const _isIncrementalIntervalValid = incrementInterval.length > 0;
 
-    function CustomBackBtn() {
-        if (isDirty) {
-            return (
-                <TouchableOpacity
-                    onPress={() => setToggleLeaveFormModal(true)}
-                    hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                >
-                    <View>
-                        <BackSvg notFire />
-                    </View>
-                </TouchableOpacity>
-            );
+        const isAnyFieldFilled =
+            _isNameValid ||
+            _isDescriptionValid ||
+            _isCityValid ||
+            _isCountryValid ||
+            _isEmailValid ||
+            _isClaimAmountValid ||
+            _isIncrementalIntervalValid ||
+            _isMaxClaimValid ||
+            _isCoverImageValid ||
+            _isEnabledGPS ||
+            _isProfileImageValid;
+        if (isAnyFieldFilled) {
+            Keyboard.dismiss();
+            setToggleLeaveFormModal(true);
         } else {
-            return <BackSvg />;
+            navigation.goBack();
         }
-    }
+    };
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -269,7 +281,8 @@ function CreateCommunityScreen() {
                         }}
                     />
                 ),
-            headerLeft: () => (showWebview ? null : <CustomBackBtn />),
+            headerLeft: () =>
+                showWebview ? null : <BackSvg onPress={handlePressGoBack} />,
             headerTitle: () =>
                 showWebview ? (
                     <Text
