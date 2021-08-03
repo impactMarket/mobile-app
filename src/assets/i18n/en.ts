@@ -423,6 +423,8 @@ export default {
         messages: {
             submitAddStoriesToStateSuccess: 'Hurray! See the latest stories.',
             yourNetworkisOffline: 'Ouch! Seems like you are offline.',
+            yourNetworkisWeak:
+                'Hmmm! Seems like you are facing network issues.',
             yourNetworkisOnline: 'Hurray! Your network is back online!',
             submitAddStoriesToStateFailure:
                 'Oops! We could not update all stories at this time. Please try again later',

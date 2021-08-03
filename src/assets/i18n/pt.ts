@@ -424,6 +424,8 @@ export default {
         messages: {
             yourNetworkisOffline: 'Ouch! Parece que você está offline.',
             yourNetworkisOnline: 'Hurray! Sua rede está online novamente!',
+            yourNetworkisWeak:
+                'Hmmm! Parece que você está a ter problemas com a rede.',
             submitAddStoriesToStateSuccess:
                 'Hurray! Veja as stories mais recentes.',
             submitAddStoriesToStateFailure:
