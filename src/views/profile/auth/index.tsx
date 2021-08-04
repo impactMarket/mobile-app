@@ -8,8 +8,9 @@ import {
 } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
-import ModalGenericError from 'components/core/ModalGenericError';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import * as Localization from 'expo-localization';
@@ -37,6 +38,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
+import { Modal } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
@@ -65,12 +67,15 @@ function Auth() {
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
-    const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
+
     const [, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
+    const modalizeHelpCenterRef = useRef<Modalize>(null);
 
     useFocusEffect(() => {
         renderAuthModalize();
@@ -100,7 +105,6 @@ function Auth() {
         const pushNotificationToken = await registerForPushNotifications();
 
         let userAddress = '';
-        let dappkitResponse: any;
 
         // celloWallet interaction
         try {
@@ -110,17 +114,41 @@ function Auth() {
                 callback,
             });
 
-            dappkitResponse = await waitForAccountAuth(requestId);
-
-            userAddress = kit.web3.utils.toChecksumAddress(
-                dappkitResponse.address
-            );
+            await Promise.race([
+                waitForAccountAuth(requestId)
+                    .then((dappkitResponse) => {
+                        userAddress = kit.web3.utils.toChecksumAddress(
+                            dappkitResponse.address
+                        );
+                        setPhoneNumber(dappkitResponse.phoneNumber);
+                        setTimedOut(false);
+                        setConnecting(false);
+                    })
+                    .catch((e) => {
+                        Sentry.Native.captureException(e);
+                        analytics(
+                            'error on valora web3 communication in login',
+                            {
+                                device: Device.brand,
+                                success: 'false',
+                            }
+                        );
+                    }),
+                (async () => {
+                    await new Promise((res) => setTimeout(res, 5000));
+                    analytics('Valora communication timeout on login', {
+                        device: Device.brand,
+                        success: 'false',
+                    });
+                    setTimedOut(true);
+                    setConnecting(false);
+                })(),
+            ]);
         } catch (e) {
             Sentry.Native.captureException(e);
             analytics('login', { device: Device.brand, success: 'false' });
 
-            // modalizeWelcomeRef.current.close();
-            setToggleInformativeModal(true);
+            setTimedOut(true);
             setConnecting(false);
             return;
         }
@@ -134,9 +162,7 @@ function Auth() {
         if (!supportedLanguages.includes(language)) {
             language = 'en';
         }
-        const currency = getCurrencyFromPhoneNumber(
-            dappkitResponse.phoneNumber
-        );
+        const currency = getCurrencyFromPhoneNumber(phoneNumber);
         /** Although all the SAGA structure is created, we would need to subscribe to the store just to 'wait' 
          * for the user to be authenticated. Using promise in this case, lead us to a more direct and independent approach.
          * Note. I am leaving the structure in place but disabled just in case we change authentication methhods in the future.
@@ -155,7 +181,7 @@ function Auth() {
             userAddress,
             language,
             currency,
-            dappkitResponse.phoneNumber,
+            phoneNumber,
             pushNotificationToken
         )
             .then(async (user) => {
@@ -165,7 +191,7 @@ function Auth() {
                         success: 'false',
                     });
                     setConnecting(false);
-                    setToggleInformativeModal(true);
+                    setTimedOut(true);
                     throw new Error('user is undefined');
                 }
                 setRefreshing(true);
@@ -173,7 +199,7 @@ function Auth() {
                 await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
                 await AsyncStorage.setItem(
                     STORAGE_USER_PHONE_NUMBER,
-                    dappkitResponse.phoneNumber
+                    phoneNumber
                 );
                 await CacheStore.cacheUser({
                     ...user.user,
@@ -184,7 +210,7 @@ function Auth() {
 
                 await welcomeUser(
                     userAddress,
-                    dappkitResponse.phoneNumber,
+                    phoneNumber,
                     user,
                     exchangeRates,
                     newKitFromWeb3(new Web3(config.jsonRpc)),
@@ -210,7 +236,7 @@ function Auth() {
                 });
                 console.log({ error });
 
-                setToggleInformativeModal(true);
+                setTimedOut(true);
                 setConnecting(false);
                 setRefreshing(false);
             });
@@ -284,18 +310,118 @@ function Auth() {
     };
 
     const handleCloseErrorModal = () => {
-        setToggleInformativeModal(false);
+        setTimedOut(false);
         navigation.navigate(Screens.Communities);
     };
 
-    return toggleInformativeModal ? (
-        <ModalGenericError
-            title={i18n.t('failure')}
-            description={i18n.t('errorConnectToValora')}
-            btnString={i18n.t('close')}
-            closeFn={handleCloseErrorModal}
-            btnFn={handleCloseErrorModal}
-        />
+    const renderTimeout = () => {
+        return (
+            <>
+                <Modal visible={timedOut} dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalValoraTimeoutTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => handleCloseErrorModal()}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                }}
+                            >
+                                {i18n.t('modalValoraTimeoutDescription')}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                            }}
+                        >
+                            <Button
+                                modeType="gray"
+                                style={{ flex: 1, marginRight: 5 }}
+                                onPress={() => handleCloseErrorModal()}
+                            >
+                                {i18n.t('close')}
+                            </Button>
+                            <Button
+                                modeType="default"
+                                style={{ flex: 1, marginLeft: 5 }}
+                                onPress={() => {
+                                    modalizeHelpCenterRef.current?.open();
+                                    setTimedOut(false);
+                                }}
+                            >
+                                {i18n.t('faq')}
+                            </Button>
+                        </View>
+                    </Card>
+                </Modal>
+                <Modalize
+                    ref={modalizeHelpCenterRef}
+                    HeaderComponent={renderHeader(
+                        null,
+                        modalizeHelpCenterRef,
+                        () => modalizeWelcomeRef.current?.open(),
+                        true
+                    )}
+                    adjustToContentHeight
+                >
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{
+                            uri:
+                                'https://docs.impactmarket.com/general/others#action-is-taking-too-long',
+                        }}
+                        style={{
+                            height: Dimensions.get('screen').height * 0.85,
+                        }}
+                    />
+                </Modalize>
+            </>
+        );
+    };
+
+    return timedOut ? (
+        <Portal>{renderTimeout()}</Portal>
     ) : (
         <Portal>
             <Modalize

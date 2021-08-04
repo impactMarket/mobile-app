@@ -124,6 +124,9 @@ export default {
     communityUpdated: 'Os dados da comunidade foram atualizados!',
     submissionFailed: 'Falha no envio',
     modalErrorTitle: 'Ooops!',
+    modalValoraTimeoutTitle: 'Valora Timeout',
+    modalValoraTimeoutDescription:
+        'Sua conexão com Valora foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
     modalLeaveTitle: 'Sair do formulário',
     stay: 'Ficar',
     leave: 'Sair',
@@ -167,6 +170,7 @@ export default {
     amountSymbol: 'Montante em {{symbol}}',
     donateSymbol: 'Contribuir ({{symbol}})',
     close: 'Fechar',
+    faq: 'FAQ',
     youCanClaimXin: 'Poderá pegar {{amount}} em',
     claimX: 'Pegar ', // {{amount}}
     loading: 'A carregar...',
