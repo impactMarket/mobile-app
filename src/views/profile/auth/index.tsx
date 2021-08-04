@@ -54,14 +54,20 @@ import Web3 from 'web3';
 import config from '../../../../config';
 function Auth() {
     const navigation = useNavigation();
-
     const dispatch = useDispatch();
+
     const kit = useSelector((state: IRootState) => state.app.kit);
+    // const user = useSelector((state: IRootState) => state.auth.user);
+    // const refreshing = useSelector(
+    //     (state: IRootState) => state.auth.refreshing
+    // );
+
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
     const [connecting, setConnecting] = useState(false);
-    const [toggleInformativeModal, setToggleInformativeModal] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+    const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
     const [, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
@@ -70,21 +76,20 @@ function Auth() {
         renderAuthModalize();
     });
 
-    const renderInformativeModal = (
-        title: string,
-        description: string,
-        btnString: string,
-        closeFn: React.SetStateAction<any>,
-        btnFn: React.SetStateAction<any>
-    ) => (
-        <ModalGenericError
-            title={title}
-            description={description}
-            btnString={btnString}
-            closeFn={closeFn}
-            btnFn={btnFn}
-        />
-    );
+    const getUser = async (
+        userAddress: string,
+        language: string,
+        currency: string,
+        phoneNumber: string,
+        pushNotificationToken: string
+    ) =>
+        await Api.user.auth(
+            userAddress,
+            language,
+            currency,
+            phoneNumber,
+            pushNotificationToken
+        );
 
     const login = async () => {
         const requestId = 'login';
@@ -96,6 +101,8 @@ function Auth() {
 
         let userAddress = '';
         let dappkitResponse: any;
+
+        // celloWallet interaction
         try {
             requestAccountAddress({
                 requestId,
@@ -104,6 +111,7 @@ function Auth() {
             });
 
             dappkitResponse = await waitForAccountAuth(requestId);
+
             userAddress = kit.web3.utils.toChecksumAddress(
                 dappkitResponse.address
             );
@@ -111,14 +119,8 @@ function Auth() {
             Sentry.Native.captureException(e);
             analytics('login', { device: Device.brand, success: 'false' });
 
-            toggleInformativeModal &&
-                renderInformativeModal(
-                    i18n.t('failure'),
-                    i18n.t('errorConnectToValora'),
-                    i18n.t('close'),
-                    setToggleInformativeModal(false),
-                    setToggleInformativeModal(false)
-                );
+            // modalizeWelcomeRef.current.close();
+            setToggleInformativeModal(true);
             setConnecting(false);
             return;
         }
@@ -135,83 +137,83 @@ function Auth() {
         const currency = getCurrencyFromPhoneNumber(
             dappkitResponse.phoneNumber
         );
-
-        const user = await Api.user.auth(
+        /** Although all the SAGA structure is created, we would need to subscribe to the store just to 'wait' 
+         * for the user to be authenticated. Using promise in this case, lead us to a more direct and independent approach.
+         * Note. I am leaving the structure in place but disabled just in case we change authentication methhods in the future.
+         * 
+        dispatch(
+            addUserAuthToStateRequest(
+                userAddress,
+                language,
+                currency,
+                dappkitResponse.phoneNumber,
+                pushNotificationToken
+            )
+        );
+        **/
+        getUser(
             userAddress,
             language,
             currency,
             dappkitResponse.phoneNumber,
             pushNotificationToken
-        );
-
-        if (user === undefined) {
-            // TODO: needs to be improved
-            // Sentry.Native.captureMessage(
-            //     JSON.stringify({ action: 'login', details: 'undefined user' }),
-            //     Sentry.Native.Severity.Critical
-            // );
-            analytics('login', { device: Device.brand, success: 'false' });
-
-            toggleInformativeModal &&
-                renderInformativeModal(
-                    i18n.t('failure'),
-                    i18n.t('authErroHappenedTryAgain'),
-                    i18n.t('close'),
-                    setToggleInformativeModal(false),
-                    setToggleInformativeModal(false)
+        )
+            .then(async (user) => {
+                if (user === undefined) {
+                    analytics('login', {
+                        device: Device.brand,
+                        success: 'false',
+                    });
+                    setConnecting(false);
+                    setToggleInformativeModal(true);
+                    throw new Error('user is undefined');
+                }
+                setRefreshing(true);
+                await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, user.token);
+                await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
+                await AsyncStorage.setItem(
+                    STORAGE_USER_PHONE_NUMBER,
+                    dappkitResponse.phoneNumber
                 );
-            setConnecting(false);
-            return;
-        }
-        try {
-            await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, user.token);
-            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
-            await AsyncStorage.setItem(
-                STORAGE_USER_PHONE_NUMBER,
-                dappkitResponse.phoneNumber
-            );
-            await CacheStore.cacheUser({
-                ...user.user,
-                avatar: user.user.avatar ? (user.user.avatar as any).url : null, // TODO: avoid this
+                await CacheStore.cacheUser({
+                    ...user.user,
+                    avatar: user.user.avatar
+                        ? (user.user.avatar as any).url
+                        : null, // TODO: avoid this
+                });
+
+                await welcomeUser(
+                    userAddress,
+                    dappkitResponse.phoneNumber,
+                    user,
+                    exchangeRates,
+                    newKitFromWeb3(new Web3(config.jsonRpc)),
+                    dispatch,
+                    user.user
+                );
+                if (pushNotificationToken) {
+                    dispatch(setPushNotificationsToken(pushNotificationToken));
+                    setPushNotificationListeners(
+                        startNotificationsListeners(kit, dispatch)
+                    );
+                }
+                analytics('login', {
+                    device: Device.brand,
+                    success: 'true',
+                });
+                setRefreshing(false);
+            })
+            .catch((error) => {
+                analytics('login', {
+                    device: Device.brand,
+                    success: 'false',
+                });
+                console.log({ error });
+
+                setToggleInformativeModal(true);
+                setConnecting(false);
+                setRefreshing(false);
             });
-
-            await welcomeUser(
-                userAddress,
-                dappkitResponse.phoneNumber,
-                user,
-                exchangeRates,
-                newKitFromWeb3(new Web3(config.jsonRpc)),
-                dispatch,
-                user.user
-            );
-            if (pushNotificationToken) {
-                dispatch(setPushNotificationsToken(pushNotificationToken));
-                setPushNotificationListeners(
-                    startNotificationsListeners(kit, dispatch)
-                );
-            }
-            analytics('login', { device: Device.brand, success: 'true' });
-        } catch (error) {
-            analytics('login', { device: Device.brand, success: 'false' });
-            // TODO: improve this
-            // Sentry.Native.captureMessage(
-            //     JSON.stringify({
-            //         action: 'login',
-            //         details: `config user - ${error.message}`,
-            //     }),
-            //     Sentry.Native.Severity.Critical
-            // );
-
-            toggleInformativeModal &&
-                renderInformativeModal(
-                    i18n.t('failure'),
-                    i18n.t('anErroHappenedTryAgain'),
-                    i18n.t('close'),
-                    setToggleInformativeModal(false),
-                    setToggleInformativeModal(false)
-                );
-            setConnecting(false);
-        }
     };
 
     const buttonStoreLink = () => {
@@ -281,7 +283,20 @@ function Auth() {
         }
     };
 
-    return (
+    const handleCloseErrorModal = () => {
+        setToggleInformativeModal(false);
+        navigation.navigate(Screens.Communities);
+    };
+
+    return toggleInformativeModal ? (
+        <ModalGenericError
+            title={i18n.t('failure')}
+            description={i18n.t('errorConnectToValora')}
+            btnString={i18n.t('close')}
+            closeFn={handleCloseErrorModal}
+            btnFn={handleCloseErrorModal}
+        />
+    ) : (
         <Portal>
             <Modalize
                 ref={modalizeWelcomeRef}
@@ -326,8 +341,8 @@ function Auth() {
                         <Button
                             modeType="green"
                             bold
-                            onPress={() => login()}
-                            loading={connecting}
+                            onPress={login}
+                            loading={connecting || refreshing}
                             style={{ width: '100%', marginTop: 16 }}
                             labelStyle={styles.buttomConnectValoraText}
                         >

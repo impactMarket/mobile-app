@@ -26,9 +26,16 @@ import {
     appAction,
     modalDonateAction,
     storiesAction,
+    SET_USER_AUTH_REQUEST,
+    SET_USER_AUTH_SUCCESS,
+    SET_USER_AUTH_FAILURE,
 } from 'helpers/constants';
 
-import { ICommunitiesListStories, ICommunityStory } from './endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunityStory,
+    IUserAuth,
+} from './endpoints';
 import { CommunityAttributes, UserAttributes } from './models';
 import { IUserWallet } from './state';
 
@@ -107,9 +114,29 @@ interface SetTokenPushNotificationsAction {
     type: typeof SET_PUSH_NOTIFICATION_TOKEN;
     payload: string;
 }
-
 interface SetAuthTokenAction {
     type: typeof SET_AUTH_TOKEN;
+    payload: string;
+}
+
+interface InitUserAuthActionRequest {
+    type: typeof SET_USER_AUTH_REQUEST;
+    payload: {
+        userAddress: string;
+        language: string;
+        currency: string;
+        phoneNumber: string;
+        pushNotificationToken: string;
+    };
+}
+
+interface InitUserAuthActionSuccess {
+    type: typeof SET_USER_AUTH_SUCCESS;
+    payload: IUserAuth;
+}
+
+interface InitUserAuthActionFailure {
+    type: typeof SET_USER_AUTH_FAILURE;
     payload: string;
 }
 interface UserLanguageAction {
@@ -224,7 +251,10 @@ export type UserActionTypes =
 
 export type AuthActionTypes =
     | SetTokenPushNotificationsAction
-    | SetAuthTokenAction;
+    | SetAuthTokenAction
+    | InitUserAuthActionRequest
+    | InitUserAuthActionSuccess
+    | InitUserAuthActionFailure;
 
 export type AppActionTypes =
     | CeloKitAction
