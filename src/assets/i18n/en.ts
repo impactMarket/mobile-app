@@ -254,7 +254,7 @@ export default {
     youAreNotConnected:
         'You are not connected to your Valora. Connect to send directly.',
     errorConnectToValora:
-        'An error happened while connecting to Valora. Please, try again.',
+        'An error happened while connecting to Valora. Please, check your internet connection and try again.',
     addingYourOwnAddress:
         'You are trying to add your own address. Are you sure?',
     alreadyInCommunity:

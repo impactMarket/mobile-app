@@ -250,7 +250,7 @@ export default {
     youAreNotConnected:
         'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
     errorConnectToValora:
-        'Ocorreu um erro enquanto se conectava á Valora. Por favor, tente novamente.',
+        'Ocorreu um erro enquanto se conectava á Valora. Por favor, verifique o estado de sua conexão com a internet e tente novamente.',
     addingYourOwnAddress:
         'Você está a tentar adicionar o seu endereço. Tem certeza?',
     alreadyInCommunity:
