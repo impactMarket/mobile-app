@@ -23,6 +23,13 @@ export function* startWatchingNetworkConnectivity(): any {
                 showMessage({
                     message: i18n.t('sagas.messages.yourNetworkisWeak'),
                     type: 'warning',
+                    backgroundColor: '#FE9A22',
+                    style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                    textStyle: { textAlign: 'center' },
                 });
             } else if (
                 // in order to check the "strength" of wifi network we check if the connection is a 4g generation.
@@ -32,6 +39,13 @@ export function* startWatchingNetworkConnectivity(): any {
                 showMessage({
                     message: i18n.t('sagas.messages.yourNetworkisWeak'),
                     type: 'warning',
+                    backgroundColor: '#FE9A22',
+                    style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                    textStyle: { textAlign: 'center' },
                 });
             }
 
@@ -40,12 +54,25 @@ export function* startWatchingNetworkConnectivity(): any {
                 showMessage({
                     message: i18n.t('sagas.messages.yourNetworkisOnline'),
                     type: 'success',
+                    backgroundColor: '#2DCE89',
+                    style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                    textStyle: { textAlign: 'center' },
                 });
             } else {
                 yield put({ type: OFFLINE });
                 showMessage({
                     message: i18n.t('sagas.messages.yourNetworkisOffline'),
                     type: 'danger',
+                    style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                    textStyle: { textAlign: 'center' },
                     autoHide: !netStatus.isConnected,
                 });
             }

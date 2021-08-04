@@ -461,16 +461,12 @@ class App extends React.Component<any, IAppState> {
                         translucent
                     />
                     <FlashMessage
-                        position={
-                            Platform.OS === 'ios'
-                                ? 'top'
-                                : {
-                                      top: StatusBar.currentHeight,
-                                      left: 0,
-                                      right: 0,
-                                  }
-                        }
-                        floating={Platform.OS !== 'ios'}
+                        position={{
+                            top: StatusBar.currentHeight,
+                            left: 0,
+                            right: 0,
+                        }}
+                        floating
                     />
                     {config.testnet && testnetWarningView}
                     <NavigationContainer
