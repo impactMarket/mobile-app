@@ -40,6 +40,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Modal } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
+import { s } from 'react-native-size-matters';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
@@ -318,63 +319,21 @@ function Auth() {
         return (
             <>
                 <Modal visible={timedOut} dismissable={false}>
-                    <Card
-                        style={{
-                            marginHorizontal: 22,
-                            borderRadius: 12,
-                            paddingHorizontal: 22,
-                            paddingVertical: 16,
-                        }}
-                    >
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                width: '100%',
-                                marginBottom: 13.5,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontFamily: 'Manrope-Bold',
-                                    fontSize: 18,
-                                    lineHeight: 20,
-                                    textAlign: 'left',
-                                }}
-                            >
+                    <Card style={styles.timedOutCard}>
+                        <View style={styles.timedOutCardContent}>
+                            <Text style={styles.timedOutCardText}>
                                 {i18n.t('modalValoraTimeoutTitle')}
                             </Text>
                             <CloseStorySvg
                                 onPress={() => handleCloseErrorModal()}
                             />
                         </View>
-                        <View
-                            style={{
-                                width: '100%',
-                                flexDirection: 'row',
-                                marginBottom: 16,
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontFamily: 'Inter-Regular',
-                                    fontSize: 14,
-                                    lineHeight: 24,
-                                    color: ipctColors.almostBlack,
-                                }}
-                            >
+                        <View style={styles.timedOutCardDescriptionContainer}>
+                            <Text style={styles.timedOutCardDescription}>
                                 {i18n.t('modalValoraTimeoutDescription')}
                             </Text>
                         </View>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                width: '100%',
-                            }}
-                        >
+                        <View style={styles.timedOutCardButtons}>
                             <Button
                                 modeType="gray"
                                 style={{ flex: 1, marginRight: 5 }}
@@ -509,6 +468,42 @@ Auth.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
 export default Auth;
 
 const styles = StyleSheet.create({
+    timedOutCard: {
+        marginHorizontal: 22,
+        borderRadius: 12,
+        paddingHorizontal: 22,
+        paddingVertical: 16,
+    },
+    timedOutCardContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 13.5,
+    },
+    timedOutCardText: {
+        fontFamily: 'Manrope-Bold',
+        fontSize: 18,
+        lineHeight: 20,
+        textAlign: 'left',
+    },
+    timedOutCardButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    timedOutCardDescription: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 24,
+        color: ipctColors.almostBlack,
+    },
+    timedOutCardDescriptionContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        marginBottom: 16,
+    },
     mainView: {
         flexDirection: 'column',
         justifyContent: 'space-around',
