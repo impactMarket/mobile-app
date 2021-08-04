@@ -39,7 +39,14 @@ import rootSagas from 'helpers/redux/sagas';
 import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
 import React from 'react';
-import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
+import {
+    Image,
+    View,
+    LogBox,
+    StatusBar,
+    Dimensions,
+    Platform,
+} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import {
     DefaultTheme,
@@ -453,7 +460,18 @@ class App extends React.Component<any, IAppState> {
                         backgroundColor="rgba(0, 0, 0, 0.2)"
                         translucent
                     />
-                    <FlashMessage position="top" />
+                    <FlashMessage
+                        position={
+                            Platform.OS === 'ios'
+                                ? 'top'
+                                : {
+                                      top: StatusBar.currentHeight,
+                                      left: 0,
+                                      right: 0,
+                                  }
+                        }
+                        floating={Platform.OS !== 'ios'}
+                    />
                     {config.testnet && testnetWarningView}
                     <NavigationContainer
                         theme={navigationTheme}
