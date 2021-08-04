@@ -122,21 +122,13 @@ function Auth() {
                             dappkitResponse.address
                         );
                         setPhoneNumber(dappkitResponse.phoneNumber);
-                        setTimedOut(false);
                         setConnecting(false);
                     })
                     .catch((e) => {
-                        Sentry.Native.captureException(e);
-                        analytics(
-                            'error on valora web3 communication in login',
-                            {
-                                device: Device.brand,
-                                success: 'false',
-                            }
-                        );
+                        throw new Error(e);
                     }),
                 (async () => {
-                    await new Promise((res) => setTimeout(res, 5000));
+                    await new Promise((res) => setTimeout(res, 10000));
                     analytics('Valora communication timeout on login', {
                         device: Device.brand,
                         success: 'false',
