@@ -40,7 +40,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Modal } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
-import { s } from 'react-native-size-matters';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';

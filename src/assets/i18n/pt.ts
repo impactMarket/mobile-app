@@ -124,9 +124,9 @@ export default {
     communityUpdated: 'Os dados da comunidade foram atualizados!',
     submissionFailed: 'Falha no envio',
     modalErrorTitle: 'Ooops!',
-    modalValoraTimeoutTitle: 'Valora Timeout',
+    modalValoraTimeoutTitle: 'Request timeout',
     modalValoraTimeoutDescription:
-        'Sua conexão com Valora foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
+        'Sua solicitação de conexão foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
     modalLeaveTitle: 'Sair do formulário',
     stay: 'Ficar',
     leave: 'Sair',
