@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
-import Clipboard from 'expo-clipboard';
+// import Clipboard from 'expo-clipboard';
 import { modalDonateAction } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
@@ -11,7 +11,14 @@ import {
 import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Alert, TextInput } from 'react-native';
+import {
+    Text,
+    View,
+    StyleSheet,
+    Alert,
+    TextInput,
+    Clipboard,
+} from 'react-native';
 import { Paragraph, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -48,7 +55,8 @@ class DonateModal extends Component<
 
     handleCopyAddressToClipboard = () => {
         if (this.props.community) {
-            Clipboard.setString(this.props.community.contractAddress!);
+            const { contractAddress } = this.props.community;
+            Clipboard.setString(contractAddress!);
             this.setState({ showCopiedToClipboard: true });
             this.props.dismissModal();
         }
