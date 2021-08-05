@@ -131,9 +131,9 @@ export default {
     modalErrorTitle: 'Ooops!',
     stay: 'Stay',
     leave: 'Leave',
-    modalValoraTimeoutTitle: 'Valora Timeout',
+    modalValoraTimeoutTitle: 'Request timeout',
     modalValoraTimeoutDescription:
-        'Your connection to Valora was lost. Please try again or visit our FAQ.',
+        'Your request was lost. Please try again or visit our FAQ.',
     modalLeaveTitle: 'Leave form',
     modalLeaveDescription:
         'All content entered will be lost. Are you sure you want to leave this form?',
