@@ -124,14 +124,11 @@ function Auth() {
                         setConnecting(false);
                     })
                     .catch((e) => {
+                        Sentry.Native.captureException(e);
                         throw new Error(e);
                     }),
                 (async () => {
                     await new Promise((res) => setTimeout(res, 10000));
-                    analytics('Valora communication timeout on login', {
-                        device: Device.brand,
-                        success: 'false',
-                    });
                     setTimedOut(true);
                     setConnecting(false);
                 })(),
