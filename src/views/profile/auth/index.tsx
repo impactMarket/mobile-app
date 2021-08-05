@@ -38,8 +38,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
-import { Modal } from 'react-native-paper';
-import { Portal } from 'react-native-portalize';
+import { Portal, Modal } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
@@ -115,28 +114,23 @@ function Auth() {
             });
 
             await Promise.race([
-                waitForAccountAuth(requestId)
-                    .then((dappkitResponse) => {
-                        userAddress = kit.web3.utils.toChecksumAddress(
-                            dappkitResponse.address
-                        );
-                        setPhoneNumber(dappkitResponse.phoneNumber);
-                        setConnecting(false);
-                    })
-                    .catch((e) => {
-                        Sentry.Native.captureException(e);
-                        throw new Error(e);
-                    }),
+                waitForAccountAuth(requestId).then((dappkitResponse) => {
+                    userAddress = kit.web3.utils.toChecksumAddress(
+                        dappkitResponse.address
+                    );
+                    setPhoneNumber(dappkitResponse.phoneNumber);
+                }),
                 (async () => {
-                    await new Promise((res) => setTimeout(res, 10000));
-                    setTimedOut(true);
-                    setConnecting(false);
+                    await new Promise((res) => setTimeout(res, 10000)).then(
+                        () => {
+                            setTimedOut(true);
+                        }
+                    );
                 })(),
             ]);
         } catch (e) {
             Sentry.Native.captureException(e);
             setTimedOut(true);
-            setConnecting(false);
             return;
         }
 
@@ -177,8 +171,12 @@ function Auth() {
                         device: Device.brand,
                         success: 'false',
                     });
-                    setConnecting(false);
-                    setTimedOut(true);
+                    await new Promise((res) => setTimeout(res, 5000)).then(
+                        () => {
+                            modalizeWelcomeRef.current.close();
+                            setTimedOut(true);
+                        }
+                    );
                     throw new Error('user is undefined');
                 }
                 setRefreshing(true);
@@ -297,74 +295,29 @@ function Auth() {
         navigation.navigate(Screens.Communities);
     };
 
-    const renderTimeout = () => {
-        return (
-            <>
-                <Modal visible={timedOut} dismissable={false}>
-                    <Card style={styles.timedOutCard}>
-                        <View style={styles.timedOutCardContent}>
-                            <Text style={styles.timedOutCardText}>
-                                {i18n.t('modalValoraTimeoutTitle')}
-                            </Text>
-                            <CloseStorySvg
-                                onPress={() => handleCloseErrorModal()}
-                            />
-                        </View>
-                        <View style={styles.timedOutCardDescriptionContainer}>
-                            <Text style={styles.timedOutCardDescription}>
-                                {i18n.t('modalValoraTimeoutDescription')}
-                            </Text>
-                        </View>
-                        <View style={styles.timedOutCardButtons}>
-                            <Button
-                                modeType="gray"
-                                style={{ flex: 1, marginRight: 5 }}
-                                onPress={() => handleCloseErrorModal()}
-                            >
-                                {i18n.t('close')}
-                            </Button>
-                            <Button
-                                modeType="default"
-                                style={{ flex: 1, marginLeft: 5 }}
-                                onPress={() => {
-                                    modalizeHelpCenterRef.current?.open();
-                                    setTimedOut(false);
-                                }}
-                            >
-                                {i18n.t('faq')}
-                            </Button>
-                        </View>
-                    </Card>
-                </Modal>
-                <Modalize
-                    ref={modalizeHelpCenterRef}
-                    HeaderComponent={renderHeader(
-                        null,
-                        modalizeHelpCenterRef,
-                        () => modalizeWelcomeRef.current?.open(),
-                        true
-                    )}
-                    adjustToContentHeight
-                >
-                    <WebView
-                        originWhitelist={['*']}
-                        source={{
-                            uri:
-                                'https://docs.impactmarket.com/general/others#action-is-taking-too-long',
-                        }}
-                        style={{
-                            height: Dimensions.get('screen').height * 0.85,
-                        }}
-                    />
-                </Modalize>
-            </>
-        );
-    };
-
-    return timedOut ? (
-        <Portal>{renderTimeout()}</Portal>
-    ) : (
+    return (
         <Portal>
+            <Modalize
+                ref={modalizeHelpCenterRef}
+                HeaderComponent={renderHeader(
+                    null,
+                    modalizeHelpCenterRef,
+                    () => modalizeWelcomeRef.current?.open(),
+                    true
+                )}
+                adjustToContentHeight
+            >
+                <WebView
+                    originWhitelist={['*']}
+                    source={{
+                        uri:
+                            'https://docs.impactmarket.com/general/others#app-is-out-of-date',
+                    }}
+                    style={{
+                        height: Dimensions.get('screen').height * 0.85,
+                    }}
+                />
+            </Modalize>
             <Modalize
                 ref={modalizeWelcomeRef}
                 HeaderComponent={renderHeader(
@@ -418,7 +371,6 @@ function Auth() {
                     </View>
                 </ScrollView>
             </Modalize>
-
             <Modalize
                 ref={modalizeWebViewRef}
                 HeaderComponent={renderHeader(
@@ -437,6 +389,42 @@ function Auth() {
                     }}
                 />
             </Modalize>
+            <Modal visible={timedOut} dismissable={false}>
+                <Card style={styles.timedOutCard}>
+                    <View style={styles.timedOutCardContent}>
+                        <Text style={styles.timedOutCardText}>
+                            {i18n.t('modalValoraTimeoutTitle')}
+                        </Text>
+                        <CloseStorySvg
+                            onPress={() => handleCloseErrorModal()}
+                        />
+                    </View>
+                    <View style={styles.timedOutCardDescriptionContainer}>
+                        <Text style={styles.timedOutCardDescription}>
+                            {i18n.t('modalValoraTimeoutDescription')}
+                        </Text>
+                    </View>
+                    <View style={styles.timedOutCardButtons}>
+                        <Button
+                            modeType="gray"
+                            style={{ flex: 1, marginRight: 5 }}
+                            onPress={() => handleCloseErrorModal()}
+                        >
+                            {i18n.t('close')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ flex: 1, marginLeft: 5 }}
+                            onPress={() => {
+                                modalizeHelpCenterRef.current?.open();
+                                setTimedOut(false);
+                            }}
+                        >
+                            {i18n.t('faq')}
+                        </Button>
+                    </View>
+                </Card>
+            </Modal>
         </Portal>
     );
 }

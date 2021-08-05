@@ -91,7 +91,6 @@ function ProfileScreen() {
     const [searchCurrencyResult, setSearchCurrencyResult] = useState<string[]>(
         []
     );
-    const [tooManyResultForQuery, setTooManyResultForQuery] = useState(false);
 
     const [name, setName] = useState('');
     const [userAvatarImage, setUserAvatarImage] = useState<string | null>('');
