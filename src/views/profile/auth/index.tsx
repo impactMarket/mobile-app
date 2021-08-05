@@ -135,8 +135,6 @@ function Auth() {
             ]);
         } catch (e) {
             Sentry.Native.captureException(e);
-            analytics('login', { device: Device.brand, success: 'false' });
-
             setTimedOut(true);
             setConnecting(false);
             return;
@@ -218,12 +216,8 @@ function Auth() {
                 });
                 setRefreshing(false);
             })
-            .catch((error) => {
-                analytics('login', {
-                    device: Device.brand,
-                    success: 'false',
-                });
-                console.log({ error });
+            .catch((e) => {
+                Sentry.Native.captureException(e);
 
                 setTimedOut(true);
                 setConnecting(false);
