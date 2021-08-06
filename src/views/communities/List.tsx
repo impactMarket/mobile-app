@@ -29,8 +29,8 @@ function ListItem(props: { community: CommunityAttributes }) {
     return (
         <View
             style={{
-                height: 92,
-                marginBottom: 26,
+                height: 82,
+                marginBottom: 16,
                 marginHorizontal: 22,
                 flex: 1,
                 flexDirection: 'row',
@@ -38,36 +38,36 @@ function ListItem(props: { community: CommunityAttributes }) {
             }}
         >
             <View
-                style={{
-                    borderRadius: 12,
-                    width: 82,
-                    backgroundColor: '#172B4D',
-                }}
+                style={
+                    {
+                        // borderRadius: 12,
+                        // width: 82,
+                        // height: 82,
+                        // backgroundColor: '#172B4D',
+                    }
+                }
             >
                 <Image
                     source={{ uri: props.community.cover!.url! }}
                     style={{
-                        flex: 1,
-                        borderTopLeftRadius: 12,
-                        borderTopRightRadius: 12,
+                        // flex: 1,
+                        width: 82,
+                        height: 82,
+                        borderRadius: 12,
                     }}
                 />
                 <View
                     style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center', // horizontal align
-                        alignItems: 'center', // vertical align
+                        position: 'absolute',
+                        marginLeft: 8,
+                        marginBottom: 8,
+                        bottom: 0,
+                        backgroundColor: 'white',
+                        borderRadius: 4,
+                        padding: 2,
                     }}
                 >
-                    <IconCommunity />
-                    <Text
-                        style={{
-                            color: 'white',
-                            marginLeft: 4,
-                        }}
-                    >
-                        {props.community.state!.beneficiaries}
-                    </Text>
+                    <Text>🇰🇪</Text>
                 </View>
             </View>
             <View
@@ -82,7 +82,7 @@ function ListItem(props: { community: CommunityAttributes }) {
                         lineHeight: 22,
                         fontSize: 16,
                         fontWeight: '800',
-                        fontFamily: 'Manrope-SemiBold',
+                        fontFamily: 'Manrope-ExtraBold',
                         color: '#1E3252',
                     }}
                 >
@@ -93,7 +93,7 @@ function ListItem(props: { community: CommunityAttributes }) {
                         style={{
                             // flex: 1,
                             flexDirection: 'row',
-                            marginBottom: 12,
+                            marginBottom: 7,
                             alignItems: 'center',
                             // backgroundColor: 'yellow',
                         }}
@@ -103,7 +103,7 @@ function ListItem(props: { community: CommunityAttributes }) {
                         <Text
                             style={{
                                 fontFamily: 'Inter-Bold',
-                                fontSize: 14,
+                                fontSize: 13,
                                 lineHeight: 20,
                                 color: '#73839D',
                             }}
@@ -113,7 +113,7 @@ function ListItem(props: { community: CommunityAttributes }) {
                         <Text
                             style={{
                                 fontFamily: 'Inter-Regular',
-                                fontSize: 14,
+                                fontSize: 13,
                                 lineHeight: 20,
                                 color: '#73839D',
                             }}
@@ -122,17 +122,17 @@ function ListItem(props: { community: CommunityAttributes }) {
                             $0.67/day
                         </Text>
                         <Dot />
-                        <LocationsSvg />
+                        <IconCommunity />
                         <Text
                             style={{
                                 marginLeft: 4,
                                 fontFamily: 'Inter-Regular',
-                                fontSize: 14,
+                                fontSize: 13,
                                 lineHeight: 20,
                                 color: '#73839D',
                             }}
                         >
-                            Democratic Republic of the Congo
+                            {props.community.state!.beneficiaries}
                         </Text>
                     </View>
                     <ProgressBar
