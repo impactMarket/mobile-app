@@ -8,7 +8,7 @@ import DeleteSvg from 'components/svg/DeleteSvg';
 import ReportInapropriateSvg from 'components/svg/ReportInapropriateSvg';
 import ShareSvg from 'components/svg/ShareSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
-// import Clipboard from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { Screens } from 'helpers/constants';
@@ -26,7 +26,6 @@ import {
     TextStyle,
     useWindowDimensions,
     StyleSheet,
-    Clipboard,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';

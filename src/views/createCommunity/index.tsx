@@ -12,7 +12,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
-// import Clipboard from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
@@ -55,7 +55,6 @@ import {
     KeyboardAvoidingView,
     Platform,
     Keyboard,
-    Clipboard,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
