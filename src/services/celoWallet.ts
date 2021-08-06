@@ -1,5 +1,5 @@
-import { ContractKit } from '@celo/contractkit';
 import { toTxResult } from '@celo/connect';
+import { ContractKit } from '@celo/contractkit';
 import {
     requestTxSig,
     FeeCurrency,

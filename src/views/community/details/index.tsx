@@ -6,7 +6,7 @@ import Card from 'components/core/Card';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import * as shape from 'd3-shape';
-// import Clipboard from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
@@ -14,13 +14,7 @@ import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
-import {
-    View,
-    StyleSheet,
-    RefreshControl,
-    StatusBar,
-    Clipboard,
-} from 'react-native';
+import { View, StyleSheet, RefreshControl, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     Paragraph,
