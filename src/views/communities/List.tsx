@@ -1,13 +1,30 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import countriesJSON from 'assets/countries.json';
+import i18n from 'assets/i18n';
 import IconCommunity from 'components/svg/IconCommunity';
-import LocationsSvg from 'components/svg/LocationSvg';
 import SuspiciousActivityMiddleSvg from 'components/svg/SuspiciousActivityMiddleSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as Location from 'expo-location';
+import { Screens } from 'helpers/constants';
+import { amountToCurrency } from 'helpers/currency';
+import { chooseMediaThumbnail } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
+import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, Text, FlatList, Image, Pressable } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 import Api from 'services/api';
+
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 
 function Dot() {
     return (
@@ -25,32 +42,47 @@ function Dot() {
     );
 }
 
-function ListItem(props: { community: CommunityAttributes }) {
+function ListItem(props: {
+    community: CommunityAttributes;
+    exchangeRates: {
+        [key: string]: number;
+    };
+    navigation: NavigationProp<any, any, any, any, any>;
+}) {
+    const { community, exchangeRates } = props;
+    const claimAmount = amountToCurrency(
+        community.contract.claimAmount,
+        community.currency,
+        exchangeRates
+    );
+    const claimFrequency =
+        community.contract.baseInterval === 86400
+            ? i18n.t('day')
+            : i18n.t('week');
     return (
-        <View
+        <Pressable
             style={{
                 height: 82,
                 marginBottom: 16,
                 marginHorizontal: 22,
                 flex: 1,
                 flexDirection: 'row',
-                // backgroundColor: 'red',
             }}
+            onPress={() =>
+                props.navigation.navigate(Screens.CommunityDetails, {
+                    communityId: community.id,
+                })
+            }
         >
-            <View
-                style={
-                    {
-                        // borderRadius: 12,
-                        // width: 82,
-                        // height: 82,
-                        // backgroundColor: '#172B4D',
-                    }
-                }
-            >
+            <View>
                 <Image
-                    source={{ uri: props.community.cover!.url! }}
+                    source={{
+                        uri: chooseMediaThumbnail(props.community.cover!, {
+                            heigth: 88,
+                            width: 88,
+                        }),
+                    }}
                     style={{
-                        // flex: 1,
                         width: 82,
                         height: 82,
                         borderRadius: 12,
@@ -67,7 +99,7 @@ function ListItem(props: { community: CommunityAttributes }) {
                         padding: 2,
                     }}
                 >
-                    <Text>🇰🇪</Text>
+                    <Text>{countries[community.country].emoji}</Text>
                 </View>
             </View>
             <View
@@ -95,7 +127,6 @@ function ListItem(props: { community: CommunityAttributes }) {
                             flexDirection: 'row',
                             marginBottom: 7,
                             alignItems: 'center',
-                            // backgroundColor: 'yellow',
                         }}
                     >
                         <SuspiciousActivityMiddleSvg />
@@ -119,7 +150,7 @@ function ListItem(props: { community: CommunityAttributes }) {
                             }}
                         >
                             {' '}
-                            $0.67/day
+                            {claimAmount}/{claimFrequency}
                         </Text>
                         <Dot />
                         <IconCommunity />
@@ -146,12 +177,17 @@ function ListItem(props: { community: CommunityAttributes }) {
                     />
                 </View>
             </View>
-        </View>
+        </Pressable>
     );
 }
 
 function ListCommunitiesScreen() {
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
+
+    const navigation = useNavigation();
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
 
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
@@ -225,7 +261,11 @@ function ListCommunitiesScreen() {
         <FlatList
             data={communities}
             renderItem={({ item }: { item: CommunityAttributes }) => (
-                <ListItem community={item} />
+                <ListItem
+                    community={item}
+                    exchangeRates={exchangeRates}
+                    navigation={navigation}
+                />
             )}
             ref={flatListRef}
             keyExtractor={(item) => item.publicId}
