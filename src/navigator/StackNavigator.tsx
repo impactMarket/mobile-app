@@ -14,7 +14,7 @@ import AddManagerScreen from 'views/community/manager/views/AddManagerScreen';
 import AddedBeneficiaryScreen from 'views/community/manager/views/AddedBeneficiaryScreen';
 import AddedManagerScreen from 'views/community/manager/views/AddedManagerScreen';
 import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBeneficiaryScreen';
-import CreateCommunityScreen from 'views/createCommunity';
+import CreateCommunityScreen from 'views/newCommunity';
 import FAQScreen from 'views/faq';
 import StoriesScreen from 'views/stories';
 import Carousel from 'views/stories/Carousel';
@@ -42,7 +42,7 @@ const commonScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.CreateCommunity}
             component={CreateCommunityScreen}
-            // options={CreateCommunityScreen.navigationOptions}
+            options={CreateCommunityScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.WaitingTx}
