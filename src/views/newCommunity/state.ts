@@ -3,12 +3,14 @@ interface INITIAL_FORM_STATE {
     coverImage: string;
     description: string;
     city: string;
+    country: string;
 }
 export enum formAction {
     SET_NAME = 'form/setName',
     SET_COVER_IMAGE = 'form/setCoverImage',
     SET_DESCRIPTION = 'form/setDescription',
     SET_CITY = 'form/setCity',
+    SET_COUNTRY = 'form/setCountry',
 }
 
 interface communityNameAction {
@@ -31,17 +33,24 @@ interface communityCityAction {
     payload: string;
 }
 
+interface communityCountryAction {
+    type: formAction.SET_COUNTRY;
+    payload: string;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
     | communityDescriptionAction
-    | communityCityAction;
+    | communityCityAction
+    | communityCountryAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
     coverImage: '',
     description: '',
     city: '',
+    country: '',
 };
 
 export function reducer(
@@ -57,6 +66,8 @@ export function reducer(
             return { ...state, description: action.payload };
         case formAction.SET_CITY:
             return { ...state, city: action.payload };
+        case formAction.SET_COUNTRY:
+            return { ...state, country: action.payload };
         default:
             return state;
     }

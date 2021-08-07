@@ -1,13 +1,166 @@
+import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
+import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useRef, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
-import { Headline } from 'react-native-paper';
+import { Modalize } from 'react-native-modalize';
+import { Headline, Searchbar } from 'react-native-paper';
+import { Portal } from 'react-native-portalize';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ipctColors } from 'styles/index';
 
 import { formAction, formInitialState, reducer } from './state';
+
+function CommunityCountry() {
+    const countries: {
+        [key: string]: {
+            name: string;
+            native: string;
+            currency: string;
+            languages: string[];
+            emoji: string;
+        };
+    } = countriesJSON;
+
+    const [searchCountryQuery, setSearchCountryQuery] = useState('');
+    const [countriesList, setCountriesList] = useState(Object.keys(countries));
+    const [state, dispatch] = useReducer(reducer, formInitialState);
+
+    const modalizeCountryRef = useRef<Modalize>(null);
+
+    const handleSelectCountry = (item: string) => {
+        dispatch({
+            type: formAction.SET_COUNTRY,
+            payload: item,
+        });
+        modalizeCountryRef.current?.close();
+    };
+
+    const countryItem = ({ item }: { item: string }) => (
+        <Pressable onPress={() => handleSelectCountry(item)}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    paddingVertical: 16,
+                    paddingHorizontal: 22,
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 15,
+                        lineHeight: 24,
+                        fontFamily: 'Inter-Regular',
+                    }}
+                >{`${countries[item].emoji} ${countries[item].name}`}</Text>
+                {item === state.country && (
+                    <Icon
+                        name="check"
+                        color={ipctColors.greenishTeal}
+                        size={22}
+                    />
+                )}
+            </View>
+        </Pressable>
+    );
+
+    return (
+        <>
+            <View style={{ marginTop: 28 }}>
+                <Select
+                    label={i18n.t('country')}
+                    value={
+                        state.country.length > 0
+                            ? `${countries[state.country].emoji} ${
+                                  countries[state.country].name
+                              }`
+                            : 'Select Country'
+                    }
+                    onPress={() => modalizeCountryRef.current?.open()}
+                />
+                {/* {!isCountryValid && (
+            <HelperText
+                type="error"
+                padding="none"
+                visible
+                style={styles.errorText}
+            >
+                {i18n.t('countryRequired')}
+            </HelperText>
+        )} */}
+            </View>
+            <Portal>
+                <Modalize
+                    ref={modalizeCountryRef}
+                    HeaderComponent={
+                        <View>
+                            {renderHeader(
+                                i18n.t('country'),
+                                modalizeCountryRef,
+                                () => modalizeCountryRef.current?.close()
+                            )}
+                            <Searchbar
+                                placeholder={i18n.t('search')}
+                                style={{
+                                    borderColor: ipctColors.borderGray,
+                                    borderWidth: 1,
+                                    borderStyle: 'solid',
+                                    shadowRadius: 0,
+                                    elevation: 0,
+                                    borderRadius: 6,
+                                    marginHorizontal: 22,
+                                }}
+                                // autoFocus
+                                inputStyle={{
+                                    marginLeft: -14,
+                                }}
+                                onChangeText={(e) => {
+                                    if (e.length === 0) {
+                                        setCountriesList(
+                                            Object.keys(countries)
+                                        );
+                                        setSearchCountryQuery(e);
+                                    } else {
+                                        const foundCountries = [];
+                                        for (const [
+                                            key,
+                                            value,
+                                        ] of Object.entries(countries)) {
+                                            if (
+                                                value.name
+                                                    .toLowerCase()
+                                                    .indexOf(
+                                                        e.toLowerCase()
+                                                    ) !== -1
+                                            ) {
+                                                foundCountries.push(key);
+                                            }
+                                        }
+                                        setCountriesList(foundCountries);
+                                        setSearchCountryQuery(e);
+                                    }
+                                }}
+                                value={searchCountryQuery}
+                            />
+                        </View>
+                    }
+                    flatListProps={{
+                        data: countriesList,
+                        renderItem: countryItem,
+                        keyExtractor: (item) => item,
+                    }}
+                />
+            </Portal>
+        </>
+    );
+}
 
 function CommunityCity() {
     const [isCityValid, setIsCityValid] = useState(true);
@@ -304,6 +457,7 @@ export default function Metadata() {
             </Text>
             <CommunityDescription />
             <CommunityCity />
+            <CommunityCountry />
         </View>
     );
 }
