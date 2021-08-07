@@ -21,18 +21,18 @@ function CreateCommunityScreen() {
         <KeyboardAvoidingView
             style={{
                 flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
+                // flexDirection: 'column',
+                // justifyContent: 'center',
             }}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            enabled
+            // enabled
             keyboardVerticalOffset={140}
         >
             <ScrollView
                 style={{
                     paddingHorizontal: 20,
-                    marginBottom: 20,
-                    marginTop: 16,
+                    // marginBottom: 20,
+                    // marginTop: 16,
                 }}
             >
                 <Suspense fallback={<Text>Loading...</Text>}>
