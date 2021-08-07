@@ -3,11 +3,97 @@ import Input from 'components/core/Input';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
-import React, { Dispatch, useReducer, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import { Headline } from 'react-native-paper';
 
 import { formAction, formInitialState, reducer } from './state';
+
+function CommunityCity() {
+    const [isCityValid, setIsCityValid] = useState(true);
+    const [state, dispatch] = useReducer(reducer, formInitialState);
+
+    const handleChangeCity = (value) => {
+        dispatch({ type: formAction.SET_CITY, payload: value });
+    };
+
+    return (
+        <View style={{ marginTop: 28 }}>
+            <Input
+                style={{
+                    fontFamily: 'Gelion-Regular',
+                    backgroundColor: 'transparent',
+                    paddingHorizontal: 0,
+                }}
+                label={i18n.t('city')}
+                value={state.city}
+                maxLength={32}
+                onChangeText={handleChangeCity}
+                onEndEditing={() => setIsCityValid(state.city.length > 0)}
+            />
+            {/* {!isCityValid && (
+                <HelperText
+                    type="error"
+                    visible
+                    padding="none"
+                    style={styles.errorText}
+                >
+                    {i18n.t('cityRequired')}
+                </HelperText>
+            )} */}
+        </View>
+    );
+}
+
+function CommunityDescription() {
+    const [isDescriptionValid, setIsDescriptionValid] = useState(true);
+    const [state, dispatch] = useReducer(reducer, formInitialState);
+
+    const handleChangeDescription = (value) => {
+        dispatch({ type: formAction.SET_DESCRIPTION, payload: value });
+    };
+    return (
+        <View style={{ marginTop: 16, minHeight: 115 }}>
+            <Input
+                style={{
+                    minHeight: 115,
+                    fontFamily: 'Gelion-Regular',
+                    backgroundColor: 'transparent',
+                    paddingHorizontal: 0,
+                }}
+                label={i18n.t('shortDescription')}
+                value={state.description}
+                maxLength={1024}
+                onChangeText={handleChangeDescription}
+                onEndEditing={() =>
+                    setIsDescriptionValid(state.description.length >= 240)
+                }
+                multiline
+                numberOfLines={6}
+            />
+        </View>
+        // {!isDescriptionValid && (
+        //     <HelperText
+        //         type="error"
+        //         padding="none"
+        //         visible
+        //         style={styles.errorText}
+        //     >
+        //         {i18n.t('communityDescriptionRequired')}
+        //     </HelperText>
+        // )}
+        // {!isDescriptionTooShort && (
+        //     <HelperText
+        //         type="error"
+        //         padding="none"
+        //         visible
+        //         style={styles.errorText}
+        //     >
+        //         {i18n.t('communityDescriptionTooShort')}
+        //     </HelperText>
+        // )}
+    );
+}
 
 function CommunityName() {
     const [isNameValid, setIsNameValid] = useState(true);
@@ -216,6 +302,8 @@ export default function Metadata() {
             >
                 {i18n.t('communityPicsImportance')}
             </Text>
+            <CommunityDescription />
+            <CommunityCity />
         </View>
     );
 }
