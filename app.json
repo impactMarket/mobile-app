@@ -11,7 +11,7 @@
         "splash": {
             "resizeMode": "cover",
             "image": "./src/assets/images/splash@4x.png",
-            "backgroundColor": "#2362FB"
+            "backgroundColor": "#2956f3"
         },
         "updates": {
             "enabled": false,
@@ -49,7 +49,7 @@
             ],
             "splash": {
                 "resizeMode": "native",
-                "backgroundColor": "#2362FB",
+                "backgroundColor": "#2956f3",
                 "mdpi": "./src/assets/images/splash@0.5x.png",
                 "hdpi": "./src/assets/images/splash@0.5x.png",
                 "xhdpi": "./src/assets/images/splash@2x.png",
