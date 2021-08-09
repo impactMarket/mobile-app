@@ -11,7 +11,7 @@ jest.mock('react-native-reanimated', () => {
     return Reanimated;
 });
 
-// jest.useFakeTimers();
+jest.useFakeTimers();
 
 // jest.mock('axios');
 
