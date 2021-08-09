@@ -1,4 +1,4 @@
-import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+// import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import 'react-native-gesture-handler/jestSetup';
 
 jest.mock('react-native-reanimated', () => {
@@ -11,21 +11,29 @@ jest.mock('react-native-reanimated', () => {
     return Reanimated;
 });
 
+// jest.useFakeTimers();
+
+// jest.mock('axios');
+
+// jest.mock('@react-navigation/native');
+// jest.mock('react-native-safe-area-context');
+// jest.mock('@react-navigation/stack');
+// jest.mock('expo-constants');
+// jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+
+const mockedNavigate = jest.fn();
+
+jest.mock('@react-navigation/native', () => {
+    return {
+        ...(jest.requireActual('@react-navigation/native') as any),
+        useNavigation: () => ({
+            setOptions: mockedNavigate,
+        }),
+    };
+});
+
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
-jest.useFakeTimers();
 
-jest.mock('axios');
-
-jest.mock('@react-navigation/native');
-jest.mock('react-native-safe-area-context');
-jest.mock('@react-navigation/stack');
-jest.mock('expo-constants');
-jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
-
-jest.mock('@react-navigation/native', () => ({
-    useNavigation: () => jest.fn(),
-    useNavigationParam: jest.fn(
-        jest.requireActual('@react-navigation/native').useNavigationParam
-    ),
-}));
+// // As of react-native@0.64.X file has moved
+// jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
