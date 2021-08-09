@@ -8,6 +8,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
+import { validateEmail } from 'helpers/index';
 import React, { useContext, useRef, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -17,6 +18,48 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ipctColors } from 'styles/index';
 
 import { DispatchContext, formAction, StateContext } from './state';
+
+function CommunityEmail() {
+    const [isEmailValid, setIsEmailValid] = useState(true);
+
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+
+    return (
+        <View>
+            <Input
+                style={{
+                    fontFamily: 'Gelion-Regular',
+                    backgroundColor: 'transparent',
+                    paddingHorizontal: 0,
+                }}
+                label={i18n.t('email')}
+                value={state.email}
+                maxLength={64}
+                keyboardType="email-address"
+                onChangeText={(value) =>
+                    dispatch({
+                        type: formAction.SET_EMAIL,
+                        payload: value,
+                    })
+                }
+                onEndEditing={() => setIsEmailValid(validateEmail(state.email))}
+            />
+            {/* {!isEmailValid && (
+                <HelperText
+                    type="error"
+                    padding="none"
+                    visible
+                    style={styles.errorText}
+                >
+                    {!email
+                        ? i18n.t('emailRequired')
+                        : i18n.t('emailInvalidFormat')}
+                </HelperText>
+            )} */}
+        </View>
+    );
+}
 
 function CommunityLocation() {
     const [isEnabling, setIsEnabling] = useState(false);
@@ -608,6 +651,7 @@ export default function Metadata() {
             <CommunityCity />
             <CommunityCountry />
             <CommunityLocation />
+            <CommunityEmail />
         </View>
     );
 }
