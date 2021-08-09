@@ -29,6 +29,7 @@ export default class Select extends Component<ISelectProps, object> {
                     width: '100%',
                     height: 48,
                 }}
+                accessibilityLabel={label}
             >
                 <Text
                     style={[

@@ -39,8 +39,12 @@ test('create community - metadata', async () => {
     await act(async () => {});
 
     const communityName = getByLabelText(i18n.t('communityName'));
-
     fireEvent.changeText(communityName, 'test community');
+
+    fireEvent.press(getByLabelText(i18n.t('country')));
+    // TODO: scroll to another country
+    await act(async () => expect(getByLabelText('AR')));
+    fireEvent.press(getByLabelText('AR'));
 
     fireEvent.press(getByText(i18n.t('submit')));
 });

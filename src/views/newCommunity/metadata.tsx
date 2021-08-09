@@ -376,7 +376,10 @@ function CommunityCountry() {
     };
 
     const countryItem = ({ item }: { item: string }) => (
-        <Pressable onPress={() => handleSelectCountry(item)}>
+        <Pressable
+            accessibilityLabel={item}
+            onPress={() => handleSelectCountry(item)}
+        >
             <View
                 style={{
                     flexDirection: 'row',
