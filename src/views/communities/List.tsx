@@ -7,7 +7,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import NoSuspiciousSvg from 'components/svg/suspicious/NoSuspiciousSvg';
 import SuspiciousActivityMiddleSvg from 'components/svg/suspicious/SuspiciousActivityMiddleSvg';
 import * as Location from 'expo-location';
-import { Screens } from 'helpers/constants';
+import { communityOrderOptions, Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
@@ -110,7 +110,7 @@ function ListItem(props: {
                                 { fontFamily: 'Inter-Bold' },
                             ]}
                         >
-                            UBI
+                            {i18n.t('ubi')}
                         </Text>
                         <Text
                             style={[
@@ -156,7 +156,9 @@ function ListCommunitiesScreen() {
 
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     // TODO: use later with filters
-    const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
+    const [communtiesOrder, setCommuntiesOrder] = useState(
+        communityOrderOptions.bigger
+    );
     const [userLocation, setUserLocation] = useState<
         Location.LocationObject | undefined
     >(undefined);
@@ -193,10 +195,13 @@ function ListCommunitiesScreen() {
                 lat?: number;
                 lng?: number;
             } = { offset: communtiesOffset + 10, limit: 10 };
-            if (communtiesOrder === 'nearest' && userLocation) {
+            if (
+                communtiesOrder === communityOrderOptions.nearest &&
+                userLocation
+            ) {
                 queryList = {
                     ...queryList,
-                    orderBy: 'nearest',
+                    orderBy: communityOrderOptions.nearest,
                     lat: userLocation.coords.latitude,
                     lng: userLocation.coords.longitude,
                 };

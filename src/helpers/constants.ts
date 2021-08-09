@@ -93,6 +93,11 @@ export enum storiesAction {
     USER_STORIES_FAILURE = 'stories/user_failure',
 }
 
+export enum communityOrderOptions {
+    bigger = 'bigger',
+    nearest = 'nearest',
+}
+
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';
 
 export enum celoNetwork {
