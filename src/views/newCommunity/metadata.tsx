@@ -736,6 +736,7 @@ function CommunityCover() {
                 )} */}
             </View>
             <Pressable
+                accessibilityLabel="image uploader"
                 style={{
                     width: 98,
                     height: 44,

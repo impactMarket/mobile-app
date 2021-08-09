@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
 import i18n from 'assets/i18n';
+import * as ImagePicker from 'expo-image-picker';
 import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
@@ -32,14 +33,29 @@ function FakeCreateCommunityScreen() {
 
 test('create community - metadata', async () => {
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
+    const launchImageLibraryAsyncMock = ImagePicker.launchImageLibraryAsync as jest.Mock<
+        any,
+        any
+    >;
 
     useSelectorMock.mockReturnValueOnce('USD');
+    launchImageLibraryAsyncMock.mockReturnValueOnce(
+        Promise.resolve({
+            uri: '/some/fake/image/uri.jpg',
+            width: 790,
+            height: 790,
+            type: 'image',
+            cancelled: false,
+        })
+    );
 
     const { getByLabelText, getByText } = render(<FakeCreateCommunityScreen />);
     await act(async () => {});
 
     const communityName = getByLabelText(i18n.t('communityName'));
     fireEvent.changeText(communityName, 'test community');
+
+    fireEvent.press(getByLabelText('image uploader'));
 
     fireEvent.press(getByLabelText(i18n.t('country')));
     // TODO: scroll to another country
