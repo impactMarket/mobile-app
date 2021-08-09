@@ -87,13 +87,6 @@ class ConfirmModal extends Component<
                     });
                 })
                 .catch((e) => {
-                    if (
-                        e.message.includes(
-                            'Timeout while communicating with celoWallet'
-                        )
-                    ) {
-                        //TODO: Call ModalValoraTimeoutError
-                    }
                     Sentry.Native.withScope((scope) => {
                         scope.setTag('ipct-activity', 'donate');
                         Sentry.Native.captureException(e);
