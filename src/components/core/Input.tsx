@@ -73,7 +73,8 @@ export default class Input extends Component<IInputProps, object> {
                         )}
                     </Text>
                     <TextInput
-                        // style={styles.textInput}
+                        {...this.props}
+                        style={styles.textInput}
                         // value={value}
                         // maxLength={maxLength}
                         // onEndEditing={onEndEditing}
@@ -83,7 +84,6 @@ export default class Input extends Component<IInputProps, object> {
                         // multiline={multiline}
                         // numberOfLines={numberOfLines}
                         // placeholder={placeholder}
-                        {...this.props}
                     />
                 </View>
             </View>
