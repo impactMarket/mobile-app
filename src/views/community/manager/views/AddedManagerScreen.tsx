@@ -150,13 +150,6 @@ function AddedManagerScreen() {
                         error = 'networkConnectionLost';
                     }
                     error = 'networkIssuesRPC';
-                } else if (
-                    e.message.includes(
-                        'Timeout while communicating with celoWallet'
-                    )
-                ) {
-                    error = 'celoWalletTimeout';
-                    //TODO: Call ModalValoraTimeoutError
                 }
                 if (error === 'unknown') {
                     //only submit to sentry if it's unknown
