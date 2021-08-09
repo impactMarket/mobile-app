@@ -38,3 +38,8 @@ jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 
 // // As of react-native@0.64.X file has moved
 // jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+
+jest.mock('react-redux', () => ({
+    ...(jest.requireActual('react-redux') as any),
+    useSelector: jest.fn(),
+}));

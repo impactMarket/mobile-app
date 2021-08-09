@@ -4,6 +4,7 @@ import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
 import i18n from 'assets/i18n';
 import React from 'react';
 import { Host } from 'react-native-portalize';
+import * as reactRedux from 'react-redux';
 
 import CreateCommunityScreen from './index';
 
@@ -30,6 +31,10 @@ function FakeCreateCommunityScreen() {
 }
 
 test('create community - metadata', async () => {
+    const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
+
+    useSelectorMock.mockReturnValueOnce('USD');
+
     const { getByLabelText, getByText } = render(<FakeCreateCommunityScreen />);
     await act(async () => {});
 
