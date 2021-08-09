@@ -73,16 +73,17 @@ export default class Input extends Component<IInputProps, object> {
                         )}
                     </Text>
                     <TextInput
-                        style={styles.textInput}
-                        value={value}
-                        maxLength={maxLength}
-                        onEndEditing={onEndEditing}
-                        onChangeText={onChangeText}
-                        keyboardType={keyboardType}
-                        editable={editable}
-                        multiline={multiline}
-                        numberOfLines={numberOfLines}
-                        placeholder={placeholder}
+                        // style={styles.textInput}
+                        // value={value}
+                        // maxLength={maxLength}
+                        // onEndEditing={onEndEditing}
+                        // onChangeText={onChangeText}
+                        // keyboardType={keyboardType}
+                        // editable={editable}
+                        // multiline={multiline}
+                        // numberOfLines={numberOfLines}
+                        // placeholder={placeholder}
+                        {...this.props}
                     />
                 </View>
             </View>
