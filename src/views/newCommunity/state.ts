@@ -6,6 +6,10 @@ interface INITIAL_FORM_STATE {
     description: string;
     city: string;
     country: string;
+    gps: {
+        latitude: number;
+        longitude: number;
+    };
 }
 export enum formAction {
     SET_NAME = 'form/setName',
@@ -13,6 +17,7 @@ export enum formAction {
     SET_DESCRIPTION = 'form/setDescription',
     SET_CITY = 'form/setCity',
     SET_COUNTRY = 'form/setCountry',
+    SET_GPS = 'form/setGPS',
 }
 
 interface communityNameAction {
@@ -40,12 +45,21 @@ interface communityCountryAction {
     payload: string;
 }
 
+interface communityGPSAction {
+    type: formAction.SET_GPS;
+    payload: {
+        latitude: number;
+        longitude: number;
+    };
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
     | communityDescriptionAction
     | communityCityAction
-    | communityCountryAction;
+    | communityCountryAction
+    | communityGPSAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -53,6 +67,10 @@ export const formInitialState: INITIAL_FORM_STATE = {
     description: '',
     city: '',
     country: '',
+    gps: {
+        latitude: 0,
+        longitude: 0,
+    },
 };
 
 export function reducer(
@@ -70,6 +88,8 @@ export function reducer(
             return { ...state, city: action.payload };
         case formAction.SET_COUNTRY:
             return { ...state, country: action.payload };
+        case formAction.SET_GPS:
+            return { ...state, gps: action.payload };
         default:
             return state;
     }

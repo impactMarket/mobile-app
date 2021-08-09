@@ -1,11 +1,13 @@
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
+import * as Location from 'expo-location';
 import React, { useContext, useRef, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import { Modalize } from 'react-native-modalize';
@@ -15,6 +17,146 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ipctColors } from 'styles/index';
 
 import { DispatchContext, formAction, StateContext } from './state';
+
+function CommunityLocation() {
+    const [isEnabling, setIsEnabling] = useState(false);
+
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+
+    const enableGPSLocation = async () => {
+        setIsEnabling(true);
+        try {
+            const {
+                status,
+            } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                // Alert.alert(
+                //     i18n.t('failure'),
+                //     i18n.t('errorGettingGPSLocation'),
+                //     [{ text: 'OK' }],
+                //     { cancelable: false }
+                // );
+                return;
+            }
+
+            const {
+                coords: { latitude, longitude },
+            } = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Low,
+            });
+            dispatch({
+                type: formAction.SET_GPS,
+                payload: { latitude, longitude },
+            });
+        } catch (e) {
+            // Alert.alert(
+            //     i18n.t('failure'),
+            //     i18n.t('errorGettingGPSLocation'),
+            //     [{ text: 'OK' }],
+            //     { cancelable: false }
+            // );
+        } finally {
+            setIsEnabling(false);
+        }
+    };
+
+    if (state.gps.latitude !== 0 || state.gps.longitude !== 0) {
+        return (
+            <View
+                style={{
+                    marginVertical: 16,
+                    marginBottom: 24,
+                }}
+            >
+                <Pressable
+                    style={{
+                        backgroundColor: '#E9EDF4',
+                        borderWidth: 0,
+                        width: '100%',
+                        height: 44,
+                        paddingVertical: 8,
+                        borderRadius: 6,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'row',
+                    }}
+                >
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignSelf: 'center',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Icon
+                            name="check-circle-outline"
+                            size={22}
+                            color={ipctColors.greenishTeal}
+                        />
+                        <Text
+                            style={{
+                                color: ipctColors.darBlue,
+                                marginLeft: 10,
+                                fontFamily: 'Inter-Regular',
+                                fontSize: 15,
+                                lineHeight: 28,
+                            }}
+                        >
+                            {i18n.t('validCoordinates')}
+                        </Text>
+                    </View>
+                </Pressable>
+            </View>
+        );
+    }
+
+    return (
+        <View
+            style={{
+                marginVertical: 16,
+                marginBottom: 24,
+            }}
+        >
+            <Button
+                // mode="contained"
+                modeType="default"
+                style={{
+                    paddingVertical: 0,
+                    width: '100%',
+                    height: 44,
+                    borderRadius: 6,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                }}
+                onPress={() => enableGPSLocation()}
+                loading={isEnabling}
+            >
+                <Text
+                    style={{
+                        color: ipctColors.white,
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 15,
+                        lineHeight: 28,
+                    }}
+                >
+                    {i18n.t('getGPSLocation')}
+                </Text>
+            </Button>
+            {/* {!isEnabled && (
+                <HelperText
+                    type="error"
+                    padding="none"
+                    visible
+                    style={styles.errorText}
+                >
+                    {i18n.t('enablingGPSRequired')}
+                </HelperText>
+            )} */}
+        </View>
+    );
+}
 
 function CommunityCountry() {
     const countries: {
@@ -465,6 +607,7 @@ export default function Metadata() {
             <CommunityDescription />
             <CommunityCity />
             <CommunityCountry />
+            <CommunityLocation />
         </View>
     );
 }
