@@ -154,15 +154,15 @@ export default {
     pin4Digits: 'PIN (4 digits)',
     continue: 'Continue',
     yourQRCode: 'Your QR Code',
-    youHaveDonated: 'Thank you for your donation!',
+    youHaveDonated: 'Thank you for your contribution!',
     errorDonating: 'An error happened while donating!',
     addressCopiedClipboard:
         'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
-    donate: 'Donate',
+    donate: 'Contribute',
     attach: 'Attach',
-    donateWithValora: 'Donate with Valora',
+    donateWithValora: 'Contribute with Valora',
     amountSymbol: 'Amount ({{symbol}})',
-    donateSymbol: 'Donate ({{symbol}})',
+    donateSymbol: 'Contribute ({{symbol}})',
     close: 'Close',
     youCanClaimXin: 'You can claim {{amount}} in',
     claimX: 'Claim ', // {{amount}}
@@ -230,7 +230,7 @@ export default {
     payConfirmMessage:
         "By pressing 'Send', you will send {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
     donateConfirmMessage:
-        "By pressing 'Donate', you will donate <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
+        "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
     yourDonationWillBackFor:
         'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
     eachBeneficiaryCanClaimXUpToY:
@@ -240,7 +240,7 @@ export default {
     howClaimWorks: 'How claims work.',
     copyContractAddress: 'Copy Contract Address',
     donationBiggerThanBalance:
-        'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',
+        'You are trying to contribute with an amount bigger than your balance. Add funds on your Valora app.',
     errorClaiming: 'An error happened while claiming.\n\nError: {{error}}',
     consentAnonymousAnalytics: 'Consent Anonymous Analytics',
     youCreatedPrivateCommunity: "You've created a private community. Welcome!",
