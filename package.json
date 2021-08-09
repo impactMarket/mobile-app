@@ -17,7 +17,8 @@
     "jest": {
         "preset": "jest-expo",
         "setupFiles": [
-            "./jestSetup.ts"
+            "<rootDir>/jestSetup.ts",
+            "<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js"
         ],
         "moduleNameMapper": {
             "\\.(jpg|jpeg|png|gif)$": "<rootDir>/node_modules/react-native/Libraries/Image/RelativeImageStub"
@@ -28,7 +29,7 @@
         "transform": {
             "^.+\\.[jt]sx?$": "babel-jest"
         },
-        "collectCoverage": true,
+        "collectCoverage": false,
         "collectCoverageFrom": [
             "**/*.{ts,tsx}",
             "!**/coverage/**",
@@ -136,8 +137,10 @@
     },
     "devDependencies": {
         "@babel/core": "7.9.0",
+        "@testing-library/jest-dom": "5.14.1",
+        "@testing-library/jest-native": "4.0.2",
         "@testing-library/react-native": "7.2.0",
-        "@types/jest": "26.0.23",
+        "@types/jest": "26.0.24",
         "@types/react": "16.9.35",
         "@types/react-native": "0.63.40",
         "@types/react-redux": "7.1.16",
@@ -149,7 +152,7 @@
         "@typescript-eslint/parser": "4.20.0",
         "babel-plugin-inline-dotenv": "1.6.0",
         "babel-plugin-module-resolver": "4.1.0",
-        "babel-preset-expo": "8.3.0",
+        "babel-preset-expo": "8.4.1",
         "chai": "4.3.4",
         "dotenv": "8.2.0",
         "eslint": "7.23.0",
@@ -157,8 +160,8 @@
         "eslint-config-universe": "7.0.1",
         "eslint-plugin-tsc": "2.0.0",
         "husky": "6.0.0",
-        "jest": "27.0.4",
-        "jest-expo": "42.0.0",
+        "jest": "27.0.6",
+        "jest-expo": "42.1.0",
         "lint-staged": ">=10",
         "prettier": "2.2.1",
         "react-native-bundle-visualizer": "2.2.1",
