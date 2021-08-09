@@ -1,4 +1,5 @@
 import countriesJSON from 'assets/countries.json';
+import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
@@ -9,21 +10,173 @@ import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
 import { validateEmail } from 'helpers/index';
-import React, { useContext, useRef, useState } from 'react';
+import { IRootState } from 'helpers/types/state';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Headline, Searchbar } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 import { DispatchContext, formAction, StateContext } from './state';
+
+function CommunityCurrency() {
+    const currencies: {
+        [key: string]: {
+            symbol: string;
+            name: string;
+            symbol_native: string;
+        };
+    } = currenciesJSON;
+
+    const modalizeCurrencyRef = useRef<Modalize>(null);
+
+    const [searchCurrencyQuery, setSearchCurrencyQuery] = useState('');
+    const [currenciesList, setCurrenciesList] = useState(
+        Object.keys(currencies)
+    );
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
+    useEffect(() => {
+        dispatch({
+            type: formAction.SET_CURRENCY,
+            payload: userCurrency,
+        });
+    }, [dispatch]);
+
+    const handleSelectCurrency = (item: string) => {
+        dispatch({
+            type: formAction.SET_CURRENCY,
+            payload: item,
+        });
+        modalizeCurrencyRef.current?.close();
+    };
+
+    const currencyItem = ({ item }: { item: string }) => (
+        <Pressable onPress={() => handleSelectCurrency(item)}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    paddingVertical: 16,
+                    paddingHorizontal: 22,
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 15,
+                        lineHeight: 24,
+                        fontFamily: 'Inter-Regular',
+                    }}
+                >{`[${currencies[item].symbol}] ${currencies[item].name}`}</Text>
+                {item === state.currency && (
+                    <Icon
+                        name="check"
+                        color={ipctColors.greenishTeal}
+                        size={22}
+                    />
+                )}
+            </View>
+        </Pressable>
+    );
+
+    return (
+        <>
+            <View style={{ marginTop: 28 }}>
+                <Select
+                    label={i18n.t('currency')}
+                    value={
+                        state.currency.length > 0
+                            ? currencies[state.currency].name
+                            : 'Select currency'
+                    }
+                    onPress={() => modalizeCurrencyRef.current?.open()}
+                />
+            </View>
+            <Portal>
+                <Modalize
+                    ref={modalizeCurrencyRef}
+                    HeaderComponent={
+                        <View>
+                            {renderHeader(
+                                i18n.t('currency'),
+                                modalizeCurrencyRef,
+                                () => modalizeCurrencyRef.current?.close()
+                            )}
+                            <Searchbar
+                                placeholder={i18n.t('search')}
+                                style={{
+                                    borderColor: ipctColors.borderGray,
+                                    borderWidth: 1,
+                                    borderStyle: 'solid',
+                                    shadowRadius: 0,
+                                    elevation: 0,
+                                    borderRadius: 6,
+                                    marginHorizontal: 22,
+                                }}
+                                autoFocus
+                                inputStyle={{
+                                    marginLeft: -14,
+                                }}
+                                onChangeText={(e) => {
+                                    if (e.length === 0) {
+                                        setCurrenciesList(
+                                            Object.keys(currencies)
+                                        );
+                                    } else {
+                                        const foundCurrencies = [];
+                                        for (const [
+                                            key,
+                                            value,
+                                        ] of Object.entries(currencies)) {
+                                            if (
+                                                value.name
+                                                    .toLowerCase()
+                                                    .indexOf(
+                                                        e.toLowerCase()
+                                                    ) !== -1
+                                            ) {
+                                                foundCurrencies.push(key);
+                                            }
+                                        }
+                                        setCurrenciesList(foundCurrencies);
+                                    }
+                                    setSearchCurrencyQuery(e);
+                                }}
+                                value={searchCurrencyQuery}
+                            />
+                        </View>
+                    }
+                    flatListProps={{
+                        data: currenciesList,
+                        renderItem: currencyItem,
+                        keyExtractor: (item) => item,
+                    }}
+                />
+            </Portal>
+        </>
+    );
+}
 
 function CommunityEmail() {
     const [isEmailValid, setIsEmailValid] = useState(true);
 
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
+
+    const handleEmailChange = (value) =>
+        dispatch({
+            type: formAction.SET_EMAIL,
+            payload: value,
+        });
 
     return (
         <View>
@@ -37,12 +190,7 @@ function CommunityEmail() {
                 value={state.email}
                 maxLength={64}
                 keyboardType="email-address"
-                onChangeText={(value) =>
-                    dispatch({
-                        type: formAction.SET_EMAIL,
-                        payload: value,
-                    })
-                }
+                onChangeText={handleEmailChange}
                 onEndEditing={() => setIsEmailValid(validateEmail(state.email))}
             />
             {/* {!isEmailValid && (
@@ -312,7 +460,6 @@ function CommunityCountry() {
                                         setCountriesList(
                                             Object.keys(countries)
                                         );
-                                        setSearchCountryQuery(e);
                                     } else {
                                         const foundCountries = [];
                                         for (const [
@@ -330,8 +477,8 @@ function CommunityCountry() {
                                             }
                                         }
                                         setCountriesList(foundCountries);
-                                        setSearchCountryQuery(e);
                                     }
+                                    setSearchCountryQuery(e);
                                 }}
                                 value={searchCountryQuery}
                             />
@@ -652,6 +799,7 @@ export default function Metadata() {
             <CommunityCountry />
             <CommunityLocation />
             <CommunityEmail />
+            <CommunityCurrency />
         </View>
     );
 }

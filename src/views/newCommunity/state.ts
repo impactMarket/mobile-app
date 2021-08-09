@@ -11,6 +11,7 @@ interface INITIAL_FORM_STATE {
         longitude: number;
     };
     email: string;
+    currency: string;
 }
 export enum formAction {
     SET_NAME = 'form/setName',
@@ -20,6 +21,7 @@ export enum formAction {
     SET_COUNTRY = 'form/setCountry',
     SET_GPS = 'form/setGPS',
     SET_EMAIL = 'form/setEmail',
+    SET_CURRENCY = 'form/setCurrency',
 }
 
 interface communityNameAction {
@@ -60,6 +62,11 @@ interface communityEmailAction {
     payload: string;
 }
 
+interface communityCurrencyAction {
+    type: formAction.SET_CURRENCY;
+    payload: string;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -67,7 +74,8 @@ type FormActionTypes =
     | communityCityAction
     | communityCountryAction
     | communityGPSAction
-    | communityEmailAction;
+    | communityEmailAction
+    | communityCurrencyAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -80,6 +88,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
         longitude: 0,
     },
     email: '',
+    currency: '',
 };
 
 export function reducer(
@@ -101,6 +110,8 @@ export function reducer(
             return { ...state, gps: action.payload };
         case formAction.SET_EMAIL:
             return { ...state, email: action.payload };
+        case formAction.SET_CURRENCY:
+            return { ...state, currency: action.payload };
         default:
             return state;
     }
