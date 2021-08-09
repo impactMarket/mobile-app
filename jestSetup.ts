@@ -21,14 +21,15 @@ jest.useFakeTimers();
 // jest.mock('expo-constants');
 // jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
-const mockedNavigate = jest.fn();
+// const mockedNavigate = jest.fn();
 
 jest.mock('@react-navigation/native', () => {
     return {
         ...(jest.requireActual('@react-navigation/native') as any),
-        useNavigation: () => ({
-            setOptions: mockedNavigate,
-        }),
+        // we need the actual "useNavigation" in create community test
+        // useNavigation: () => ({
+        //     setOptions: mockedNavigate,
+        // }),
     };
 });
 

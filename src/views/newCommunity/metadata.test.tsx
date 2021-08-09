@@ -1,4 +1,6 @@
-import { render, fireEvent, cleanup } from '@testing-library/react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
 import i18n from 'assets/i18n';
 import React from 'react';
 import { Host } from 'react-native-portalize';
@@ -7,16 +9,33 @@ import CreateCommunityScreen from './index';
 
 afterEach(cleanup);
 
-test('create community - metadata', () => {
-    const { getByLabelText } = render(
+/**
+ * NOTE: we are testing the component individually, but need the header
+ * "submit button", so the entire navigator can be faked.
+ */
+function FakeCreateCommunityScreen() {
+    const Stack = createStackNavigator();
+    return (
         <Host>
-            <CreateCommunityScreen />
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="Home"
+                        component={CreateCommunityScreen}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
         </Host>
     );
+}
+
+test('create community - metadata', async () => {
+    const { getByLabelText, getByText } = render(<FakeCreateCommunityScreen />);
+    await act(async () => {});
 
     const communityName = getByLabelText(i18n.t('communityName'));
 
     fireEvent.changeText(communityName, 'test community');
 
-    // fireEvent.press(getByText(i18n.t('submit')));
+    fireEvent.press(getByText(i18n.t('submit')));
 });
