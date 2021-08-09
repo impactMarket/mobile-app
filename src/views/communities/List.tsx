@@ -1,9 +1,11 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import { BigNumber } from 'bignumber.js';
 import IconCommunity from 'components/svg/IconCommunity';
-import SuspiciousActivityMiddleSvg from 'components/svg/SuspiciousActivityMiddleSvg';
 import BackSvg from 'components/svg/header/BackSvg';
+import NoSuspiciousSvg from 'components/svg/suspicious/NoSuspiciousSvg';
+import SuspiciousActivityMiddleSvg from 'components/svg/suspicious/SuspiciousActivityMiddleSvg';
 import * as Location from 'expo-location';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
@@ -11,7 +13,14 @@ import { chooseMediaThumbnail } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, FlatList, Image, Pressable } from 'react-native';
+import {
+    View,
+    Text,
+    FlatList,
+    Image,
+    Pressable,
+    StyleSheet,
+} from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
@@ -27,23 +36,12 @@ const countries: {
 } = countriesJSON;
 
 function Dot() {
-    return (
-        <Text
-            style={{
-                marginHorizontal: 4,
-                fontFamily: 'Inter-Regular',
-                fontSize: 12,
-                lineHeight: 20,
-                color: '#73839D',
-            }}
-        >
-            ·
-        </Text>
-    );
+    return <Text style={styles.dot}>·</Text>;
 }
 
 function ListItem(props: {
     community: CommunityAttributes;
+    userCurrency: string;
     exchangeRates: {
         [key: string]: number;
     };
@@ -52,22 +50,29 @@ function ListItem(props: {
     const { community, exchangeRates } = props;
     const claimAmount = amountToCurrency(
         community.contract.claimAmount,
-        community.currency,
+        props.userCurrency,
         exchangeRates
     );
     const claimFrequency =
         community.contract.baseInterval === 86400
             ? i18n.t('day')
             : i18n.t('week');
+
+    let progress = 0;
+    if (community.state.beneficiaries !== 0 && community.state.raised !== '0') {
+        progress = parseFloat(
+            new BigNumber(community.state.raised)
+                .dividedBy(
+                    new BigNumber(community.contract.maxClaim).multipliedBy(
+                        community.state.beneficiaries
+                    )
+                )
+                .toString()
+        );
+    }
     return (
         <Pressable
-            style={{
-                height: 82,
-                marginBottom: 16,
-                marginHorizontal: 22,
-                flex: 1,
-                flexDirection: 'row',
-            }}
+            style={styles.container}
             onPress={() =>
                 props.navigation.navigate(Screens.CommunityDetails, {
                     communityId: community.id,
@@ -82,72 +87,36 @@ function ListItem(props: {
                             width: 88,
                         }),
                     }}
-                    style={{
-                        width: 82,
-                        height: 82,
-                        borderRadius: 12,
-                    }}
+                    style={styles.cover}
                 />
-                <View
-                    style={{
-                        position: 'absolute',
-                        marginLeft: 8,
-                        marginBottom: 8,
-                        bottom: 0,
-                        backgroundColor: 'white',
-                        borderRadius: 4,
-                        padding: 2,
-                    }}
-                >
+                <View style={styles.countryFlag}>
                     <Text>{countries[community.country].emoji}</Text>
                 </View>
             </View>
-            <View
-                style={{
-                    marginLeft: 16,
-                    justifyContent: 'space-between',
-                    flex: 1,
-                }}
-            >
-                <Text
-                    style={{
-                        lineHeight: 22,
-                        fontSize: 16,
-                        fontWeight: '800',
-                        fontFamily: 'Manrope-ExtraBold',
-                        color: '#1E3252',
-                    }}
-                >
-                    {props.community.name}
-                </Text>
+            <View style={styles.titleView}>
+                <Text style={styles.titleText}>{props.community.name}</Text>
                 <View>
-                    <View
-                        style={{
-                            // flex: 1,
-                            flexDirection: 'row',
-                            marginBottom: 7,
-                            alignItems: 'center',
-                        }}
-                    >
-                        <SuspiciousActivityMiddleSvg />
+                    <View style={styles.infoView}>
+                        {community.suspect !== undefined &&
+                        community.suspect !== null ? (
+                            <SuspiciousActivityMiddleSvg />
+                        ) : (
+                            <NoSuspiciousSvg />
+                        )}
                         <Dot />
                         <Text
-                            style={{
-                                fontFamily: 'Inter-Bold',
-                                fontSize: 13,
-                                lineHeight: 20,
-                                color: '#73839D',
-                            }}
+                            style={[
+                                styles.infoText,
+                                { fontFamily: 'Inter-Bold' },
+                            ]}
                         >
                             UBI
                         </Text>
                         <Text
-                            style={{
-                                fontFamily: 'Inter-Regular',
-                                fontSize: 13,
-                                lineHeight: 20,
-                                color: '#73839D',
-                            }}
+                            style={[
+                                styles.infoText,
+                                { fontFamily: 'Inter-Regular' },
+                            ]}
                         >
                             {' '}
                             {claimAmount}/{claimFrequency}
@@ -155,25 +124,18 @@ function ListItem(props: {
                         <Dot />
                         <IconCommunity />
                         <Text
-                            style={{
-                                marginLeft: 4,
-                                fontFamily: 'Inter-Regular',
-                                fontSize: 13,
-                                lineHeight: 20,
-                                color: '#73839D',
-                            }}
+                            style={[
+                                styles.infoText,
+                                { fontFamily: 'Inter-Regular', marginLeft: 4 },
+                            ]}
                         >
                             {props.community.state!.beneficiaries}
                         </Text>
                     </View>
                     <ProgressBar
-                        progress={0.2}
+                        progress={progress}
                         color="#8A9FC2"
-                        style={{
-                            borderRadius: 6.5,
-                            height: 4,
-                            backgroundColor: '#E9ECEF',
-                        }}
+                        style={styles.progressBar}
                     />
                 </View>
             </View>
@@ -188,8 +150,12 @@ function ListCommunitiesScreen() {
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
 
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
+    // TODO: use later with filters
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
     const [userLocation, setUserLocation] = useState<
         Location.LocationObject | undefined
@@ -226,7 +192,7 @@ function ListCommunitiesScreen() {
                 filter?: string;
                 lat?: number;
                 lng?: number;
-            } = { offset: 0, limit: 10 };
+            } = { offset: communtiesOffset + 10, limit: 10 };
             if (communtiesOrder === 'nearest' && userLocation) {
                 queryList = {
                     ...queryList,
@@ -263,22 +229,15 @@ function ListCommunitiesScreen() {
             renderItem={({ item }: { item: CommunityAttributes }) => (
                 <ListItem
                     community={item}
+                    userCurrency={userCurrency}
                     exchangeRates={exchangeRates}
                     navigation={navigation}
                 />
             )}
             ref={flatListRef}
             keyExtractor={(item) => item.publicId}
-            onEndReachedThreshold={0.5}
             onEndReached={handleOnEndReached}
             showsVerticalScrollIndicator={false}
-            // Performance settings
-            // removeClippedSubviews // Unmount components when outside of window
-            // initialNumToRender={4} // Reduce initial render amount
-            // maxToRenderPerBatch={2} // Reduce number in each render batch
-            // updateCellsBatchingPeriod={100} // Increase time between renders
-            // windowSize={7} // Reduce the window size
-            style={{ paddingTop: 20 }}
         />
     );
 }
@@ -291,3 +250,61 @@ ListCommunitiesScreen.navigationOptions = () => {
 };
 
 export default ListCommunitiesScreen;
+
+const styles = StyleSheet.create({
+    dot: {
+        marginHorizontal: 4,
+        fontFamily: 'Inter-Regular',
+        fontSize: 12,
+        lineHeight: 20,
+        color: '#73839D',
+    },
+    container: {
+        height: 82,
+        marginBottom: 16,
+        marginHorizontal: 22,
+        flex: 1,
+        flexDirection: 'row',
+    },
+    cover: {
+        width: 82,
+        height: 82,
+        borderRadius: 12,
+    },
+    countryFlag: {
+        position: 'absolute',
+        marginLeft: 8,
+        marginBottom: 8,
+        bottom: 0,
+        backgroundColor: 'white',
+        borderRadius: 4,
+        padding: 2,
+    },
+    titleView: {
+        marginLeft: 16,
+        justifyContent: 'space-between',
+        flex: 1,
+    },
+    titleText: {
+        lineHeight: 22,
+        fontSize: 16,
+        fontWeight: '800',
+        fontFamily: 'Manrope-ExtraBold',
+        color: '#1E3252',
+    },
+    infoView: {
+        flexDirection: 'row',
+        marginBottom: 7,
+        alignItems: 'center',
+    },
+    infoText: {
+        fontSize: 13,
+        lineHeight: 20,
+        color: '#73839D',
+    },
+    progressBar: {
+        borderRadius: 6.5,
+        height: 4,
+        backgroundColor: '#E9ECEF',
+    },
+});
