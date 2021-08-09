@@ -261,6 +261,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     }}
                                 >
                                     <Trans
+                                        tOptions={{
+                                            interpolation: {
+                                                escapeValue: false,
+                                            },
+                                        }}
                                         i18nKey="eachBeneficiaryCanClaimXUpToY"
                                         values={{
                                             claimXCCurrency: amountToCurrency(
