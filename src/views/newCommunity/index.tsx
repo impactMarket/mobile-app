@@ -1,22 +1,46 @@
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
 import SubmitCommunity from 'navigator/header/SubmitCommunity';
-import React, { Suspense } from 'react';
+import React, { useLayoutEffect, useReducer, useState } from 'react';
 import {
     StyleSheet,
     ScrollView,
     KeyboardAvoidingView,
     Platform,
-    Text,
 } from 'react-native';
 import { ipctColors } from 'styles/index';
 
-import { formInitialState } from './state';
-
-const Metadata = React.lazy(() => import('./metadata'));
+import Metadata from './metadata';
+import {
+    DispatchContext,
+    formInitialState,
+    reducer,
+    StateContext,
+} from './state';
 
 function CreateCommunityScreen() {
+    const navigation = useNavigation();
+    const [submitting, setSubmitting] = useState(false);
+    const [state, dispatch] = useReducer(reducer, formInitialState);
+
+    const submitNewCommunity = () => {
+        //
+        console.log('state', state);
+        // setSubmitting(true);
+    };
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <SubmitCommunity
+                    submit={submitNewCommunity}
+                    submitting={submitting}
+                />
+            ),
+        });
+    }, [navigation, submitting, state]);
+
     return (
         <KeyboardAvoidingView
             style={{
@@ -35,9 +59,11 @@ function CreateCommunityScreen() {
                     // marginTop: 16,
                 }}
             >
-                <Suspense fallback={<Text>Loading...</Text>}>
-                    <Metadata />
-                </Suspense>
+                <DispatchContext.Provider value={dispatch}>
+                    <StateContext.Provider value={state}>
+                        <Metadata />
+                    </StateContext.Provider>
+                </DispatchContext.Provider>
             </ScrollView>
         </KeyboardAvoidingView>
     );
@@ -52,21 +78,9 @@ CreateCommunityScreen.navigationOptions = ({
         navigation.goBack();
     };
 
-    const submitNewCommunity = () => {
-        //
-        console.log(formInitialState);
-    };
-
     return {
         headerLeft: () => <BackSvg onPress={handlePressGoBack} />,
         headerTitle: i18n.t('applyCommunity'),
-        headerRight: () => (
-            <SubmitCommunity
-                submit={submitNewCommunity}
-                submitting={false}
-                // submitting={sending}
-            />
-        ),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

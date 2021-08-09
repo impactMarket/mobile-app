@@ -6,7 +6,7 @@ import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
-import React, { useReducer, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { View, Text, Pressable, Image } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Headline, Searchbar } from 'react-native-paper';
@@ -14,7 +14,7 @@ import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ipctColors } from 'styles/index';
 
-import { formAction, formInitialState, reducer } from './state';
+import { DispatchContext, formAction, StateContext } from './state';
 
 function CommunityCountry() {
     const countries: {
@@ -29,7 +29,8 @@ function CommunityCountry() {
 
     const [searchCountryQuery, setSearchCountryQuery] = useState('');
     const [countriesList, setCountriesList] = useState(Object.keys(countries));
-    const [state, dispatch] = useReducer(reducer, formInitialState);
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
 
     const modalizeCountryRef = useRef<Modalize>(null);
 
@@ -164,7 +165,8 @@ function CommunityCountry() {
 
 function CommunityCity() {
     const [isCityValid, setIsCityValid] = useState(true);
-    const [state, dispatch] = useReducer(reducer, formInitialState);
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
 
     const handleChangeCity = (value) => {
         dispatch({ type: formAction.SET_CITY, payload: value });
@@ -200,7 +202,8 @@ function CommunityCity() {
 
 function CommunityDescription() {
     const [isDescriptionValid, setIsDescriptionValid] = useState(true);
-    const [state, dispatch] = useReducer(reducer, formInitialState);
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
 
     const handleChangeDescription = (value) => {
         dispatch({ type: formAction.SET_DESCRIPTION, payload: value });
@@ -250,7 +253,8 @@ function CommunityDescription() {
 
 function CommunityName() {
     const [isNameValid, setIsNameValid] = useState(true);
-    const [state, dispatch] = useReducer(reducer, formInitialState);
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
 
     const handleChangeName = (value) => {
         dispatch({ type: formAction.SET_NAME, payload: value });
@@ -264,7 +268,9 @@ function CommunityName() {
                     backgroundColor: 'transparent',
                     paddingHorizontal: 0,
                 }}
+                accessibilityLabel={i18n.t('communityName')}
                 label={i18n.t('communityName')}
+                testID="community-name"
                 value={state.name}
                 maxLength={32}
                 onChangeText={handleChangeName}
@@ -286,7 +292,8 @@ function CommunityName() {
 
 function CommunityCover() {
     const [isCoverImageValid, setIsCoverImageValid] = useState(true);
-    const [state, dispatch] = useReducer(reducer, formInitialState);
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
 
     const pickImage = async () =>
         // cb: Dispatch<React.SetStateAction<string>>,

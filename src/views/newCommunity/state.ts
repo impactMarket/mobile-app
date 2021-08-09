@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface INITIAL_FORM_STATE {
     name: string;
     coverImage: string;
@@ -72,3 +74,8 @@ export function reducer(
             return state;
     }
 }
+
+export const StateContext = React.createContext(formInitialState);
+export const DispatchContext = React.createContext<
+    React.Dispatch<FormActionTypes> | undefined
+>(undefined);
