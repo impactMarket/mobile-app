@@ -13,6 +13,7 @@ interface INITIAL_FORM_STATE {
     email: string;
     currency: string;
     claimAmount: string;
+    baseInterval: string;
 }
 export enum formAction {
     SET_NAME = 'form/setName',
@@ -24,6 +25,7 @@ export enum formAction {
     SET_EMAIL = 'form/setEmail',
     SET_CURRENCY = 'form/setCurrency',
     SET_CLAIM_AMOUNT = 'form/setClaimAmount',
+    SET_BASE_INTERVAL = 'form/setBaseInterval',
 }
 
 interface communityNameAction {
@@ -74,6 +76,11 @@ interface communityClaimAmountAction {
     payload: string;
 }
 
+interface communityBaseIntervalAction {
+    type: formAction.SET_BASE_INTERVAL;
+    payload: string;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -83,7 +90,8 @@ type FormActionTypes =
     | communityGPSAction
     | communityEmailAction
     | communityCurrencyAction
-    | communityClaimAmountAction;
+    | communityClaimAmountAction
+    | communityBaseIntervalAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -98,6 +106,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
     email: '',
     currency: '',
     claimAmount: '',
+    baseInterval: '86400',
 };
 
 export function reducer(
@@ -123,6 +132,8 @@ export function reducer(
             return { ...state, currency: action.payload };
         case formAction.SET_CLAIM_AMOUNT:
             return { ...state, claimAmount: action.payload };
+        case formAction.SET_BASE_INTERVAL:
+            return { ...state, baseInterval: action.payload };
         default:
             return state;
     }

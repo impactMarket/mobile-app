@@ -1,13 +1,15 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
+import Select from 'components/core/Select';
 import { amountToCurrency } from 'helpers/currency';
 import { IRootState } from 'helpers/types/state';
 import React, { useContext, useRef, useState } from 'react';
 import { View, Text } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { IHandles } from 'react-native-modalize/lib/options';
-import { Headline } from 'react-native-paper';
+import { Headline, RadioButton } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
@@ -21,6 +23,71 @@ interface HelperProps {
         title: React.Dispatch<React.SetStateAction<string>>;
         content: React.Dispatch<React.SetStateAction<string>>;
     };
+}
+
+function CommunityClaimFrequency(props: HelperProps) {
+    const modalizeFrequencyRef = useRef<Modalize>(null);
+
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+
+    return (
+        <View style={{ marginTop: 28 }}>
+            <Select
+                label={i18n.t('frequency')}
+                help
+                onHelpPress={() => {
+                    props.setHelperInfo.title(i18n.t('frequency'));
+                    props.setHelperInfo.content(i18n.t('frequencyHelp'));
+                    props.helperRef.current.open();
+                }}
+                value={
+                    state.baseInterval === '86400'
+                        ? i18n.t('daily')
+                        : i18n.t('weekly')
+                }
+                onPress={() => modalizeFrequencyRef.current?.open()}
+            />
+            <Portal>
+                <Modalize
+                    ref={modalizeFrequencyRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('frequency'),
+                        modalizeFrequencyRef
+                    )}
+                    adjustToContentHeight
+                >
+                    <View
+                        style={{
+                            height: 120,
+                            paddingLeft: 8,
+                            marginBottom: 22,
+                        }}
+                    >
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                dispatch({
+                                    type: formAction.SET_BASE_INTERVAL,
+                                    payload: value,
+                                });
+                                modalizeFrequencyRef.current?.close();
+                            }}
+                            value={state.baseInterval}
+                        >
+                            <RadioButton.Item
+                                label={i18n.t('daily')}
+                                value="86400"
+                            />
+                            <RadioButton.Item
+                                label={i18n.t('weekly')}
+                                value="604800"
+                            />
+                        </RadioButton.Group>
+                    </View>
+                </Modalize>
+            </Portal>
+        </View>
+    );
 }
 
 function CommunityClaimAmount(props: HelperProps) {
@@ -135,6 +202,13 @@ export default function Contract() {
                 {i18n.t('contractDescriptionLabel')}
             </Text>
             <CommunityClaimAmount
+                helperRef={modalizeHelperRef}
+                setHelperInfo={{
+                    title: setHelperTitle,
+                    content: setHelperContent,
+                }}
+            />
+            <CommunityClaimFrequency
                 helperRef={modalizeHelperRef}
                 setHelperInfo={{
                     title: setHelperTitle,
