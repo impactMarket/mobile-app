@@ -72,6 +72,11 @@ export interface IOfflineState {
     queue: [];
     isConnected: true;
 }
+
+export interface ICommunitiesState {
+    communities: CommunityAttributes[];
+    refreshing: boolean;
+}
 export interface IRootState {
     offline?: IOfflineState;
     user: IUserState;
@@ -79,6 +84,7 @@ export interface IRootState {
     app: IAppState;
     modalDonate: IModalDonateState;
     stories: IStoriesState;
+    communities: ICommunitiesState;
 }
 
 export interface ICallerRouteParams {

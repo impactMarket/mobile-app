@@ -96,6 +96,12 @@ export enum storiesAction {
     USER_STORIES_FAILURE = 'stories/user_failure',
 }
 
+export enum communitiesAction {
+    INIT_REQUEST = 'communities/init_request',
+    INIT_SUCCESS = 'communities/init_success',
+    INIT_FAILURE = 'communities/init_failure',
+}
+
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';
 
 export enum celoNetwork {
