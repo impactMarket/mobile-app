@@ -25,6 +25,93 @@ interface HelperProps {
     };
 }
 
+function CommunityMaxClaim(props: HelperProps) {
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+
+    const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
+
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
+
+    const amountInUserCurrency = amountToCurrency(
+        new BigNumber(state.maxClaim.replace(/,/g, '.')).multipliedBy(
+            new BigNumber(10).pow(config.cUSDDecimals)
+        ),
+        state.currency.length > 0 ? state.currency : 'USD',
+        exchangeRates
+    );
+
+    const handleChangeMaxClaim = (value) =>
+        dispatch({
+            type: formAction.SET_MAX_CLAIM,
+            payload: value,
+        });
+
+    return (
+        <View style={{ marginTop: 28 }}>
+            <Input
+                style={{
+                    fontFamily: 'Gelion-Regular',
+                    backgroundColor: 'transparent',
+                    paddingHorizontal: 0,
+                }}
+                label={i18n.t('totalClaimPerBeneficiary')}
+                help
+                onPress={() => {
+                    props.setHelperInfo.title(
+                        i18n.t('totalClaimPerBeneficiary')
+                    );
+                    props.setHelperInfo.content(
+                        i18n.t('totalClaimPerBeneficiaryHelp')
+                    );
+                    props.helperRef.current.open();
+                }}
+                value={state.maxClaim}
+                placeholder="$0"
+                maxLength={14}
+                keyboardType="numeric"
+                onChangeText={handleChangeMaxClaim}
+                onEndEditing={() =>
+                    setIsMaxClaimValid(
+                        state.maxClaim.length > 0 &&
+                            /^\d*[.,]?\d*$/.test(state.maxClaim)
+                    )
+                }
+            />
+            {/* {!isMaxClaimValid && (
+                <HelperText
+                    type="error"
+                    padding="none"
+                    visible
+                    style={styles.errorText}
+                >
+                    {i18n.t('maxClaimAmountRequired')}
+                </HelperText>
+            )} */}
+            {state.maxClaim.length > 0 && (
+                <Text
+                    style={{
+                        marginTop: 14,
+                        position: 'absolute',
+                        marginHorizontal: 10,
+                        right: 0,
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        color: ipctColors.regentGray,
+                    }}
+                >
+                    {i18n.t('aroundValue', {
+                        amount: amountInUserCurrency,
+                    })}
+                </Text>
+            )}
+        </View>
+    );
+}
+
 function CommunityClaimFrequency(props: HelperProps) {
     const modalizeFrequencyRef = useRef<Modalize>(null);
 
@@ -209,6 +296,13 @@ export default function Contract() {
                 }}
             />
             <CommunityClaimFrequency
+                helperRef={modalizeHelperRef}
+                setHelperInfo={{
+                    title: setHelperTitle,
+                    content: setHelperContent,
+                }}
+            />
+            <CommunityMaxClaim
                 helperRef={modalizeHelperRef}
                 setHelperInfo={{
                     title: setHelperTitle,
