@@ -97,6 +97,8 @@ export default {
     hours: 'Hours',
     days: 'Days',
     time: 'Time',
+    expectedUBIDuration:
+        'This UBI will take at least {{years}} years {{months}} months {{days}} days {{hours}} hours {{minutes}} minutes per beneficiary.',
     timeIncrementAfterClaim: 'Time increment after each claim',
     timeInMinutes: 'Time in minutes',
     visibility: 'Visibility',

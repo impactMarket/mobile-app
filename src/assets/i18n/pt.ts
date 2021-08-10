@@ -94,6 +94,8 @@ export default {
     hours: 'Horas',
     days: 'Dias',
     time: 'Tempo',
+    expectedUBIDuration:
+        'Este programa de RBU deverá durar pelo menos {{years}} anos {{months}} meses {{days}} dias {{hours}} horas {{minutes}} minutos por beneficiário.',
     timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
     timeInMinutes: 'Tempo em minutos',
     visibility: 'Visibilidade',

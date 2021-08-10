@@ -25,6 +25,61 @@ interface HelperProps {
     };
 }
 
+function CommunityMinimunExpectedDuration() {
+    const state = useContext(StateContext);
+
+    if (
+        state.claimAmount.length === 0 ||
+        state.maxClaim.length === 0 ||
+        state.incrementInterval.length === 0
+    ) {
+        return null;
+    }
+
+    const totalClaims =
+        parseInt(state.maxClaim, 10) / parseInt(state.claimAmount, 10);
+    const estimatedSeconds = //78912420; // 2 years, 6 months, 3 days, 8 hours, 7 minutes
+        parseInt(state.baseInterval, 10) * (totalClaims - 2) +
+        parseInt(state.incrementInterval, 10) *
+            (totalClaims - 1) *
+            state.incrementIntervalUnit;
+
+    let minutes = Math.floor(estimatedSeconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+    let months = Math.floor(days / 30);
+
+    const years = Math.floor(days / 365);
+    months = months - years * 12;
+    days = days - months * 30 - years * 365;
+    hours = hours - days * 24 - months * 30 * 24 - years * 365 * 24;
+    minutes =
+        minutes -
+        hours * 60 -
+        days * 24 * 60 -
+        months * 30 * 24 * 60 -
+        years * 365 * 24 * 60;
+
+    return (
+        <Text
+            style={{
+                marginVertical: 22,
+                fontFamily: 'Manrope-Bold',
+                fontSize: 18,
+                lineHeight: 28,
+            }}
+        >
+            {i18n.t('expectedUBIDuration', {
+                years,
+                months,
+                days,
+                hours,
+                minutes,
+            })}
+        </Text>
+    );
+}
+
 function CommunityVisibility(props: HelperProps) {
     const modalizeVisibilityRef = useRef<Modalize>(null);
 
@@ -525,6 +580,7 @@ export default function Contract() {
                     content: setHelperContent,
                 }}
             />
+            <CommunityMinimunExpectedDuration />
             <Portal>
                 <Modalize ref={modalizeHelperRef} adjustToContentHeight>
                     <View
