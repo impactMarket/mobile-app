@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { ipctColors } from 'styles/index';
 
+import Contract from './contract';
 import Metadata from './metadata';
 import {
     DispatchContext,
@@ -62,6 +63,7 @@ function CreateCommunityScreen() {
                 <DispatchContext.Provider value={dispatch}>
                     <StateContext.Provider value={state}>
                         <Metadata />
+                        <Contract />
                     </StateContext.Provider>
                 </DispatchContext.Provider>
             </ScrollView>

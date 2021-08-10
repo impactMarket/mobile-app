@@ -12,6 +12,7 @@ interface INITIAL_FORM_STATE {
     };
     email: string;
     currency: string;
+    claimAmount: string;
 }
 export enum formAction {
     SET_NAME = 'form/setName',
@@ -22,6 +23,7 @@ export enum formAction {
     SET_GPS = 'form/setGPS',
     SET_EMAIL = 'form/setEmail',
     SET_CURRENCY = 'form/setCurrency',
+    SET_CLAIM_AMOUNT = 'form/setClaimAmount',
 }
 
 interface communityNameAction {
@@ -67,6 +69,11 @@ interface communityCurrencyAction {
     payload: string;
 }
 
+interface communityClaimAmountAction {
+    type: formAction.SET_CLAIM_AMOUNT;
+    payload: string;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -75,7 +82,8 @@ type FormActionTypes =
     | communityCountryAction
     | communityGPSAction
     | communityEmailAction
-    | communityCurrencyAction;
+    | communityCurrencyAction
+    | communityClaimAmountAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -89,6 +97,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
     },
     email: '',
     currency: '',
+    claimAmount: '',
 };
 
 export function reducer(
@@ -112,6 +121,8 @@ export function reducer(
             return { ...state, email: action.payload };
         case formAction.SET_CURRENCY:
             return { ...state, currency: action.payload };
+        case formAction.SET_CLAIM_AMOUNT:
+            return { ...state, claimAmount: action.payload };
         default:
             return state;
     }
