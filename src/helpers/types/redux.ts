@@ -26,6 +26,7 @@ import {
     appAction,
     modalDonateAction,
     storiesAction,
+    communitiesAction,
     SET_USER_AUTH_REQUEST,
     SET_USER_AUTH_SUCCESS,
     SET_USER_AUTH_FAILURE,
@@ -235,6 +236,27 @@ interface SetAppPushNotificationListeners {
     };
 }
 
+interface InitLoadCommunitiesActionRequest {
+    type: typeof communitiesAction.INIT_REQUEST;
+    payload: {
+        offset: number;
+        limit: number;
+        orderBy?: string;
+        filter?: string;
+        lat?: number;
+        lng?: number;
+    };
+}
+
+interface InitLoadCommunitiesActionSuccess {
+    type: typeof communitiesAction.INIT_SUCCESS;
+    payload: CommunityAttributes[];
+}
+
+interface InitLoadCommunitiesActionFailure {
+    type: typeof communitiesAction.INIT_FAILURE;
+}
+
 export type UserActionTypes =
     | UserWalletAction
     | UserSetBalanceAction
@@ -281,6 +303,11 @@ export type StoriesActionTypes =
     | LoadMyStoriesActionRequest
     | LoadMyStoriesActionSuccess
     | LoadMyStoriesActionFailure;
+
+export type CommunitiesActionTypes =
+    | InitLoadCommunitiesActionRequest
+    | InitLoadCommunitiesActionSuccess
+    | InitLoadCommunitiesActionFailure;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes

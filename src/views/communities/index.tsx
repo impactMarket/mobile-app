@@ -3,6 +3,7 @@ import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Select from 'components/core/Select';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import * as Location from 'expo-location';
+import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 // import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
@@ -10,6 +11,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Alert, FlatList, Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
@@ -17,6 +19,7 @@ import CommunityCard from './CommunityCard';
 import Stories from './Stories';
 
 function CommunitiesScreen() {
+    const dispatch = useDispatch();
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
     const modalizeOrderRef = useRef<Modalize>(null);
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
@@ -30,6 +33,12 @@ function CommunitiesScreen() {
     const [reachedEndList, setReachedEndList] = useState(false);
 
     useEffect(() => {
+        dispatch(
+            fetchCommunitiesListRequest({
+                offset: 0,
+                limit: 5,
+            })
+        );
         Api.community
             .list({
                 offset: 0,
