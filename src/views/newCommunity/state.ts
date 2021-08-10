@@ -17,6 +17,7 @@ interface INITIAL_FORM_STATE {
     maxClaim: string;
     incrementInterval: string;
     incrementIntervalUnit: number;
+    visibility: string;
 }
 export enum formAction {
     SET_NAME = 'form/setName',
@@ -32,6 +33,7 @@ export enum formAction {
     SET_MAX_CLAIM = 'form/setMaxClaim',
     SET_INCREMENT_INTERVAL = 'form/setIncrementInterval',
     SET_INCREMENT_INTERVAL_UNIT = 'form/setIncrementIntervalUnit',
+    SET_VISIBILITY = 'form/setVisibility',
 }
 
 interface communityNameAction {
@@ -97,6 +99,11 @@ interface communityIncrementIntervalAction {
     payload: string;
 }
 
+interface communityVisibilityAction {
+    type: formAction.SET_VISIBILITY;
+    payload: string;
+}
+
 interface communityIncrementIntervalUnitAction {
     type: formAction.SET_INCREMENT_INTERVAL_UNIT;
     payload: number;
@@ -115,7 +122,8 @@ type FormActionTypes =
     | communityBaseIntervalAction
     | communityMaxClaimAction
     | communityIncrementIntervalAction
-    | communityIncrementIntervalUnitAction;
+    | communityIncrementIntervalUnitAction
+    | communityVisibilityAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -134,6 +142,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
     maxClaim: '',
     incrementInterval: '',
     incrementIntervalUnit: 60,
+    visibility: 'public',
 };
 
 export function reducer(
@@ -167,6 +176,8 @@ export function reducer(
             return { ...state, incrementInterval: action.payload };
         case formAction.SET_INCREMENT_INTERVAL_UNIT:
             return { ...state, incrementIntervalUnit: action.payload };
+        case formAction.SET_VISIBILITY:
+            return { ...state, visibility: action.payload };
         default:
             return state;
     }

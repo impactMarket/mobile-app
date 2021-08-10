@@ -25,6 +25,71 @@ interface HelperProps {
     };
 }
 
+function CommunityVisibility(props: HelperProps) {
+    const modalizeVisibilityRef = useRef<Modalize>(null);
+
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+
+    return (
+        <View style={{ marginTop: 28 }}>
+            <Select
+                label={i18n.t('visibility')}
+                help
+                onHelpPress={() => {
+                    props.setHelperInfo.title(i18n.t('visibility'));
+                    props.setHelperInfo.content(i18n.t('visibilityHelp'));
+                    props.helperRef.current.open();
+                }}
+                value={
+                    state.visibility === 'public'
+                        ? i18n.t('public')
+                        : i18n.t('private')
+                }
+                onPress={() => modalizeVisibilityRef.current?.open()}
+            />
+            <Portal>
+                <Modalize
+                    ref={modalizeVisibilityRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('visibility'),
+                        modalizeVisibilityRef
+                    )}
+                    adjustToContentHeight
+                >
+                    <View
+                        style={{
+                            paddingLeft: 8,
+                            // height: 120,
+                            marginBottom: 22,
+                        }}
+                    >
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                dispatch({
+                                    type: formAction.SET_VISIBILITY,
+                                    payload: value,
+                                });
+                                modalizeVisibilityRef.current?.close();
+                            }}
+                            value={state.visibility}
+                        >
+                            <RadioButton.Item
+                                label={i18n.t('public')}
+                                value="public"
+                            />
+                            <RadioButton.Item
+                                label={i18n.t('private')}
+                                value="private"
+                            />
+                        </RadioButton.Group>
+                    </View>
+                </Modalize>
+            </Portal>
+        </View>
+    );
+}
+
 function CommunityIncrementInterval(props: HelperProps) {
     const modalizeClaimIncrementRef = useRef<Modalize>(null);
 
@@ -126,7 +191,7 @@ function CommunityIncrementInterval(props: HelperProps) {
                 >
                     <View
                         style={{
-                            height: 160,
+                            // height: 160,
                             marginBottom: 22,
                             paddingLeft: 8,
                         }}
@@ -283,7 +348,7 @@ function CommunityClaimFrequency(props: HelperProps) {
                 >
                     <View
                         style={{
-                            height: 120,
+                            // height: 120,
                             paddingLeft: 8,
                             marginBottom: 22,
                         }}
@@ -447,6 +512,13 @@ export default function Contract() {
                 }}
             />
             <CommunityIncrementInterval
+                helperRef={modalizeHelperRef}
+                setHelperInfo={{
+                    title: setHelperTitle,
+                    content: setHelperContent,
+                }}
+            />
+            <CommunityVisibility
                 helperRef={modalizeHelperRef}
                 setHelperInfo={{
                     title: setHelperTitle,
