@@ -49,7 +49,7 @@ test('create community - metadata', async () => {
                 },
             },
         });
-    }); // mockReturnValueOnce('USD');
+    });
     launchImageLibraryAsyncMock.mockReturnValueOnce(
         Promise.resolve({
             uri: '/some/fake/image/uri.jpg',
@@ -60,7 +60,9 @@ test('create community - metadata', async () => {
         })
     );
 
-    const { getByLabelText, getByText } = render(<FakeCreateCommunityScreen />);
+    const { getByLabelText, getByText, getByA11yLabel } = render(
+        <FakeCreateCommunityScreen />
+    );
     await act(async () => {});
 
     const communityName = getByLabelText(i18n.t('communityName'));
@@ -69,9 +71,11 @@ test('create community - metadata', async () => {
     fireEvent.press(getByLabelText('image uploader'));
 
     fireEvent.press(getByLabelText(i18n.t('country')));
-    // TODO: scroll to another country
-    await act(async () => expect(getByLabelText('AR')));
-    fireEvent.press(getByLabelText('AR'));
+
+    await act(async () => expect(getByA11yLabel(i18n.t('search'))));
+    fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+    await act(async () => expect(getByLabelText('PT')));
+    fireEvent.press(getByLabelText('PT'));
 
     fireEvent.press(getByText(i18n.t('submit')));
 });

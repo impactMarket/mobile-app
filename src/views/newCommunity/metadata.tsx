@@ -444,6 +444,7 @@ function CommunityCountry() {
                                 () => modalizeCountryRef.current?.close()
                             )}
                             <Searchbar
+                                accessibilityLabel={i18n.t('search')}
                                 placeholder={i18n.t('search')}
                                 style={{
                                     borderColor: ipctColors.borderGray,
