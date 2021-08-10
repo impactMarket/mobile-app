@@ -38,7 +38,18 @@ test('create community - metadata', async () => {
         any
     >;
 
-    useSelectorMock.mockReturnValueOnce('USD');
+    useSelectorMock.mockImplementation((callback) => {
+        return callback({
+            app: {
+                exchangeRates: { USD: 1 },
+            },
+            user: {
+                metadata: {
+                    currency: 'USD',
+                },
+            },
+        });
+    }); // mockReturnValueOnce('USD');
     launchImageLibraryAsyncMock.mockReturnValueOnce(
         Promise.resolve({
             uri: '/some/fake/image/uri.jpg',
