@@ -96,6 +96,7 @@ export default {
     minutes: 'Minutes',
     hours: 'Hours',
     days: 'Days',
+    time: 'Time',
     timeIncrementAfterClaim: 'Time increment after each claim',
     timeInMinutes: 'Time in minutes',
     visibility: 'Visibility',

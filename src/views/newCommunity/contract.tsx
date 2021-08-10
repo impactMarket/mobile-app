@@ -25,6 +25,143 @@ interface HelperProps {
     };
 }
 
+function CommunityIncrementInterval(props: HelperProps) {
+    const modalizeClaimIncrementRef = useRef<Modalize>(null);
+
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+
+    const [isIncrementIntervalValid, setIsIncrementIntervalValid] = useState(
+        true
+    );
+
+    return (
+        <>
+            <Text
+                style={{
+                    marginTop: 22,
+                    fontFamily: 'Manrope-Bold',
+                    fontSize: 14,
+                    lineHeight: 24,
+                }}
+            >
+                {i18n.t('contractIncrementTitle')}
+            </Text>
+            <View
+                style={{
+                    marginTop: 8,
+                    flex: 2,
+                    flexDirection: 'row',
+                }}
+            >
+                <View style={{ flex: 1, marginRight: 10 }}>
+                    <Input
+                        style={{
+                            fontFamily: 'Gelion-Regular',
+                            backgroundColor: 'transparent',
+                            paddingHorizontal: 0,
+                        }}
+                        label={i18n.t('time')}
+                        value={state.incrementInterval}
+                        help
+                        onPress={() => {
+                            props.setHelperInfo.title(
+                                i18n.t('timeIncrementAfterClaim')
+                            );
+                            props.setHelperInfo.content(
+                                i18n.t('timeIncrementAfterClaimHelp')
+                            );
+                            props.helperRef.current.open();
+                        }}
+                        placeholder="0"
+                        maxLength={14}
+                        keyboardType="numeric"
+                        onChangeText={(value) =>
+                            dispatch({
+                                type: formAction.SET_INCREMENT_INTERVAL,
+                                payload: value,
+                            })
+                        }
+                        onEndEditing={() =>
+                            setIsIncrementIntervalValid(
+                                state.incrementInterval.length > 0
+                            )
+                        }
+                    />
+                    {/* {!isIncrementalIntervalValid && (
+                        <HelperText
+                            type="error"
+                            padding="none"
+                            visible
+                            style={styles.errorText}
+                        >
+                            {i18n.t('incrementalIntervalRequired')}
+                        </HelperText>
+                    )} */}
+                </View>
+                <View style={{ flex: 1, marginLeft: 10 }}>
+                    <Select
+                        value={
+                            // TODO: Refactor
+                            state.incrementIntervalUnit === 60
+                                ? i18n.t('minutes')
+                                : state.incrementIntervalUnit === 3600
+                                ? i18n.t('hours')
+                                : i18n.t('days')
+                        }
+                        onPress={() =>
+                            modalizeClaimIncrementRef.current?.open()
+                        }
+                    />
+                </View>
+            </View>
+            <Portal>
+                <Modalize
+                    ref={modalizeClaimIncrementRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('incrementalFrequency'),
+                        modalizeClaimIncrementRef
+                    )}
+                    adjustToContentHeight
+                >
+                    <View
+                        style={{
+                            height: 160,
+                            marginBottom: 22,
+                            paddingLeft: 8,
+                        }}
+                    >
+                        <RadioButton.Group
+                            onValueChange={(value) => {
+                                dispatch({
+                                    type:
+                                        formAction.SET_INCREMENT_INTERVAL_UNIT,
+                                    payload: Number(value),
+                                });
+                                modalizeClaimIncrementRef.current?.close();
+                            }}
+                            value={state.incrementIntervalUnit.toString()}
+                        >
+                            <RadioButton.Item
+                                label={i18n.t('minutes')}
+                                value="60"
+                            />
+                            <RadioButton.Item
+                                label={i18n.t('hours')}
+                                value="3600"
+                            />
+                            <RadioButton.Item
+                                label={i18n.t('days')}
+                                value="86400"
+                            />
+                        </RadioButton.Group>
+                    </View>
+                </Modalize>
+            </Portal>
+        </>
+    );
+}
+
 function CommunityMaxClaim(props: HelperProps) {
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
@@ -303,6 +440,13 @@ export default function Contract() {
                 }}
             />
             <CommunityMaxClaim
+                helperRef={modalizeHelperRef}
+                setHelperInfo={{
+                    title: setHelperTitle,
+                    content: setHelperContent,
+                }}
+            />
+            <CommunityIncrementInterval
                 helperRef={modalizeHelperRef}
                 setHelperInfo={{
                     title: setHelperTitle,

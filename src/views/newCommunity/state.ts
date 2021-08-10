@@ -15,6 +15,8 @@ interface INITIAL_FORM_STATE {
     claimAmount: string;
     baseInterval: string;
     maxClaim: string;
+    incrementInterval: string;
+    incrementIntervalUnit: number;
 }
 export enum formAction {
     SET_NAME = 'form/setName',
@@ -28,6 +30,8 @@ export enum formAction {
     SET_CLAIM_AMOUNT = 'form/setClaimAmount',
     SET_BASE_INTERVAL = 'form/setBaseInterval',
     SET_MAX_CLAIM = 'form/setMaxClaim',
+    SET_INCREMENT_INTERVAL = 'form/setIncrementInterval',
+    SET_INCREMENT_INTERVAL_UNIT = 'form/setIncrementIntervalUnit',
 }
 
 interface communityNameAction {
@@ -88,6 +92,16 @@ interface communityMaxClaimAction {
     payload: string;
 }
 
+interface communityIncrementIntervalAction {
+    type: formAction.SET_INCREMENT_INTERVAL;
+    payload: string;
+}
+
+interface communityIncrementIntervalUnitAction {
+    type: formAction.SET_INCREMENT_INTERVAL_UNIT;
+    payload: number;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -99,7 +113,9 @@ type FormActionTypes =
     | communityCurrencyAction
     | communityClaimAmountAction
     | communityBaseIntervalAction
-    | communityMaxClaimAction;
+    | communityMaxClaimAction
+    | communityIncrementIntervalAction
+    | communityIncrementIntervalUnitAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -116,6 +132,8 @@ export const formInitialState: INITIAL_FORM_STATE = {
     claimAmount: '',
     baseInterval: '86400',
     maxClaim: '',
+    incrementInterval: '',
+    incrementIntervalUnit: 60,
 };
 
 export function reducer(
@@ -145,6 +163,10 @@ export function reducer(
             return { ...state, baseInterval: action.payload };
         case formAction.SET_MAX_CLAIM:
             return { ...state, maxClaim: action.payload };
+        case formAction.SET_INCREMENT_INTERVAL:
+            return { ...state, incrementInterval: action.payload };
+        case formAction.SET_INCREMENT_INTERVAL_UNIT:
+            return { ...state, incrementIntervalUnit: action.payload };
         default:
             return state;
     }

@@ -93,6 +93,7 @@ export default {
     minutes: 'Minutos',
     hours: 'Horas',
     days: 'Dias',
+    time: 'Tempo',
     timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
     timeInMinutes: 'Tempo em minutos',
     visibility: 'Visibilidade',
@@ -210,7 +211,7 @@ export default {
     frequencyHelp:
         'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pegar novamente (mais $2).',
     timeIncrementAfterClaimHelp:
-        'É possível adicionar um incremento de tempo cada vez qEue um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
+        'É possível adicionar um incremento de tempo cada vez que um beneficiário recebe. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
     visibilityHelp:
         'Uma comunidade pode ser publica (necessita da aprovação da equipe da impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
     currencyHelp: 'Escolha aqui a moeda usada entre os seus beneficiários.',
