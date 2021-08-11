@@ -2,10 +2,13 @@ import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
+import Modal from 'components/Modal';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
@@ -586,35 +589,36 @@ function CommunityName() {
 }
 
 function CommunityCover() {
-    const [isCoverImageValid, setIsCoverImageValid] = useState(true);
+    const [toggleDimensionsModal, setToggleDimensionsModal] = useState(false);
+
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
-    const pickImage = async () =>
-        // cb: Dispatch<React.SetStateAction<string>>,
-        // cbv: Dispatch<React.SetStateAction<boolean>>
-        {
-            const result = (await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                quality: 1,
-            })) as {
-                cancelled: false;
-            } & ImageInfo;
+    const pickImage = async () => {
+        const result = (await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+        })) as {
+            cancelled: false;
+        } & ImageInfo;
 
-            const { width, height } = result;
+        const { width, height } = result;
 
-            if (!result.cancelled) {
-                if (width >= 784 && height >= 784) {
-                    dispatch({
-                        type: formAction.SET_COVER_IMAGE,
-                        payload: result.uri,
-                    });
-                } else {
-                    // TODO:
-                    // setToggleImageDimensionsModal(true);
-                }
+        if (!result.cancelled) {
+            if (width >= 784 && height >= 784) {
+                dispatch({
+                    type: formAction.SET_COVER_IMAGE,
+                    payload: result.uri,
+                });
+                dispatch({
+                    type: formAction.SET_COVER_VALID,
+                    payload: result.uri.length > 0,
+                });
+            } else {
+                setToggleDimensionsModal(true);
             }
-        };
+        }
+    };
 
     if (state.coverImage.length > 0) {
         return (
@@ -653,73 +657,135 @@ function CommunityCover() {
         <View
             style={{
                 marginTop: 12,
-                flexDirection: 'row',
-                width: '100%',
                 marginBottom: 24,
-                alignItems: 'center',
-                justifyContent: 'space-between',
             }}
         >
             <View
                 style={{
-                    flexDirection: 'column',
-                }}
-            >
-                <Headline
-                    style={{
-                        fontFamily: 'Manrope-Bold',
-                        fontSize: 15,
-                        lineHeight: 24,
-                    }}
-                >
-                    {i18n.t('changeCoverImage')}
-                </Headline>
-                <Text
-                    style={{
-                        color: '#73839D',
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 14,
-                        lineHeight: 24,
-                    }}
-                >
-                    Min. 784px by 784px
-                </Text>
-                {/* TODO: {!isCoverImageValid && (
-                    <HelperText
-                        type="error"
-                        padding="none"
-                        visible
-                        style={styles.errorText}
-                    >
-                        {i18n.t('coverImageRequired')}
-                    </HelperText>
-                )} */}
-            </View>
-            <Pressable
-                accessibilityLabel="image uploader"
-                style={{
-                    width: 98,
-                    height: 44,
-                    paddingHorizontal: 12,
-                    paddingVertical: 8,
-                    backgroundColor: '#E9EDF4',
-                    borderRadius: 8,
+                    flexDirection: 'row',
+                    width: '100%',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'space-between',
                 }}
-                onPress={pickImage}
             >
-                <Text
+                <View
                     style={{
-                        color: '#333239',
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 15,
-                        lineHeight: 16,
+                        flexDirection: 'column',
                     }}
                 >
-                    Upload
+                    <Headline
+                        style={{
+                            fontFamily: 'Manrope-Bold',
+                            fontSize: 15,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('changeCoverImage')}
+                    </Headline>
+                    <Text
+                        style={{
+                            color: '#73839D',
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 14,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('minCoverSize')}
+                    </Text>
+                </View>
+                <Pressable
+                    accessibilityLabel="image uploader"
+                    style={{
+                        width: 98,
+                        height: 44,
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        backgroundColor: '#E9EDF4',
+                        borderRadius: 8,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    onPress={pickImage}
+                >
+                    <Text
+                        style={{
+                            color: '#333239',
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 15,
+                            lineHeight: 16,
+                        }}
+                    >
+                        {i18n.t('upload')}
+                    </Text>
+                </Pressable>
+                <Portal>
+                    <Modal
+                        visible={toggleDimensionsModal}
+                        title={i18n.t('modalErrorTitle')}
+                        onDismiss={() => {
+                            setToggleDimensionsModal(false);
+                        }}
+                        buttons={
+                            <Button
+                                modeType="gray"
+                                style={{ width: '100%' }}
+                                onPress={() => {
+                                    setToggleDimensionsModal(false);
+                                }}
+                            >
+                                {i18n.t('close')}
+                            </Button>
+                        }
+                    >
+                        <View
+                            style={{
+                                paddingVertical: 16,
+                                paddingHorizontal: 22,
+                                borderStyle: 'solid',
+                                borderColor: '#EB5757',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <WarningRedTriangle
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    marginRight: 16,
+                                    marginTop: 8,
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                    // textAlign: 'justify',
+                                    marginRight: 12,
+                                }}
+                            >
+                                {i18n.t('imageDimensionsNotFit')}
+                            </Text>
+                        </View>
+                    </Modal>
+                </Portal>
+            </View>
+            {!state.validation.cover && (
+                <Text
+                    style={{
+                        color: '#EB5757',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        fontFamily: 'Inter-Regular',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    {i18n.t('coverImageRequired')}
                 </Text>
-            </Pressable>
+            )}
         </View>
     );
 }

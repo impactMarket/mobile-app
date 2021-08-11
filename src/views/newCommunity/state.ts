@@ -28,6 +28,7 @@ interface INITIAL_FORM_STATE {
         email: boolean;
         emailFormat: boolean;
         gps: boolean;
+        cover: boolean;
     };
 }
 export enum formAction {
@@ -53,6 +54,7 @@ export enum formAction {
     SET_EMAIL_VALID = 'form/setEmailValid',
     SET_EMAIL_FORMAT_VALID = 'form/setEmailFormatValid',
     SET_GPS_VALID = 'form/setGPSValid',
+    SET_COVER_VALID = 'form/setCoverValid',
 }
 
 interface communityNameAction {
@@ -170,6 +172,11 @@ interface communityGPSValidAction {
     payload: boolean;
 }
 
+interface communityCoverValidAction {
+    type: formAction.SET_COVER_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -192,7 +199,8 @@ type FormActionTypes =
     | communityCountryValidAction
     | communityEmailValidAction
     | communityEmailFormatValidAction
-    | communityGPSValidAction;
+    | communityGPSValidAction
+    | communityCoverValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -221,6 +229,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
         email: true,
         emailFormat: true,
         gps: true,
+        cover: true,
     },
 };
 
@@ -318,6 +327,14 @@ export function reducer(
                     gps: action.payload,
                 },
             };
+        case formAction.SET_COVER_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    cover: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -372,6 +389,11 @@ export const validateField = (
         dispatch({
             type: formAction.SET_GPS_VALID,
             payload: state.gps.latitude !== 0 || state.gps.longitude !== 0,
+        }),
+    cover: () =>
+        dispatch({
+            type: formAction.SET_COVER_VALID,
+            payload: state.coverImage.length > 0,
         }),
     // no currency validation. User's currency is used by default
 });

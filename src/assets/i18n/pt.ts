@@ -95,6 +95,8 @@ export default {
     days: 'Dias',
     time: 'Tempo',
     selectCountry: 'Selecionar país',
+    minCoverSize: 'Min. 784px por 784px',
+    upload: 'Carregar',
     expectedUBIDuration:
         'Este programa de RBU deverá durar pelo menos {{years}} anos {{months}} meses {{days}} dias {{hours}} horas {{minutes}} minutos por beneficiário.',
     timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',

@@ -98,6 +98,8 @@ export default {
     days: 'Days',
     time: 'Time',
     selectCountry: 'Select country',
+    minCoverSize: 'Min. 784px by 784px',
+    upload: 'Upload',
     expectedUBIDuration:
         'This UBI will take at least {{years}} years {{months}} months {{days}} days {{hours}} hours {{minutes}} minutes per beneficiary.',
     timeIncrementAfterClaim: 'Time increment after each claim',

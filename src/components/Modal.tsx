@@ -83,7 +83,7 @@ export default class Modal extends Component<IModalProps, IModalState> {
         return (
             <ModalRNP
                 visible={visible}
-                dismissable={onDismiss !== undefined}
+                dismissable={onDismiss !== undefined} // TODO: change to false and test all modals
                 onDismiss={onDismiss}
             >
                 <Card
