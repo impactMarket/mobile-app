@@ -270,28 +270,14 @@ export const validateField = (
             payload: state.name.length > 0,
         }),
     description: () => {
-        if (state.description.length === 0) {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_VALID,
-                payload: false,
-            });
-        } else {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_VALID,
-                payload: true,
-            });
-        }
-        if (state.description.length < 240) {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
-                payload: true,
-            });
-        } else {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
-                payload: false,
-            });
-        }
+        dispatch({
+            type: formAction.SET_DESCRIPTION_VALID,
+            payload: state.description.length !== 0,
+        });
+        dispatch({
+            type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
+            payload: state.description.length < 240,
+        });
     },
     city: () =>
         dispatch({
