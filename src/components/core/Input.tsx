@@ -7,6 +7,8 @@ import {
     StyleSheet,
     GestureResponderEvent,
     TouchableWithoutFeedback,
+    StyleProp,
+    ViewStyle,
 } from 'react-native';
 import { ipctColors } from 'styles/index';
 
@@ -15,6 +17,8 @@ interface IInputProps extends TextInputProps {
     help?: boolean;
     isBig?: boolean;
     onPress?: (event: GestureResponderEvent) => void;
+    boxStyle?: StyleProp<ViewStyle>;
+    error?: string;
 }
 export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
@@ -22,70 +26,56 @@ export default class Input extends Component<IInputProps, object> {
     }
 
     render() {
-        const {
-            label,
-            help,
-            onPress,
-            value,
-            maxLength,
-            onEndEditing,
-            onChangeText,
-            editable,
-            placeholder,
-            isBig,
-            style,
-            multiline,
-            numberOfLines,
-            keyboardType,
-        } = this.props;
+        const { label, help, onPress, error } = this.props;
 
         return (
-            <View
-                style={[
-                    style,
-                    {
+            <View style={this.props.boxStyle}>
+                <View
+                    style={[
+                        styles.outline,
+                        {
+                            borderColor: error
+                                ? '#EB5757'
+                                : ipctColors.borderGray,
+                        },
+                    ]}
+                />
+                <Text
+                    style={[
+                        styles.label,
+                        {
+                            backgroundColor: label ? '#FFFFFF' : 'transparent',
+                        },
+                    ]}
+                >
+                    {label}{' '}
+                    {help && (
+                        <TouchableWithoutFeedback
+                            onPress={onPress}
+                            style={{ width: 50, height: 30 }}
+                        >
+                            <Text style={{ color: ipctColors.blueRibbon }}>
+                                [?]
+                            </Text>
+                        </TouchableWithoutFeedback>
+                    )}
+                </Text>
+                <TextInput
+                    {...this.props}
+                    style={{
+                        height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
+                        minHeight: 38,
+                        flexGrow: 1,
                         width: '100%',
-                        height: isBig ? 200 : 48,
-                    },
-                ]}
-            >
-                <View style={styles.outline}>
-                    <Text
-                        style={[
-                            styles.label,
-                            {
-                                backgroundColor: label
-                                    ? '#FFFFFF'
-                                    : 'transparent',
-                            },
-                        ]}
-                    >
-                        {label}{' '}
-                        {help && (
-                            <TouchableWithoutFeedback
-                                onPress={onPress}
-                                style={{ width: 50, height: 30 }}
-                            >
-                                <Text style={{ color: ipctColors.blueRibbon }}>
-                                    [?]
-                                </Text>
-                            </TouchableWithoutFeedback>
-                        )}
-                    </Text>
-                    <TextInput
-                        {...this.props}
-                        style={styles.textInput}
-                        // value={value}
-                        // maxLength={maxLength}
-                        // onEndEditing={onEndEditing}
-                        // onChangeText={onChangeText}
-                        // keyboardType={keyboardType}
-                        // editable={editable}
-                        // multiline={multiline}
-                        // numberOfLines={numberOfLines}
-                        // placeholder={placeholder}
-                    />
-                </View>
+                        paddingHorizontal: 10,
+                        marginVertical: 5,
+                        alignSelf: 'center',
+                        zIndex: 1,
+                        fontSize: 15,
+                        fontFamily: 'Inter-Regular',
+                        color: ipctColors.almostBlack,
+                    }}
+                />
             </View>
         );
     }
@@ -104,7 +94,6 @@ const styles = StyleSheet.create({
         paddingBottom: 12,
         borderRadius: 6,
         borderWidth: 0.5,
-        borderColor: ipctColors.borderGray,
     },
     textInput: {
         flexGrow: 1,
