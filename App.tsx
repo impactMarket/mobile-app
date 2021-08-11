@@ -81,6 +81,11 @@ import Navigator from './src/navigator';
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
 import { ipctColors } from './src/styles';
+if (__DEV__) {
+    import('./ReactotronConfig').then(() =>
+        console.log('Reactotron Configured')
+    );
+}
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));

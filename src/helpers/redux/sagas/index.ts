@@ -1,6 +1,6 @@
 import { all, spawn } from 'redux-saga/effects';
 
-import * as communitiesSaga from './communities';
+import communitiesSaga from './communities';
 import { startWatchingNetworkConnectivity } from './offline';
 
 export default function* rootSagas() {

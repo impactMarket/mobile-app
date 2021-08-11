@@ -3,15 +3,20 @@ import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Select from 'components/core/Select';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import * as Location from 'expo-location';
-import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
+import {
+    cleanCommunitiesListState,
+    fetchCommunitiesListRequest,
+} from 'helpers/redux/actions/communities';
+import communities from 'helpers/redux/sagas/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 // import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
+import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useRef } from 'react';
 import { Alert, FlatList, Dimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
@@ -29,8 +34,13 @@ function CommunitiesScreen() {
     >(undefined);
 
     const [refreshing, setRefreshing] = useState(true);
-    const [communities, setCommunities] = useState<CommunityAttributes[]>([]);
-    const [reachedEndList, setReachedEndList] = useState(false);
+    const communities = useSelector(
+        (state: IRootState) => state.communities.communities
+    );
+
+    const reachedEndList = useSelector(
+        (state: IRootState) => state.communities.reachedEndList
+    );
 
     useEffect(() => {
         dispatch(
@@ -39,29 +49,12 @@ function CommunitiesScreen() {
                 limit: 5,
             })
         );
-        Api.community
-            .list({
-                offset: 0,
-                limit: 5,
-            })
-            .then((c) => {
-                if (c.length < 5) {
-                    setReachedEndList(true);
-                } else {
-                    setReachedEndList(false);
-                }
-                setCommunities(c);
-            })
-            .finally(() => setRefreshing(false));
     }, []);
 
     const handleChangeOrder = async (order: string) => {
         modalizeOrderRef.current?.close();
         setRefreshing(true);
         setCommuntiesOrder(order);
-        //
-        const previousCommunities = communities;
-        setCommunities([]);
         flatListRef.current?.scrollToIndex({ index: 0 });
         if (order === 'nearest') {
             try {
@@ -78,91 +71,63 @@ function CommunitiesScreen() {
                 const location = await Location.getCurrentPositionAsync({
                     accuracy: Location.Accuracy.Low,
                 });
+
                 setUserLocation(location);
-                Api.community
-                    .list({
+                dispatch(cleanCommunitiesListState());
+
+                dispatch(
+                    fetchCommunitiesListRequest({
                         offset: 0,
                         limit: 5,
                         orderBy: 'nearest',
                         lat: location.coords.latitude,
                         lng: location.coords.longitude,
                     })
-                    .then((c) => {
-                        if (c.length < 5) {
-                            setReachedEndList(true);
-                        } else {
-                            setReachedEndList(false);
-                        }
-                        setCommunities(c);
-                        setCommuntiesOffset(0);
-                    })
-                    .finally(() => setRefreshing(false));
+                );
+
+                setCommuntiesOffset(0);
             } catch (e) {
-                setCommunities(previousCommunities);
+                console.log('catch handleChangeOrder');
                 setCommuntiesOrder('bigger');
                 setRefreshing(false);
             }
         } else {
-            Api.community
-                .list({
+            dispatch(cleanCommunitiesListState());
+            dispatch(
+                fetchCommunitiesListRequest({
                     offset: 0,
                     limit: 5,
                 })
-                .then((c) => {
-                    if (c.length < 5) {
-                        setReachedEndList(true);
-                    } else {
-                        setReachedEndList(false);
-                    }
-                    setCommunities(c);
-                    setCommuntiesOffset(0);
-                })
-                .finally(() => setRefreshing(false));
+            );
         }
     };
 
     const handleOnEndReached = (info: { distanceFromEnd: number }) => {
-        if (!refreshing && !reachedEndList) {
+        if (!reachedEndList) {
             setRefreshing(true);
             if (communtiesOrder === 'nearest' && userLocation) {
-                Api.community
-                    .list({
+                dispatch(
+                    fetchCommunitiesListRequest({
                         offset: communtiesOffset + 5,
                         limit: 5,
                         orderBy: 'nearest',
                         lat: userLocation.coords.latitude,
                         lng: userLocation.coords.longitude,
                     })
-                    .then((c) => {
-                        if (c.length < 5) {
-                            setReachedEndList(true);
-                        }
-                        setCommunities(communities.concat(c));
-                        setCommuntiesOffset(communtiesOffset + 5);
-                    })
-                    .finally(() => setRefreshing(false));
+                );
+
+                setCommuntiesOffset(communtiesOffset + 5);
+                setRefreshing(false);
             } else {
-                Api.community
-                    .list({
+                dispatch(
+                    fetchCommunitiesListRequest({
                         offset: communtiesOffset + 5,
                         limit: 5,
                     })
-                    .then((c) => {
-                        if (c.length < 5) {
-                            setReachedEndList(true);
-                        }
-                        // TODO: until the backend issue is fixed
-                        setCommunities([
-                            ...new Map(
-                                [...communities, ...c].map((item) => [
-                                    item.id,
-                                    item,
-                                ])
-                            ).values(),
-                        ]);
-                        setCommuntiesOffset(communtiesOffset + 5);
-                    })
-                    .finally(() => setRefreshing(false));
+                );
+
+                setCommuntiesOffset(communtiesOffset + 5);
+                setRefreshing(false);
             }
         }
     };
@@ -197,6 +162,41 @@ function CommunitiesScreen() {
         );
     };
 
+    const renderCommunityOrder = () => {
+        return (
+            <Modalize
+                ref={modalizeOrderRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('order'),
+                    modalizeOrderRef
+                )}
+                adjustToContentHeight
+            >
+                <View
+                    style={{
+                        height: 110,
+                    }}
+                >
+                    <RadioButton.Group
+                        onValueChange={(value) => handleChangeOrder(value)}
+                        value={communtiesOrder}
+                    >
+                        <RadioButton.Item
+                            key="bigger"
+                            label={i18n.t('bigger')}
+                            value="bigger"
+                        />
+                        <RadioButton.Item
+                            key="nearest"
+                            label={i18n.t('nearest')}
+                            value="nearest"
+                        />
+                    </RadioButton.Group>
+                </View>
+            </Modalize>
+        );
+    };
+
     return (
         <>
             <FlatList
@@ -221,46 +221,9 @@ function CommunitiesScreen() {
                 onEndReachedThreshold={0.5}
                 onEndReached={handleOnEndReached}
                 showsVerticalScrollIndicator={false}
-                // Performance settings
-                // removeClippedSubviews // Unmount components when outside of window
-                // initialNumToRender={4} // Reduce initial render amount
-                // maxToRenderPerBatch={2} // Reduce number in each render batch
-                // updateCellsBatchingPeriod={100} // Increase time between renders
-                // windowSize={7} // Reduce the window size
                 style={{ paddingTop: 20 }}
             />
-            <Portal>
-                <Modalize
-                    ref={modalizeOrderRef}
-                    HeaderComponent={renderHeader(
-                        i18n.t('order'),
-                        modalizeOrderRef
-                    )}
-                    adjustToContentHeight
-                >
-                    <View
-                        style={{
-                            height: 110,
-                        }}
-                    >
-                        <RadioButton.Group
-                            onValueChange={(value) => handleChangeOrder(value)}
-                            value={communtiesOrder}
-                        >
-                            <RadioButton.Item
-                                key="bigger"
-                                label={i18n.t('bigger')}
-                                value="bigger"
-                            />
-                            <RadioButton.Item
-                                key="nearest"
-                                label={i18n.t('nearest')}
-                                value="nearest"
-                            />
-                        </RadioButton.Group>
-                    </View>
-                </Modalize>
-            </Portal>
+            <Portal>{renderCommunityOrder()}</Portal>
         </>
     );
 }
