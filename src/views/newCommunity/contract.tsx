@@ -49,21 +49,13 @@ function CommunityMinimunExpectedDuration() {
             (totalClaims - 1) *
             state.incrementIntervalUnit;
 
-    let minutes = Math.floor(estimatedSeconds / 60);
-    let hours = Math.floor(minutes / 60);
-    let days = Math.floor(hours / 24);
-    let months = Math.floor(days / 30);
-
-    const years = Math.floor(days / 365);
-    months = months - years * 12;
-    days = days - months * 30 - years * 365;
-    hours = hours - days * 24 - months * 30 * 24 - years * 365 * 24;
-    minutes =
-        minutes -
-        hours * 60 -
-        days * 24 * 60 -
-        months * 30 * 24 * 60 -
-        years * 365 * 24 * 60;
+    const years = Math.floor(estimatedSeconds / 31536000);
+    const months = Math.floor((estimatedSeconds % 2629800) / 86400);
+    const days = Math.floor(((estimatedSeconds % 31536000) % 2629800) / 86400);
+    const hours = Math.floor(((estimatedSeconds % 31536000) % 86400) / 3600);
+    const minutes = Math.floor(
+        (((estimatedSeconds % 31536000) % 86400) % 3600) / 60
+    );
 
     return (
         <Text
