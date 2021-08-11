@@ -537,46 +537,55 @@ function CommunityCity() {
 }
 
 function CommunityDescription() {
-    const [isDescriptionValid, setIsDescriptionValid] = useState(true);
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
-    const handleChangeDescription = (value) => {
+    const handleChangeDescription = (value: string) => {
         dispatch({ type: formAction.SET_DESCRIPTION, payload: value });
     };
+
+    const error = !state.validation.description
+        ? i18n.t('communityDescriptionRequired')
+        : state.validation.descriptionTooShort
+        ? i18n.t('communityDescriptionTooShort')
+        : undefined;
+
+    const handleEndEdit = () => {
+        if (state.description.length === 0) {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_VALID,
+                payload: false,
+            });
+        } else {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_VALID,
+                payload: true,
+            });
+        }
+        if (state.description.length < 240) {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
+                payload: true,
+            });
+        } else {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
+                payload: false,
+            });
+        }
+    };
+
     return (
-        <View style={{ marginTop: 16, minHeight: 115 }}>
-            <Input
-                label={i18n.t('shortDescription')}
-                value={state.description}
-                maxLength={1024}
-                onChangeText={handleChangeDescription}
-                onEndEditing={() =>
-                    setIsDescriptionValid(state.description.length >= 240)
-                }
-                multiline
-            />
-        </View>
-        // {!isDescriptionValid && (
-        //     <HelperText
-        //         type="error"
-        //         padding="none"
-        //         visible
-        //         style={styles.errorText}
-        //     >
-        //         {i18n.t('communityDescriptionRequired')}
-        //     </HelperText>
-        // )}
-        // {!isDescriptionTooShort && (
-        //     <HelperText
-        //         type="error"
-        //         padding="none"
-        //         visible
-        //         style={styles.errorText}
-        //     >
-        //         {i18n.t('communityDescriptionTooShort')}
-        //     </HelperText>
-        // )}
+        <Input
+            label={i18n.t('shortDescription')}
+            value={state.description}
+            maxLength={1024}
+            onChangeText={handleChangeDescription}
+            onEndEditing={handleEndEdit}
+            error={error}
+            multiline
+            boxStyle={{ marginTop: 16 }}
+        />
     );
 }
 
@@ -584,7 +593,7 @@ function CommunityName() {
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
-    const handleChangeName = (value) => {
+    const handleChangeName = (value: string) => {
         dispatch({ type: formAction.SET_NAME, payload: value });
     };
 
@@ -594,28 +603,22 @@ function CommunityName() {
             payload: state.name.length > 0,
         });
 
+    const error = state.validation.name
+        ? undefined
+        : i18n.t('communityNameRequired');
+
     return (
-        <View style={{ marginTop: 28 }}>
-            <Input
-                style={{
-                    fontFamily: 'Gelion-Regular',
-                    backgroundColor: 'transparent',
-                    paddingHorizontal: 0,
-                }}
-                accessibilityLabel={i18n.t('communityName')}
-                label={i18n.t('communityName')}
-                testID="community-name"
-                value={state.name}
-                maxLength={32}
-                onChangeText={handleChangeName}
-                onEndEditing={handleEndEdit}
-                error={
-                    state.validation.name
-                        ? undefined
-                        : i18n.t('communityNameRequired')
-                }
-            />
-        </View>
+        <Input
+            accessibilityLabel={i18n.t('communityName')}
+            label={i18n.t('communityName')}
+            testID="community-name"
+            value={state.name}
+            maxLength={32}
+            onChangeText={handleChangeName}
+            onEndEditing={handleEndEdit}
+            error={error}
+            boxStyle={{ marginTop: 28 }}
+        />
     );
 }
 

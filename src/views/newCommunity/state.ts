@@ -20,6 +20,8 @@ interface INITIAL_FORM_STATE {
     visibility: string;
     validation: {
         name: boolean;
+        description: boolean;
+        descriptionTooShort: boolean;
     };
 }
 export enum formAction {
@@ -38,6 +40,8 @@ export enum formAction {
     SET_INCREMENT_INTERVAL_UNIT = 'form/setIncrementIntervalUnit',
     SET_VISIBILITY = 'form/setVisibility',
     SET_NAME_VALID = 'form/setNameValid',
+    SET_DESCRIPTION_VALID = 'form/setDescriptionValid',
+    SET_DESCRIPTION_TOO_SHORT_VALID = 'form/setDescriptionTooShortValid',
 }
 
 interface communityNameAction {
@@ -120,6 +124,16 @@ interface communityNameValidAction {
     payload: boolean;
 }
 
+interface communityDescriptionValidAction {
+    type: formAction.SET_DESCRIPTION_VALID;
+    payload: boolean;
+}
+
+interface communityDescriptionTooShortValidAction {
+    type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -135,7 +149,9 @@ type FormActionTypes =
     | communityIncrementIntervalAction
     | communityIncrementIntervalUnitAction
     | communityVisibilityAction
-    | communityNameValidAction;
+    | communityNameValidAction
+    | communityDescriptionValidAction
+    | communityDescriptionTooShortValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -157,6 +173,8 @@ export const formInitialState: INITIAL_FORM_STATE = {
     visibility: 'public',
     validation: {
         name: true,
+        description: true,
+        descriptionTooShort: false,
     },
 };
 
@@ -197,6 +215,22 @@ export function reducer(
             return {
                 ...state,
                 validation: { ...state.validation, name: action.payload },
+            };
+        case formAction.SET_DESCRIPTION_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    description: action.payload,
+                },
+            };
+        case formAction.SET_DESCRIPTION_TOO_SHORT_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    descriptionTooShort: action.payload,
+                },
             };
         default:
             return state;
