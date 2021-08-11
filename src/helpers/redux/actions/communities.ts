@@ -16,16 +16,23 @@ export function fetchCommunitiesListRequest(query: {
     };
 }
 export function fetchCommunitiesListSuccess(
-    communities: CommunityAttributes[]
+    communities: CommunityAttributes[],
+    reachedEndList: boolean
 ): CommunitiesActionTypes {
     return {
         type: communitiesAction.INIT_SUCCESS,
-        payload: communities,
+        payload: { communities, reachedEndList },
     };
 }
 
 export function fetchCommunitiesListFailure(): CommunitiesActionTypes {
     return {
         type: communitiesAction.INIT_FAILURE,
+    };
+}
+
+export function cleanCommunitiesListState(): CommunitiesActionTypes {
+    return {
+        type: communitiesAction.INIT_CLEAN,
     };
 }

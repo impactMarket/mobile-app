@@ -17,24 +17,26 @@ const listCommunities = (query: {
 }) => Api.community.list(query);
 
 export function* fetchCommunitiesList({ payload }: any) {
-    console.log('called fetchCommunitiesList');
     try {
-        const { query } = payload;
-
         const communities: CommunityAttributes[] = yield call(
             listCommunities,
-            query
+            payload
         );
 
-        console.log('called fetchCommunitiesList');
-        console.log({ communities });
+        let reachedEndList: boolean;
 
-        yield put(fetchCommunitiesListSuccess(communities));
+        if (communities.length < 5) {
+            reachedEndList = true;
+        } else {
+            reachedEndList = false;
+        }
+
+        yield put(fetchCommunitiesListSuccess(communities, reachedEndList));
     } catch (err) {
         yield put(fetchCommunitiesListFailure());
     }
 }
 
-export function* communitiesSaga() {
-    return [takeEvery(communitiesAction.INIT_REQUEST, fetchCommunitiesList)];
-}
+export default all([
+    takeEvery(communitiesAction.INIT_REQUEST, fetchCommunitiesList),
+]);

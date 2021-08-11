@@ -250,11 +250,15 @@ interface InitLoadCommunitiesActionRequest {
 
 interface InitLoadCommunitiesActionSuccess {
     type: typeof communitiesAction.INIT_SUCCESS;
-    payload: CommunityAttributes[];
+    payload: { communities: CommunityAttributes[]; reachedEndList: boolean };
 }
 
 interface InitLoadCommunitiesActionFailure {
     type: typeof communitiesAction.INIT_FAILURE;
+}
+
+interface InitLoadCommunitiesActionClean {
+    type: typeof communitiesAction.INIT_CLEAN;
 }
 
 export type UserActionTypes =
@@ -307,7 +311,8 @@ export type StoriesActionTypes =
 export type CommunitiesActionTypes =
     | InitLoadCommunitiesActionRequest
     | InitLoadCommunitiesActionSuccess
-    | InitLoadCommunitiesActionFailure;
+    | InitLoadCommunitiesActionFailure
+    | InitLoadCommunitiesActionClean;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes

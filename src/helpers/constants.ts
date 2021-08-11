@@ -100,6 +100,7 @@ export enum communitiesAction {
     INIT_REQUEST = 'communities/init_request',
     INIT_SUCCESS = 'communities/init_success',
     INIT_FAILURE = 'communities/init_failure',
+    INIT_CLEAN = 'communities/init_clean',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';
