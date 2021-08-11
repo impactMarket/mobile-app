@@ -172,8 +172,6 @@ function CommunityCurrency() {
 }
 
 function CommunityEmail() {
-    const [isEmailValid, setIsEmailValid] = useState(true);
-
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
@@ -183,34 +181,24 @@ function CommunityEmail() {
             payload: value,
         });
 
+    const handleEndEdit = () => validateField(state, dispatch).email();
+
+    const error = !state.validation.email
+        ? i18n.t('emailRequired')
+        : !state.validation.emailFormat
+        ? i18n.t('emailInvalidFormat')
+        : undefined;
+
     return (
-        <View>
-            <Input
-                style={{
-                    fontFamily: 'Gelion-Regular',
-                    backgroundColor: 'transparent',
-                    paddingHorizontal: 0,
-                }}
-                label={i18n.t('email')}
-                value={state.email}
-                maxLength={64}
-                keyboardType="email-address"
-                onChangeText={handleEmailChange}
-                onEndEditing={() => setIsEmailValid(validateEmail(state.email))}
-            />
-            {/* {!isEmailValid && (
-                <HelperText
-                    type="error"
-                    padding="none"
-                    visible
-                    style={styles.errorText}
-                >
-                    {!email
-                        ? i18n.t('emailRequired')
-                        : i18n.t('emailInvalidFormat')}
-                </HelperText>
-            )} */}
-        </View>
+        <Input
+            label={i18n.t('email')}
+            value={state.email}
+            maxLength={64}
+            keyboardType="email-address"
+            onChangeText={handleEmailChange}
+            onEndEditing={handleEndEdit}
+            error={error}
+        />
     );
 }
 

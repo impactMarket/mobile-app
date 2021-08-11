@@ -1,3 +1,4 @@
+import { validateEmail } from 'helpers/index';
 import React from 'react';
 
 interface INITIAL_FORM_STATE {
@@ -24,6 +25,8 @@ interface INITIAL_FORM_STATE {
         descriptionTooShort: boolean;
         city: boolean;
         country: boolean;
+        email: boolean;
+        emailFormat: boolean;
     };
 }
 export enum formAction {
@@ -46,6 +49,8 @@ export enum formAction {
     SET_DESCRIPTION_TOO_SHORT_VALID = 'form/setDescriptionTooShortValid',
     SET_CITY_VALID = 'form/setCityValid',
     SET_COUNTRY_VALID = 'form/setCountryValid',
+    SET_EMAIL_VALID = 'form/setEmailValid',
+    SET_EMAIL_FORMAT_VALID = 'form/setEmailFormatValid',
 }
 
 interface communityNameAction {
@@ -148,6 +153,16 @@ interface communityCountryValidAction {
     payload: boolean;
 }
 
+interface communityEmailValidAction {
+    type: formAction.SET_EMAIL_VALID;
+    payload: boolean;
+}
+
+interface communityEmailFormatValidAction {
+    type: formAction.SET_EMAIL_FORMAT_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -167,7 +182,9 @@ type FormActionTypes =
     | communityDescriptionValidAction
     | communityDescriptionTooShortValidAction
     | communityCityValidAction
-    | communityCountryValidAction;
+    | communityCountryValidAction
+    | communityEmailValidAction
+    | communityEmailFormatValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -193,6 +210,8 @@ export const formInitialState: INITIAL_FORM_STATE = {
         descriptionTooShort: false,
         city: true,
         country: true,
+        email: true,
+        emailFormat: true,
     },
 };
 
@@ -266,6 +285,22 @@ export function reducer(
                     country: action.payload,
                 },
             };
+        case formAction.SET_EMAIL_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    email: action.payload,
+                },
+            };
+        case formAction.SET_EMAIL_FORMAT_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    emailFormat: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -306,4 +341,14 @@ export const validateField = (
             type: formAction.SET_COUNTRY_VALID,
             payload: state.country.length > 0,
         }),
+    email: () => {
+        dispatch({
+            type: formAction.SET_EMAIL_VALID,
+            payload: state.email.length > 0,
+        });
+        dispatch({
+            type: formAction.SET_EMAIL_FORMAT_VALID,
+            payload: validateEmail(state.email),
+        });
+    },
 });
