@@ -192,6 +192,7 @@ function CommunityEmail() {
 
     return (
         <Input
+            accessibilityLabel={i18n.t('email')}
             label={i18n.t('email')}
             value={state.email}
             maxLength={64}
@@ -309,6 +310,7 @@ function CommunityLocation() {
         >
             <Button
                 // mode="contained"
+                accessibilityLabel={i18n.t('getGPSLocation')}
                 modeType="default"
                 style={{
                     paddingVertical: 0,
@@ -516,6 +518,7 @@ function CommunityCity() {
 
     return (
         <Input
+            accessibilityLabel={i18n.t('city')}
             label={i18n.t('city')}
             value={state.city}
             maxLength={32}
@@ -545,6 +548,7 @@ function CommunityDescription() {
 
     return (
         <Input
+            accessibilityLabel={i18n.t('shortDescription')}
             label={i18n.t('shortDescription')}
             value={state.description}
             maxLength={1024}
@@ -575,7 +579,6 @@ function CommunityName() {
         <Input
             accessibilityLabel={i18n.t('communityName')}
             label={i18n.t('communityName')}
-            testID="community-name"
             value={state.name}
             maxLength={32}
             onChangeText={handleChangeName}
