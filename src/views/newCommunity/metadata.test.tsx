@@ -68,11 +68,10 @@ test('create community - metadata', async () => {
     const communityName = getByLabelText(i18n.t('communityName'));
     fireEvent.changeText(communityName, 'test community');
 
-    fireEvent.press(getByLabelText('image uploader'));
+    await act(async () => fireEvent.press(getByLabelText('image uploader')));
 
     fireEvent.press(getByLabelText(i18n.t('country')));
 
-    await act(async () => expect(getByA11yLabel(i18n.t('search'))));
     fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
     await act(async () => expect(getByLabelText('PT')));
     fireEvent.press(getByLabelText('PT'));
