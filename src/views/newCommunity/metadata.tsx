@@ -581,13 +581,18 @@ function CommunityDescription() {
 }
 
 function CommunityName() {
-    const [isNameValid, setIsNameValid] = useState(true);
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
     const handleChangeName = (value) => {
         dispatch({ type: formAction.SET_NAME, payload: value });
     };
+
+    const handleEndEdit = () =>
+        dispatch({
+            type: formAction.SET_NAME_VALID,
+            payload: state.name.length > 0,
+        });
 
     return (
         <View style={{ marginTop: 28 }}>
@@ -603,28 +608,13 @@ function CommunityName() {
                 value={state.name}
                 maxLength={32}
                 onChangeText={handleChangeName}
-                onEndEditing={() =>
-                    dispatch({
-                        type: formAction.SET_NAME_VALID,
-                        payload: state.name.length > 0,
-                    })
-                }
+                onEndEditing={handleEndEdit}
                 error={
                     state.validation.name
                         ? undefined
                         : i18n.t('communityNameRequired')
                 }
             />
-            {/* {!isNameValid && (
-                <HelperText
-                    type="error"
-                    padding="none"
-                    visible
-                    style={styles.errorText}
-                >
-                    {i18n.t('communityNameRequired')}
-                </HelperText>
-            )} */}
         </View>
     );
 }
