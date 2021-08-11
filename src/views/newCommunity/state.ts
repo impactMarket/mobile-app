@@ -18,6 +18,9 @@ interface INITIAL_FORM_STATE {
     incrementInterval: string;
     incrementIntervalUnit: number;
     visibility: string;
+    validation: {
+        name: boolean;
+    };
 }
 export enum formAction {
     SET_NAME = 'form/setName',
@@ -34,6 +37,7 @@ export enum formAction {
     SET_INCREMENT_INTERVAL = 'form/setIncrementInterval',
     SET_INCREMENT_INTERVAL_UNIT = 'form/setIncrementIntervalUnit',
     SET_VISIBILITY = 'form/setVisibility',
+    SET_NAME_VALID = 'form/setNameValid',
 }
 
 interface communityNameAction {
@@ -109,6 +113,13 @@ interface communityIncrementIntervalUnitAction {
     payload: number;
 }
 
+//
+
+interface communityNameValidAction {
+    type: formAction.SET_NAME_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -123,7 +134,8 @@ type FormActionTypes =
     | communityMaxClaimAction
     | communityIncrementIntervalAction
     | communityIncrementIntervalUnitAction
-    | communityVisibilityAction;
+    | communityVisibilityAction
+    | communityNameValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -143,6 +155,9 @@ export const formInitialState: INITIAL_FORM_STATE = {
     incrementInterval: '',
     incrementIntervalUnit: 60,
     visibility: 'public',
+    validation: {
+        name: true,
+    },
 };
 
 export function reducer(
@@ -178,6 +193,11 @@ export function reducer(
             return { ...state, incrementIntervalUnit: action.payload };
         case formAction.SET_VISIBILITY:
             return { ...state, visibility: action.payload };
+        case formAction.SET_NAME_VALID:
+            return {
+                ...state,
+                validation: { ...state.validation, name: action.payload },
+            };
         default:
             return state;
     }

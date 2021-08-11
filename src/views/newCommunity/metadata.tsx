@@ -547,12 +547,6 @@ function CommunityDescription() {
     return (
         <View style={{ marginTop: 16, minHeight: 115 }}>
             <Input
-                style={{
-                    minHeight: 115,
-                    fontFamily: 'Gelion-Regular',
-                    backgroundColor: 'transparent',
-                    paddingHorizontal: 0,
-                }}
                 label={i18n.t('shortDescription')}
                 value={state.description}
                 maxLength={1024}
@@ -561,7 +555,6 @@ function CommunityDescription() {
                     setIsDescriptionValid(state.description.length >= 240)
                 }
                 multiline
-                numberOfLines={6}
             />
         </View>
         // {!isDescriptionValid && (
@@ -610,7 +603,17 @@ function CommunityName() {
                 value={state.name}
                 maxLength={32}
                 onChangeText={handleChangeName}
-                onEndEditing={() => setIsNameValid(state.name.length > 0)}
+                onEndEditing={() =>
+                    dispatch({
+                        type: formAction.SET_NAME_VALID,
+                        payload: state.name.length > 0,
+                    })
+                }
+                error={
+                    state.validation.name
+                        ? undefined
+                        : i18n.t('communityNameRequired')
+                }
             />
             {/* {!isNameValid && (
                 <HelperText
