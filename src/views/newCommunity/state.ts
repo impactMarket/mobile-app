@@ -29,6 +29,10 @@ interface INITIAL_FORM_STATE {
         emailFormat: boolean;
         gps: boolean;
         cover: boolean;
+        claimAmount: boolean;
+        baseInterval: boolean;
+        maxClaim: boolean;
+        incrementInterval: boolean;
     };
 }
 export enum formAction {
@@ -55,6 +59,10 @@ export enum formAction {
     SET_EMAIL_FORMAT_VALID = 'form/setEmailFormatValid',
     SET_GPS_VALID = 'form/setGPSValid',
     SET_COVER_VALID = 'form/setCoverValid',
+    SET_CLAIM_AMOUNT_VALID = 'form/setClaimAmountValid',
+    SET_BASE_INTERVAL_VALID = 'form/setBaseIntervalValid',
+    SET_MAX_CLAIM_VALID = 'form/setMaxClaimValid',
+    SET_INCREMENT_INTERVAL_VALID = 'form/setIncrementIntervalValid',
 }
 
 interface communityNameAction {
@@ -177,6 +185,26 @@ interface communityCoverValidAction {
     payload: boolean;
 }
 
+interface communityClaimAmountValidAction {
+    type: formAction.SET_CLAIM_AMOUNT_VALID;
+    payload: boolean;
+}
+
+interface communityBaseIntervalValidAction {
+    type: formAction.SET_BASE_INTERVAL_VALID;
+    payload: boolean;
+}
+
+interface communityMaxClaimValidAction {
+    type: formAction.SET_MAX_CLAIM_VALID;
+    payload: boolean;
+}
+
+interface communityIncrementIntervalValidAction {
+    type: formAction.SET_INCREMENT_INTERVAL_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -200,7 +228,11 @@ type FormActionTypes =
     | communityEmailValidAction
     | communityEmailFormatValidAction
     | communityGPSValidAction
-    | communityCoverValidAction;
+    | communityCoverValidAction
+    | communityClaimAmountValidAction
+    | communityBaseIntervalValidAction
+    | communityMaxClaimValidAction
+    | communityIncrementIntervalValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -230,6 +262,10 @@ export const formInitialState: INITIAL_FORM_STATE = {
         emailFormat: true,
         gps: true,
         cover: true,
+        claimAmount: true,
+        baseInterval: true,
+        maxClaim: true,
+        incrementInterval: true,
     },
 };
 
@@ -335,6 +371,38 @@ export function reducer(
                     cover: action.payload,
                 },
             };
+        case formAction.SET_CLAIM_AMOUNT_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    claimAmount: action.payload,
+                },
+            };
+        case formAction.SET_BASE_INTERVAL_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    baseInterval: action.payload,
+                },
+            };
+        case formAction.SET_MAX_CLAIM_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    maxClaim: action.payload,
+                },
+            };
+        case formAction.SET_INCREMENT_INTERVAL_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    incrementInterval: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -410,4 +478,36 @@ export const validateField = (
         return state.coverImage.length > 0;
     },
     // no currency validation. User's currency is used by default
+    claimAmount: () => {
+        dispatch({
+            type: formAction.SET_CLAIM_AMOUNT_VALID,
+            payload:
+                state.claimAmount.length > 0 &&
+                /^\d*[.,]?\d*$/.test(state.claimAmount),
+        });
+        return (
+            state.claimAmount.length > 0 &&
+            /^\d*[.,]?\d*$/.test(state.claimAmount)
+        );
+    },
+    maxClaim: () => {
+        dispatch({
+            type: formAction.SET_MAX_CLAIM_VALID,
+            payload:
+                state.maxClaim.length > 0 &&
+                /^\d*[.,]?\d*$/.test(state.maxClaim),
+        });
+        return (
+            state.maxClaim.length > 0 && /^\d*[.,]?\d*$/.test(state.maxClaim)
+        );
+    },
+    incrementInterval: () => {
+        dispatch({
+            type: formAction.SET_INCREMENT_INTERVAL_VALID,
+            payload: state.incrementInterval.length > 0,
+        });
+        return state.incrementInterval.length > 0;
+    },
+    // no base interval unit validation. minutes by default
+    // no visibility validation. public by default
 });

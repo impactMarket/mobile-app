@@ -15,7 +15,12 @@ import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 import config from '../../../config';
-import { DispatchContext, formAction, StateContext } from './state';
+import {
+    DispatchContext,
+    formAction,
+    StateContext,
+    validateField,
+} from './state';
 
 interface HelperProps {
     helperRef: React.MutableRefObject<IHandles>;
@@ -63,7 +68,7 @@ function CommunityMinimunExpectedDuration() {
     return (
         <Text
             style={{
-                marginVertical: 22,
+                marginBottom: 22,
                 fontFamily: 'Manrope-Bold',
                 fontSize: 18,
                 lineHeight: 28,
@@ -87,7 +92,7 @@ function CommunityVisibility(props: HelperProps) {
     const dispatch = useContext(DispatchContext);
 
     return (
-        <View style={{ marginTop: 28 }}>
+        <View style={{ marginTop: 28, marginBottom: 22 }}>
             <Select
                 label={i18n.t('visibility')}
                 help
@@ -151,9 +156,26 @@ function CommunityIncrementInterval(props: HelperProps) {
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
-    const [isIncrementIntervalValid, setIsIncrementIntervalValid] = useState(
-        true
-    );
+    const handleChangeIncrementIntervalUnit = (value: string) => {
+        dispatch({
+            type: formAction.SET_INCREMENT_INTERVAL_UNIT,
+            payload: Number(value),
+        });
+        modalizeClaimIncrementRef.current?.close();
+    };
+
+    const handleChangeIncrementInterval = (value: string) =>
+        dispatch({
+            type: formAction.SET_INCREMENT_INTERVAL,
+            payload: value,
+        });
+
+    const handleEndEdit = () =>
+        validateField(state, dispatch).incrementInterval();
+
+    const error = state.validation.incrementInterval
+        ? undefined
+        : i18n.t('incrementalIntervalRequired');
 
     return (
         <>
@@ -176,11 +198,6 @@ function CommunityIncrementInterval(props: HelperProps) {
             >
                 <View style={{ flex: 1, marginRight: 10 }}>
                     <Input
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            backgroundColor: 'transparent',
-                            paddingHorizontal: 0,
-                        }}
                         label={i18n.t('time')}
                         value={state.incrementInterval}
                         help
@@ -196,33 +213,14 @@ function CommunityIncrementInterval(props: HelperProps) {
                         placeholder="0"
                         maxLength={14}
                         keyboardType="numeric"
-                        onChangeText={(value) =>
-                            dispatch({
-                                type: formAction.SET_INCREMENT_INTERVAL,
-                                payload: value,
-                            })
-                        }
-                        onEndEditing={() =>
-                            setIsIncrementIntervalValid(
-                                state.incrementInterval.length > 0
-                            )
-                        }
+                        onChangeText={handleChangeIncrementInterval}
+                        onEndEditing={handleEndEdit}
+                        error={error}
                     />
-                    {/* {!isIncrementalIntervalValid && (
-                        <HelperText
-                            type="error"
-                            padding="none"
-                            visible
-                            style={styles.errorText}
-                        >
-                            {i18n.t('incrementalIntervalRequired')}
-                        </HelperText>
-                    )} */}
                 </View>
                 <View style={{ flex: 1, marginLeft: 10 }}>
                     <Select
                         value={
-                            // TODO: Refactor
                             state.incrementIntervalUnit === 60
                                 ? i18n.t('minutes')
                                 : state.incrementIntervalUnit === 3600
@@ -252,14 +250,7 @@ function CommunityIncrementInterval(props: HelperProps) {
                         }}
                     >
                         <RadioButton.Group
-                            onValueChange={(value) => {
-                                dispatch({
-                                    type:
-                                        formAction.SET_INCREMENT_INTERVAL_UNIT,
-                                    payload: Number(value),
-                                });
-                                modalizeClaimIncrementRef.current?.close();
-                            }}
+                            onValueChange={handleChangeIncrementIntervalUnit}
                             value={state.incrementIntervalUnit.toString()}
                         >
                             <RadioButton.Item
@@ -286,8 +277,6 @@ function CommunityMaxClaim(props: HelperProps) {
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
-    const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
-
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
@@ -300,20 +289,21 @@ function CommunityMaxClaim(props: HelperProps) {
         exchangeRates
     );
 
-    const handleChangeMaxClaim = (value) =>
+    const handleChangeMaxClaim = (value: string) =>
         dispatch({
             type: formAction.SET_MAX_CLAIM,
             payload: value,
         });
 
+    const handleEndEdit = () => validateField(state, dispatch).maxClaim();
+
+    const error = state.validation.maxClaim
+        ? undefined
+        : i18n.t('maxClaimAmountRequired');
+
     return (
         <View style={{ marginTop: 28 }}>
             <Input
-                style={{
-                    fontFamily: 'Gelion-Regular',
-                    backgroundColor: 'transparent',
-                    paddingHorizontal: 0,
-                }}
                 label={i18n.t('totalClaimPerBeneficiary')}
                 help
                 onPress={() => {
@@ -330,23 +320,9 @@ function CommunityMaxClaim(props: HelperProps) {
                 maxLength={14}
                 keyboardType="numeric"
                 onChangeText={handleChangeMaxClaim}
-                onEndEditing={() =>
-                    setIsMaxClaimValid(
-                        state.maxClaim.length > 0 &&
-                            /^\d*[.,]?\d*$/.test(state.maxClaim)
-                    )
-                }
+                onEndEditing={handleEndEdit}
+                error={error}
             />
-            {/* {!isMaxClaimValid && (
-                <HelperText
-                    type="error"
-                    padding="none"
-                    visible
-                    style={styles.errorText}
-                >
-                    {i18n.t('maxClaimAmountRequired')}
-                </HelperText>
-            )} */}
             {state.maxClaim.length > 0 && (
                 <Text
                     style={{
@@ -435,8 +411,6 @@ function CommunityClaimFrequency(props: HelperProps) {
 }
 
 function CommunityClaimAmount(props: HelperProps) {
-    const [isClaimAmountValid, setIsClaimAmountValid] = useState(true);
-
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
@@ -452,55 +426,40 @@ function CommunityClaimAmount(props: HelperProps) {
         exchangeRates
     );
 
-    const handleChangeClaimAmount = (value) =>
+    const handleChangeClaimAmount = (value: string) =>
         dispatch({
             type: formAction.SET_CLAIM_AMOUNT,
             payload: value,
         });
 
+    const handleEndEdit = () => validateField(state, dispatch).claimAmount();
+
+    const error = state.validation.claimAmount
+        ? undefined
+        : i18n.t('claimAmountRequired');
+
     return (
-        <View>
-            <View style={{ marginTop: 28 }}>
-                <Input
-                    style={{
-                        fontFamily: 'Gelion-Regular',
-                        backgroundColor: 'transparent',
-                        paddingHorizontal: 0,
-                    }}
-                    label={i18n.t('claimAmount')}
-                    help
-                    onPress={() => {
-                        props.setHelperInfo.title(i18n.t('claimAmount'));
-                        props.setHelperInfo.content(i18n.t('claimAmountHelp'));
-                        props.helperRef.current.open();
-                    }}
-                    value={state.claimAmount}
-                    placeholder="$0"
-                    maxLength={14}
-                    keyboardType="numeric"
-                    onChangeText={handleChangeClaimAmount}
-                    onEndEditing={() =>
-                        setIsClaimAmountValid(
-                            state.claimAmount.length > 0 &&
-                                /^\d*[.,]?\d*$/.test(state.claimAmount)
-                        )
-                    }
-                />
-                {/* {!isClaimAmountValid && (
-                    <HelperText
-                        type="error"
-                        padding="none"
-                        visible
-                        style={styles.errorText}
-                    >
-                        {i18n.t('claimAmountRequired')}
-                    </HelperText>
-                )} */}
-            </View>
+        <View style={{ marginTop: 28 }}>
+            <Input
+                label={i18n.t('claimAmount')}
+                help
+                onPress={() => {
+                    props.setHelperInfo.title(i18n.t('claimAmount'));
+                    props.setHelperInfo.content(i18n.t('claimAmountHelp'));
+                    props.helperRef.current.open();
+                }}
+                value={state.claimAmount}
+                placeholder="$0"
+                maxLength={14}
+                keyboardType="numeric"
+                onChangeText={handleChangeClaimAmount}
+                onEndEditing={handleEndEdit}
+                error={error}
+            />
             {state.claimAmount.length > 0 && (
                 <Text
                     style={{
-                        marginTop: 42,
+                        marginTop: 14,
                         position: 'absolute',
                         marginHorizontal: 10,
                         right: 0,

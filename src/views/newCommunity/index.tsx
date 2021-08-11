@@ -41,7 +41,10 @@ function CreateCommunityScreen() {
             validateField(state, dispatch).city() ||
             validateField(state, dispatch).country() ||
             validateField(state, dispatch).email() ||
-            validateField(state, dispatch).gps();
+            validateField(state, dispatch).gps() ||
+            validateField(state, dispatch).claimAmount() ||
+            validateField(state, dispatch).maxClaim() ||
+            validateField(state, dispatch).incrementInterval();
 
         if (!isAllValid) {
             setIsAnyFieldMissedModal(true);
