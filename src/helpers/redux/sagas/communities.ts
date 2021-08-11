@@ -5,7 +5,7 @@ import {
 } from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import Api from 'services/api';
-import { takeLatest, call, put, all } from 'typed-redux-saga';
+import { call, put, all, takeEvery } from 'typed-redux-saga';
 
 const listCommunities = (query: {
     offset: number;
@@ -17,6 +17,7 @@ const listCommunities = (query: {
 }) => Api.community.list(query);
 
 export function* fetchCommunitiesList({ payload }: any) {
+    console.log('called fetchCommunitiesList');
     try {
         const { query } = payload;
 
@@ -34,6 +35,6 @@ export function* fetchCommunitiesList({ payload }: any) {
     }
 }
 
-export default all([
-    takeLatest(communitiesAction.INIT_REQUEST, fetchCommunitiesList),
-]);
+export function* communitiesSaga() {
+    return [takeEvery(communitiesAction.INIT_REQUEST, fetchCommunitiesList)];
+}
