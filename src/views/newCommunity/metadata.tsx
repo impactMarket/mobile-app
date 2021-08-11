@@ -20,7 +20,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
-import { DispatchContext, formAction, StateContext } from './state';
+import {
+    DispatchContext,
+    formAction,
+    StateContext,
+    validateField,
+} from './state';
 
 function CommunityCurrency() {
     const currencies: {
@@ -507,11 +512,7 @@ function CommunityCity() {
         dispatch({ type: formAction.SET_CITY, payload: value });
     };
 
-    const handleEndEdit = () =>
-        dispatch({
-            type: formAction.SET_CITY_VALID,
-            payload: state.city.length > 0,
-        });
+    const handleEndEdit = () => validateField(state, dispatch).city();
 
     const error = state.validation.city ? undefined : i18n.t('cityRequired');
 
@@ -542,30 +543,7 @@ function CommunityDescription() {
         ? i18n.t('communityDescriptionTooShort')
         : undefined;
 
-    const handleEndEdit = () => {
-        if (state.description.length === 0) {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_VALID,
-                payload: false,
-            });
-        } else {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_VALID,
-                payload: true,
-            });
-        }
-        if (state.description.length < 240) {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
-                payload: true,
-            });
-        } else {
-            dispatch({
-                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
-                payload: false,
-            });
-        }
-    };
+    const handleEndEdit = () => validateField(state, dispatch).description();
 
     return (
         <Input
@@ -589,11 +567,7 @@ function CommunityName() {
         dispatch({ type: formAction.SET_NAME, payload: value });
     };
 
-    const handleEndEdit = () =>
-        dispatch({
-            type: formAction.SET_NAME_VALID,
-            payload: state.name.length > 0,
-        });
+    const handleEndEdit = () => validateField(state, dispatch).name();
 
     const error = state.validation.name
         ? undefined

@@ -258,3 +258,44 @@ export const StateContext = React.createContext(formInitialState);
 export const DispatchContext = React.createContext<
     React.Dispatch<FormActionTypes> | undefined
 >(undefined);
+
+/** method of methods allowed to be called from any component to run input validation */
+export const validateField = (
+    state: INITIAL_FORM_STATE,
+    dispatch: React.Dispatch<FormActionTypes>
+) => ({
+    name: () =>
+        dispatch({
+            type: formAction.SET_NAME_VALID,
+            payload: state.name.length > 0,
+        }),
+    description: () => {
+        if (state.description.length === 0) {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_VALID,
+                payload: false,
+            });
+        } else {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_VALID,
+                payload: true,
+            });
+        }
+        if (state.description.length < 240) {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
+                payload: true,
+            });
+        } else {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
+                payload: false,
+            });
+        }
+    },
+    city: () =>
+        dispatch({
+            type: formAction.SET_CITY_VALID,
+            payload: state.city.length > 0,
+        }),
+});
