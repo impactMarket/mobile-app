@@ -1,5 +1,8 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import Modal from 'components/Modal';
+import Button from 'components/core/Button';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import SubmitCommunity from 'navigator/header/SubmitCommunity';
 import React, { useLayoutEffect, useReducer, useState } from 'react';
@@ -8,7 +11,10 @@ import {
     ScrollView,
     KeyboardAvoidingView,
     Platform,
+    View,
+    Text,
 } from 'react-native';
+import { Portal } from 'react-native-portalize';
 import { ipctColors } from 'styles/index';
 
 import Contract from './contract';
@@ -24,19 +30,24 @@ import {
 function CreateCommunityScreen() {
     const navigation = useNavigation();
     const [submitting, setSubmitting] = useState(false);
+    const [isAnyFieldMissedModal, setIsAnyFieldMissedModal] = useState(false);
     const [state, dispatch] = useReducer(reducer, formInitialState);
 
     const submitNewCommunity = () => {
-        //
-        validateField(state, dispatch).name();
-        validateField(state, dispatch).cover();
-        validateField(state, dispatch).description();
-        validateField(state, dispatch).city();
-        validateField(state, dispatch).country();
-        validateField(state, dispatch).email();
-        validateField(state, dispatch).gps();
-        console.log('state', state);
-        // setSubmitting(true);
+        const isAllValid =
+            validateField(state, dispatch).name() ||
+            validateField(state, dispatch).cover() ||
+            validateField(state, dispatch).description() ||
+            validateField(state, dispatch).city() ||
+            validateField(state, dispatch).country() ||
+            validateField(state, dispatch).email() ||
+            validateField(state, dispatch).gps();
+
+        if (!isAllValid) {
+            setIsAnyFieldMissedModal(true);
+            return;
+        }
+        setSubmitting(true);
     };
 
     useLayoutEffect(() => {
@@ -51,31 +62,89 @@ function CreateCommunityScreen() {
     }, [navigation, submitting, state]);
 
     return (
-        <KeyboardAvoidingView
-            style={{
-                flex: 1,
-                // flexDirection: 'column',
-                // justifyContent: 'center',
-            }}
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-            // enabled
-            keyboardVerticalOffset={140}
-        >
-            <ScrollView
+        <>
+            <KeyboardAvoidingView
                 style={{
-                    paddingHorizontal: 20,
-                    // marginBottom: 20,
-                    // marginTop: 16,
+                    flex: 1,
+                    // flexDirection: 'column',
+                    // justifyContent: 'center',
                 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                // enabled
+                keyboardVerticalOffset={140}
             >
-                <DispatchContext.Provider value={dispatch}>
-                    <StateContext.Provider value={state}>
-                        <Metadata />
-                        <Contract />
-                    </StateContext.Provider>
-                </DispatchContext.Provider>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                <ScrollView
+                    style={{
+                        paddingHorizontal: 20,
+                        // marginBottom: 20,
+                        // marginTop: 16,
+                    }}
+                >
+                    <DispatchContext.Provider value={dispatch}>
+                        <StateContext.Provider value={state}>
+                            <Metadata />
+                            <Contract />
+                        </StateContext.Provider>
+                    </DispatchContext.Provider>
+                </ScrollView>
+            </KeyboardAvoidingView>
+            <Portal>
+                <Modal
+                    visible={isAnyFieldMissedModal}
+                    title={i18n.t('modalErrorTitle')}
+                    onDismiss={() => {
+                        setSubmitting(false);
+                        setIsAnyFieldMissedModal(false);
+                    }}
+                    buttons={
+                        <Button
+                            modeType="gray"
+                            style={{ width: '100%' }}
+                            onPress={() => {
+                                setSubmitting(false);
+                                setIsAnyFieldMissedModal(false);
+                            }}
+                        >
+                            {i18n.t('close')}
+                        </Button>
+                    }
+                >
+                    <View
+                        style={{
+                            paddingVertical: 16,
+                            paddingHorizontal: 22,
+                            borderStyle: 'solid',
+                            borderColor: '#EB5757',
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            width: '100%',
+                            flexDirection: 'row',
+                            marginBottom: 16,
+                        }}
+                    >
+                        <WarningRedTriangle
+                            style={{
+                                alignSelf: 'flex-start',
+                                marginRight: 16,
+                                marginTop: 8,
+                            }}
+                        />
+                        <Text
+                            style={{
+                                fontFamily: 'Inter-Regular',
+                                fontSize: 14,
+                                lineHeight: 24,
+                                color: ipctColors.almostBlack,
+                                // textAlign: 'justify',
+                                marginRight: 12,
+                            }}
+                        >
+                            {i18n.t('missingFieldError')}
+                        </Text>
+                    </View>
+                </Modal>
+            </Portal>
+        </>
     );
 }
 

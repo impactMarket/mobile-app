@@ -350,11 +350,13 @@ export const validateField = (
     state: INITIAL_FORM_STATE,
     dispatch: React.Dispatch<FormActionTypes>
 ) => ({
-    name: () =>
+    name: () => {
         dispatch({
             type: formAction.SET_NAME_VALID,
             payload: state.name.length > 0,
-        }),
+        });
+        return state.name.length > 0;
+    },
     description: () => {
         dispatch({
             type: formAction.SET_DESCRIPTION_VALID,
@@ -364,17 +366,24 @@ export const validateField = (
             type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
             payload: state.description.length < 240,
         });
+        return (
+            state.description.length !== 0 && state.description.length >= 240
+        );
     },
-    city: () =>
+    city: () => {
         dispatch({
             type: formAction.SET_CITY_VALID,
             payload: state.city.length > 0,
-        }),
-    country: () =>
+        });
+        return state.city.length > 0;
+    },
+    country: () => {
         dispatch({
             type: formAction.SET_COUNTRY_VALID,
             payload: state.country.length > 0,
-        }),
+        });
+        return state.country.length > 0;
+    },
     email: () => {
         dispatch({
             type: formAction.SET_EMAIL_VALID,
@@ -384,16 +393,21 @@ export const validateField = (
             type: formAction.SET_EMAIL_FORMAT_VALID,
             payload: validateEmail(state.email),
         });
+        return state.email.length > 0 && validateEmail(state.email);
     },
-    gps: () =>
+    gps: () => {
         dispatch({
             type: formAction.SET_GPS_VALID,
             payload: state.gps.latitude !== 0 || state.gps.longitude !== 0,
-        }),
-    cover: () =>
+        });
+        return state.gps.latitude !== 0 || state.gps.longitude !== 0;
+    },
+    cover: () => {
         dispatch({
             type: formAction.SET_COVER_VALID,
             payload: state.coverImage.length > 0,
-        }),
+        });
+        return state.coverImage.length > 0;
+    },
     // no currency validation. User's currency is used by default
 });
