@@ -48,3 +48,9 @@ jest.mock('expo-image-picker', () => ({
     ...(jest.requireActual('expo-image-picker') as any),
     launchImageLibraryAsync: jest.fn(),
 }));
+
+jest.mock('expo-location', () => ({
+    ...(jest.requireActual('expo-location') as any),
+    requestForegroundPermissionsAsync: jest.fn(),
+    getCurrentPositionAsync: jest.fn(),
+}));
