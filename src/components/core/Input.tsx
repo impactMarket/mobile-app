@@ -29,54 +29,72 @@ export default class Input extends Component<IInputProps, object> {
         const { label, help, onPress, error } = this.props;
 
         return (
-            <View style={this.props.boxStyle}>
-                <View
-                    style={[
-                        styles.outline,
-                        {
-                            borderColor: error
-                                ? '#EB5757'
-                                : ipctColors.borderGray,
-                        },
-                    ]}
-                />
-                <Text
-                    style={[
-                        styles.label,
-                        {
-                            backgroundColor: label ? '#FFFFFF' : 'transparent',
-                        },
-                    ]}
-                >
-                    {label}{' '}
-                    {help && (
-                        <TouchableWithoutFeedback
-                            onPress={onPress}
-                            style={{ width: 50, height: 30 }}
-                        >
-                            <Text style={{ color: ipctColors.blueRibbon }}>
-                                [?]
-                            </Text>
-                        </TouchableWithoutFeedback>
-                    )}
-                </Text>
-                <TextInput
-                    {...this.props}
-                    style={{
-                        height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
-                        minHeight: 38,
-                        flexGrow: 1,
-                        width: '100%',
-                        paddingHorizontal: 10,
-                        marginVertical: 5,
-                        alignSelf: 'center',
-                        zIndex: 1,
-                        fontSize: 15,
-                        fontFamily: 'Inter-Regular',
-                        color: ipctColors.almostBlack,
-                    }}
-                />
-            </View>
+            <>
+                <View style={this.props.boxStyle}>
+                    <View
+                        style={[
+                            styles.outline,
+                            {
+                                borderColor: error
+                                    ? '#EB5757'
+                                    : ipctColors.borderGray,
+                            },
+                        ]}
+                    />
+                    <Text
+                        style={[
+                            styles.label,
+                            {
+                                backgroundColor: label
+                                    ? '#FFFFFF'
+                                    : 'transparent',
+                            },
+                        ]}
+                    >
+                        {label}{' '}
+                        {help && (
+                            <TouchableWithoutFeedback
+                                onPress={onPress}
+                                style={{ width: 50, height: 30 }}
+                            >
+                                <Text style={{ color: ipctColors.blueRibbon }}>
+                                    [?]
+                                </Text>
+                            </TouchableWithoutFeedback>
+                        )}
+                    </Text>
+                    <TextInput
+                        {...this.props}
+                        style={{
+                            height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
+                            minHeight: 38,
+                            flexGrow: 1,
+                            width: '100%',
+                            paddingHorizontal: 10,
+                            marginVertical: 5,
+                            alignSelf: 'center',
+                            zIndex: 1,
+                            fontSize: 15,
+                            fontFamily: 'Inter-Regular',
+                            color: ipctColors.almostBlack,
+                        }}
+                    />
+                </View>
+                {error && (
+                    <Text
+                        style={{
+                            color: '#EB5757',
+                            fontSize: 12,
+                            lineHeight: 20,
+                            fontFamily: 'Inter-Regular',
+                            justifyContent: 'flex-start',
+                            // backgroundColor: 'blue',
+                        }}
+                    >
+                        {error}
+                    </Text>
+                )}
+            </>
         );
     }
 }
