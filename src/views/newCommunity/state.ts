@@ -22,6 +22,7 @@ interface INITIAL_FORM_STATE {
         name: boolean;
         description: boolean;
         descriptionTooShort: boolean;
+        city: boolean;
     };
 }
 export enum formAction {
@@ -42,6 +43,7 @@ export enum formAction {
     SET_NAME_VALID = 'form/setNameValid',
     SET_DESCRIPTION_VALID = 'form/setDescriptionValid',
     SET_DESCRIPTION_TOO_SHORT_VALID = 'form/setDescriptionTooShortValid',
+    SET_CITY_VALID = 'form/setCityValid',
 }
 
 interface communityNameAction {
@@ -134,6 +136,11 @@ interface communityDescriptionTooShortValidAction {
     payload: boolean;
 }
 
+interface communityCityValidAction {
+    type: formAction.SET_CITY_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -151,7 +158,8 @@ type FormActionTypes =
     | communityVisibilityAction
     | communityNameValidAction
     | communityDescriptionValidAction
-    | communityDescriptionTooShortValidAction;
+    | communityDescriptionTooShortValidAction
+    | communityCityValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -175,6 +183,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
         name: true,
         description: true,
         descriptionTooShort: false,
+        city: true,
     },
 };
 
@@ -230,6 +239,14 @@ export function reducer(
                 validation: {
                     ...state.validation,
                     descriptionTooShort: action.payload,
+                },
+            };
+        case formAction.SET_CITY_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    city: action.payload,
                 },
             };
         default:

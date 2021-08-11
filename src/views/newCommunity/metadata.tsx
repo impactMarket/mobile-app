@@ -500,39 +500,31 @@ function CommunityCountry() {
 }
 
 function CommunityCity() {
-    const [isCityValid, setIsCityValid] = useState(true);
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
-    const handleChangeCity = (value) => {
+    const handleChangeCity = (value: string) => {
         dispatch({ type: formAction.SET_CITY, payload: value });
     };
 
+    const handleEndEdit = () =>
+        dispatch({
+            type: formAction.SET_CITY_VALID,
+            payload: state.city.length > 0,
+        });
+
+    const error = state.validation.city ? undefined : i18n.t('cityRequired');
+
     return (
-        <View style={{ marginTop: 28 }}>
-            <Input
-                style={{
-                    fontFamily: 'Gelion-Regular',
-                    backgroundColor: 'transparent',
-                    paddingHorizontal: 0,
-                }}
-                label={i18n.t('city')}
-                value={state.city}
-                maxLength={32}
-                onChangeText={handleChangeCity}
-                onEndEditing={() => setIsCityValid(state.city.length > 0)}
-            />
-            {/* {!isCityValid && (
-                <HelperText
-                    type="error"
-                    visible
-                    padding="none"
-                    style={styles.errorText}
-                >
-                    {i18n.t('cityRequired')}
-                </HelperText>
-            )} */}
-        </View>
+        <Input
+            label={i18n.t('city')}
+            value={state.city}
+            maxLength={32}
+            onChangeText={handleChangeCity}
+            onEndEditing={handleEndEdit}
+            error={error}
+            boxStyle={{ marginTop: 28 }}
+        />
     );
 }
 
