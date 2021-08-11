@@ -6,7 +6,7 @@ import {
     View,
     StyleSheet,
     GestureResponderEvent,
-    TouchableWithoutFeedback,
+    Pressable,
     StyleProp,
     ViewStyle,
 } from 'react-native';
@@ -41,28 +41,40 @@ export default class Input extends Component<IInputProps, object> {
                             },
                         ]}
                     />
-                    <Text
+                    <View
                         style={[
                             styles.label,
                             {
-                                backgroundColor: label
-                                    ? '#FFFFFF'
-                                    : 'transparent',
+                                alignItems: 'center',
+                                flexDirection: 'row',
                             },
                         ]}
                     >
-                        {label}{' '}
+                        <Text
+                            style={{
+                                fontFamily: 'Inter-Regular',
+                                color: ipctColors.regentGray,
+                                fontWeight: '500',
+                                fontSize: 12,
+                                lineHeight: 14,
+                            }}
+                        >
+                            {label}
+                        </Text>
                         {help && (
-                            <TouchableWithoutFeedback
-                                onPress={onPress}
-                                style={{ width: 50, height: 30 }}
-                            >
-                                <Text style={{ color: ipctColors.blueRibbon }}>
+                            <Pressable onPress={onPress} hitSlop={20}>
+                                <Text
+                                    style={{
+                                        color: ipctColors.blueRibbon,
+                                        fontSize: 12,
+                                        paddingLeft: 3,
+                                    }}
+                                >
                                     [?]
                                 </Text>
-                            </TouchableWithoutFeedback>
+                            </Pressable>
                         )}
-                    </Text>
+                    </View>
                     <TextInput
                         {...this.props}
                         style={{
@@ -88,7 +100,6 @@ export default class Input extends Component<IInputProps, object> {
                             lineHeight: 20,
                             fontFamily: 'Inter-Regular',
                             justifyContent: 'flex-start',
-                            // backgroundColor: 'blue',
                         }}
                     >
                         {error}
@@ -125,15 +136,10 @@ const styles = StyleSheet.create({
     },
     label: {
         position: 'absolute',
-        fontFamily: 'Inter-Regular',
         left: 12,
         top: -8,
         paddingHorizontal: 4,
-        color: ipctColors.regentGray,
         backgroundColor: '#FFFFFF',
         zIndex: 1,
-        fontWeight: '500',
-        fontSize: 12,
-        lineHeight: 14,
     },
 });
