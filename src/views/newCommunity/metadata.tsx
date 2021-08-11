@@ -378,6 +378,10 @@ function CommunityCountry() {
             payload: item,
         });
         modalizeCountryRef.current?.close();
+        dispatch({
+            type: formAction.SET_COUNTRY_VALID,
+            payload: true,
+        });
     };
 
     const countryItem = ({ item }: { item: string }) => (
@@ -413,6 +417,10 @@ function CommunityCountry() {
         </Pressable>
     );
 
+    const error = state.validation.country
+        ? undefined
+        : i18n.t('countryRequired');
+
     return (
         <>
             <View style={{ marginTop: 28 }}>
@@ -423,20 +431,11 @@ function CommunityCountry() {
                             ? `${countries[state.country].emoji} ${
                                   countries[state.country].name
                               }`
-                            : 'Select Country'
+                            : i18n.t('selectCountry')
                     }
                     onPress={() => modalizeCountryRef.current?.open()}
+                    error={error}
                 />
-                {/* {!isCountryValid && (
-            <HelperText
-                type="error"
-                padding="none"
-                visible
-                style={styles.errorText}
-            >
-                {i18n.t('countryRequired')}
-            </HelperText>
-        )} */}
             </View>
             <Portal>
                 <Modalize
@@ -446,7 +445,10 @@ function CommunityCountry() {
                             {renderHeader(
                                 i18n.t('country'),
                                 modalizeCountryRef,
-                                () => modalizeCountryRef.current?.close()
+                                () => {
+                                    modalizeCountryRef.current?.close();
+                                    validateField(state, dispatch).country();
+                                }
                             )}
                             <Searchbar
                                 accessibilityLabel={i18n.t('search')}

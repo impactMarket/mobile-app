@@ -23,6 +23,7 @@ interface INITIAL_FORM_STATE {
         description: boolean;
         descriptionTooShort: boolean;
         city: boolean;
+        country: boolean;
     };
 }
 export enum formAction {
@@ -44,6 +45,7 @@ export enum formAction {
     SET_DESCRIPTION_VALID = 'form/setDescriptionValid',
     SET_DESCRIPTION_TOO_SHORT_VALID = 'form/setDescriptionTooShortValid',
     SET_CITY_VALID = 'form/setCityValid',
+    SET_COUNTRY_VALID = 'form/setCountryValid',
 }
 
 interface communityNameAction {
@@ -141,6 +143,11 @@ interface communityCityValidAction {
     payload: boolean;
 }
 
+interface communityCountryValidAction {
+    type: formAction.SET_COUNTRY_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -159,7 +166,8 @@ type FormActionTypes =
     | communityNameValidAction
     | communityDescriptionValidAction
     | communityDescriptionTooShortValidAction
-    | communityCityValidAction;
+    | communityCityValidAction
+    | communityCountryValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -184,6 +192,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
         description: true,
         descriptionTooShort: false,
         city: true,
+        country: true,
     },
 };
 
@@ -249,6 +258,14 @@ export function reducer(
                     city: action.payload,
                 },
             };
+        case formAction.SET_COUNTRY_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    country: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -283,5 +300,10 @@ export const validateField = (
         dispatch({
             type: formAction.SET_CITY_VALID,
             payload: state.city.length > 0,
+        }),
+    country: () =>
+        dispatch({
+            type: formAction.SET_COUNTRY_VALID,
+            payload: state.country.length > 0,
         }),
 });
