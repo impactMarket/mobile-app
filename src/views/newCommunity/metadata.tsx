@@ -233,6 +233,10 @@ function CommunityLocation() {
                 type: formAction.SET_GPS,
                 payload: { latitude, longitude },
             });
+            dispatch({
+                type: formAction.SET_GPS_VALID,
+                payload: latitude !== 0 || longitude !== 0,
+            });
         } catch (e) {
             // Alert.alert(
             //     i18n.t('failure'),
@@ -328,16 +332,19 @@ function CommunityLocation() {
                     {i18n.t('getGPSLocation')}
                 </Text>
             </Button>
-            {/* {!isEnabled && (
-                <HelperText
-                    type="error"
-                    padding="none"
-                    visible
-                    style={styles.errorText}
+            {!state.validation.gps && (
+                <Text
+                    style={{
+                        color: '#EB5757',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        fontFamily: 'Inter-Regular',
+                        justifyContent: 'flex-start',
+                    }}
                 >
                     {i18n.t('enablingGPSRequired')}
-                </HelperText>
-            )} */}
+                </Text>
+            )}
         </View>
     );
 }

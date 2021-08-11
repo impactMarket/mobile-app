@@ -27,6 +27,7 @@ interface INITIAL_FORM_STATE {
         country: boolean;
         email: boolean;
         emailFormat: boolean;
+        gps: boolean;
     };
 }
 export enum formAction {
@@ -51,6 +52,7 @@ export enum formAction {
     SET_COUNTRY_VALID = 'form/setCountryValid',
     SET_EMAIL_VALID = 'form/setEmailValid',
     SET_EMAIL_FORMAT_VALID = 'form/setEmailFormatValid',
+    SET_GPS_VALID = 'form/setGPSValid',
 }
 
 interface communityNameAction {
@@ -163,6 +165,11 @@ interface communityEmailFormatValidAction {
     payload: boolean;
 }
 
+interface communityGPSValidAction {
+    type: formAction.SET_GPS_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -184,7 +191,8 @@ type FormActionTypes =
     | communityCityValidAction
     | communityCountryValidAction
     | communityEmailValidAction
-    | communityEmailFormatValidAction;
+    | communityEmailFormatValidAction
+    | communityGPSValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -212,6 +220,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
         country: true,
         email: true,
         emailFormat: true,
+        gps: true,
     },
 };
 
@@ -301,6 +310,14 @@ export function reducer(
                     emailFormat: action.payload,
                 },
             };
+        case formAction.SET_GPS_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    gps: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -351,4 +368,10 @@ export const validateField = (
             payload: validateEmail(state.email),
         });
     },
+    gps: () =>
+        dispatch({
+            type: formAction.SET_GPS_VALID,
+            payload: state.gps.latitude !== 0 || state.gps.longitude !== 0,
+        }),
+    // no currency validation. User's currency is used by default
 });
