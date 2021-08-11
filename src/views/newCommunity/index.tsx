@@ -34,17 +34,28 @@ function CreateCommunityScreen() {
     const [state, dispatch] = useReducer(reducer, formInitialState);
 
     const submitNewCommunity = () => {
+        const validate = validateField(state, dispatch);
+        const _name = validate.name();
+        const _cover = validate.cover();
+        const _description = validate.description();
+        const _city = validate.city();
+        const _country = validate.country();
+        const _email = validate.email();
+        const _gps = validate.gps();
+        const _claimAmount = validate.claimAmount();
+        const _maxClaim = validate.maxClaim();
+        const _incrementInterval = validate.incrementInterval();
         const isAllValid =
-            validateField(state, dispatch).name() ||
-            validateField(state, dispatch).cover() ||
-            validateField(state, dispatch).description() ||
-            validateField(state, dispatch).city() ||
-            validateField(state, dispatch).country() ||
-            validateField(state, dispatch).email() ||
-            validateField(state, dispatch).gps() ||
-            validateField(state, dispatch).claimAmount() ||
-            validateField(state, dispatch).maxClaim() ||
-            validateField(state, dispatch).incrementInterval();
+            _name &&
+            _cover &&
+            _description &&
+            _city &&
+            _country &&
+            _email &&
+            _gps &&
+            _claimAmount &&
+            _maxClaim &&
+            _incrementInterval;
 
         if (!isAllValid) {
             setIsAnyFieldMissedModal(true);
