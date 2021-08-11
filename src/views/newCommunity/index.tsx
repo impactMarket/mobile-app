@@ -18,6 +18,7 @@ import {
     formInitialState,
     reducer,
     StateContext,
+    validateField,
 } from './state';
 
 function CreateCommunityScreen() {
@@ -27,6 +28,13 @@ function CreateCommunityScreen() {
 
     const submitNewCommunity = () => {
         //
+        validateField(state, dispatch).name();
+        validateField(state, dispatch).cover();
+        validateField(state, dispatch).description();
+        validateField(state, dispatch).city();
+        validateField(state, dispatch).country();
+        validateField(state, dispatch).email();
+        validateField(state, dispatch).gps();
         console.log('state', state);
         // setSubmitting(true);
     };
