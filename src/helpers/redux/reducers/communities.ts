@@ -19,12 +19,6 @@ export const communitiesReducer = (
                 refreshing: false,
             };
 
-        case communitiesAction.INIT_REQUEST:
-            return {
-                ...state,
-                refreshing: true,
-            };
-
         case communitiesAction.INIT_FAILURE:
             return {
                 ...state,
