@@ -31,50 +31,61 @@ function FakeCreateCommunityScreen() {
     );
 }
 
-test('create community - metadata', async () => {
+describe('create community', () => {
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
     const launchImageLibraryAsyncMock = ImagePicker.launchImageLibraryAsync as jest.Mock<
         any,
         any
     >;
 
-    useSelectorMock.mockImplementation((callback) => {
-        return callback({
-            app: {
-                exchangeRates: { USD: 1 },
-            },
-            user: {
-                metadata: {
-                    currency: 'USD',
+    beforeAll(() => {
+        useSelectorMock.mockImplementation((callback) => {
+            return callback({
+                app: {
+                    exchangeRates: { USD: 1 },
                 },
-            },
+                user: {
+                    metadata: {
+                        currency: 'USD',
+                    },
+                },
+            });
         });
     });
-    launchImageLibraryAsyncMock.mockReturnValueOnce(
-        Promise.resolve({
-            uri: '/some/fake/image/uri.jpg',
-            width: 790,
-            height: 790,
-            type: 'image',
-            cancelled: false,
-        })
-    );
 
-    const { getByLabelText, getByText, getByA11yLabel } = render(
-        <FakeCreateCommunityScreen />
-    );
-    await act(async () => {});
+    afterAll(() => {
+        useSelectorMock.mockClear();
+    });
 
-    const communityName = getByLabelText(i18n.t('communityName'));
-    fireEvent.changeText(communityName, 'test community');
+    test('metadata', async () => {
+        launchImageLibraryAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                uri: '/some/fake/image/uri.jpg',
+                width: 790,
+                height: 790,
+                type: 'image',
+                cancelled: false,
+            })
+        );
 
-    await act(async () => fireEvent.press(getByLabelText('image uploader')));
+        const { getByLabelText, getByText, getByA11yLabel } = render(
+            <FakeCreateCommunityScreen />
+        );
+        await act(async () => {});
 
-    fireEvent.press(getByLabelText(i18n.t('country')));
+        const communityName = getByLabelText(i18n.t('communityName'));
+        fireEvent.changeText(communityName, 'test community');
 
-    fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
-    await act(async () => expect(getByLabelText('PT')));
-    fireEvent.press(getByLabelText('PT'));
+        await act(async () =>
+            fireEvent.press(getByLabelText('image uploader'))
+        );
 
-    fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByLabelText(i18n.t('country')));
+
+        fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+        await act(async () => expect(getByLabelText('PT')));
+        fireEvent.press(getByLabelText('PT'));
+
+        fireEvent.press(getByText(i18n.t('submit')));
+    });
 });
