@@ -110,7 +110,7 @@ export default {
     communityRequestSending:
         'Please wait while the community information is being uploaded...',
     communityRequestError:
-        'There was an error submitting the community information. If you are unable to create this community please <webview>submit a ticket</webview>.',
+        'There was an error submitting the community information.',
     missingFieldError:
         'All the fields marked as required need to be informed. Please check what is missing and try again.',
     communityRequestErrorDetails:
