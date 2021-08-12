@@ -9,7 +9,6 @@ import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 
 import CreateCommunityScreen from './index';
-import '@testing-library/jest-dom/extend-expect';
 
 afterEach(cleanup);
 
@@ -57,6 +56,9 @@ describe('create community', () => {
                 user: {
                     metadata: {
                         currency: 'USD',
+                    },
+                    wallet: {
+                        address: '0xd7632B7588DF8532C0aBA55586167C2a315Fd768',
                     },
                 },
             });

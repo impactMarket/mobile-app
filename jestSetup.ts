@@ -42,6 +42,7 @@ jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 jest.mock('react-redux', () => ({
     ...(jest.requireActual('react-redux') as any),
     useSelector: jest.fn(),
+    useDispatch: jest.fn(),
 }));
 
 jest.mock('expo-image-picker', () => ({
