@@ -4,13 +4,13 @@ import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
 import i18n from 'assets/i18n';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
+import * as helpers from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
-import Api from '../../services/api';
-import * as helpers from 'helpers/index';
 
+import Api from '../../services/api';
 import CreateCommunityScreen from './index';
 
 afterEach(cleanup);
@@ -730,8 +730,87 @@ describe('create community', () => {
             fireEvent.press(getByText(i18n.t('submit')));
         });
 
-        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('communityRequestError'))).toBeNull();
         expect(queryByText(i18n.t('communityRequestSending'))).not.toBeNull();
+        expect(queryByText(i18n.t('communityRequestSuccess'))).toBeNull();
+    });
+
+    test('failed submit', async () => {
+        launchImageLibraryAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                uri: '/some/fake/image/uri.jpg',
+                width: 790,
+                height: 790,
+                type: 'image',
+                cancelled: false,
+            })
+        );
+        requestForegroundPermissionsAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                status: 'granted',
+            })
+        );
+        getCurrentPositionAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                coords: { latitude: 3.0, longitude: 2.0 },
+            })
+        );
+
+        communityCreateMock.mockImplementationOnce(() => {
+            throw new Error('bruh, wat?');
+        });
+
+        const {
+            getByLabelText,
+            getByText,
+            getByA11yLabel,
+            queryByText,
+        } = render(<FakeCreateCommunityScreen />);
+        await act(async () => {});
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('communityName')),
+            'test community'
+        );
+
+        await act(async () =>
+            fireEvent.press(getByLabelText('image uploader'))
+        );
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('shortDescription')),
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('city')), 'Beja');
+
+        fireEvent.press(getByLabelText(i18n.t('country')));
+
+        fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+        await act(async () => expect(getByLabelText('PT')));
+        fireEvent.press(getByLabelText('PT'));
+
+        await act(async () =>
+            fireEvent.press(getByA11yLabel(i18n.t('getGPSLocation')))
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example.io');
+
+        fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('totalClaimPerBeneficiary')),
+            '100'
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
+
+        await act(async () => {
+            fireEvent.press(getByText(i18n.t('submit')));
+        });
+
+        expect(queryByText(i18n.t('communityRequestError'))).not.toBeNull();
+        expect(queryByText(i18n.t('communityRequestSending'))).toBeNull();
         expect(queryByText(i18n.t('communityRequestSuccess'))).toBeNull();
     });
 
@@ -812,7 +891,7 @@ describe('create community', () => {
             fireEvent.press(getByText(i18n.t('submit')));
         });
 
-        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('communityRequestError'))).toBeNull();
         expect(queryByText(i18n.t('communityRequestSending'))).toBeNull();
         expect(queryByText(i18n.t('communityRequestSuccess'))).not.toBeNull();
     });
