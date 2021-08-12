@@ -6,12 +6,13 @@ import CommuntyStatus from 'components/CommuntyStatus';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import CommunityRules from 'components/core/CommunityRules';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import ManageSvg from 'components/svg/ManageSvg';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
 import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import {
     CommunityAttributes,
@@ -41,7 +42,6 @@ import { ipctColors } from 'styles/index';
 
 import Beneficiaries from './cards/Beneficiaries';
 import Managers from './cards/Managers';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
 
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
@@ -168,11 +168,12 @@ function CommunityManagerScreen() {
                     return;
                 }
                 // refresh community details
-                setTimeout(() => {
-                    Api.community
-                        .findById(community.id)
-                        .then((c) => dispatch(setCommunityMetadata(c!)));
-                }, 2500);
+                dispatch(findCommunityByIdRequest(community.id));
+                // setTimeout(() => {
+                //     Api.community
+                //         .findById(community.id)
+                //         .then((c) => dispatch(setCommunityMetadata(c!)));
+                // }, 2500);
 
                 Alert.alert(
                     i18n.t('success'),

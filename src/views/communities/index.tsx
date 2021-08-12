@@ -7,18 +7,14 @@ import {
     cleanCommunitiesListState,
     fetchCommunitiesListRequest,
 } from 'helpers/redux/actions/communities';
-import communities from 'helpers/redux/sagas/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
-// import { ICommunityLightDetails } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, FlatList, Dimensions, View } from 'react-native';
+import { Alert, FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
-import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
 import Stories from './Stories';

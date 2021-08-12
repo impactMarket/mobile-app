@@ -36,3 +36,30 @@ export function cleanCommunitiesListState(): CommunitiesActionTypes {
         type: communitiesAction.INIT_CLEAN,
     };
 }
+
+export function findCommunityByIdRequest(id: number): CommunitiesActionTypes {
+    return {
+        type: communitiesAction.FIND_BY_ID_REQUEST,
+        payload: { id },
+    };
+}
+export function findCommunityByIdSuccess(
+    community: CommunityAttributes
+): CommunitiesActionTypes {
+    return {
+        type: communitiesAction.FIND_BY_ID_SUCCESS,
+        payload: { community },
+    };
+}
+
+export function findCommunityByIdFailure(): CommunitiesActionTypes {
+    return {
+        type: communitiesAction.FIND_BY_ID_FAILURE,
+    };
+}
+
+export function findCommunityByIdClear(): CommunitiesActionTypes {
+    return {
+        type: communitiesAction.FIND_BY_ID_CLEAN,
+    };
+}
