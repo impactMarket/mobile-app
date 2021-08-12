@@ -580,7 +580,7 @@ function CreateCommunityScreen() {
                     ...privateParamsIfAvailable,
                 };
                 const communityApiRequestResult = await Api.community.create(
-                    coverImage,
+                    // coverImage,
                     communityDetails
                 );
                 if (communityApiRequestResult.error === undefined) {
