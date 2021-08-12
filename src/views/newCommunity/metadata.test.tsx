@@ -41,6 +41,31 @@ function FakeCreateCommunityScreen() {
 }
 
 describe('create community', () => {
+    const communityDummyData: CommunityAttributes = {
+        id: 1,
+        name: 'Some example',
+        description: 'Description goes here',
+        descriptionEn: 'Description goes here',
+        coverMediaId: 1,
+        city: 'Beja',
+        country: 'PT',
+        contractAddress: '0x0',
+        requestByAddress: '0x0',
+        currency: 'BTC',
+        email: 'tt@cc.io',
+        gps: {
+            latitude: 1,
+            longitude: 1,
+        },
+        language: 'pt',
+        publicId: '0000',
+        status: 'valid',
+        visibility: 'public',
+        started: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    };
+
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
     const launchImageLibraryAsyncMock = ImagePicker.launchImageLibraryAsync as jest.Mock<
         any,
@@ -88,37 +113,7 @@ describe('create community', () => {
             })
         );
 
-        const communityDummyData: CommunityAttributes = {
-            id: 1,
-            name: 'Some example',
-            description: 'Description goes here',
-            descriptionEn: 'Description goes here',
-            coverMediaId: 1,
-            city: 'Beja',
-            country: 'PT',
-            contractAddress: '0x0',
-            requestByAddress: '0x0',
-            currency: 'BTC',
-            email: 'tt@cc.io',
-            gps: {
-                latitude: 1,
-                longitude: 1,
-            },
-            language: 'pt',
-            publicId: '0000',
-            status: 'valid',
-            visibility: 'public',
-            started: new Date(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        communityCreateMock.mockImplementation(() =>
-            Promise.resolve({
-                data: communityDummyData,
-                error: undefined,
-            })
-        );
+        // communityCreateMock.mockImplementation mocked below
 
         communityFindByIdMock.mockImplementation(() =>
             Promise.resolve(communityDummyData)
@@ -654,6 +649,92 @@ describe('create community', () => {
         expect(queryByLabelText('image uploader')).toBeNull();
     });
 
+    test('pending submit', async () => {
+        launchImageLibraryAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                uri: '/some/fake/image/uri.jpg',
+                width: 790,
+                height: 790,
+                type: 'image',
+                cancelled: false,
+            })
+        );
+        requestForegroundPermissionsAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                status: 'granted',
+            })
+        );
+        getCurrentPositionAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                coords: { latitude: 3.0, longitude: 2.0 },
+            })
+        );
+
+        communityCreateMock.mockImplementationOnce(() => {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve({
+                        data: communityDummyData,
+                        error: undefined,
+                    });
+                }, 5000);
+            });
+        });
+
+        const {
+            getByLabelText,
+            getByText,
+            getByA11yLabel,
+            queryByText,
+        } = render(<FakeCreateCommunityScreen />);
+        await act(async () => {});
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('communityName')),
+            'test community'
+        );
+
+        await act(async () =>
+            fireEvent.press(getByLabelText('image uploader'))
+        );
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('shortDescription')),
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('city')), 'Beja');
+
+        fireEvent.press(getByLabelText(i18n.t('country')));
+
+        fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+        await act(async () => expect(getByLabelText('PT')));
+        fireEvent.press(getByLabelText('PT'));
+
+        await act(async () =>
+            fireEvent.press(getByA11yLabel(i18n.t('getGPSLocation')))
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example.io');
+
+        fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('totalClaimPerBeneficiary')),
+            '100'
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
+
+        await act(async () => {
+            fireEvent.press(getByText(i18n.t('submit')));
+        });
+
+        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('communityRequestSending'))).not.toBeNull();
+        expect(queryByText(i18n.t('communityRequestSuccess'))).toBeNull();
+    });
+
     test('submit successfully', async () => {
         launchImageLibraryAsyncMock.mockReturnValueOnce(
             Promise.resolve({
@@ -672,6 +753,13 @@ describe('create community', () => {
         getCurrentPositionAsyncMock.mockReturnValueOnce(
             Promise.resolve({
                 coords: { latitude: 3.0, longitude: 2.0 },
+            })
+        );
+
+        communityCreateMock.mockImplementationOnce(() =>
+            Promise.resolve({
+                data: communityDummyData,
+                error: undefined,
             })
         );
 
