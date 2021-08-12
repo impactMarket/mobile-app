@@ -19,6 +19,8 @@ function StoriesCarouselScreen(props: IStoriesCarouselScreen) {
         (state: IRootState) => state.stories.stories
     );
 
+    console.log({ storiesListState });
+
     const flatListRef = useRef<FlatList<ICommunitiesListStories> | null>(null);
     const [index, setIndex] = useState(
         storiesListState.findIndex(
