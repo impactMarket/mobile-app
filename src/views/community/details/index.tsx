@@ -10,6 +10,7 @@ import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
@@ -47,38 +48,39 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const language = useSelector(
         (state: IRootState) => state.user.metadata.language
     );
+    const community = useSelector(
+        (state: IRootState) => state.communities.community
+    );
 
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
     const [historicalSSI, setHistoricalSSI] = useState<number[]>([]);
-    const [community, setCommunity] = useState<CommunityAttributes | undefined>(
-        undefined
-    );
+    // const [community, setCommunity] = useState<CommunityAttributes | undefined>(
+    //     undefined
+    // );
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
-        Api.community
-            .findById(props.route.params.communityId)
-            .then((c) => {
-                setCommunity(c);
-                if (props.route.params.openDonate === true) {
-                    dispatch({
-                        type: modalDonateAction.OPEN,
-                        payload: c,
-                    });
-                }
-            })
-            .finally(() => setRefreshing(false));
+        dispatch(findCommunityByIdRequest(props.route.params.communityId));
+        if (community) {
+            if (props.route.params.openDonate === true) {
+                dispatch({
+                    type: modalDonateAction.OPEN,
+                    payload: community,
+                });
+            }
+            setRefreshing(false);
+        }
         Api.community
             .pastSSI(props.route.params.communityId)
             .then(setHistoricalSSI);
     }, []);
 
+    console.log({ community });
+
     const onRefresh = () => {
-        Api.community
-            .findById(props.route.params.communityId)
-            .then((c) => setCommunity(c))
-            .finally(() => setRefreshing(false));
+        dispatch(findCommunityByIdRequest(props.route.params.communityId));
+        setRefreshing(false);
     };
 
     const renderSSI = () => {
@@ -153,8 +155,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     if (
         community === undefined ||
-        community.contract === undefined ||
-        community.state === undefined
+        community?.contract === undefined ||
+        community?.state === undefined
     ) {
         return (
             <View

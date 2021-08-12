@@ -83,6 +83,7 @@ import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 const countries: {
     [key: string]: {
@@ -125,6 +126,11 @@ function CreateCommunityScreen() {
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
+
+    const community = useSelector(
+        (state: IRootState) => state.communities.community
+    );
+
     const avatar = useSelector(
         (state: IRootState) => state.user.metadata.avatar
     );
@@ -588,9 +594,14 @@ function CreateCommunityScreen() {
                         communityApiRequestResult.data.id,
                         dispatch
                     );
-                    const community = await Api.community.findById(
-                        communityApiRequestResult.data.id
+                    dispatch(
+                        findCommunityByIdRequest(
+                            communityApiRequestResult.data.id
+                        )
                     );
+                    // const community = await Api.community.findById(
+                    //     communityApiRequestResult.data.id
+                    // );
                     if (community !== undefined) {
                         batch(() => {
                             dispatch(setCommunityMetadata(community));
@@ -686,9 +697,12 @@ function CreateCommunityScreen() {
                         dispatch
                     );
 
-                    const community = await Api.community.findById(
-                        communityApiRequestResult.id
+                    dispatch(
+                        findCommunityByIdRequest(communityApiRequestResult.id)
                     );
+                    // const community = await Api.community.findById(
+                    //     communityApiRequestResult.id
+                    // );
 
                     if (community !== undefined) {
                         batch(() => {
