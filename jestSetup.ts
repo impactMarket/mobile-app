@@ -43,6 +43,7 @@ jest.mock('react-redux', () => ({
     ...(jest.requireActual('react-redux') as any),
     useSelector: jest.fn(),
     useDispatch: jest.fn(),
+    batch: jest.fn(),
 }));
 
 jest.mock('expo-image-picker', () => ({

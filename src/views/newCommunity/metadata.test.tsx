@@ -4,13 +4,21 @@ import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
 import i18n from 'assets/i18n';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
+import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
+import Api from '../../services/api';
+import * as helpers from 'helpers/index';
 
 import CreateCommunityScreen from './index';
 
 afterEach(cleanup);
+
+jest.mock('helpers/redux/actions/user', () => ({
+    setCommunityMetadata: jest.fn(),
+    setUserIsCommunityManager: jest.fn(),
+}));
 
 /**
  * NOTE: we are testing the component individually, but need the header
@@ -46,6 +54,10 @@ describe('create community', () => {
         any,
         any
     >;
+    const communityUploadCoverMock = jest.spyOn(Api.community, 'uploadCover');
+    const communityCreateMock = jest.spyOn(Api.community, 'create');
+    const communityFindByIdMock = jest.spyOn(Api.community, 'findById');
+    const updateCommunityInfoMock = jest.spyOn(helpers, 'updateCommunityInfo');
 
     beforeAll(() => {
         useSelectorMock.mockImplementation((callback) => {
@@ -63,10 +75,63 @@ describe('create community', () => {
                 },
             });
         });
+
+        communityUploadCoverMock.mockImplementation(() =>
+            Promise.resolve({
+                media: {
+                    id: 1,
+                    height: 850,
+                    width: 850,
+                    url: 'https://example.xyz/1628784243498.jpeg',
+                },
+                uploadURL: 'abc.xyz',
+            })
+        );
+
+        const communityDummyData: CommunityAttributes = {
+            id: 1,
+            name: 'Some example',
+            description: 'Description goes here',
+            descriptionEn: 'Description goes here',
+            coverMediaId: 1,
+            city: 'Beja',
+            country: 'PT',
+            contractAddress: '0x0',
+            requestByAddress: '0x0',
+            currency: 'BTC',
+            email: 'tt@cc.io',
+            gps: {
+                latitude: 1,
+                longitude: 1,
+            },
+            language: 'pt',
+            publicId: '0000',
+            status: 'valid',
+            visibility: 'public',
+            started: new Date(),
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        communityCreateMock.mockImplementation(() =>
+            Promise.resolve({
+                data: communityDummyData,
+                error: undefined,
+            })
+        );
+
+        communityFindByIdMock.mockImplementation(() =>
+            Promise.resolve(communityDummyData)
+        );
+
+        updateCommunityInfoMock.mockImplementationOnce(() => Promise.resolve());
     });
 
     afterAll(() => {
         useSelectorMock.mockClear();
+        communityUploadCoverMock.mockClear();
+        communityFindByIdMock.mockClear();
+        updateCommunityInfoMock.mockClear();
     });
 
     test('try to submit empty', async () => {
@@ -589,7 +654,7 @@ describe('create community', () => {
         expect(queryByLabelText('image uploader')).toBeNull();
     });
 
-    test('metadata', async () => {
+    test('submit successfully', async () => {
         launchImageLibraryAsyncMock.mockReturnValueOnce(
             Promise.resolve({
                 uri: '/some/fake/image/uri.jpg',
@@ -599,18 +664,40 @@ describe('create community', () => {
                 cancelled: false,
             })
         );
-
-        const { getByLabelText, getByText, getByA11yLabel } = render(
-            <FakeCreateCommunityScreen />
+        requestForegroundPermissionsAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                status: 'granted',
+            })
         );
+        getCurrentPositionAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                coords: { latitude: 3.0, longitude: 2.0 },
+            })
+        );
+
+        const {
+            getByLabelText,
+            getByText,
+            getByA11yLabel,
+            queryByText,
+        } = render(<FakeCreateCommunityScreen />);
         await act(async () => {});
 
-        const communityName = getByLabelText(i18n.t('communityName'));
-        fireEvent.changeText(communityName, 'test community');
+        fireEvent.changeText(
+            getByLabelText(i18n.t('communityName')),
+            'test community'
+        );
 
         await act(async () =>
             fireEvent.press(getByLabelText('image uploader'))
         );
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('shortDescription')),
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('city')), 'Beja');
 
         fireEvent.press(getByLabelText(i18n.t('country')));
 
@@ -618,6 +705,27 @@ describe('create community', () => {
         await act(async () => expect(getByLabelText('PT')));
         fireEvent.press(getByLabelText('PT'));
 
-        fireEvent.press(getByText(i18n.t('submit')));
+        await act(async () =>
+            fireEvent.press(getByA11yLabel(i18n.t('getGPSLocation')))
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example.io');
+
+        fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('totalClaimPerBeneficiary')),
+            '100'
+        );
+
+        fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
+
+        await act(async () => {
+            fireEvent.press(getByText(i18n.t('submit')));
+        });
+
+        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('communityRequestSending'))).toBeNull();
+        expect(queryByText(i18n.t('communityRequestSuccess'))).not.toBeNull();
     });
 });
