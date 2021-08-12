@@ -190,6 +190,7 @@ function CommunityIncrementInterval(props: HelperProps) {
             >
                 <View style={{ flex: 1, marginRight: 10 }}>
                     <Input
+                        accessibilityLabel={i18n.t('time')}
                         label={i18n.t('time')}
                         value={state.incrementInterval}
                         help
@@ -296,6 +297,7 @@ function CommunityMaxClaim(props: HelperProps) {
     return (
         <View style={{ marginTop: 28 }}>
             <Input
+                accessibilityLabel={i18n.t('totalClaimPerBeneficiary')}
                 label={i18n.t('totalClaimPerBeneficiary')}
                 help
                 onPress={() => {
@@ -433,6 +435,7 @@ function CommunityClaimAmount(props: HelperProps) {
     return (
         <View style={{ marginTop: 28 }}>
             <Input
+                accessibilityLabel={i18n.t('claimAmount')}
                 label={i18n.t('claimAmount')}
                 help
                 onPress={() => {

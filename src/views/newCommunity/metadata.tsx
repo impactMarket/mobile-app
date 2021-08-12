@@ -446,6 +446,8 @@ function CommunityCountry() {
                                 () => {
                                     modalizeCountryRef.current?.close();
                                     validateField(state, dispatch).country();
+                                    setCountriesList(Object.keys(countries));
+                                    setSearchCountryQuery('');
                                 }
                             )}
                             <Searchbar
@@ -638,6 +640,7 @@ function CommunityCover() {
                     }}
                 />
                 <CloseStorySvg
+                    testID="remove-cover"
                     style={{
                         position: 'absolute',
                         top: 38,

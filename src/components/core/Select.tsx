@@ -66,7 +66,12 @@ export default class Select extends Component<ISelectProps, object> {
                                 },
                             ]}
                         >
-                            <Text style={styles.textInput}>{value}</Text>
+                            <Text
+                                style={styles.textInput}
+                                testID="selected-value"
+                            >
+                                {value}
+                            </Text>
                             <Svg
                                 width={14}
                                 height={9}

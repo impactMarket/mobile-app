@@ -9,6 +9,7 @@ import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 
 import CreateCommunityScreen from './index';
+import '@testing-library/jest-dom/extend-expect';
 
 afterEach(cleanup);
 
@@ -399,6 +400,191 @@ describe('create community', () => {
         fireEvent.press(getByText(i18n.t('submit')));
 
         expect(queryByText(i18n.t('imageDimensionsNotFit'))).not.toBeNull();
+    });
+
+    test('try to submit only claim amount', async () => {
+        const { getByText, queryByText, getByLabelText } = render(
+            <FakeCreateCommunityScreen />
+        );
+        await act(async () => {});
+
+        expect(queryByText(i18n.t('coverImageRequired'))).toBeNull();
+        expect(queryByText(i18n.t('communityNameRequired'))).toBeNull();
+        expect(queryByText(i18n.t('communityDescriptionRequired'))).toBeNull();
+        expect(queryByText(i18n.t('cityRequired'))).toBeNull();
+        expect(queryByText(i18n.t('countryRequired'))).toBeNull();
+        expect(queryByText(i18n.t('enablingGPSRequired'))).toBeNull();
+        expect(queryByText(i18n.t('emailRequired'))).toBeNull();
+        expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
+        expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
+        expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
+        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+
+        fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
+        fireEvent.press(getByText(i18n.t('submit')));
+
+        expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
+        expect(
+            queryByText(i18n.t('communityDescriptionRequired'))
+        ).not.toBeNull();
+        expect(queryByText(i18n.t('cityRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('countryRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('enablingGPSRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('emailRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
+        expect(queryByText(i18n.t('maxClaimAmountRequired'))).not.toBeNull();
+        expect(
+            queryByText(i18n.t('incrementalIntervalRequired'))
+        ).not.toBeNull();
+        expect(queryByText(i18n.t('modalErrorTitle'))).not.toBeNull();
+    });
+
+    test('try to submit only max claim', async () => {
+        const { getByText, queryByText, getByLabelText } = render(
+            <FakeCreateCommunityScreen />
+        );
+        await act(async () => {});
+
+        expect(queryByText(i18n.t('coverImageRequired'))).toBeNull();
+        expect(queryByText(i18n.t('communityNameRequired'))).toBeNull();
+        expect(queryByText(i18n.t('communityDescriptionRequired'))).toBeNull();
+        expect(queryByText(i18n.t('cityRequired'))).toBeNull();
+        expect(queryByText(i18n.t('countryRequired'))).toBeNull();
+        expect(queryByText(i18n.t('enablingGPSRequired'))).toBeNull();
+        expect(queryByText(i18n.t('emailRequired'))).toBeNull();
+        expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
+        expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
+        expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
+        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('totalClaimPerBeneficiary')),
+            '100'
+        );
+        fireEvent.press(getByText(i18n.t('submit')));
+
+        expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
+        expect(
+            queryByText(i18n.t('communityDescriptionRequired'))
+        ).not.toBeNull();
+        expect(queryByText(i18n.t('cityRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('countryRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('enablingGPSRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('emailRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('claimAmountRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
+        expect(
+            queryByText(i18n.t('incrementalIntervalRequired'))
+        ).not.toBeNull();
+        expect(queryByText(i18n.t('modalErrorTitle'))).not.toBeNull();
+    });
+
+    test('try to submit only increment interval', async () => {
+        const { getByText, queryByText, getByLabelText } = render(
+            <FakeCreateCommunityScreen />
+        );
+        await act(async () => {});
+
+        expect(queryByText(i18n.t('coverImageRequired'))).toBeNull();
+        expect(queryByText(i18n.t('communityNameRequired'))).toBeNull();
+        expect(queryByText(i18n.t('communityDescriptionRequired'))).toBeNull();
+        expect(queryByText(i18n.t('cityRequired'))).toBeNull();
+        expect(queryByText(i18n.t('countryRequired'))).toBeNull();
+        expect(queryByText(i18n.t('enablingGPSRequired'))).toBeNull();
+        expect(queryByText(i18n.t('emailRequired'))).toBeNull();
+        expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
+        expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
+        expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
+        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+
+        fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
+        fireEvent.press(getByText(i18n.t('submit')));
+
+        expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
+        expect(
+            queryByText(i18n.t('communityDescriptionRequired'))
+        ).not.toBeNull();
+        expect(queryByText(i18n.t('cityRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('countryRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('enablingGPSRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('emailRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('claimAmountRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('maxClaimAmountRequired'))).not.toBeNull();
+        expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
+        expect(queryByText(i18n.t('modalErrorTitle'))).not.toBeNull();
+    });
+
+    // TODO: this test is important but it's failling for unknown reasons
+    // test('change country', async () => {
+    //     const { getByLabelText, queryAllByTestId, getByA11yLabel } = render(
+    //         <FakeCreateCommunityScreen />
+    //     );
+    //     await act(async () => {});
+
+    //     fireEvent.press(getByLabelText(i18n.t('country')));
+    //     fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+    //     await act(async () => expect(getByLabelText('PT')));
+    //     fireEvent.press(getByLabelText('PT'));
+
+    //     expect(queryAllByTestId('selected-value')[0].children).toContain(
+    //         '🇵🇹 Portugal'
+    //     );
+
+    //     await act(async () => {});
+    //     fireEvent.press(getByLabelText(i18n.t('country')));
+    //     fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Ang');
+    //     await act(async () => expect(getByLabelText('AO')));
+    //     fireEvent.press(getByLabelText('AO'));
+
+    //     expect(queryAllByTestId('selected-value')[0].children).toContain(
+    //         '🇦🇴 Angola'
+    //     );
+    // });
+
+    test('change cover', async () => {
+        launchImageLibraryAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                uri: '/some/fake/image/one.jpg',
+                width: 790,
+                height: 790,
+                type: 'image',
+                cancelled: false,
+            })
+        );
+
+        const { getByLabelText, getByTestId, queryByLabelText } = render(
+            <FakeCreateCommunityScreen />
+        );
+        await act(async () => {});
+
+        await act(async () =>
+            fireEvent.press(getByLabelText('image uploader'))
+        );
+
+        expect(queryByLabelText('image uploader')).toBeNull();
+
+        fireEvent.press(getByTestId('remove-cover'));
+
+        expect(queryByLabelText('image uploader')).not.toBeNull();
+
+        launchImageLibraryAsyncMock.mockReturnValueOnce(
+            Promise.resolve({
+                uri: '/some/fake/image/two.jpg',
+                width: 790,
+                height: 790,
+                type: 'image',
+                cancelled: false,
+            })
+        );
+
+        await act(async () =>
+            fireEvent.press(getByLabelText('image uploader'))
+        );
+
+        expect(queryByLabelText('image uploader')).toBeNull();
     });
 
     test('metadata', async () => {
