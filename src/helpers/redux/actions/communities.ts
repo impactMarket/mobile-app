@@ -43,6 +43,12 @@ export function findCommunityByIdRequest(id: number): CommunitiesActionTypes {
         payload: { id },
     };
 }
+
+export function cleanCommunityState(): CommunitiesActionTypes {
+    return {
+        type: communitiesAction.FIND_BY_ID_CLEAN,
+    };
+}
 export function findCommunityByIdSuccess(
     community: CommunityAttributes
 ): CommunitiesActionTypes {

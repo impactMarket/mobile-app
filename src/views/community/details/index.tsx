@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BaseCommunity from 'components/BaseCommunity';
 import CommuntyStatus from 'components/CommuntyStatus';
@@ -10,7 +11,10 @@ import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
-import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
+import {
+    cleanCommunityState,
+    findCommunityByIdRequest,
+} from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
@@ -44,6 +48,7 @@ interface ICommunityDetailsScreen {
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const dispatch = useDispatch();
+
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
     const language = useSelector(
         (state: IRootState) => state.user.metadata.language
@@ -55,12 +60,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
     const [historicalSSI, setHistoricalSSI] = useState<number[]>([]);
-    // const [community, setCommunity] = useState<CommunityAttributes | undefined>(
-    //     undefined
-    // );
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
+        dispatch(cleanCommunityState());
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
         if (community) {
             if (props.route.params.openDonate === true) {
@@ -75,8 +78,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             .pastSSI(props.route.params.communityId)
             .then(setHistoricalSSI);
     }, []);
-
-    console.log({ community });
 
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
