@@ -10,9 +10,10 @@ import {
     getCurrencySymbol,
 } from 'helpers/currency';
 import { getUserBalance, isOutOfTime } from 'helpers/index';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { setUserWalletBalance } from 'helpers/redux/actions/user';
 import { navigationRef } from 'helpers/rootNavigation';
-import { UserActionTypes } from 'helpers/types/redux';
+import { CommunitiesActionTypes, UserActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React from 'react';
@@ -101,11 +102,13 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
     handleClaimPress = async () => {
         const {
             updateUserBalance,
+            findCommunityById,
             updateCooldownTime,
             updateClaimedAmount,
             communityContract,
             userAddress,
             communityMetadata,
+            communityUpdated,
             kit,
             isManager,
             userBalance,
@@ -261,9 +264,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             });
                         } else {
                             // verify contract funds :/
-                            const communityUpdated = await Api.community.findById(
-                                communityMetadata.id
-                            );
+                            // const communityUpdated = await Api.community.findById(
+                            // communityMetadata.id
+                            // );
+                            findCommunityById(communityMetadata.id);
+
                             if (communityUpdated) {
                                 const { state, contract } = communityUpdated;
                                 if (state && contract) {
@@ -578,22 +583,28 @@ const mapStateToProps = (state: IRootState) => {
     const { balance } = state.user.wallet;
     const { isManager } = state.user.community;
     const { exchangeRates, kit } = state.app;
+    const { community } = state.communities;
     return {
         communityMetadata: metadata,
         communityContract: contract,
         userCurrency: currency,
         userAddress: address,
         userBalance: balance,
+        communityUpdated: community,
         exchangeRates,
         kit,
         isManager,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
+const mapDispatchToProps = (
+    dispatch: Dispatch<UserActionTypes | CommunitiesActionTypes>
+) => {
     return {
         updateUserBalance: (newBalance: string) =>
             dispatch(setUserWalletBalance(newBalance)),
+        findCommunityById: (id: number) =>
+            dispatch(findCommunityByIdRequest(id)),
     };
 };
 

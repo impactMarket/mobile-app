@@ -45,9 +45,10 @@ export function* fetchCommunitiesList({ payload }: any) {
 
 export function* findCommunityById({ payload }: any) {
     try {
+        const { id } = payload;
         const community: CommunityAttributes = yield call(
             findCommunityByIdApi,
-            payload
+            id
         );
 
         yield put(findCommunityByIdSuccess(community));

@@ -27,6 +27,7 @@ import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -121,9 +122,10 @@ function AddedBeneficiaryScreen() {
                 );
                 // refresh community details
                 setTimeout(() => {
-                    Api.community
-                        .findById(community.metadata.id)
-                        .then((c) => dispatch(setCommunityMetadata(c!)));
+                    dispatch(findCommunityByIdRequest(community.metadata.id));
+                    // Api.community
+                    //     .findById(community.metadata.id)
+                    //     .then((c) => dispatch(setCommunityMetadata(c!)));
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);
                     Api.community.listBeneficiaries(true, 0, 10).then((l) => {
