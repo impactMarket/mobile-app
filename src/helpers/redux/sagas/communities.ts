@@ -2,10 +2,14 @@ import { communitiesAction } from 'helpers/constants';
 import {
     fetchCommunitiesListSuccess,
     fetchCommunitiesListFailure,
+    findCommunityByIdSuccess,
+    findCommunityByIdFailure,
 } from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import Api from 'services/api';
 import { call, put, all, takeEvery } from 'typed-redux-saga';
+
+import { setCommunityMetadata } from '../actions/user';
 
 const listCommunities = (query: {
     offset: number;
@@ -15,6 +19,8 @@ const listCommunities = (query: {
     lat?: number;
     lng?: number;
 }) => Api.community.list(query);
+
+const findCommunityByIdApi = (id: number) => Api.community.findById(id);
 
 export function* fetchCommunitiesList({ payload }: any) {
     try {
@@ -37,6 +43,21 @@ export function* fetchCommunitiesList({ payload }: any) {
     }
 }
 
+export function* findCommunityById({ payload }: any) {
+    try {
+        const community: CommunityAttributes = yield call(
+            findCommunityByIdApi,
+            payload
+        );
+
+        yield put(findCommunityByIdSuccess(community));
+        yield put(setCommunityMetadata(community));
+    } catch (err) {
+        yield put(findCommunityByIdFailure());
+    }
+}
+
 export default all([
     takeEvery(communitiesAction.INIT_REQUEST, fetchCommunitiesList),
+    takeEvery(communitiesAction.FIND_BY_ID_REQUEST, findCommunityById),
 ]);

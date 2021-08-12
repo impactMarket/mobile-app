@@ -4,6 +4,7 @@ import { ICommunitiesState } from 'helpers/types/state';
 
 const INITIAL_STATE_COMMUNITIES: ICommunitiesState = {
     communities: [],
+    community: null,
     refreshing: false,
     reachedEndList: false,
 };
@@ -34,6 +35,26 @@ export const communitiesReducer = (
             return {
                 ...state,
                 communities: [],
+                refreshing: false,
+            };
+
+        case communitiesAction.FIND_BY_ID_SUCCESS:
+            return {
+                ...state,
+                community: state.community,
+                refreshing: false,
+            };
+
+        case communitiesAction.FIND_BY_ID_FAILURE:
+            return {
+                ...state,
+                refreshing: false,
+            };
+
+        case communitiesAction.FIND_BY_ID_CLEAN:
+            return {
+                ...state,
+                community: {},
                 refreshing: false,
             };
 

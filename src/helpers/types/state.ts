@@ -75,6 +75,7 @@ export interface IOfflineState {
 
 export interface ICommunitiesState {
     communities: CommunityAttributes[];
+    community: CommunityAttributes;
     refreshing: boolean;
     reachedEndList: boolean;
 }

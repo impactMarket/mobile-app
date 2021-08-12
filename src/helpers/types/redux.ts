@@ -261,6 +261,26 @@ interface InitLoadCommunitiesActionClean {
     type: typeof communitiesAction.INIT_CLEAN;
 }
 
+interface findCommunityByIdActionRequest {
+    type: typeof communitiesAction.FIND_BY_ID_REQUEST;
+    payload: {
+        id: number;
+    };
+}
+
+interface findCommunityByIdActionSuccess {
+    type: typeof communitiesAction.FIND_BY_ID_SUCCESS;
+    payload: { community: CommunityAttributes };
+}
+
+interface findCommunityByIdActionFailure {
+    type: typeof communitiesAction.FIND_BY_ID_FAILURE;
+}
+
+interface findCommunityByIdActionClean {
+    type: typeof communitiesAction.FIND_BY_ID_CLEAN;
+}
+
 export type UserActionTypes =
     | UserWalletAction
     | UserSetBalanceAction
@@ -312,7 +332,11 @@ export type CommunitiesActionTypes =
     | InitLoadCommunitiesActionRequest
     | InitLoadCommunitiesActionSuccess
     | InitLoadCommunitiesActionFailure
-    | InitLoadCommunitiesActionClean;
+    | InitLoadCommunitiesActionClean
+    | findCommunityByIdActionRequest
+    | findCommunityByIdActionSuccess
+    | findCommunityByIdActionFailure
+    | findCommunityByIdActionClean;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes
