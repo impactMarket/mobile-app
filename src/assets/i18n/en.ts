@@ -60,6 +60,7 @@ export default {
     editCommunity: 'Edit',
     submitTicket: 'Submit a Ticket',
     submit: 'Submit',
+    submitting: 'Submitting',
     needLoginToCreateCommunity:
         'You need to connect with Valora to create a community.',
     communityDetails: 'Community Details',

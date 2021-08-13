@@ -569,6 +569,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -791,6 +792,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": "top",
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -884,6 +886,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -1229,6 +1232,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -1545,6 +1549,7 @@ If there is another person or organization among your community you believe is m
                                         "marginVertical": 5,
                                         "minHeight": 38,
                                         "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
                                         "width": "100%",
                                         "zIndex": 1,
                                       }
@@ -1828,6 +1833,7 @@ If there is another person or organization among your community you believe is m
                                         "marginVertical": 5,
                                         "minHeight": 38,
                                         "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
                                         "width": "100%",
                                         "zIndex": 1,
                                       }
@@ -1977,6 +1983,7 @@ If there is another person or organization among your community you believe is m
                                           "marginVertical": 5,
                                           "minHeight": 38,
                                           "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
                                           "width": "100%",
                                           "zIndex": 1,
                                         }
@@ -2971,6 +2978,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -3193,6 +3201,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": "top",
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -3286,6 +3295,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -3631,6 +3641,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -3947,6 +3958,7 @@ If there is another person or organization among your community you believe is m
                                         "marginVertical": 5,
                                         "minHeight": 38,
                                         "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
                                         "width": "100%",
                                         "zIndex": 1,
                                       }
@@ -4230,6 +4242,7 @@ If there is another person or organization among your community you believe is m
                                         "marginVertical": 5,
                                         "minHeight": 38,
                                         "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
                                         "width": "100%",
                                         "zIndex": 1,
                                       }
@@ -4379,6 +4392,7 @@ If there is another person or organization among your community you believe is m
                                           "marginVertical": 5,
                                           "minHeight": 38,
                                           "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
                                           "width": "100%",
                                           "zIndex": 1,
                                         }
@@ -5373,6 +5387,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -5595,6 +5610,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": "top",
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -5688,6 +5704,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -6033,6 +6050,7 @@ Array [
                                       "marginVertical": 5,
                                       "minHeight": 38,
                                       "paddingHorizontal": 10,
+                                      "textAlignVertical": undefined,
                                       "width": "100%",
                                       "zIndex": 1,
                                     }
@@ -6349,6 +6367,7 @@ If there is another person or organization among your community you believe is m
                                         "marginVertical": 5,
                                         "minHeight": 38,
                                         "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
                                         "width": "100%",
                                         "zIndex": 1,
                                       }
@@ -6632,6 +6651,7 @@ If there is another person or organization among your community you believe is m
                                         "marginVertical": 5,
                                         "minHeight": 38,
                                         "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
                                         "width": "100%",
                                         "zIndex": 1,
                                       }
@@ -6781,6 +6801,7 @@ If there is another person or organization among your community you believe is m
                                           "marginVertical": 5,
                                           "minHeight": 38,
                                           "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
                                           "width": "100%",
                                           "zIndex": 1,
                                         }

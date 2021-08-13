@@ -25,6 +25,7 @@ import {
     View,
     Text,
     Image,
+    StyleSheet,
 } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -365,22 +366,8 @@ function CreateCommunityScreen() {
         uploadDetails: any;
     }) => (
         <>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    paddingVertical: 16,
-                }}
-            >
-                <Text
-                    style={{
-                        fontSize: 15,
-                        lineHeight: 24,
-                        fontFamily: 'Inter-Regular',
-                    }}
-                >
+            <View style={styles.submissionActivityContainer}>
+                <Text style={styles.submissionActivityText}>
                     {props.description}
                 </Text>
                 {props.submission === true ? (
@@ -401,7 +388,7 @@ function CreateCommunityScreen() {
                         color={
                             props.uploadDetails
                                 ? ipctColors.greenishTeal
-                                : 'red'
+                                : '#EB5757'
                         }
                         size={22}
                     />
@@ -432,36 +419,9 @@ function CreateCommunityScreen() {
 
     const SubmissionFailed = () => (
         <>
-            <View
-                style={{
-                    marginVertical: 16,
-                    paddingVertical: 16,
-                    paddingHorizontal: 22,
-                    borderStyle: 'solid',
-                    borderColor: '#EB5757',
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    width: '100%',
-                    flexDirection: 'row',
-                }}
-            >
-                <WarningRedTriangle
-                    style={{
-                        alignSelf: 'flex-start',
-                        marginRight: 16,
-                        marginTop: 8,
-                    }}
-                />
-                <Text
-                    style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 14,
-                        lineHeight: 24,
-                        color: ipctColors.almostBlack,
-                        textAlign: 'left',
-                        marginRight: 36,
-                    }}
-                >
+            <View style={styles.failedModalContainer}>
+                <WarningRedTriangle style={styles.errorModalWarningSvg} />
+                <Text style={styles.failedModalMessageText}>
                     {i18n.t('communityRequestError')}
                 </Text>
             </View>
@@ -478,27 +438,15 @@ function CreateCommunityScreen() {
 
     const SubmissionSucess = () => (
         <>
-            <View
-                style={{
-                    paddingVertical: 14,
-                    display: 'flex',
-                    // height: sending || sendingSuccess ? 234 : 400,
-                    width: '88%',
-                    alignItems: 'center',
-                    alignSelf: 'center',
-                }}
-            >
+            <View style={styles.successModalContainer}>
                 <SuccessSvg />
                 <Text
-                    style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 14,
-                        lineHeight: 24,
-                        color: ipctColors.almostBlack,
-                        width: '100%',
-                        marginVertical: 12,
-                        textAlign: 'center',
-                    }}
+                    style={[
+                        styles.submissionModalMessageText,
+                        {
+                            textAlign: 'center',
+                        },
+                    ]}
                 >
                     {i18n.t('communityRequestSuccess')}
                 </Text>
@@ -517,16 +465,7 @@ function CreateCommunityScreen() {
 
     const SubmissionInProgress = () => (
         <>
-            <Text
-                style={{
-                    fontFamily: 'Inter-Regular',
-                    fontSize: 14,
-                    lineHeight: 24,
-                    color: ipctColors.almostBlack,
-                    width: '100%',
-                    marginVertical: 12,
-                }}
-            >
+            <Text style={styles.submissionModalMessageText}>
                 {i18n.t('communityRequestSending')}
             </Text>
             <SubmissionProgressDetails />
@@ -544,25 +483,10 @@ function CreateCommunityScreen() {
 
     const SubmissionRequestCancel = () => (
         <>
-            <Text
-                style={{
-                    fontFamily: 'Inter-Regular',
-                    fontSize: 14,
-                    lineHeight: 24,
-                    color: ipctColors.almostBlack,
-                    width: '100%',
-                    marginVertical: 12,
-                }}
-            >
+            <Text style={styles.submissionModalMessageText}>
                 {i18n.t('communityRequestCancel')}
             </Text>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                }}
-            >
+            <View style={styles.requestCancelContainerButtons}>
                 <Button
                     modeType="gray"
                     style={{ width: '35%' }}
@@ -597,16 +521,7 @@ function CreateCommunityScreen() {
 
     const SubmissionCanceled = () => (
         <>
-            <Text
-                style={{
-                    fontFamily: 'Inter-Regular',
-                    fontSize: 14,
-                    lineHeight: 24,
-                    color: ipctColors.almostBlack,
-                    width: '100%',
-                    marginVertical: 12,
-                }}
-            >
+            <Text style={styles.submissionModalMessageText}>
                 {i18n.t('communityRequestCancel')}
             </Text>
             <Button
@@ -670,35 +585,11 @@ function CreateCommunityScreen() {
                         </Button>
                     }
                 >
-                    <View
-                        style={{
-                            paddingVertical: 16,
-                            paddingHorizontal: 22,
-                            borderStyle: 'solid',
-                            borderColor: '#EB5757',
-                            borderWidth: 2,
-                            borderRadius: 8,
-                            width: '100%',
-                            flexDirection: 'row',
-                            marginBottom: 16,
-                        }}
-                    >
+                    <View style={styles.errorModalContainer}>
                         <WarningRedTriangle
-                            style={{
-                                alignSelf: 'flex-start',
-                                marginRight: 16,
-                                marginTop: 8,
-                            }}
+                            style={styles.errorModalWarningSvg}
                         />
-                        <Text
-                            style={{
-                                fontFamily: 'Inter-Regular',
-                                fontSize: 14,
-                                lineHeight: 24,
-                                color: ipctColors.almostBlack,
-                                marginRight: 12,
-                            }}
-                        >
+                        <Text style={styles.errorModalText}>
                             {invalidInputAmounts
                                 ? invalidInputAmounts
                                 : i18n.t('missingFieldError')}
@@ -707,7 +598,7 @@ function CreateCommunityScreen() {
                 </Modal>
                 <Modal
                     visible={showSubmissionModal}
-                    title="Submitting"
+                    title={i18n.t('submitting')}
                     onDismiss={
                         !submitting && !submittingSuccess
                             ? () => {
@@ -716,15 +607,7 @@ function CreateCommunityScreen() {
                             : undefined
                     }
                 >
-                    <View
-                        style={{
-                            paddingBottom: 14,
-                            display: 'flex',
-                            width: '88%',
-                            alignItems: 'center',
-                            alignSelf: 'center',
-                        }}
-                    >
+                    <View style={styles.modalSubmissionContainer}>
                         {canceled ? (
                             <SubmissionCanceled />
                         ) : requestCancel ? (
@@ -766,5 +649,89 @@ CreateCommunityScreen.navigationOptions = ({
         },
     };
 };
+
+const styles = StyleSheet.create({
+    submissionActivityContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingVertical: 16,
+    },
+    submissionActivityText: {
+        fontSize: 15,
+        lineHeight: 24,
+        fontFamily: 'Inter-Regular',
+    },
+    failedModalMessageText: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 24,
+        color: ipctColors.almostBlack,
+        textAlign: 'left',
+        marginRight: 36,
+    },
+    failedModalContainer: {
+        marginVertical: 16,
+        paddingVertical: 16,
+        paddingHorizontal: 22,
+        borderStyle: 'solid',
+        borderColor: '#EB5757',
+        borderWidth: 2,
+        borderRadius: 8,
+        width: '100%',
+        flexDirection: 'row',
+    },
+    successModalContainer: {
+        paddingVertical: 14,
+        display: 'flex',
+        width: '88%',
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+    requestCancelContainerButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    submissionModalMessageText: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 24,
+        color: ipctColors.almostBlack,
+        width: '100%',
+        marginVertical: 12,
+    },
+    errorModalContainer: {
+        paddingVertical: 16,
+        paddingHorizontal: 22,
+        borderStyle: 'solid',
+        borderColor: '#EB5757',
+        borderWidth: 2,
+        borderRadius: 8,
+        width: '100%',
+        flexDirection: 'row',
+        marginBottom: 16,
+    },
+    errorModalWarningSvg: {
+        alignSelf: 'flex-start',
+        marginRight: 16,
+        marginTop: 8,
+    },
+    errorModalText: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 24,
+        color: ipctColors.almostBlack,
+        marginRight: 12,
+    },
+    modalSubmissionContainer: {
+        paddingBottom: 14,
+        display: 'flex',
+        width: '88%',
+        alignItems: 'center',
+        alignSelf: 'center',
+    },
+});
 
 export default CreateCommunityScreen;

@@ -55,6 +55,7 @@ export default {
     edit: 'Editar',
     create: 'Criar',
     submit: 'Enviar',
+    submitting: 'Enviando',
     needLoginToCreateCommunity:
         'É necessário estar conectado com a app Valora para criar uma comunidade.',
     communityDetails: 'Detalhes da Comunidade',

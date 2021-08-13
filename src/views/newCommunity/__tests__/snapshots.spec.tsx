@@ -6,7 +6,7 @@ import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 
-import CreateCommunityScreen from '../index';
+import CreateCommunityScreen from '../create';
 
 /**
  * NOTE: we are testing the component individually, but need the header
