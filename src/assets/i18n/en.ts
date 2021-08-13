@@ -109,6 +109,9 @@ export default {
     private: 'Private',
     communityRequestSending:
         'Please wait while the community information is being uploaded...',
+    communityRequestCancel: 'Are you sure you want to cancel the request?',
+    yes: 'Yes',
+    no: 'No',
     communityRequestError:
         'There was an error submitting the community information.',
     missingFieldError:

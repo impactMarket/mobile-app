@@ -13,10 +13,10 @@ import {
     setUserIsCommunityManager,
 } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
-import { AppMediaContent } from 'helpers/types/models';
+import { AppMediaContent, CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitCommunity from 'navigator/header/SubmitCommunity';
-import React, { useLayoutEffect, useReducer, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useReducer, useState } from 'react';
 import {
     ScrollView,
     KeyboardAvoidingView,
@@ -45,16 +45,23 @@ import {
 function CreateCommunityScreen() {
     const navigation = useNavigation();
     const dispatchRedux = useDispatch();
+    const [contractParams, setContractParams] = useState({});
+    const [privateParams, setPrivateParams] = useState(undefined);
     const [submitting, setSubmitting] = useState(false);
+    const [canceled, setCanceled] = useState(false);
+    const [requestCancel, setRequestCancel] = useState(false);
     const [submittingSuccess, setSubmittingSuccess] = useState(false);
     const [submittingCover, setSubmittingCover] = useState(false);
     const [submittingCommunity, setSubmittingCommunity] = useState(false);
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
     const [isAnyFieldMissedModal, setIsAnyFieldMissedModal] = useState(false);
-    const [state, dispatch] = useReducer(reducer, formInitialState);
     const [coverUploadDetails, setCoverUploadDetails] = useState<
         AppMediaContent | undefined
     >(undefined);
+    const [communityUploadDetails, setCommunityUploadDetails] = useState<
+        CommunityAttributes | undefined
+    >(undefined);
+    const [state, dispatch] = useReducer(reducer, formInitialState);
 
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
@@ -63,22 +70,40 @@ function CreateCommunityScreen() {
         (state: IRootState) => state.user.metadata.language
     );
 
-    const submitCommunity = async (
-        contractParams: {
-            claimAmount: string;
-            maxClaim: string;
-            baseInterval: number;
-            incrementInterval: number;
-        },
-        privateParamsIfAvailable: any,
-        details: [
-            {
-                uploadURL: string;
-                media: AppMediaContent;
-            },
-            void
-        ]
+    useEffect(() => {
+        if (!canceled && coverUploadDetails !== undefined) {
+            submitCommunity().finally(() => {
+                setSubmitting(false);
+                setSubmittingCover(false);
+                setSubmittingCommunity(false);
+            });
+        }
+    }, [canceled, coverUploadDetails]);
+
+    const updateUIAfterSubmission = async (
+        data: CommunityAttributes,
+        error: any
     ) => {
+        if (error === undefined) {
+            await updateCommunityInfo(data.id, dispatchRedux);
+            const community = await Api.community.findById(data.id);
+            if (community !== undefined) {
+                batch(() => {
+                    dispatchRedux(setCommunityMetadata(community));
+                    dispatchRedux(setUserIsCommunityManager(true));
+                });
+            }
+            setSubmitting(false);
+            setSubmittingSuccess(true);
+        } else {
+            // Sentry.Native.captureException(e);
+            setSubmitting(false);
+            setSubmittingCommunity(false);
+            setSubmittingSuccess(false);
+        }
+    };
+
+    const submitCommunity = async () => {
         const {
             name,
             description,
@@ -101,34 +126,16 @@ function CreateCommunityScreen() {
                 longitude: gps.longitude + config.locationErrorMargin,
             },
             email,
-            coverMediaId: details[0].media.id,
+            coverMediaId: coverUploadDetails.id,
             contractParams,
-            ...privateParamsIfAvailable,
+            ...privateParams,
         };
-        const communityApiRequestResult = await Api.community.create(
-            communityDetails
-        );
-        if (communityApiRequestResult.error === undefined) {
-            await updateCommunityInfo(
-                communityApiRequestResult.data.id,
-                dispatchRedux
-            );
-            const community = await Api.community.findById(
-                communityApiRequestResult.data.id
-            );
-            if (community !== undefined) {
-                batch(() => {
-                    dispatchRedux(setCommunityMetadata(community));
-                    dispatchRedux(setUserIsCommunityManager(true));
-                });
-            }
-            setSubmitting(false);
-            setSubmittingSuccess(true);
-        } else {
-            // Sentry.Native.captureException(e);
-            setSubmitting(false);
-            setSubmittingCommunity(false);
-            setSubmittingSuccess(false);
+        const { data, error } = await Api.community.create(communityDetails);
+        if (error === undefined) {
+            setCommunityUploadDetails(data);
+        }
+        if (!requestCancel) {
+            await updateUIAfterSubmission(data, error);
         }
     };
 
@@ -171,7 +178,8 @@ function CreateCommunityScreen() {
     };
 
     const deployPrivateCommunity = async () => {
-        //
+        // TODO:
+        return { contractAddress: '0x0' };
     };
 
     const submitNewCommunity = async () => {
@@ -241,66 +249,34 @@ function CreateCommunityScreen() {
         }
 
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-        let txReceipt = null,
-            communityAddress = null;
+        setContractParams({
+            claimAmount: new BigNumber(
+                formatInputAmountToTransfer(state.claimAmount)
+            )
+                .multipliedBy(decimals)
+                .toString(),
+            maxClaim: new BigNumber(formatInputAmountToTransfer(state.maxClaim))
+                .multipliedBy(decimals)
+                .toString(),
+            baseInterval: parseInt(state.baseInterval, 10),
+            incrementInterval:
+                parseInt(state.incrementInterval, 10) *
+                state.incrementIntervalUnit,
+        });
+
         try {
-            const contractParams = {
-                claimAmount: new BigNumber(
-                    formatInputAmountToTransfer(state.claimAmount)
-                )
-                    .multipliedBy(decimals)
-                    .toString(),
-                maxClaim: new BigNumber(
-                    formatInputAmountToTransfer(state.maxClaim)
-                )
-                    .multipliedBy(decimals)
-                    .toString(),
-                baseInterval: parseInt(state.baseInterval, 10),
-                incrementInterval:
-                    parseInt(state.incrementInterval, 10) *
-                    state.incrementIntervalUnit,
-            };
-            let privateParamsIfAvailable = {};
             if (state.visibility === 'private') {
-                txReceipt = await deployPrivateCommunity();
+                const txReceipt = await deployPrivateCommunity();
                 if (txReceipt === undefined) {
-                    // TODO: throw an error
-                    return;
+                    throw new Error('invalid tx');
                 }
-                communityAddress = txReceipt.contractAddress;
-                privateParamsIfAvailable = {
-                    contractAddress: communityAddress,
+                setPrivateParams({
+                    contractAddress: txReceipt.contractAddress,
                     txReceipt,
-                };
+                });
             }
 
-            // if (profileImage.length > 0 && profileImage !== avatar) {
-            //     try {
-            //         const res = await Api.user.updateProfilePicture(
-            //             profileImage
-            //         );
-            //         const cachedUser = (await CacheStore.getUser())!;
-            //         await CacheStore.cacheUser({
-            //             ...cachedUser,
-            //             avatar: res.url,
-            //         });
-            //         dispatch(
-            //             setUserMetadata({
-            //                 ...user,
-            //                 avatar: res.url,
-            //             })
-            //         );
-            //     } catch (e) {
-            //         // TODO: block community creation if this fails, for now, lets ignore
-            //     }
-            // }
-
-            const details = await uploadImages(state.coverImage, '');
-            await submitCommunity(
-                contractParams,
-                privateParamsIfAvailable,
-                details
-            );
+            await uploadImages(state.coverImage, '');
         } catch (e) {
             // Sentry.Native.captureException(e);
         } finally {
@@ -487,10 +463,6 @@ function CreateCommunityScreen() {
                     color: ipctColors.almostBlack,
                     width: '100%',
                     marginVertical: 12,
-                    // textAlign:
-                    //     sendingSuccess || sending
-                    //         ? 'center'
-                    //         : 'left',
                 }}
             >
                 {i18n.t('communityRequestSending')}
@@ -500,15 +472,89 @@ function CreateCommunityScreen() {
                 modeType="gray"
                 style={{ width: '100%' }}
                 onPress={() => {
-                    // setSending(false);
-                    // setToggleInformativeModal(false);
-                    // navigation.goBack();
-                    // navigation.navigate(
-                    //     Screens.CommunityManager
-                    // );
+                    setRequestCancel(true);
                 }}
             >
                 {i18n.t('cancelSending')}
+            </Button>
+        </>
+    );
+
+    const SubmissionRequestCancel = () => (
+        <>
+            <Text
+                style={{
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 14,
+                    lineHeight: 24,
+                    color: ipctColors.almostBlack,
+                    width: '100%',
+                    marginVertical: 12,
+                }}
+            >
+                {i18n.t('communityRequestCancel')}
+            </Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                }}
+            >
+                <Button
+                    modeType="gray"
+                    style={{ width: '35%' }}
+                    onPress={() => {
+                        setCanceled(true);
+                        setRequestCancel(false);
+                        if (communityUploadDetails !== undefined) {
+                            // TODO: request API delete
+                        }
+                    }}
+                >
+                    {i18n.t('yes')}
+                </Button>
+                <Button
+                    modeType="default"
+                    style={{ width: '35%' }}
+                    onPress={() => {
+                        setRequestCancel(false);
+                        if (communityUploadDetails !== undefined) {
+                            updateUIAfterSubmission(
+                                communityUploadDetails,
+                                undefined
+                            );
+                        }
+                    }}
+                >
+                    {i18n.t('no')}
+                </Button>
+            </View>
+        </>
+    );
+
+    const SubmissionCanceled = () => (
+        <>
+            <Text
+                style={{
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 14,
+                    lineHeight: 24,
+                    color: ipctColors.almostBlack,
+                    width: '100%',
+                    marginVertical: 12,
+                }}
+            >
+                {i18n.t('communityRequestCancel')}
+            </Text>
+            <Button
+                modeType="gray"
+                style={{ width: '100%' }}
+                onPress={() => {
+                    navigation.goBack();
+                }}
+            >
+                {i18n.t('leave')}
             </Button>
         </>
     );
@@ -616,7 +662,11 @@ function CreateCommunityScreen() {
                             alignSelf: 'center',
                         }}
                     >
-                        {submitting ? (
+                        {canceled ? (
+                            <SubmissionCanceled />
+                        ) : requestCancel ? (
+                            <SubmissionRequestCancel />
+                        ) : submitting ? (
                             <SubmissionInProgress />
                         ) : submittingSuccess ? (
                             <SubmissionSucess />
