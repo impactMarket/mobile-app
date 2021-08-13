@@ -10,8 +10,8 @@ import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 
-import Api from '../../services/api';
-import CreateCommunityScreen from './index';
+import Api from '../../../services/api';
+import CreateCommunityScreen from '../index';
 
 afterEach(cleanup);
 
