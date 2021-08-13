@@ -418,12 +418,12 @@ function CreateCommunityScreen() {
             }}
         >
             <SubmissionActivity
-                description="Cover"
+                description={i18n.t('changeCoverImage')}
                 submission={submittingCover}
                 uploadDetails={coverUploadDetails}
             />
             <SubmissionActivity
-                description="Community"
+                description={i18n.t('communityDetails')}
                 submission={submittingCommunity}
                 uploadDetails={undefined} // doesn't matter, once it's approved, jumps to another modal
             />
