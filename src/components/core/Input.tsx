@@ -89,6 +89,9 @@ export default class Input extends Component<IInputProps, object> {
                             fontSize: 15,
                             fontFamily: 'Inter-Regular',
                             color: ipctColors.almostBlack,
+                            textAlignVertical: this.props.multiline
+                                ? 'top'
+                                : undefined,
                         }}
                     />
                 </View>
