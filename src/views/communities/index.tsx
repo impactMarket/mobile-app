@@ -83,7 +83,6 @@ function CommunitiesScreen() {
 
                 setCommuntiesOffset(0);
             } catch (e) {
-                console.log('catch handleChangeOrder');
                 setCommuntiesOrder('bigger');
                 setRefreshing(false);
             }

@@ -168,12 +168,9 @@ function CommunityManagerScreen() {
                     return;
                 }
                 // refresh community details
-                dispatch(findCommunityByIdRequest(community.id));
-                // setTimeout(() => {
-                //     Api.community
-                //         .findById(community.id)
-                //         .then((c) => dispatch(setCommunityMetadata(c!)));
-                // }, 2500);
+                setTimeout(() => {
+                    dispatch(findCommunityByIdRequest(community.id));
+                }, 2500);
 
                 Alert.alert(
                     i18n.t('success'),

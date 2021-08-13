@@ -104,9 +104,6 @@ function AddManagerScreen() {
                 // refresh community details
                 setTimeout(() => {
                     dispatch(findCommunityByIdRequest(community.id));
-                    // Api.community
-                    //     .findById(community.id)
-                    //     .then((c) => dispatch(setCommunityMetadata(c!)));
                 }, 2500);
 
                 Alert.alert(

@@ -599,9 +599,6 @@ function CreateCommunityScreen() {
                             communityApiRequestResult.data.id
                         )
                     );
-                    // const community = await Api.community.findById(
-                    //     communityApiRequestResult.data.id
-                    // );
                     if (community !== undefined) {
                         batch(() => {
                             dispatch(setCommunityMetadata(community));
@@ -700,9 +697,6 @@ function CreateCommunityScreen() {
                     dispatch(
                         findCommunityByIdRequest(communityApiRequestResult.id)
                     );
-                    // const community = await Api.community.findById(
-                    //     communityApiRequestResult.id
-                    // );
 
                     if (community !== undefined) {
                         batch(() => {

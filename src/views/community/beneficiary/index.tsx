@@ -203,9 +203,6 @@ function BeneficiaryScreen() {
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(community.id));
         setRefreshing(false);
-        // Api.community.findById(community.id).then((c) => {
-        //     dispatch(setCommunityMetadata(c!));
-        // });
     };
 
     const updateClaimedAmountAndCache = async () => {
