@@ -76,6 +76,9 @@ function CreateCommunityScreen() {
     const [submittingCommunity, setSubmittingCommunity] = useState(false);
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
     const [isAnyFieldMissedModal, setIsAnyFieldMissedModal] = useState(false);
+    const [invalidInputAmounts, setInvalidInputAmounts] = useState<
+        string | undefined
+    >(undefined);
     const [coverUploadDetails, setCoverUploadDetails] = useState<
         AppMediaContent | undefined
     >(undefined);
@@ -251,31 +254,16 @@ function CreateCommunityScreen() {
         }
 
         if (new BigNumber(state.maxClaim).lte(state.claimAmount)) {
-            // Alert.alert(
-            //     i18n.t('failure'),
-            //     i18n.t('claimBiggerThanMax'),
-            //     [{ text: 'OK' }],
-            //     { cancelable: false }
-            // );
-            // return;
+            setInvalidInputAmounts(i18n.t('claimBiggerThanMax'));
+            return;
         }
         if (new BigNumber(state.claimAmount).eq(0)) {
-            // Alert.alert(
-            //     i18n.t('failure'),
-            //     i18n.t('claimNotZero'),
-            //     [{ text: 'OK' }],
-            //     { cancelable: false }
-            // );
-            // return;
+            setInvalidInputAmounts(i18n.t('claimNotZero'));
+            return;
         }
         if (new BigNumber(state.maxClaim).eq(0)) {
-            // Alert.alert(
-            //     i18n.t('failure'),
-            //     i18n.t('maxNotZero'),
-            //     [{ text: 'OK' }],
-            //     { cancelable: false }
-            // );
-            // return;
+            setInvalidInputAmounts(i18n.t('maxNotZero'));
+            return;
         }
 
         setSubmitting(true);
@@ -318,10 +306,6 @@ function CreateCommunityScreen() {
             setIsUploadingContent(true);
         } catch (e) {
             // Sentry.Native.captureException(e);
-        } finally {
-            // setSubmitting(false);
-            // setSubmittingCover(false);
-            // setSubmittingCommunity(false);
         }
     };
 
@@ -603,8 +587,6 @@ function CreateCommunityScreen() {
             <KeyboardAvoidingView
                 style={{
                     flex: 1,
-                    // flexDirection: 'column',
-                    // justifyContent: 'center',
                 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 // enabled
@@ -613,8 +595,6 @@ function CreateCommunityScreen() {
                 <ScrollView
                     style={{
                         paddingHorizontal: 20,
-                        // marginBottom: 20,
-                        // marginTop: 16,
                     }}
                 >
                     <DispatchContext.Provider value={dispatch}>
@@ -627,11 +607,15 @@ function CreateCommunityScreen() {
             </KeyboardAvoidingView>
             <Portal>
                 <Modal
-                    visible={isAnyFieldMissedModal}
+                    visible={
+                        isAnyFieldMissedModal ||
+                        invalidInputAmounts !== undefined
+                    }
                     title={i18n.t('modalErrorTitle')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);
+                        setInvalidInputAmounts(undefined);
                     }}
                     buttons={
                         <Button
@@ -640,6 +624,7 @@ function CreateCommunityScreen() {
                             onPress={() => {
                                 setSubmitting(false);
                                 setIsAnyFieldMissedModal(false);
+                                setInvalidInputAmounts(undefined);
                             }}
                         >
                             {i18n.t('close')}
@@ -672,11 +657,12 @@ function CreateCommunityScreen() {
                                 fontSize: 14,
                                 lineHeight: 24,
                                 color: ipctColors.almostBlack,
-                                // textAlign: 'justify',
                                 marginRight: 12,
                             }}
                         >
-                            {i18n.t('missingFieldError')}
+                            {invalidInputAmounts
+                                ? invalidInputAmounts
+                                : i18n.t('missingFieldError')}
                         </Text>
                     </View>
                 </Modal>
@@ -695,7 +681,6 @@ function CreateCommunityScreen() {
                         style={{
                             paddingBottom: 14,
                             display: 'flex',
-                            // height: sending || sendingSuccess ? 234 : 400,
                             width: '88%',
                             alignItems: 'center',
                             alignSelf: 'center',

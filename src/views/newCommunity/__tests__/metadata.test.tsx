@@ -606,6 +606,12 @@ describe('create community', () => {
     //     );
     // });
 
+    // TODO: claim amount bigger than max claim
+
+    // TODO: claim amount zero
+
+    // TODO: max claim zero
+
     test('change cover', async () => {
         launchImageLibraryAsyncMock.mockReturnValueOnce(
             Promise.resolve({
