@@ -54,7 +54,7 @@ export const communitiesReducer = (
         case communitiesAction.FIND_BY_ID_CLEAN:
             return {
                 ...state,
-                community: {},
+                community: null,
                 refreshing: false,
             };
 
