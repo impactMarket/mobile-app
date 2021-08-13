@@ -128,7 +128,7 @@ function CommunityCurrency() {
                                     borderRadius: 6,
                                     marginHorizontal: 22,
                                 }}
-                                autoFocus
+                                // autoFocus
                                 inputStyle={{
                                     marginLeft: -14,
                                 }}
@@ -794,7 +794,35 @@ function CommunityCover() {
     );
 }
 
-export default function Metadata() {
+export default function Metadata(props: { edit?: boolean }) {
+    if (props.edit === true) {
+        return (
+            <View style={{ paddingBottom: 20 }}>
+                <Headline
+                    style={{
+                        fontFamily: 'Manrope-Bold',
+                        fontSize: 15,
+                        lineHeight: 24,
+                    }}
+                >
+                    {i18n.t('communityDetails')}
+                </Headline>
+                <Text
+                    style={{
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 14,
+                        lineHeight: 24,
+                    }}
+                >
+                    {i18n.t('communityDescriptionLabel')}
+                </Text>
+                <CommunityName />
+                <CommunityCover />
+                <CommunityDescription />
+                <CommunityCurrency />
+            </View>
+        );
+    }
     return (
         <View>
             <Headline

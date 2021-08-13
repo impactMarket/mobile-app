@@ -133,7 +133,7 @@ function CreateCommunityScreen() {
     };
 
     const uploadImages = (_cover: string, _profile: string) => {
-        const profile = () => {
+        const profileUpload = () => {
             // if (profileImage.length > 0 && profileImage !== avatar) {
             //     try {
             //         const res = await Api.user.updateProfilePicture(
@@ -155,7 +155,7 @@ function CreateCommunityScreen() {
             //     }
             // }
         };
-        const cover = async () => {
+        const coverUpload = async () => {
             if (coverUploadDetails !== undefined) {
                 return {
                     uploadURL: '',
@@ -167,7 +167,7 @@ function CreateCommunityScreen() {
             setSubmittingCover(false);
             return details;
         };
-        return Promise.all([cover(), profile()]);
+        return Promise.all([coverUpload(), profileUpload()]);
     };
 
     const deployPrivateCommunity = async () => {
@@ -467,12 +467,9 @@ function CreateCommunityScreen() {
                 <Button
                     modeType="gray"
                     style={{ width: '100%' }}
-                    // onPress={() => {
-                    //     setSending(false);
-                    //     setToggleInformativeModal(false);
-                    //     navigation.goBack();
-                    //     navigation.navigate(Screens.CommunityManager);
-                    // }}
+                    onPress={() => {
+                        navigation.goBack();
+                    }}
                 >
                     {i18n.t('continue')}
                 </Button>

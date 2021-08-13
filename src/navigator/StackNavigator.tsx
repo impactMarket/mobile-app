@@ -14,8 +14,9 @@ import AddManagerScreen from 'views/community/manager/views/AddManagerScreen';
 import AddedBeneficiaryScreen from 'views/community/manager/views/AddedBeneficiaryScreen';
 import AddedManagerScreen from 'views/community/manager/views/AddedManagerScreen';
 import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBeneficiaryScreen';
-import CreateCommunityScreen from 'views/newCommunity';
 import FAQScreen from 'views/faq';
+import CreateCommunityScreen from 'views/newCommunity/create';
+import EditCommunityScreen from 'views/newCommunity/edit';
 import StoriesScreen from 'views/stories';
 import Carousel from 'views/stories/Carousel';
 import NewStoryScreen from 'views/stories/NewStory';
@@ -107,6 +108,11 @@ const managerScreens = (Navigator: typeof Stack) => (
             name={Screens.AddedBeneficiary}
             component={AddedBeneficiaryScreen}
             options={AddedBeneficiaryScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.EditCommunity}
+            component={EditCommunityScreen}
+            options={EditCommunityScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.RemovedBeneficiary}
