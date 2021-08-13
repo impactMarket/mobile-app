@@ -42,9 +42,30 @@ import {
     validateField,
 } from './state';
 
+const makeCancelable = (promise: Promise<any>) => {
+    let hasCanceled_ = false;
+
+    const wrappedPromise = new Promise((resolve, reject) => {
+        promise.then(
+            (val) =>
+                hasCanceled_ ? reject(Error('isCanceled')) : resolve(val),
+            (error) =>
+                hasCanceled_ ? reject(Error('isCanceled')) : reject(error)
+        );
+    });
+
+    return {
+        promise: wrappedPromise,
+        cancel() {
+            hasCanceled_ = true;
+        },
+    };
+};
+
 function CreateCommunityScreen() {
     const navigation = useNavigation();
     const dispatchRedux = useDispatch();
+    const [isUploadingContent, setIsUploadingContent] = useState(false);
     const [contractParams, setContractParams] = useState({});
     const [privateParams, setPrivateParams] = useState(undefined);
     const [submitting, setSubmitting] = useState(false);
@@ -71,14 +92,34 @@ function CreateCommunityScreen() {
     );
 
     useEffect(() => {
-        if (!canceled && coverUploadDetails !== undefined) {
-            submitCommunity().finally(() => {
-                setSubmitting(false);
-                setSubmittingCover(false);
-                setSubmittingCommunity(false);
-            });
+        let cancelablePromise: {
+            promise: Promise<unknown>;
+            cancel(): void;
+        };
+        if (!canceled) {
+            if (coverUploadDetails !== undefined) {
+                cancelablePromise = makeCancelable(submitCommunity());
+                cancelablePromise.promise.catch().finally(() => {
+                    setSubmitting(false);
+                    setSubmittingCover(false);
+                    setSubmittingCommunity(false);
+                });
+            } else if (isUploadingContent) {
+                cancelablePromise = makeCancelable(uploadImages());
+                cancelablePromise.promise
+                    .then((details) => {
+                        setCoverUploadDetails(details[0].media);
+                        setSubmittingCover(false);
+                    })
+                    .catch();
+            }
         }
-    }, [canceled, coverUploadDetails]);
+        return () => {
+            if (cancelablePromise !== undefined) {
+                return cancelablePromise.cancel();
+            }
+        };
+    }, [canceled, coverUploadDetails, isUploadingContent]);
 
     const updateUIAfterSubmission = async (
         data: CommunityAttributes,
@@ -139,7 +180,7 @@ function CreateCommunityScreen() {
         }
     };
 
-    const uploadImages = (_cover: string, _profile: string) => {
+    const uploadImages = () => {
         const profileUpload = () => {
             // if (profileImage.length > 0 && profileImage !== avatar) {
             //     try {
@@ -169,9 +210,7 @@ function CreateCommunityScreen() {
                     media: coverUploadDetails,
                 };
             }
-            const details = await Api.community.uploadCover(_cover);
-            setCoverUploadDetails(details.media);
-            setSubmittingCover(false);
+            const details = await Api.community.uploadCover(state.coverImage);
             return details;
         };
         return Promise.all([coverUpload(), profileUpload()]);
@@ -276,13 +315,13 @@ function CreateCommunityScreen() {
                 });
             }
 
-            await uploadImages(state.coverImage, '');
+            setIsUploadingContent(true);
         } catch (e) {
             // Sentry.Native.captureException(e);
         } finally {
-            setSubmitting(false);
-            setSubmittingCover(false);
-            setSubmittingCommunity(false);
+            // setSubmitting(false);
+            // setSubmittingCover(false);
+            // setSubmittingCommunity(false);
         }
     };
 

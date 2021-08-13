@@ -895,4 +895,8 @@ describe('create community', () => {
         expect(queryByText(i18n.t('communityRequestSending'))).toBeNull();
         expect(queryByText(i18n.t('communityRequestSuccess'))).not.toBeNull();
     });
+
+    // TODO: cancel during image upload
+
+    // TODO: cancel during community upload
 });
