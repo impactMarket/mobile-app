@@ -6,6 +6,7 @@ import Button from 'components/core/Button';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
+import { celoNetwork } from 'helpers/constants';
 import { formatInputAmountToTransfer } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
 import {
@@ -29,9 +30,12 @@ import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
+import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 import config from '../../../config';
+import CommunityContractABI from '../../contracts/CommunityABI.json';
+import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import Contract from './contract';
 import Metadata from './metadata';
 import {
@@ -93,6 +97,7 @@ function CreateCommunityScreen() {
     const userLanguage = useSelector(
         (state: IRootState) => state.user.metadata.language
     );
+    const kit = useSelector((state: IRootState) => state.app.kit);
 
     useEffect(() => {
         let cancelablePromise: {
@@ -220,8 +225,42 @@ function CreateCommunityScreen() {
     };
 
     const deployPrivateCommunity = async () => {
-        // TODO:
-        return { contractAddress: '0x0' };
+        const decimals = new BigNumber(10).pow(config.cUSDDecimals),
+            CommunityContract = new kit.web3.eth.Contract(
+                CommunityContractABI as any
+            ),
+            txObject = await CommunityContract.deploy({
+                data: CommunityBytecode.bytecode,
+                arguments: [
+                    userAddress,
+                    new BigNumber(
+                        formatInputAmountToTransfer(state.claimAmount)
+                    )
+                        .multipliedBy(decimals)
+                        .toString(),
+                    new BigNumber(formatInputAmountToTransfer(state.maxClaim))
+                        .multipliedBy(decimals)
+                        .toString(),
+                    state.baseInterval,
+                    (
+                        parseInt(state.incrementInterval, 10) *
+                        state.incrementIntervalUnit
+                    ).toString(),
+                    celoNetwork.noAddress,
+                    config.cUSDContract,
+                    userAddress,
+                ],
+            }),
+            // exception is handled outside
+            // receipt as undefined is handled outside
+            receipt = await celoWalletRequest(
+                userAddress,
+                celoNetwork.noAddress,
+                txObject,
+                'createcommunity',
+                kit
+            );
+        return receipt;
     };
 
     const submitNewCommunity = async () => {
