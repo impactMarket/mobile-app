@@ -109,9 +109,6 @@ function AddedManagerScreen() {
                 // refresh community details
                 setTimeout(() => {
                     dispatch(findCommunityByIdRequest(community.metadata.id));
-                    // Api.community
-                    //     .findById(community.metadata.id)
-                    //     .then((c) => dispatch(setCommunityMetadata(c!)));
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);
                     Api.community
