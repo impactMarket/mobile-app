@@ -598,7 +598,17 @@ function CreateCommunityScreen() {
                         </Text>
                     </View>
                 </Modal>
-                <Modal visible={showSubmissionModal} title="Submitting">
+                <Modal
+                    visible={showSubmissionModal}
+                    title="Submitting"
+                    onDismiss={
+                        !submitting && !submittingSuccess
+                            ? () => {
+                                  setShowSubmissionModal(false);
+                              }
+                            : undefined
+                    }
+                >
                     <View
                         style={{
                             paddingBottom: 14,
