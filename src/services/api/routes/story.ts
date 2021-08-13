@@ -94,11 +94,13 @@ class ApiRouteStory {
         ).data;
     }
 
-    static async love(storyId: number): Promise<void> {
+    static async love(storyId: number): Promise<{ data: unknown; error: any }> {
         return this.api.put('/story/love/' + storyId, {});
     }
 
-    static async inapropriate(storyId: number): Promise<void> {
+    static async inapropriate(
+        storyId: number
+    ): Promise<{ data: unknown; error: any }> {
         return this.api.put('/story/inapropriate/' + storyId, {});
     }
 

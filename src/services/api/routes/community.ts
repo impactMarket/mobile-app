@@ -231,9 +231,9 @@ class ApiRouteCommunity {
     }
 
     static async edit(
-        uri: string | undefined,
+        // uri: string | undefined,
         details: CommunityEditionAttributes
-    ): Promise<CommunityAttributes> {
+    ): Promise<{ data: CommunityAttributes; error: any }> {
         // if (uri) {
         //     const mimetype = mime
         //         .contentType(path.basename(uri))
@@ -273,7 +273,7 @@ class ApiRouteCommunity {
         //         coverMediaId: preSigned.media.id,
         //     };
         // }
-        return this.api.put('/community', details);
+        return this.api.put<CommunityAttributes>('/community', details);
     }
 
     static async getRequestChangeUbi(

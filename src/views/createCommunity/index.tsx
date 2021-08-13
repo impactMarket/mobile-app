@@ -674,20 +674,20 @@ function CreateCommunityScreen() {
                     coverMediaId: -1, // default!
                 };
                 const communityApiRequestResult = await Api.community.edit(
-                    coverImage !== initialData.coverImage
-                        ? coverImage
-                        : undefined,
+                    // coverImage !== initialData.coverImage
+                    //     ? coverImage
+                    //     : undefined,
                     communityDetails
                 );
 
                 if (communityApiRequestResult) {
                     await updateCommunityInfo(
-                        communityApiRequestResult.id,
+                        communityApiRequestResult.data.id,
                         dispatch
                     );
 
                     const community = await Api.community.findById(
-                        communityApiRequestResult.id
+                        communityApiRequestResult.data.id
                     );
 
                     if (community !== undefined) {
