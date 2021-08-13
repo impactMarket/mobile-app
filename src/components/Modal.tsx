@@ -118,7 +118,11 @@ export default class Modal extends Component<IModalProps, IModalState> {
                                     {title}
                                 </Headline>
                                 {onDismiss !== undefined && (
-                                    <Pressable hitSlop={15} onPress={onDismiss}>
+                                    <Pressable
+                                        hitSlop={15}
+                                        onPress={onDismiss}
+                                        testID="close-modal"
+                                    >
                                         <CloseSvg />
                                     </Pressable>
                                 )}
