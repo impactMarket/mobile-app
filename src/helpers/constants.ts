@@ -53,6 +53,10 @@ export const SET_EXCHANGE_RATES = 'SET_EXCHANGE_RATES';
 export const CONSENT_ANALYTICS = 'CONSENT_ANALYTICS';
 export const SHOW_REPORT_CARD = 'SHOW_REPORT_CARD';
 
+export const SET_USER_AUTH_REQUEST = 'SET_USER_AUTH_REQUEST';
+export const SET_USER_AUTH_SUCCESS = 'SET_USER_AUTH_SUCCESS';
+export const SET_USER_AUTH_FAILURE = 'SET_USER_AUTH_FAILURE';
+
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
 export const SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS =
@@ -93,9 +97,20 @@ export enum storiesAction {
     USER_STORIES_FAILURE = 'stories/user_failure',
 }
 
+
 export enum communityOrderOptions {
     bigger = 'bigger',
     nearest = 'nearest',
+}
+export enum communitiesAction {
+    INIT_REQUEST = 'communities/init_request',
+    INIT_SUCCESS = 'communities/init_success',
+    INIT_FAILURE = 'communities/init_failure',
+    INIT_CLEAN = 'communities/init_clean',
+    FIND_BY_ID_REQUEST = 'communities/find_by_id_request',
+    FIND_BY_ID_SUCCESS = 'communities/find_by_id_success',
+    FIND_BY_ID_FAILURE = 'communities/find_by_id_failure',
+    FIND_BY_ID_CLEAN = 'communities/find_by_id_clean',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

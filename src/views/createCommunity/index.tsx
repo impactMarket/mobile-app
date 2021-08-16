@@ -12,7 +12,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
-import Clipboard from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
@@ -52,10 +52,9 @@ import {
     Image,
     FlatList,
     TouchableOpacity,
-    Dimensions,
     KeyboardAvoidingView,
     Platform,
-    ActivityIndicator,
+    Keyboard,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
@@ -84,6 +83,7 @@ import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
 import SubmitCommunity from '../../navigator/header/SubmitCommunity';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 const countries: {
     [key: string]: {
@@ -126,6 +126,11 @@ function CreateCommunityScreen() {
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
+
+    const community = useSelector(
+        (state: IRootState) => state.communities.community
+    );
+
     const avatar = useSelector(
         (state: IRootState) => state.user.metadata.avatar
     );
@@ -173,6 +178,8 @@ function CreateCommunityScreen() {
     const [isMaxClaimValid, setIsMaxClaimValid] = useState(true);
     //
     const [showingResults, setShowingResults] = useState(false);
+
+    const [toggleLeaveFormModal, setToggleLeaveFormModal] = useState(false);
     const [toggleInformativeModal, setToggleInformativeModal] = useState(false);
     const [toggleMissingFieldsModal, setToggleMissingFieldsModal] = useState(
         false
@@ -227,6 +234,39 @@ function CreateCommunityScreen() {
         PROFILE_IMAGE = 'PROFILE_IMAGE',
     }
 
+    const handlePressGoBack = () => {
+        const _isCoverImageValid = coverImage.length > 0;
+        const _isProfileImageValid = profileImage.length > 0;
+        const _isNameValid = name.length > 0;
+        const _isDescriptionValid = description.length > 0;
+        const _isCityValid = city.length > 0;
+        const _isCountryValid = country.length > 0;
+        const _isEmailValid = email.length > 0;
+        const _isEnabledGPS = gpsLocation !== undefined;
+        const _isClaimAmountValid = claimAmount.length > 0;
+        const _isMaxClaimValid = maxClaim.length > 0;
+        const _isIncrementalIntervalValid = incrementInterval.length > 0;
+
+        const isAnyFieldFilled =
+            _isNameValid ||
+            _isDescriptionValid ||
+            _isCityValid ||
+            _isCountryValid ||
+            _isEmailValid ||
+            _isClaimAmountValid ||
+            _isIncrementalIntervalValid ||
+            _isMaxClaimValid ||
+            _isCoverImageValid ||
+            _isEnabledGPS ||
+            _isProfileImageValid;
+        if (isAnyFieldFilled) {
+            Keyboard.dismiss();
+            setToggleLeaveFormModal(true);
+        } else {
+            navigation.goBack();
+        }
+    };
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () =>
@@ -247,7 +287,8 @@ function CreateCommunityScreen() {
                         }}
                     />
                 ),
-            headerLeft: () => (showWebview ? null : <BackSvg />),
+            headerLeft: () =>
+                showWebview ? null : <BackSvg onPress={handlePressGoBack} />,
             headerTitle: () =>
                 showWebview ? (
                     <Text
@@ -553,8 +594,10 @@ function CreateCommunityScreen() {
                         communityApiRequestResult.data.id,
                         dispatch
                     );
-                    const community = await Api.community.findById(
-                        communityApiRequestResult.data.id
+                    dispatch(
+                        findCommunityByIdRequest(
+                            communityApiRequestResult.data.id
+                        )
                     );
                     if (community !== undefined) {
                         batch(() => {
@@ -651,8 +694,8 @@ function CreateCommunityScreen() {
                         dispatch
                     );
 
-                    const community = await Api.community.findById(
-                        communityApiRequestResult.id
+                    dispatch(
+                        findCommunityByIdRequest(communityApiRequestResult.id)
                     );
 
                     if (community !== undefined) {
@@ -1020,6 +1063,7 @@ function CreateCommunityScreen() {
                     {i18n.t('createCommunityAlert')}
                 </Text>
                 <TouchableOpacity
+                    hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
                     onPress={() => setIsAlertVisible(!isAlertVisible)}
                 >
                     <Icon
@@ -1239,11 +1283,17 @@ function CreateCommunityScreen() {
         return (
             <RNPortal>
                 <Modal visible dismissable={false}>
-                    <Card style={{ marginHorizontal: 22, borderRadius: 12 }}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                        }}
+                    >
                         <View
                             style={{
                                 paddingVertical: 14,
-                                height: sending || sendingSuccess ? 234 : 400,
+                                display: 'flex',
+                                // height: sending || sendingSuccess ? 234 : 400,
                                 width: '88%',
                                 alignItems: 'center',
                                 alignSelf: 'center',
@@ -2247,6 +2297,88 @@ function CreateCommunityScreen() {
                 )}
             </KeyboardAvoidingView>
             <RNPortal>
+                <Modal visible={toggleLeaveFormModal} dismissable={false}>
+                    <Card
+                        style={{
+                            marginHorizontal: 22,
+                            borderRadius: 12,
+                            paddingHorizontal: 22,
+                            paddingVertical: 16,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                marginBottom: 13.5,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Manrope-Bold',
+                                    fontSize: 18,
+                                    lineHeight: 20,
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {i18n.t('modalLeaveTitle')}
+                            </Text>
+                            <CloseStorySvg
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                }}
+                            >
+                                {i18n.t('modalLeaveDescription')}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                width: '100%',
+                            }}
+                        >
+                            <Button
+                                modeType="gray"
+                                style={{ flex: 1, marginRight: 5 }}
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                    navigation.goBack();
+                                }}
+                            >
+                                {i18n.t('leave')}
+                            </Button>
+                            <Button
+                                modeType="default"
+                                style={{ flex: 1, marginLeft: 5 }}
+                                onPress={() => {
+                                    setToggleLeaveFormModal(false);
+                                }}
+                            >
+                                {i18n.t('stay')}
+                            </Button>
+                        </View>
+                    </Card>
+                </Modal>
                 <Modalize ref={modalizeGenericErrorRef} adjustToContentHeight>
                     <View
                         style={{
@@ -2330,9 +2462,10 @@ function CreateCommunityScreen() {
         </>
     );
 }
-CreateCommunityScreen.navigationOptions = (isEditable: boolean) => {
+
+CreateCommunityScreen.navigationOptions = () => {
     return {
-        headerLeft: () => <BackSvg />,
+        // headerLeft: () => <CustomBackBtn />,
         headerTitle: i18n.t('applyCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
@@ -2369,7 +2502,6 @@ const styles = StyleSheet.create({
     },
     //
     textNote: {
-        // color: 'grey',
         fontFamily: 'Gelion-Regular',
     },
     communityName: {
@@ -2488,11 +2620,11 @@ const styles = StyleSheet.create({
         borderRadius: 6,
     },
     createCommunityAlert: {
-        flex: 1,
+        display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'space-around',
-        height: 80,
+        minHeight: 80,
         width: '90%',
         marginHorizontal: 20,
         marginTop: 20,
@@ -2500,7 +2632,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderWidth: 2,
         borderStyle: 'solid',
-        paddingTop: 16,
+        paddingVertical: 12,
     },
     errorText: {
         fontFamily: 'Inter-Regular',

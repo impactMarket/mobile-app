@@ -8,8 +8,9 @@ import {
 } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
-import ModalGenericError from 'components/core/ModalGenericError';
+import CloseStorySvg from 'components/svg/CloseStorySvg';
 import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import * as Localization from 'expo-localization';
@@ -37,7 +38,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
-import { Portal } from 'react-native-portalize';
+import { Portal, Modal } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
@@ -54,37 +55,45 @@ import Web3 from 'web3';
 import config from '../../../../config';
 function Auth() {
     const navigation = useNavigation();
-
     const dispatch = useDispatch();
+
     const kit = useSelector((state: IRootState) => state.app.kit);
+    // const user = useSelector((state: IRootState) => state.auth.user);
+    // const refreshing = useSelector(
+    //     (state: IRootState) => state.auth.refreshing
+    // );
+
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
-    const [toggleInformativeModal, setToggleInformativeModal] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
+
     const [, setLoadRefs] = useState(false);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
+    const modalizeHelpCenterRef = useRef<Modalize>(null);
 
     useFocusEffect(() => {
         renderAuthModalize();
     });
 
-    const renderInformativeModal = (
-        title: string,
-        description: string,
-        btnString: string,
-        closeFn: React.SetStateAction<any>,
-        btnFn: React.SetStateAction<any>
-    ) => (
-        <ModalGenericError
-            title={title}
-            description={description}
-            btnString={btnString}
-            closeFn={closeFn}
-            btnFn={btnFn}
-        />
-    );
+    const getUser = async (
+        userAddress: string,
+        language: string,
+        currency: string,
+        phoneNumber: string,
+        pushNotificationToken: string
+    ) =>
+        await Api.user.auth(
+            userAddress,
+            language,
+            currency,
+            phoneNumber,
+            pushNotificationToken
+        );
 
     const login = async () => {
         const requestId = 'login';
@@ -95,7 +104,8 @@ function Auth() {
         const pushNotificationToken = await registerForPushNotifications();
 
         let userAddress = '';
-        let dappkitResponse: any;
+
+        // celloWallet interaction
         try {
             requestAccountAddress({
                 requestId,
@@ -103,23 +113,24 @@ function Auth() {
                 callback,
             });
 
-            dappkitResponse = await waitForAccountAuth(requestId);
-            userAddress = kit.web3.utils.toChecksumAddress(
-                dappkitResponse.address
-            );
+            await Promise.race([
+                waitForAccountAuth(requestId).then((dappkitResponse) => {
+                    userAddress = kit.web3.utils.toChecksumAddress(
+                        dappkitResponse.address
+                    );
+                    setPhoneNumber(dappkitResponse.phoneNumber);
+                }),
+                (async () => {
+                    await new Promise((res) => setTimeout(res, 10000)).then(
+                        () => {
+                            setTimedOut(true);
+                        }
+                    );
+                })(),
+            ]);
         } catch (e) {
             Sentry.Native.captureException(e);
-            analytics('login', { device: Device.brand, success: 'false' });
-
-            toggleInformativeModal &&
-                renderInformativeModal(
-                    i18n.t('failure'),
-                    i18n.t('errorConnectToValora'),
-                    i18n.t('close'),
-                    setToggleInformativeModal(false),
-                    setToggleInformativeModal(false)
-                );
-            setConnecting(false);
+            setTimedOut(true);
             return;
         }
 
@@ -132,86 +143,84 @@ function Auth() {
         if (!supportedLanguages.includes(language)) {
             language = 'en';
         }
-        const currency = getCurrencyFromPhoneNumber(
-            dappkitResponse.phoneNumber
+        const currency = getCurrencyFromPhoneNumber(phoneNumber);
+        /** Although all the SAGA structure is created, we would need to subscribe to the store just to 'wait' 
+         * for the user to be authenticated. Using promise in this case, lead us to a more direct and independent approach.
+         * Note. I am leaving the structure in place but disabled just in case we change authentication methhods in the future.
+         * 
+        dispatch(
+            addUserAuthToStateRequest(
+                userAddress,
+                language,
+                currency,
+                dappkitResponse.phoneNumber,
+                pushNotificationToken
+            )
         );
-
-        const user = await Api.user.auth(
+        **/
+        getUser(
             userAddress,
             language,
             currency,
-            dappkitResponse.phoneNumber,
+            phoneNumber,
             pushNotificationToken
-        );
-
-        if (user === undefined) {
-            // TODO: needs to be improved
-            // Sentry.Native.captureMessage(
-            //     JSON.stringify({ action: 'login', details: 'undefined user' }),
-            //     Sentry.Native.Severity.Critical
-            // );
-            analytics('login', { device: Device.brand, success: 'false' });
-
-            toggleInformativeModal &&
-                renderInformativeModal(
-                    i18n.t('failure'),
-                    i18n.t('authErroHappenedTryAgain'),
-                    i18n.t('close'),
-                    setToggleInformativeModal(false),
-                    setToggleInformativeModal(false)
+        )
+            .then(async (user) => {
+                if (user === undefined) {
+                    analytics('login', {
+                        device: Device.brand,
+                        success: 'false',
+                    });
+                    await new Promise((res) => setTimeout(res, 5000)).then(
+                        () => {
+                            modalizeWelcomeRef.current.close();
+                            setTimedOut(true);
+                        }
+                    );
+                    throw new Error('user is undefined');
+                }
+                setRefreshing(true);
+                await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, user.token);
+                await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
+                await AsyncStorage.setItem(
+                    STORAGE_USER_PHONE_NUMBER,
+                    phoneNumber
                 );
-            setConnecting(false);
-            return;
-        }
-        try {
-            await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, user.token);
-            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
-            await AsyncStorage.setItem(
-                STORAGE_USER_PHONE_NUMBER,
-                dappkitResponse.phoneNumber
-            );
-            await CacheStore.cacheUser({
-                ...user.user,
-                avatar: user.user.avatar ? (user.user.avatar as any).url : null, // TODO: avoid this
+                await CacheStore.cacheUser({
+                    ...user.user,
+                    avatar: user.user.avatar
+                        ? (user.user.avatar as any).url
+                        : null, // TODO: avoid this
+                });
+
+                await welcomeUser(
+                    userAddress,
+                    phoneNumber,
+                    user,
+                    exchangeRates,
+                    newKitFromWeb3(new Web3(config.jsonRpc)),
+                    dispatch,
+                    user.user
+                );
+                if (pushNotificationToken) {
+                    dispatch(setPushNotificationsToken(pushNotificationToken));
+                    setPushNotificationListeners(
+                        startNotificationsListeners(kit, dispatch)
+                    );
+                }
+                analytics('login', {
+                    device: Device.brand,
+                    success: 'true',
+                });
+                setRefreshing(false);
+            })
+            .catch((e) => {
+                Sentry.Native.captureException(e);
+
+                setTimedOut(true);
+                setConnecting(false);
+                setRefreshing(false);
             });
-
-            await welcomeUser(
-                userAddress,
-                dappkitResponse.phoneNumber,
-                user,
-                exchangeRates,
-                newKitFromWeb3(new Web3(config.jsonRpc)),
-                dispatch,
-                user.user
-            );
-            if (pushNotificationToken) {
-                dispatch(setPushNotificationsToken(pushNotificationToken));
-                setPushNotificationListeners(
-                    startNotificationsListeners(kit, dispatch)
-                );
-            }
-            analytics('login', { device: Device.brand, success: 'true' });
-        } catch (error) {
-            analytics('login', { device: Device.brand, success: 'false' });
-            // TODO: improve this
-            // Sentry.Native.captureMessage(
-            //     JSON.stringify({
-            //         action: 'login',
-            //         details: `config user - ${error.message}`,
-            //     }),
-            //     Sentry.Native.Severity.Critical
-            // );
-
-            toggleInformativeModal &&
-                renderInformativeModal(
-                    i18n.t('failure'),
-                    i18n.t('anErroHappenedTryAgain'),
-                    i18n.t('close'),
-                    setToggleInformativeModal(false),
-                    setToggleInformativeModal(false)
-                );
-            setConnecting(false);
-        }
     };
 
     const buttonStoreLink = () => {
@@ -281,8 +290,34 @@ function Auth() {
         }
     };
 
+    const handleCloseErrorModal = () => {
+        setTimedOut(false);
+        navigation.navigate(Screens.Communities);
+    };
+
     return (
         <Portal>
+            <Modalize
+                ref={modalizeHelpCenterRef}
+                HeaderComponent={renderHeader(
+                    null,
+                    modalizeHelpCenterRef,
+                    () => modalizeWelcomeRef.current?.open(),
+                    true
+                )}
+                adjustToContentHeight
+            >
+                <WebView
+                    originWhitelist={['*']}
+                    source={{
+                        uri:
+                            'https://docs.impactmarket.com/general/others#app-is-out-of-date',
+                    }}
+                    style={{
+                        height: Dimensions.get('screen').height * 0.85,
+                    }}
+                />
+            </Modalize>
             <Modalize
                 ref={modalizeWelcomeRef}
                 HeaderComponent={renderHeader(
@@ -326,8 +361,8 @@ function Auth() {
                         <Button
                             modeType="green"
                             bold
-                            onPress={() => login()}
-                            loading={connecting}
+                            onPress={login}
+                            loading={connecting || refreshing}
                             style={{ width: '100%', marginTop: 16 }}
                             labelStyle={styles.buttomConnectValoraText}
                         >
@@ -336,7 +371,6 @@ function Auth() {
                     </View>
                 </ScrollView>
             </Modalize>
-
             <Modalize
                 ref={modalizeWebViewRef}
                 HeaderComponent={renderHeader(
@@ -355,6 +389,42 @@ function Auth() {
                     }}
                 />
             </Modalize>
+            <Modal visible={timedOut} dismissable={false}>
+                <Card style={styles.timedOutCard}>
+                    <View style={styles.timedOutCardContent}>
+                        <Text style={styles.timedOutCardText}>
+                            {i18n.t('modalValoraTimeoutTitle')}
+                        </Text>
+                        <CloseStorySvg
+                            onPress={() => handleCloseErrorModal()}
+                        />
+                    </View>
+                    <View style={styles.timedOutCardDescriptionContainer}>
+                        <Text style={styles.timedOutCardDescription}>
+                            {i18n.t('modalValoraTimeoutDescription')}
+                        </Text>
+                    </View>
+                    <View style={styles.timedOutCardButtons}>
+                        <Button
+                            modeType="gray"
+                            style={{ flex: 1, marginRight: 5 }}
+                            onPress={() => handleCloseErrorModal()}
+                        >
+                            {i18n.t('close')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ flex: 1, marginLeft: 5 }}
+                            onPress={() => {
+                                modalizeHelpCenterRef.current?.open();
+                                setTimedOut(false);
+                            }}
+                        >
+                            {i18n.t('faq')}
+                        </Button>
+                    </View>
+                </Card>
+            </Modal>
         </Portal>
     );
 }
@@ -368,6 +438,42 @@ Auth.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
 export default Auth;
 
 const styles = StyleSheet.create({
+    timedOutCard: {
+        marginHorizontal: 22,
+        borderRadius: 12,
+        paddingHorizontal: 22,
+        paddingVertical: 16,
+    },
+    timedOutCardContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 13.5,
+    },
+    timedOutCardText: {
+        fontFamily: 'Manrope-Bold',
+        fontSize: 18,
+        lineHeight: 20,
+        textAlign: 'left',
+    },
+    timedOutCardButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    timedOutCardDescription: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 24,
+        color: ipctColors.almostBlack,
+    },
+    timedOutCardDescriptionContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        marginBottom: 16,
+    },
     mainView: {
         flexDirection: 'column',
         justifyContent: 'space-around',

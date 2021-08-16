@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
@@ -10,7 +9,7 @@ import WaitingRedSvg from 'components/svg/WaitingRedSvg';
 import ReportCard from 'components/svg/header/ReportCard';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
-import { Screens, SHOW_REPORT_CARD } from 'helpers/constants';
+import { Screens } from 'helpers/constants';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import {
     setAppSuspectWrongDateTime,
@@ -21,7 +20,6 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-
 // redux Actions
 import { Trans } from 'react-i18next';
 import {
@@ -50,6 +48,7 @@ import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
 import BlockedAccount from './cards/BlockedAccount';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 function BeneficiaryScreen() {
     let timeoutTimeDiff: NodeJS.Timer | undefined;
@@ -202,10 +201,8 @@ function BeneficiaryScreen() {
     };
 
     const onRefresh = () => {
-        Api.community.findById(community.id).then((c) => {
-            dispatch(setCommunityMetadata(c!));
-            setRefreshing(false);
-        });
+        dispatch(findCommunityByIdRequest(community.id));
+        setRefreshing(false);
     };
 
     const updateClaimedAmountAndCache = async () => {

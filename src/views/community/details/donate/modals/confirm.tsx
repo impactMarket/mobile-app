@@ -16,7 +16,6 @@ import { Text, View, StyleSheet, Alert } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 import { batch, connect, ConnectedProps } from 'react-redux';
 import { analytics } from 'services/analytics';
-import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import * as Sentry from 'sentry-expo';
 

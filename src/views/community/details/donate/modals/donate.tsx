@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
-import Clipboard from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { modalDonateAction } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
@@ -48,7 +48,8 @@ class DonateModal extends Component<
 
     handleCopyAddressToClipboard = () => {
         if (this.props.community) {
-            Clipboard.setString(this.props.community.contractAddress!);
+            const { contractAddress } = this.props.community;
+            Clipboard.setString(contractAddress!);
             this.setState({ showCopiedToClipboard: true });
             this.props.dismissModal();
         }

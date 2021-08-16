@@ -124,6 +124,14 @@ export default {
     communityUpdated: 'Os dados da comunidade foram atualizados!',
     submissionFailed: 'Falha no envio',
     modalErrorTitle: 'Ooops!',
+    modalValoraTimeoutTitle: 'Request timeout',
+    modalValoraTimeoutDescription:
+        'Sua solicitação de conexão foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
+    modalLeaveTitle: 'Sair do formulário',
+    stay: 'Ficar',
+    leave: 'Sair',
+    modalLeaveDescription:
+        'Todo o conteúdo inserido será perdido. Tem certeza que deseja sair deste formulário?',
     modalErrorDescription:
         'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
     errorUpdatingCommunity:
@@ -152,16 +160,17 @@ export default {
     pin4Digits: 'PIN (4 digitos)',
     continue: 'Continuar',
     yourQRCode: 'Seu código QR',
-    youHaveDonated: 'Obrigado pelo seu donativo!',
-    errorDonating: 'Um erro ocorreu durante o donativo!',
+    youHaveDonated: 'Obrigado pelo seu contributo!',
+    errorDonating: 'Um erro ocorreu durante o contributo!',
     addressCopiedClipboard:
         'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
     donate: 'Contribuir',
     attach: 'Anexar',
-    donateWithValora: 'Doar com Valora',
+    donateWithValora: 'Contribuir com Valora',
     amountSymbol: 'Montante em {{symbol}}',
     donateSymbol: 'Contribuir ({{symbol}})',
     close: 'Fechar',
+    faq: 'FAQ',
     youCanClaimXin: 'Poderá pegar {{amount}} em',
     claimX: 'Pegar ', // {{amount}}
     loading: 'A carregar...',
@@ -189,9 +198,11 @@ export default {
     notFundsToAddBeneficiary:
         'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
     claimExplained1:
-        'Cada comunidade possui um grupo de beneficiários, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
+        '<bold>Cada comunidade possui um grupo de beneficiários</bold>, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
     claimExplained2:
-        'Existe um tempo minimo que terá de esperar antes de poder pegar novamente, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
+        '<bold>Existe um tempo minimo que terá de esperar antes de poder pegar novamente</bold>, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
+    claimExplained3:
+        '<bold>Se a sua comunidade ficar sem fundos</bold>, você não poderá solicitar. A única maneira de começar a solicitar novamente é quando a comunidade recebe fundos adicionais por meio de doações.',
     claimAmountHelp:
         'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir/pegar de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
     totalClaimPerBeneficiaryHelp:
@@ -243,7 +254,7 @@ export default {
     youAreNotConnected:
         'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
     errorConnectToValora:
-        'Ocorreu um erro enquanto se conectava á Valora. Por favor, tente novamente.',
+        'Ocorreu um erro enquanto se conectava á Valora. Por favor, verifique o estado de sua conexão com a internet e tente novamente.',
     addingYourOwnAddress:
         'Você está a tentar adicionar o seu endereço. Tem certeza?',
     alreadyInCommunity:
@@ -287,7 +298,7 @@ export default {
     bigger: 'Mais beneficiários',
     pleaseWait: 'Por favor aguarde...',
     thankYou: 'Obrigado!',
-    donationBeingProcessed: 'O seu donativo está a ser processado...',
+    donationBeingProcessed: 'O seu contributo está a ser processado...',
     beneficiaryCommunityNoFunds:
         'Infelizmente, a sua comunidade não tem fundos de momento! Por favor, tente mais tarde.',
     possibleNetworkIssues: 'Posivelmente problemas de conexão.',
@@ -300,6 +311,12 @@ export default {
     unknown: 'Desconhecido.',
     clockNotSynced:
         'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
+    communityFundsRunOut: {
+        title: 'Comunidade sem fundos',
+        description:
+            'Entendemos o inconveniente e sabemos o quanto você precisa desse valor. <bold> Você será notificado quando os fundos estiverem disponíveis novamente. </bold>',
+        callToAction: 'Por que os fundos acabam?',
+    },
     communityWentOutOfFunds:
         'Parece que a comunidade ficou sem fundos. Tente novamente mais tarde.',
     notEnoughForTransaction:
@@ -424,6 +441,8 @@ export default {
         messages: {
             yourNetworkisOffline: 'Ouch! Parece que você está offline.',
             yourNetworkisOnline: 'Hurray! Sua rede está online novamente!',
+            yourNetworkisWeak:
+                'Hmmm! Parece que você está a ter problemas com a rede.',
             submitAddStoriesToStateSuccess:
                 'Hurray! Veja as stories mais recentes.',
             submitAddStoriesToStateFailure:

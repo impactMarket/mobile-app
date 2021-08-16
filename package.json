@@ -68,7 +68,7 @@
         "expo-app-loading": "1.0.1",
         "expo-application": "3.2.0",
         "expo-camera": "11.2.1",
-        "expo-clipboard": "1.1.0",
+        "expo-clipboard": "~1.1.0",
         "expo-constants": "11.0.1",
         "expo-crypto": "9.2.0",
         "expo-device": "3.3.0",
@@ -163,6 +163,7 @@
         "prettier": "2.2.1",
         "react-native-bundle-visualizer": "2.2.1",
         "react-test-renderer": "17.0.2",
+        "reactotron-react-native": "5.0.0",
         "typescript": "4.3.5"
     },
     "resolutions": {

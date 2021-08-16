@@ -1,7 +1,11 @@
 import { ContractKit } from '@celo/contractkit';
 import { Subscription } from '@unimodules/core';
 
-import { ICommunitiesListStories, ICommunityStory } from './endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunityStory,
+    IUserAuth,
+} from './endpoints';
 import { CommunityAttributes, UserAttributes } from './models';
 
 export interface IUserWallet {
@@ -27,6 +31,8 @@ export interface IUserState {
 export interface IAuthState {
     pushNotificationToken: string;
     authToken: string;
+    user: IUserAuth;
+    refreshing: boolean;
 }
 export interface IModalDonateState {
     donationValues: {
@@ -66,6 +72,13 @@ export interface IOfflineState {
     queue: [];
     isConnected: true;
 }
+
+export interface ICommunitiesState {
+    communities: CommunityAttributes[];
+    community: CommunityAttributes;
+    refreshing: boolean;
+    reachedEndList: boolean;
+}
 export interface IRootState {
     offline?: IOfflineState;
     user: IUserState;
@@ -73,6 +86,7 @@ export interface IRootState {
     app: IAppState;
     modalDonate: IModalDonateState;
     stories: IStoriesState;
+    communities: ICommunitiesState;
 }
 
 export interface ICallerRouteParams {

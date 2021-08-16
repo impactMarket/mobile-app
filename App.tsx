@@ -39,7 +39,14 @@ import rootSagas from 'helpers/redux/sagas';
 import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
 import React from 'react';
-import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
+import {
+    Image,
+    View,
+    LogBox,
+    StatusBar,
+    Dimensions,
+    Platform,
+} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import {
     DefaultTheme,
@@ -74,6 +81,11 @@ import Navigator from './src/navigator';
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
 import { ipctColors } from './src/styles';
+if (__DEV__) {
+    import('./ReactotronConfig').then(() =>
+        console.log('Reactotron Configured')
+    );
+}
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -230,20 +242,13 @@ class App extends React.Component<any, IAppState> {
         }
 
         //
-        // Analytics.setUserId(Device.osInternalBuildId);
-        const osVersion = Device.osVersion;
-        let userProperties: any = {
-            screen_resolution: `${Dimensions.get('window').width}x${
-                Dimensions.get('window').height
-            }`,
-        };
-        if (osVersion) {
-            userProperties = {
-                ...userProperties,
-                osVersion,
-            };
-        }
-        Analytics.setUserProperties(userProperties);
+        const { width, height } = Dimensions.get('screen');
+        Analytics.setUserProperties({
+            screen_dimensions: `${width}x${height}`,
+            os_version: `${Device.osName.slice(0, 1).toLowerCase()}${
+                Device.osVersion
+            }`, // to separate android and ios
+        });
     };
 
     componentWillUnmount = () => {
@@ -453,7 +458,14 @@ class App extends React.Component<any, IAppState> {
                         backgroundColor="rgba(0, 0, 0, 0.2)"
                         translucent
                     />
-                    <FlashMessage position="top" />
+                    <FlashMessage
+                        position={{
+                            top: StatusBar.currentHeight,
+                            left: 0,
+                            right: 0,
+                        }}
+                        floating
+                    />
                     {config.testnet && testnetWarningView}
                     <NavigationContainer
                         theme={navigationTheme}

@@ -129,6 +129,14 @@ export default {
     errorUpdatingCommunity: 'An error happened while updating your community!',
     submissionFailed: 'Submission failed',
     modalErrorTitle: 'Ooops!',
+    stay: 'Stay',
+    leave: 'Leave',
+    modalValoraTimeoutTitle: 'Request timeout',
+    modalValoraTimeoutDescription:
+        'Your request was lost. Please try again or visit our FAQ.',
+    modalLeaveTitle: 'Leave form',
+    modalLeaveDescription:
+        'All content entered will be lost. Are you sure you want to leave this form?',
     modalErrorDescription: 'Something went wrong. Please try again later.',
     errorCreatingCommunity:
         'An error happened while placing the request to create a community!',
@@ -154,16 +162,17 @@ export default {
     pin4Digits: 'PIN (4 digits)',
     continue: 'Continue',
     yourQRCode: 'Your QR Code',
-    youHaveDonated: 'Thank you for your donation!',
+    youHaveDonated: 'Thank you for your contribution!',
     errorDonating: 'An error happened while donating!',
     addressCopiedClipboard:
         'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
-    donate: 'Donate',
+    donate: 'Contribute',
     attach: 'Attach',
-    donateWithValora: 'Donate with Valora',
+    donateWithValora: 'Contribute with Valora',
     amountSymbol: 'Amount ({{symbol}})',
-    donateSymbol: 'Donate ({{symbol}})',
+    donateSymbol: 'Contribute ({{symbol}})',
     close: 'Close',
+    faq: 'FAQ',
     youCanClaimXin: 'You can claim {{amount}} in',
     claimX: 'Claim ', // {{amount}}
     loading: 'Loading...',
@@ -195,9 +204,11 @@ export default {
     notFundsToAddBeneficiary:
         'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
     claimExplained1:
-        'Each community has a group of beneficiaries, added by the coommunity managers, that can access a basic income under a set of rules. For example, each beneficiary can claim $1/day up to $500.',
+        '<bold>Each community has a group of beneficiaries</bold>, added by the coommunity managers, that can access a basic income under a set of rules. For example, each beneficiary can claim $1/day up to $500.',
     claimExplained2:
-        'There is a minimum time you have to wait before being able to claim again, but there is no maximum. You should only claim when you need those funds. The more you claim, the more time you have to wait to claim again.',
+        '<bold>There is a minimum time you have to wait before being able to claim again</bold>, but there is no maximum. You should only claim when you need those funds. The more you claim, the more time you have to wait to claim again.',
+    claimExplained3:
+        '<bold>If your community have run out of funds</bold> you will not be able to claim. The only way to start claiming again is when the community gets additional funds through donations.',
     claimAmountHelp:
         'This is the UBI amount, in $cUSD, that each beneficiary will be able to claim each time from this community contract. For example, each beneficiary can claim $2 from the contract on a regular basis, while there are funds available.',
     totalClaimPerBeneficiaryHelp:
@@ -230,7 +241,7 @@ export default {
     payConfirmMessage:
         "By pressing 'Send', you will send {{symbol}}{{amount}} (${{amountInDollars}} cUSD) to {{to}}",
     donateConfirmMessage:
-        "By pressing 'Donate', you will donate <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
+        "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
     yourDonationWillBackFor:
         'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
     eachBeneficiaryCanClaimXUpToY:
@@ -240,14 +251,14 @@ export default {
     howClaimWorks: 'How claims work.',
     copyContractAddress: 'Copy Contract Address',
     donationBiggerThanBalance:
-        'You are trying to donate an amount bigger than your balance. Add funds on your Valora app.',
+        'You are trying to contribute with an amount bigger than your balance. Add funds on your Valora app.',
     errorClaiming: 'An error happened while claiming.\n\nError: {{error}}',
     consentAnonymousAnalytics: 'Consent Anonymous Analytics',
     youCreatedPrivateCommunity: "You've created a private community. Welcome!",
     youAreNotConnected:
         'You are not connected to your Valora. Connect to send directly.',
     errorConnectToValora:
-        'An error happened while connecting to Valora. Please, try again.',
+        'An error happened while connecting to Valora. Please, check your internet connection and try again.',
     addingYourOwnAddress:
         'You are trying to add your own address. Are you sure?',
     alreadyInCommunity:
@@ -303,6 +314,12 @@ export default {
     unknown: 'Unknown.',
     clockNotSynced:
         'It seems like your date or time is incorrect. Please, fix it before trying again.',
+    communityFundsRunOut: {
+        title: 'Community funds run out',
+        description:
+            'We understand the inconvenience and we know how much you need this allowance.  <bold>You will be notified when funds are available again.</bold>',
+        callToAction: 'Why funds run out?',
+    },
     communityWentOutOfFunds:
         'It seems like your community run out of funds. Please try again later',
     notEnoughForTransaction:
@@ -423,6 +440,8 @@ export default {
         messages: {
             submitAddStoriesToStateSuccess: 'Hurray! See the latest stories.',
             yourNetworkisOffline: 'Ouch! Seems like you are offline.',
+            yourNetworkisWeak:
+                'Hmmm! Seems like you are facing network issues.',
             yourNetworkisOnline: 'Hurray! Your network is back online!',
             submitAddStoriesToStateFailure:
                 'Oops! We could not update all stories at this time. Please try again later',

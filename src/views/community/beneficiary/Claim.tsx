@@ -1,18 +1,23 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
+import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import * as Device from 'expo-device';
 import * as Location from 'expo-location';
+import { Screens } from 'helpers/constants';
 import {
     humanifyCurrencyAmount,
     amountToCurrency,
     getCurrencySymbol,
 } from 'helpers/currency';
 import { getUserBalance, isOutOfTime } from 'helpers/index';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { setUserWalletBalance } from 'helpers/redux/actions/user';
-import { UserActionTypes } from 'helpers/types/redux';
+import { navigationRef } from 'helpers/rootNavigation';
+import { CommunitiesActionTypes, UserActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React from 'react';
+import { Trans } from 'react-i18next';
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
@@ -97,17 +102,17 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
     handleClaimPress = async () => {
         const {
             updateUserBalance,
+            findCommunityById,
             updateCooldownTime,
             updateClaimedAmount,
             communityContract,
             userAddress,
             communityMetadata,
+            communityUpdated,
             kit,
             isManager,
             userBalance,
         } = this.props;
-        // const communityContract = user.community.contract;
-        // const { address } = user.wallet;
         const { notEnoughToClaimOnContract } = this.state;
 
         if (notEnoughToClaimOnContract) {
@@ -259,9 +264,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             });
                         } else {
                             // verify contract funds :/
-                            const communityUpdated = await Api.community.findById(
-                                communityMetadata.id
-                            );
+                            // const communityUpdated = await Api.community.findById(
+                            // communityMetadata.id
+                            // );
+                            findCommunityById(communityMetadata.id);
+
                             if (communityUpdated) {
                                 const { state, contract } = communityUpdated;
                                 if (state && contract) {
@@ -375,14 +382,49 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             );
         }
 
-        return (
+        return notEnoughToClaimOnContract ? (
+            <View style={styles.communityFundsRunOutContainer}>
+                <View style={styles.communityFundsRunOutHeader}>
+                    <WarningRedTriangle
+                        style={{
+                            marginRight: 10,
+                        }}
+                    />
+                    <Text style={styles.communityFundsRunOutTitle}>
+                        {i18n.t('communityFundsRunOut.title')}
+                    </Text>
+                </View>
+                <Text style={styles.communityFundsRunOutDescription}>
+                    <Trans
+                        i18nKey="communityFundsRunOut.description"
+                        components={{
+                            bold: (
+                                <Text
+                                    style={{
+                                        fontFamily: 'Inter-Bold',
+                                        fontSize: 14,
+                                        color: ipctColors.blueRibbon,
+                                    }}
+                                />
+                            ),
+                        }}
+                    />
+                </Text>
+                <Text
+                    style={styles.communityFundsRunOutCallToAction}
+                    onPress={() =>
+                        navigationRef.current?.navigate(Screens.ClaimExplained)
+                    }
+                >
+                    {i18n.t('communityFundsRunOut.callToAction')}
+                </Text>
+            </View>
+        ) : (
             <TouchableOpacity
                 style={{
                     flexDirection: 'row',
                     backgroundColor: claimDisabled
                         ? '#E9ECEF'
-                        : notEnoughToClaimOnContract
-                        ? '#f0ad4e'
                         : ipctColors.blueRibbon,
                     alignSelf: 'center',
                     alignItems: 'center',
@@ -391,10 +433,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     paddingHorizontal: 27,
                     borderRadius: 8,
                 }}
-                disabled={
-                    claimDisabled // ||
-                    // claiming ||  notEnoughToClaimOnContract
-                }
+                disabled={claimDisabled}
                 onPress={this.handleClaimPress}
             >
                 {claiming && (
@@ -473,7 +512,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         lineHeight: 29,
         letterSpacing: 0.458182,
-        // marginVertical: 4,
         alignSelf: 'flex-end',
         color: 'white',
     },
@@ -497,6 +535,46 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: ipctColors.greenishTeal,
     },
+    communityFundsRunOutContainer: {
+        display: 'flex',
+        borderWidth: 2,
+        borderStyle: 'solid',
+        borderColor: 'rgba(235, 87, 87, 1)',
+        borderRadius: 8,
+        padding: 16,
+        marginHorizontal: 22,
+        alignItems: 'center',
+    },
+    communityFundsRunOutHeader: {
+        flexDirection: 'row',
+        width: '95%',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    communityFundsRunOutTitle: {
+        fontFamily: 'Manrope-Bold',
+        fontSize: 16,
+        fontWeight: '800',
+        lineHeight: 22,
+        textAlign: 'left',
+    },
+    communityFundsRunOutDescription: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        fontWeight: '700',
+        lineHeight: 24,
+        textAlign: 'left',
+        marginBottom: 20,
+    },
+    communityFundsRunOutCallToAction: {
+        fontFamily: 'Inter-Bold',
+        fontSize: 18,
+        fontWeight: '700',
+        lineHeight: 30,
+        textAlign: 'left',
+        color: ipctColors.blueRibbon,
+        marginBottom: 12,
+    },
 });
 
 const mapStateToProps = (state: IRootState) => {
@@ -505,22 +583,28 @@ const mapStateToProps = (state: IRootState) => {
     const { balance } = state.user.wallet;
     const { isManager } = state.user.community;
     const { exchangeRates, kit } = state.app;
+    const { community } = state.communities;
     return {
         communityMetadata: metadata,
         communityContract: contract,
         userCurrency: currency,
         userAddress: address,
         userBalance: balance,
+        communityUpdated: community,
         exchangeRates,
         kit,
         isManager,
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<UserActionTypes>) => {
+const mapDispatchToProps = (
+    dispatch: Dispatch<UserActionTypes | CommunitiesActionTypes>
+) => {
     return {
         updateUserBalance: (newBalance: string) =>
             dispatch(setUserWalletBalance(newBalance)),
+        findCommunityById: (id: number) =>
+            dispatch(findCommunityByIdRequest(id)),
     };
 };
 

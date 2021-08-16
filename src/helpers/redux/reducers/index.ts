@@ -4,6 +4,7 @@ import { reducer as offline } from 'redux-offline-queue';
 
 import { appReducer } from './app';
 import { authReducer } from './auth';
+import { communitiesReducer } from './communities';
 import { modalDonateReducer } from './modalDonate';
 import { storiesReducer } from './stories';
 import { userReducer } from './user';
@@ -15,4 +16,5 @@ export default combineReducers<IRootState>({
     app: appReducer,
     modalDonate: modalDonateReducer,
     stories: storiesReducer,
+    communities: communitiesReducer,
 });

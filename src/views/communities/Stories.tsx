@@ -1,4 +1,3 @@
-import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
@@ -6,15 +5,8 @@ import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import { navigationRef } from 'helpers/rootNavigation';
 import { ICommunitiesListStories } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useCallback, useEffect } from 'react';
-import {
-    Dimensions,
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    View,
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';

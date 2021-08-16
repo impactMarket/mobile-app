@@ -25,6 +25,7 @@ const ModalGenericError: React.FC<ErrorProps> = ({
             <Modal visible dismissable={false}>
                 <Card
                     style={{
+                        display: 'flex',
                         marginHorizontal: 22,
                         borderRadius: 12,
                         paddingHorizontal: 22,
@@ -78,7 +79,7 @@ const ModalGenericError: React.FC<ErrorProps> = ({
                                 fontSize: 14,
                                 lineHeight: 24,
                                 color: ipctColors.almostBlack,
-                                textAlign: 'justify',
+                                textAlign: 'left',
                                 marginRight: 36,
                             }}
                         >
