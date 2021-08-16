@@ -8,6 +8,7 @@ export enum Screens {
     NewStory = 'NewStory',
     StoriesCarousel = 'StoriesCarousel',
     Carousel = 'Carousel',
+    ListCommunities = 'ListCommunitiesScreen',
     //
     ClaimExplained = 'ClaimExplained',
     AnonymousReport = 'AnonymousReport',
@@ -96,6 +97,11 @@ export enum storiesAction {
     USER_STORIES_FAILURE = 'stories/user_failure',
 }
 
+
+export enum communityOrderOptions {
+    bigger = 'bigger',
+    nearest = 'nearest',
+}
 export enum communitiesAction {
     INIT_REQUEST = 'communities/init_request',
     INIT_SUCCESS = 'communities/init_success',
