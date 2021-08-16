@@ -1,5 +1,4 @@
 import i18n from 'assets/i18n';
-import BigNumber from 'bignumber.js';
 import { amountToCurrency } from 'helpers/currency';
 import {
     calculateCommunityProgress,
@@ -9,7 +8,7 @@ import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Title, ProgressBar, Text } from 'react-native-paper';
+import { Title, ProgressBar, Text, Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
@@ -31,15 +30,6 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
     if (community.contract === undefined || community.state === undefined) {
         return null;
     }
-    // in theory, it's the total claimed is relative to the total raised.
-    // But to draw the progress bar, it's relative to the progress bar size.
-    const claimedByRaised = parseFloat(
-        new BigNumber(community.state.claimed)
-            .div(community.state.raised === '0' ? 1 : community.state.raised)
-            .multipliedBy(100)
-            .decimalPlaces(2, 1)
-            .toString()
-    );
 
     return (
         <Card elevation={0} style={{ marginTop: 16 }}>
@@ -124,6 +114,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         })}
                     </Text>
                 </View>
+                {props.children && <Divider />}
                 {props.children}
             </Card.Content>
         </Card>

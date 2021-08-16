@@ -170,7 +170,11 @@ export default {
     addressCopiedClipboard:
         'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
     donate: 'Contribute',
+    donateWithCelo: 'Celo Dollar ($cUSD)',
+    donateWithESolidar: 'Credit Card / Paypal / BTC / ETH',
     attach: 'Attach',
+    contributeWith: 'Contribute with',
+    or: 'or',
     donateWithValora: 'Contribute with Valora',
     amountSymbol: 'Amount ({{symbol}})',
     donateSymbol: 'Contribute ({{symbol}})',

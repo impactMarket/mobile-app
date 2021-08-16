@@ -1,9 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BaseCommunity from 'components/BaseCommunity';
 import CommunityStatus from 'components/CommunityStatus';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
+import DonateCard from 'components/DonateCard';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import * as shape from 'd3-shape';
@@ -15,7 +15,6 @@ import {
     cleanCommunityState,
     findCommunityByIdRequest,
 } from 'helpers/redux/actions/communities';
-import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { Trans } from 'react-i18next';
@@ -307,25 +306,12 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             </Card.Content>
                         </Card>
                         <CommunityStatus community={community}>
-                            <Button
-                                modeType="gray"
-                                bold
-                                style={{ marginTop: '5%' }}
-                                onPress={() =>
-                                    WebBrowser.openBrowserAsync(
-                                        config.blockExplorer +
-                                            community.contractAddress +
-                                            '/token-transfers'
-                                    )
-                                }
-                            >
-                                {i18n.t('exploreCommunityContract')}
-                            </Button>
+                            <DonateCard community={community} />
                         </CommunityStatus>
                     </View>
                 </BaseCommunity>
             </ScrollView>
-            <Donate community={community} />
+            {/* <Donate community={community} /> */}
         </>
     );
 }
