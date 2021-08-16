@@ -3,7 +3,7 @@ import Button from 'components/core/Button';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
-import { View, StyleSheet, Pressable, Image } from 'react-native';
+import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
 import { Title, Text, Portal } from 'react-native-paper';
 import { useDispatch, Provider, useStore } from 'react-redux';
 import { ipctColors } from 'styles/index';
@@ -17,13 +17,18 @@ interface IDonateProps {
 }
 
 export default function DonateCard(props: IDonateProps) {
+    const { width } = Dimensions.get('screen');
     const { community } = props;
     const dispatch = useDispatch();
 
     return (
         <>
             <View style={styles.donateContainer}>
-                <Title style={styles.title}>{i18n.t('contributeWith')}</Title>
+                <Title
+                    style={[styles.title, { fontSize: width < 375 ? 14 : 20 }]}
+                >
+                    {i18n.t('contributeWith')}
+                </Title>
                 <Pressable
                     style={styles.button}
                     onPress={() =>
@@ -33,11 +38,13 @@ export default function DonateCard(props: IDonateProps) {
                         })
                     }
                 >
-                    <View style={{ flexDirection: 'row' }}>
+                    <View
+                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
                         <Text
                             style={{
                                 fontFamily: 'Inter-Regular',
-                                fontSize: 16,
+                                fontSize: width < 375 ? 11 : 16,
                                 lineHeight: 28,
                                 color: 'white',
                                 marginRight: 10,
@@ -47,8 +54,8 @@ export default function DonateCard(props: IDonateProps) {
                         </Text>
                         <Image
                             source={require('assets/images/celoDolar.png')}
-                            width={24}
-                            height={24}
+                            width={22}
+                            height={22}
                         />
                     </View>
                 </Pressable>
@@ -69,11 +76,17 @@ export default function DonateCard(props: IDonateProps) {
                         })
                     }
                 >
-                    <View>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                        }}
+                    >
                         <Text
                             style={{
                                 fontFamily: 'Inter-Regular',
-                                fontSize: 16,
+                                fontSize: width < 375 ? 11 : 16,
                                 lineHeight: 28,
                                 color: ipctColors.blueRibbon,
                             }}

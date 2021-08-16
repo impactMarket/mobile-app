@@ -7,7 +7,7 @@ import {
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { Title, ProgressBar, Text, Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
@@ -22,6 +22,7 @@ interface ICommuntyStatusProps {
 
 export default function CommunityStatus(props: ICommuntyStatusProps) {
     const { community } = props;
+    const { width } = Dimensions.get('screen');
 
     const user = useSelector((state: IRootState) => state.user.metadata);
 
@@ -45,14 +46,25 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         <Text
                             style={[
                                 styles.description,
-                                { color: ipctColors.regentGray },
+                                {
+                                    color: ipctColors.regentGray,
+                                    fontSize: width < 375 ? 11 : 14,
+                                    lineHeight: width < 375 ? 14 : 24,
+                                },
                             ]}
                         >
                             {i18n.t('raisedFrom', {
                                 backers: community.state.backers,
                             })}
                         </Text>
-                        <Title style={styles.title}>
+                        <Title
+                            style={[
+                                styles.title,
+                                {
+                                    fontSize: width < 375 ? 14 : 20,
+                                },
+                            ]}
+                        >
                             {amountToCurrency(
                                 community.state.raised,
                                 user.currency,
@@ -70,12 +82,20 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         <Text
                             style={[
                                 styles.description,
-                                { color: ipctColors.regentGray },
+                                {
+                                    color: ipctColors.regentGray,
+                                    fontSize: width < 375 ? 11 : 14,
+                                },
                             ]}
                         >
                             {i18n.t('goal')}
                         </Text>
-                        <Title style={styles.title}>
+                        <Title
+                            style={[
+                                styles.title,
+                                { fontSize: width < 375 ? 14 : 20 },
+                            ]}
+                        >
                             {amountToCurrency(
                                 community.state.raised,
                                 user.currency,
@@ -100,13 +120,30 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         color={ipctColors.blueRibbon}
                     />
                 </View>
-                <View style={styles.fundsContainer}>
+                <View
+                    style={[
+                        styles.fundsContainer,
+                        {
+                            alignItems: width < 375 ? 'flex-start' : 'center',
+                            marginRight: width < 375 ? 40 : 0,
+                            justifyContent: 'center',
+                        },
+                    ]}
+                >
                     {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
-                    <WarningRedTriangle color="#FE9A22" />
+                    <WarningRedTriangle
+                        color="#FE9A22"
+                        style={{ marginTop: width < 375 ? 8 : 0 }}
+                    />
                     <Text
                         style={[
                             styles.description,
-                            { color: ipctColors.regentGray, marginLeft: 7 },
+                            {
+                                color: ipctColors.regentGray,
+                                marginLeft: 7,
+                                fontSize: width < 375 ? 11 : 14,
+                                lineHeight: width < 375 ? 14 : 24,
+                            },
                         ]}
                     >
                         {i18n.t('fundsRunOut', {
@@ -154,7 +191,7 @@ const styles = StyleSheet.create({
         flex: 2,
         flexDirection: 'row',
         marginTop: 7,
-        alignItems: 'center',
+        alignItems: 'flex-end',
         justifyContent: 'center',
     },
     fundsContainer: {
@@ -163,5 +200,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginVertical: 22,
+        paddingHorizontal: 8,
     },
 });
