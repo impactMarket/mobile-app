@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BaseCommunity from 'components/BaseCommunity';
-import CommuntyStatus from 'components/CommuntyStatus';
+import CommunityStatus from 'components/CommunityStatus';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -306,7 +306,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 {renderSSI()}
                             </Card.Content>
                         </Card>
-                        <CommuntyStatus community={community}>
+                        <CommunityStatus community={community}>
                             <Button
                                 modeType="gray"
                                 bold
@@ -321,7 +321,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             >
                                 {i18n.t('exploreCommunityContract')}
                             </Button>
-                        </CommuntyStatus>
+                        </CommunityStatus>
                     </View>
                 </BaseCommunity>
             </ScrollView>
