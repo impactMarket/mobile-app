@@ -1,24 +1,27 @@
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import { amountToCurrency } from 'helpers/currency';
-import { calculateCommunityProgress } from 'helpers/index';
+import {
+    calculateCommunityProgress,
+    calculateCommunityRemainedFunds,
+} from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Title, ProgressBar, Text } from 'react-native-paper';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 import Card from './core/Card';
+import WarningRedTriangle from './svg/WarningRedTriangle';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
     community: CommunityAttributes;
 }
 
-function CommunityStatus(props: ICommuntyStatusProps) {
+export default function CommunityStatus(props: ICommuntyStatusProps) {
     const { community } = props;
 
     const user = useSelector((state: IRootState) => state.user.metadata);
@@ -41,69 +44,57 @@ function CommunityStatus(props: ICommuntyStatusProps) {
     return (
         <Card elevation={0} style={{ marginTop: 16 }}>
             <Card.Content>
-                <View
-                    style={{
-                        flex: 2,
-                        flexDirection: 'row',
-                        marginTop: 7,
-                        justifyContent: 'center',
-                        // backgroundColor: 'yellow',
-                    }}
-                >
+                <View style={styles.cardWrap}>
                     <View
                         style={{
                             flex: 1,
-                            alignItems: 'center',
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
                         }}
                     >
-                        <Title
-                            style={{
-                                fontFamily: 'Gelion-Bold',
-                                fontSize: 42,
-                                lineHeight: 42,
-                                marginVertical: 4,
-                            }}
-                        >
-                            {community.state.beneficiaries}
-                        </Title>
                         <Text
-                            style={{
-                                color: ipctColors.regentGray,
-                                fontSize: 14,
-                                lineHeight: 15,
-                            }}
+                            style={[
+                                styles.description,
+                                { color: ipctColors.regentGray },
+                            ]}
                         >
-                            {i18n.t('beneficiaries')}
+                            {i18n.t('raisedFrom', {
+                                backers: community.state.backers,
+                            })}
                         </Text>
+                        <Title style={styles.title}>
+                            {amountToCurrency(
+                                community.state.raised,
+                                user.currency,
+                                app.exchangeRates
+                            )}
+                        </Title>
                     </View>
                     <View
                         style={{
                             flex: 1,
-                            alignItems: 'center',
+                            alignItems: 'flex-end',
+                            justifyContent: 'center',
                         }}
                     >
-                        <Title
-                            style={{
-                                fontFamily: 'Gelion-Bold',
-                                fontSize: 42,
-                                lineHeight: 42,
-                                marginVertical: 4,
-                            }}
-                        >
-                            {community.state.backers}
-                        </Title>
                         <Text
-                            style={{
-                                color: ipctColors.regentGray,
-                                fontSize: 14,
-                                lineHeight: 15,
-                            }}
+                            style={[
+                                styles.description,
+                                { color: ipctColors.regentGray },
+                            ]}
                         >
-                            {i18n.t('backers')}
+                            {i18n.t('goal')}
                         </Text>
+                        <Title style={styles.title}>
+                            {amountToCurrency(
+                                community.state.raised,
+                                user.currency,
+                                app.exchangeRates
+                            )}
+                        </Title>
                     </View>
                 </View>
-                <View style={{ marginTop: 21 }}>
+                <View style={{ marginTop: 7.5 }}>
                     <ProgressBar
                         key="raised"
                         style={{
@@ -118,90 +109,20 @@ function CommunityStatus(props: ICommuntyStatusProps) {
                         )}
                         color={ipctColors.blueRibbon}
                     />
-                    <ProgressBar
-                        key="claimed"
-                        style={{
-                            backgroundColor: 'rgba(255,255,255,0)', // transparent
-                            borderRadius: 6.5,
-                            height: 6.32,
-                        }}
-                        progress={calculateCommunityProgress(
-                            'claimed',
-                            community
-                        )}
-                        color={ipctColors.greenishTeal}
-                    />
                 </View>
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        paddingVertical: 10,
-                    }}
-                >
-                    <View
-                        style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}
+                <View style={styles.fundsContainer}>
+                    {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
+                    <WarningRedTriangle color="#FE9A22" />
+                    <Text
+                        style={[
+                            styles.description,
+                            { color: ipctColors.regentGray, marginLeft: 7 },
+                        ]}
                     >
-                        <View style={styles.sphereClaimed} />
-                        <Text
-                            style={{
-                                fontFamily: 'Gelion-Bold',
-                                color: ipctColors.almostBlack,
-                                fontSize: 15,
-                                lineHeight: 15,
-                                letterSpacing: 0.245455,
-                            }}
-                        >
-                            {claimedByRaised}%{' '}
-                        </Text>
-                        <Text
-                            style={{
-                                color: ipctColors.regentGray,
-                                fontSize: 15,
-                                lineHeight: 15,
-                                letterSpacing: 0.245455,
-                            }}
-                        >
-                            {i18n.t('claimed')}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <View style={styles.sphereRaised} />
-                        <Text
-                            style={{
-                                fontFamily: 'Gelion-Bold',
-                                color: ipctColors.almostBlack,
-                                fontSize: 15,
-                                lineHeight: 15,
-                                letterSpacing: 0.245455,
-                            }}
-                        >
-                            {amountToCurrency(
-                                community.state.raised,
-                                user.currency,
-                                app.exchangeRates
-                            )}{' '}
-                        </Text>
-                        <Text
-                            style={{
-                                color: ipctColors.regentGray,
-                                fontSize: 15,
-                                lineHeight: 15,
-                                letterSpacing: 0.245455,
-                            }}
-                        >
-                            {i18n.t('raised')}
-                        </Text>
-                    </View>
+                        {i18n.t('fundsRunOut', {
+                            days: calculateCommunityRemainedFunds(community),
+                        })}
+                    </Text>
                 </View>
                 {props.children}
             </Card.Content>
@@ -224,6 +145,32 @@ const styles = StyleSheet.create({
         backgroundColor: ipctColors.blueRibbon,
         marginRight: 5,
     },
+    title: {
+        fontFamily: 'Inter-Bold',
+        fontSize: 20,
+        lineHeight: 32,
+    },
+    description: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        fontStyle: 'normal',
+        fontWeight: '400',
+        lineHeight: 24,
+        letterSpacing: 0,
+        textAlign: 'left',
+    },
+    cardWrap: {
+        flex: 2,
+        flexDirection: 'row',
+        marginTop: 7,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    fundsContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 22,
+    },
 });
-
-export default CommunityStatus;
