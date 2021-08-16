@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BaseCommunity from 'components/BaseCommunity';
 import CommuntyStatus from 'components/CommuntyStatus';
@@ -10,6 +11,10 @@ import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
+import {
+    cleanCommunityState,
+    findCommunityByIdRequest,
+} from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
@@ -43,42 +48,40 @@ interface ICommunityDetailsScreen {
 }
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const dispatch = useDispatch();
+
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
     const language = useSelector(
         (state: IRootState) => state.user.metadata.language
+    );
+    const community = useSelector(
+        (state: IRootState) => state.communities.community
     );
 
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
     const [historicalSSI, setHistoricalSSI] = useState<number[]>([]);
-    const [community, setCommunity] = useState<CommunityAttributes | undefined>(
-        undefined
-    );
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
-        Api.community
-            .findById(props.route.params.communityId)
-            .then((c) => {
-                setCommunity(c);
-                if (props.route.params.openDonate === true) {
-                    dispatch({
-                        type: modalDonateAction.OPEN,
-                        payload: c,
-                    });
-                }
-            })
-            .finally(() => setRefreshing(false));
+        dispatch(cleanCommunityState());
+        dispatch(findCommunityByIdRequest(props.route.params.communityId));
+        if (community) {
+            if (props.route.params.openDonate === true) {
+                dispatch({
+                    type: modalDonateAction.OPEN,
+                    payload: community,
+                });
+            }
+            setRefreshing(false);
+        }
         Api.community
             .pastSSI(props.route.params.communityId)
             .then(setHistoricalSSI);
     }, []);
 
     const onRefresh = () => {
-        Api.community
-            .findById(props.route.params.communityId)
-            .then((c) => setCommunity(c))
-            .finally(() => setRefreshing(false));
+        dispatch(findCommunityByIdRequest(props.route.params.communityId));
+        setRefreshing(false);
     };
 
     const renderSSI = () => {
@@ -153,8 +156,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     if (
         community === undefined ||
-        community.contract === undefined ||
-        community.state === undefined
+        community?.contract === undefined ||
+        community?.state === undefined
     ) {
         return (
             <View
@@ -261,6 +264,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     }}
                                 >
                                     <Trans
+                                        tOptions={{
+                                            interpolation: {
+                                                escapeValue: false,
+                                            },
+                                        }}
                                         i18nKey="eachBeneficiaryCanClaimXUpToY"
                                         values={{
                                             claimXCCurrency: amountToCurrency(

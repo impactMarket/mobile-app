@@ -48,7 +48,7 @@ export function amountToCurrency(
     const bgn = new BigNumber(amount).multipliedBy(exchangeRate);
     const hValue = humanifyCurrencyAmount(bgn);
     const currencySymbol = getCurrencySymbol(currency);
-    // if (currency === 'CVE') {
+    // if (currency.includes('/.')) {
     //     return hValue.replace('.', currencySymbol);
     // }
     if (!showSymbol) {

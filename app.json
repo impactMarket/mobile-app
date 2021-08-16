@@ -4,7 +4,7 @@
         "slug": "impact-market",
         "privacy": "public",
         "platforms": ["ios", "android"],
-        "version": "1.1.10",
+        "version": "1.1.11",
         "orientation": "portrait",
         "icon": "./src/assets/images/logo/android.png",
         "scheme": "impactmarket",
@@ -27,7 +27,7 @@
             "icon": "./src/assets/images/logo/ios.png",
             "googleServicesFile": "./src/assets/firebase/GoogleService-Info.plist",
             "bundleIdentifier": "com.impactmarket.mobile",
-            "buildNumber": "1.1.10",
+            "buildNumber": "1.1.11",
             "supportsTablet": true
         },
         "android": {
@@ -35,7 +35,7 @@
             "icon": "./src/assets/images/logo/android.png",
             "googleServicesFile": "./src/assets/firebase/google-services.json",
             "package": "com.impactmarket.mobile",
-            "versionCode": 80,
+            "versionCode": 81,
             "adaptiveIcon": {
                 "backgroundImage": "./src/assets/images/logo/android.png",
                 "backgroundColor": "#2362FB"
@@ -46,16 +46,7 @@
                 "ACCESS_FINE_LOCATION",
                 "READ_EXTERNAL_STORAGE",
                 "WRITE_EXTERNAL_STORAGE"
-            ],
-            "splash": {
-                "resizeMode": "native",
-                "backgroundColor": "#2362FB",
-                "mdpi": "./src/assets/images/splash@0.5x.png",
-                "hdpi": "./src/assets/images/splash@0.5x.png",
-                "xhdpi": "./src/assets/images/splash@2x.png",
-                "xxhdpi": "./src/assets/images/splash@2x.png",
-                "xxxhdpi": "./src/assets/images/splash@2x.png"
-            }
+            ]
         },
         "description": "Decentralized impact-driven 2-sided marketplace to provide financial services to charities and vulnerable beneficiaries.",
         "githubUrl": "https://github.com/impactMarket/mobile-app",

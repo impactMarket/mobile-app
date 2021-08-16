@@ -26,6 +26,7 @@ import {
     appAction,
     modalDonateAction,
     storiesAction,
+    communitiesAction,
     SET_USER_AUTH_REQUEST,
     SET_USER_AUTH_SUCCESS,
     SET_USER_AUTH_FAILURE,
@@ -235,6 +236,51 @@ interface SetAppPushNotificationListeners {
     };
 }
 
+interface InitLoadCommunitiesActionRequest {
+    type: typeof communitiesAction.INIT_REQUEST;
+    payload: {
+        offset: number;
+        limit: number;
+        orderBy?: string;
+        filter?: string;
+        lat?: number;
+        lng?: number;
+    };
+}
+
+interface InitLoadCommunitiesActionSuccess {
+    type: typeof communitiesAction.INIT_SUCCESS;
+    payload: { communities: CommunityAttributes[]; reachedEndList: boolean };
+}
+
+interface InitLoadCommunitiesActionFailure {
+    type: typeof communitiesAction.INIT_FAILURE;
+}
+
+interface InitLoadCommunitiesActionClean {
+    type: typeof communitiesAction.INIT_CLEAN;
+}
+
+interface findCommunityByIdActionRequest {
+    type: typeof communitiesAction.FIND_BY_ID_REQUEST;
+    payload: {
+        id: number;
+    };
+}
+
+interface findCommunityByIdActionSuccess {
+    type: typeof communitiesAction.FIND_BY_ID_SUCCESS;
+    payload: { community: CommunityAttributes };
+}
+
+interface findCommunityByIdActionFailure {
+    type: typeof communitiesAction.FIND_BY_ID_FAILURE;
+}
+
+interface findCommunityByIdActionClean {
+    type: typeof communitiesAction.FIND_BY_ID_CLEAN;
+}
+
 export type UserActionTypes =
     | UserWalletAction
     | UserSetBalanceAction
@@ -281,6 +327,16 @@ export type StoriesActionTypes =
     | LoadMyStoriesActionRequest
     | LoadMyStoriesActionSuccess
     | LoadMyStoriesActionFailure;
+
+export type CommunitiesActionTypes =
+    | InitLoadCommunitiesActionRequest
+    | InitLoadCommunitiesActionSuccess
+    | InitLoadCommunitiesActionFailure
+    | InitLoadCommunitiesActionClean
+    | findCommunityByIdActionRequest
+    | findCommunityByIdActionSuccess
+    | findCommunityByIdActionFailure
+    | findCommunityByIdActionClean;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes
