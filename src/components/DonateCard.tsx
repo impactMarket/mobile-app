@@ -1,7 +1,7 @@
 import i18n from 'assets/i18n';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Title, Text, Portal } from 'react-native-paper';
@@ -22,6 +22,7 @@ export default function DonateCard(props: IDonateProps) {
     const { width } = Dimensions.get('screen');
     const { community } = props;
     const dispatch = useDispatch();
+    const [campaignUrl, setCampaignUrl] = useState('');
     const modalizeESolidar = useRef<Modalize>(null);
 
     return (
@@ -128,8 +129,7 @@ export default function DonateCard(props: IDonateProps) {
                         <WebView
                             originWhitelist={['*']}
                             source={{
-                                uri:
-                                    'https://community.esolidar.com/pt/crowdfunding/detail/81-kakuma-refugee-camp-rio',
+                                uri: campaignUrl,
                             }}
                             style={{
                                 height: Dimensions.get('screen').height * 0.85,

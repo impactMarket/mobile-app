@@ -205,7 +205,7 @@ export function calculateCommunityRemainedFunds(
 
         const remainingDays = remainingFundToBeClaimed / communityLimitPerDay;
 
-        return remainingDays < 1 ? 1 : Math.round(remainingDays);
+        return remainingDays <= 1 ? 1 : Math.round(remainingDays);
     }
 }
 
