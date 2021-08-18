@@ -58,6 +58,7 @@ export default {
     edit: 'Editar',
     create: 'Criar',
     submit: 'Enviar',
+    submitting: 'Enviando',
     needLoginToCreateCommunity:
         'É necessário estar conectado com a app Valora para criar uma comunidade.',
     communityDetails: 'Detalhes da Comunidade',
@@ -96,6 +97,12 @@ export default {
     minutes: 'Minutos',
     hours: 'Horas',
     days: 'Dias',
+    time: 'Tempo',
+    selectCountry: 'Selecionar país',
+    minCoverSize: 'Min. 784px por 784px',
+    upload: 'Carregar',
+    expectedUBIDuration:
+        'Este programa de RBU deverá durar pelo menos {{years}} anos {{months}} meses {{days}} dias {{hours}} horas {{minutes}} minutos por beneficiário.',
     timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
     timeInMinutes: 'Tempo em minutos',
     visibility: 'Visibilidade',
@@ -109,10 +116,13 @@ export default {
         'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
     communityRequestSending:
         'Aguarde enquanto as informações da comunidade estão sendo carregadas ...',
+    communityRequestCancel: 'Você tem certeza que pretende cancelar o pedido?',
+    yes: 'Sim',
+    no: 'Não',
     missingFieldError:
         'Todos os campos marcados como obrigatórios precisam ser informados. Verifique o que está faltando e tente novamente. ',
     communityRequestError:
-        'Ocorreu um erro ao enviar as informações da comunidade. Se você não conseguir criar/editar esta comunidade, <webview>envie um tíquete</webview>.',
+        'Ocorreu um erro ao enviar as informações da comunidade.',
     communityRequestErrorDetails:
         'Se tens dúvida de como submeter um ticket, por favor <bold>clique aqui</bold>',
     communityRequestSuccess:
@@ -217,7 +227,7 @@ export default {
     frequencyHelp:
         'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pegar novamente (mais $2).',
     timeIncrementAfterClaimHelp:
-        'É possível adicionar um incremento de tempo cada vez qEue um beneficiário reclama. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
+        'É possível adicionar um incremento de tempo cada vez que um beneficiário recebe. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
     visibilityHelp:
         'Uma comunidade pode ser publica (necessita da aprovação da equipe da impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
     currencyHelp: 'Escolha aqui a moeda usada entre os seus beneficiários.',

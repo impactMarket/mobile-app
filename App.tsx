@@ -59,6 +59,7 @@ import {
     Paragraph,
     Headline,
 } from 'react-native-paper';
+import { Host } from 'react-native-portalize';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import {
@@ -503,7 +504,9 @@ class App extends React.Component<any, IAppState> {
                         }}
                         ref={navigationRef}
                     >
-                        <Navigator />
+                        <Host>
+                            <Navigator />
+                        </Host>
                     </NavigationContainer>
                 </Provider>
             </PaperProvider>

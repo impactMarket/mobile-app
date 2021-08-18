@@ -15,6 +15,7 @@ interface ISelectProps {
     help?: boolean;
     onHelpPress?: (event: GestureResponderEvent) => void;
     onPress?: (event: GestureResponderEvent) => void;
+    error?: string;
 }
 export default class Select extends Component<ISelectProps, object> {
     constructor(props: any) {
@@ -22,53 +23,85 @@ export default class Select extends Component<ISelectProps, object> {
     }
 
     render() {
-        const { label, value, help, onPress, onHelpPress } = this.props;
+        const { label, value, help, onPress, onHelpPress, error } = this.props;
         return (
-            <View
-                style={{
-                    width: '100%',
-                    height: 48,
-                }}
-            >
-                <Text
-                    style={[
-                        styles.label,
-                        {
-                            backgroundColor: label ? '#FFFFFF' : 'transparent',
-                        },
-                    ]}
+            <>
+                <View
+                    style={{
+                        width: '100%',
+                        height: 48,
+                    }}
+                    accessibilityLabel={label}
                 >
-                    {label}{' '}
-                    {help && (
-                        <TouchableWithoutFeedback
-                            onPress={onHelpPress}
-                            style={{ width: 70, height: 40 }}
+                    <Text
+                        style={[
+                            styles.label,
+                            {
+                                backgroundColor: label
+                                    ? '#FFFFFF'
+                                    : 'transparent',
+                            },
+                        ]}
+                    >
+                        {label}{' '}
+                        {help && (
+                            <TouchableWithoutFeedback
+                                onPress={onHelpPress}
+                                style={{ width: 70, height: 40 }}
+                            >
+                                <Text style={{ color: ipctColors.blueRibbon }}>
+                                    [?]
+                                </Text>
+                            </TouchableWithoutFeedback>
+                        )}
+                    </Text>
+                    <TouchableWithoutFeedback onPress={onPress}>
+                        <View
+                            style={[
+                                styles.outline,
+                                {
+                                    borderColor: error
+                                        ? '#EB5757'
+                                        : ipctColors.borderGray,
+                                },
+                            ]}
                         >
-                            <Text style={{ color: ipctColors.blueRibbon }}>
-                                [?]
+                            <Text
+                                style={styles.textInput}
+                                testID="selected-value"
+                            >
+                                {value}
                             </Text>
-                        </TouchableWithoutFeedback>
-                    )}
-                </Text>
-                <TouchableWithoutFeedback onPress={onPress}>
-                    <View style={styles.outline}>
-                        <Text style={styles.textInput}>{value}</Text>
-                        <Svg
-                            width={14}
-                            height={9}
-                            viewBox="0 0 14 9"
-                            fill="none"
-                            style={{ alignSelf: 'center' }}
-                        >
-                            <Path
-                                opacity={0.833}
-                                d="M6.997 5.812L11.861.717a.69.69 0 011.005 0l.426.447c.134.14.208.327.208.527s-.074.386-.208.526l-5.79 6.066a.69.69 0 01-.504.217.69.69 0 01-.505-.217L.708 2.223A.757.757 0 01.5 1.696c0-.2.074-.386.208-.527l.426-.446a.69.69 0 011.005 0l4.858 5.089z"
-                                fill="#172B4D"
-                            />
-                        </Svg>
-                    </View>
-                </TouchableWithoutFeedback>
-            </View>
+                            <Svg
+                                width={14}
+                                height={9}
+                                viewBox="0 0 14 9"
+                                fill="none"
+                                style={{ alignSelf: 'center' }}
+                            >
+                                <Path
+                                    opacity={0.833}
+                                    d="M6.997 5.812L11.861.717a.69.69 0 011.005 0l.426.447c.134.14.208.327.208.527s-.074.386-.208.526l-5.79 6.066a.69.69 0 01-.504.217.69.69 0 01-.505-.217L.708 2.223A.757.757 0 01.5 1.696c0-.2.074-.386.208-.527l.426-.446a.69.69 0 011.005 0l4.858 5.089z"
+                                    fill="#73839D"
+                                />
+                            </Svg>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+                {error && (
+                    <Text
+                        style={{
+                            color: '#EB5757',
+                            fontSize: 12,
+                            lineHeight: 20,
+                            fontFamily: 'Inter-Regular',
+                            justifyContent: 'flex-start',
+                        }}
+                    >
+                        {error}
+                    </Text>
+                )}
+            </>
         );
     }
 }
@@ -86,7 +119,6 @@ const styles = StyleSheet.create({
         // paddingBottom: 6,
         borderRadius: 6,
         borderWidth: 0.5,
-        borderColor: ipctColors.borderGray,
     },
     textInput: {
         flexGrow: 1,

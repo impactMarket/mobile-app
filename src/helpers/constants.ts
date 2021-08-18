@@ -3,6 +3,7 @@ export enum Screens {
     FAQ = 'FAQ',
     Welcome = 'Welcome',
     CreateCommunity = 'CreateCommunity',
+    EditCommunity = 'EditCommunity',
     WaitingTx = 'WaitingTx',
     Stories = 'Stories',
     NewStory = 'NewStory',

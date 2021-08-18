@@ -13,7 +13,8 @@
             "views": ["./src/views"]
         },
         "sourceMap": true,
-        "inlineSources": true
+        "inlineSources": true,
+        "module": "commonjs"
     },
     "extends": "expo/tsconfig.base"
 }

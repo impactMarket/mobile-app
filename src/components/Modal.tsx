@@ -83,7 +83,7 @@ export default class Modal extends Component<IModalProps, IModalState> {
         return (
             <ModalRNP
                 visible={visible}
-                dismissable={onDismiss !== undefined}
+                dismissable={onDismiss !== undefined} // TODO: change to false and test all modals
                 onDismiss={onDismiss}
             >
                 <Card
@@ -118,7 +118,11 @@ export default class Modal extends Component<IModalProps, IModalState> {
                                     {title}
                                 </Headline>
                                 {onDismiss !== undefined && (
-                                    <Pressable hitSlop={15} onPress={onDismiss}>
+                                    <Pressable
+                                        hitSlop={15}
+                                        onPress={onDismiss}
+                                        testID="close-modal"
+                                    >
                                         <CloseSvg />
                                     </Pressable>
                                 )}

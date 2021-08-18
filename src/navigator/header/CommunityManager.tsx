@@ -53,9 +53,7 @@ function CommunityManager() {
                             style={{ marginVertical: 10, width: '100%' }}
                             onPress={() => {
                                 setOpenThreeDotsMenu(false);
-                                navigation.navigate(Screens.CreateCommunity, {
-                                    communityId: community.id,
-                                });
+                                navigation.navigate(Screens.EditCommunity);
                             }}
                         >
                             {i18n.t('editCommunityDetails')}
