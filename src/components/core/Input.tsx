@@ -1,3 +1,4 @@
+import LockSvg from 'components/svg/LockSvg';
 import React, { Component } from 'react';
 import {
     TextInput,
@@ -19,6 +20,7 @@ interface IInputProps extends TextInputProps {
     onPress?: (event: GestureResponderEvent) => void;
     boxStyle?: StyleProp<ViewStyle>;
     error?: string;
+    locked?: boolean;
 }
 export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
@@ -26,7 +28,7 @@ export default class Input extends Component<IInputProps, object> {
     }
 
     render() {
-        const { label, help, onPress, error } = this.props;
+        const { label, help, onPress, error, locked } = this.props;
 
         return (
             <>
@@ -75,25 +77,33 @@ export default class Input extends Component<IInputProps, object> {
                             </Pressable>
                         )}
                     </View>
-                    <TextInput
-                        {...this.props}
-                        style={{
-                            height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
-                            minHeight: 38,
-                            flexGrow: 1,
-                            width: '100%',
-                            paddingHorizontal: 10,
-                            marginVertical: 5,
-                            alignSelf: 'center',
-                            zIndex: 1,
-                            fontSize: 15,
-                            fontFamily: 'Inter-Regular',
-                            color: ipctColors.almostBlack,
-                            textAlignVertical: this.props.multiline
-                                ? 'top'
-                                : undefined,
-                        }}
-                    />
+                    <View style={styles.innerInput}>
+                        <TextInput
+                            {...this.props}
+                            style={{
+                                height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
+                                minHeight: 38,
+                                flexGrow: 1,
+                                width: '100%',
+                                paddingHorizontal: 10,
+                                marginVertical: 5,
+                                alignSelf: 'center',
+                                zIndex: 1,
+                                fontSize: 15,
+                                fontFamily: 'Inter-Regular',
+                                color: ipctColors.almostBlack,
+                                textAlignVertical: this.props.multiline
+                                    ? 'top'
+                                    : undefined,
+                            }}
+                        />
+                        {locked && (
+                            <LockSvg
+                                color={ipctColors.borderGray}
+                                style={{ left: -30 }}
+                            />
+                        )}
+                    </View>
                 </View>
                 {error && (
                     <Text
@@ -114,6 +124,10 @@ export default class Input extends Component<IInputProps, object> {
 }
 
 const styles = StyleSheet.create({
+    innerInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     outline: {
         position: 'absolute',
         left: 0,
