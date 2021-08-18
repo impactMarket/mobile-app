@@ -38,32 +38,15 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async auth(
-        address: string,
-        language: string,
-        currency: string,
-        phone: string,
-        pushNotificationToken?: string
-    ) {
-        let auth: {
-            address: string;
-            language: string;
-            currency: string;
-            phone: string;
-            pushNotificationToken?: string;
-        } = {
-            address,
-            language,
-            currency,
-            phone,
-        };
-        if (pushNotificationToken) {
-            auth = {
-                ...auth,
-                pushNotificationToken,
-            };
-        }
-        return this.api.post<IUserAuth>('/user/auth', auth);
+    static async auth(params: {
+        address: string;
+        language: string;
+        currency: string;
+        phone: string;
+        overwrite?: boolean;
+        pushNotificationToken?: string;
+    }) {
+        return this.api.post<IUserAuth>('/user/auth', params);
     }
 
     static async addClaimLocation(

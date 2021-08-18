@@ -29,7 +29,7 @@ import {
 import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     StyleSheet,
     Text,
@@ -67,10 +67,15 @@ function Auth() {
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
-    const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [
+        dappKitResponse,
+        setDappKitResponse,
+    ] = useState<AccountAuthResponseSuccess>();
     const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const [duplicatedAccountsWarn, setDuplicatedAccountsWarn] = useState(false);
+    const [timedOutValidation, setTimedOutValidation] = useState(false);
 
     const [, setLoadRefs] = useState(false);
     const modalizeDuplicatedAccountsRef = useRef<Modalize>(null);
@@ -78,69 +83,22 @@ function Auth() {
     const modalizeWebViewRef = useRef<Modalize>(null);
     const modalizeHelpCenterRef = useRef<Modalize>(null);
 
+    // i don't like. We must do it differently when replacing the header
+    useEffect(() => {
+        if (timedOutValidation && !duplicatedAccountsWarn) {
+            setTimedOut(true);
+        }
+    }, [timedOutValidation]);
+
     useFocusEffect(() => {
         renderAuthModalize();
     });
 
-    const getUser = async (
-        userAddress: string,
-        language: string,
-        currency: string,
-        phoneNumber: string,
-        pushNotificationToken: string
-    ) =>
-        await Api.user.auth(
-            userAddress,
-            language,
-            currency,
-            phoneNumber,
-            pushNotificationToken
-        );
-
-    const login = async () => {
-        const requestId = 'login';
-        const dappName = 'impactMarket';
-        const callback = makeDeeplinkUrl();
-        setConnecting(true);
-
-        const pushNotificationToken = await registerForPushNotifications();
-
-        let userAddress = '';
-        let dappkitResponse: AccountAuthResponseSuccess;
-
-        // celloWallet interaction
-        try {
-            requestAccountAddress({
-                requestId,
-                dappName,
-                callback,
-            });
-
-            await Promise.race([
-                waitForAccountAuth(requestId).then((_dappkitResponse) => {
-                    userAddress = kit.web3.utils.toChecksumAddress(
-                        _dappkitResponse.address
-                    );
-                    setPhoneNumber(_dappkitResponse.phoneNumber);
-                    dappkitResponse = _dappkitResponse;
-                }),
-                (async () => {
-                    await new Promise((res) => setTimeout(res, 10000)).then(
-                        () => {
-                            setTimedOut(true);
-                        }
-                    );
-                })(),
-            ]);
-        } catch (e) {
-            Sentry.Native.withScope((scope) => {
-                scope.setTag('ipct-activity', 'auth');
-                Sentry.Native.captureException(e);
-            });
-            setTimedOut(true);
-            return;
-        }
-
+    const apiAuthRequest = async (props: {
+        response?: AccountAuthResponseSuccess;
+        overwrite?: boolean;
+    }) => {
+        const { response, overwrite } = props;
         let language = Localization.locale;
         if (language.includes('-')) {
             language = language.substr(0, language.indexOf('-'));
@@ -150,6 +108,13 @@ function Auth() {
         if (!supportedLanguages.includes(language)) {
             language = 'en';
         }
+        let _dappkitResponse: AccountAuthResponseSuccess;
+        if (response === undefined) {
+            _dappkitResponse = dappKitResponse;
+        } else {
+            _dappkitResponse = response;
+        }
+        const { phoneNumber, address } = _dappkitResponse;
         const currency = getCurrencyFromPhoneNumber(phoneNumber);
         /** Although all the SAGA structure is created, we would need to subscribe to the store just to 'wait' 
          * for the user to be authenticated. Using promise in this case, lead us to a more direct and independent approach.
@@ -165,17 +130,28 @@ function Auth() {
             )
         );
         **/
-        getUser(
-            userAddress,
-            language,
-            currency,
-            dappkitResponse.phoneNumber,
-            pushNotificationToken
-        )
+
+        const pushNotificationToken = await registerForPushNotifications();
+        const userAddress = kit.web3.utils.toChecksumAddress(address);
+
+        Api.user
+            .auth({
+                address: userAddress,
+                language,
+                currency,
+                phone: phoneNumber,
+                pushNotificationToken,
+                overwrite,
+            })
             .then(async (result) => {
-                if (result.error.indexOf('associated with another account')) {
+                if (
+                    result.error !== undefined &&
+                    result.error.indexOf('associated with another account')
+                ) {
                     modalizeDuplicatedAccountsRef.current.open();
                     modalizeWelcomeRef.current.close();
+                    setDuplicatedAccountsWarn(true);
+                    setConnecting(false);
                     return;
                 }
                 const user = result.data;
@@ -237,6 +213,46 @@ function Auth() {
                 setConnecting(false);
                 setRefreshing(false);
             });
+    };
+
+    const login = async () => {
+        const requestId = 'login';
+        const dappName = 'impactMarket';
+        const callback = makeDeeplinkUrl();
+        setConnecting(true);
+
+        let _dappkitResponse: AccountAuthResponseSuccess;
+
+        // celloWallet interaction
+        try {
+            requestAccountAddress({
+                requestId,
+                dappName,
+                callback,
+            });
+
+            await Promise.race([
+                waitForAccountAuth(requestId).then((response) => {
+                    setDappKitResponse(response);
+                    _dappkitResponse = response;
+                }),
+                (async () => {
+                    await new Promise((res) => setTimeout(res, 10000)).then(
+                        () => {
+                            setTimedOutValidation(true);
+                        }
+                    );
+                })(),
+            ]);
+        } catch (e) {
+            Sentry.Native.withScope((scope) => {
+                scope.setTag('ipct-activity', 'auth');
+                Sentry.Native.captureException(e);
+            });
+            setTimedOut(true);
+            return;
+        }
+        await apiAuthRequest({ response: _dappkitResponse });
     };
 
     const buttonStoreLink = () => {
@@ -405,7 +421,10 @@ function Auth() {
             >
                 <View style={{ width: '100%', paddingHorizontal: 22 }}>
                     <Text style={styles.descriptionTop}>
-                        {i18n.t('auth.duplicatedMsg1', phoneNumber)}
+                        {i18n.t(
+                            'auth.duplicatedMsg1',
+                            dappKitResponse?.phoneNumber
+                        )}
                     </Text>
                     <Text style={styles.description}>
                         {i18n.t('auth.duplicatedMsg2')}
@@ -426,6 +445,7 @@ function Auth() {
                             onPress={() =>
                                 modalizeDuplicatedAccountsRef.current.close()
                             }
+                            disabled={connecting}
                         >
                             {i18n.t('dismiss')}
                         </Button>
@@ -433,8 +453,11 @@ function Auth() {
                             modeType="default"
                             style={{ width: '45%' }}
                             onPress={() => {
-                                // TODO: do something
+                                setConnecting(true);
+                                apiAuthRequest({ overwrite: true });
                             }}
+                            loading={connecting}
+                            disabled={connecting}
                         >
                             {i18n.t('yes')}
                         </Button>
