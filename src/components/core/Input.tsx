@@ -17,10 +17,10 @@ interface IInputProps extends TextInputProps {
     label?: string;
     help?: boolean;
     isBig?: boolean;
+    locked?: boolean;
     onPress?: (event: GestureResponderEvent) => void;
     boxStyle?: StyleProp<ViewStyle>;
     error?: string;
-    locked?: boolean;
 }
 export default class Input extends Component<IInputProps, object> {
     constructor(props: any) {
