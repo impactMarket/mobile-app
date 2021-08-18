@@ -1,5 +1,6 @@
 import { newKitFromWeb3 } from '@celo/contractkit';
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
+import { AccountAuthResponseSuccess } from '@celo/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     RouteProp,
@@ -72,6 +73,7 @@ function Auth() {
     const [refreshing, setRefreshing] = useState(false);
 
     const [, setLoadRefs] = useState(false);
+    const modalizeDuplicatedAccountsRef = useRef<Modalize>(null);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
     const modalizeHelpCenterRef = useRef<Modalize>(null);
@@ -104,6 +106,7 @@ function Auth() {
         const pushNotificationToken = await registerForPushNotifications();
 
         let userAddress = '';
+        let dappkitResponse: AccountAuthResponseSuccess;
 
         // celloWallet interaction
         try {
@@ -114,11 +117,12 @@ function Auth() {
             });
 
             await Promise.race([
-                waitForAccountAuth(requestId).then((dappkitResponse) => {
+                waitForAccountAuth(requestId).then((_dappkitResponse) => {
                     userAddress = kit.web3.utils.toChecksumAddress(
-                        dappkitResponse.address
+                        _dappkitResponse.address
                     );
-                    setPhoneNumber(dappkitResponse.phoneNumber);
+                    setPhoneNumber(_dappkitResponse.phoneNumber);
+                    dappkitResponse = _dappkitResponse;
                 }),
                 (async () => {
                     await new Promise((res) => setTimeout(res, 10000)).then(
@@ -129,7 +133,10 @@ function Auth() {
                 })(),
             ]);
         } catch (e) {
-            Sentry.Native.captureException(e);
+            Sentry.Native.withScope((scope) => {
+                scope.setTag('ipct-activity', 'auth');
+                Sentry.Native.captureException(e);
+            });
             setTimedOut(true);
             return;
         }
@@ -162,10 +169,16 @@ function Auth() {
             userAddress,
             language,
             currency,
-            phoneNumber,
+            dappkitResponse.phoneNumber,
             pushNotificationToken
         )
-            .then(async (user) => {
+            .then(async (result) => {
+                if (result.error.indexOf('associated with another account')) {
+                    modalizeDuplicatedAccountsRef.current.open();
+                    modalizeWelcomeRef.current.close();
+                    return;
+                }
+                const user = result.data;
                 if (user === undefined) {
                     analytics('login', {
                         device: Device.brand,
@@ -215,7 +228,10 @@ function Auth() {
                 setRefreshing(false);
             })
             .catch((e) => {
-                Sentry.Native.captureException(e);
+                Sentry.Native.withScope((scope) => {
+                    scope.setTag('ipct-activity', 'auth');
+                    Sentry.Native.captureException(e);
+                });
 
                 setTimedOut(true);
                 setConnecting(false);
@@ -327,16 +343,12 @@ function Auth() {
                         navigation.navigate(Screens.Communities);
                     }
                 )}
-                adjustToContentHeight={Dimensions.get('window').height >= 720}
+                adjustToContentHeight
                 onClose={() => {
                     navigation.navigate(Screens.Communities);
                 }}
             >
-                <ScrollView
-                    style={{
-                        minHeight: 500,
-                    }}
-                >
+                <ScrollView>
                     <View style={{ width: '100%', paddingHorizontal: 22 }}>
                         <Text style={styles.descriptionTop}>
                             {i18n.t('impactMarketDescription')}
@@ -345,7 +357,13 @@ function Auth() {
                             {i18n.t('loginDescription')}
                         </Text>
                     </View>
-                    <View style={{ width: '100%', paddingHorizontal: 21 }}>
+                    <View
+                        style={{
+                            width: '100%',
+                            paddingHorizontal: 21,
+                            marginBottom: 22,
+                        }}
+                    >
                         <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
                         <View style={{ width: '100%', marginTop: 16 }}>
                             {buttonStoreLink()}
@@ -370,6 +388,48 @@ function Auth() {
                         </Button>
                     </View>
                 </ScrollView>
+            </Modalize>
+            <Modalize
+                ref={modalizeDuplicatedAccountsRef}
+                HeaderComponent={renderHeader(
+                    'Duplicated Accounts',
+                    modalizeDuplicatedAccountsRef,
+                    () => {
+                        navigation.navigate(Screens.Communities);
+                    }
+                )}
+                adjustToContentHeight
+                onClose={() => {
+                    navigation.navigate(Screens.Communities);
+                }}
+            >
+                <View style={{ width: '100%', paddingHorizontal: 22 }}>
+                    <Text style={styles.descriptionTop}>
+                        Your phone number {phoneNumber} is associated with other
+                        impactMarket account.
+                    </Text>
+                    <Text style={styles.description}>
+                        Do you want login and disable all other accounts?
+                    </Text>
+                    <Text style={styles.description}>
+                        P.S: Funds will continue to exist on all other Valora
+                        accounts.
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginBottom: 18,
+                        }}
+                    >
+                        <Button modeType="gray" style={{ width: '45%' }}>
+                            Dismiss
+                        </Button>
+                        <Button modeType="default" style={{ width: '45%' }}>
+                            Yes
+                        </Button>
+                    </View>
+                </View>
             </Modalize>
             <Modalize
                 ref={modalizeWebViewRef}

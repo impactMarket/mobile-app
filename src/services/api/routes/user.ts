@@ -44,7 +44,7 @@ class ApiRouteUser {
         currency: string,
         phone: string,
         pushNotificationToken?: string
-    ): Promise<IUserAuth | undefined> {
+    ) {
         let auth: {
             address: string;
             language: string;
@@ -63,8 +63,7 @@ class ApiRouteUser {
                 pushNotificationToken,
             };
         }
-        return (await this.api.post<IUserAuth | undefined>('/user/auth', auth))
-            .data;
+        return this.api.post<IUserAuth>('/user/auth', auth);
     }
 
     static async addClaimLocation(
