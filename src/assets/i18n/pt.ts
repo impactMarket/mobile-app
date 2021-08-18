@@ -183,6 +183,7 @@ export default {
     amountSymbol: 'Montante em {{symbol}}',
     donateWithCelo: 'Celo Dollar ($cUSD)',
     donateWithESolidar: 'Cartão de Crédito / Paypal / BTC / ETH',
+    poweredByESolidar: 'Distribuído por',
     contributeWith: 'Contribuir com',
     or: 'ou',
     donateSymbol: 'Contribuir ({{symbol}})',

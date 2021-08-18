@@ -182,6 +182,7 @@ export default {
     donate: 'Contribute',
     donateWithCelo: 'Celo Dollar ($cUSD)',
     donateWithESolidar: 'Credit Card / Paypal / BTC / ETH',
+    poweredByESolidar: 'Powered by',
     attach: 'Attach',
     contributeWith: 'Contribute with',
     or: 'or',
