@@ -20,7 +20,6 @@ import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Linking from 'expo-linking';
-import { imageTargets } from 'helpers/constants';
 // Helpers
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
@@ -49,6 +48,7 @@ import { Modalize } from 'react-native-modalize';
 import {
     Portal,
     Button as RNButton,
+    Divider,
     Card,
     Modal,
     Paragraph,
@@ -63,6 +63,8 @@ import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 // Styles
 import { ipctColors } from 'styles/index';
+import { Trans } from 'react-i18next';
+import { WebView } from 'react-native-webview';
 
 // Constants
 const currencies: {
@@ -84,6 +86,7 @@ function ProfileScreen() {
     const modalizeCurrencyRef = useRef<Modalize>(null);
     const modalizeLanguageRef = useRef<Modalize>(null);
     const modalizeGenderRef = useRef<Modalize>(null);
+    const modalizeStolenFAQRef = useRef<Modalize>(null);
 
     const [showingResults, setShowingResults] = useState(false);
     const [searchCurrency, setSearchCurrency] = useState('');
@@ -679,19 +682,44 @@ function ProfileScreen() {
                             onPress={() => modalizeLanguageRef.current?.open()}
                         />
                     </View>
+                    <Divider
+                        style={{
+                            marginVertical: 32,
+                        }}
+                    />
+                    <Text style={styles.itemTitle}>
+                        <Trans
+                            i18nKey="stolenOrChangedPhone"
+                            components={{
+                                blue: (
+                                    <Text
+                                        onPress={() =>
+                                            modalizeStolenFAQRef.current?.open()
+                                        }
+                                        style={{
+                                            fontFamily: 'Inter-Regular',
+                                            fontSize: 15,
+                                            lineHeight: 24,
+                                            color: ipctColors.blueRibbon,
+                                        }}
+                                    />
+                                ),
+                            }}
+                        />
+                    </Text>
+                    <Input
+                        label={i18n.t('phoneNumber')}
+                        boxStyle={{ marginTop: 28 }}
+                        value={userWallet.phoneNumber}
+                        editable={false}
+                        locked
+                    />
                     <Input
                         label={i18n.t('country')}
                         boxStyle={{ marginTop: 28 }}
                         value={getCountryFromPhoneNumber(
                             userWallet.phoneNumber
                         )}
-                        editable={false}
-                        locked
-                    />
-                    <Input
-                        label={i18n.t('phoneNumber')}
-                        boxStyle={{ marginTop: 28 }}
-                        value={userWallet.phoneNumber}
                         editable={false}
                         locked
                     />
@@ -768,6 +796,26 @@ function ProfileScreen() {
                     adjustToContentHeight
                 >
                     {renderGenderContent()}
+                </Modalize>
+                <Modalize
+                    ref={modalizeStolenFAQRef}
+                    HeaderComponent={renderHeader(
+                        null,
+                        modalizeStolenFAQRef,
+                        () => {},
+                        true
+                    )}
+                >
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{
+                            uri:
+                                'https://docs.impactmarket.com/general/stolen-lost-phone',
+                        }}
+                        style={{
+                            height: Dimensions.get('screen').height * 0.85,
+                        }}
+                    />
                 </Modalize>
             </Portal>
         </>
