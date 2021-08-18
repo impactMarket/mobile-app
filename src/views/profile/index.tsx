@@ -686,12 +686,14 @@ function ProfileScreen() {
                             userWallet.phoneNumber
                         )}
                         editable={false}
+                        locked
                     />
                     <Input
                         label={i18n.t('phoneNumber')}
                         boxStyle={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
+                        locked
                     />
                     <View
                         style={{
