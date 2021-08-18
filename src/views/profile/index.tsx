@@ -65,6 +65,7 @@ import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
 import { Trans } from 'react-i18next';
 import { WebView } from 'react-native-webview';
+import LockSvg from 'components/svg/LockSvg';
 
 // Constants
 const currencies: {
@@ -712,7 +713,12 @@ function ProfileScreen() {
                         boxStyle={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
-                        locked
+                        rightIcon={
+                            <LockSvg
+                                color={ipctColors.borderGray}
+                                style={{ left: -30 }}
+                            />
+                        }
                     />
                     <Input
                         label={i18n.t('country')}
@@ -721,7 +727,12 @@ function ProfileScreen() {
                             userWallet.phoneNumber
                         )}
                         editable={false}
-                        locked
+                        rightIcon={
+                            <LockSvg
+                                color={ipctColors.borderGray}
+                                style={{ left: -30 }}
+                            />
+                        }
                     />
                     <View
                         style={{
