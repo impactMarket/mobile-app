@@ -49,6 +49,8 @@ export default {
     moreAboutYourCommunity: 'Sobre a minha comunidade',
     ssi: 'Índice de Autossustentabilidade',
     ssiDescription: 'SSI mede a sustentabilidade financeira de uma comunidade.',
+    stolenOrChangedPhone:
+        'Leia as instruções a seguir caso seu telefone seja <blue>roubado/perdido</blue> ou você precise <blue>alterar seu número de telefone.</blue>',
     seeMore: 'Ver Mais',
     seeLess: 'Ver Menos',
     exploreCommunityContract: 'Ver Contrato da Comunidade',
