@@ -14,6 +14,7 @@ interface IButtonProps {
     style?: StyleProp<ViewStyle>;
     contentStyle?: StyleProp<ViewStyle>;
     labelStyle?: StyleProp<TextStyle>;
+    accessibilityLabel?: string;
 }
 interface IButtonState {}
 
@@ -23,7 +24,15 @@ export default class Button extends Component<IButtonProps, IButtonState> {
     }
 
     render() {
-        const { style, disabled, children, modeType, bold, icon } = this.props;
+        const {
+            style,
+            disabled,
+            children,
+            modeType,
+            bold,
+            icon,
+            accessibilityLabel,
+        } = this.props;
         let buttonStyle: StyleProp<ViewStyle> = {
             elevation: 0,
             height: 42,
@@ -70,6 +79,7 @@ export default class Button extends Component<IButtonProps, IButtonState> {
                     lineHeight: 17.58,
                     ...(this.props.labelStyle as any),
                 }}
+                accessibilityLabel={accessibilityLabel}
             >
                 {children}
             </RNPButton>

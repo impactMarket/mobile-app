@@ -235,7 +235,7 @@ class ApiRequests {
         endpoint: string,
         requestBody: any,
         options?: any
-    ): Promise<T> {
+    ): Promise<{ data: T; error: any }> {
         // let response: T | undefined;
         // try {
         // handle success
@@ -247,7 +247,7 @@ class ApiRequests {
         //     },
         //     ...options,
         // };
-        const result = await axios.put(
+        const apiResult = await axios.put(
             endpoint,
             requestBody,
             await this._requestOptions(options)
@@ -261,8 +261,12 @@ class ApiRequests {
         //         return undefined;
         //     }
         //     response = result.data as T;
-        const r = result.data as IApiResult<T>;
-        return r.data as T;
+        const r = apiResult.data as IApiResult<T>;
+        let result: any = { data: r.data as T };
+        if (r.error !== undefined) {
+            result = { ...result, error: r.error };
+        }
+        return result;
         // } catch (e) {
         //     Sentry.Native.captureException(e);
         // }

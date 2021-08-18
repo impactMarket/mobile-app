@@ -6,7 +6,7 @@ import { View, Text, StyleSheet } from 'react-native';
 const renderHeader = (
     title: string | null,
     ref: React.RefObject<any>,
-    cb?: React.SetStateAction<any>,
+    cb?: () => void,
     leftIcon?: boolean
 ) => {
     return (

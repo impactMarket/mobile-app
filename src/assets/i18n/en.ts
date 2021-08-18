@@ -60,6 +60,7 @@ export default {
     editCommunity: 'Edit',
     submitTicket: 'Submit a Ticket',
     submit: 'Submit',
+    submitting: 'Submitting',
     needLoginToCreateCommunity:
         'You need to connect with Valora to create a community.',
     communityDetails: 'Community Details',
@@ -96,6 +97,12 @@ export default {
     minutes: 'Minutes',
     hours: 'Hours',
     days: 'Days',
+    time: 'Time',
+    selectCountry: 'Select country',
+    minCoverSize: 'Min. 784px by 784px',
+    upload: 'Upload',
+    expectedUBIDuration:
+        'This UBI will take at least {{years}} years {{months}} months {{days}} days {{hours}} hours {{minutes}} minutes per beneficiary.',
     timeIncrementAfterClaim: 'Time increment after each claim',
     timeInMinutes: 'Time in minutes',
     visibility: 'Visibility',
@@ -103,8 +110,11 @@ export default {
     private: 'Private',
     communityRequestSending:
         'Please wait while the community information is being uploaded...',
+    communityRequestCancel: 'Are you sure you want to cancel the request?',
+    yes: 'Yes',
+    no: 'No',
     communityRequestError:
-        'There was an error submitting the community information. If you are unable to create this community please <webview>submit a ticket</webview>.',
+        'There was an error submitting the community information.',
     missingFieldError:
         'All the fields marked as required need to be informed. Please check what is missing and try again.',
     communityRequestErrorDetails:
