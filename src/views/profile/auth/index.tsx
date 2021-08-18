@@ -392,7 +392,7 @@ function Auth() {
             <Modalize
                 ref={modalizeDuplicatedAccountsRef}
                 HeaderComponent={renderHeader(
-                    'Duplicated Accounts',
+                    i18n.t('auth.duplicatedTitle'),
                     modalizeDuplicatedAccountsRef,
                     () => {
                         navigation.navigate(Screens.Communities);
@@ -405,15 +405,13 @@ function Auth() {
             >
                 <View style={{ width: '100%', paddingHorizontal: 22 }}>
                     <Text style={styles.descriptionTop}>
-                        Your phone number {phoneNumber} is associated with other
-                        impactMarket account.
+                        {i18n.t('auth.duplicatedMsg1', phoneNumber)}
                     </Text>
                     <Text style={styles.description}>
-                        Do you want login and disable all other accounts?
+                        {i18n.t('auth.duplicatedMsg2')}
                     </Text>
                     <Text style={styles.description}>
-                        P.S: Funds will continue to exist on all other Valora
-                        accounts.
+                        {i18n.t('auth.duplicatedMsg3')}
                     </Text>
                     <View
                         style={{
@@ -422,11 +420,23 @@ function Auth() {
                             marginBottom: 18,
                         }}
                     >
-                        <Button modeType="gray" style={{ width: '45%' }}>
-                            Dismiss
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={() =>
+                                modalizeDuplicatedAccountsRef.current.close()
+                            }
+                        >
+                            {i18n.t('dismiss')}
                         </Button>
-                        <Button modeType="default" style={{ width: '45%' }}>
-                            Yes
+                        <Button
+                            modeType="default"
+                            style={{ width: '45%' }}
+                            onPress={() => {
+                                // TODO: do something
+                            }}
+                        >
+                            {i18n.t('yes')}
                         </Button>
                     </View>
                 </View>
