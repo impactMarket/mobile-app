@@ -3,16 +3,17 @@ import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import BackSvg from 'components/svg/header/BackSvg';
 import { isOutOfTime } from 'helpers/index';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
-import { Alert, View, ScrollView } from 'react-native';
+import { Alert, View } from 'react-native';
 import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
+
 import ScanQR from './ScanQR';
-import * as Sentry from 'sentry-expo';
 
 function AddManagerScreen() {
     const dispatch = useDispatch();
@@ -102,9 +103,7 @@ function AddManagerScreen() {
                 }
                 // refresh community details
                 setTimeout(() => {
-                    Api.community
-                        .findById(community.id)
-                        .then((c) => dispatch(setCommunityMetadata(c!)));
+                    dispatch(findCommunityByIdRequest(community.id));
                 }, 2500);
 
                 Alert.alert(

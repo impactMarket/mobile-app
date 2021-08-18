@@ -1,10 +1,8 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
-// import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import { isOutOfTime } from 'helpers/index';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
-// import { IManagerDetailsManager } from 'helpers/types/endpoints';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ManagerAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
@@ -110,9 +108,7 @@ function AddedManagerScreen() {
                 setTotalManagers(totalManagers - 1);
                 // refresh community details
                 setTimeout(() => {
-                    Api.community
-                        .findById(community.metadata.id)
-                        .then((c) => dispatch(setCommunityMetadata(c!)));
+                    dispatch(findCommunityByIdRequest(community.metadata.id));
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);
                     Api.community

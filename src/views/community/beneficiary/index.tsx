@@ -48,6 +48,7 @@ import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
 import BlockedAccount from './cards/BlockedAccount';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 function BeneficiaryScreen() {
     let timeoutTimeDiff: NodeJS.Timer | undefined;
@@ -200,10 +201,8 @@ function BeneficiaryScreen() {
     };
 
     const onRefresh = () => {
-        Api.community.findById(community.id).then((c) => {
-            dispatch(setCommunityMetadata(c!));
-            setRefreshing(false);
-        });
+        dispatch(findCommunityByIdRequest(community.id));
+        setRefreshing(false);
     };
 
     const updateClaimedAmountAndCache = async () => {

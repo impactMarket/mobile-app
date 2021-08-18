@@ -9,6 +9,7 @@ export enum Screens {
     NewStory = 'NewStory',
     StoriesCarousel = 'StoriesCarousel',
     Carousel = 'Carousel',
+    ListCommunities = 'ListCommunitiesScreen',
     //
     ClaimExplained = 'ClaimExplained',
     AnonymousReport = 'AnonymousReport',
@@ -95,6 +96,22 @@ export enum storiesAction {
     USER_STORIES_REQUEST = 'stories/user_request',
     USER_STORIES_SUCCESS = 'stories/user_success',
     USER_STORIES_FAILURE = 'stories/user_failure',
+}
+
+
+export enum communityOrderOptions {
+    bigger = 'bigger',
+    nearest = 'nearest',
+}
+export enum communitiesAction {
+    INIT_REQUEST = 'communities/init_request',
+    INIT_SUCCESS = 'communities/init_success',
+    INIT_FAILURE = 'communities/init_failure',
+    INIT_CLEAN = 'communities/init_clean',
+    FIND_BY_ID_REQUEST = 'communities/find_by_id_request',
+    FIND_BY_ID_SUCCESS = 'communities/find_by_id_success',
+    FIND_BY_ID_FAILURE = 'communities/find_by_id_failure',
+    FIND_BY_ID_CLEAN = 'communities/find_by_id_clean',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';

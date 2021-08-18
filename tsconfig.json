@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "jsx": "react",
+        "module": "es2020",
         "baseUrl": "src",
         "paths": {
             "assets": ["./src/assets"],

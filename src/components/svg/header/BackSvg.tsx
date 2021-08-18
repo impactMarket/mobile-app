@@ -1,10 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 import { Pressable } from 'react-native';
 import Svg, { Circle, Path } from 'react-native-svg';
 
 function BackSvg(props: { onPress?: () => void }) {
+    const navigation = useNavigation();
     return (
-        <Pressable onPress={props.onPress} hitSlop={15}>
+        <Pressable
+            onPress={props.onPress ? props.onPress : () => navigation.goBack()}
+            hitSlop={15}
+        >
             <Svg
                 style={{ marginLeft: 16 }}
                 width={34}

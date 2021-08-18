@@ -4,6 +4,7 @@ import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
+import ListCommunitiesScreen from 'views/communities/List';
 import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
 import WelcomeRulesScreen from 'views/community/beneficiary/WelcomeRulesScreen';
@@ -84,6 +85,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.WelcomeRulesScreen}
             component={WelcomeRulesScreen}
             options={WelcomeRulesScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.ListCommunities}
+            component={ListCommunitiesScreen}
+            options={ListCommunitiesScreen.navigationOptions}
         />
     </>
 );
