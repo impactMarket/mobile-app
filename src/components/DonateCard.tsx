@@ -1,12 +1,13 @@
 import i18n from 'assets/i18n';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Title, Text, Portal } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, Provider, useStore } from 'react-redux';
+import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 import ConfirmModal from '../views/community/details/donate/modals/confirm';
@@ -22,8 +23,22 @@ export default function DonateCard(props: IDonateProps) {
     const { width } = Dimensions.get('screen');
     const { community } = props;
     const dispatch = useDispatch();
-    const [campaignUrl, setCampaignUrl] = useState('');
+    //TODO: Create a page to be shown when the community isnt's fundraising on eSolidar.
+    const [campaignUrl, setCampaignUrl] = useState<string>(
+        'https://community.esolidar.com/pt'
+    );
     const modalizeESolidar = useRef<Modalize>(null);
+
+    useEffect(() => {
+        Api.community
+            .getCommunityFundraisingUrl(community.id)
+            .then((res) => {
+                res.campaignUrl && setCampaignUrl(res.campaignUrl);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    }, []);
 
     return (
         <>
