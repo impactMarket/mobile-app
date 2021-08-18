@@ -96,7 +96,7 @@ exports[`CommunityManager screen test should render Donate correctly 1`] = `
           ]
         }
       >
-        Donate
+        Contribute
       </Text>
     </View>
   </View>

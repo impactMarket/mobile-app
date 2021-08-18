@@ -681,7 +681,7 @@ function ProfileScreen() {
                     </View>
                     <Input
                         label={i18n.t('country')}
-                        style={{ marginTop: 28 }}
+                        boxStyle={{ marginTop: 28 }}
                         value={getCountryFromPhoneNumber(
                             userWallet.phoneNumber
                         )}
@@ -689,7 +689,7 @@ function ProfileScreen() {
                     />
                     <Input
                         label={i18n.t('phoneNumber')}
-                        style={{ marginTop: 28 }}
+                        boxStyle={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
                     />
