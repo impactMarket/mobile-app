@@ -17,7 +17,7 @@ interface IInputProps extends TextInputProps {
     label?: string;
     help?: boolean;
     isBig?: boolean;
-    locked?: boolean;
+    rightIcon?: JSX.Element;
     onPress?: (event: GestureResponderEvent) => void;
     boxStyle?: StyleProp<ViewStyle>;
     error?: string;
@@ -28,7 +28,7 @@ export default class Input extends Component<IInputProps, object> {
     }
 
     render() {
-        const { label, help, onPress, error, locked } = this.props;
+        const { label, help, onPress, error, rightIcon } = this.props;
 
         return (
             <>
@@ -97,12 +97,7 @@ export default class Input extends Component<IInputProps, object> {
                                     : undefined,
                             }}
                         />
-                        {locked && (
-                            <LockSvg
-                                color={ipctColors.borderGray}
-                                style={{ left: -30 }}
-                            />
-                        )}
+                        {rightIcon}
                     </View>
                 </View>
                 {error && (
