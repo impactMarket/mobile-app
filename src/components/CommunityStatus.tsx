@@ -7,7 +7,7 @@ import {
 } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Title, ProgressBar, Text, Divider } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -19,16 +19,22 @@ import WarningRedTriangle from './svg/WarningRedTriangle';
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
     community: CommunityAttributes;
-    goal: BigNumber;
 }
 
 export default function CommunityStatus(props: ICommuntyStatusProps) {
-    const { community, goal } = props;
+    const { community } = props;
     const { width } = Dimensions.get('screen');
-
+    const [communityGoal, setCommunityGoal] = useState<BigNumber>();
     const user = useSelector((state: IRootState) => state.user.metadata);
 
     const app = useSelector((state: IRootState) => state.app);
+
+    useEffect(() => {
+        const goal = new BigNumber(community.contract.maxClaim).multipliedBy(
+            community.state.beneficiaries
+        );
+        setCommunityGoal(goal);
+    }, [community]);
 
     if (community.contract === undefined || community.state === undefined) {
         return null;
@@ -100,9 +106,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 { fontSize: width < 375 ? 14 : 20 },
                             ]}
                         >
-                            {goal
+                            {communityGoal
                                 ? amountToCurrency(
-                                      goal,
+                                      communityGoal,
                                       user.currency,
                                       app.exchangeRates
                                   )
