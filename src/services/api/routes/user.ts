@@ -6,6 +6,14 @@ import * as mime from 'react-native-mime-types';
 
 import { ApiRequests } from '../base';
 
+export interface AuthParams {
+    address: string;
+    language: string;
+    currency: string;
+    phone: string;
+    overwrite?: boolean;
+    pushNotificationToken?: string;
+}
 class ApiRouteUser {
     static api = new ApiRequests();
 
@@ -38,15 +46,8 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async auth(params: {
-        address: string;
-        language: string;
-        currency: string;
-        phone: string;
-        overwrite?: boolean;
-        pushNotificationToken?: string;
-    }) {
-        return this.api.post<IUserAuth>('/user/auth', params);
+    static async auth(authParams: AuthParams) {
+        return this.api.post<IUserAuth>('/user/auth', authParams);
     }
 
     static async addClaimLocation(

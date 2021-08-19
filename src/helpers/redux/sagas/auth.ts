@@ -6,39 +6,43 @@ import {
 import { IUserAuth } from 'helpers/types/endpoints';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
+import { AuthParams } from 'services/api/routes/user';
 import { call, put, all, takeEvery } from 'typed-redux-saga';
 
 const getUser = async (
-    userAddress: string,
+    address: string,
     language: string,
     currency: string,
-    phoneNumber: string,
+    phone: string,
     pushNotificationToken: string
 ) =>
-    await Api.user.auth(
-        userAddress,
+    await Api.user.auth({
+        address,
         language,
         currency,
-        phoneNumber,
-        pushNotificationToken
-    );
+        phone,
+        pushNotificationToken,
+    });
 
-export function* submitUserAuthenticationRequest({ payload }: any) {
+export function* submitUserAuthenticationRequest(action: {
+    payload: AuthParams;
+    type: string;
+}) {
     try {
         const {
-            userAddress,
+            address,
             language,
             currency,
-            phoneNumber,
+            phone,
             pushNotificationToken,
-        } = payload;
+        } = action.payload;
 
         const user: IUserAuth = yield call(
             getUser,
-            userAddress,
+            address,
             language,
             currency,
-            phoneNumber,
+            phone,
             pushNotificationToken
         );
 
