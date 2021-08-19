@@ -1,0 +1,33 @@
+--- a/node_modules/react-native-modalize/lib/index.js
++++ b/node_modules/react-native-modalize/lib/index.js
+@@ -275,19 +275,15 @@ onOpen, onOpened, onClose, onClosed, onBackButtonPress, onPositionChange, onOver
+         const shorterHeight = maxFixed < endHeightFixed;
+         setDisableScroll(shorterHeight && disableScrollIfPossible);
+     };
+-    const handleContentLayout = ({ nativeEvent }) => {
+-        if (onLayout) {
+-            onLayout(nativeEvent);
+-        }
++    const handleContentLayout = (width, height) => {
+         if (alwaysOpen && adjustToContentHeight) {
+-            const { height } = nativeEvent.layout;
+             return setModalHeightValue(height);
+         }
+         // We don't want to disable the scroll if we are not using adjustToContentHeight props
+         if (!adjustToContentHeight) {
+             return;
+         }
+-        handleBaseLayout('content', nativeEvent.layout.height);
++        handleBaseLayout('content', height);
+     };
+     const handleComponentLayout = ({ nativeEvent }, name, absolute) => {
+         /**
+@@ -531,7 +527,7 @@ onOpen, onOpened, onClose, onClosed, onBackButtonPress, onPositionChange, onOver
+                 listener: onScrollBeginDrag,
+             }),
+             scrollEventThrottle,
+-            onLayout: handleContentLayout,
++            onContentSizeChange: handleContentLayout,
+             scrollEnabled,
+             keyboardDismissMode,
+         };
