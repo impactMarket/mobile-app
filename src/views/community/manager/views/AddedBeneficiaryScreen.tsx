@@ -4,7 +4,7 @@ import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import { amountToCurrency } from 'helpers/currency';
 import { isOutOfTime } from 'helpers/index';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
@@ -27,7 +27,6 @@ import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
-import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -69,7 +68,7 @@ function AddedBeneficiaryScreen() {
     useEffect(() => {
         const loadActiveBeneficiaries = () => {
             Api.community.listBeneficiaries(true, 0, 10).then((l) => {
-                if (l.length <= 10) {
+                if (l.length < 10) {
                     setReachedEndList(true);
                 }
                 setBeneficiaries(l);
