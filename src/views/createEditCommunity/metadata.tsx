@@ -829,7 +829,11 @@ function UserProfilePicture() {
         }
     };
 
-    if (userProfilePicture !== null && userProfilePicture.length > 0) {
+    if (
+        userProfilePicture !== null &&
+        userProfilePicture !== undefined &&
+        userProfilePicture.length > 0
+    ) {
         return null;
     }
 
