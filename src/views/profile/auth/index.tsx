@@ -27,7 +27,10 @@ import {
     welcomeUser,
 } from 'helpers/index';
 import { setPushNotificationListeners } from 'helpers/redux/actions/app';
-import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
+import {
+    addUserAuthToStateRequest,
+    setPushNotificationsToken,
+} from 'helpers/redux/actions/auth';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useRef, useEffect } from 'react';
 import {
@@ -59,7 +62,7 @@ function Auth() {
     const dispatch = useDispatch();
 
     const kit = useSelector((state: IRootState) => state.app.kit);
-    // const user = useSelector((state: IRootState) => state.auth.user);
+    const userAuthState = useSelector((state: IRootState) => state.auth);
     // const refreshing = useSelector(
     //     (state: IRootState) => state.auth.refreshing
     // );
@@ -67,13 +70,11 @@ function Auth() {
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
-    const [
-        dappKitResponse,
-        setDappKitResponse,
-    ] = useState<AccountAuthResponseSuccess>();
+    const [dappKitResponse, setDappKitResponse] = useState<
+        AccountAuthResponseSuccess | undefined
+    >(undefined);
     const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
     const [duplicatedAccountsWarn, setDuplicatedAccountsWarn] = useState(false);
     const [timedOutValidation, setTimedOutValidation] = useState(false);
 
@@ -89,6 +90,46 @@ function Auth() {
             setTimedOut(true);
         }
     }, [timedOutValidation]);
+
+    useEffect(() => {
+        const finishAuth = async () => {
+            const user = userAuthState.user;
+
+            const { phoneNumber, address } = dappKitResponse;
+            const userAddress = kit.web3.utils.toChecksumAddress(address);
+
+            await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, user.token);
+            await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
+            await AsyncStorage.setItem(STORAGE_USER_PHONE_NUMBER, phoneNumber);
+            await CacheStore.cacheUser({
+                ...user.user,
+                avatar: user.user.avatar ? (user.user.avatar as any).url : null, // TODO: avoid this
+            });
+
+            await welcomeUser(
+                userAddress,
+                phoneNumber,
+                user,
+                exchangeRates,
+                newKitFromWeb3(new Web3(config.jsonRpc)),
+                dispatch,
+                user.user
+            );
+        };
+        if (userAuthState.user !== undefined) {
+            if (dappKitResponse !== undefined) {
+                finishAuth();
+            }
+        } else if (
+            userAuthState.error !== undefined &&
+            userAuthState.error.indexOf('associated with another account')
+        ) {
+            modalizeDuplicatedAccountsRef.current.open();
+            modalizeWelcomeRef.current.close();
+            setDuplicatedAccountsWarn(true);
+            setConnecting(false);
+        }
+    }, [userAuthState, dappKitResponse]);
 
     useFocusEffect(() => {
         renderAuthModalize();
@@ -116,26 +157,17 @@ function Auth() {
         }
         const { phoneNumber, address } = _dappkitResponse;
         const currency = getCurrencyFromPhoneNumber(phoneNumber);
-        /** Although all the SAGA structure is created, we would need to subscribe to the store just to 'wait' 
-         * for the user to be authenticated. Using promise in this case, lead us to a more direct and independent approach.
-         * Note. I am leaving the structure in place but disabled just in case we change authentication methhods in the future.
-         * 
-        dispatch(
-            addUserAuthToStateRequest(
-                userAddress,
-                language,
-                currency,
-                dappkitResponse.phoneNumber,
-                pushNotificationToken
-            )
-        );
-        **/
-
         const pushNotificationToken = await registerForPushNotifications();
+        if (pushNotificationToken) {
+            dispatch(setPushNotificationsToken(pushNotificationToken));
+            setPushNotificationListeners(
+                startNotificationsListeners(kit, dispatch)
+            );
+        }
         const userAddress = kit.web3.utils.toChecksumAddress(address);
 
-        Api.user
-            .auth({
+        dispatch(
+            addUserAuthToStateRequest({
                 address: userAddress,
                 language,
                 currency,
@@ -143,76 +175,7 @@ function Auth() {
                 pushNotificationToken,
                 overwrite,
             })
-            .then(async (result) => {
-                if (
-                    result.error !== undefined &&
-                    result.error.indexOf('associated with another account')
-                ) {
-                    modalizeDuplicatedAccountsRef.current.open();
-                    modalizeWelcomeRef.current.close();
-                    setDuplicatedAccountsWarn(true);
-                    setConnecting(false);
-                    return;
-                }
-                const user = result.data;
-                if (user === undefined) {
-                    analytics('login', {
-                        device: Device.brand,
-                        success: 'false',
-                    });
-                    await new Promise((res) => setTimeout(res, 5000)).then(
-                        () => {
-                            modalizeWelcomeRef.current.close();
-                            setTimedOut(true);
-                        }
-                    );
-                    throw new Error('user is undefined');
-                }
-                setRefreshing(true);
-                await AsyncStorage.setItem(STORAGE_USER_AUTH_TOKEN, user.token);
-                await AsyncStorage.setItem(STORAGE_USER_ADDRESS, userAddress);
-                await AsyncStorage.setItem(
-                    STORAGE_USER_PHONE_NUMBER,
-                    phoneNumber
-                );
-                await CacheStore.cacheUser({
-                    ...user.user,
-                    avatar: user.user.avatar
-                        ? (user.user.avatar as any).url
-                        : null, // TODO: avoid this
-                });
-
-                await welcomeUser(
-                    userAddress,
-                    phoneNumber,
-                    user,
-                    exchangeRates,
-                    newKitFromWeb3(new Web3(config.jsonRpc)),
-                    dispatch,
-                    user.user
-                );
-                if (pushNotificationToken) {
-                    dispatch(setPushNotificationsToken(pushNotificationToken));
-                    setPushNotificationListeners(
-                        startNotificationsListeners(kit, dispatch)
-                    );
-                }
-                analytics('login', {
-                    device: Device.brand,
-                    success: 'true',
-                });
-                setRefreshing(false);
-            })
-            .catch((e) => {
-                Sentry.Native.withScope((scope) => {
-                    scope.setTag('ipct-activity', 'auth');
-                    Sentry.Native.captureException(e);
-                });
-
-                setTimedOut(true);
-                setConnecting(false);
-                setRefreshing(false);
-            });
+        );
     };
 
     const login = async () => {
@@ -395,7 +358,7 @@ function Auth() {
                         modeType="green"
                         bold
                         onPress={login}
-                        loading={connecting || refreshing}
+                        loading={connecting || userAuthState.refreshing}
                         style={{ width: '100%', marginTop: 16 }}
                         labelStyle={styles.buttomConnectValoraText}
                     >
@@ -421,7 +384,7 @@ function Auth() {
                     <Text style={styles.descriptionTop}>
                         {i18n.t(
                             'auth.duplicatedMsg1',
-                            dappKitResponse?.phoneNumber
+                            dappKitResponse ? dappKitResponse.phoneNumber : ''
                         )}
                     </Text>
                     <Text style={styles.description}>

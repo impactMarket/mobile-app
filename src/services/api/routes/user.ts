@@ -47,6 +47,7 @@ class ApiRouteUser {
     }
 
     static async auth(authParams: AuthParams) {
+        console.log(authParams);
         return this.api.post<IUserAuth>('/user/auth', authParams);
     }
 

@@ -3,7 +3,6 @@ import {
     addUserAuthToStateSuccess,
     addUserAuthToStateFailure,
 } from 'helpers/redux/actions/auth';
-import { IUserAuth } from 'helpers/types/endpoints';
 import Api from 'services/api';
 import { AuthParams } from 'services/api/routes/user';
 import { call, put, all, takeEvery } from 'typed-redux-saga';
@@ -15,11 +14,11 @@ export function* submitUserAuthenticationRequest(action: {
     payload: AuthParams;
     type: string;
 }) {
-    try {
-        const user: IUserAuth = yield call(getUser, action.payload);
-        yield put(addUserAuthToStateSuccess(user));
-    } catch (err) {
-        yield put(addUserAuthToStateFailure(err));
+    const result = yield call(getUser, action.payload);
+    if (result.error !== undefined) {
+        yield put(addUserAuthToStateFailure(result.data));
+    } else {
+        yield put(addUserAuthToStateSuccess(result.data));
     }
 }
 
