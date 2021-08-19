@@ -55,8 +55,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 },
                             ]}
                         >
-                            {i18n.t('raisedFrom', {
-                                backers: community.state.backers,
+                            {i18n.t('raisedFrom')}
+                            {''}
+                            {i18n.t('backers', {
+                                count: community.state.backers,
                             })}
                         </Text>
                         <Title
@@ -152,6 +154,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                     >
                         {i18n.t('fundsRunOut', {
                             days: calculateCommunityRemainedFunds(community),
+                        })}{' '}
+                        {i18n.t('days', {
+                            count: calculateCommunityRemainedFunds(community),
                         })}
                     </Text>
                 </View>
