@@ -8,25 +8,16 @@ import {
 import { IUserAuth } from 'helpers/types/endpoints';
 import { AuthActionTypes } from 'helpers/types/redux';
 import { markActionsOffline } from 'redux-offline-queue';
+import { AuthParams } from 'services/api/routes/user';
 
 markActionsOffline(SET_USER_AUTH_REQUEST, [addUserAuthToStateRequest]);
 
 export function addUserAuthToStateRequest(
-    userAddress: string,
-    language: string,
-    currency: string,
-    phoneNumber: string,
-    pushNotificationToken: string
+    authParams: AuthParams
 ): AuthActionTypes {
     return {
         type: SET_USER_AUTH_REQUEST,
-        payload: {
-            userAddress,
-            language,
-            currency,
-            phoneNumber,
-            pushNotificationToken,
-        },
+        payload: authParams,
     };
 }
 

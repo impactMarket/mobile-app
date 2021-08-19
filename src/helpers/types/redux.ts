@@ -31,6 +31,7 @@ import {
     SET_USER_AUTH_SUCCESS,
     SET_USER_AUTH_FAILURE,
 } from 'helpers/constants';
+import { AuthParams } from 'services/api/routes/user';
 
 import {
     ICommunitiesListStories,
@@ -122,13 +123,7 @@ interface SetAuthTokenAction {
 
 interface InitUserAuthActionRequest {
     type: typeof SET_USER_AUTH_REQUEST;
-    payload: {
-        userAddress: string;
-        language: string;
-        currency: string;
-        phoneNumber: string;
-        pushNotificationToken: string;
-    };
+    payload: AuthParams;
 }
 
 interface InitUserAuthActionSuccess {
