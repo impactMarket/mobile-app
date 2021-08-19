@@ -15,6 +15,7 @@ import { ipctColors } from 'styles/index';
 
 import Card from './core/Card';
 import WarningRedTriangle from './svg/WarningRedTriangle';
+import NoSuspiciusBadgeOutlineSvg from './svg/NoSuspiciusBadgeOutlineSvg';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
@@ -42,10 +43,41 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
     if (community.contract === undefined || community.state === undefined) {
         return null;
     }
-
+    console.log({ suspect: community.suspect });
     return (
         <Card elevation={0} style={{ marginTop: 16 }}>
-            <Card.Content>
+            {community.suspect !== undefined && community.suspect !== null && (
+                <View
+                    style={{
+                        backgroundColor: ipctColors.softWhite,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        minHeight: 88,
+                        padding: 22,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                        borderTopRightRadius: 6,
+                        borderTopLeftRadius: 6,
+                    }}
+                >
+                    <NoSuspiciusBadgeOutlineSvg
+                        style={{ marginRight: 12, marginTop: 4 }}
+                    />
+                    <Text
+                        style={{
+                            flexShrink: 1,
+                            fontFamily: 'Inter-Regular',
+                            fontSize: width < 375 ? 12 : 15,
+                            fontWeight: '500',
+                            lineHeight: width < 375 ? 14 : 24,
+                            textAlign: 'left',
+                        }}
+                    >
+                        {i18n.t('noSuspiciousActivityDetected')}
+                    </Text>
+                </View>
+            )}
+            <View style={{ padding: 22 }}>
                 <View style={styles.cardWrap}>
                     <View
                         style={{
@@ -171,7 +203,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                 </View>
                 {props.children && <Divider />}
                 {props.children}
-            </Card.Content>
+            </View>
         </Card>
     );
 }
