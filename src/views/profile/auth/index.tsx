@@ -202,6 +202,7 @@ function Auth() {
                 (async () => {
                     await new Promise((res) => setTimeout(res, 10000)).then(
                         () => {
+                            // TODO: this generates a "state update on an unmounted component". Needs fix.
                             setTimedOutValidation(true);
                         }
                     );
