@@ -713,12 +713,7 @@ function ProfileScreen() {
                         boxStyle={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
-                        rightIcon={
-                            <LockSvg
-                                color={ipctColors.borderGray}
-                                style={{ left: -30 }}
-                            />
-                        }
+                        rightElement={<LockSvg color={ipctColors.borderGray} />}
                     />
                     <Input
                         label={i18n.t('country')}
@@ -727,12 +722,7 @@ function ProfileScreen() {
                             userWallet.phoneNumber
                         )}
                         editable={false}
-                        rightIcon={
-                            <LockSvg
-                                color={ipctColors.borderGray}
-                                style={{ left: -30 }}
-                            />
-                        }
+                        rightElement={<LockSvg color={ipctColors.borderGray} />}
                     />
                     <View
                         style={{

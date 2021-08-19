@@ -17,7 +17,7 @@ interface IInputProps extends TextInputProps {
     label?: string;
     help?: boolean;
     isBig?: boolean;
-    rightIcon?: JSX.Element;
+    rightElement?: JSX.Element | React.ComponentClass;
     onPress?: (event: GestureResponderEvent) => void;
     boxStyle?: StyleProp<ViewStyle>;
     error?: string;
@@ -28,7 +28,7 @@ export default class Input extends Component<IInputProps, object> {
     }
 
     render() {
-        const { label, help, onPress, error, rightIcon } = this.props;
+        const { label, help, onPress, error, rightElement } = this.props;
 
         return (
             <>
@@ -84,7 +84,7 @@ export default class Input extends Component<IInputProps, object> {
                                 height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
                                 minHeight: 38,
                                 flexGrow: 1,
-                                width: '100%',
+                                maxWidth: '100%',
                                 paddingHorizontal: 10,
                                 marginVertical: 5,
                                 alignSelf: 'center',
@@ -97,7 +97,7 @@ export default class Input extends Component<IInputProps, object> {
                                     : undefined,
                             }}
                         />
-                        {rightIcon}
+                        {rightElement}
                     </View>
                 </View>
                 {error && (
@@ -122,6 +122,8 @@ const styles = StyleSheet.create({
     innerInput: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: 14,
     },
     outline: {
         position: 'absolute',
