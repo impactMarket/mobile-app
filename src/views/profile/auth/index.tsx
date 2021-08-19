@@ -364,46 +364,44 @@ function Auth() {
                     navigation.navigate(Screens.Communities);
                 }}
             >
-                <ScrollView>
-                    <View style={{ width: '100%', paddingHorizontal: 22 }}>
-                        <Text style={styles.descriptionTop}>
-                            {i18n.t('impactMarketDescription')}
-                        </Text>
-                        <Text style={styles.description}>
-                            {i18n.t('loginDescription')}
-                        </Text>
+                <View style={{ width: '100%', paddingHorizontal: 22 }}>
+                    <Text style={styles.descriptionTop}>
+                        {i18n.t('impactMarketDescription')}
+                    </Text>
+                    <Text style={styles.description}>
+                        {i18n.t('loginDescription')}
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        width: '100%',
+                        paddingHorizontal: 21,
+                        marginBottom: 22,
+                    }}
+                >
+                    <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
+                    <View style={{ width: '100%', marginTop: 16 }}>
+                        {buttonStoreLink()}
                     </View>
-                    <View
-                        style={{
-                            width: '100%',
-                            paddingHorizontal: 21,
-                            marginBottom: 22,
-                        }}
+                    <TouchableOpacity
+                        onPress={() => modalizeWebViewRef.current?.open()}
                     >
-                        <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
-                        <View style={{ width: '100%', marginTop: 16 }}>
-                            {buttonStoreLink()}
-                        </View>
-                        <TouchableOpacity
-                            onPress={() => modalizeWebViewRef.current?.open()}
-                        >
-                            <Text style={styles.whatIsValora}>
-                                {i18n.t('whatIsValora')}
-                            </Text>
-                        </TouchableOpacity>
-                        <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
-                        <Button
-                            modeType="green"
-                            bold
-                            onPress={login}
-                            loading={connecting || refreshing}
-                            style={{ width: '100%', marginTop: 16 }}
-                            labelStyle={styles.buttomConnectValoraText}
-                        >
-                            {i18n.t('connectWithValora')}
-                        </Button>
-                    </View>
-                </ScrollView>
+                        <Text style={styles.whatIsValora}>
+                            {i18n.t('whatIsValora')}
+                        </Text>
+                    </TouchableOpacity>
+                    <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
+                    <Button
+                        modeType="green"
+                        bold
+                        onPress={login}
+                        loading={connecting || refreshing}
+                        style={{ width: '100%', marginTop: 16 }}
+                        labelStyle={styles.buttomConnectValoraText}
+                    >
+                        {i18n.t('connectWithValora')}
+                    </Button>
+                </View>
             </Modalize>
             <Modalize
                 ref={modalizeDuplicatedAccountsRef}
