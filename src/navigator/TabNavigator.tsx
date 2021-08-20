@@ -159,7 +159,7 @@ function TabNavigator({
                 ),
         });
 
-        if (!isBeneficiary && !isManager && userCommunity) {
+        if (!isBeneficiary && !isManager) {
             setHidedTabBar({ offset: -100, height: 12 });
         } else {
             setHidedTabBar({ offset: 0, height: 82 });
