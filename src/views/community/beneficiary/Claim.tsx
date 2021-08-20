@@ -181,8 +181,18 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 ) {
                     try {
                         const enabled = await Location.hasServicesEnabledAsync();
-                        const permission = await Location.getForegroundPermissionsAsync();
-                        if (!enabled) {
+                        if (enabled) {
+                            const permission = await Location.getForegroundPermissionsAsync();
+                            // if not previously allowed, but enabled, request permission
+                            if (
+                                permission.status !==
+                                Location.PermissionStatus.GRANTED
+                            ) {
+                                await Location.requestForegroundPermissionsAsync();
+                            }
+                            //else would be "if not enabled and previously not allowed, return", same as above
+                        } else {
+                            const permission = await Location.getForegroundPermissionsAsync();
                             if (
                                 permission.status !==
                                 Location.PermissionStatus.GRANTED
@@ -190,16 +200,6 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                                 // if not enabled and previously not allowed, return
                                 return;
                             }
-                        }
-                        if (
-                            permission.status !==
-                            Location.PermissionStatus.GRANTED
-                        ) {
-                            if (enabled) {
-                                // if not previously allowed, but enabled, request permission
-                                await Location.requestForegroundPermissionsAsync();
-                            }
-                            //else would be "if not enabled and previously not allowed, return", same as above
                         }
 
                         const {
