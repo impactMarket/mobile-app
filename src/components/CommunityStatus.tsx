@@ -119,7 +119,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                       user.currency,
                                       app.exchangeRates
                                   )
-                                : ' '}
+                                : 'N/A'}
                         </Title>
                     </View>
                 </View>
