@@ -7,7 +7,8 @@ import Card from 'components/core/Card';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import * as shape from 'd3-shape';
-import * as Clipboard from 'expo-clipboard';
+import Clipboard from 'expo-clipboard';
+import * as Device from 'expo-device';
 import * as WebBrowser from 'expo-web-browser';
 import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
@@ -325,7 +326,9 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     </View>
                 </BaseCommunity>
             </ScrollView>
-            <Donate community={community} />
+            {Device.brand.toLowerCase() !== 'apple' && (
+                <Donate community={community} />
+            )}
         </>
     );
 }
