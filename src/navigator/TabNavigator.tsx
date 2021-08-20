@@ -10,7 +10,7 @@ import { Screens } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect, useState } from 'react';
-import { Platform, Dimensions, Animated } from 'react-native';
+import { Platform, Dimensions } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
