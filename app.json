@@ -10,7 +10,7 @@
         "scheme": "impactmarket",
         "splash": {
             "resizeMode": "cover",
-            "image": "./src/assets/images/splash@4x.png",
+            "image": "./src/assets/images/splash.png",
             "backgroundColor": "#2362FB"
         },
         "updates": {
