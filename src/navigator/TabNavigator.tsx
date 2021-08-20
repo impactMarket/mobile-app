@@ -9,8 +9,8 @@ import BackSvg from 'components/svg/header/BackSvg';
 import { Screens } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useLayoutEffect } from 'react';
-import { Platform, Dimensions } from 'react-native';
+import React, { useLayoutEffect, useState } from 'react';
+import { Platform, Dimensions, Animated } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
@@ -112,6 +112,11 @@ function TabNavigator({
     );
     const userWallet = useSelector((state: IRootState) => state.user.wallet);
 
+    const [hidedTabBar, setHidedTabBar] = useState({
+        offset: 0,
+        height: 0,
+    });
+
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         const headerLeftDetected = getHeaderLeft(route);
@@ -153,6 +158,12 @@ function TabNavigator({
                     userCommunity
                 ),
         });
+
+        if (!isBeneficiary || !isBeneficiary || !userCommunity) {
+            setHidedTabBar({ offset: -100, height: 12 });
+        } else {
+            setHidedTabBar({ offset: 0, height: 82 });
+        }
     }, [navigation, route]);
 
     const tabBeneficiary = (
@@ -201,9 +212,10 @@ function TabNavigator({
                     },
                     tabStyle: { marginVertical: 16 },
                     style: {
+                        bottom: hidedTabBar.offset,
                         height:
                             Platform.OS === 'ios' && !!isLargeIphone()
-                                ? 82
+                                ? hidedTabBar.height
                                 : 84 + insets.bottom,
                     },
                     activeTintColor: ipctColors.blueRibbon,
