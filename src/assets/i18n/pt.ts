@@ -462,4 +462,12 @@ export default {
                 'Oops! Não conseguimos atualizar todas as stories desta vez. Por favor, tente mais tarde.',
         },
     },
+    auth: {
+        duplicatedTitle: 'Contas duplicadas',
+        duplicatedMsg1:
+            'O seu numero de telemovel {{phoneNumber}} está associado a outra conta no impactMarket.',
+        duplicatedMsg2:
+            'Pretende continuar com a autenticação, desabilitando todas as outras contas?',
+        duplicatedMsg3: 'P.S: Os fundos serão mantidos nas outras contas.',
+    },
 };

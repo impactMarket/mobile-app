@@ -460,4 +460,12 @@ export default {
                 'Oops! We could not update all stories at this time. Please try again later',
         },
     },
+    auth: {
+        duplicatedTitle: 'Duplicated Accounts',
+        duplicatedMsg1:
+            'Your phone number {{phoneNumber}} is associated with other impactMarket account.',
+        duplicatedMsg2: 'Do you want login and disable all other accounts?',
+        duplicatedMsg3:
+            'P.S: Funds will continue to exist on all other Valora accounts.',
+    },
 };

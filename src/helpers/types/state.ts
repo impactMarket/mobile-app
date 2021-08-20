@@ -31,8 +31,9 @@ export interface IUserState {
 export interface IAuthState {
     pushNotificationToken: string;
     authToken: string;
-    user: IUserAuth;
+    user: IUserAuth | undefined;
     refreshing: boolean;
+    error: string | undefined;
 }
 export interface IModalDonateState {
     donationValues: {

@@ -177,22 +177,15 @@ Sentry.init({
         // with anything in the global namespace to compute the sample rate or
         // sampling decision for this transaction
 
-        console.log('samplingContext', samplingContext.transactionContext.tags);
-        // if ipct-activity is donate or claim, send all error to sentry
+        // if ipct-activity is defined, send all error to sentry
         if (
             samplingContext.transactionContext.tags &&
-            (samplingContext.transactionContext.tags['ipct-activity'] ===
-                'donate' ||
-                samplingContext.transactionContext.tags['ipct-activity'] ===
-                    'claim')
+            samplingContext.transactionContext.tags['ipct-activity'] !==
+                undefined
         ) {
             return 1;
         }
         return 0.1;
-    },
-    beforeSend(event, hint) {
-        console.log('beforeSend', event, hint);
-        return event;
     },
 });
 

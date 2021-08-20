@@ -6,7 +6,7 @@
         "ios": "expo start --ios",
         "web": "expo start --web",
         "eject": "expo eject",
-        "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo*",
+        "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/ && rm -rf node_modules/@celo/dappkit/node_modules/expo* && patch-package",
         "prettier": "prettier --write ./**/*.{ts,tsx}",
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
         "prettier-no-fix": "prettier ./**/*.{ts,tsx}",
@@ -96,9 +96,7 @@
         "native-base": "3.0.3",
         "node-libs-react-native": "1.2.0",
         "os-browserify": "0.3.0",
-        "patch-package": "6.4.7",
         "path-browserify": "1.0.1",
-        "postinstall-postinstall": "2.1.0",
         "react": "16.13.1",
         "react-dom": "16.13.1",
         "react-i18next": "11.8.12",
@@ -136,6 +134,8 @@
         "vm-browserify": "1.1.2"
     },
     "devDependencies": {
+        "patch-package": "6.4.7",
+        "postinstall-postinstall": "2.1.0",
         "@babel/core": "7.9.0",
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/jest-native": "4.0.2",
