@@ -179,48 +179,65 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     communityMetadata.visibility === 'public' &&
                     isManager === false
                 ) {
-                    try {
-                        const enabled = await Location.hasServicesEnabledAsync();
-                        if (enabled) {
-                            const permission = await Location.getForegroundPermissionsAsync();
-                            // if not previously allowed, but enabled, request permission
-                            if (
-                                permission.status !==
-                                Location.PermissionStatus.GRANTED
-                            ) {
-                                await Location.requestForegroundPermissionsAsync();
-                            }
-                            //else would be "if not enabled and previously not allowed, return", same as above
-                        } else {
-                            const permission = await Location.getForegroundPermissionsAsync();
-                            if (
-                                permission.status !==
-                                Location.PermissionStatus.GRANTED
-                            ) {
-                                // if not enabled and previously not allowed, return
+                    const enabled = await Location.hasServicesEnabledAsync();
+                    // if enabled but not allowed, request permission
+                    // if not enabled but previously allowed, request permission
+                    if (enabled) {
+                        const permission = await Location.getForegroundPermissionsAsync();
+                        const {
+                            status,
+                        } = await Location.requestForegroundPermissionsAsync();
+                        if (
+                            permission.status !==
+                            Location.PermissionStatus.GRANTED
+                        ) {
+                            if (status !== Location.PermissionStatus.GRANTED) {
                                 return;
                             }
                         }
-
-                        const {
-                            coords: { latitude, longitude },
-                        } = await Location.getCurrentPositionAsync({
-                            accuracy: Location.Accuracy.Low,
-                        });
-                        await Api.user.addClaimLocation(communityMetadata.id, {
-                            latitude: latitude + config.locationErrorMargin,
-                            longitude: longitude + config.locationErrorMargin,
-                        });
-                        analytics('claim_location', {
-                            device: Device.brand,
-                            success: 'true',
-                        });
-                    } catch (e) {
-                        Sentry.Native.captureException(e);
-                        analytics('claim_location', {
-                            device: Device.brand,
-                            success: 'false',
-                        });
+                    } else {
+                        const permission = await Location.getForegroundPermissionsAsync();
+                        if (
+                            permission.status ===
+                            Location.PermissionStatus.GRANTED
+                        ) {
+                            const {
+                                status,
+                            } = await Location.requestForegroundPermissionsAsync();
+                            if (status !== Location.PermissionStatus.GRANTED) {
+                                return;
+                            }
+                        } else {
+                            return;
+                        }
+                    }
+                    // looks like expo-location fails getting location, many times
+                    // trying many times solved the problem. Although, not good.
+                    let x = 67;
+                    while (x-- > 0) {
+                        try {
+                            const {
+                                coords: { latitude, longitude },
+                            } = await Location.getCurrentPositionAsync({
+                                accuracy: Location.Accuracy.Low,
+                            });
+                            await Api.user.addClaimLocation(
+                                communityMetadata.id,
+                                {
+                                    latitude:
+                                        latitude + config.locationErrorMargin,
+                                    longitude:
+                                        longitude + config.locationErrorMargin,
+                                }
+                            );
+                            analytics('claim_location', {
+                                device: Device.brand,
+                                success: 'true',
+                            });
+                            break;
+                        } catch (e) {
+                            //
+                        }
                     }
                 }
             })
