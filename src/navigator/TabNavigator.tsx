@@ -159,7 +159,7 @@ function TabNavigator({
                 ),
         });
 
-        if (!isBeneficiary || !isBeneficiary || !userCommunity) {
+        if (!isBeneficiary || !isManager) {
             setHidedTabBar({ offset: -100, height: 12 });
         } else {
             setHidedTabBar({ offset: 0, height: 82 });
@@ -216,7 +216,7 @@ function TabNavigator({
                         height:
                             Platform.OS === 'ios' && !!isLargeIphone()
                                 ? hidedTabBar.height
-                                : 84 + insets.bottom,
+                                : hidedTabBar.height + 2 + insets.bottom,
                     },
                     activeTintColor: ipctColors.blueRibbon,
                     inactiveTintColor: ipctColors.almostBlack,
