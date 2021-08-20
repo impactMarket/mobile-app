@@ -35,8 +35,8 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
         const goal = new BigNumber(community.contract.maxClaim).multipliedBy(
             community.state.beneficiaries
         );
-        setCommunityGoal(goal);
         const days = calculateCommunityRemainedFunds(community);
+        setCommunityGoal(goal);
         setRemainedFunds(days);
     }, [community]);
 
