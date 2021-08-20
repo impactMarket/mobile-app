@@ -794,6 +794,227 @@ function CommunityCover() {
     );
 }
 
+function UserProfilePicture() {
+    const [toggleDimensionsModal, setToggleDimensionsModal] = useState(false);
+
+    const state = useContext(StateContext);
+    const dispatch = useContext(DispatchContext);
+    const userProfilePicture = useSelector(
+        (state: IRootState) => state.user.metadata.avatar
+    );
+
+    const pickImage = async () => {
+        const result = (await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+        })) as {
+            cancelled: false;
+        } & ImageInfo;
+
+        const { width, height } = result;
+
+        if (!result.cancelled) {
+            if (width >= 300 && height >= 300) {
+                dispatch({
+                    type: formAction.SET_PROFILE_IMAGE,
+                    payload: result.uri,
+                });
+                dispatch({
+                    type: formAction.SET_PROFILE_VALID,
+                    payload: result.uri.length > 0,
+                });
+            } else {
+                setToggleDimensionsModal(true);
+            }
+        }
+    };
+
+    if (
+        userProfilePicture !== null &&
+        userProfilePicture !== undefined &&
+        userProfilePicture.length > 0
+    ) {
+        return null;
+    }
+
+    if (state.profileImage.length > 0) {
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    width: '100%',
+                    marginBottom: 24,
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#E9EDF4',
+                    paddingVertical: 18.1,
+                }}
+            >
+                <CloseStorySvg
+                    style={{
+                        position: 'absolute',
+                        top: 14,
+                        right: 14,
+                    }}
+                    onPress={() => {
+                        dispatch({
+                            type: formAction.SET_PROFILE_IMAGE,
+                            payload: '',
+                        });
+                    }}
+                />
+                <Image
+                    style={{
+                        height: 80,
+                        width: 80,
+                        borderRadius: 40,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    source={{ uri: state.profileImage }}
+                />
+            </View>
+        );
+    }
+
+    return (
+        <View
+            style={{
+                marginTop: 12,
+                marginBottom: 24,
+            }}
+        >
+            <View
+                style={{
+                    flexDirection: 'row',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: 'column',
+                    }}
+                >
+                    <Headline
+                        style={{
+                            fontFamily: 'Manrope-Bold',
+                            fontSize: 15,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('changeProfileImage')}
+                    </Headline>
+                    <Text
+                        style={{
+                            color: '#73839D',
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 14,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('minProfilePictureSize')}
+                    </Text>
+                </View>
+                <Pressable
+                    accessibilityLabel="image uploader"
+                    style={{
+                        width: 98,
+                        height: 44,
+                        paddingHorizontal: 12,
+                        paddingVertical: 8,
+                        backgroundColor: '#E9EDF4',
+                        borderRadius: 8,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    onPress={pickImage}
+                >
+                    <Text
+                        style={{
+                            color: '#333239',
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 15,
+                            lineHeight: 16,
+                        }}
+                    >
+                        {i18n.t('upload')}
+                    </Text>
+                </Pressable>
+                <Portal>
+                    <Modal
+                        visible={toggleDimensionsModal}
+                        title={i18n.t('modalErrorTitle')}
+                        onDismiss={() => {
+                            setToggleDimensionsModal(false);
+                        }}
+                        buttons={
+                            <Button
+                                modeType="gray"
+                                style={{ width: '100%' }}
+                                onPress={() => {
+                                    setToggleDimensionsModal(false);
+                                }}
+                            >
+                                {i18n.t('close')}
+                            </Button>
+                        }
+                    >
+                        <View
+                            style={{
+                                paddingVertical: 16,
+                                paddingHorizontal: 22,
+                                borderStyle: 'solid',
+                                borderColor: '#EB5757',
+                                borderWidth: 2,
+                                borderRadius: 8,
+                                width: '100%',
+                                flexDirection: 'row',
+                                marginBottom: 16,
+                            }}
+                        >
+                            <WarningRedTriangle
+                                style={{
+                                    alignSelf: 'flex-start',
+                                    marginRight: 16,
+                                    marginTop: 8,
+                                }}
+                            />
+                            <Text
+                                style={{
+                                    fontFamily: 'Inter-Regular',
+                                    fontSize: 14,
+                                    lineHeight: 24,
+                                    color: ipctColors.almostBlack,
+                                    // textAlign: 'justify',
+                                    marginRight: 12,
+                                }}
+                            >
+                                {i18n.t('imageDimensionsNotFit')}
+                            </Text>
+                        </View>
+                    </Modal>
+                </Portal>
+            </View>
+            {!state.validation.cover && (
+                <Text
+                    style={{
+                        color: '#EB5757',
+                        fontSize: 12,
+                        lineHeight: 20,
+                        fontFamily: 'Inter-Regular',
+                        justifyContent: 'flex-start',
+                    }}
+                >
+                    {i18n.t('profileImageRequired')}
+                </Text>
+            )}
+        </View>
+    );
+}
+
 export default function Metadata(props: { edit?: boolean }) {
     if (props.edit === true) {
         return (
@@ -845,6 +1066,7 @@ export default function Metadata(props: { edit?: boolean }) {
             </Text>
             <CommunityName />
             <CommunityCover />
+            <UserProfilePicture />
             <Text
                 style={{
                     color: '#73839D',

@@ -48,6 +48,8 @@ export default {
     currentAddress: 'Current Address',
     allowCamera: 'Allow camera',
     moreAboutYourCommunity: 'About my community',
+    stolenOrChangedPhone:
+        'Please read the following instruction in case your phone is <blue>stolen/lost</blue> or you need to <blue>change your phone number.</blue>',
     ssi: 'Self-Sustainability Index',
     ssiDescription:
         'SSI measures how financially sustainable a community is, and its progress.',
@@ -77,6 +79,7 @@ export default {
     imageDimensionsNotFit: 'Select an image with the correct dimensions',
     changeCoverImage: 'Cover Image',
     changeProfileImage: 'Your Profile Image',
+    minProfilePictureSize: 'Min. 300px by 300px',
     changeLogoImage: 'Community Logotype',
     addCoverImage: 'Cover Image',
     communityName: 'Community Name',
