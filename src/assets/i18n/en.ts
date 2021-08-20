@@ -79,6 +79,7 @@ export default {
     imageDimensionsNotFit: 'Select an image with the correct dimensions',
     changeCoverImage: 'Cover Image',
     changeProfileImage: 'Your Profile Image',
+    minProfilePictureSize: 'Min. 300px by 300px',
     changeLogoImage: 'Community Logotype',
     addCoverImage: 'Cover Image',
     communityName: 'Community Name',
