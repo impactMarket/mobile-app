@@ -40,6 +40,7 @@ describe('create community [snapshot]', () => {
                 user: {
                     metadata: {
                         currency: 'USD',
+                        avatar: 'something.jpg',
                     },
                     wallet: {
                         address: '0xd7632B7588DF8532C0aBA55586167C2a315Fd768',
@@ -71,4 +72,6 @@ describe('create community [snapshot]', () => {
         fireEvent.press(rendered.getByTestId('close-modal'));
         expect(tree).toMatchSnapshot();
     });
+
+    // TODO: test without mocking user profile picture
 });

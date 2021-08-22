@@ -53,6 +53,8 @@ export default {
     moreAboutYourCommunity: 'Sobre a minha comunidade',
     ssi: 'Índice de Autossustentabilidade',
     ssiDescription: 'SSI mede a sustentabilidade financeira de uma comunidade.',
+    stolenOrChangedPhone:
+        'Leia as instruções a seguir caso seu telefone seja <blue>roubado/perdido</blue> ou você precise <blue>alterar seu número de telefone.</blue>',
     seeMore: 'Ver Mais',
     seeLess: 'Ver Menos',
     exploreCommunityContract: 'Ver Contrato da Comunidade',
@@ -79,6 +81,7 @@ export default {
         'Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas de seus beneficiários. Eles poderão reclamar enquanto houver fundos disponíveis no contrato. Você terá a responsabilidade de promover sua comunidade e de arrecadar fundos para isso.\n\nSe houver outra pessoa ou organização em sua comunidade que você acredita ser mais adequada para conduzir esta iniciativa, informe-a sobre essa possibilidade e incentive-a a criar uma comunidade.',
     changeCoverImage: 'Imagem de Capa',
     changeProfileImage: 'Sua Imagem de Perfil',
+    minProfilePictureSize: 'Min. 300px por 300px',
     changeLogoImage: 'Logomarca',
     communityName: 'Nome da Comunidade',
     shortDescription: 'Descrição (Min 240 Caractéres)',
@@ -476,5 +479,13 @@ export default {
             submitAddStoriesToStateFailure:
                 'Oops! Não conseguimos atualizar todas as stories desta vez. Por favor, tente mais tarde.',
         },
+    },
+    auth: {
+        duplicatedTitle: 'Contas duplicadas',
+        duplicatedMsg1:
+            'O seu numero de telemovel {{phoneNumber}} está associado a outra conta no impactMarket.',
+        duplicatedMsg2:
+            'Pretende continuar com a autenticação, desabilitando todas as outras contas?',
+        duplicatedMsg3: 'P.S: Os fundos serão mantidos nas outras contas.',
     },
 };

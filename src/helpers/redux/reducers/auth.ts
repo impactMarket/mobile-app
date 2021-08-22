@@ -11,8 +11,9 @@ import { IAuthState } from 'helpers/types/state';
 const INITIAL_STATE_AUTH: IAuthState = {
     pushNotificationToken: '',
     authToken: '',
-    user: null,
+    user: undefined,
     refreshing: false,
+    error: undefined,
 };
 
 export const authReducer = (
@@ -29,7 +30,7 @@ export const authReducer = (
         case SET_USER_AUTH_REQUEST:
             return { ...state, refreshing: true };
         case SET_USER_AUTH_FAILURE:
-            return { ...state, refreshing: false };
+            return { ...state, error: action.payload, refreshing: false };
         default:
             return state;
     }
