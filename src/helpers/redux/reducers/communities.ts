@@ -58,6 +58,35 @@ export const communitiesReducer = (
                 refreshing: false,
             };
 
+        case communitiesAction.CREATE_COMMUNITY_SUCCESS:
+            return {
+                ...state,
+                community: action.payload.community,
+                refreshing: false,
+            };
+
+        case communitiesAction.CREATE_COMMUNITY_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error,
+                refreshing: false,
+            };
+
+        case communitiesAction.UPLOAD_COMMUNITY_IMAGE_SUCCESS:
+            return {
+                ...state,
+                uploadURL: action.payload.uploadURL,
+                media: action.payload.media,
+                refreshing: false,
+            };
+
+        case communitiesAction.UPLOAD_COMMUNITY_IMAGE_FAILURE:
+            return {
+                ...state,
+                error: action.payload.error,
+                refreshing: false,
+            };
+
         default:
             return state;
     }

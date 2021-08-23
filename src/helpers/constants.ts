@@ -98,7 +98,6 @@ export enum storiesAction {
     USER_STORIES_FAILURE = 'stories/user_failure',
 }
 
-
 export enum communityOrderOptions {
     bigger = 'bigger',
     nearest = 'nearest',
@@ -112,6 +111,12 @@ export enum communitiesAction {
     FIND_BY_ID_SUCCESS = 'communities/find_by_id_success',
     FIND_BY_ID_FAILURE = 'communities/find_by_id_failure',
     FIND_BY_ID_CLEAN = 'communities/find_by_id_clean',
+    CREATE_COMMUNITY_REQUEST = 'communities/create_community_request',
+    CREATE_COMMUNITY_SUCCESS = 'communities/create_community_success',
+    CREATE_COMMUNITY_FAILURE = 'communities/create_community_failure',
+    UPLOAD_COMMUNITY_IMAGE_REQUEST = 'communities/upload_community_image_request',
+    UPLOAD_COMMUNITY_IMAGE_SUCCESS = 'communities/upload_community_image_success',
+    UPLOAD_COMMUNITY_IMAGE_FAILURE = 'communities/upload_community_image_failure',
 }
 
 export const SET_VIEW_MANAGER_DETAILS = 'view/managerDetails';
