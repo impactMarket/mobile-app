@@ -1,6 +1,6 @@
 import i18n from 'assets/i18n';
 import Card from 'components/core/Card';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Headline, Paragraph } from 'react-native-paper';
@@ -10,7 +10,7 @@ function SuspiciousActivity() {
     return (
         <Card style={styles.cardContainer}>
             <View style={styles.headlineContainer}>
-                <WarningRedTriangle />
+                <WarningTriangle />
                 <Headline style={styles.headerTitle}>
                     {i18n.t('suspiciousActivityDetected')}
                 </Headline>

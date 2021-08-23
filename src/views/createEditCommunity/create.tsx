@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import SuccessSvg from 'components/svg/SuccessSvg';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import { celoNetwork } from 'helpers/constants';
 import { formatInputAmountToTransfer } from 'helpers/currency';
@@ -463,7 +463,7 @@ function CreateCommunityScreen() {
     const SubmissionFailed = () => (
         <>
             <View style={styles.failedModalContainer}>
-                <WarningRedTriangle style={styles.errorModalWarningSvg} />
+                <WarningTriangle style={styles.errorModalWarningSvg} />
                 <Text style={styles.failedModalMessageText}>
                     {i18n.t('communityRequestError')}
                 </Text>
@@ -629,9 +629,7 @@ function CreateCommunityScreen() {
                     }
                 >
                     <View style={styles.errorModalContainer}>
-                        <WarningRedTriangle
-                            style={styles.errorModalWarningSvg}
-                        />
+                        <WarningTriangle style={styles.errorModalWarningSvg} />
                         <Text style={styles.errorModalText}>
                             {invalidInputAmounts
                                 ? invalidInputAmounts

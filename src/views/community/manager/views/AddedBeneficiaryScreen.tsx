@@ -1,6 +1,6 @@
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import { amountToCurrency } from 'helpers/currency';
 import { isOutOfTime } from 'helpers/index';
@@ -249,7 +249,7 @@ function AddedBeneficiaryScreen() {
             )}
             left={() =>
                 item.suspect && (
-                    <WarningRedTriangle style={{ marginVertical: 14 }} />
+                    <WarningTriangle style={{ marginVertical: 14 }} />
                 )
             }
             titleStyle={styles.textTitle}

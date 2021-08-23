@@ -3,7 +3,7 @@ import i18n from 'assets/i18n';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import SuccessSvg from 'components/svg/SuccessSvg';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import { updateCommunityInfo } from 'helpers/index';
 import { setCommunityMetadata } from 'helpers/redux/actions/user';
@@ -245,7 +245,7 @@ function EditCommunityScreen() {
                     flexDirection: 'row',
                 }}
             >
-                <WarningRedTriangle
+                <WarningTriangle
                     style={{
                         alignSelf: 'flex-start',
                         marginRight: 16,
@@ -411,7 +411,7 @@ function EditCommunityScreen() {
                             marginBottom: 16,
                         }}
                     >
-                        <WarningRedTriangle
+                        <WarningTriangle
                             style={{
                                 alignSelf: 'flex-start',
                                 marginRight: 16,

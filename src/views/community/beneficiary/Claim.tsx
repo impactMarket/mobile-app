@@ -1,6 +1,6 @@
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import * as Device from 'expo-device';
 import * as Location from 'expo-location';
 import { Screens } from 'helpers/constants';
@@ -413,7 +413,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         return notEnoughToClaimOnContract ? (
             <View style={styles.communityFundsRunOutContainer}>
                 <View style={styles.communityFundsRunOutHeader}>
-                    <WarningRedTriangle
+                    <WarningTriangle
                         style={{
                             marginRight: 10,
                         }}

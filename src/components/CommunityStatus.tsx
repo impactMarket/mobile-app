@@ -15,7 +15,7 @@ import { ipctColors } from 'styles/index';
 
 import SuspiciousCard from './SuspiciousCard';
 import Card from './core/Card';
-import WarningRedTriangle from './svg/WarningRedTriangle';
+import WarningTriangle from './svg/WarningTriangle';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
@@ -69,7 +69,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             ]}
                         >
                             {i18n.t('raisedFrom')}
-                            {''}
+
                             {i18n.t('backers', {
                                 count: community.state.backers,
                             })}
@@ -149,7 +149,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                     ]}
                 >
                     {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
-                    <WarningRedTriangle
+                    <WarningTriangle
                         color="#FE9A22"
                         style={{ marginTop: width < 375 ? 8 : 0 }}
                     />

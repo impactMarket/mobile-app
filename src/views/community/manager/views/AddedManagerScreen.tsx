@@ -227,7 +227,7 @@ function AddedManagerScreen() {
                 )
             }
             // left={() =>
-            //     item.suspect && <WarningRedTriangle style={{ marginTop: 14 }} />
+            //     item.suspect && <WarningTriangle style={{ marginTop: 14 }} />
             // }
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}

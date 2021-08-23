@@ -5,7 +5,7 @@ import { Text } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
 
 import NoSuspiciusBadgeOutlineSvg from './svg/NoSuspiciusBadgeOutlineSvg';
-import WarningRedTriangle from './svg/WarningRedTriangle';
+import WarningTriangle from './svg/WarningTriangle';
 
 export default function SuspiciousCard(props: { suspectCounts: number }) {
     const { width } = Dimensions.get('screen');
@@ -31,7 +31,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
 
             case suspects < 4:
                 return (
-                    <WarningRedTriangle
+                    <WarningTriangle
                         color="#73839D"
                         style={{ marginRight: 12, marginTop: 4 }}
                     />
@@ -39,7 +39,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
 
             case suspects < 8:
                 return (
-                    <WarningRedTriangle
+                    <WarningTriangle
                         color="#FE9A22"
                         style={{ marginRight: 12, marginTop: 4 }}
                     />
@@ -47,7 +47,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
 
             case suspects > 7:
                 return (
-                    <WarningRedTriangle
+                    <WarningTriangle
                         color="#EB5757"
                         style={{ marginRight: 12, marginTop: 4 }}
                     />

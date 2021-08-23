@@ -1,6 +1,6 @@
 import Button from 'components/core/Button';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Card, Portal as RNPortal, Modal } from 'react-native-paper';
@@ -66,7 +66,7 @@ const ModalGenericError: React.FC<ErrorProps> = ({
                             marginBottom: 16,
                         }}
                     >
-                        <WarningRedTriangle
+                        <WarningTriangle
                             style={{
                                 alignSelf: 'flex-start',
                                 marginRight: 16,
