@@ -10,6 +10,7 @@ import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Title, ProgressBar, Text, Divider } from 'react-native-paper';
+import { scale, moderateScale } from 'react-native-size-matters';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
@@ -63,8 +64,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 styles.description,
                                 {
                                     color: ipctColors.regentGray,
-                                    fontSize: width < 375 ? 11 : 14,
-                                    lineHeight: width < 375 ? 19 : 24,
+                                    // fontSize: width < 375 ? 11 : 14,
+                                    fontSize: moderateScale(14, 0.1),
+                                    lineHeight: moderateScale(24, 0.5),
+                                    // lineHeight: width < 375 ? 19 : 24,
                                 },
                             ]}
                         >
@@ -78,7 +81,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             style={[
                                 styles.title,
                                 {
-                                    fontSize: width < 375 ? 14 : 20,
+                                    fontSize: moderateScale(20, 0.1),
                                 },
                             ]}
                         >
@@ -101,7 +104,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 styles.description,
                                 {
                                     color: ipctColors.regentGray,
-                                    fontSize: width < 375 ? 11 : 14,
+                                    fontSize: moderateScale(14, 0.1),
                                 },
                             ]}
                         >
@@ -110,7 +113,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         <Title
                             style={[
                                 styles.title,
-                                { fontSize: width < 375 ? 14 : 20 },
+                                { fontSize: moderateScale(20, 0.1) },
                             ]}
                         >
                             {communityGoal
@@ -159,8 +162,8 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             {
                                 color: ipctColors.regentGray,
                                 marginLeft: 7,
-                                fontSize: width < 375 ? 11 : 14,
-                                lineHeight: width < 375 ? 19 : 24,
+                                fontSize: moderateScale(14, 0.1),
+                                lineHeight: moderateScale(24, 0.5),
                             },
                         ]}
                     >
