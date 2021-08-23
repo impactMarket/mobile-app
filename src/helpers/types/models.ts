@@ -69,7 +69,7 @@ export interface CommunityAttributes extends UbiCommunity {
     organization?: UbiOrganization;
 }
 
-export interface CommunityFundraisingUrl {
+export interface CommunityCampaing {
     communityId: number;
     campaignUrl: string;
 }
