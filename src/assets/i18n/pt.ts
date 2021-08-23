@@ -430,6 +430,8 @@ export default {
             'Se você encontrar alguma atividade suspeita, avise-nos, pois será considerada uma ação de boa fé que pode evitar que toda a comunidade seja afetada por causa de alguns atores mal-intencionados.',
     },
     suspiciousActivityDetected: 'Atividade suspeita detectada',
+    noSuspiciousActivityDetected:
+        'Nenhuma atividade suspeita detectada neste comunidade.',
     suspiciousDescription:
         'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
     blockedAccountTitle: 'Conta Bloqueada',

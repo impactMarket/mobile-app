@@ -429,6 +429,8 @@ export default {
             'If you find some suspicious activity, let us know, as it will be regarded as a good faith action that can prevent all the community to be affected because of a few bad actors.',
     },
     suspiciousActivityDetected: 'Suspicious activities detected',
+    noSuspiciousActivityDetected:
+        'No suspicious activities detected in this community.',
     suspiciousDescription:
         'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',
     blockedAccountTitle: 'Blocked Account',
