@@ -100,6 +100,7 @@ export default function DonateCard(props: IDonateProps) {
                         <Text
                             style={{
                                 fontFamily: 'Inter-Regular',
+                                fontWeight: '500',
                                 fontSize: width < 375 ? 11 : 16,
                                 lineHeight: 28,
                                 color: ipctColors.blueRibbon,
@@ -160,6 +161,7 @@ export default function DonateCard(props: IDonateProps) {
 const styles = StyleSheet.create({
     title: {
         fontFamily: 'Inter-Bold',
+        fontWeight: '700',
         fontSize: 20,
         lineHeight: 32,
         marginBottom: 8,
