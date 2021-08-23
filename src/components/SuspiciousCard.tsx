@@ -1,5 +1,5 @@
 import i18n from 'assets/i18n';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Text } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
@@ -9,17 +9,27 @@ import WarningRedTriangle from './svg/WarningRedTriangle';
 
 export default function SuspiciousCard(props: { suspectCounts: number }) {
     const { width } = Dimensions.get('screen');
-    console.log({ suspectCounts: props.suspectCounts });
-    const setLogoSuspects = (suspects: number | null) => {
+    const [cardText, setCardText] = useState<string>();
+    const [cardLogo, setCardLogo] = useState<JSX.Element>();
+
+    useEffect(() => {
+        const text = setTextSuspects(props.suspectCounts);
+        const logo = setLogoSuspects(props.suspectCounts);
+
+        setCardLogo(logo);
+        setCardText(text);
+    }, [props.suspectCounts]);
+
+    const setLogoSuspects = (suspects: number) => {
         switch (true) {
-            case suspects < 1 || null:
+            case suspects < 1:
                 return (
                     <NoSuspiciusBadgeOutlineSvg
                         style={{ marginRight: 12, marginTop: 4 }}
                     />
                 );
 
-            case suspects <= 3:
+            case suspects < 4:
                 return (
                     <WarningRedTriangle
                         color="#73839D"
@@ -27,7 +37,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
                     />
                 );
 
-            case suspects <= 7:
+            case suspects < 8:
                 return (
                     <WarningRedTriangle
                         color="#FE9A22"
@@ -57,10 +67,10 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
             case suspects < 1:
                 return i18n.t('noSuspiciousActivityDetected');
 
-            case suspects < 3:
+            case suspects < 4:
                 return i18n.t('lowSuspiciousActivityDetected');
 
-            case suspects < 7:
+            case suspects < 8:
                 return i18n.t('significantSuspiciousActivityDetected');
 
             case suspects > 7:
@@ -73,7 +83,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
 
     return (
         <View style={styles.cardWrap}>
-            {setLogoSuspects(props.suspectCounts)}
+            {cardLogo}
             <Text
                 style={[
                     styles.cardText,
@@ -83,7 +93,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
                     },
                 ]}
             >
-                {setTextSuspects(props.suspectCounts)}
+                {cardText}
             </Text>
         </View>
     );

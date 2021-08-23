@@ -33,7 +33,7 @@ export default function DonateCard(props: IDonateProps) {
         Api.community
             .getCommunityFundraisingUrl(community.id)
             .then((res) => {
-                res.campaignUrl && setCampaignUrl(res.campaignUrl);
+                res.campaignUrl && setCampaignUrl(res?.campaignUrl);
             })
             .catch((e) => {
                 console.log(e);
