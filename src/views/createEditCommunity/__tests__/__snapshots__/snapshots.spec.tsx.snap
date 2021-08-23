@@ -545,38 +545,49 @@ Array [
                                     Community Name
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Community Name"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 28,
-                                    }
-                                  }
-                                  label="Community Name"
-                                  maxLength={32}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Community Name"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
+                                    label="Community Name"
+                                    maxLength={32}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -767,39 +778,50 @@ Array [
                                     Description (Min 240 Chars)
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Description (Min 240 Chars)"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 16,
-                                    }
-                                  }
-                                  label="Description (Min 240 Chars)"
-                                  maxLength={1024}
-                                  multiline={true}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": 115,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": "top",
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Description (Min 240 Chars)"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 16,
+                                      }
+                                    }
+                                    label="Description (Min 240 Chars)"
+                                    maxLength={1024}
+                                    multiline={true}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": 115,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": "top",
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -862,38 +884,49 @@ Array [
                                     City
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="City"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 28,
-                                    }
-                                  }
-                                  label="City"
-                                  maxLength={32}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="City"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
+                                    label="City"
+                                    maxLength={32}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -1212,34 +1245,45 @@ Array [
                                     Email
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Email"
-                                  allowFontScaling={true}
-                                  keyboardType="email-address"
-                                  label="Email"
-                                  maxLength={64}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Email"
+                                    allowFontScaling={true}
+                                    keyboardType="email-address"
+                                    label="Email"
+                                    maxLength={64}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -1526,37 +1570,48 @@ If there is another person or organization among your community you believe is m
                                       </Text>
                                     </View>
                                   </View>
-                                  <TextInput
-                                    accessibilityLabel="Amount per Claim"
-                                    allowFontScaling={true}
-                                    help={true}
-                                    keyboardType="numeric"
-                                    label="Amount per Claim"
-                                    maxLength={14}
-                                    onChangeText={[Function]}
-                                    onEndEditing={[Function]}
-                                    onPress={[Function]}
-                                    placeholder="$0"
-                                    rejectResponderTermination={true}
+                                  <View
                                     style={
                                       Object {
-                                        "alignSelf": "center",
-                                        "color": "#1E3252",
-                                        "flexGrow": 1,
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 15,
-                                        "height": undefined,
-                                        "marginVertical": 5,
-                                        "minHeight": 38,
-                                        "paddingHorizontal": 10,
-                                        "textAlignVertical": undefined,
-                                        "width": "100%",
-                                        "zIndex": 1,
+                                        "alignItems": "center",
+                                        "flexDirection": "row",
+                                        "justifyContent": "space-between",
+                                        "paddingRight": 14,
                                       }
                                     }
-                                    underlineColorAndroid="transparent"
-                                    value=""
-                                  />
+                                  >
+                                    <TextInput
+                                      accessibilityLabel="Amount per Claim"
+                                      allowFontScaling={true}
+                                      help={true}
+                                      keyboardType="numeric"
+                                      label="Amount per Claim"
+                                      maxLength={14}
+                                      onChangeText={[Function]}
+                                      onEndEditing={[Function]}
+                                      onPress={[Function]}
+                                      placeholder="$0"
+                                      rejectResponderTermination={true}
+                                      style={
+                                        Object {
+                                          "alignSelf": "center",
+                                          "color": "#1E3252",
+                                          "flexGrow": 1,
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 15,
+                                          "height": undefined,
+                                          "marginVertical": 5,
+                                          "maxWidth": "100%",
+                                          "minHeight": 38,
+                                          "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
+                                          "zIndex": 1,
+                                        }
+                                      }
+                                      underlineColorAndroid="transparent"
+                                      value=""
+                                    />
+                                  </View>
                                 </View>
                               </View>
                               <View
@@ -1810,37 +1865,48 @@ If there is another person or organization among your community you believe is m
                                       </Text>
                                     </View>
                                   </View>
-                                  <TextInput
-                                    accessibilityLabel="Amount"
-                                    allowFontScaling={true}
-                                    help={true}
-                                    keyboardType="numeric"
-                                    label="Amount"
-                                    maxLength={14}
-                                    onChangeText={[Function]}
-                                    onEndEditing={[Function]}
-                                    onPress={[Function]}
-                                    placeholder="$0"
-                                    rejectResponderTermination={true}
+                                  <View
                                     style={
                                       Object {
-                                        "alignSelf": "center",
-                                        "color": "#1E3252",
-                                        "flexGrow": 1,
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 15,
-                                        "height": undefined,
-                                        "marginVertical": 5,
-                                        "minHeight": 38,
-                                        "paddingHorizontal": 10,
-                                        "textAlignVertical": undefined,
-                                        "width": "100%",
-                                        "zIndex": 1,
+                                        "alignItems": "center",
+                                        "flexDirection": "row",
+                                        "justifyContent": "space-between",
+                                        "paddingRight": 14,
                                       }
                                     }
-                                    underlineColorAndroid="transparent"
-                                    value=""
-                                  />
+                                  >
+                                    <TextInput
+                                      accessibilityLabel="Amount"
+                                      allowFontScaling={true}
+                                      help={true}
+                                      keyboardType="numeric"
+                                      label="Amount"
+                                      maxLength={14}
+                                      onChangeText={[Function]}
+                                      onEndEditing={[Function]}
+                                      onPress={[Function]}
+                                      placeholder="$0"
+                                      rejectResponderTermination={true}
+                                      style={
+                                        Object {
+                                          "alignSelf": "center",
+                                          "color": "#1E3252",
+                                          "flexGrow": 1,
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 15,
+                                          "height": undefined,
+                                          "marginVertical": 5,
+                                          "maxWidth": "100%",
+                                          "minHeight": 38,
+                                          "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
+                                          "zIndex": 1,
+                                        }
+                                      }
+                                      underlineColorAndroid="transparent"
+                                      value=""
+                                    />
+                                  </View>
                                 </View>
                               </View>
                               <Text
@@ -1960,37 +2026,48 @@ If there is another person or organization among your community you believe is m
                                         </Text>
                                       </View>
                                     </View>
-                                    <TextInput
-                                      accessibilityLabel="Time"
-                                      allowFontScaling={true}
-                                      help={true}
-                                      keyboardType="numeric"
-                                      label="Time"
-                                      maxLength={14}
-                                      onChangeText={[Function]}
-                                      onEndEditing={[Function]}
-                                      onPress={[Function]}
-                                      placeholder="0"
-                                      rejectResponderTermination={true}
+                                    <View
                                       style={
                                         Object {
-                                          "alignSelf": "center",
-                                          "color": "#1E3252",
-                                          "flexGrow": 1,
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 15,
-                                          "height": undefined,
-                                          "marginVertical": 5,
-                                          "minHeight": 38,
-                                          "paddingHorizontal": 10,
-                                          "textAlignVertical": undefined,
-                                          "width": "100%",
-                                          "zIndex": 1,
+                                          "alignItems": "center",
+                                          "flexDirection": "row",
+                                          "justifyContent": "space-between",
+                                          "paddingRight": 14,
                                         }
                                       }
-                                      underlineColorAndroid="transparent"
-                                      value=""
-                                    />
+                                    >
+                                      <TextInput
+                                        accessibilityLabel="Time"
+                                        allowFontScaling={true}
+                                        help={true}
+                                        keyboardType="numeric"
+                                        label="Time"
+                                        maxLength={14}
+                                        onChangeText={[Function]}
+                                        onEndEditing={[Function]}
+                                        onPress={[Function]}
+                                        placeholder="0"
+                                        rejectResponderTermination={true}
+                                        style={
+                                          Object {
+                                            "alignSelf": "center",
+                                            "color": "#1E3252",
+                                            "flexGrow": 1,
+                                            "fontFamily": "Inter-Regular",
+                                            "fontSize": 15,
+                                            "height": undefined,
+                                            "marginVertical": 5,
+                                            "maxWidth": "100%",
+                                            "minHeight": 38,
+                                            "paddingHorizontal": 10,
+                                            "textAlignVertical": undefined,
+                                            "zIndex": 1,
+                                          }
+                                        }
+                                        underlineColorAndroid="transparent"
+                                        value=""
+                                      />
+                                    </View>
                                   </View>
                                 </View>
                                 <View
@@ -2954,38 +3031,49 @@ Array [
                                     Community Name
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Community Name"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 28,
-                                    }
-                                  }
-                                  label="Community Name"
-                                  maxLength={32}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Community Name"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
+                                    label="Community Name"
+                                    maxLength={32}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -3176,39 +3264,50 @@ Array [
                                     Description (Min 240 Chars)
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Description (Min 240 Chars)"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 16,
-                                    }
-                                  }
-                                  label="Description (Min 240 Chars)"
-                                  maxLength={1024}
-                                  multiline={true}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": 115,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": "top",
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Description (Min 240 Chars)"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 16,
+                                      }
+                                    }
+                                    label="Description (Min 240 Chars)"
+                                    maxLength={1024}
+                                    multiline={true}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": 115,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": "top",
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -3271,38 +3370,49 @@ Array [
                                     City
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="City"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 28,
-                                    }
-                                  }
-                                  label="City"
-                                  maxLength={32}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="City"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
+                                    label="City"
+                                    maxLength={32}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -3621,34 +3731,45 @@ Array [
                                     Email
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Email"
-                                  allowFontScaling={true}
-                                  keyboardType="email-address"
-                                  label="Email"
-                                  maxLength={64}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Email"
+                                    allowFontScaling={true}
+                                    keyboardType="email-address"
+                                    label="Email"
+                                    maxLength={64}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -3935,37 +4056,48 @@ If there is another person or organization among your community you believe is m
                                       </Text>
                                     </View>
                                   </View>
-                                  <TextInput
-                                    accessibilityLabel="Amount per Claim"
-                                    allowFontScaling={true}
-                                    help={true}
-                                    keyboardType="numeric"
-                                    label="Amount per Claim"
-                                    maxLength={14}
-                                    onChangeText={[Function]}
-                                    onEndEditing={[Function]}
-                                    onPress={[Function]}
-                                    placeholder="$0"
-                                    rejectResponderTermination={true}
+                                  <View
                                     style={
                                       Object {
-                                        "alignSelf": "center",
-                                        "color": "#1E3252",
-                                        "flexGrow": 1,
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 15,
-                                        "height": undefined,
-                                        "marginVertical": 5,
-                                        "minHeight": 38,
-                                        "paddingHorizontal": 10,
-                                        "textAlignVertical": undefined,
-                                        "width": "100%",
-                                        "zIndex": 1,
+                                        "alignItems": "center",
+                                        "flexDirection": "row",
+                                        "justifyContent": "space-between",
+                                        "paddingRight": 14,
                                       }
                                     }
-                                    underlineColorAndroid="transparent"
-                                    value=""
-                                  />
+                                  >
+                                    <TextInput
+                                      accessibilityLabel="Amount per Claim"
+                                      allowFontScaling={true}
+                                      help={true}
+                                      keyboardType="numeric"
+                                      label="Amount per Claim"
+                                      maxLength={14}
+                                      onChangeText={[Function]}
+                                      onEndEditing={[Function]}
+                                      onPress={[Function]}
+                                      placeholder="$0"
+                                      rejectResponderTermination={true}
+                                      style={
+                                        Object {
+                                          "alignSelf": "center",
+                                          "color": "#1E3252",
+                                          "flexGrow": 1,
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 15,
+                                          "height": undefined,
+                                          "marginVertical": 5,
+                                          "maxWidth": "100%",
+                                          "minHeight": 38,
+                                          "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
+                                          "zIndex": 1,
+                                        }
+                                      }
+                                      underlineColorAndroid="transparent"
+                                      value=""
+                                    />
+                                  </View>
                                 </View>
                               </View>
                               <View
@@ -4219,37 +4351,48 @@ If there is another person or organization among your community you believe is m
                                       </Text>
                                     </View>
                                   </View>
-                                  <TextInput
-                                    accessibilityLabel="Amount"
-                                    allowFontScaling={true}
-                                    help={true}
-                                    keyboardType="numeric"
-                                    label="Amount"
-                                    maxLength={14}
-                                    onChangeText={[Function]}
-                                    onEndEditing={[Function]}
-                                    onPress={[Function]}
-                                    placeholder="$0"
-                                    rejectResponderTermination={true}
+                                  <View
                                     style={
                                       Object {
-                                        "alignSelf": "center",
-                                        "color": "#1E3252",
-                                        "flexGrow": 1,
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 15,
-                                        "height": undefined,
-                                        "marginVertical": 5,
-                                        "minHeight": 38,
-                                        "paddingHorizontal": 10,
-                                        "textAlignVertical": undefined,
-                                        "width": "100%",
-                                        "zIndex": 1,
+                                        "alignItems": "center",
+                                        "flexDirection": "row",
+                                        "justifyContent": "space-between",
+                                        "paddingRight": 14,
                                       }
                                     }
-                                    underlineColorAndroid="transparent"
-                                    value=""
-                                  />
+                                  >
+                                    <TextInput
+                                      accessibilityLabel="Amount"
+                                      allowFontScaling={true}
+                                      help={true}
+                                      keyboardType="numeric"
+                                      label="Amount"
+                                      maxLength={14}
+                                      onChangeText={[Function]}
+                                      onEndEditing={[Function]}
+                                      onPress={[Function]}
+                                      placeholder="$0"
+                                      rejectResponderTermination={true}
+                                      style={
+                                        Object {
+                                          "alignSelf": "center",
+                                          "color": "#1E3252",
+                                          "flexGrow": 1,
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 15,
+                                          "height": undefined,
+                                          "marginVertical": 5,
+                                          "maxWidth": "100%",
+                                          "minHeight": 38,
+                                          "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
+                                          "zIndex": 1,
+                                        }
+                                      }
+                                      underlineColorAndroid="transparent"
+                                      value=""
+                                    />
+                                  </View>
                                 </View>
                               </View>
                               <Text
@@ -4369,37 +4512,48 @@ If there is another person or organization among your community you believe is m
                                         </Text>
                                       </View>
                                     </View>
-                                    <TextInput
-                                      accessibilityLabel="Time"
-                                      allowFontScaling={true}
-                                      help={true}
-                                      keyboardType="numeric"
-                                      label="Time"
-                                      maxLength={14}
-                                      onChangeText={[Function]}
-                                      onEndEditing={[Function]}
-                                      onPress={[Function]}
-                                      placeholder="0"
-                                      rejectResponderTermination={true}
+                                    <View
                                       style={
                                         Object {
-                                          "alignSelf": "center",
-                                          "color": "#1E3252",
-                                          "flexGrow": 1,
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 15,
-                                          "height": undefined,
-                                          "marginVertical": 5,
-                                          "minHeight": 38,
-                                          "paddingHorizontal": 10,
-                                          "textAlignVertical": undefined,
-                                          "width": "100%",
-                                          "zIndex": 1,
+                                          "alignItems": "center",
+                                          "flexDirection": "row",
+                                          "justifyContent": "space-between",
+                                          "paddingRight": 14,
                                         }
                                       }
-                                      underlineColorAndroid="transparent"
-                                      value=""
-                                    />
+                                    >
+                                      <TextInput
+                                        accessibilityLabel="Time"
+                                        allowFontScaling={true}
+                                        help={true}
+                                        keyboardType="numeric"
+                                        label="Time"
+                                        maxLength={14}
+                                        onChangeText={[Function]}
+                                        onEndEditing={[Function]}
+                                        onPress={[Function]}
+                                        placeholder="0"
+                                        rejectResponderTermination={true}
+                                        style={
+                                          Object {
+                                            "alignSelf": "center",
+                                            "color": "#1E3252",
+                                            "flexGrow": 1,
+                                            "fontFamily": "Inter-Regular",
+                                            "fontSize": 15,
+                                            "height": undefined,
+                                            "marginVertical": 5,
+                                            "maxWidth": "100%",
+                                            "minHeight": 38,
+                                            "paddingHorizontal": 10,
+                                            "textAlignVertical": undefined,
+                                            "zIndex": 1,
+                                          }
+                                        }
+                                        underlineColorAndroid="transparent"
+                                        value=""
+                                      />
+                                    </View>
                                   </View>
                                 </View>
                                 <View
@@ -5363,38 +5517,49 @@ Array [
                                     Community Name
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Community Name"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 28,
-                                    }
-                                  }
-                                  label="Community Name"
-                                  maxLength={32}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Community Name"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
+                                    label="Community Name"
+                                    maxLength={32}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -5585,39 +5750,50 @@ Array [
                                     Description (Min 240 Chars)
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Description (Min 240 Chars)"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 16,
-                                    }
-                                  }
-                                  label="Description (Min 240 Chars)"
-                                  maxLength={1024}
-                                  multiline={true}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": 115,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": "top",
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Description (Min 240 Chars)"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 16,
+                                      }
+                                    }
+                                    label="Description (Min 240 Chars)"
+                                    maxLength={1024}
+                                    multiline={true}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": 115,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": "top",
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -5680,38 +5856,49 @@ Array [
                                     City
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="City"
-                                  allowFontScaling={true}
-                                  boxStyle={
-                                    Object {
-                                      "marginTop": 28,
-                                    }
-                                  }
-                                  label="City"
-                                  maxLength={32}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="City"
+                                    allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
+                                    label="City"
+                                    maxLength={32}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -6030,34 +6217,45 @@ Array [
                                     Email
                                   </Text>
                                 </View>
-                                <TextInput
-                                  accessibilityLabel="Email"
-                                  allowFontScaling={true}
-                                  keyboardType="email-address"
-                                  label="Email"
-                                  maxLength={64}
-                                  onChangeText={[Function]}
-                                  onEndEditing={[Function]}
-                                  rejectResponderTermination={true}
+                                <View
                                   style={
                                     Object {
-                                      "alignSelf": "center",
-                                      "color": "#1E3252",
-                                      "flexGrow": 1,
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 15,
-                                      "height": undefined,
-                                      "marginVertical": 5,
-                                      "minHeight": 38,
-                                      "paddingHorizontal": 10,
-                                      "textAlignVertical": undefined,
-                                      "width": "100%",
-                                      "zIndex": 1,
+                                      "alignItems": "center",
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                      "paddingRight": 14,
                                     }
                                   }
-                                  underlineColorAndroid="transparent"
-                                  value=""
-                                />
+                                >
+                                  <TextInput
+                                    accessibilityLabel="Email"
+                                    allowFontScaling={true}
+                                    keyboardType="email-address"
+                                    label="Email"
+                                    maxLength={64}
+                                    onChangeText={[Function]}
+                                    onEndEditing={[Function]}
+                                    rejectResponderTermination={true}
+                                    style={
+                                      Object {
+                                        "alignSelf": "center",
+                                        "color": "#1E3252",
+                                        "flexGrow": 1,
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 15,
+                                        "height": undefined,
+                                        "marginVertical": 5,
+                                        "maxWidth": "100%",
+                                        "minHeight": 38,
+                                        "paddingHorizontal": 10,
+                                        "textAlignVertical": undefined,
+                                        "zIndex": 1,
+                                      }
+                                    }
+                                    underlineColorAndroid="transparent"
+                                    value=""
+                                  />
+                                </View>
                               </View>
                               <View
                                 style={
@@ -6344,37 +6542,48 @@ If there is another person or organization among your community you believe is m
                                       </Text>
                                     </View>
                                   </View>
-                                  <TextInput
-                                    accessibilityLabel="Amount per Claim"
-                                    allowFontScaling={true}
-                                    help={true}
-                                    keyboardType="numeric"
-                                    label="Amount per Claim"
-                                    maxLength={14}
-                                    onChangeText={[Function]}
-                                    onEndEditing={[Function]}
-                                    onPress={[Function]}
-                                    placeholder="$0"
-                                    rejectResponderTermination={true}
+                                  <View
                                     style={
                                       Object {
-                                        "alignSelf": "center",
-                                        "color": "#1E3252",
-                                        "flexGrow": 1,
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 15,
-                                        "height": undefined,
-                                        "marginVertical": 5,
-                                        "minHeight": 38,
-                                        "paddingHorizontal": 10,
-                                        "textAlignVertical": undefined,
-                                        "width": "100%",
-                                        "zIndex": 1,
+                                        "alignItems": "center",
+                                        "flexDirection": "row",
+                                        "justifyContent": "space-between",
+                                        "paddingRight": 14,
                                       }
                                     }
-                                    underlineColorAndroid="transparent"
-                                    value=""
-                                  />
+                                  >
+                                    <TextInput
+                                      accessibilityLabel="Amount per Claim"
+                                      allowFontScaling={true}
+                                      help={true}
+                                      keyboardType="numeric"
+                                      label="Amount per Claim"
+                                      maxLength={14}
+                                      onChangeText={[Function]}
+                                      onEndEditing={[Function]}
+                                      onPress={[Function]}
+                                      placeholder="$0"
+                                      rejectResponderTermination={true}
+                                      style={
+                                        Object {
+                                          "alignSelf": "center",
+                                          "color": "#1E3252",
+                                          "flexGrow": 1,
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 15,
+                                          "height": undefined,
+                                          "marginVertical": 5,
+                                          "maxWidth": "100%",
+                                          "minHeight": 38,
+                                          "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
+                                          "zIndex": 1,
+                                        }
+                                      }
+                                      underlineColorAndroid="transparent"
+                                      value=""
+                                    />
+                                  </View>
                                 </View>
                               </View>
                               <View
@@ -6628,37 +6837,48 @@ If there is another person or organization among your community you believe is m
                                       </Text>
                                     </View>
                                   </View>
-                                  <TextInput
-                                    accessibilityLabel="Amount"
-                                    allowFontScaling={true}
-                                    help={true}
-                                    keyboardType="numeric"
-                                    label="Amount"
-                                    maxLength={14}
-                                    onChangeText={[Function]}
-                                    onEndEditing={[Function]}
-                                    onPress={[Function]}
-                                    placeholder="$0"
-                                    rejectResponderTermination={true}
+                                  <View
                                     style={
                                       Object {
-                                        "alignSelf": "center",
-                                        "color": "#1E3252",
-                                        "flexGrow": 1,
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 15,
-                                        "height": undefined,
-                                        "marginVertical": 5,
-                                        "minHeight": 38,
-                                        "paddingHorizontal": 10,
-                                        "textAlignVertical": undefined,
-                                        "width": "100%",
-                                        "zIndex": 1,
+                                        "alignItems": "center",
+                                        "flexDirection": "row",
+                                        "justifyContent": "space-between",
+                                        "paddingRight": 14,
                                       }
                                     }
-                                    underlineColorAndroid="transparent"
-                                    value=""
-                                  />
+                                  >
+                                    <TextInput
+                                      accessibilityLabel="Amount"
+                                      allowFontScaling={true}
+                                      help={true}
+                                      keyboardType="numeric"
+                                      label="Amount"
+                                      maxLength={14}
+                                      onChangeText={[Function]}
+                                      onEndEditing={[Function]}
+                                      onPress={[Function]}
+                                      placeholder="$0"
+                                      rejectResponderTermination={true}
+                                      style={
+                                        Object {
+                                          "alignSelf": "center",
+                                          "color": "#1E3252",
+                                          "flexGrow": 1,
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 15,
+                                          "height": undefined,
+                                          "marginVertical": 5,
+                                          "maxWidth": "100%",
+                                          "minHeight": 38,
+                                          "paddingHorizontal": 10,
+                                          "textAlignVertical": undefined,
+                                          "zIndex": 1,
+                                        }
+                                      }
+                                      underlineColorAndroid="transparent"
+                                      value=""
+                                    />
+                                  </View>
                                 </View>
                               </View>
                               <Text
@@ -6778,37 +6998,48 @@ If there is another person or organization among your community you believe is m
                                         </Text>
                                       </View>
                                     </View>
-                                    <TextInput
-                                      accessibilityLabel="Time"
-                                      allowFontScaling={true}
-                                      help={true}
-                                      keyboardType="numeric"
-                                      label="Time"
-                                      maxLength={14}
-                                      onChangeText={[Function]}
-                                      onEndEditing={[Function]}
-                                      onPress={[Function]}
-                                      placeholder="0"
-                                      rejectResponderTermination={true}
+                                    <View
                                       style={
                                         Object {
-                                          "alignSelf": "center",
-                                          "color": "#1E3252",
-                                          "flexGrow": 1,
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 15,
-                                          "height": undefined,
-                                          "marginVertical": 5,
-                                          "minHeight": 38,
-                                          "paddingHorizontal": 10,
-                                          "textAlignVertical": undefined,
-                                          "width": "100%",
-                                          "zIndex": 1,
+                                          "alignItems": "center",
+                                          "flexDirection": "row",
+                                          "justifyContent": "space-between",
+                                          "paddingRight": 14,
                                         }
                                       }
-                                      underlineColorAndroid="transparent"
-                                      value=""
-                                    />
+                                    >
+                                      <TextInput
+                                        accessibilityLabel="Time"
+                                        allowFontScaling={true}
+                                        help={true}
+                                        keyboardType="numeric"
+                                        label="Time"
+                                        maxLength={14}
+                                        onChangeText={[Function]}
+                                        onEndEditing={[Function]}
+                                        onPress={[Function]}
+                                        placeholder="0"
+                                        rejectResponderTermination={true}
+                                        style={
+                                          Object {
+                                            "alignSelf": "center",
+                                            "color": "#1E3252",
+                                            "flexGrow": 1,
+                                            "fontFamily": "Inter-Regular",
+                                            "fontSize": 15,
+                                            "height": undefined,
+                                            "marginVertical": 5,
+                                            "maxWidth": "100%",
+                                            "minHeight": 38,
+                                            "paddingHorizontal": 10,
+                                            "textAlignVertical": undefined,
+                                            "zIndex": 1,
+                                          }
+                                        }
+                                        underlineColorAndroid="transparent"
+                                        value=""
+                                      />
+                                    </View>
                                   </View>
                                 </View>
                                 <View

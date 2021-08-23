@@ -93,6 +93,7 @@ describe('create community', () => {
                 user: {
                     metadata: {
                         currency: 'USD',
+                        avatar: 'something.jpg',
                     },
                     wallet: {
                         address: '0xd7632B7588DF8532C0aBA55586167C2a315Fd768',
@@ -905,4 +906,6 @@ describe('create community', () => {
     // TODO: cancel during image upload
 
     // TODO: cancel during community upload
+
+    // TODO: test without mocking user profile picture
 });

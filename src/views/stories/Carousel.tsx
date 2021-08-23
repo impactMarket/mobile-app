@@ -3,6 +3,7 @@ import i18n from 'assets/i18n';
 import BottomPopup from 'components/core/BottomPopup';
 import Button from 'components/core/Button';
 import StoryLoveSvg from 'components/svg/StoryLoveSvg';
+import * as Device from 'expo-device';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Screens } from 'helpers/constants';
 import { ICommunityStories, ICommunityStory } from 'helpers/types/endpoints';
@@ -282,24 +283,28 @@ function Carousel(props: {
                             {stories[index].loves} Loves
                         </Text>
                     </Pressable>
-                    {communityStories?.id !== -1 && (
-                        <Button
-                            modeType="green"
-                            bold
-                            style={{
-                                marginRight: 22,
-                                width: 128,
-                            }}
-                            onPress={() =>
-                                navigation.navigate(Screens.CommunityDetails, {
-                                    communityId: communityStories?.id,
-                                    openDonate: true,
-                                })
-                            }
-                        >
-                            {i18n.t('donate')}
-                        </Button>
-                    )}
+                    {communityStories?.id !== -1 &&
+                        Device.brand.toLowerCase() !== 'apple' && (
+                            <Button
+                                modeType="green"
+                                bold
+                                style={{
+                                    marginRight: 22,
+                                    width: 128,
+                                }}
+                                onPress={() =>
+                                    navigation.navigate(
+                                        Screens.CommunityDetails,
+                                        {
+                                            communityId: communityStories?.id,
+                                            openDonate: true,
+                                        }
+                                    )
+                                }
+                            >
+                                {i18n.t('donate')}
+                            </Button>
+                        )}
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     {Array(stories.length)

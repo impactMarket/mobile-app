@@ -4,6 +4,7 @@ import React from 'react';
 interface INITIAL_FORM_STATE {
     name: string;
     coverImage: string;
+    profileImage: string;
     description: string;
     city: string;
     country: string;
@@ -29,6 +30,7 @@ interface INITIAL_FORM_STATE {
         emailFormat: boolean;
         gps: boolean;
         cover: boolean;
+        profile: boolean;
         claimAmount: boolean;
         baseInterval: boolean;
         maxClaim: boolean;
@@ -38,6 +40,7 @@ interface INITIAL_FORM_STATE {
 export enum formAction {
     SET_NAME = 'form/setName',
     SET_COVER_IMAGE = 'form/setCoverImage',
+    SET_PROFILE_IMAGE = 'form/setProfileImage',
     SET_DESCRIPTION = 'form/setDescription',
     SET_CITY = 'form/setCity',
     SET_COUNTRY = 'form/setCountry',
@@ -59,6 +62,7 @@ export enum formAction {
     SET_EMAIL_FORMAT_VALID = 'form/setEmailFormatValid',
     SET_GPS_VALID = 'form/setGPSValid',
     SET_COVER_VALID = 'form/setCoverValid',
+    SET_PROFILE_VALID = 'form/setProfileValid',
     SET_CLAIM_AMOUNT_VALID = 'form/setClaimAmountValid',
     SET_BASE_INTERVAL_VALID = 'form/setBaseIntervalValid',
     SET_MAX_CLAIM_VALID = 'form/setMaxClaimValid',
@@ -72,6 +76,11 @@ interface communityNameAction {
 
 interface communityCoverImageAction {
     type: formAction.SET_COVER_IMAGE;
+    payload: string;
+}
+
+interface communityProfileImageAction {
+    type: formAction.SET_PROFILE_IMAGE;
     payload: string;
 }
 
@@ -185,6 +194,11 @@ interface communityCoverValidAction {
     payload: boolean;
 }
 
+interface communityProfileValidAction {
+    type: formAction.SET_PROFILE_VALID;
+    payload: boolean;
+}
+
 interface communityClaimAmountValidAction {
     type: formAction.SET_CLAIM_AMOUNT_VALID;
     payload: boolean;
@@ -208,6 +222,7 @@ interface communityIncrementIntervalValidAction {
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
+    | communityProfileImageAction
     | communityDescriptionAction
     | communityCityAction
     | communityCountryAction
@@ -229,6 +244,7 @@ type FormActionTypes =
     | communityEmailFormatValidAction
     | communityGPSValidAction
     | communityCoverValidAction
+    | communityProfileValidAction
     | communityClaimAmountValidAction
     | communityBaseIntervalValidAction
     | communityMaxClaimValidAction
@@ -237,6 +253,7 @@ type FormActionTypes =
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
     coverImage: '',
+    profileImage: '',
     description: '',
     city: '',
     country: '',
@@ -262,6 +279,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
         emailFormat: true,
         gps: true,
         cover: true,
+        profile: true,
         claimAmount: true,
         baseInterval: true,
         maxClaim: true,
@@ -278,6 +296,8 @@ export function reducer(
             return { ...state, name: action.payload };
         case formAction.SET_COVER_IMAGE:
             return { ...state, coverImage: action.payload };
+        case formAction.SET_PROFILE_IMAGE:
+            return { ...state, profileImage: action.payload };
         case formAction.SET_DESCRIPTION:
             return { ...state, description: action.payload };
         case formAction.SET_CITY:
@@ -369,6 +389,14 @@ export function reducer(
                 validation: {
                     ...state.validation,
                     cover: action.payload,
+                },
+            };
+        case formAction.SET_PROFILE_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    profile: action.payload,
                 },
             };
         case formAction.SET_CLAIM_AMOUNT_VALID:
@@ -476,6 +504,19 @@ export const validateField = (
             payload: state.coverImage.length > 0,
         });
         return state.coverImage.length > 0;
+    },
+    profile: (userProfilePicture: string) => {
+        dispatch({
+            type: formAction.SET_PROFILE_VALID,
+            payload:
+                (userProfilePicture !== null &&
+                    userProfilePicture.length > 0) ||
+                state.profileImage.length > 0,
+        });
+        return (
+            (userProfilePicture !== null && userProfilePicture.length > 0) ||
+            state.profileImage.length > 0
+        );
     },
     // no currency validation. User's currency is used by default
     claimAmount: () => {

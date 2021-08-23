@@ -12,6 +12,7 @@ import { updateCommunityInfo } from 'helpers/index';
 import {
     setCommunityMetadata,
     setUserIsCommunityManager,
+    setUserMetadata,
 } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { AppMediaContent, CommunityAttributes } from 'helpers/types/models';
@@ -31,6 +32,7 @@ import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
+import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
@@ -78,6 +80,7 @@ function CreateCommunityScreen() {
     const [requestCancel, setRequestCancel] = useState(false);
     const [submittingSuccess, setSubmittingSuccess] = useState(false);
     const [submittingCover, setSubmittingCover] = useState(false);
+    const [submittingProfile, setSubmittingProfile] = useState(false);
     const [submittingCommunity, setSubmittingCommunity] = useState(false);
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
     const [isAnyFieldMissedModal, setIsAnyFieldMissedModal] = useState(false);
@@ -85,6 +88,9 @@ function CreateCommunityScreen() {
         string | undefined
     >(undefined);
     const [coverUploadDetails, setCoverUploadDetails] = useState<
+        AppMediaContent | undefined
+    >(undefined);
+    const [profileUploadDetails, setProfileUploadDetails] = useState<
         AppMediaContent | undefined
     >(undefined);
     const [communityUploadDetails, setCommunityUploadDetails] = useState<
@@ -95,8 +101,8 @@ function CreateCommunityScreen() {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
-    const userLanguage = useSelector(
-        (state: IRootState) => state.user.metadata.language
+    const userMetadata = useSelector(
+        (state: IRootState) => state.user.metadata
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
@@ -106,11 +112,19 @@ function CreateCommunityScreen() {
             cancel(): void;
         };
         if (!canceled) {
-            if (coverUploadDetails !== undefined) {
+            // if community cover picture and user profile picture were uploded successfully, move on to upload community
+            // ignore user profile picture if the user has already has it
+            if (
+                coverUploadDetails !== undefined &&
+                ((state.profileImage.length > 0 &&
+                    profileUploadDetails !== undefined) ||
+                    userMetadata.avatar.length > 0)
+            ) {
                 cancelablePromise = makeCancelable(submitCommunity());
                 cancelablePromise.promise.catch().finally(() => {
                     setSubmitting(false);
                     setSubmittingCover(false);
+                    setSubmittingProfile(false);
                     setSubmittingCommunity(false);
                 });
             } else if (isUploadingContent) {
@@ -118,7 +132,11 @@ function CreateCommunityScreen() {
                 cancelablePromise.promise
                     .then((details) => {
                         setCoverUploadDetails(details[0].media);
+                        if (state.profileImage.length > 0) {
+                            setProfileUploadDetails(details[1].media);
+                        }
                         setSubmittingCover(false);
+                        setSubmittingProfile(false);
                     })
                     .catch();
             }
@@ -128,7 +146,12 @@ function CreateCommunityScreen() {
                 return cancelablePromise.cancel();
             }
         };
-    }, [canceled, coverUploadDetails, isUploadingContent]);
+    }, [
+        canceled,
+        coverUploadDetails,
+        profileUploadDetails,
+        isUploadingContent,
+    ]);
 
     const updateUIAfterSubmission = async (
         data: CommunityAttributes,
@@ -167,7 +190,7 @@ function CreateCommunityScreen() {
             requestByAddress: userAddress,
             name,
             description,
-            language: userLanguage,
+            language: userMetadata.language,
             currency,
             city,
             country,
@@ -190,27 +213,34 @@ function CreateCommunityScreen() {
     };
 
     const uploadImages = () => {
-        const profileUpload = () => {
-            // if (profileImage.length > 0 && profileImage !== avatar) {
-            //     try {
-            //         const res = await Api.user.updateProfilePicture(
-            //             profileImage
-            //         );
-            //         const cachedUser = (await CacheStore.getUser())!;
-            //         await CacheStore.cacheUser({
-            //             ...cachedUser,
-            //             avatar: res.url,
-            //         });
-            //         dispatch(
-            //             setUserMetadata({
-            //                 ...user,
-            //                 avatar: res.url,
-            //             })
-            //         );
-            //     } catch (e) {
-            //         // TODO: block community creation if this fails, for now, lets ignore
-            //     }
-            // }
+        const profileUpload = async () => {
+            if (state.profileImage.length > 0) {
+                if (profileUploadDetails !== undefined) {
+                    return {
+                        uploadURL: '',
+                        media: profileUploadDetails,
+                    };
+                }
+                try {
+                    const res = await Api.user.updateProfilePicture(
+                        state.profileImage
+                    );
+                    const cachedUser = (await CacheStore.getUser())!;
+                    await CacheStore.cacheUser({
+                        ...cachedUser,
+                        avatar: res.url,
+                    });
+                    dispatchRedux(
+                        setUserMetadata({
+                            ...userMetadata,
+                            avatar: res.url,
+                        })
+                    );
+                    return res;
+                } catch (e) {
+                    // TODO: block community creation if this fails, for now, lets ignore
+                }
+            }
         };
         const coverUpload = async () => {
             if (coverUploadDetails !== undefined) {
@@ -268,6 +298,7 @@ function CreateCommunityScreen() {
         const validate = validateField(state, dispatch);
         const _name = validate.name();
         const _cover = validate.cover();
+        const _profile = validate.profile(userMetadata.avatar);
         const _description = validate.description();
         const _city = validate.city();
         const _country = validate.country();
@@ -279,6 +310,7 @@ function CreateCommunityScreen() {
         const isAllValid =
             _name &&
             _cover &&
+            _profile &&
             _description &&
             _city &&
             _country &&
@@ -310,6 +342,12 @@ function CreateCommunityScreen() {
         setSubmittingCommunity(true);
         if (coverUploadDetails === undefined) {
             setSubmittingCover(true);
+        }
+        if (
+            state.profileImage.length > 0 &&
+            profileUploadDetails === undefined
+        ) {
+            setSubmittingProfile(true);
         }
         if (!showSubmissionModal) {
             setShowSubmissionModal(true);
@@ -408,6 +446,11 @@ function CreateCommunityScreen() {
                 description={i18n.t('changeCoverImage')}
                 submission={submittingCover}
                 uploadDetails={coverUploadDetails}
+            />
+            <SubmissionActivity
+                description={i18n.t('changeProfileImage')}
+                submission={submittingProfile}
+                uploadDetails={profileUploadDetails}
             />
             <SubmissionActivity
                 description={i18n.t('communityDetails')}

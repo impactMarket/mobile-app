@@ -194,41 +194,18 @@ class ApiRequests {
         endpoint: string,
         requestBody: any,
         options?: any
-    ): Promise<{ data: T; error: any }> {
-        // let response: T | undefined;
-        // try {
-        // handle success
-        // const requestOptions = {
-        //     headers: {
-        //         Authorization: `Bearer ${this.token}`,
-        //         'Content-Type': 'application/json',
-        //         Accept: 'application/json',
-        //     },
-        //     ...options,
-        // };
-        const apiResult = await axios.post(
-            endpoint,
-            requestBody,
-            await this._requestOptions(options)
-        );
-        // if (result.status === 401) {
-        //     await AsyncStorage.clear();
-        //     DevSettings.reload();
-        //     return undefined;
-        // }
-        // if (result.status >= 400) {
-        //     return undefined;
-        // }
-        const r = apiResult.data as IApiResult<T>;
-        let result: any = { data: r.data as T };
-        if (r.error !== undefined) {
-            result = { ...result, error: r.error };
+    ): Promise<IApiResult<T>> {
+        try {
+            return (
+                await axios.post<IApiResult<T>>(
+                    endpoint,
+                    requestBody,
+                    await this._requestOptions(options)
+                )
+            ).data;
+        } catch (e) {
+            return e.response.data;
         }
-        return result;
-        // } catch (e) {
-        //     Sentry.Native.captureException(e);
-        // }
-        // return response;
     }
 
     async put<T>(

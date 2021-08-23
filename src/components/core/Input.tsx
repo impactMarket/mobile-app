@@ -1,3 +1,4 @@
+import LockSvg from 'components/svg/LockSvg';
 import React, { Component } from 'react';
 import {
     TextInput,
@@ -16,6 +17,7 @@ interface IInputProps extends TextInputProps {
     label?: string;
     help?: boolean;
     isBig?: boolean;
+    rightElement?: JSX.Element | React.ComponentClass;
     onPress?: (event: GestureResponderEvent) => void;
     boxStyle?: StyleProp<ViewStyle>;
     error?: string;
@@ -26,7 +28,7 @@ export default class Input extends Component<IInputProps, object> {
     }
 
     render() {
-        const { label, help, onPress, error } = this.props;
+        const { label, help, onPress, error, rightElement } = this.props;
 
         return (
             <>
@@ -75,25 +77,28 @@ export default class Input extends Component<IInputProps, object> {
                             </Pressable>
                         )}
                     </View>
-                    <TextInput
-                        {...this.props}
-                        style={{
-                            height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
-                            minHeight: 38,
-                            flexGrow: 1,
-                            width: '100%',
-                            paddingHorizontal: 10,
-                            marginVertical: 5,
-                            alignSelf: 'center',
-                            zIndex: 1,
-                            fontSize: 15,
-                            fontFamily: 'Inter-Regular',
-                            color: ipctColors.almostBlack,
-                            textAlignVertical: this.props.multiline
-                                ? 'top'
-                                : undefined,
-                        }}
-                    />
+                    <View style={styles.innerInput}>
+                        <TextInput
+                            {...this.props}
+                            style={{
+                                height: this.props.multiline ? 115 : undefined, // TODO: edit this once we need different sizes
+                                minHeight: 38,
+                                flexGrow: 1,
+                                maxWidth: '100%',
+                                paddingHorizontal: 10,
+                                marginVertical: 5,
+                                alignSelf: 'center',
+                                zIndex: 1,
+                                fontSize: 15,
+                                fontFamily: 'Inter-Regular',
+                                color: ipctColors.almostBlack,
+                                textAlignVertical: this.props.multiline
+                                    ? 'top'
+                                    : undefined,
+                            }}
+                        />
+                        {rightElement}
+                    </View>
                 </View>
                 {error && (
                     <Text
@@ -114,6 +119,12 @@ export default class Input extends Component<IInputProps, object> {
 }
 
 const styles = StyleSheet.create({
+    innerInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: 14,
+    },
     outline: {
         position: 'absolute',
         left: 0,
