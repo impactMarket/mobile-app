@@ -25,6 +25,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
     const { community } = props;
     const { width } = Dimensions.get('screen');
     const [communityGoal, setCommunityGoal] = useState<BigNumber>();
+    const [remainedFunds, setRemainedFunds] = useState<number>();
     const user = useSelector((state: IRootState) => state.user.metadata);
 
     const app = useSelector((state: IRootState) => state.app);
@@ -34,6 +35,8 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
             community.state.beneficiaries
         );
         setCommunityGoal(goal);
+        const days = calculateCommunityRemainedFunds(community);
+        setRemainedFunds(days);
     }, [community]);
 
     if (community.contract === undefined || community.state === undefined) {
@@ -159,10 +162,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         ]}
                     >
                         {i18n.t('fundsRunOut', {
-                            days: calculateCommunityRemainedFunds(community),
+                            days: remainedFunds,
                         })}{' '}
                         {i18n.t('days', {
-                            count: calculateCommunityRemainedFunds(community),
+                            count: remainedFunds,
                         })}
                     </Text>
                 </View>
