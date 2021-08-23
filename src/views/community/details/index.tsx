@@ -1,4 +1,5 @@
 import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CommunityStatus from 'components/CommunityStatus';
 import Button from 'components/core/Button';
@@ -59,6 +60,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const [refreshing, setRefreshing] = useState(false);
     const [seeFullDescription, setSeeFullDescription] = useState(false);
     const [historicalSSI, setHistoricalSSI] = useState<number[]>([]);
+    const [communityGoal, setCommunityGoal] = useState<BigNumber>();
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
@@ -72,6 +74,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 });
             }
             setRefreshing(false);
+            const goal = new BigNumber(
+                community.contract.maxClaim
+            ).multipliedBy(community.state.beneficiaries);
+            setCommunityGoal(goal);
         }
         Api.community
             .pastSSI(props.route.params.communityId)
@@ -305,7 +311,10 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                 {renderSSI()}
                             </Card.Content>
                         </Card>
-                        <CommunityStatus community={community}>
+                        <CommunityStatus
+                            community={community}
+                            goal={communityGoal}
+                        >
                             <DonateCard community={community} />
                         </CommunityStatus>
                     </View>

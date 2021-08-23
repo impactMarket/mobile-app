@@ -1,4 +1,5 @@
 import i18n from 'assets/i18n';
+import BigNumber from 'bignumber.js';
 import { amountToCurrency } from 'helpers/currency';
 import {
     calculateCommunityProgress,
@@ -18,10 +19,11 @@ import WarningRedTriangle from './svg/WarningRedTriangle';
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
     community: CommunityAttributes;
+    goal: BigNumber;
 }
 
 export default function CommunityStatus(props: ICommuntyStatusProps) {
-    const { community } = props;
+    const { community, goal } = props;
     const { width } = Dimensions.get('screen');
 
     const user = useSelector((state: IRootState) => state.user.metadata);
@@ -96,11 +98,13 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 { fontSize: width < 375 ? 14 : 20 },
                             ]}
                         >
-                            {amountToCurrency(
-                                community.state.raised,
-                                user.currency,
-                                app.exchangeRates
-                            )}
+                            {goal
+                                ? amountToCurrency(
+                                      goal,
+                                      user.currency,
+                                      app.exchangeRates
+                                  )
+                                : ' '}
                         </Title>
                     </View>
                 </View>
