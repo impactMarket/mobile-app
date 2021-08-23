@@ -95,6 +95,22 @@ export default function DonateCard(props: IDonateProps) {
                         </Text>
                     </View>
                 </Pressable>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Text
+                        style={[
+                            styles.description,
+                            { color: ipctColors.regentGray, marginRight: 4 },
+                        ]}
+                    >
+                        {i18n.t('poweredByESolidar')}
+                    </Text>
+                    <Image source={require('assets/images/eSolidar.png')} />
+                </View>
             </View>
             <Portal>
                 <Provider store={useStore()}>
