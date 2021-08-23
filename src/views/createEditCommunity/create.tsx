@@ -566,10 +566,10 @@ function CreateCommunityScreen() {
             <Text style={styles.submissionModalMessageText}>
                 {i18n.t('communityRequestCancel')}
             </Text>
-            <View style={styles.requestCancelContainerButtons}>
+            <View style={styles.modalBoxTwoButtons}>
                 <Button
                     modeType="gray"
-                    style={{ width: '35%' }}
+                    style={{ width: '45%' }}
                     onPress={() => {
                         setCanceled(true);
                         setRequestCancel(false);
@@ -582,7 +582,7 @@ function CreateCommunityScreen() {
                 </Button>
                 <Button
                     modeType="default"
-                    style={{ width: '35%' }}
+                    style={{ width: '45%' }}
                     onPress={() => {
                         setRequestCancel(false);
                         if (communityUploadDetails !== undefined) {
@@ -706,35 +706,13 @@ function CreateCommunityScreen() {
                     title={i18n.t('modalLeaveTitle')}
                     onDismiss={() => setToggleLeaveFormModal(false)}
                 >
-                    <View
-                        style={{
-                            width: '100%',
-                            flexDirection: 'row',
-                            marginBottom: 16,
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontFamily: 'Inter-Regular',
-                                fontSize: 14,
-                                lineHeight: 24,
-                                color: ipctColors.almostBlack,
-                            }}
-                        >
-                            {i18n.t('modalLeaveDescription')}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            width: '100%',
-                        }}
-                    >
+                    <Text style={styles.submissionModalMessageText}>
+                        {i18n.t('modalLeaveDescription')}
+                    </Text>
+                    <View style={styles.modalBoxTwoButtons}>
                         <Button
                             modeType="gray"
-                            style={{ flex: 1, marginRight: 5 }}
+                            style={{ width: '45%' }}
                             onPress={() => {
                                 setToggleLeaveFormModal(false);
                                 navigation.goBack();
@@ -744,7 +722,7 @@ function CreateCommunityScreen() {
                         </Button>
                         <Button
                             modeType="default"
-                            style={{ flex: 1, marginLeft: 5 }}
+                            style={{ width: '45%' }}
                             onPress={() => {
                                 setToggleLeaveFormModal(false);
                             }}
@@ -812,7 +790,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
     },
-    requestCancelContainerButtons: {
+    modalBoxTwoButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
