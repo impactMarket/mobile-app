@@ -11,9 +11,6 @@ const _createCommunity = async (
     communityDetails: CommunityCreationAttributes
 ) => await Api.community.create(communityDetails);
 
-const _uploadCover = async (coverImage: string) =>
-    await Api.community.uploadCover(coverImage);
-
 export function* createCommunity({ payload }: any) {
     try {
         const { communityDetails } = payload;

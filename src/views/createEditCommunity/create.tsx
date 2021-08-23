@@ -94,9 +94,9 @@ function CreateCommunityScreen() {
     const [profileUploadDetails, setProfileUploadDetails] = useState<
         AppMediaContent | undefined
     >(undefined);
-    const [communityUploadDetails, setCommunityUploadDetails] = useState<
-        CommunityAttributes | undefined
-    >(undefined);
+    // const [communityUploadDetails, setCommunityUploadDetails] = useState<
+    //     CommunityAttributes | undefined
+    // >(undefined);
     const [state, dispatch] = useReducer(reducer, formInitialState);
 
     const userAddress = useSelector(
@@ -110,9 +110,10 @@ function CreateCommunityScreen() {
         (state: IRootState) => state.communities.communityCreationError
     );
 
-    const community = useSelector(
+    const communityUploadDetails = useSelector(
         (state: IRootState) => state.communities.community
     );
+
     const kit = useSelector((state: IRootState) => state.app.kit);
 
     useEffect(() => {
@@ -215,13 +216,18 @@ function CreateCommunityScreen() {
 
         dispatchRedux(createCommunityRequest(communityDetails));
         // const { data, error } = await Api.community.create(communityDetails);
-        setTimeout(() => {
-            if (communityCreationError === undefined) {
-                setCommunityUploadDetails(community);
-            }
-        }, 200);
+
+        // if (communityCreationError === undefined && community !== undefined) {
+        //     setCommunityUploadDetails(community);
+        //     console.log({ communityCreationError });
+        //     console.log({ community });
+        // }
+
         if (!requestCancel) {
-            await updateUIAfterSubmission(community, communityCreationError);
+            await updateUIAfterSubmission(
+                communityUploadDetails,
+                communityCreationError
+            );
         }
     };
 
