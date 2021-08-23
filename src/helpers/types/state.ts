@@ -78,6 +78,7 @@ export interface ICommunitiesState {
     communities: CommunityAttributes[];
     community: CommunityAttributes;
     refreshing: boolean;
+    communityCreationError: any;
     reachedEndList: boolean;
 }
 export interface IRootState {

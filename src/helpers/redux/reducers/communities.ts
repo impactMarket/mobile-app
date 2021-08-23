@@ -5,6 +5,7 @@ import { ICommunitiesState } from 'helpers/types/state';
 const INITIAL_STATE_COMMUNITIES: ICommunitiesState = {
     communities: [],
     community: null,
+    communityCreationError: null,
     refreshing: false,
     reachedEndList: false,
 };
@@ -61,26 +62,12 @@ export const communitiesReducer = (
         case communitiesAction.CREATE_COMMUNITY_SUCCESS:
             return {
                 ...state,
-                community: action.payload.community,
+                community: action.payload.data,
+                communityCreationError: action.payload.error,
                 refreshing: false,
             };
 
         case communitiesAction.CREATE_COMMUNITY_FAILURE:
-            return {
-                ...state,
-                error: action.payload.error,
-                refreshing: false,
-            };
-
-        case communitiesAction.UPLOAD_COMMUNITY_IMAGE_SUCCESS:
-            return {
-                ...state,
-                uploadURL: action.payload.uploadURL,
-                media: action.payload.media,
-                refreshing: false,
-            };
-
-        case communitiesAction.UPLOAD_COMMUNITY_IMAGE_FAILURE:
             return {
                 ...state,
                 error: action.payload.error,

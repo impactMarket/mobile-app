@@ -280,35 +280,17 @@ interface findCommunityByIdActionClean {
 interface createCommunityActionRequest {
     type: typeof communitiesAction.CREATE_COMMUNITY_REQUEST;
     payload: {
-        coverImage: string;
         communityDetails: CommunityCreationAttributes;
     };
 }
 
 interface createCommunityActionSuccess {
     type: typeof communitiesAction.CREATE_COMMUNITY_SUCCESS;
-    payload: { community: CommunityAttributes };
+    payload: { data: CommunityAttributes; error: any };
 }
 
 interface createCommunityActionFailure {
     type: typeof communitiesAction.CREATE_COMMUNITY_FAILURE;
-    payload: { error: any };
-}
-
-interface uploadCommunityImageActionRequest {
-    type: typeof communitiesAction.UPLOAD_COMMUNITY_IMAGE_REQUEST;
-    payload: {
-        coverImage: string;
-    };
-}
-
-interface uploadCommunityImageActionSuccess {
-    type: typeof communitiesAction.UPLOAD_COMMUNITY_IMAGE_SUCCESS;
-    payload: { uploadURL: string; media: AppMediaContent };
-}
-
-interface uploadCommunityImageActionFailure {
-    type: typeof communitiesAction.UPLOAD_COMMUNITY_IMAGE_FAILURE;
     payload: { error: any };
 }
 
@@ -370,10 +352,7 @@ export type CommunitiesActionTypes =
     | findCommunityByIdActionClean
     | createCommunityActionRequest
     | createCommunityActionSuccess
-    | createCommunityActionFailure
-    | uploadCommunityImageActionRequest
-    | uploadCommunityImageActionSuccess
-    | uploadCommunityImageActionFailure;
+    | createCommunityActionFailure;
 
 export type IStoreCombinedActionsTypes =
     | UserActionTypes

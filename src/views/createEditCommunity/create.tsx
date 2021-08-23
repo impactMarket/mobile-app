@@ -9,6 +9,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import { celoNetwork } from 'helpers/constants';
 import { formatInputAmountToTransfer } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
+import { createCommunityRequest } from 'helpers/redux/actions/communities';
 import {
     setCommunityMetadata,
     setUserIsCommunityManager,
@@ -103,6 +104,14 @@ function CreateCommunityScreen() {
     );
     const userMetadata = useSelector(
         (state: IRootState) => state.user.metadata
+    );
+
+    const communityCreationError = useSelector(
+        (state: IRootState) => state.communities.communityCreationError
+    );
+
+    const community = useSelector(
+        (state: IRootState) => state.communities.community
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
@@ -203,12 +212,16 @@ function CreateCommunityScreen() {
             contractParams,
             ...privateParams,
         };
-        const { data, error } = await Api.community.create(communityDetails);
-        if (error === undefined) {
-            setCommunityUploadDetails(data);
-        }
+
+        dispatchRedux(createCommunityRequest(communityDetails));
+        // const { data, error } = await Api.community.create(communityDetails);
+        setTimeout(() => {
+            if (communityCreationError === undefined) {
+                setCommunityUploadDetails(community);
+            }
+        }, 200);
         if (!requestCancel) {
-            await updateUIAfterSubmission(data, error);
+            await updateUIAfterSubmission(community, communityCreationError);
         }
     };
 

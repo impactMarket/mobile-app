@@ -1,7 +1,7 @@
 import { communitiesAction } from 'helpers/constants';
-import { AppMediaContent, CommunityAttributes } from 'helpers/types/models';
+import { CommunityCreationAttributes } from 'helpers/types/endpoints';
+import { CommunityAttributes } from 'helpers/types/models';
 import { CommunitiesActionTypes } from 'helpers/types/redux';
-import error from 'views/community/details/donate/modals/error';
 
 export function fetchCommunitiesListRequest(query: {
     offset: number;
@@ -70,36 +70,28 @@ export function findCommunityByIdClear(): CommunitiesActionTypes {
         type: communitiesAction.FIND_BY_ID_CLEAN,
     };
 }
+export function createCommunityRequest(
+    communityDetails: CommunityCreationAttributes
+): CommunitiesActionTypes {
+    return {
+        type: communitiesAction.CREATE_COMMUNITY_REQUEST,
+        payload: { communityDetails },
+    };
+}
 
 export function createCommunitySuccess(
-    community: CommunityAttributes
+    data: CommunityAttributes,
+    error?: any
 ): CommunitiesActionTypes {
     return {
         type: communitiesAction.CREATE_COMMUNITY_SUCCESS,
-        payload: { community },
+        payload: { data, error },
     };
 }
 
 export function createCommunityFailure(error: any): CommunitiesActionTypes {
     return {
         type: communitiesAction.CREATE_COMMUNITY_FAILURE,
-        payload: { error },
-    };
-}
-
-export function uploadCoverImageSuccess(
-    uploadURL: string,
-    media: AppMediaContent
-): CommunitiesActionTypes {
-    return {
-        type: communitiesAction.UPLOAD_COMMUNITY_IMAGE_SUCCESS,
-        payload: { uploadURL, media },
-    };
-}
-
-export function uploadCoverImageFailure(error: any): CommunitiesActionTypes {
-    return {
-        type: communitiesAction.UPLOAD_COMMUNITY_IMAGE_FAILURE,
         payload: { error },
     };
 }
