@@ -43,7 +43,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
     if (community.contract === undefined || community.state === undefined) {
         return null;
     }
-    console.log({ suspect: community.suspect });
+
     return (
         <Card elevation={0} style={{ marginTop: 16 }}>
             {community.suspect !== undefined && community.suspect !== null && (
@@ -69,7 +69,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             fontFamily: 'Inter-Regular',
                             fontSize: width < 375 ? 12 : 15,
                             fontWeight: '500',
-                            lineHeight: width < 375 ? 14 : 24,
+                            lineHeight: width < 375 ? 19 : 24,
                             textAlign: 'left',
                         }}
                     >
@@ -92,7 +92,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 {
                                     color: ipctColors.regentGray,
                                     fontSize: width < 375 ? 11 : 14,
-                                    lineHeight: width < 375 ? 14 : 24,
+                                    lineHeight: width < 375 ? 19 : 24,
                                 },
                             ]}
                         >
@@ -172,7 +172,6 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         styles.fundsContainer,
                         {
                             alignItems: width < 375 ? 'flex-start' : 'center',
-                            marginRight: width < 375 ? 40 : 0,
                             justifyContent: 'center',
                         },
                     ]}
@@ -189,7 +188,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 color: ipctColors.regentGray,
                                 marginLeft: 7,
                                 fontSize: width < 375 ? 11 : 14,
-                                lineHeight: width < 375 ? 14 : 24,
+                                lineHeight: width < 375 ? 19 : 24,
                             },
                         ]}
                     >
@@ -248,7 +247,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
         marginVertical: 22,
         paddingHorizontal: 8,
     },

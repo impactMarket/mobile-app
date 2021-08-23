@@ -64,7 +64,7 @@ export default function DonateCard(props: IDonateProps) {
                             style={{
                                 fontFamily: 'Inter-Regular',
                                 fontSize: width < 375 ? 11 : 16,
-                                lineHeight: 28,
+                                lineHeight: width < 375 ? 22 : 28,
                                 color: 'white',
                                 marginRight: 10,
                             }}
@@ -78,7 +78,14 @@ export default function DonateCard(props: IDonateProps) {
                         />
                     </View>
                 </Pressable>
-                <Text style={styles.description}>{i18n.t('or')}</Text>
+                <Text
+                    style={[
+                        styles.description,
+                        { fontSize: width < 375 ? 11 : 16 },
+                    ]}
+                >
+                    {i18n.t('or')}
+                </Text>
                 <Pressable
                     style={[
                         styles.button,
@@ -102,7 +109,7 @@ export default function DonateCard(props: IDonateProps) {
                                 fontFamily: 'Inter-Regular',
                                 fontWeight: '500',
                                 fontSize: width < 375 ? 11 : 16,
-                                lineHeight: 28,
+                                lineHeight: width < 375 ? 22 : 28,
                                 color: ipctColors.blueRibbon,
                             }}
                         >
@@ -119,7 +126,11 @@ export default function DonateCard(props: IDonateProps) {
                     <Text
                         style={[
                             styles.description,
-                            { color: ipctColors.regentGray, marginRight: 4 },
+                            {
+                                color: ipctColors.regentGray,
+                                fontSize: width < 375 ? 11 : 14,
+                                marginRight: 4,
+                            },
                         ]}
                     >
                         {i18n.t('poweredByESolidar')}
