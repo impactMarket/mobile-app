@@ -431,6 +431,12 @@ export default {
     suspiciousActivityDetected: 'Suspicious activities detected',
     noSuspiciousActivityDetected:
         'No suspicious activities detected in this community.',
+    lowSuspiciousActivityDetected:
+        'A very small  number of accounts may be involved in suspicious activities.',
+    significantSuspiciousActivityDetected:
+        'A significant number of accounts may be involved in suspicious activities.',
+    largeSuspiciousActivityDetected:
+        'A very large number of accounts  may be involved in suspicious activities.',
     suspiciousDescription:
         'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',
     blockedAccountTitle: 'Blocked Account',

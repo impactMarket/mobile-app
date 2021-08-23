@@ -14,8 +14,8 @@ import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 import Card from './core/Card';
+import SuspiciousCard from './SuspiciousCard';
 import WarningRedTriangle from './svg/WarningRedTriangle';
-import NoSuspiciusBadgeOutlineSvg from './svg/NoSuspiciusBadgeOutlineSvg';
 
 interface ICommuntyStatusProps {
     children?: any; // linter issues are a bit anoying sometimes
@@ -47,35 +47,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
     return (
         <Card elevation={0} style={{ marginTop: 16 }}>
             {community.suspect !== undefined && community.suspect !== null && (
-                <View
-                    style={{
-                        backgroundColor: ipctColors.softWhite,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        minHeight: 88,
-                        padding: 22,
-                        alignItems: 'flex-start',
-                        justifyContent: 'center',
-                        borderTopRightRadius: 6,
-                        borderTopLeftRadius: 6,
-                    }}
-                >
-                    <NoSuspiciusBadgeOutlineSvg
-                        style={{ marginRight: 12, marginTop: 4 }}
-                    />
-                    <Text
-                        style={{
-                            flexShrink: 1,
-                            fontFamily: 'Inter-Regular',
-                            fontSize: width < 375 ? 12 : 15,
-                            fontWeight: '500',
-                            lineHeight: width < 375 ? 19 : 24,
-                            textAlign: 'left',
-                        }}
-                    >
-                        {i18n.t('noSuspiciousActivityDetected')}
-                    </Text>
-                </View>
+                <SuspiciousCard suspectCounts={community.suspect.suspect} />
             )}
             <View style={{ padding: 22 }}>
                 <View style={styles.cardWrap}>

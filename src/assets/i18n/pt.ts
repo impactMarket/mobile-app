@@ -432,6 +432,12 @@ export default {
     suspiciousActivityDetected: 'Atividade suspeita detectada',
     noSuspiciousActivityDetected:
         'Nenhuma atividade suspeita detectada neste comunidade.',
+    lowSuspiciousActivityDetected:
+        'Um número muito pequeno de contas pode estar envolvido em atividades suspeitas.',
+    significantSuspiciousActivityDetected:
+        'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
+    largeSuspiciousActivityDetected:
+        'Um grande número de contas pode estar envolvido em atividades suspeitas.',
     suspiciousDescription:
         'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
     blockedAccountTitle: 'Conta Bloqueada',
