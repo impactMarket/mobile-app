@@ -1,16 +1,18 @@
 import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { Title, Text, Portal } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 import { useDispatch, Provider, useStore } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 import ConfirmModal from '../views/community/details/donate/modals/confirm';
 import DonateModal from '../views/community/details/donate/modals/donate';
 import ErrorModal from '../views/community/details/donate/modals/error';
+import renderHeader from './core/HeaderBottomSheetTitle';
 
 interface IDonateProps {
     community: CommunityAttributes;
@@ -20,6 +22,7 @@ export default function DonateCard(props: IDonateProps) {
     const { width } = Dimensions.get('screen');
     const { community } = props;
     const dispatch = useDispatch();
+    const modalizeESolidar = useRef<Modalize>(null);
 
     return (
         <>
@@ -69,12 +72,7 @@ export default function DonateCard(props: IDonateProps) {
                             borderWidth: 1,
                         },
                     ]}
-                    onPress={() =>
-                        dispatch({
-                            type: modalDonateAction.OPEN,
-                            payload: community,
-                        })
-                    }
+                    onPress={() => modalizeESolidar.current?.open()}
                 >
                     <View
                         style={{
@@ -117,6 +115,27 @@ export default function DonateCard(props: IDonateProps) {
                     <DonateModal />
                     <ConfirmModal />
                     <ErrorModal />
+                    <Modalize
+                        ref={modalizeESolidar}
+                        HeaderComponent={renderHeader(
+                            null,
+                            modalizeESolidar,
+                            () => {},
+                            true
+                        )}
+                        adjustToContentHeight
+                    >
+                        <WebView
+                            originWhitelist={['*']}
+                            source={{
+                                uri:
+                                    'https://community.esolidar.com/pt/crowdfunding/detail/81-kakuma-refugee-camp-rio',
+                            }}
+                            style={{
+                                height: Dimensions.get('screen').height * 0.85,
+                            }}
+                        />
+                    </Modalize>
                 </Provider>
             </Portal>
         </>
