@@ -42,6 +42,7 @@ interface IClaimState {
     claimDisabled: boolean;
     claiming: boolean;
     notEnoughToClaimOnContract: boolean;
+    loading: boolean;
 }
 class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
     constructor(props: any) {
@@ -51,6 +52,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             claimDisabled: true,
             claiming: false,
             notEnoughToClaimOnContract: true,
+            loading: true,
         };
     }
 
@@ -62,7 +64,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             kit,
         } = this.props;
         const { state, contract } = communityMetadata;
-        if (state !== undefined && contract !== undefined) {
+        if (
+            state !== undefined &&
+            contract !== undefined &&
+            this.state.loading === true
+        ) {
             await this._loadAllowance(cooldownTime);
             // check if there's enough funds to enable/disable claim button
 
@@ -95,7 +101,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 notEnoughToClaimOnContract = true;
             }
 
-            this.setState({ notEnoughToClaimOnContract });
+            this.setState({ notEnoughToClaimOnContract, loading: false });
         }
     };
 
@@ -364,6 +370,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             nextClaim,
             claiming,
             notEnoughToClaimOnContract,
+            loading,
         } = this.state;
         const { claimAmount, userCurrency, exchangeRates } = this.props;
 
@@ -379,6 +386,10 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             next += `${nextClaim.seconds()}s `;
             return next;
         };
+
+        if (loading) {
+            return null;
+        }
 
         if (claimDisabled) {
             return (
