@@ -69,6 +69,10 @@ export interface CommunityAttributes extends UbiCommunity {
     organization?: UbiOrganization;
 }
 
+export interface CommunityFundraisingUrl {
+    communityId: number;
+    campaignUrl: string;
+}
 export interface AppMediaThumbnail {
     id: number;
     mediaContentId: number;

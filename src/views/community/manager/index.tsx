@@ -2,7 +2,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
-import CommuntyStatus from 'components/CommuntyStatus';
+import CommunityStatus from 'components/CommunityStatus';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import CommunityRules from 'components/core/CommunityRules';
@@ -229,7 +229,7 @@ function CommunityManagerScreen() {
                                 <Managers
                                     managers={_community.state.managers}
                                 />
-                                <CommuntyStatus community={_community} />
+                                <CommunityStatus community={_community} />
                             </View>
                         </BaseCommunity>
                     </ScrollView>
