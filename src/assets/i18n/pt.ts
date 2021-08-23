@@ -9,7 +9,8 @@ export default {
     viewAsPublic: 'Ver página da comunidade',
     share: 'Partilhar',
     beneficiaries: 'Beneficiários',
-    backers: 'Apoiantes',
+    backers: 'Apoiante',
+    backers_plural: 'Apoiantes',
     added: 'Adicionado',
     removed: 'Removido',
     addBeneficiary: 'Adicionar Beneficiário',
@@ -20,8 +21,11 @@ export default {
     claimed: 'Distribuído',
     raised: 'Angariado',
     claim: 'Pegar',
+    raisedFrom: 'Angariado por {{backers}}',
+    goal: 'Alvo',
     manage: 'Gerir',
     communities: 'Comunidades',
+    fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
     pay: 'Enviar',
     wallet: 'Carteira',
     emptyStoriesTitle: 'Ainda não criou uma story?',
@@ -96,7 +100,8 @@ export default {
     weekly: 'Semanalmente',
     minutes: 'Minutos',
     hours: 'Horas',
-    days: 'Dias',
+    days: 'dia',
+    days_plural: 'dias',
     time: 'Tempo',
     selectCountry: 'Selecionar país',
     minCoverSize: 'Min. 784px por 784px',
@@ -182,6 +187,11 @@ export default {
     donateWithValora: 'Contribuir com Valora',
     amountSymbol: 'Montante em {{symbol}}',
     donateSymbol: 'Contribuir ({{symbol}})',
+    donateWithCelo: 'Celo Dollar ($cUSD)',
+    donateWithESolidar: 'Cartão de Crédito / Paypal / BTC / ETH',
+    poweredByESolidar: 'Distribuído por',
+    contributeWith: 'Contribuir com',
+    or: 'ou',
     close: 'Fechar',
     faq: 'FAQ',
     youCanClaimXin: 'Poderá pegar {{amount}} em',
@@ -422,6 +432,14 @@ export default {
         warning:
             'Se você encontrar alguma atividade suspeita, avise-nos, pois será considerada uma ação de boa fé que pode evitar que toda a comunidade seja afetada por causa de alguns atores mal-intencionados.',
     },
+    noSuspiciousActivityDetected:
+        'Nenhuma atividade suspeita detectada neste comunidade.',
+    lowSuspiciousActivityDetected:
+        'Um número muito pequeno de contas pode estar envolvido em atividades suspeitas.',
+    significantSuspiciousActivityDetected:
+        'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
+    largeSuspiciousActivityDetected:
+        'Um grande número de contas pode estar envolvido em atividades suspeitas.',
     suspiciousActivityDetected: 'Atividade suspeita detectada',
     suspiciousDescription:
         'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
