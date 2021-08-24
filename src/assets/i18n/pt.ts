@@ -52,8 +52,6 @@ export default {
     stolenOrChangedPhone:
         'Leia as instruções a seguir caso seu telefone seja <blue>roubado/perdido</blue> ou você precise <blue>alterar seu número de telefone.</blue>',
     seeMore: 'Ver Mais',
-    seeLess: 'Ver Menos',
-    exploreCommunityContract: 'Ver Contrato da Comunidade',
     edit: 'Editar',
     create: 'Criar',
     submit: 'Enviar',
@@ -251,8 +249,6 @@ export default {
         "Ao selecionar 'Contribuir', irá enviar <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> para {{to}}.",
     yourDonationWillBackFor:
         'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
-    eachBeneficiaryCanClaimXUpToY:
-        'Cada beneficiário pode aceder a ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) por <bold>{{interval}}</bold>, até acumular $<bold>{{upToY}}</bold> cUSD. A cada pedido, <bold>{{minIncrement}}</bold> minutos são adicionados ao tempo de espera.',
     nextTimeWillWaitClaim:
         'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
     howClaimWorks: 'Como funciona?',

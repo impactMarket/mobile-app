@@ -1,41 +1,32 @@
-import { useNavigation } from '@react-navigation/native';
+import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
-import BaseCommunity from 'components/BaseCommunity';
-import CommuntyStatus from 'components/CommuntyStatus';
-import Button from 'components/core/Button';
-import Card from 'components/core/Card';
+import Dot from 'components/Dot';
+import IconCommunity from 'components/svg/IconCommunity';
+import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
-import * as shape from 'd3-shape';
-import Clipboard from 'expo-clipboard';
 import * as Device from 'expo-device';
-import * as WebBrowser from 'expo-web-browser';
 import { modalDonateAction } from 'helpers/constants';
-import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
+import { chooseMediaThumbnail } from 'helpers/index';
 import {
     cleanCommunityState,
     findCommunityByIdRequest,
 } from 'helpers/redux/actions/communities';
-import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
-import { Trans } from 'react-i18next';
-import { View, StyleSheet, RefreshControl, StatusBar } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import {
-    Paragraph,
-    Divider,
-    Headline,
+    View,
+    StyleSheet,
+    RefreshControl,
+    StatusBar,
+    Image,
     Text,
-    ActivityIndicator,
-    Snackbar,
-} from 'react-native-paper';
-import { LineChart } from 'react-native-svg-charts';
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { ActivityIndicator, Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
-import config from '../../../../config';
 import Donate from './donate';
 
 interface ICommunityDetailsScreen {
@@ -47,24 +38,26 @@ interface ICommunityDetailsScreen {
         };
     };
 }
+const countries: {
+    [key: string]: {
+        name: string;
+        native: string;
+        currency: string;
+        languages: string[];
+        emoji: string;
+    };
+} = countriesJSON;
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const dispatch = useDispatch();
 
-    const rates = useSelector((state: IRootState) => state.app.exchangeRates);
-    const language = useSelector(
-        (state: IRootState) => state.user.metadata.language
-    );
     const community = useSelector(
         (state: IRootState) => state.communities.community
     );
 
     const [refreshing, setRefreshing] = useState(false);
-    const [seeFullDescription, setSeeFullDescription] = useState(false);
-    const [historicalSSI, setHistoricalSSI] = useState<number[]>([]);
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
-        dispatch(cleanCommunityState());
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
         if (community) {
             if (props.route.params.openDonate === true) {
@@ -75,84 +68,12 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             }
             setRefreshing(false);
         }
-        Api.community
-            .pastSSI(props.route.params.communityId)
-            .then(setHistoricalSSI);
+        return () => dispatch(cleanCommunityState());
     }, []);
 
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
         setRefreshing(false);
-    };
-
-    const renderSSI = () => {
-        if (
-            community !== undefined &&
-            community.metrics !== undefined &&
-            historicalSSI.length > 1
-        ) {
-            return (
-                <>
-                    <Divider
-                        style={{
-                            marginLeft: -16,
-                            marginRight: -16,
-                            marginTop: 16,
-                        }}
-                    />
-                    <View style={styles.chartView}>
-                        <LineChart
-                            style={{ flex: 2, height: 100, width: 200 }}
-                            data={historicalSSI.reverse()}
-                            contentInset={{ top: 20, bottom: 20 }}
-                            curve={shape.curveMonotoneX}
-                            svg={{
-                                strokeWidth: 4,
-                                stroke: 'rgba(45,206,137,1)',
-                            }}
-                        />
-                        <View
-                            style={{
-                                ...styles.ssiView,
-                            }}
-                        >
-                            <View
-                                style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-end',
-                                }}
-                            >
-                                <Headline style={styles.ssiHeadline}>
-                                    {community.metrics.ssi}
-                                </Headline>
-                                <Text
-                                    style={{
-                                        alignSelf: 'center',
-                                        fontSize: 18,
-                                        lineHeight: 18,
-                                        padding: 3,
-                                    }}
-                                >
-                                    %
-                                </Text>
-                            </View>
-                            <Paragraph
-                                style={{
-                                    textAlign: 'right',
-                                    fontSize: 14,
-                                    lineHeight: 17,
-                                }}
-                            >
-                                {i18n.t('ssi')}
-                            </Paragraph>
-                        </View>
-                    </View>
-                    <Paragraph style={styles.ssiExplained}>
-                        {i18n.t('ssiDescription')}
-                    </Paragraph>
-                </>
-            );
-        }
     };
 
     if (
@@ -177,23 +98,12 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         );
     }
 
-    const handleCopyToClipboard = () => {
-        Clipboard.setString(community.contractAddress!);
-        setShowCopiedToClipboard(true);
-    };
-
-    let description;
-    const cDescription =
-        language === community.language
-            ? community.description
-            : community.descriptionEn === null
-            ? community.description
-            : community.descriptionEn;
-    if (seeFullDescription || community.description.indexOf('\n') === -1) {
-        description = cDescription;
-    } else {
-        description = cDescription.slice(0, cDescription.indexOf('\n'));
-    }
+    const description = community.description.slice(
+        0,
+        community.description.indexOf('.') !== -1
+            ? community.description.indexOf('.', 180) + 1
+            : community.description.length
+    );
 
     return (
         <>
@@ -215,116 +125,46 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         onRefresh={onRefresh}
                     />
                 }
+                style={{
+                    paddingHorizontal: 20,
+                }}
             >
-                <BaseCommunity community={community}>
-                    <View style={styles.container}>
-                        <Card elevation={0}>
-                            <Card.Content>
-                                <Paragraph
-                                    style={{
-                                        fontSize: 17,
-                                        lineHeight: 22,
-                                    }}
-                                    onPress={handleCopyToClipboard}
-                                >
-                                    {description}
-                                </Paragraph>
-                                {community.description.indexOf('\n') !== -1 && (
-                                    <View style={{ paddingTop: 16 }}>
-                                        <Button
-                                            modeType="gray"
-                                            bold
-                                            style={{
-                                                backgroundColor:
-                                                    'rgba(206, 212, 218, .27)',
-                                            }}
-                                            labelStyle={{
-                                                fontSize: 15,
-                                                lineHeight: 18,
-                                            }}
-                                            onPress={() =>
-                                                setSeeFullDescription(
-                                                    !seeFullDescription
-                                                )
-                                            }
-                                        >
-                                            {seeFullDescription
-                                                ? i18n.t('seeLess')
-                                                : i18n.t('seeMore')}
-                                        </Button>
-                                    </View>
-                                )}
-                            </Card.Content>
-                        </Card>
-                        <Card elevation={0} style={{ marginTop: 16 }}>
-                            <Card.Content>
-                                <Paragraph
-                                    style={{
-                                        fontSize: 17,
-                                        lineHeight: 21,
-                                    }}
-                                >
-                                    <Trans
-                                        tOptions={{
-                                            interpolation: {
-                                                escapeValue: false,
-                                            },
-                                        }}
-                                        i18nKey="eachBeneficiaryCanClaimXUpToY"
-                                        values={{
-                                            claimXCCurrency: amountToCurrency(
-                                                community.contract.claimAmount,
-                                                community.currency,
-                                                rates
-                                            ),
-                                            claimX: humanifyCurrencyAmount(
-                                                community.contract.claimAmount
-                                            ),
-                                            upToY: humanifyCurrencyAmount(
-                                                community.contract.maxClaim
-                                            ),
-                                            interval:
-                                                community.contract
-                                                    .baseInterval === 86400
-                                                    ? i18n.t('day')
-                                                    : i18n.t('week'),
-                                            minIncrement:
-                                                community.contract
-                                                    .incrementInterval / 60,
-                                        }}
-                                        components={{
-                                            bold: (
-                                                <Text
-                                                    style={{
-                                                        fontFamily:
-                                                            'Gelion-Bold',
-                                                    }}
-                                                />
-                                            ),
-                                        }}
-                                    />
-                                </Paragraph>
-                                {renderSSI()}
-                            </Card.Content>
-                        </Card>
-                        <CommuntyStatus community={community}>
-                            <Button
-                                modeType="gray"
-                                bold
-                                style={{ marginTop: '5%' }}
-                                onPress={() =>
-                                    WebBrowser.openBrowserAsync(
-                                        config.blockExplorer +
-                                            community.contractAddress +
-                                            '/token-transfers'
-                                    )
-                                }
-                            >
-                                {i18n.t('exploreCommunityContract')}
-                            </Button>
-                        </CommuntyStatus>
+                <View>
+                    <Text style={styles.communityName}>{community.name}</Text>
+                    <View style={styles.inlineBox}>
+                        <LocationsSvg />
+                        <Text style={styles.communityLocation}>
+                            {community.city},{' '}
+                            {countries[community.country].name}
+                        </Text>
                     </View>
-                </BaseCommunity>
+                </View>
+                <View>
+                    <Image
+                        style={styles.cover}
+                        source={{
+                            uri: chooseMediaThumbnail(community.cover!, {
+                                width: 330,
+                                heigth: 330,
+                            }),
+                        }}
+                    />
+                    <View style={styles.darkerBackground} />
+                </View>
+                <View style={styles.inlineBox}>
+                    <IconCommunity />
+                    <Text style={styles.textBeneficiaries}>
+                        {community.state!.beneficiaries}{' '}
+                        {i18n.t('beneficiaries').toLowerCase()}
+                    </Text>
+                    <Dot />
+                    <Text style={styles.textManagers}>
+                        {community.state!.managers}{' '}
+                        {i18n.t('managers').toLowerCase()}
+                    </Text>
+                </View>
+                <Text style={styles.textDescription}>{description}</Text>
+                <Text style={styles.textSeeMore}>{i18n.t('seeMore')}</Text>
             </ScrollView>
             {Device.brand.toLowerCase() !== 'apple' && (
                 <Donate community={community} />
@@ -342,16 +182,28 @@ CommunityDetailsScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        marginHorizontal: 16,
-        marginBottom: 30,
+    communityName: {
+        fontSize: 18,
+        lineHeight: 28,
+        fontFamily: 'Manrope-Bold',
+        color: ipctColors.darBlue,
     },
-    imageBackground: {
+    communityLocation: {
+        marginLeft: 4,
+        fontSize: 14,
+        lineHeight: 24,
+        fontFamily: 'Inter-Regular',
+        color: ipctColors.lynch,
+    },
+    inlineBox: { flexDirection: 'row', alignItems: 'center' },
+    cover: {
         width: '100%',
-        height: 152,
+        height: 329,
+        borderRadius: 20,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
+        marginVertical: 16,
     },
     linearGradient: {
         position: 'absolute',
@@ -367,46 +219,32 @@ const styles = StyleSheet.create({
         bottom: 0,
         height: 152,
     },
-    communityName: {
-        zIndex: 5,
-        marginTop: 22,
-        marginBottom: 2,
-        fontSize: 30,
-        lineHeight: 36,
-        fontFamily: 'Gelion-Bold',
-        color: 'white',
-        textAlign: 'center',
+    textBeneficiaries: {
+        fontFamily: 'Inter-Bold',
+        marginLeft: 4,
+        fontSize: 14,
+        lineHeight: 24,
+        color: ipctColors.darBlue,
     },
-    communityLocation: {
-        zIndex: 5,
-        marginBottom: 32.41,
-        fontSize: 15,
-        lineHeight: 15,
-        letterSpacing: 0.25,
-        color: 'white',
-        textAlign: 'center',
+    textManagers: {
+        fontFamily: 'Inter-Regular',
+        marginLeft: 4,
+        fontSize: 14,
+        lineHeight: 24,
+        color: ipctColors.darBlue,
     },
-    ssiExplained: {
-        fontSize: 15,
-        lineHeight: 18,
-        letterSpacing: 0.245455,
-        color: ipctColors.regentGray,
+    textDescription: {
+        marginTop: 16,
+        fontSize: 14,
+        lineHeight: 24,
+        fontFamily: 'Inter-Regular',
+        color: ipctColors.darBlue,
     },
-    ssiHeadline: {
-        fontFamily: 'Gelion-Bold',
-        fontSize: 36,
-        lineHeight: 36,
-        textAlign: 'right',
-    },
-    ssiView: {
-        flex: 2,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginRight: 0,
-    },
-    chartView: {
-        flex: 3,
-        flexDirection: 'row',
-        margin: 0,
+    textSeeMore: {
+        marginTop: 8,
+        fontSize: 16,
+        lineHeight: 28,
+        fontFamily: 'Inter-Regular',
+        color: ipctColors.blueRibbon,
     },
 });

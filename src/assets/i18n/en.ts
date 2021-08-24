@@ -54,8 +54,6 @@ export default {
     ssiDescription:
         'SSI measures how financially sustainable a community is, and its progress.',
     seeMore: 'See More',
-    seeLess: 'See Less',
-    exploreCommunityContract: 'See Community Contract',
     edit: 'Edit',
     create: 'Create',
     applyCommunity: 'Apply',
@@ -257,8 +255,6 @@ export default {
         "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
     yourDonationWillBackFor:
         'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
-    eachBeneficiaryCanClaimXUpToY:
-        'Each beneficiary can claim ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',
     nextTimeWillWaitClaim:
         'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
     howClaimWorks: 'How claims work.',
