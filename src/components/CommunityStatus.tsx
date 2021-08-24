@@ -29,7 +29,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
     const [remainedFunds, setRemainedFunds] = useState<number>();
     const user = useSelector((state: IRootState) => state.user.metadata);
 
-    const app = useSelector((state: IRootState) => state.app);
+    const exchangeRates = useSelector(
+        (state: IRootState) => state.app.exchangeRates
+    );
 
     useEffect(() => {
         const goal = new BigNumber(community.contract.maxClaim).multipliedBy(
@@ -85,7 +87,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             {amountToCurrency(
                                 community.state.raised,
                                 user.currency,
-                                app.exchangeRates
+                                exchangeRates
                             )}
                         </Title>
                     </View>
@@ -117,7 +119,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 ? amountToCurrency(
                                       communityGoal,
                                       user.currency,
-                                      app.exchangeRates
+                                      exchangeRates
                                   )
                                 : 'N/A'}
                         </Title>
