@@ -68,6 +68,7 @@ export const communitiesReducer = (
             };
 
         case communitiesAction.CREATE_COMMUNITY_FAILURE:
+            console.log(action.payload.error);
             return {
                 ...state,
                 error: action.payload.error,

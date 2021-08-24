@@ -148,7 +148,7 @@ function CreateCommunityScreen() {
                         setSubmittingCover(false);
                         setSubmittingProfile(false);
                     })
-                    .catch();
+                    .catch((error) => console.log(error));
             }
         }
         return () => {
@@ -161,6 +161,7 @@ function CreateCommunityScreen() {
         coverUploadDetails,
         profileUploadDetails,
         isUploadingContent,
+        communityUploadDetails,
     ]);
 
     const updateUIAfterSubmission = async (
@@ -215,15 +216,14 @@ function CreateCommunityScreen() {
         };
 
         dispatchRedux(createCommunityRequest(communityDetails));
-        // const { data, error } = await Api.community.create(communityDetails);
 
-        // if (communityCreationError === undefined && community !== undefined) {
-        //     setCommunityUploadDetails(community);
-        //     console.log({ communityCreationError });
-        //     console.log({ community });
-        // }
+        if (
+            !requestCancel &&
+            communityCreationError === undefined &&
+            communityUploadDetails !== undefined
+        ) {
+            console.log('updating UI After Submission');
 
-        if (!requestCancel) {
             await updateUIAfterSubmission(
                 communityUploadDetails,
                 communityCreationError
