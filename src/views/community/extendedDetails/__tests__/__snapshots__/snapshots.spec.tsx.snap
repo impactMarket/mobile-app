@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`create community [snapshot] renders correctly 1`] = `
+exports[`extended details community [snapshot] renders correctly 1`] = `
 <RCTScrollView
   style={
     Object {

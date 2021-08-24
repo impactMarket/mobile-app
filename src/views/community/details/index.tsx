@@ -50,8 +50,8 @@ const countries: {
     };
 } = countriesJSON;
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
-    const dispatch = useDispatch();
     const navigator = useNavigation();
+    const dispatch = useDispatch();
 
     const community = useSelector(
         (state: IRootState) => state.communities.community

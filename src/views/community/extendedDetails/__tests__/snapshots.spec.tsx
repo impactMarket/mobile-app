@@ -50,7 +50,7 @@ const community: CommunityAttributes = {
     },
 };
 
-describe('create community [snapshot]', () => {
+describe('extended details community [snapshot]', () => {
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
 
     const communityListManagersMock = jest.spyOn(Api.community, 'listManagers');
