@@ -75,9 +75,7 @@ class ApiRouteCommunity {
     }
 
     static async listManagers(
-        communityId: number,
-        offset: number,
-        limit: number
+        communityId: number
     ): Promise<ManagerAttributes[]> {
         return (
             await this.api.get<ManagerAttributes[]>(

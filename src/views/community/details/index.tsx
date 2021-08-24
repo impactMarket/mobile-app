@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import Dot from 'components/Dot';
@@ -6,7 +7,7 @@ import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import * as Device from 'expo-device';
-import { modalDonateAction } from 'helpers/constants';
+import { modalDonateAction, Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import {
     cleanCommunityState,
@@ -21,6 +22,7 @@ import {
     StatusBar,
     Image,
     Text,
+    Pressable,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Snackbar } from 'react-native-paper';
@@ -49,6 +51,7 @@ const countries: {
 } = countriesJSON;
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const dispatch = useDispatch();
+    const navigator = useNavigation();
 
     const community = useSelector(
         (state: IRootState) => state.communities.community
@@ -164,7 +167,16 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     </Text>
                 </View>
                 <Text style={styles.textDescription}>{description}</Text>
-                <Text style={styles.textSeeMore}>{i18n.t('seeMore')}</Text>
+                <Pressable
+                    hitSlop={15}
+                    onPress={() =>
+                        navigator.navigate(
+                            Screens.CommunityExtendedDetailsScreen
+                        )
+                    }
+                >
+                    <Text style={styles.textSeeMore}>{i18n.t('seeMore')}</Text>
+                </Pressable>
             </ScrollView>
             {Device.brand.toLowerCase() !== 'apple' && (
                 <Donate community={community} />

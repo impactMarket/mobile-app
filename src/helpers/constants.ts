@@ -1,5 +1,6 @@
 export enum Screens {
     CommunityDetails = 'CommunityDetails',
+    CommunityExtendedDetailsScreen = 'CommunityExtendedDetailsScreen',
     FAQ = 'FAQ',
     Welcome = 'Welcome',
     CreateCommunity = 'CreateCommunity',
@@ -97,7 +98,6 @@ export enum storiesAction {
     USER_STORIES_SUCCESS = 'stories/user_success',
     USER_STORIES_FAILURE = 'stories/user_failure',
 }
-
 
 export enum communityOrderOptions {
     bigger = 'bigger',
