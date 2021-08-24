@@ -12,6 +12,7 @@ import {
     UbiCommunity,
     UbiCommunitySuspect,
     UbiRequestChangeParams,
+    CommunityCampaing,
 } from 'helpers/types/models';
 import { UbiCommunityContract } from 'helpers/types/ubi/ubiCommunityContract';
 import { UbiCommunityDailyMetrics } from 'helpers/types/ubi/ubiCommunityDailyMetrics';
@@ -83,6 +84,16 @@ class ApiRouteCommunity {
             await this.api.get<ManagerAttributes[]>(
                 '/community/' + communityId + '/managers/',
                 true
+            )
+        ).data;
+    }
+
+    static async getCommunityFundraisingUrl(
+        communityId: number
+    ): Promise<CommunityCampaing> {
+        return (
+            await this.api.get<CommunityCampaing>(
+                '/community/' + communityId + '/campaign/'
             )
         ).data;
     }

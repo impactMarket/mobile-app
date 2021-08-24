@@ -12,8 +12,9 @@ import ArrowForwardSvg from 'components/svg/ArrowForwardSvg';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CheckSvg from 'components/svg/CheckSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
+import LockSvg from 'components/svg/LockSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
@@ -33,6 +34,7 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useState, useEffect, useRef } from 'react';
+import { Trans } from 'react-i18next';
 import {
     FlatList,
     RefreshControl,
@@ -57,15 +59,13 @@ import {
     Headline,
     Searchbar,
 } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 import { batch, useDispatch, useSelector } from 'react-redux';
 // Services
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 // Styles
 import { ipctColors } from 'styles/index';
-import { Trans } from 'react-i18next';
-import { WebView } from 'react-native-webview';
-import LockSvg from 'components/svg/LockSvg';
 
 // Constants
 const currencies: {
@@ -476,7 +476,7 @@ function ProfileScreen() {
                                 marginBottom: 16,
                             }}
                         >
-                            <WarningRedTriangle
+                            <WarningTriangle
                                 style={{
                                     alignSelf: 'flex-start',
                                     marginRight: 16,

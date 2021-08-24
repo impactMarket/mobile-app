@@ -9,7 +9,8 @@ export default {
     viewAsPublic: 'View as public',
     share: 'Share',
     beneficiaries: 'Beneficiaries',
-    backers: 'Backers',
+    backers: 'Backer',
+    backers_plural: 'Backers',
     added: 'Added',
     removed: 'Removed',
     addBeneficiary: 'Add Beneficiary',
@@ -19,6 +20,9 @@ export default {
     confirm: 'Confirm',
     claimed: 'Claimed',
     raised: 'Raised',
+    raisedFrom: 'Raised from {{backers}}',
+    goal: 'Goal',
+    fundsRunOut: 'Community funds will run out in {{days}}',
     claim: 'Claim',
     ubi: 'UBI',
     manage: 'Manage',
@@ -99,7 +103,8 @@ export default {
     weekly: 'Weekly',
     minutes: 'Minutes',
     hours: 'Hours',
-    days: 'Days',
+    days: 'day',
+    days_plural: 'days',
     time: 'Time',
     selectCountry: 'Select country',
     minCoverSize: 'Min. 784px by 784px',
@@ -180,7 +185,12 @@ export default {
     addressCopiedClipboard:
         'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
     donate: 'Contribute',
+    donateWithCelo: 'Celo Dollar ($cUSD)',
+    donateWithESolidar: 'Credit Card / Paypal / BTC / ETH',
+    poweredByESolidar: 'Powered by',
     attach: 'Attach',
+    contributeWith: 'Contribute with',
+    or: 'or',
     donateWithValora: 'Contribute with Valora',
     amountSymbol: 'Amount ({{symbol}})',
     donateSymbol: 'Contribute ({{symbol}})',
@@ -421,6 +431,14 @@ export default {
         warning:
             'If you find some suspicious activity, let us know, as it will be regarded as a good faith action that can prevent all the community to be affected because of a few bad actors.',
     },
+    noSuspiciousActivityDetected:
+        'No suspicious activities detected in this community.',
+    lowSuspiciousActivityDetected:
+        'A very small  number of accounts may be involved in suspicious activities.',
+    significantSuspiciousActivityDetected:
+        'A significant number of accounts may be involved in suspicious activities.',
+    largeSuspiciousActivityDetected:
+        'A very large number of accounts  may be involved in suspicious activities.',
     suspiciousActivityDetected: 'Suspicious activities detected',
     suspiciousDescription:
         'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',

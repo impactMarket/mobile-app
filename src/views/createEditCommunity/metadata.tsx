@@ -7,7 +7,7 @@ import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
@@ -754,7 +754,7 @@ function CommunityCover() {
                                 marginBottom: 16,
                             }}
                         >
-                            <WarningRedTriangle
+                            <WarningTriangle
                                 style={{
                                     alignSelf: 'flex-start',
                                     marginRight: 16,
@@ -975,7 +975,7 @@ function UserProfilePicture() {
                                 marginBottom: 16,
                             }}
                         >
-                            <WarningRedTriangle
+                            <WarningTriangle
                                 style={{
                                     alignSelf: 'flex-start',
                                     marginRight: 16,

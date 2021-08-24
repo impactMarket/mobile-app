@@ -181,6 +181,32 @@ export function calculateCommunityProgress(
     ).div(m.eq(0) ? 1 : m);
     return parseFloat(result.decimalPlaces(5, 1).toString());
 }
+export function calculateCommunityRemainedFunds(
+    community: CommunityAttributes
+): number {
+    if (community.contract === undefined || community.state === undefined) {
+        return 0;
+    }
+
+    const raised = new BigNumber(community.state.raised);
+    const claimed = new BigNumber(community.state.claimed);
+    const ubiRate = community.metrics?.ubiRate ?? 0;
+    const beneficiaryCount = community.state.beneficiaries;
+
+    const remainingFundToBeClaimed =
+        raised.toNumber() - claimed.toNumber() / ubiRate / beneficiaryCount;
+
+    const claimAmountPerBeneficiary = new BigNumber(
+        community.contract.claimAmount
+    );
+
+    const communityLimitPerDay =
+        claimAmountPerBeneficiary.toNumber() * beneficiaryCount;
+
+    const remainingDays = remainingFundToBeClaimed / communityLimitPerDay;
+
+    return remainingDays <= 1 ? 1 : Math.round(remainingDays);
+}
 
 export function getCountryFromPhoneNumber(pnumber: string) {
     const phoneNumber = parsePhoneNumber(pnumber);
