@@ -13,6 +13,7 @@ export const ipctColors = {
     borderGray: '#8A9FC2',
     darBlue: '#333239',
     white: '#FFFFFF',
+    lynch: '#73839D',
 };
 
 export default StyleSheet.create({});
