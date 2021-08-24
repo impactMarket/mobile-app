@@ -1,4 +1,4 @@
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Modal from 'components/Modal';
@@ -27,6 +27,7 @@ import {
     Text,
     Image,
     StyleSheet,
+    Keyboard,
 } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -72,6 +73,7 @@ const makeCancelable = (promise: Promise<any>) => {
 function CreateCommunityScreen() {
     const navigation = useNavigation();
     const dispatchRedux = useDispatch();
+    const [toggleLeaveFormModal, setToggleLeaveFormModal] = useState(false);
     const [isUploadingContent, setIsUploadingContent] = useState(false);
     const [contractParams, setContractParams] = useState({});
     const [privateParams, setPrivateParams] = useState(undefined);
@@ -387,6 +389,40 @@ function CreateCommunityScreen() {
         }
     };
 
+    const handlePressGoBack = () => {
+        const validate = validateField(state, dispatch);
+        const _name = validate.name(false);
+        const _cover = validate.cover(false);
+        const _profile = validate.profile(userMetadata.avatar, false);
+        const _description = validate.description(false);
+        const _city = validate.city(false);
+        const _country = validate.country(false);
+        const _email = validate.email(false);
+        const _gps = validate.gps(false);
+        const _claimAmount = validate.claimAmount(false);
+        const _maxClaim = validate.maxClaim(false);
+        const _incrementInterval = validate.incrementInterval(false);
+        const isAnyValid =
+            _name ||
+            _cover ||
+            _profile ||
+            _description ||
+            _city ||
+            _country ||
+            _email ||
+            _gps ||
+            _claimAmount ||
+            _maxClaim ||
+            _incrementInterval;
+
+        if (isAnyValid) {
+            Keyboard.dismiss();
+            setToggleLeaveFormModal(true);
+        } else {
+            navigation.goBack();
+        }
+    };
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -395,6 +431,7 @@ function CreateCommunityScreen() {
                     submitting={submitting}
                 />
             ),
+            headerLeft: () => <BackSvg onPress={handlePressGoBack} />,
         });
     }, [navigation, submitting, state]);
 
@@ -529,10 +566,10 @@ function CreateCommunityScreen() {
             <Text style={styles.submissionModalMessageText}>
                 {i18n.t('communityRequestCancel')}
             </Text>
-            <View style={styles.requestCancelContainerButtons}>
+            <View style={styles.modalBoxTwoButtons}>
                 <Button
                     modeType="gray"
-                    style={{ width: '35%' }}
+                    style={{ width: '45%' }}
                     onPress={() => {
                         setCanceled(true);
                         setRequestCancel(false);
@@ -545,7 +582,7 @@ function CreateCommunityScreen() {
                 </Button>
                 <Button
                     modeType="default"
-                    style={{ width: '35%' }}
+                    style={{ width: '45%' }}
                     onPress={() => {
                         setRequestCancel(false);
                         if (communityUploadDetails !== undefined) {
@@ -664,22 +701,43 @@ function CreateCommunityScreen() {
                         )}
                     </View>
                 </Modal>
+                <Modal
+                    visible={toggleLeaveFormModal}
+                    title={i18n.t('modalLeaveTitle')}
+                    onDismiss={() => setToggleLeaveFormModal(false)}
+                >
+                    <Text style={styles.submissionModalMessageText}>
+                        {i18n.t('modalLeaveDescription')}
+                    </Text>
+                    <View style={styles.modalBoxTwoButtons}>
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={() => {
+                                setToggleLeaveFormModal(false);
+                                navigation.goBack();
+                            }}
+                        >
+                            {i18n.t('leave')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ width: '45%' }}
+                            onPress={() => {
+                                setToggleLeaveFormModal(false);
+                            }}
+                        >
+                            {i18n.t('stay')}
+                        </Button>
+                    </View>
+                </Modal>
             </Portal>
         </>
     );
 }
 
-CreateCommunityScreen.navigationOptions = ({
-    navigation,
-}: {
-    navigation: NavigationProp<any, any>;
-}) => {
-    const handlePressGoBack = () => {
-        navigation.goBack();
-    };
-
+CreateCommunityScreen.navigationOptions = () => {
     return {
-        headerLeft: () => <BackSvg onPress={handlePressGoBack} />,
         headerTitle: i18n.t('applyCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
@@ -732,7 +790,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
     },
-    requestCancelContainerButtons: {
+    modalBoxTwoButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',

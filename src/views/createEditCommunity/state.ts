@@ -446,107 +446,129 @@ export const validateField = (
     state: INITIAL_FORM_STATE,
     dispatch: React.Dispatch<FormActionTypes>
 ) => ({
-    name: () => {
-        dispatch({
-            type: formAction.SET_NAME_VALID,
-            payload: state.name.length > 0,
-        });
+    name: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_NAME_VALID,
+                payload: state.name.length > 0,
+            });
+        }
         return state.name.length > 0;
     },
-    description: () => {
-        dispatch({
-            type: formAction.SET_DESCRIPTION_VALID,
-            payload: state.description.length !== 0,
-        });
-        dispatch({
-            type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
-            payload: state.description.length < 240,
-        });
+    description: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_DESCRIPTION_VALID,
+                payload: state.description.length !== 0,
+            });
+            dispatch({
+                type: formAction.SET_DESCRIPTION_TOO_SHORT_VALID,
+                payload: state.description.length < 240,
+            });
+        }
         return (
             state.description.length !== 0 && state.description.length >= 240
         );
     },
-    city: () => {
-        dispatch({
-            type: formAction.SET_CITY_VALID,
-            payload: state.city.length > 0,
-        });
+    city: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_CITY_VALID,
+                payload: state.city.length > 0,
+            });
+        }
         return state.city.length > 0;
     },
-    country: () => {
-        dispatch({
-            type: formAction.SET_COUNTRY_VALID,
-            payload: state.country.length > 0,
-        });
+    country: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_COUNTRY_VALID,
+                payload: state.country.length > 0,
+            });
+        }
         return state.country.length > 0;
     },
-    email: () => {
-        dispatch({
-            type: formAction.SET_EMAIL_VALID,
-            payload: state.email.length > 0,
-        });
-        dispatch({
-            type: formAction.SET_EMAIL_FORMAT_VALID,
-            payload: validateEmail(state.email),
-        });
+    email: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_EMAIL_VALID,
+                payload: state.email.length > 0,
+            });
+            dispatch({
+                type: formAction.SET_EMAIL_FORMAT_VALID,
+                payload: validateEmail(state.email),
+            });
+        }
         return state.email.length > 0 && validateEmail(state.email);
     },
-    gps: () => {
-        dispatch({
-            type: formAction.SET_GPS_VALID,
-            payload: state.gps.latitude !== 0 || state.gps.longitude !== 0,
-        });
+    gps: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_GPS_VALID,
+                payload: state.gps.latitude !== 0 || state.gps.longitude !== 0,
+            });
+        }
         return state.gps.latitude !== 0 || state.gps.longitude !== 0;
     },
-    cover: () => {
-        dispatch({
-            type: formAction.SET_COVER_VALID,
-            payload: state.coverImage.length > 0,
-        });
+    cover: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_COVER_VALID,
+                payload: state.coverImage.length > 0,
+            });
+        }
         return state.coverImage.length > 0;
     },
-    profile: (userProfilePicture: string) => {
-        dispatch({
-            type: formAction.SET_PROFILE_VALID,
-            payload:
-                (userProfilePicture !== null &&
-                    userProfilePicture.length > 0) ||
-                state.profileImage.length > 0,
-        });
+    profile: (userProfilePicture: string, isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_PROFILE_VALID,
+                payload:
+                    (userProfilePicture !== null &&
+                        userProfilePicture.length > 0) ||
+                    state.profileImage.length > 0,
+            });
+        }
         return (
             (userProfilePicture !== null && userProfilePicture.length > 0) ||
             state.profileImage.length > 0
         );
     },
     // no currency validation. User's currency is used by default
-    claimAmount: () => {
-        dispatch({
-            type: formAction.SET_CLAIM_AMOUNT_VALID,
-            payload:
-                state.claimAmount.length > 0 &&
-                /^\d*[.,]?\d*$/.test(state.claimAmount),
-        });
+    claimAmount: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_CLAIM_AMOUNT_VALID,
+                payload:
+                    state.claimAmount.length > 0 &&
+                    /^\d*[.,]?\d*$/.test(state.claimAmount),
+            });
+        }
         return (
             state.claimAmount.length > 0 &&
             /^\d*[.,]?\d*$/.test(state.claimAmount)
         );
     },
-    maxClaim: () => {
-        dispatch({
-            type: formAction.SET_MAX_CLAIM_VALID,
-            payload:
-                state.maxClaim.length > 0 &&
-                /^\d*[.,]?\d*$/.test(state.maxClaim),
-        });
+    maxClaim: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_MAX_CLAIM_VALID,
+                payload:
+                    state.maxClaim.length > 0 &&
+                    /^\d*[.,]?\d*$/.test(state.maxClaim),
+            });
+        }
         return (
             state.maxClaim.length > 0 && /^\d*[.,]?\d*$/.test(state.maxClaim)
         );
     },
-    incrementInterval: () => {
-        dispatch({
-            type: formAction.SET_INCREMENT_INTERVAL_VALID,
-            payload: state.incrementInterval.length > 0,
-        });
+    incrementInterval: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_INCREMENT_INTERVAL_VALID,
+                payload: state.incrementInterval.length > 0,
+            });
+        }
         return state.incrementInterval.length > 0;
     },
     // no base interval unit validation. minutes by default
