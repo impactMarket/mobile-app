@@ -1,5 +1,6 @@
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import { humanifyCurrencyAmount } from 'helpers/currency';
@@ -12,7 +13,6 @@ import { View, Text, ScrollView, StyleSheet, Image } from 'react-native';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
-import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 
 const countries: {
     [key: string]: {
@@ -39,7 +39,6 @@ function Divider() {
 function UBIParamsBox(props: { title: string; body: string }) {
     return (
         <View
-            key={props.title}
             style={{
                 padding: 16,
                 borderRadius: 12,
@@ -75,7 +74,6 @@ function UBIParamsBox(props: { title: string; body: string }) {
 function ManagersBox(props: { manager: ManagerAttributes }) {
     return (
         <View
-            key={props.manager.address}
             style={{
                 padding: 16,
                 borderRadius: 12,
@@ -111,8 +109,8 @@ function ManagersBox(props: { manager: ManagerAttributes }) {
             <View style={{ flexDirection: 'column' }}>
                 <Text
                     style={{
-                        fontSize: 16,
-                        lineHeight: 32,
+                        fontSize: 13,
+                        lineHeight: 22,
                         fontFamily: 'Inter-Bold',
                         color: ipctColors.darBlue,
                     }}
@@ -123,8 +121,8 @@ function ManagersBox(props: { manager: ManagerAttributes }) {
                 </Text>
                 <Text
                     style={{
-                        fontSize: 14,
-                        lineHeight: 24,
+                        fontSize: 12,
+                        lineHeight: 20,
                         fontFamily: 'Inter-Regular',
                         color: ipctColors.lynch,
                     }}
@@ -202,7 +200,7 @@ function CommunityExtendedDetailsScreen() {
                 {i18n.t('managers')}
             </Text>
             {managers.map((manager) => (
-                <ManagersBox manager={manager} />
+                <ManagersBox key={manager.address} manager={manager} />
             ))}
         </ScrollView>
     );
