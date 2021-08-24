@@ -7,9 +7,9 @@ import {
 } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
-import { Title, ProgressBar, Text, Divider } from 'react-native-paper';
+import React from 'react';
+import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { ProgressBar } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
@@ -70,9 +70,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 count: community.state.backers,
                             })}
                         </Text>
-                        <Title
+                        <Text
                             style={[
-                                styles.title,
+                                styles.Text,
                                 {
                                     fontSize: width < 375 ? 14 : 20,
                                 },
@@ -83,7 +83,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 user.currency,
                                 exchangeRates
                             )}
-                        </Title>
+                        </Text>
                     </View>
                     <View
                         style={{
@@ -103,9 +103,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         >
                             {i18n.t('goal')}
                         </Text>
-                        <Title
+                        <Text
                             style={[
-                                styles.title,
+                                styles.Text,
                                 { fontSize: width < 375 ? 14 : 20 },
                             ]}
                         >
@@ -116,7 +116,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                       exchangeRates
                                   )
                                 : 'N/A'}
-                        </Title>
+                        </Text>
                     </View>
                 </View>
                 <View style={{ marginTop: 7.5 }}>
@@ -168,7 +168,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         })}
                     </Text>
                 </View>
-                {props.children && <Divider />}
+                {props.children && <View style={styles.divider} />}
                 {props.children}
             </View>
         </Card>
@@ -176,6 +176,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
 }
 
 const styles = StyleSheet.create({
+    divider: {
+        height: 1,
+        backgroundColor: ipctColors.softGray,
+    },
     sphereClaimed: {
         width: 8,
         height: 8,
@@ -190,8 +194,9 @@ const styles = StyleSheet.create({
         backgroundColor: ipctColors.blueRibbon,
         marginRight: 5,
     },
-    title: {
+    Text: {
         fontFamily: 'Inter-Bold',
+        color: ipctColors.darBlue,
         fontSize: 20,
         lineHeight: 32,
     },
