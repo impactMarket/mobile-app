@@ -446,8 +446,8 @@ export const validateField = (
     state: INITIAL_FORM_STATE,
     dispatch: React.Dispatch<FormActionTypes>
 ) => ({
-    name: (v: boolean = true) => {
-        if (v) {
+    name: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_NAME_VALID,
                 payload: state.name.length > 0,
@@ -455,8 +455,8 @@ export const validateField = (
         }
         return state.name.length > 0;
     },
-    description: (v: boolean = true) => {
-        if (v) {
+    description: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_DESCRIPTION_VALID,
                 payload: state.description.length !== 0,
@@ -470,8 +470,8 @@ export const validateField = (
             state.description.length !== 0 && state.description.length >= 240
         );
     },
-    city: (v: boolean = true) => {
-        if (v) {
+    city: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_CITY_VALID,
                 payload: state.city.length > 0,
@@ -479,8 +479,8 @@ export const validateField = (
         }
         return state.city.length > 0;
     },
-    country: (v: boolean = true) => {
-        if (v) {
+    country: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_COUNTRY_VALID,
                 payload: state.country.length > 0,
@@ -488,8 +488,8 @@ export const validateField = (
         }
         return state.country.length > 0;
     },
-    email: (v: boolean = true) => {
-        if (v) {
+    email: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_EMAIL_VALID,
                 payload: state.email.length > 0,
@@ -501,8 +501,8 @@ export const validateField = (
         }
         return state.email.length > 0 && validateEmail(state.email);
     },
-    gps: (v: boolean = true) => {
-        if (v) {
+    gps: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_GPS_VALID,
                 payload: state.gps.latitude !== 0 || state.gps.longitude !== 0,
@@ -510,8 +510,8 @@ export const validateField = (
         }
         return state.gps.latitude !== 0 || state.gps.longitude !== 0;
     },
-    cover: (v: boolean = true) => {
-        if (v) {
+    cover: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_COVER_VALID,
                 payload: state.coverImage.length > 0,
@@ -519,8 +519,8 @@ export const validateField = (
         }
         return state.coverImage.length > 0;
     },
-    profile: (userProfilePicture: string, v: boolean = true) => {
-        if (v) {
+    profile: (userProfilePicture: string, isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_PROFILE_VALID,
                 payload:
@@ -535,8 +535,8 @@ export const validateField = (
         );
     },
     // no currency validation. User's currency is used by default
-    claimAmount: (v: boolean = true) => {
-        if (v) {
+    claimAmount: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_CLAIM_AMOUNT_VALID,
                 payload:
@@ -549,8 +549,8 @@ export const validateField = (
             /^\d*[.,]?\d*$/.test(state.claimAmount)
         );
     },
-    maxClaim: (v: boolean = true) => {
-        if (v) {
+    maxClaim: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_MAX_CLAIM_VALID,
                 payload:
@@ -562,8 +562,8 @@ export const validateField = (
             state.maxClaim.length > 0 && /^\d*[.,]?\d*$/.test(state.maxClaim)
         );
     },
-    incrementInterval: (v: boolean = true) => {
-        if (v) {
+    incrementInterval: (isValidated: boolean = true) => {
+        if (isValidated) {
             dispatch({
                 type: formAction.SET_INCREMENT_INTERVAL_VALID,
                 payload: state.incrementInterval.length > 0,
