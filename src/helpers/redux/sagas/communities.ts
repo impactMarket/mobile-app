@@ -52,7 +52,6 @@ export function* findCommunityById({ payload }: any) {
         );
 
         yield put(findCommunityByIdSuccess(community));
-        yield put(setCommunityMetadata(community));
     } catch (err) {
         yield put(findCommunityByIdFailure());
     }

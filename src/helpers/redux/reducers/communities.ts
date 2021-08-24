@@ -52,7 +52,6 @@ export const communitiesReducer = (
             };
 
         case communitiesAction.FIND_BY_ID_CLEAN:
-            console.log('cleaning ...');
             return {
                 ...state,
                 community: null,

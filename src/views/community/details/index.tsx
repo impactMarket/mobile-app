@@ -58,7 +58,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
-        // dispatch(cleanCommunityState());
+        dispatch(cleanCommunityState());
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
         if (community) {
             if (props.route.params.openDonate === true) {

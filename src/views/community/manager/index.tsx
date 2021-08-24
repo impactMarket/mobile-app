@@ -12,10 +12,7 @@ import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
 import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
-import {
-    cleanCommunityState,
-    findCommunityByIdRequest,
-} from 'helpers/redux/actions/communities';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import {
     CommunityAttributes,
@@ -57,6 +54,7 @@ function CommunityManagerScreen() {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
+
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
@@ -81,8 +79,6 @@ function CommunityManagerScreen() {
     const [editInProgress, setEditInProgress] = useState(false);
 
     useEffect(() => {
-        // dispatch(cleanCommunityState());
-        // dispatch(findCommunityByIdRequest(communityContract.id));
         if (kit !== undefined && community.status === 'valid') {
             const loadCommunityBalance = async () => {
                 const stableToken = await kit.contracts.getStableToken();
