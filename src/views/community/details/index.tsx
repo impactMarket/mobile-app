@@ -8,7 +8,6 @@ import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import * as shape from 'd3-shape';
 import Clipboard from 'expo-clipboard';
-import * as Device from 'expo-device';
 import { modalDonateAction } from 'helpers/constants';
 import { amountToCurrency, humanifyCurrencyAmount } from 'helpers/currency';
 import {
@@ -32,9 +31,6 @@ import { LineChart } from 'react-native-svg-charts';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
-
-import config from '../../../../config';
-import Donate from './donate';
 
 interface ICommunityDetailsScreen {
     route: {
@@ -62,7 +58,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
 
     useEffect(() => {
-        dispatch(cleanCommunityState());
+        // dispatch(cleanCommunityState());
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
         if (community) {
             if (props.route.params.openDonate === true) {

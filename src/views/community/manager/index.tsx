@@ -12,7 +12,10 @@ import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
 import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
-import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
+import {
+    cleanCommunityState,
+    findCommunityByIdRequest,
+} from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import {
     CommunityAttributes,
@@ -78,6 +81,8 @@ function CommunityManagerScreen() {
     const [editInProgress, setEditInProgress] = useState(false);
 
     useEffect(() => {
+        // dispatch(cleanCommunityState());
+        // dispatch(findCommunityByIdRequest(communityContract.id));
         if (kit !== undefined && community.status === 'valid') {
             const loadCommunityBalance = async () => {
                 const stableToken = await kit.contracts.getStableToken();

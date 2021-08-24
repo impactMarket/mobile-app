@@ -25,22 +25,16 @@ interface ICommuntyStatusProps {
 export default function CommunityStatus(props: ICommuntyStatusProps) {
     const { community } = props;
     const { width } = Dimensions.get('screen');
-    const [communityGoal, setCommunityGoal] = useState<BigNumber>();
-    const [remainedFunds, setRemainedFunds] = useState<number>();
     const user = useSelector((state: IRootState) => state.user.metadata);
 
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
 
-    useEffect(() => {
-        const goal = new BigNumber(community.contract.maxClaim).multipliedBy(
-            community.state.beneficiaries
-        );
-        const days = calculateCommunityRemainedFunds(community);
-        setCommunityGoal(goal);
-        setRemainedFunds(days);
-    }, [community]);
+    const goal = new BigNumber(community.contract.maxClaim).multipliedBy(
+        community.state.beneficiaries
+    );
+    const days = calculateCommunityRemainedFunds(community);
 
     if (community.contract === undefined || community.state === undefined) {
         return null;
@@ -115,9 +109,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 { fontSize: width < 375 ? 14 : 20 },
                             ]}
                         >
-                            {communityGoal
+                            {goal
                                 ? amountToCurrency(
-                                      communityGoal,
+                                      goal,
                                       user.currency,
                                       exchangeRates
                                   )
@@ -167,10 +161,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         ]}
                     >
                         {i18n.t('fundsRunOut', {
-                            days: remainedFunds,
+                            days,
                         })}{' '}
                         {i18n.t('days', {
-                            count: remainedFunds,
+                            count: days,
                         })}
                     </Text>
                 </View>
