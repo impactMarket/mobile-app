@@ -14,6 +14,9 @@ export const ipctColors = {
     darBlue: '#333239',
     white: '#FFFFFF',
     softWhite: '#DCDFE44F',
+    blueGray: '#73839D',
+    warningOrange: '#FE9A22',
+    errorRed: '#EB5757',
 };
 
 export default StyleSheet.create({});

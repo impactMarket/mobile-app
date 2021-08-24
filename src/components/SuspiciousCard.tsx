@@ -32,7 +32,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
             case suspects < 4:
                 return (
                     <WarningTriangle
-                        color="#73839D"
+                        color={ipctColors.blueGray}
                         style={{ marginRight: 12, marginTop: 4 }}
                     />
                 );
@@ -40,7 +40,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
             case suspects < 8:
                 return (
                     <WarningTriangle
-                        color="#FE9A22"
+                        color={ipctColors.warningOrange}
                         style={{ marginRight: 12, marginTop: 4 }}
                     />
                 );
@@ -48,7 +48,7 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
             case suspects > 7:
                 return (
                     <WarningTriangle
-                        color="#EB5757"
+                        color={ipctColors.errorRed}
                         style={{ marginRight: 12, marginTop: 4 }}
                     />
                 );
