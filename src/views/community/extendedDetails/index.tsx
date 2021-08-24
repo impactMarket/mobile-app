@@ -74,6 +74,7 @@ function UBIParamsBox(props: { title: string; body: string }) {
 function ManagersBox(props: { manager: ManagerAttributes }) {
     return (
         <View
+            testID="manager-box"
             style={{
                 padding: 16,
                 borderRadius: 12,
@@ -129,7 +130,7 @@ function ManagersBox(props: { manager: ManagerAttributes }) {
                 >
                     {i18n.t('managerSince', {
                         date: moment(props.manager.createdAt).format(
-                            'MMM d, YYYY'
+                            'MMM DD, YYYY'
                         ),
                     })}
                 </Text>
