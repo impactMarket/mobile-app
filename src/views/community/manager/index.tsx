@@ -263,7 +263,7 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('claimAmount')}:{' '}
+                                        {i18n.t('createCommunity.claimAmount')}:{' '}
                                         {amountToCurrency(
                                             requiredUbiToChange.claimAmount,
                                             userCurrency,
@@ -273,7 +273,10 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('totalClaimPerBeneficiary')}:{' '}
+                                        {i18n.t(
+                                            'createCommunity.totalClaimPerBeneficiary'
+                                        )}
+                                        :{' '}
                                         {amountToCurrency(
                                             requiredUbiToChange.maxClaim,
                                             userCurrency,
@@ -283,7 +286,7 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('frequency')}:{' '}
+                                        {i18n.t('createCommunity.frequency')}:{' '}
                                         {requiredUbiToChange.baseInterval ===
                                         86400
                                             ? i18n.t('generic.day')
@@ -292,8 +295,14 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('timeIncrementAfterClaim')} (
-                                        {i18n.t('timeInMinutes')}):{' '}
+                                        {i18n.t(
+                                            'createCommunity.timeIncrementAfterClaim'
+                                        )}{' '}
+                                        (
+                                        {i18n.t(
+                                            'createCommunity.timeInMinutes'
+                                        )}
+                                        ):{' '}
                                         {requiredUbiToChange.incrementInterval /
                                             60}{' '}
                                     </Paragraph>
@@ -334,7 +343,7 @@ function CommunityManagerScreen() {
                                 textAlign: 'left',
                             }}
                         >
-                            {i18n.t('pendingApprovalMessage')}{' '}
+                            {i18n.t('createCommunity.pendingApprovalMessage')}{' '}
                         </Text>
                         <Button
                             modeType="gray"

@@ -185,9 +185,9 @@ function CommunityEmail() {
     const handleEndEdit = () => validateField(state, dispatch).email();
 
     const error = !state.validation.email
-        ? i18n.t('emailRequired')
+        ? i18n.t('createCommunity.emailRequired')
         : !state.validation.emailFormat
-        ? i18n.t('emailInvalidFormat')
+        ? i18n.t('createCommunity.emailInvalidFormat')
         : undefined;
 
     return (
@@ -293,7 +293,7 @@ function CommunityLocation() {
                                 lineHeight: 28,
                             }}
                         >
-                            {i18n.t('validCoordinates')}
+                            {i18n.t('createCommunity.validCoordinates')}
                         </Text>
                     </View>
                 </Pressable>
@@ -310,7 +310,7 @@ function CommunityLocation() {
         >
             <Button
                 // mode="contained"
-                accessibilityLabel={i18n.t('getGPSLocation')}
+                accessibilityLabel={i18n.t('createCommunity.getGPSLocation')}
                 modeType="default"
                 style={{
                     paddingVertical: 0,
@@ -332,7 +332,7 @@ function CommunityLocation() {
                         lineHeight: 28,
                     }}
                 >
-                    {i18n.t('getGPSLocation')}
+                    {i18n.t('createCommunity.getGPSLocation')}
                 </Text>
             </Button>
             {!state.validation.gps && (
@@ -345,7 +345,7 @@ function CommunityLocation() {
                         justifyContent: 'flex-start',
                     }}
                 >
-                    {i18n.t('enablingGPSRequired')}
+                    {i18n.t('createCommunity.enablingGPSRequired')}
                 </Text>
             )}
         </View>
@@ -417,7 +417,7 @@ function CommunityCountry() {
 
     const error = state.validation.country
         ? undefined
-        : i18n.t('countryRequired');
+        : i18n.t('createCommunity.countryRequired');
 
     return (
         <>
@@ -429,7 +429,7 @@ function CommunityCountry() {
                             ? `${countries[state.country].emoji} ${
                                   countries[state.country].name
                               }`
-                            : i18n.t('selectCountry')
+                            : i18n.t('createCommunity.selectCountry')
                     }
                     onPress={() => modalizeCountryRef.current?.open()}
                     error={error}
@@ -516,7 +516,9 @@ function CommunityCity() {
 
     const handleEndEdit = () => validateField(state, dispatch).city();
 
-    const error = state.validation.city ? undefined : i18n.t('cityRequired');
+    const error = state.validation.city
+        ? undefined
+        : i18n.t('createCommunity.cityRequired');
 
     return (
         <Input
@@ -541,17 +543,17 @@ function CommunityDescription() {
     };
 
     const error = !state.validation.description
-        ? i18n.t('communityDescriptionRequired')
+        ? i18n.t('createCommunity.communityDescriptionRequired')
         : state.validation.descriptionTooShort
-        ? i18n.t('communityDescriptionTooShort')
+        ? i18n.t('createCommunity.communityDescriptionTooShort')
         : undefined;
 
     const handleEndEdit = () => validateField(state, dispatch).description();
 
     return (
         <Input
-            accessibilityLabel={i18n.t('shortDescription')}
-            label={i18n.t('shortDescription')}
+            accessibilityLabel={i18n.t('createCommunity.shortDescription')}
+            label={i18n.t('createCommunity.shortDescription')}
             value={state.description}
             maxLength={1024}
             onChangeText={handleChangeDescription}
@@ -575,12 +577,12 @@ function CommunityName() {
 
     const error = state.validation.name
         ? undefined
-        : i18n.t('communityNameRequired');
+        : i18n.t('createCommunity.communityNameRequired');
 
     return (
         <Input
-            accessibilityLabel={i18n.t('communityName')}
-            label={i18n.t('communityName')}
+            accessibilityLabel={i18n.t('createCommunity.communityName')}
+            label={i18n.t('createCommunity.communityName')}
             value={state.name}
             maxLength={32}
             onChangeText={handleChangeName}
@@ -684,7 +686,7 @@ function CommunityCover() {
                             lineHeight: 24,
                         }}
                     >
-                        {i18n.t('changeCoverImage')}
+                        {i18n.t('createCommunity.changeCoverImage')}
                     </Headline>
                     <Text
                         style={{
@@ -694,7 +696,7 @@ function CommunityCover() {
                             lineHeight: 24,
                         }}
                     >
-                        {i18n.t('minCoverSize')}
+                        {i18n.t('createCommunity.minCoverSize')}
                     </Text>
                 </View>
                 <Pressable
@@ -771,7 +773,9 @@ function CommunityCover() {
                                     marginRight: 12,
                                 }}
                             >
-                                {i18n.t('imageDimensionsNotFit')}
+                                {i18n.t(
+                                    'createCommunity.imageDimensionsNotFit'
+                                )}
                             </Text>
                         </View>
                     </Modal>
@@ -787,7 +791,7 @@ function CommunityCover() {
                         justifyContent: 'flex-start',
                     }}
                 >
-                    {i18n.t('coverImageRequired')}
+                    {i18n.t('createCommunity.coverImageRequired')}
                 </Text>
             )}
         </View>
@@ -905,7 +909,7 @@ function UserProfilePicture() {
                             lineHeight: 24,
                         }}
                     >
-                        {i18n.t('changeProfileImage')}
+                        {i18n.t('createCommunity.changeProfileImage')}
                     </Headline>
                     <Text
                         style={{
@@ -915,7 +919,7 @@ function UserProfilePicture() {
                             lineHeight: 24,
                         }}
                     >
-                        {i18n.t('minProfilePictureSize')}
+                        {i18n.t('createCommunity.minProfilePictureSize')}
                     </Text>
                 </View>
                 <Pressable
@@ -992,7 +996,9 @@ function UserProfilePicture() {
                                     marginRight: 12,
                                 }}
                             >
-                                {i18n.t('imageDimensionsNotFit')}
+                                {i18n.t(
+                                    'createCommunity.imageDimensionsNotFit'
+                                )}
                             </Text>
                         </View>
                     </Modal>
@@ -1008,7 +1014,7 @@ function UserProfilePicture() {
                         justifyContent: 'flex-start',
                     }}
                 >
-                    {i18n.t('profileImageRequired')}
+                    {i18n.t('createCommunity.profileImageRequired')}
                 </Text>
             )}
         </View>
@@ -1026,7 +1032,7 @@ export default function Metadata(props: { edit?: boolean }) {
                         lineHeight: 24,
                     }}
                 >
-                    {i18n.t('communityDetails')}
+                    {i18n.t('createCommunity.communityDetails')}
                 </Headline>
                 <Text
                     style={{
@@ -1035,7 +1041,7 @@ export default function Metadata(props: { edit?: boolean }) {
                         lineHeight: 24,
                     }}
                 >
-                    {i18n.t('communityDescriptionLabel')}
+                    {i18n.t('createCommunity.communityDescriptionLabel')}
                 </Text>
                 <CommunityName />
                 <CommunityCover />
@@ -1053,7 +1059,7 @@ export default function Metadata(props: { edit?: boolean }) {
                     lineHeight: 24,
                 }}
             >
-                {i18n.t('communityDetails')}
+                {i18n.t('createCommunity.communityDetails')}
             </Headline>
             <Text
                 style={{
@@ -1062,7 +1068,7 @@ export default function Metadata(props: { edit?: boolean }) {
                     lineHeight: 24,
                 }}
             >
-                {i18n.t('communityDescriptionLabel')}
+                {i18n.t('createCommunity.communityDescriptionLabel')}
             </Text>
             <CommunityName />
             <CommunityCover />
@@ -1076,7 +1082,7 @@ export default function Metadata(props: { edit?: boolean }) {
                     lineHeight: 24,
                 }}
             >
-                {i18n.t('communityPicsImportance')}
+                {i18n.t('createCommunity.communityPicsImportance')}
             </Text>
             <CommunityDescription />
             <CommunityCity />

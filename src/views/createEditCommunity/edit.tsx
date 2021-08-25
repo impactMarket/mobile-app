@@ -262,7 +262,7 @@ function EditCommunityScreen() {
                         marginRight: 36,
                     }}
                 >
-                    {i18n.t('communityRequestError')}
+                    {i18n.t('createCommunity.communityRequestError')}
                 </Text>
             </View>
             <SubmissionProgressDetails />
@@ -300,7 +300,7 @@ function EditCommunityScreen() {
                         textAlign: 'center',
                     }}
                 >
-                    {i18n.t('communityRequestSuccess')}
+                    {i18n.t('createCommunity.communityRequestSuccess')}
                 </Text>
                 <Button
                     modeType="gray"
@@ -331,7 +331,7 @@ function EditCommunityScreen() {
                     //         : 'left',
                 }}
             >
-                {i18n.t('communityRequestSending')}
+                {i18n.t('createCommunity.communityRequestSending')}
             </Text>
             <SubmissionProgressDetails />
             <Button
@@ -428,7 +428,7 @@ function EditCommunityScreen() {
                                 marginRight: 12,
                             }}
                         >
-                            {i18n.t('missingFieldError')}
+                            {i18n.t('createCommunity.missingFieldError')}
                         </Text>
                     </View>
                 </Modal>
@@ -478,7 +478,7 @@ EditCommunityScreen.navigationOptions = ({
 
     return {
         headerLeft: () => <BackSvg onPress={handlePressGoBack} />,
-        headerTitle: i18n.t('editCommunity'),
+        headerTitle: i18n.t('createCommunity.editCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

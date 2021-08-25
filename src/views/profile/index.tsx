@@ -493,7 +493,9 @@ function ProfileScreen() {
                                     marginRight: 12,
                                 }}
                             >
-                                {i18n.t('imageDimensionsNotFit')}
+                                {i18n.t(
+                                    'createCommunity.imageDimensionsNotFit'
+                                )}
                             </Text>
                         </View>
                         <Button

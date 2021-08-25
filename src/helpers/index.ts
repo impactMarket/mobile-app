@@ -159,8 +159,8 @@ export async function getUserBalance(kit: ContractKit, address: string) {
 }
 
 export function claimFrequencyToText(frequency: number): string {
-    if (frequency === 86400) return i18n.t('daily');
-    if (frequency === 604800) return i18n.t('weekly');
+    if (frequency === 86400) return i18n.t('createCommunity.daily');
+    if (frequency === 604800) return i18n.t('createCommunity.weekly');
     return 'unknown';
 }
 

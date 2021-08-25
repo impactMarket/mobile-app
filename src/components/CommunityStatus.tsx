@@ -163,7 +163,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         {i18n.t('fundsRunOut', {
                             days,
                         })}{' '}
-                        {i18n.t('days', {
+                        {i18n.t('createCommunity.days', {
                             count: days,
                         })}
                     </Text>
