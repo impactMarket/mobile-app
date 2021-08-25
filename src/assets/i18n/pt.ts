@@ -1,339 +1,368 @@
 export default {
-    testnetWarning:
-        'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
-    pendingApprovalMessage:
-        'Estamos revisando seu envio e entraremos em contato dentro de poucas semanas. Se você tiver outras perguntas, visite nossa Central de Ajuda para ler nosso F.A.Q.s ou enviar um tíquete.',
-    pendingApproval: 'Pedido Pendente',
-    fullDashboard: 'Painel Completo',
-    editCommunityDetails: 'Editar detalhes da comunidade',
-    viewAsPublic: 'Ver página da comunidade',
-    share: 'Partilhar',
-    beneficiaries: 'Beneficiários',
-    backers: 'Apoiante',
-    backers_plural: 'Apoiantes',
-    added: 'Adicionado',
-    removed: 'Removido',
-    addBeneficiary: 'Adicionar Beneficiário',
-    add: 'Adicionar',
-    cancel: 'Fechar',
-    cancelSending: 'Cancelar',
-    confirm: 'Confirmar',
-    claimed: 'Distribuído',
-    raised: 'Angariado',
-    claim: 'Pegar',
-    raisedFrom: 'Angariado por {{backers}}',
-    goal: 'Alvo',
-    manage: 'Gerir',
-    communities: 'Comunidades',
-    fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
-    pay: 'Enviar',
-    wallet: 'Carteira',
-    emptyStoriesTitle: 'Ainda não criou uma story?',
-    emptyStoriesDescription: 'Não perca tempo, e comece a criar agora mesmo!',
-    profile: 'Perfil',
-    balance: 'Balanço',
-    uploadProfile: 'Atualizar foto de perfil',
-    name: 'Nome',
-    currency: 'Moeda',
-    country: 'País',
-    phoneNumber: 'Número de telemóvel',
-    logout: 'Sair',
-    recentTransactions: 'Transações Recentes',
-    nameAddressPhone: 'Endereço do destinatário',
-    nameAddressPhoneNotFound: 'Não encontrado.',
-    noteOptional: 'Nota (opcional)',
-    recent: 'Recentes',
-    remove: 'Remover',
-    beneficiaryAddress: 'Conta do Beneficiario',
-    useText: 'Usar Texto',
-    useCamera: 'Usar Camera',
-    tapToScanAgain: 'Clique para tentar de novo',
-    currentAddress: 'Endereço Atual',
-    allowCamera: 'Permitir camera',
-    moreAboutYourCommunity: 'Sobre a minha comunidade',
-    ssi: 'Índice de Autossustentabilidade',
-    ssiDescription: 'SSI mede a sustentabilidade financeira de uma comunidade.',
-    stolenOrChangedPhone:
-        'Leia as instruções a seguir caso seu telefone seja <blue>roubado/perdido</blue> ou você precise <blue>alterar seu número de telefone.</blue>',
-    seeMore: 'Ver Mais',
-    seeLess: 'Ver Menos',
-    exploreCommunityContract: 'Ver Contrato da Comunidade',
-    edit: 'Editar',
-    create: 'Criar',
-    submit: 'Enviar',
-    submitting: 'Enviando',
-    needLoginToCreateCommunity:
-        'É necessário estar conectado com a app Valora para criar uma comunidade.',
-    communityDetails: 'Detalhes da Comunidade',
-    applyCommunity: 'Criar',
-    submitTicket: 'Crie um Ticket',
-    editCommunity: 'Editar',
-    createCommunityDescription:
-        'Ao criar uma comunidade, um novo contrato de renda mínima é iniciado, onde todos os beneficiários adicionados terão acesso igual aos fundos nesse contrato, de forma regular.',
-    createCommunityAlert:
-        'Após o envio, entraremos em contato com você dentro de poucas semanas.',
-    selectCoverImage: 'Selecione Imagem de Capa',
-    imageDimensionsNotFit: 'Selecione uma imagem com as dimensões corretas',
-    contractIncrementTitle: 'Incremento de tempo total após cada pedido',
-    communityDescriptionLabel:
-        'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
-    contractDescriptionLabel:
-        'Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas de seus beneficiários. Eles poderão reclamar enquanto houver fundos disponíveis no contrato. Você terá a responsabilidade de promover sua comunidade e de arrecadar fundos para isso.\n\nSe houver outra pessoa ou organização em sua comunidade que você acredita ser mais adequada para conduzir esta iniciativa, informe-a sobre essa possibilidade e incentive-a a criar uma comunidade.',
-    changeCoverImage: 'Imagem de Capa',
-    changeProfileImage: 'Sua Imagem de Perfil',
-    minProfilePictureSize: 'Min. 300px por 300px',
-    changeLogoImage: 'Logomarca',
-    communityName: 'Nome da Comunidade',
-    shortDescription: 'Descrição (Min 240 Caractéres)',
-    city: 'Cidade',
-    getGPSLocation: 'Obter Localização GPS',
-    validCoordinates: 'Coordenadas Válidas',
-    email: 'Email',
-    contractDetails: 'Detalhes do Contrato',
-    claimAmount: 'Montante por Pedido',
-    aroundValue: 'Em média {{amount}}',
-    totalClaimPerBeneficiary: 'Montante total por beneficiário',
-    frequency: 'Frequência',
-    incrementalFrequency: 'Tempo Incremental',
-    hourly: 'Por Hora',
-    daily: 'Diariamente',
-    weekly: 'Semanalmente',
-    minutes: 'Minutos',
-    hours: 'Horas',
-    days: 'dia',
-    days_plural: 'dias',
-    time: 'Tempo',
-    selectCountry: 'Selecionar país',
-    minCoverSize: 'Min. 784px por 784px',
-    upload: 'Carregar',
-    expectedUBIDuration:
-        'Este programa de RBU deverá durar pelo menos {{years}} anos {{months}} meses {{days}} dias {{hours}} horas {{minutes}} minutos por beneficiário.',
-    timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
-    timeInMinutes: 'Tempo em minutos',
-    visibility: 'Visibilidade',
-    public: 'Publico',
-    private: 'Privado',
-    createCommunityNote1:
-        'Nota: Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas dos seus beneficiários. Quem cria a comunidade tem a responsabilidade de a promover, gerir e angariar fundos.',
-    createCommunityNote2:
-        'Se existir outra pessoa ou organização social na sua comunidade que seja mais adequada para gerir esta iniciativa, informe sobre esta possibilidade e incentive a criar uma comunidade.',
-    communityPicsImportance:
-        'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
-    communityRequestSending:
-        'Aguarde enquanto as informações da comunidade estão sendo carregadas ...',
-    communityRequestCancel: 'Você tem certeza que pretende cancelar o pedido?',
-    yes: 'Sim',
-    no: 'Não',
-    missingFieldError:
-        'Todos os campos marcados como obrigatórios precisam ser informados. Verifique o que está faltando e tente novamente. ',
-    communityRequestError:
-        'Ocorreu um erro ao enviar as informações da comunidade.',
-    communityRequestErrorDetails:
-        'Se tens dúvida de como submeter um ticket, por favor <bold>clique aqui</bold>',
-    communityRequestSuccess:
-        'As informações da sua comunidade foram enviadas com sucesso.',
-    failure: 'Falhou',
-    success: 'Sucesso',
-    requestNewCommunityPlaced:
-        'O seu pedido para criar uma nova comunidade foi registado! Validação a decorrer.',
-    claimBiggerThanMax: 'O valor por pedido deve ser inferior ao valor total!',
-    claimNotZero: 'Montante por Pedido deve ser superior a zero!',
-    maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
-    communityUpdated: 'Os dados da comunidade foram atualizados!',
-    submissionFailed: 'Falha no envio',
-    modalErrorTitle: 'Ooops!',
-    modalValoraTimeoutTitle: 'Request timeout',
-    modalValoraTimeoutDescription:
-        'Sua solicitação de conexão foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
-    modalLeaveTitle: 'Sair do formulário',
-    stay: 'Ficar',
-    leave: 'Sair',
-    modalLeaveDescription:
-        'Todo o conteúdo inserido será perdido. Tem certeza que deseja sair deste formulário?',
-    modalErrorDescription:
-        'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
-    errorUpdatingCommunity:
-        'Ocorreu um erro enquanto atualizava os dados da comunidade!',
-    errorCreatingCommunity:
-        'Ocorreu um erro enquanto era registado o pedido para criar uma comunidade!',
-    errorEditingCommunity:
-        'Ocorreu um erro enquanto era registado o pedido para editar uma comunidade!',
-    errorUploadingAvatar:
-        'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente.',
-    anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente.',
-    authErroHappenedTryAgain:
-        'Ocorreu um erro enquanto recebíamos os seus dados da valora, Por favor tente novamente.',
-    toContinuePlease: 'Para continuar, deverá',
-    impactMarketDescription:
-        'ImpactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.',
-    loginDescription:
-        'Com a carteira Valora, pode enviar e receber dinheiro usando apenas um telemóvel.',
-    step1: 'Step 1 de 2',
-    step2: 'Step 2 de 2',
-    whatIsValora: 'O que é Valora?',
-    installAndCreateValoraAccount: 'Instalar Valora e criar conta',
-    connectWithValora: 'Conectar com Valora',
-    notNow: 'Agora não',
-    beforeMovingInsertPin: 'Antes de continuar, por favor, introduza o PIN',
-    pin4Digits: 'PIN (4 digitos)',
-    continue: 'Continuar',
-    yourQRCode: 'Seu código QR',
-    youHaveDonated: 'Obrigado pelo seu contributo!',
-    errorDonating: 'Um erro ocorreu durante o contributo!',
-    addressCopiedClipboard:
-        'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
-    donate: 'Contribuir',
-    attach: 'Anexar',
-    donateWithValora: 'Contribuir com Valora',
-    amountSymbol: 'Montante em {{symbol}}',
-    donateSymbol: 'Contribuir ({{symbol}})',
-    donateWithCelo: 'Celo Dollar ($cUSD)',
-    donateWithESolidar: 'Cartão de Crédito / Paypal / BTC / ETH',
-    poweredByESolidar: 'Distribuído por',
-    contributeWith: 'Contribuir com',
-    or: 'ou',
-    close: 'Fechar',
-    faq: 'FAQ',
-    youCanClaimXin: 'Poderá pegar {{amount}} em',
-    claimX: 'Pegar ', // {{amount}}
-    loading: 'A carregar...',
-    youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
-    hour: 'hora',
-    day: 'dia',
-    week: 'semana',
-    changePhoto: 'Alterar foto',
-    scanningInvalidAddress: 'Esse endereço parece inválido!',
-    select: 'Selecionar',
-    errorGettingGPSLocation: 'Ocorreu um erro ao obter a localização GPS.',
-    errorWhileLoadingRestart: 'Ocorreu eu erro ao iniciar. Por favor reinicie.',
-    userWasRemoved: '{{user}} foi removido com sucesso!',
-    errorRemovingBeneficiary:
-        'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
-    addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
-    addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
-    errorAddingBeneficiary:
-        'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
-    oneTimeWelcomeMessage1:
-        'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
-    exploreCommunities: 'Explorar Comunidades',
-    noFunds:
-        'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
-    notFundsToAddBeneficiary:
-        'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
-    claimExplained1:
-        '<bold>Cada comunidade possui um grupo de beneficiários</bold>, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
-    claimExplained2:
-        '<bold>Existe um tempo minimo que terá de esperar antes de poder pegar novamente</bold>, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
-    claimExplained3:
-        '<bold>Se a sua comunidade ficar sem fundos</bold>, você não poderá solicitar. A única maneira de começar a solicitar novamente é quando a comunidade recebe fundos adicionais por meio de doações.',
-    claimAmountHelp:
-        'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir/pegar de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
-    totalClaimPerBeneficiaryHelp:
-        'Este montante é o limite que cada beneficiário pode obter no total após várias pedidos. Por exemplo, cada beneficiário pode pegar $2 por dia até atingir um total de $1000, o que significa que cada beneficiário terá acesso a um rendimento mínimo de $2/dia durante pelo menos 16 meses. Este tempo pode aumentar se a opção de incremento de tempo dessa comunidade for superior a zero.',
-    frequencyHelp:
-        'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pegar novamente (mais $2).',
-    timeIncrementAfterClaimHelp:
-        'É possível adicionar um incremento de tempo cada vez que um beneficiário recebe. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
-    visibilityHelp:
-        'Uma comunidade pode ser publica (necessita da aprovação da equipe da impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
-    currencyHelp: 'Escolha aqui a moeda usada entre os seus beneficiários.',
-    coverImageRequired: 'Imagem de capa é obrigatório!',
-    profileImageRequired: 'Sua Imagem de Perfil é obrigatória!',
-    communityNameRequired: 'Nome da comunidade é obrigatório!',
-    communityDescriptionRequired: 'Descrição da comunidade é obrigatório!',
-    communityDescriptionTooShort: 'Esta descrição é muito curta!',
-    cityRequired: 'Cidade é obrigatório!',
-    countryRequired: 'País é obrigatório!',
-    enablingGPSRequired: 'Ativar o GPS é obrigatório!',
-    emailRequired: 'Endereço de e-mail é obrigatório!',
-    emailInvalidFormat: 'Endereço de e-mail inválido!',
-    claimAmountRequired: 'Quantidade a pegar é obrigatório!',
-    maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
-    incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
-    openHelpCenter: 'Abrir o Centro de Ajuda',
-    knowMoreHelpCenter: 'Saiba mais em nosso Centro de Ajuda',
-    turnOn: 'Ativar',
-    turnOnLocationHint: 'Ative a sua localização para uma melhor experiência.',
-    tryAgain: 'Tentar Novamente',
-    payConfirmMessage:
-        "Ao selecionar 'Enviar', irá enviar {{symbol}}{{amount}} (${{amountInDollars}} cUSD) para {{to}}",
-    donateConfirmMessage:
-        "Ao selecionar 'Contribuir', irá enviar <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> para {{to}}.",
-    yourDonationWillBackFor:
-        'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
-    eachBeneficiaryCanClaimXUpToY:
-        'Cada beneficiário pode aceder a ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) por <bold>{{interval}}</bold>, até acumular $<bold>{{upToY}}</bold> cUSD. A cada pedido, <bold>{{minIncrement}}</bold> minutos são adicionados ao tempo de espera.',
-    nextTimeWillWaitClaim:
-        'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
-    howClaimWorks: 'Como funciona?',
-    copyContractAddress: 'Copiar Endereço do Contrato',
-    donationBiggerThanBalance:
-        'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
-    errorClaiming:
-        'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.\n\nErro: {{error}}',
-    consentAnonymousAnalytics: 'Aceitar enviar dados anonimos para análises',
-    youCreatedPrivateCommunity:
-        'Você criou uma comunidade privada. Seja bem vindo.',
-    youAreNotConnected:
-        'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
-    errorConnectToValora:
-        'Ocorreu um erro enquanto se conectava á Valora. Por favor, verifique o estado de sua conexão com a internet e tente novamente.',
-    addingYourOwnAddress:
-        'Você está a tentar adicionar o seu endereço. Tem certeza?',
-    alreadyInCommunity:
-        'Você está a tentar adicionar um endereço que já está nesta comunidade!',
-    requestingPermission: 'Perdido de permissão',
-    requestCameraPermission:
-        'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
-    claimedSince: 'Recebeu {{amount}} desde {{date}}',
-    language: 'Idioma',
-    update: 'Atualizar',
-    skip: 'Mais Tarde',
-    newVersionAvailable: 'Nova versão disponível',
-    newVersionAvailableMessage:
-        'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.',
-    amountShouldBe: 'Quantidade deve ser ${{claimAmount}}+ para calcular..',
-    offline: 'Você não está conectado à internet.',
-    openClockSettings: 'Abrir definições data/hora',
-    dismiss: 'Fechar',
-    incorrectTime: 'Data/Hora incorreta',
-    incorrectTimeMessage:
-        'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}. Após terminar, reinicie o aplicativo.',
-    backWithSymbol: '< Voltar',
-    age: 'Idade',
-    gender: 'Género',
-    male: 'Masculino',
-    female: 'Feminino',
-    others: 'Outros',
-    howManyChildren: 'Quantos filhos você tem?',
-    addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
-    errorAddingManager:
-        'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
-    errorRemovingManager:
-        'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
-    managerAddress: 'Conta do Gestor',
-    addManager: 'Adicionar Gestor',
-    managers: 'Gestores',
-    notAnUser: 'O endereço que está a tentar adicionar não é um utilizador.',
-    managerSince: 'Gestor desde {{date}}',
-    order: 'Ordem',
-    nearest: 'Mais próxima',
-    bigger: 'Mais beneficiários',
-    pleaseWait: 'Por favor aguarde...',
-    thankYou: 'Obrigado!',
-    donationBeingProcessed: 'O seu contributo está a ser processado...',
-    beneficiaryCommunityNoFunds:
-        'Infelizmente, a sua comunidade não tem fundos de momento! Por favor, tente mais tarde.',
-    possibleNetworkIssues: 'Posivelmente problemas de conexão.',
-    networkConnectionLost: 'A ligação à internet foi perdida.',
-    networkIssuesRPC: 'Serviço RPC indisponivel. Tente novamente mais tarde.',
-    syncIssues:
-        'Parece que ocorreu um problema de sincronização. Por favor tente novamente.',
-    possiblyValoraNotSynced:
-        "Parece que a sua valora não está sincronizada com a rede. Por favor, abra a Valora e certifique-se que não tem nenhuma mensagem como 'Connecting...'",
-    unknown: 'Desconhecido.',
-    clockNotSynced:
-        'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
+    generic: {
+        testnetWarning:
+            'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
+        share: 'Partilhar',
+        beneficiaries: 'Beneficiários',
+        backers: 'Apoiantes',
+        cancel: 'Fechar',
+        confirm: 'Confirmar',
+        claimed: 'Distribuído',
+        raised: 'Angariado',
+        ubi: 'UBI',
+        manage: 'Gerir',
+        communities: 'Comunidades',
+        name: 'Nome',
+        currency: 'Moeda',
+        country: 'País',
+        moreAboutYourCommunity: 'Sobre a minha comunidade',
+        added: 'Adicionado',
+        removed: 'Removido',
+        remove: 'Remover',
+        create: 'Criar',
+        submit: 'Enviar',
+        submitting: 'Enviando',
+        yes: 'Sim',
+        no: 'Não',
+        failure: 'Falhou',
+        success: 'Sucesso',
+        city: 'Cidade',
+        email: 'Email',
+        upload: 'Carregar',
+        networkConnectionLost: 'A ligação à internet foi perdida.',
+        networkIssuesRPC:
+            'Serviço RPC indisponivel. Tente novamente mais tarde.',
+        syncIssues:
+            'Parece que ocorreu um problema de sincronização. Por favor tente novamente.',
+        possiblyValoraNotSynced:
+            "Parece que a sua valora não está sincronizada com a rede. Por favor, abra a Valora e certifique-se que não tem nenhuma mensagem como 'Connecting...'",
+        unknown: 'Desconhecido.',
+        clockNotSynced:
+            'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
+        notEnoughForTransaction:
+            'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
+        continue: 'Continuar',
+        yourQRCode: 'Seu código QR',
+        close: 'Fechar',
+        faq: 'FAQ',
+        leave: 'Sair',
+        oneTimeWelcomeMessage1:
+            'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
+        exploreCommunities: 'Explorar Comunidades',
+        day: 'dia',
+        week: 'semana',
+        scanningInvalidAddress: 'Esse endereço parece inválido!',
+        select: 'Selecionar',
+        errorGettingGPSLocation: 'Ocorreu um erro ao obter a localização GPS.',
+        modalErrorTitle: 'Ooops!',
+        modalValoraTimeoutTitle: 'Request timeout',
+        modalValoraTimeoutDescription:
+            'Sua solicitação de conexão foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
+
+        modalErrorDescription:
+            'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
+        errorUploadingAvatar:
+            'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente.',
+        anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente.',
+        openHelpCenter: 'Abrir o Centro de Ajuda',
+        knowMoreHelpCenter: 'Saiba mais em nosso Centro de Ajuda',
+        turnOn: 'Ativar',
+        turnOnLocationHint:
+            'Ative a sua localização para uma melhor experiência.',
+        tryAgain: 'Tentar Novamente',
+        youAreNotConnected:
+            'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
+        requestingPermission: 'Perdido de permissão',
+        requestCameraPermission:
+            'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
+        language: 'Idioma',
+        update: 'Atualizar',
+        skip: 'Mais Tarde',
+        newVersionAvailable: 'Nova versão disponível',
+        newVersionAvailableMessage:
+            'Para obter as melhorias e recursos mais recentes, precisamos que você atualize para a versão mais recente.',
+        offline: 'Você não está conectado à internet.',
+        openClockSettings: 'Abrir definições data/hora',
+        dismiss: 'Fechar',
+        incorrectTime: 'Data/Hora incorreta',
+        incorrectTimeMessage:
+            'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}. Após terminar, reinicie o aplicativo.',
+        backWithSymbol: '< Voltar',
+        order: 'Ordem',
+        nearest: 'Mais próxima',
+        bigger: 'Mais beneficiários',
+        pleaseWait: 'Por favor aguarde...',
+        thankYou: 'Obrigado!',
+        search: 'Pesquisar',
+        noResults: 'Nenhum resultado!',
+        viewAll: 'Ver Todas',
+        notInComunity: 'Não estás associado a nenhuma comunidade!',
+        delete: 'Apagar',
+        story: 'Story',
+        storyPermissionCamera:
+            'É necessária permissão para acessar sua câmera!',
+        descriptionCopiedClipboard:
+            'Descrição copiada para a área de transferência!',
+        welcome: 'Bem Vindo!',
+        unexpectedError:
+            'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
+    },
+    createCommunity: {
+        pendingApprovalMessage:
+            'Estamos revisando seu envio e entraremos em contato dentro de poucas semanas. Se você tiver outras perguntas, visite nossa Central de Ajuda para ler nosso F.A.Q.s ou enviar um tíquete.',
+        applyCommunity: 'Criar Comunidade',
+        editCommunity: 'Editar',
+        communityDetails: 'Detalhes da Comunidade',
+        communityDescriptionLabel:
+            'Fale mais sobre sua comunidade e por que o acesso a uma renda básica pode ser importante para seus membros.',
+        contractIncrementTitle: 'Incremento de tempo total após cada pedido',
+        contractDescriptionLabel:
+            'Esses valores devem ser uma renda básica mínima suficiente para atender às necessidades básicas de seus beneficiários. Eles poderão reclamar enquanto houver fundos disponíveis no contrato. Você terá a responsabilidade de promover sua comunidade e de arrecadar fundos para isso.\n\nSe houver outra pessoa ou organização em sua comunidade que você acredita ser mais adequada para conduzir esta iniciativa, informe-a sobre essa possibilidade e incentive-a a criar uma comunidade.',
+        imageDimensionsNotFit: 'Selecione uma imagem com as dimensões corretas',
+        changeCoverImage: 'Imagem de Capa',
+        changeProfileImage: 'Sua Imagem de Perfil',
+        minProfilePictureSize: 'Min. 300px por 300px',
+        communityName: 'Nome da Comunidade',
+        shortDescription: 'Descrição (Min 240 Caractéres)',
+        getGPSLocation: 'Obter Localização GPS',
+        validCoordinates: 'Coordenadas Válidas',
+        contractDetails: 'Detalhes do Contrato',
+        claimAmount: 'Montante por Pedido',
+        aroundValue: 'Em média {{amount}}',
+        totalClaimPerBeneficiary: 'Montante total por beneficiário',
+        frequency: 'Frequência',
+        incrementalFrequency: 'Tempo Incremental',
+        daily: 'Diariamente',
+        weekly: 'Semanalmente',
+        minutes: 'Minutos',
+        hours: 'Horas',
+        days: 'Dias',
+        time: 'Tempo',
+        selectCountry: 'Selecionar país',
+        minCoverSize: 'Min. 784px por 784px',
+        expectedUBIDuration:
+            'Este programa de RBU deverá durar pelo menos {{years}} anos {{months}} meses {{days}} dias {{hours}} horas {{minutes}} minutos por beneficiário.',
+        timeIncrementAfterClaim: 'Incremento de tempo após cada pedido',
+        timeInMinutes: 'Tempo em minutos',
+        visibility: 'Visibilidade',
+        public: 'Publico',
+        private: 'Privado',
+        communityPicsImportance:
+            'P.S: Comunidades com todos os detalhes preenchidos, incluindo as fotos dos gestores, têm maior probabilidade de serem financiadas.',
+        communityRequestSending:
+            'Aguarde enquanto as informações da comunidade estão sendo carregadas ...',
+        communityRequestCancel:
+            'Você tem certeza que pretende cancelar o pedido?',
+        missingFieldError:
+            'Todos os campos marcados como obrigatórios precisam ser informados. Verifique o que está faltando e tente novamente. ',
+        communityRequestError:
+            'Ocorreu um erro ao enviar as informações da comunidade.',
+        communityRequestSuccess:
+            'As informações da sua comunidade foram enviadas com sucesso.',
+        claimBiggerThanMax:
+            'O valor por pedido deve ser inferior ao valor total!',
+        claimNotZero: 'Montante por Pedido deve ser superior a zero!',
+        maxNotZero: 'Montante total por beneficiário deve ser superior a zero!',
+        claimAmountHelp:
+            'Este é o montante UBI, em $cUSD (dólar americano), que cada beneficiário poderá reivindicar/pedir/pegar de cada vez deste contrato comunitário. Por exemplo, cada beneficiário pode reivindicar $2 do contrato regularmente, enquanto tiver fundos disponíveis.',
+        totalClaimPerBeneficiaryHelp:
+            'Este montante é o limite que cada beneficiário pode obter no total após várias pedidos. Por exemplo, cada beneficiário pode pegar $2 por dia até atingir um total de $1000, o que significa que cada beneficiário terá acesso a um rendimento mínimo de $2/dia durante pelo menos 16 meses. Este tempo pode aumentar se a opção de incremento de tempo dessa comunidade for superior a zero.',
+        frequencyHelp:
+            'Cada beneficiário terá acesso a uma renda básica de forma regular, que pode ser diária ou semanal. Por exemplo, se for diário, cada beneficiário terá que esperar pelo menos 1 dia (24h) antes de poder pegar novamente (mais $2).',
+        timeIncrementAfterClaimHelp:
+            'É possível adicionar um incremento de tempo cada vez que um beneficiário recebe. Por exemplo, numa comunidade onde cada beneficiário pode pegar $2/dia, 20 minutos podem ser adicionados ao tempo que esse beneficiário terá que esperar antes de poder pegar novamente (neste caso, 24h20m após pegar pela 2ª vez, 24h40m após a 3ª vez, e assim por diante). Isto beneficia quem pede menos e incentiva uma transição para auto-sustentabilidade.',
+        visibilityHelp:
+            'Uma comunidade pode ser publica (necessita da aprovação da equipe da impactMarket) ou privada que não necessita de aprovação nem aparecerá na lista de comunidades.',
+        coverImageRequired: 'Imagem de capa é obrigatório!',
+        profileImageRequired: 'Sua Imagem de Perfil é obrigatória!',
+        communityNameRequired: 'Nome da comunidade é obrigatório!',
+        communityDescriptionRequired: 'Descrição da comunidade é obrigatório!',
+        communityDescriptionTooShort: 'Esta descrição é muito curta!',
+        cityRequired: 'Cidade é obrigatório!',
+        countryRequired: 'País é obrigatório!',
+        enablingGPSRequired: 'Ativar o GPS é obrigatório!',
+        emailRequired: 'Endereço de e-mail é obrigatório!',
+        emailInvalidFormat: 'Endereço de e-mail inválido!',
+        claimAmountRequired: 'Quantidade a pegar é obrigatório!',
+        maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
+        incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
+    },
+    manager: {
+        rules: {
+            title: 'Regras Importantes',
+            btnText: 'Eu li e compreendo',
+            first:
+                'Como gestor, você terá a responsabilidade de selecionar quais beneficiários terão acesso à renda básica. Quanto mais pessoas tiverem acesso em sua comunidade, mais difícil será ter fundos disponíveis para todos o tempo todo, então tome cuidado ao escolher quem pode / deve se beneficiar e realmente precisa disso. ',
+            second:
+                'Este aplicativo usa tecnologia blockchain para identificar fraude em potencial e uso de fundos suspeitos, Para que tudo o que aconteça, incluindo todas as transações, seja público e transparente.',
+            third:
+                'O seu perfil pode ser bloqueado e os fundos podem ser impedidos de serem distribuídos aos beneficiários se atividades suspeitas forem encontradas ou relatadas. Isso pode resultar na remoção de sua comunidade e organização do sistema. ',
+            fourth: 'Não adicione beneficiários que já foram removidos.',
+            fifth: 'Não peça dinheiro aos beneficiários.',
+            sixth: 'Não adicione mais de uma conta por pessoa e dispositivo.',
+            seventh:
+                'As informações do seu perfil devem ser completas e precisas.',
+            warning:
+                'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
+        },
+        editCommunityDetails: 'Editar detalhes da comunidade',
+        viewAsPublic: 'Ver página da comunidade',
+        addBeneficiary: 'Adicionar Beneficiário',
+        beneficiaryAddress: 'Conta do Beneficiario',
+        allowCamera: 'Permitir camera',
+        userWasRemoved: '{{user}} foi removido com sucesso!',
+        errorRemovingBeneficiary:
+            'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
+        addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
+        addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
+        errorAddingBeneficiary:
+            'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
+        addingYourOwnAddress:
+            'Você está a tentar adicionar o seu endereço. Tem certeza?',
+        alreadyInCommunity:
+            'Você está a tentar adicionar um endereço que já está nesta comunidade!',
+        claimedSince: 'Recebeu {{amount}} desde {{date}}',
+        addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
+        errorAddingManager:
+            'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
+        errorRemovingManager:
+            'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
+        managerAddress: 'Conta do Gestor',
+        addManager: 'Adicionar Gestor',
+        managers: 'Gestores',
+        notAnUser:
+            'O endereço que está a tentar adicionar não é um utilizador.',
+        managerSince: 'Gestor desde {{date}}',
+        ubiParamsUpdated:
+            'Parâmetros UBI da sua comunidade foram atualizados com sucesso!',
+        ubiParams: 'Parâmetros UBI',
+        ubiParamsChanged:
+            'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
+        acceptNewUbiParams: 'Aceitar novos parâmetros',
+        userNotRegistered:
+            'O utilizador que está a tentar adicionar, não está registado!',
+        welcomeManagerTitle: 'Você agora é um gestor da {{ communityName }}',
+    },
+    stories: {
+        stories: 'Stories',
+        emptyStoriesTitle: 'Ainda não criou uma story?',
+        emptyStoriesDescription:
+            'Não perca tempo, e comece a criar agora mesmo!',
+        storyCongrat: 'Parabéns, sua story foi submetida!',
+        storyRules: 'Regras Importantes',
+        storyRulesFirstParagraph:
+            'Compartilhar suas histórias ajudará sua comunidade a arrecadar mais fundos. Não compartilhe nenhum conteúdo (texto ou imagem) que infrinja nossas regras, pois ele será excluído e você poderá ser removido de sua comunidade.',
+        storySubTitle: 'As histórias não devem conter nenhum dos seguintes:',
+        storyRulesSecondParagraph:
+            'Violência, terrorismo / extremismo violento, exploração sexual infantil, abuso / assédio, conduta de ódio, suicídio ou automutilação, mídia sensível, bens ou serviços ilegais ou regulamentados, nudez, nudez não consensual, integridade cívica, falsificação de identidade, sintético e mídia manipulada e direitos autorais e marcas registradas.',
+        newStory: 'Nova Story',
+        reportInapropriateSuccess: 'Sua denuncia foi submetida com sucesso.',
+        reportAsInapropriated: 'Denunciar como inapropriada',
+        reportedAsInapropriated: 'Denunciada como inapropriada',
+        deleteSuccess: 'Sua story foi apagada com sucesso.',
+        reportInapropriateWarning:
+            'Tem certeza que deseja denunciar esta story como inapropriada?',
+        deleteWarning: 'Tens certeza que quer apagar esta story?',
+        storyFailure: 'Erro ao submeter sua story!',
+        emptyStoryFailure:
+            'Por favor, assegure que a sua story possui texto ou imagem.',
+        createStory: 'Criar Story',
+        myStories: 'Minhas Stories',
+    },
+    beneficiary: {
+        rules: {
+            title: 'Regras importantes',
+            btnText: 'Eu li e entendo',
+            first:
+                'Este dinheiro é só seu e incondicional para usar no que você precisar.',
+            second:
+                'Use apenas 1 conta por pessoa. Usar mais contas por pessoa / dispositivo irá bloqueá-lo e sua comunidade será identificada como um risco para os doadores enviarem fundos. ',
+            third:
+                'Recomendamos que você tenha seu perfil preenchido com informações verdadeiras.',
+            fourth: 'Não compartilhe sua chave de conta Valora com ninguém.',
+            fifth:
+                'Todas as atividades e transações são públicas e transparentes, então é mais fácil para qualquer pessoa identificar e verificar possíveis fraudes. Uma vez que o sistema detecta uma atividade fraudulenta em potencial, os fundos podem ser cortados para toda a comunidade. ',
+            sixth:
+                'Os fundos são alocados e priorizados para as comunidades com base em seus níveis de risco e atividades suspeitas.',
+            seventh:
+                'Se seus gerentes lhe pedirem dinheiro para participar do programa, informe-nos. Mais uma vez, este é um dinheiro incondicional para você usar no que precisar. ',
+            warning:
+                'Se você encontrar alguma atividade suspeita, avise-nos, pois será considerada uma ação de boa fé que pode evitar que toda a comunidade seja afetada por causa de alguns atores mal-intencionados.',
+        },
+        claim: 'Pegar',
+        claimExplained1:
+            '<bold>Cada comunidade possui um grupo de beneficiários</bold>, adicionados pelos gestores da comunidade, que podem aceder um rendimento mínimo, de acordo com um conjunto de regras. Por exemplo, cada beneficiário pode pegar $1/dia até $500.',
+        claimExplained2:
+            '<bold>Existe um tempo minimo que terá de esperar antes de poder pegar novamente</bold>, mas não tem tempo máximo. Deverá pegar apenas quando precisa. Quanto mais pegar, mais tempo terá de esperar antes de poder pegar novamente.',
+        claimExplained3:
+            '<bold>Se a sua comunidade ficar sem fundos</bold>, você não poderá solicitar. A única maneira de começar a solicitar novamente é quando a comunidade recebe fundos adicionais por meio de doações.',
+        claimLockedUntil:
+            'Você ainda não pode pegar novamente. Ficará disponivel em {{date}}. Se habitualmente falha, certifique-se que tem a melhor ligação á internet possivel e que a sua Valora está sincronizada.',
+        youCanClaimXin: 'Poderá pegar {{amount}} em',
+        claimX: 'Pegar ', // {{amount}}
+        youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
+        noFunds:
+            'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
+        notFundsToAddBeneficiary:
+            'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
+        nextTimeWillWaitClaim:
+            'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
+        howClaimWorks: 'Como funciona?',
+        errorClaiming:
+            'O erro ocorreu ao tentar pegar. Tente novamente mais tarde.\n\nErro: {{error}}',
+        beneficiaryCommunityNoFunds:
+            'Infelizmente, a sua comunidade não tem fundos de momento! Por favor, tente mais tarde.',
+        blockedAccountTitle: 'Conta Bloqueada',
+        blockedAccountDescription:
+            'Sua conta foi bloqueada. Entre em contato com seu gerente se achar que foi um engano.',
+        welcomeBeneficiayTitle:
+            'Você agora é um beneficiário da {{ communityName }}',
+        welcomeBeneficiaryDecription:
+            'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
+    },
+    profile: {
+        profile: 'Perfil',
+        balance: 'Balanço',
+        uploadProfilePicture: 'Atualizar foto de perfil',
+        phoneNumber: 'Número de telemóvel',
+        logout: 'Sair',
+        stolenOrChangedPhone:
+            'Leia as instruções a seguir caso seu telefone seja <blue>roubado/perdido</blue> ou você precise <blue>alterar seu número de telefone.</blue>',
+        age: 'Idade',
+        gender: 'Género',
+        male: 'Masculino',
+        female: 'Feminino',
+        others: 'Outros',
+        howManyChildren: 'Quantos filhos você tem?',
+    },
+    community: {
+        ssi: 'Índice de Autossustentabilidade',
+        ssiDescription:
+            'SSI mede a sustentabilidade financeira de uma comunidade.',
+        seeMore: 'Ver Mais',
+        seeLess: 'Ver Menos',
+        exploreCommunityContract: 'Ver Contrato da Comunidade',
+        eachBeneficiaryCanClaimXUpToY:
+            'Cada beneficiário pode aceder a ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) por <bold>{{interval}}</bold>, até acumular $<bold>{{upToY}}</bold> cUSD. A cada pedido, <bold>{{minIncrement}}</bold> minutos são adicionados ao tempo de espera.',
+        copyContractAddress: 'Copiar Endereço do Contrato',
+        suspiciousActivityDetected: 'Atividade suspeita detectada',
+        suspiciousDescription:
+            'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
+    },
+    report: {
+        report: 'Relatório',
+        title: 'Denunciar atividade ilegal',
+        category: 'Categoria',
+        general: 'General',
+        selectCategory: 'Selectionar categoria',
+        potencialFraud: 'Potencial fraude',
+        message:
+            'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
+        label: 'Descreva a potencial atividade ilegal',
+        alertCongrat: 'Obrigado por denunciar potenciais atividades ilegais.',
+        alertCongratLink: 'Saiba mais sobre denúncia anônima.',
+        alertFailure: 'Erro ao submeter seu relatório!',
+    },
     communityFundsRunOut: {
         title: 'Comunidade sem fundos',
         description:
@@ -342,131 +371,22 @@ export default {
     },
     communityWentOutOfFunds:
         'Parece que a comunidade ficou sem fundos. Tente novamente mais tarde.',
-    notEnoughForTransaction:
-        'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
-    claimLockedUntil:
-        'Você ainda não pode pegar novamente. Ficará disponivel em {{date}}. Se habitualmente falha, certifique-se que tem a melhor ligação á internet possivel e que a sua Valora está sincronizada.',
-    search: 'Pesquisar',
-    noResults: 'Nenhum resultado!',
-    tooManyResults:
-        'Foram encontrados muitos resultados! Melhore a sua pesquisa.',
-    stories: 'Stories',
-    viewAll: 'Ver Todas',
-    notInComunity: 'Não estás associado a nenhuma comunidade!',
-    storyCongrat: 'Parabéns, sua story foi submetida!',
-    story: 'Story',
-    storyRules: 'Regras Importantes',
-    storyRulesFirstParagraph:
-        'Compartilhar suas histórias ajudará sua comunidade a arrecadar mais fundos. Não compartilhe nenhum conteúdo (texto ou imagem) que infrinja nossas regras, pois ele será excluído e você poderá ser removido de sua comunidade.',
-    storySubTitle: 'As histórias não devem conter nenhum dos seguintes:',
-    storyRulesSecondParagraph:
-        'Violência, terrorismo / extremismo violento, exploração sexual infantil, abuso / assédio, conduta de ódio, suicídio ou automutilação, mídia sensível, bens ou serviços ilegais ou regulamentados, nudez, nudez não consensual, integridade cívica, falsificação de identidade, sintético e mídia manipulada e direitos autorais e marcas registradas.',
-    newStory: 'Nova Story',
-    delete: 'Apagar',
-    reportInapropriateSuccess: 'Sua denuncia foi submetida com sucesso.',
-    reportAsInapropriated: 'Denunciar como inapropriada',
-    reportedAsInapropriated: 'Denunciada como inapropriada',
-    deleteSuccess: 'Sua story foi apagada com sucesso.',
-    reportInapropriateWarning:
-        'Tem certeza que deseja denunciar esta story como inapropriada?',
-    deleteWarning: 'Tens certeza que quer apagar esta story?',
-    storyFailure: 'Erro ao submeter sua story!',
-    emptyStoryFailure:
-        'Por favor, assegure que a sua story possui texto ou imagem.',
-    storyPermissionCamera: 'É necessária permissão para acessar sua câmera!',
-    descriptionCopiedClipboard:
-        'Descrição copiada para a área de transferência!',
-    report: 'Relatório',
-    reportIlegal: {
-        title: 'Denunciar atividade ilegal',
-        category: 'Categoria',
-        general: 'General',
-        selectCategory: 'Selectionar categoria',
-        potencialFraud: 'Potencial fraude',
-        message:
-            'Se você acha que há algo suspeito em sua comunidade, distribuição de dinheiro ou comportamento, como possível fraude ou corrupção, informe-nos de forma anônima.',
-        btnText: 'Reportar',
-        label: 'Descreva a potencial atividade ilegal',
-        alertCongrat: 'Obrigado por denunciar potenciais atividades ilegais.',
-        alertCongratLink: 'Saiba mais sobre denúncia anônima.',
-        alertFailure: 'Erro ao submeter seu relatório!',
-    },
-    ubiParamsUpdated:
-        'Parâmetros UBI da sua comunidade foram atualizados com sucesso!',
-    ubiParams: 'Parâmetros UBI',
-    ubiParamsChanged:
-        'Parâmetros UBI da sua comunidade vão ser alterados! Os novos parâmetros vão ser os seguintes:',
-    acceptNewUbiParams: 'Aceitar novos parâmetros',
-    newManagerRules: {
-        title: 'Regras Importantes',
-        btnText: 'Eu li e compreendo',
-        first:
-            'Como gestor, você terá a responsabilidade de selecionar quais beneficiários terão acesso à renda básica. Quanto mais pessoas tiverem acesso em sua comunidade, mais difícil será ter fundos disponíveis para todos o tempo todo, então tome cuidado ao escolher quem pode / deve se beneficiar e realmente precisa disso. ',
-        second:
-            'Este aplicativo usa tecnologia blockchain para identificar fraude em potencial e uso de fundos suspeitos, Para que tudo o que aconteça, incluindo todas as transações, seja público e transparente.',
-        third:
-            'O seu perfil pode ser bloqueado e os fundos podem ser impedidos de serem distribuídos aos beneficiários se atividades suspeitas forem encontradas ou relatadas. Isso pode resultar na remoção de sua comunidade e organização do sistema. ',
-        fourth: 'Não adicione beneficiários que já foram removidos.',
-        fifth: 'Não peça dinheiro aos beneficiários.',
-        sixth: 'Não adicione mais de uma conta por pessoa e dispositivo.',
-        seventh: 'As informações do seu perfil devem ser completas e precisas.',
-        warning:
-            'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
-    },
-    newBeneficiaryRules: {
-        title: 'Regras importantes',
-        btnText: 'Eu li e entendo',
-        first:
-            'Este dinheiro é só seu e incondicional para usar no que você precisar.',
-        second:
-            'Use apenas 1 conta por pessoa. Usar mais contas por pessoa / dispositivo irá bloqueá-lo e sua comunidade será identificada como um risco para os doadores enviarem fundos. ',
-        third:
-            'Recomendamos que você tenha seu perfil preenchido com informações verdadeiras.',
-        fourth: 'Não compartilhe sua chave de conta Valora com ninguém.',
-        fifth:
-            'Todas as atividades e transações são públicas e transparentes, então é mais fácil para qualquer pessoa identificar e verificar possíveis fraudes. Uma vez que o sistema detecta uma atividade fraudulenta em potencial, os fundos podem ser cortados para toda a comunidade. ',
-        sixth:
-            'Os fundos são alocados e priorizados para as comunidades com base em seus níveis de risco e atividades suspeitas.',
-        seventh:
-            'Se seus gerentes lhe pedirem dinheiro para participar do programa, informe-nos. Mais uma vez, este é um dinheiro incondicional para você usar no que precisar. ',
-        warning:
-            'Se você encontrar alguma atividade suspeita, avise-nos, pois será considerada uma ação de boa fé que pode evitar que toda a comunidade seja afetada por causa de alguns atores mal-intencionados.',
-    },
-    noSuspiciousActivityDetected:
-        'Nenhuma atividade suspeita detectada neste comunidade.',
-    lowSuspiciousActivityDetected:
-        'Um número muito pequeno de contas pode estar envolvido em atividades suspeitas.',
-    significantSuspiciousActivityDetected:
-        'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
-    largeSuspiciousActivityDetected:
-        'Um grande número de contas pode estar envolvido em atividades suspeitas.',
-    suspiciousActivityDetected: 'Atividade suspeita detectada',
-    suspiciousDescription:
-        'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
-    blockedAccountTitle: 'Conta Bloqueada',
-    blockedAccountDescription:
-        'Sua conta foi bloqueada. Entre em contato com seu gerente se achar que foi um engano.',
-    welcome: 'Bem Vindo!',
-    welcomeManagerTitle: 'Você agora é um gestor da {{ communityName }}',
-    welcomeBeneficiayTitle:
-        'Você agora é um beneficiário da {{ communityName }}',
-    welcomeBeneficiaryDecription:
-        'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
-    createStory: 'Criar Story',
-    myStories: 'Minhas Stories',
-    userNotRegistered:
-        'O utilizador que está a tentar adicionar, não está registado!',
-    unexpectedError:
-        'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
-    createCommunityView: {
-        errorUploadCover: 'Ocorreu um erro ao carregar a imagem da comunidade!',
-        errorCreating:
-            'Ocorreu um erro ao submeter o pedido para criar a comunidade! Por favor, tente novamente.',
-        errorLoading:
-            'Ocorreu um erro ao carregar a proxima página. Por favor, reinicie o aplicativo.',
-    },
-    profileView: {
-        errorUploadAvatar: 'Ocorreu um erro ao carregar a sua foto de perfil!',
+    donate: {
+        errorDonating: 'Um erro ocorreu durante o contributo!',
+        addressCopiedClipboard:
+            'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
+        donate: 'Contribuir',
+        attach: 'Anexar',
+        donateWithValora: 'Contribuir com Valora',
+        donateSymbol: 'Contribuir ({{symbol}})',
+        donateConfirmMessage:
+            "Ao selecionar 'Contribuir', irá enviar <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> para {{to}}.",
+        yourDonationWillBackFor:
+            'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
+        donationBiggerThanBalance:
+            'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
+        amountShouldBe: 'Quantidade deve ser ${{claimAmount}}+ para calcular..',
+        donationBeingProcessed: 'O seu contributo está a ser processado...',
     },
     sagas: {
         messages: {
@@ -481,6 +401,15 @@ export default {
         },
     },
     auth: {
+        impactMarketDescription:
+            'ImpactMarket opera na rede Celo, um sistema financeiro aberto focado em criar prosperidade para todos.',
+        loginDescription:
+            'Com a carteira Valora, pode enviar e receber dinheiro usando apenas um telemóvel.',
+        step1: 'Step 1 de 2',
+        step2: 'Step 2 de 2',
+        whatIsValora: 'O que é Valora?',
+        installAndCreateValoraAccount: 'Instalar Valora e criar conta',
+        connectWithValora: 'Conectar com Valora',
         duplicatedTitle: 'Contas duplicadas',
         duplicatedMsg1:
             'O seu numero de telemovel {{phoneNumber}} está associado a outra conta no impactMarket.',
