@@ -136,6 +136,7 @@ function CreateCommunityScreen() {
                     .then((details) => {
                         setCoverUploadDetails(details[0].media);
                         if (state.profileImage.length > 0) {
+                            console.log({ details });
                             setProfileUploadDetails(details[1].media);
                         }
                         setSubmittingCover(false);
@@ -547,7 +548,7 @@ function CreateCommunityScreen() {
                     onPress={() => {
                         setRequestCancel(false);
                         if (communityUploadDetails !== undefined) {
-                            updateUIAfterSubmission(communityUploadDetails);
+                            updateUIAfterSubmission(communityCreationError);
                         }
                     }}
                 >

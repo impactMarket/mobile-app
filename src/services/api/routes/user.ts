@@ -62,7 +62,9 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async updateProfilePicture(uri: string): Promise<AppMediaContent> {
+    static async updateProfilePicture(
+        uri: string
+    ): Promise<{ uploadURL: string; media: AppMediaContent }> {
         const mimetype = mime
             .contentType(path.basename(uri))
             .match(/\/(\w+);?/)[1];
