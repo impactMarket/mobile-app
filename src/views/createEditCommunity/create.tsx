@@ -547,10 +547,7 @@ function CreateCommunityScreen() {
                     onPress={() => {
                         setRequestCancel(false);
                         if (communityUploadDetails !== undefined) {
-                            updateUIAfterSubmission(
-                                communityUploadDetails,
-                                undefined
-                            );
+                            updateUIAfterSubmission(communityUploadDetails);
                         }
                     }}
                 >
