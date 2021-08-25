@@ -210,7 +210,9 @@ function Container({
                                             onPress={() => {
                                                 Alert.alert(
                                                     i18n.t('generic.delete'),
-                                                    i18n.t('deleteWarning'),
+                                                    i18n.t(
+                                                        'stories.deleteWarning'
+                                                    ),
                                                     [
                                                         {
                                                             text: i18n.t(
@@ -278,7 +280,9 @@ function Container({
                                         hitSlop={15}
                                         onPress={() => {
                                             Alert.alert(
-                                                i18n.t('reportAsInapropriated'),
+                                                i18n.t(
+                                                    'stories.reportAsInapropriated'
+                                                ),
                                                 i18n.t(
                                                     'reportInapropriateWarning'
                                                 ),

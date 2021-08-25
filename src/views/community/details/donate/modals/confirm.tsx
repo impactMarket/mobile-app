@@ -99,7 +99,7 @@ class ConfirmModal extends Component<
                     // TODO: 'nonce too low' have happened here!
                     Alert.alert(
                         i18n.t('generic.failure'),
-                        i18n.t('errorDonating'),
+                        i18n.t('donate.errorDonating'),
                         [
                             { text: 'Try again', onPress: () => executeTx() },
                             {
@@ -141,7 +141,7 @@ class ConfirmModal extends Component<
 
         return (
             <Modal
-                title={i18n.t('donateSymbol', {
+                title={i18n.t('donate.donateSymbol', {
                     symbol: userCurrency,
                 })}
                 visible={visible}
@@ -177,7 +177,7 @@ class ConfirmModal extends Component<
                                 labelStyle={styles.donateLabel}
                                 onPress={this.donateWithCeloWallet}
                             >
-                                {i18n.t('donate')}
+                                {i18n.t('donate.donate')}
                             </Button>
                         </View>
                     </View>

@@ -35,7 +35,7 @@ export default function Donate(props: IDonateProps) {
                     })
                 }
             >
-                {i18n.t('donate')}
+                {i18n.t('donate.donate')}
             </Button>
             <Portal>
                 <Provider store={useStore()}>

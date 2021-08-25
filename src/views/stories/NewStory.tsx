@@ -121,7 +121,7 @@ function NewStoryScreen() {
                 setSubmitedResult(r);
                 Alert.alert(
                     i18n.t('generic.success'),
-                    i18n.t('storyCongrat'),
+                    i18n.t('stories.storyCongrat'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -129,7 +129,7 @@ function NewStoryScreen() {
             } else {
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('emptyStoryFailure'),
+                    i18n.t('stories.emptyStoryFailure'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -137,7 +137,7 @@ function NewStoryScreen() {
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('storyFailure'),
+                i18n.t('stories.storyFailure'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
@@ -199,10 +199,10 @@ function NewStoryScreen() {
                     />
                 </Text>
                 <Text style={styles.storySubTitle}>
-                    {i18n.t('storySubTitle')}
+                    {i18n.t('stories.storySubTitle')}
                 </Text>
                 <Text style={styles.description}>
-                    {i18n.t('storyRulesSecondParagraph')}
+                    {i18n.t('stories.storyRulesSecondParagraph')}
                 </Text>
                 <Button
                     modeType="gray"
@@ -247,7 +247,7 @@ function NewStoryScreen() {
                         onPress={() => pickImage()}
                         style={{ width: '100%', marginVertical: 24 }}
                     >
-                        {i18n.t('attach')}
+                        {i18n.t('donate.attach')}
                     </Button>
                     {storyMedia.length > 0 && (
                         <ImageBackground
@@ -279,7 +279,7 @@ function NewStoryScreen() {
                 onOpen={() => setIsDisabled(true)}
                 onClose={() => setIsDisabled(false)}
                 HeaderComponent={renderHeader(
-                    i18n.t('storyRules'),
+                    i18n.t('stories.storyRules'),
                     modalizeStoryRef,
                     () => modalizeStoryRef.current?.close()
                 )}
@@ -293,7 +293,7 @@ function NewStoryScreen() {
 NewStoryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('newStory'),
+        headerTitle: i18n.t('stories.newStory'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

@@ -99,7 +99,7 @@ function AddedManagerScreen() {
                 }
                 Alert.alert(
                     i18n.t('generic.success'),
-                    i18n.t('userWasRemoved', {
+                    i18n.t('manager.userWasRemoved', {
                         user: formatAddressOrName(manager),
                     }),
                     [{ text: 'OK' }],
@@ -153,7 +153,9 @@ function AddedManagerScreen() {
                 }
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('errorRemovingManager', { error: i18n.t(error) }),
+                    i18n.t('manager.errorRemovingManager', {
+                        error: i18n.t(error),
+                    }),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -209,7 +211,7 @@ function AddedManagerScreen() {
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
-            description={i18n.t('managerSince', {
+            description={i18n.t('manager.managerSince', {
                 date: moment(item.createdAt).format('MMM, YYYY'),
             })}
             right={() =>

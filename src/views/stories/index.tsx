@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
 StoriesScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('stories'),
+        headerTitle: i18n.t('stories.stories'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

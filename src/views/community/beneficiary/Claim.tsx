@@ -124,7 +124,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         if (notEnoughToClaimOnContract) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('beneficiaryCommunityNoFunds'),
+                i18n.t('beneficiary.beneficiaryCommunityNoFunds'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -145,7 +145,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         if (isLocked !== null) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('claimLockedUntil', {
+                i18n.t('beneficiary.claimLockedUntil', {
                     date: moment(isLocked).format('lll'),
                 }),
                 [{ text: i18n.t('generic.close') }],
@@ -357,7 +357,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 }
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('errorClaiming', { error: i18n.t(error) }),
+                    i18n.t('beneficiary.errorClaiming', {
+                        error: i18n.t(error),
+                    }),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
@@ -395,7 +397,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             return (
                 <View style={{ height: 90 }}>
                     <Text style={styles.mainPageContent}>
-                        {i18n.t('youCanClaimXin', {
+                        {i18n.t('beneficiary.youCanClaimXin', {
                             amount: amountToCurrency(
                                 claimAmount,
                                 userCurrency,
@@ -479,7 +481,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     }}
                 >
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.claimText}>{i18n.t('claimX')}</Text>
+                        <Text style={styles.claimText}>
+                            {i18n.t('beneficiary.claimX')}
+                        </Text>
                         <Text style={styles.claimTextCurrency}>
                             {getCurrencySymbol(userCurrency)}
                         </Text>

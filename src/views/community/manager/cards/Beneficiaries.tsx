@@ -75,7 +75,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                     navigation.navigate(Screens.AddBeneficiary)
                                 }
                             >
-                                {i18n.t('addBeneficiary')}
+                                {i18n.t('manager.addBeneficiary')}
                             </Button>
                         ) : (
                             <Button
@@ -87,14 +87,16 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                 }}
                                 onPress={() => {
                                     Alert.alert(
-                                        i18n.t('noFunds'),
-                                        i18n.t('notFundsToAddBeneficiary'),
+                                        i18n.t('beneficiary.noFunds'),
+                                        i18n.t(
+                                            'beneficiary.notFundsToAddBeneficiary'
+                                        ),
                                         [{ text: i18n.t('generic.close') }],
                                         { cancelable: false }
                                     );
                                 }}
                             >
-                                {i18n.t('addBeneficiary')}
+                                {i18n.t('manager.addBeneficiary')}
                             </Button>
                         )}
                         {isSuspeciousDetected && <SuspiciousActivity />}

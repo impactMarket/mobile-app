@@ -78,7 +78,7 @@ function Welcome() {
                         dispatch(SetAppFromWelcomeScreen(Screens.Auth));
                     }}
                 >
-                    {i18n.t('connectWithValora')}
+                    {i18n.t('auth.connectWithValora')}
                 </Button>
                 <Button
                     modeType="gray"

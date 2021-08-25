@@ -29,7 +29,7 @@ function Managers(props: IManagersProps) {
                             letterSpacing: 0.7,
                         }}
                     >
-                        {i18n.t('managers').toUpperCase()}
+                        {i18n.t('manager.managers').toUpperCase()}
                     </Headline>
                     <Button
                         modeType="gray"
@@ -50,7 +50,7 @@ function Managers(props: IManagersProps) {
                         }}
                         onPress={() => navigation.navigate(Screens.AddManager)}
                     >
-                        {i18n.t('addManager')}
+                        {i18n.t('manager.addManager')}
                     </Button>
                 </Card.Content>
             </Card>

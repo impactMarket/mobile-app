@@ -83,7 +83,7 @@ function Tabs() {
                     name="profile"
                     component={ProfileScreen}
                     options={{
-                        title: i18n.t('profile'),
+                        title: i18n.t('profile.profile'),
                         tabBarIcon: (props: ITabBarIconProps) => (
                             <ProfileSvg focused={props.focused} />
                         ),

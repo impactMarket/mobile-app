@@ -21,7 +21,7 @@ class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
 
         return (
             <Modal
-                title={i18n.t('donateSymbol', {
+                title={i18n.t('donate.donateSymbol', {
                     symbol: userCurrency,
                 })}
                 visible={visible}
@@ -46,7 +46,7 @@ class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
                         textAlign: 'center',
                     }}
                 >
-                    {i18n.t('donationBiggerThanBalance')}
+                    {i18n.t('donate.donationBiggerThanBalance')}
                 </Paragraph>
             </Modal>
         );

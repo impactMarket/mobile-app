@@ -175,7 +175,7 @@ function CommunityManagerScreen() {
 
                 Alert.alert(
                     i18n.t('generic.success'),
-                    i18n.t('ubiParamsUpdated'),
+                    i18n.t('manager.ubiParamsUpdated'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -238,7 +238,7 @@ function CommunityManagerScreen() {
                         requiredUbiToChange !== null && (
                             <Portal>
                                 <Modal
-                                    title={i18n.t('ubiParams')}
+                                    title={i18n.t('manager.ubiParams')}
                                     visible
                                     buttons={
                                         <>
@@ -250,7 +250,9 @@ function CommunityManagerScreen() {
                                                 }
                                                 loading={editInProgress}
                                             >
-                                                {i18n.t('acceptNewUbiParams')}
+                                                {i18n.t(
+                                                    'manager.acceptNewUbiParams'
+                                                )}
                                             </Button>
                                         </>
                                     }
@@ -258,7 +260,7 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('ubiParamsChanged')}
+                                        {i18n.t('manager.ubiParamsChanged')}
                                     </Paragraph>
                                     <Paragraph
                                         style={styles.ubiChangeModalText}

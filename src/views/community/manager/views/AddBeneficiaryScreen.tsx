@@ -60,7 +60,7 @@ function AddBeneficiaryScreen() {
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('addingInvalidAddress'),
+                i18n.t('manager.addingInvalidAddress'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -73,7 +73,7 @@ function AddBeneficiaryScreen() {
 
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('alreadyInCommunity'),
+                i18n.t('manager.alreadyInCommunity'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -84,7 +84,7 @@ function AddBeneficiaryScreen() {
         if (!userExist) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('userNotRegistered'),
+                i18n.t('manager.userNotRegistered'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -112,7 +112,7 @@ function AddBeneficiaryScreen() {
 
                 Alert.alert(
                     i18n.t('generic.success'),
-                    i18n.t('addedNewBeneficiary'),
+                    i18n.t('manager.addedNewBeneficiary'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -147,7 +147,9 @@ function AddBeneficiaryScreen() {
                 }
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('errorAddingBeneficiary', { error: i18n.t(error) }),
+                    i18n.t('manager.errorAddingBeneficiary', {
+                        error: i18n.t(error),
+                    }),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
@@ -173,7 +175,7 @@ function AddBeneficiaryScreen() {
                             textAlign: 'center',
                         }}
                     >
-                        {i18n.t('addingYourOwnAddress')}
+                        {i18n.t('manager.addingYourOwnAddress')}
                     </Paragraph>
                 </View>
             )}
@@ -196,7 +198,7 @@ function AddBeneficiaryScreen() {
                             backgroundColor: 'transparent',
                             paddingHorizontal: 0,
                         }}
-                        label={i18n.t('beneficiaryAddress')}
+                        label={i18n.t('manager.beneficiaryAddress')}
                         value={inputAddress}
                         // required
                         onChangeText={(value: string) => setInputAddress(value)}
@@ -227,7 +229,7 @@ function AddBeneficiaryScreen() {
                     loading={addInProgress === true}
                     onPress={() => handleModalScanQR()}
                 >
-                    {i18n.t('addBeneficiary')}
+                    {i18n.t('manager.addBeneficiary')}
                 </Button>
                 {/* Accessing community details to check suspicious activity */}
                 {communityMetadata.suspect !== null && <SuspiciousActivity />}
@@ -243,7 +245,7 @@ function AddBeneficiaryScreen() {
 AddBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('addBeneficiary'),
+        headerTitle: i18n.t('manager.addBeneficiary'),
     };
 };
 

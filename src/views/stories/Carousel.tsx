@@ -131,9 +131,11 @@ function Carousel(props: {
                     alignSelf: 'center',
                 }}
             >
-                <Text style={styles.title}>{i18n.t('emptyStoriesTitle')}</Text>
+                <Text style={styles.title}>
+                    {i18n.t('stories.emptyStoriesTitle')}
+                </Text>
                 <Text style={styles.text}>
-                    {i18n.t('emptyStoriesDescription')}
+                    {i18n.t('stories.emptyStoriesDescription')}
                 </Text>
                 <Pressable
                     style={{
@@ -170,7 +172,7 @@ function Carousel(props: {
                                 color: ipctColors.white,
                             }}
                         >
-                            {i18n.t('createStory')}
+                            {i18n.t('stories.createStory')}
                         </Text>
                     </View>
                 </Pressable>
@@ -302,7 +304,7 @@ function Carousel(props: {
                                     )
                                 }
                             >
-                                {i18n.t('donate')}
+                                {i18n.t('donate.donate')}
                             </Button>
                         )}
                 </View>

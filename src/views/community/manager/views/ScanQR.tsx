@@ -161,7 +161,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={this.handleAskCameraPermission}>
-                            {i18n.t('allowCamera')}
+                            {i18n.t('manager.allowCamera')}
                         </Button>
                         <Button
                             onPress={() =>

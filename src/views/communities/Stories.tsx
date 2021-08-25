@@ -79,7 +79,7 @@ export default function Stories() {
                         color: '#1E3252',
                     }}
                 >
-                    {i18n.t('stories')}
+                    {i18n.t('stories.stories')}
                 </Text>
                 <Pressable
                     hitSlop={10}

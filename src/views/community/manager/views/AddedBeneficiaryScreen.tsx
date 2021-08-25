@@ -113,7 +113,7 @@ function AddedBeneficiaryScreen() {
                 }
                 Alert.alert(
                     i18n.t('generic.success'),
-                    i18n.t('userWasRemoved', {
+                    i18n.t('manager.userWasRemoved', {
                         user: formatAddressOrName(beneficiary),
                     }),
                     [{ text: 'OK' }],
@@ -164,7 +164,7 @@ function AddedBeneficiaryScreen() {
                 }
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('errorRemovingBeneficiary', {
+                    i18n.t('manager.errorRemovingBeneficiary', {
                         error: i18n.t(error),
                     }),
                     [{ text: 'OK' }],
@@ -224,7 +224,7 @@ function AddedBeneficiaryScreen() {
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
-            description={i18n.t('claimedSince', {
+            description={i18n.t('manager.claimedSince', {
                 amount:
                     item.claimed === undefined
                         ? '0'

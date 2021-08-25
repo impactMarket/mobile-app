@@ -311,7 +311,7 @@ AnonymousReportScreen.navigationOptions = ({
 }) => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('report'),
+        headerTitle: i18n.t('report.report'),
         headerRight: () => (
             <SubmitStory
                 submit={submitReport}

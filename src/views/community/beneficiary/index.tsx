@@ -329,7 +329,7 @@ function BeneficiaryScreen() {
                                 }
                                 style={styles.haveClaimed}
                             >
-                                {i18n.t('youHaveClaimedXoutOfY', {
+                                {i18n.t('beneficiary.youHaveClaimedXoutOfY', {
                                     claimed: claimedAmount,
                                     max: humanifyCurrencyAmount(
                                         community.contract.maxClaim
@@ -395,7 +395,7 @@ function BeneficiaryScreen() {
                                         }
                                         style={styles.howClaimsWorksLink}
                                     >
-                                        {i18n.t('howClaimWorks')}
+                                        {i18n.t('beneficiary.howClaimWorks')}
                                     </Text>
                                 )}
                             </Paragraph>
@@ -560,8 +560,8 @@ BeneficiaryScreen.navigationOptions = ({
     route: RouteProp<any, any>;
 }) => {
     return {
-        title: i18n.t('claim'),
-        tabBarLabel: i18n.t('claim'),
+        title: i18n.t('beneficiary.claim'),
+        tabBarLabel: i18n.t('beneficiary.claim'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <ClaimSvg focused={props.focused} />
         ),

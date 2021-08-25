@@ -239,17 +239,17 @@ export default {
         emptyStoriesDescription:
             "Don't miss the opportunity and create one, now!",
         storyRules: 'Important Rules',
-        storyRulesFirstParagraph:
-            '<bold>Sharing your stories will help your community to raise more funds.</bold> Do not share any content (text or image) that infringe our rules as it will be deleted and you may be removed from your community.',
+        // storyRulesFirstParagraph:
+        // '<bold>Sharing your stories will help your community to raise more funds.</bold> Do not share any content (text or image) that infringe our rules as it will be deleted and you may be removed from your community.',
         storySubTitle: 'Stories must not contain any of the following:',
         storyRulesSecondParagraph:
             'Violence, Terrorism/violent extremism, Child sexual exploitation, Abuse/harassment, Hateful conduct, Suicide or self-harm, Sensitive media, Illegal or certain regulated goods or services, Nudity, Non-consensual nudity, Civic Integrity, Impersonation, Synthetic and manipulated media, and Copyrights and trademarks.',
         reportAsInapropriated: 'Report as inapropriate',
-        reportedAsInapropriated: 'Reported as inapropriate',
-        reportInapropriateSuccess: 'Your report was successfully submitted.',
-        deleteSuccess: 'Your story was successfully deleted.',
-        reportInapropriateWarning:
-            'Are you sure you want to report this story as inapropriate?',
+        // reportedAsInapropriated: 'Reported as inapropriate',
+        // reportInapropriateSuccess: 'Your report was successfully submitted.',
+        // deleteSuccess: 'Your story was successfully deleted.',
+        // reportInapropriateWarning:
+        //     'Are you sure you want to report this story as inapropriate?',
         deleteWarning: 'Are you sure you want to delete this story?',
         storyCongrat: 'Congratulations, your story was submitted!',
         storyFailure: 'Error uploading story!',
@@ -279,12 +279,12 @@ export default {
                 'If you find some suspicious activity, let us know, as it will be regarded as a good faith action that can prevent all the community to be affected because of a few bad actors.',
         },
         claim: 'Claim',
-        claimExplained1:
-            '<bold>Each community has a group of beneficiaries</bold>, added by the coommunity managers, that can access a basic income under a set of rules. For example, each beneficiary can claim $1/day up to $500.',
-        claimExplained2:
-            '<bold>There is a minimum time you have to wait before being able to claim again</bold>, but there is no maximum. You should only claim when you need those funds. The more you claim, the more time you have to wait to claim again.',
-        claimExplained3:
-            '<bold>If your community have run out of funds</bold> you will not be able to claim. The only way to start claiming again is when the community gets additional funds through donations.',
+        // claimExplained1:
+        //     '<bold>Each community has a group of beneficiaries</bold>, added by the coommunity managers, that can access a basic income under a set of rules. For example, each beneficiary can claim $1/day up to $500.',
+        // claimExplained2:
+        //     '<bold>There is a minimum time you have to wait before being able to claim again</bold>, but there is no maximum. You should only claim when you need those funds. The more you claim, the more time you have to wait to claim again.',
+        // claimExplained3:
+        //     '<bold>If your community have run out of funds</bold> you will not be able to claim. The only way to start claiming again is when the community gets additional funds through donations.',
         claimLockedUntil:
             "You aren't yet allowed to claim. Will be available in {{date}}. If it fails peridically, make sure to have the best internet connection possible and Valora is synced.",
         youCanClaimXin: 'You can claim {{amount}} in',
@@ -293,8 +293,8 @@ export default {
         noFunds: 'No Funds',
         notFundsToAddBeneficiary:
             'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
-        nextTimeWillWaitClaim:
-            'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
+        // nextTimeWillWaitClaim:
+        //     'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
         howClaimWorks: 'How claims work.',
         errorClaiming: 'An error happened while claiming.\n\nError: {{error}}',
         beneficiaryCommunityNoFunds:
@@ -310,11 +310,11 @@ export default {
     profile: {
         profile: 'Profile',
         balance: 'Valora Wallet Balance',
-        uploadProfilePicture: 'Upload profile picture',
+        // uploadProfilePicture: 'Upload profile picture',
         phoneNumber: 'Phone Number',
         logout: 'Logout',
-        stolenOrChangedPhone:
-            'Please read the following instruction in case your phone is <blue>stolen/lost</blue> or you need to <blue>change your phone number.</blue>',
+        // stolenOrChangedPhone:
+        //     'Please read the following instruction in case your phone is <blue>stolen/lost</blue> or you need to <blue>change your phone number.</blue>',
         age: 'Age',
         gender: 'Gender',
         male: 'Male',
@@ -328,9 +328,9 @@ export default {
             'SSI measures how financially sustainable a community is, and its progress.',
         seeMore: 'See More',
         seeLess: 'See Less',
-        exploreCommunityContract: 'See Community Contract',
-        eachBeneficiaryCanClaimXUpToY:
-            'Each beneficiary can claim ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',
+        // exploreCommunityContract: 'See Community Contract',
+        // eachBeneficiaryCanClaimXUpToY:
+        //     'Each beneficiary can claim ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',
         copyContractAddress: 'Copy Contract Address',
         suspiciousActivityDetected: 'Suspicious activities detected',
         suspiciousDescription:
@@ -366,8 +366,8 @@ export default {
         attach: 'Attach',
         donateWithValora: 'Contribute with Valora',
         donateSymbol: 'Contribute ({{symbol}})',
-        donateConfirmMessage:
-            "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
+        // donateConfirmMessage:
+        //     "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
         yourDonationWillBackFor:
             'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         donationBiggerThanBalance:
@@ -396,7 +396,7 @@ export default {
         whatIsValora: 'What is Valora?',
         installAndCreateValoraAccount: 'Install and create Valora Account',
         connectWithValora: 'Connect with Valora',
-        duplicatedTitle: 'Duplicated Accounts',
+        // duplicatedTitle: 'Duplicated Accounts',
         duplicatedMsg1:
             'Your phone number {{phoneNumber}} is associated with other impactMarket account.',
         duplicatedMsg2: 'Do you want login and disable all other accounts?',

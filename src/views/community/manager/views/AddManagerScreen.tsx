@@ -58,7 +58,7 @@ function AddManagerScreen() {
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('addingInvalidAddress'),
+                i18n.t('manager.addingInvalidAddress'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -69,7 +69,7 @@ function AddManagerScreen() {
         if (searchResult.length !== 0) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('alreadyInCommunity'),
+                i18n.t('manager.alreadyInCommunity'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -82,7 +82,7 @@ function AddManagerScreen() {
         if (!userExists) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('notAnUser'),
+                i18n.t('manager.notAnUser'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -108,7 +108,7 @@ function AddManagerScreen() {
 
                 Alert.alert(
                     i18n.t('generic.success'),
-                    i18n.t('addedNewManager'),
+                    i18n.t('manager.addedNewManager'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -143,7 +143,9 @@ function AddManagerScreen() {
                 }
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('errorAddingManager', { error: i18n.t(error) }),
+                    i18n.t('manager.errorAddingManager', {
+                        error: i18n.t(error),
+                    }),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
@@ -169,7 +171,7 @@ function AddManagerScreen() {
                             textAlign: 'center',
                         }}
                     >
-                        {i18n.t('alreadyInCommunity')}
+                        {i18n.t('manager.alreadyInCommunity')}
                     </Paragraph>
                 </View>
             )}
@@ -192,7 +194,7 @@ function AddManagerScreen() {
                             backgroundColor: 'transparent',
                             paddingHorizontal: 0,
                         }}
-                        label={i18n.t('managerAddress')}
+                        label={i18n.t('manager.managerAddress')}
                         value={inputAddress}
                         // required
                         onChangeText={(value: string) => setInputAddress(value)}
@@ -223,7 +225,7 @@ function AddManagerScreen() {
                     loading={addInProgress === true}
                     onPress={() => handleModalScanQR()}
                 >
-                    {i18n.t('addManager')}
+                    {i18n.t('manager.addManager')}
                 </Button>
             </View>
             <ScanQR
@@ -237,7 +239,7 @@ function AddManagerScreen() {
 AddManagerScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('addManager'),
+        headerTitle: i18n.t('manager.addManager'),
     };
 };
 

@@ -93,7 +93,7 @@ function RemovedBeneficiaryScreen() {
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
-            description={i18n.t('claimedSince', {
+            description={i18n.t('manager.claimedSince', {
                 amount:
                     item.claimed === undefined
                         ? '0'

@@ -137,12 +137,12 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                     lineHeight: 17,
                                 }}
                             >
-                                {i18n.t('ssi')}
+                                {i18n.t('community.ssi')}
                             </Paragraph>
                         </View>
                     </View>
                     <Paragraph style={styles.ssiExplained}>
-                        {i18n.t('ssiDescription')}
+                        {i18n.t('community.ssiDescription')}
                     </Paragraph>
                 </>
             );
@@ -243,8 +243,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                             }
                                         >
                                             {seeFullDescription
-                                                ? i18n.t('seeLess')
-                                                : i18n.t('seeMore')}
+                                                ? i18n.t('community.seeLess')
+                                                : i18n.t('community.seeMore')}
                                         </Button>
                                     </View>
                                 )}

@@ -236,11 +236,11 @@ function ProfileScreen() {
     const textGender = (g: string | null) => {
         switch (g) {
             case 'f':
-                return i18n.t('female');
+                return i18n.t('profile.female');
             case 'm':
-                return i18n.t('male');
+                return i18n.t('profile.male');
             case 'o':
-                return i18n.t('others');
+                return i18n.t('profile.others');
             default:
                 return i18n.t('generic.select');
         }
@@ -419,9 +419,21 @@ function ProfileScreen() {
                 }}
                 value={gender ? gender : ''}
             >
-                <RadioButton.Item key="f" label={i18n.t('female')} value="f" />
-                <RadioButton.Item key="m" label={i18n.t('male')} value="m" />
-                <RadioButton.Item key="o" label={i18n.t('others')} value="o" />
+                <RadioButton.Item
+                    key="f"
+                    label={i18n.t('profile.female')}
+                    value="f"
+                />
+                <RadioButton.Item
+                    key="m"
+                    label={i18n.t('profile.male')}
+                    value="m"
+                />
+                <RadioButton.Item
+                    key="o"
+                    label={i18n.t('profile.others')}
+                    value="o"
+                />
             </RadioButton.Group>
         </View>
     );
@@ -530,7 +542,7 @@ function ProfileScreen() {
                         onPress={() => Linking.openURL('celo://wallet')}
                     >
                         <Text style={styles.balanceValue}>
-                            {i18n.t('balance')}
+                            {i18n.t('profile.balance')}
                         </Text>
                         <View
                             style={{
@@ -614,7 +626,7 @@ function ProfileScreen() {
                     >
                         <View style={{ flex: 1, marginRight: 10 }}>
                             <Select
-                                label={i18n.t('gender')}
+                                label={i18n.t('profile.gender')}
                                 value={textGender(gender)}
                                 onPress={() => {
                                     modalizeGenderRef.current?.open();
@@ -623,7 +635,7 @@ function ProfileScreen() {
                         </View>
                         <View style={{ flex: 1, marginLeft: 10 }}>
                             <Input
-                                label={i18n.t('age')}
+                                label={i18n.t('profile.age')}
                                 value={age}
                                 maxLength={4}
                                 keyboardType="numeric"
@@ -647,7 +659,7 @@ function ProfileScreen() {
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Input
-                            label={i18n.t('howManyChildren')}
+                            label={i18n.t('profile.howManyChildren')}
                             value={children}
                             maxLength={4}
                             keyboardType="numeric"
@@ -711,7 +723,7 @@ function ProfileScreen() {
                         />
                     </Text>
                     <Input
-                        label={i18n.t('phoneNumber')}
+                        label={i18n.t('profile.phoneNumber')}
                         boxStyle={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
@@ -793,7 +805,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeGenderRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('gender'),
+                        i18n.t('profile.gender'),
                         modalizeGenderRef
                     )}
                     adjustToContentHeight
@@ -828,8 +840,8 @@ function ProfileScreen() {
 ProfileScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('profile'),
-        tabBarLabel: i18n.t('profile'),
+        headerTitle: i18n.t('profile.profile'),
+        tabBarLabel: i18n.t('profile.profile'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

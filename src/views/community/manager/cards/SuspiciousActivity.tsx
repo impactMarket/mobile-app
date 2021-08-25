@@ -12,11 +12,11 @@ function SuspiciousActivity() {
             <View style={styles.headlineContainer}>
                 <WarningTriangle />
                 <Headline style={styles.headerTitle}>
-                    {i18n.t('suspiciousActivityDetected')}
+                    {i18n.t('community.suspiciousActivityDetected')}
                 </Headline>
             </View>
             <Paragraph style={styles.paragraphContent}>
-                {i18n.t('suspiciousDescription')}
+                {i18n.t('community.suspiciousDescription')}
             </Paragraph>
         </Card>
     );

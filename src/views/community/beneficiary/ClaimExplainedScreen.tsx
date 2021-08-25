@@ -64,7 +64,7 @@ function ClaimExplainedScreen() {
 ClaimExplainedScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('howClaimWorks'),
+        headerTitle: i18n.t('beneficiary.howClaimWorks'),
     };
 };
 

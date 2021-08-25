@@ -153,7 +153,7 @@ class DonateModal extends Component<
                     }
                     onPress={this.handleConfirmDonateWithCeloWallet}
                 >
-                    {i18n.t('donateWithValora')}
+                    {i18n.t('donate.donateWithValora')}
                 </Button>
             ) : (
                 <Button
@@ -173,7 +173,7 @@ class DonateModal extends Component<
                         );
                     }}
                 >
-                    {i18n.t('donateWithValora')}
+                    {i18n.t('donate.donateWithValora')}
                 </Button>
             );
 
@@ -190,10 +190,10 @@ class DonateModal extends Component<
                             this.setState({ showCopiedToClipboard: false }),
                     }}
                 >
-                    {i18n.t('addressCopiedClipboard')}
+                    {i18n.t('donate.addressCopiedClipboard')}
                 </Snackbar>
                 <Modal
-                    title={i18n.t('donateSymbol', {
+                    title={i18n.t('donate.donateSymbol', {
                         symbol: userCurrency,
                     })}
                     visible={visible}
@@ -206,7 +206,7 @@ class DonateModal extends Component<
                                 labelStyle={styles.donateLabel}
                                 onPress={this.handleCopyAddressToClipboard}
                             >
-                                {i18n.t('copyContractAddress')}
+                                {i18n.t('community.copyContractAddress')}
                             </Button>
                             {donateWithValoraButton}
                         </>
@@ -313,7 +313,7 @@ class DonateModal extends Component<
                                         : 'none',
                             }}
                         >
-                            {i18n.t('amountShouldBe', {
+                            {i18n.t('donate.amountShouldBe', {
                                 claimAmount: parseFloat(
                                     new BigNumber(
                                         community.contract.claimAmount
@@ -342,7 +342,7 @@ class DonateModal extends Component<
                                         : 'none',
                             }}
                         >
-                            {i18n.t('yourDonationWillBackFor', {
+                            {i18n.t('donate.yourDonationWillBackFor', {
                                 backNBeneficiaries: Math.min(
                                     community.state.beneficiaries,
                                     amountDonate.length > 0

@@ -46,7 +46,7 @@ function Logout() {
                 loading={logingOut}
                 disabled={logingOut}
             >
-                {i18n.t('logout')}
+                {i18n.t('profile.logout')}
             </Button>
         </View>
     );

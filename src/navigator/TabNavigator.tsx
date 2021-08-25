@@ -34,13 +34,13 @@ function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
 
     switch (routeName) {
         case Screens.Beneficiary:
-            return i18n.t('claim');
+            return i18n.t('beneficiary.claim');
         case Screens.CommunityManager:
             return i18n.t('generic.manage');
         case Screens.Communities:
             return i18n.t('generic.communities');
         case Screens.Profile:
-            return i18n.t('profile');
+            return i18n.t('profile.profile');
     }
 }
 function getHeaderRight(
