@@ -235,7 +235,7 @@ function Container({
                                                                                 'success'
                                                                             ),
                                                                             i18n.t(
-                                                                                'deleteSuccess'
+                                                                                'stories.deleteSuccess'
                                                                             ),
                                                                             [
                                                                                 {
@@ -308,7 +308,7 @@ function Container({
                                                                             'success'
                                                                         ),
                                                                         i18n.t(
-                                                                            'reportInapropriateSuccess'
+                                                                            'stories.reportInapropriateSuccess'
                                                                         ),
                                                                         [
                                                                             {
@@ -340,7 +340,7 @@ function Container({
                                         >
                                             {story.userReported
                                                 ? i18n.t(
-                                                      'reportedAsInapropriated'
+                                                      'stories.storyRulesFirstParagraph'
                                                   )
                                                 : i18n.t(
                                                       'reportAsInapropriated'

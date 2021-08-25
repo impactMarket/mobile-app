@@ -367,7 +367,7 @@ function BeneficiaryScreen() {
                                     )
                                     .asSeconds() < 0 ? (
                                     <Trans
-                                        i18nKey="nextTimeWillWaitClaim"
+                                        i18nKey="beneficiary.nextTimeWillWaitClaim"
                                         values={{
                                             nextWait: formatedTimeNextCooldown(),
                                         }}

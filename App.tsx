@@ -362,7 +362,7 @@ class App extends React.Component<any, IAppState> {
                                             }}
                                         >
                                             {i18n.t(
-                                                'newVersionAvailableMessage'
+                                                'generic.newVersionAvailableMessage'
                                             )}
                                         </Paragraph>
                                     </View>

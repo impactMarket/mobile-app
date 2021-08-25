@@ -11,7 +11,7 @@ function ClaimExplainedScreen() {
             <ScrollView style={styles.contentView}>
                 <Text style={styles.textInfo}>
                     <Trans
-                        i18nKey="claimExplained1"
+                        i18nKey="beneficiary.claimExplained1"
                         components={{
                             bold: (
                                 <Text
@@ -27,7 +27,7 @@ function ClaimExplainedScreen() {
                 </Text>
                 <Text style={styles.textInfo}>
                     <Trans
-                        i18nKey="claimExplained2"
+                        i18nKey="beneficiary.claimExplained2"
                         components={{
                             bold: (
                                 <Text
@@ -43,7 +43,7 @@ function ClaimExplainedScreen() {
                 </Text>
                 <Text style={styles.textInfo}>
                     <Trans
-                        i18nKey="claimExplained3"
+                        i18nKey="beneficiary.claimExplained3"
                         components={{
                             bold: (
                                 <Text

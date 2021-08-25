@@ -136,29 +136,29 @@ function AddedBeneficiaryScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
-                let error = 'unknown';
+                let error = 'generic.unknown';
                 if (e.message.includes('has been reverted')) {
-                    error = 'syncIssues';
+                    error = 'generic.syncIssues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'possiblyValoraNotSynced';
+                    error = 'generic.possiblyValoraNotSynced';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'unknown';
+                    error = 'generic.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'clockNotSynced';
+                        error = 'generic.clockNotSynced';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'networkConnectionLost';
+                        error = 'generic.networkConnectionLost';
                     }
-                    error = 'networkIssuesRPC';
+                    error = 'generic.networkIssuesRPC';
                 }
-                if (error === 'unknown') {
+                if (error === 'generic.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.captureException(e);
                 }
