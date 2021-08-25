@@ -8,15 +8,10 @@ import WarningRedTriangle from 'components/svg/WarningRedTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import { celoNetwork } from 'helpers/constants';
 import { formatInputAmountToTransfer } from 'helpers/currency';
-import { updateCommunityInfo } from 'helpers/index';
 import { createCommunityRequest } from 'helpers/redux/actions/communities';
-import {
-    setCommunityMetadata,
-    setUserIsCommunityManager,
-    setUserMetadata,
-} from 'helpers/redux/actions/user';
+import { setUserMetadata } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
-import { AppMediaContent, CommunityAttributes } from 'helpers/types/models';
+import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitCommunity from 'navigator/header/SubmitCommunity';
 import React, { useEffect, useLayoutEffect, useReducer, useState } from 'react';
@@ -31,7 +26,7 @@ import {
 } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { batch, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -94,9 +89,7 @@ function CreateCommunityScreen() {
     const [profileUploadDetails, setProfileUploadDetails] = useState<
         AppMediaContent | undefined
     >(undefined);
-    // const [communityUploadDetails, setCommunityUploadDetails] = useState<
-    //     CommunityAttributes | undefined
-    // >(undefined);
+
     const [state, dispatch] = useReducer(reducer, formInitialState);
 
     const userAddress = useSelector(
@@ -128,7 +121,7 @@ function CreateCommunityScreen() {
                 coverUploadDetails !== undefined &&
                 ((state.profileImage.length > 0 &&
                     profileUploadDetails !== undefined) ||
-                    userMetadata.avatar.length > 0)
+                    userMetadata.avatar?.length > 0)
             ) {
                 cancelablePromise = makeCancelable(submitCommunity());
                 cancelablePromise.promise.catch().finally(() => {
@@ -161,22 +154,10 @@ function CreateCommunityScreen() {
         coverUploadDetails,
         profileUploadDetails,
         isUploadingContent,
-        communityUploadDetails,
     ]);
 
-    const updateUIAfterSubmission = async (
-        data: CommunityAttributes,
-        error: any
-    ) => {
+    const updateUIAfterSubmission = async (error: any) => {
         if (error === undefined) {
-            await updateCommunityInfo(data.id, dispatchRedux);
-            const community = await Api.community.findById(data.id);
-            if (community !== undefined) {
-                batch(() => {
-                    dispatchRedux(setCommunityMetadata(community));
-                    dispatchRedux(setUserIsCommunityManager(true));
-                });
-            }
             setSubmitting(false);
             setSubmittingSuccess(true);
         } else {
@@ -222,12 +203,7 @@ function CreateCommunityScreen() {
             communityCreationError === undefined &&
             communityUploadDetails !== undefined
         ) {
-            console.log('updating UI After Submission');
-
-            await updateUIAfterSubmission(
-                communityUploadDetails,
-                communityCreationError
-            );
+            await updateUIAfterSubmission(communityCreationError);
         }
     };
 
@@ -244,6 +220,7 @@ function CreateCommunityScreen() {
                     const res = await Api.user.updateProfilePicture(
                         state.profileImage
                     );
+
                     const cachedUser = (await CacheStore.getUser())!;
                     await CacheStore.cacheUser({
                         ...cachedUser,
@@ -257,6 +234,7 @@ function CreateCommunityScreen() {
                     );
                     return res;
                 } catch (e) {
+                    console.log('error on uploading profile image', e);
                     // TODO: block community creation if this fails, for now, lets ignore
                 }
             }
@@ -362,6 +340,7 @@ function CreateCommunityScreen() {
         if (coverUploadDetails === undefined) {
             setSubmittingCover(true);
         }
+        //TODO: Check this condition
         if (
             state.profileImage.length > 0 &&
             profileUploadDetails === undefined
@@ -474,7 +453,7 @@ function CreateCommunityScreen() {
             <SubmissionActivity
                 description={i18n.t('communityDetails')}
                 submission={submittingCommunity}
-                uploadDetails={undefined} // doesn't matter, once it's approved, jumps to another modal
+                uploadDetails={communityUploadDetails} // doesn't matter, once it's approved, jumps to another modal
             />
         </View>
     );
