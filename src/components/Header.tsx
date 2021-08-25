@@ -119,7 +119,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                     >
                         <Card.Content>
                             <Headline style={{ textAlign: 'center' }}>
-                                {i18n.t('yourQRCode')}
+                                {i18n.t('generic.yourQRCode')}
                             </Headline>
                             <View style={styles.qrView}>
                                 <SvgQRCode

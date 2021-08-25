@@ -98,7 +98,7 @@ function CommunityCurrency() {
         <>
             <View style={{ marginTop: 28 }}>
                 <Select
-                    label={i18n.t('currency')}
+                    label={i18n.t('generic.currency')}
                     value={
                         state.currency.length > 0
                             ? currencies[state.currency].name
@@ -113,12 +113,12 @@ function CommunityCurrency() {
                     HeaderComponent={
                         <View>
                             {renderHeader(
-                                i18n.t('currency'),
+                                i18n.t('generic.currency'),
                                 modalizeCurrencyRef,
                                 () => modalizeCurrencyRef.current?.close()
                             )}
                             <Searchbar
-                                placeholder={i18n.t('search')}
+                                placeholder={i18n.t('generic.search')}
                                 style={{
                                     borderColor: ipctColors.borderGray,
                                     borderWidth: 1,
@@ -192,8 +192,8 @@ function CommunityEmail() {
 
     return (
         <Input
-            accessibilityLabel={i18n.t('email')}
-            label={i18n.t('email')}
+            accessibilityLabel={i18n.t('generic.email')}
+            label={i18n.t('generic.email')}
             value={state.email}
             maxLength={64}
             keyboardType="email-address"
@@ -218,8 +218,8 @@ function CommunityLocation() {
             } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 // Alert.alert(
-                //     i18n.t('failure'),
-                //     i18n.t('errorGettingGPSLocation'),
+                //     i18n.t('generic.failure'),
+                //     i18n.t('generic.errorGettingGPSLocation'),
                 //     [{ text: 'OK' }],
                 //     { cancelable: false }
                 // );
@@ -241,8 +241,8 @@ function CommunityLocation() {
             });
         } catch (e) {
             // Alert.alert(
-            //     i18n.t('failure'),
-            //     i18n.t('errorGettingGPSLocation'),
+            //     i18n.t('generic.failure'),
+            //     i18n.t('generic.errorGettingGPSLocation'),
             //     [{ text: 'OK' }],
             //     { cancelable: false }
             // );
@@ -423,7 +423,7 @@ function CommunityCountry() {
         <>
             <View style={{ marginTop: 28 }}>
                 <Select
-                    label={i18n.t('country')}
+                    label={i18n.t('generic.country')}
                     value={
                         state.country.length > 0
                             ? `${countries[state.country].emoji} ${
@@ -441,7 +441,7 @@ function CommunityCountry() {
                     HeaderComponent={
                         <View>
                             {renderHeader(
-                                i18n.t('country'),
+                                i18n.t('generic.country'),
                                 modalizeCountryRef,
                                 () => {
                                     modalizeCountryRef.current?.close();
@@ -451,8 +451,8 @@ function CommunityCountry() {
                                 }
                             )}
                             <Searchbar
-                                accessibilityLabel={i18n.t('search')}
-                                placeholder={i18n.t('search')}
+                                accessibilityLabel={i18n.t('generic.search')}
+                                placeholder={i18n.t('generic.search')}
                                 style={{
                                     borderColor: ipctColors.borderGray,
                                     borderWidth: 1,
@@ -520,8 +520,8 @@ function CommunityCity() {
 
     return (
         <Input
-            accessibilityLabel={i18n.t('city')}
-            label={i18n.t('city')}
+            accessibilityLabel={i18n.t('generic.city')}
+            label={i18n.t('generic.city')}
             value={state.city}
             maxLength={32}
             onChangeText={handleChangeCity}
@@ -719,13 +719,13 @@ function CommunityCover() {
                             lineHeight: 16,
                         }}
                     >
-                        {i18n.t('upload')}
+                        {i18n.t('generic.upload')}
                     </Text>
                 </Pressable>
                 <Portal>
                     <Modal
                         visible={toggleDimensionsModal}
-                        title={i18n.t('modalErrorTitle')}
+                        title={i18n.t('generic.modalErrorTitle')}
                         onDismiss={() => {
                             setToggleDimensionsModal(false);
                         }}
@@ -737,7 +737,7 @@ function CommunityCover() {
                                     setToggleDimensionsModal(false);
                                 }}
                             >
-                                {i18n.t('close')}
+                                {i18n.t('generic.close')}
                             </Button>
                         }
                     >
@@ -940,13 +940,13 @@ function UserProfilePicture() {
                             lineHeight: 16,
                         }}
                     >
-                        {i18n.t('upload')}
+                        {i18n.t('generic.upload')}
                     </Text>
                 </Pressable>
                 <Portal>
                     <Modal
                         visible={toggleDimensionsModal}
-                        title={i18n.t('modalErrorTitle')}
+                        title={i18n.t('generic.modalErrorTitle')}
                         onDismiss={() => {
                             setToggleDimensionsModal(false);
                         }}
@@ -958,7 +958,7 @@ function UserProfilePicture() {
                                     setToggleDimensionsModal(false);
                                 }}
                             >
-                                {i18n.t('close')}
+                                {i18n.t('generic.close')}
                             </Button>
                         }
                     >

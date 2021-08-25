@@ -32,7 +32,7 @@ class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
                         labelStyle={styles.donateLabel}
                         onPress={goBackToDonateModal}
                     >
-                        {i18n.t('backWithSymbol')}
+                        {i18n.t('generic.backWithSymbol')}
                     </Button>
                 }
                 onDismiss={dismissModal}

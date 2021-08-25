@@ -174,7 +174,7 @@ function CommunityManagerScreen() {
                 }, 2500);
 
                 Alert.alert(
-                    i18n.t('success'),
+                    i18n.t('generic.success'),
                     i18n.t('ubiParamsUpdated'),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -183,9 +183,9 @@ function CommunityManagerScreen() {
             .catch((e) => {
                 Sentry.Native.captureException(e);
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('anErroHappenedTryAgain'),
-                    [{ text: i18n.t('close') }],
+                    i18n.t('generic.failure'),
+                    i18n.t('generic.anErroHappenedTryAgain'),
+                    [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             })
@@ -286,8 +286,8 @@ function CommunityManagerScreen() {
                                         {i18n.t('frequency')}:{' '}
                                         {requiredUbiToChange.baseInterval ===
                                         86400
-                                            ? i18n.t('day')
-                                            : i18n.t('week')}
+                                            ? i18n.t('generic.day')
+                                            : i18n.t('generic.week')}
                                     </Paragraph>
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
@@ -353,7 +353,7 @@ function CommunityManagerScreen() {
                                 setOpenHelpCenter(true);
                             }}
                         >
-                            {i18n.t('openHelpCenter')}
+                            {i18n.t('generic.openHelpCenter')}
                         </Button>
                         {!hasManagerAcceptedRulesAlready && (
                             <CommunityRules caller="MANAGER" />
@@ -391,8 +391,8 @@ function CommunityManagerScreen() {
 
 CommunityManagerScreen.navigationOptions = () => {
     return {
-        title: i18n.t('manage'),
-        tabBarLabel: i18n.t('manage'),
+        title: i18n.t('generic.manage'),
+        tabBarLabel: i18n.t('generic.manage'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

@@ -47,9 +47,9 @@ function AddBeneficiaryScreen() {
 
         if (userBalance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('generic.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -59,9 +59,9 @@ function AddBeneficiaryScreen() {
             addressToAdd = kit.web3.utils.toChecksumAddress(inputAddress);
         } catch (e) {
             Alert.alert(
-                i18n.t('failure'),
+                i18n.t('generic.failure'),
                 i18n.t('addingInvalidAddress'),
-                [{ text: i18n.t('close') }],
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -72,9 +72,9 @@ function AddBeneficiaryScreen() {
             setIsBeneficiarySuspect(true);
 
             Alert.alert(
-                i18n.t('failure'),
+                i18n.t('generic.failure'),
                 i18n.t('alreadyInCommunity'),
-                [{ text: i18n.t('close') }],
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -83,9 +83,9 @@ function AddBeneficiaryScreen() {
         const userExist = await Api.user.exists(addressToAdd);
         if (!userExist) {
             Alert.alert(
-                i18n.t('failure'),
+                i18n.t('generic.failure'),
                 i18n.t('userNotRegistered'),
-                [{ text: i18n.t('close') }],
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -111,7 +111,7 @@ function AddBeneficiaryScreen() {
                 }, 2500);
 
                 Alert.alert(
-                    i18n.t('success'),
+                    i18n.t('generic.success'),
                     i18n.t('addedNewBeneficiary'),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -146,9 +146,9 @@ function AddBeneficiaryScreen() {
                     Sentry.Native.captureException(e);
                 }
                 Alert.alert(
-                    i18n.t('failure'),
+                    i18n.t('generic.failure'),
                     i18n.t('errorAddingBeneficiary', { error: i18n.t(error) }),
-                    [{ text: i18n.t('close') }],
+                    [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             })

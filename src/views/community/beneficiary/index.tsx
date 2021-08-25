@@ -307,7 +307,7 @@ function BeneficiaryScreen() {
                                 })
                             }
                         >
-                            {i18n.t('moreAboutYourCommunity')}
+                            {i18n.t('generic.moreAboutYourCommunity')}
                         </Button>
                     }
                 >
@@ -411,7 +411,7 @@ function BeneficiaryScreen() {
                 duration={10000}
                 onDismiss={() => setAskLocationOnOpen(false)}
                 action={{
-                    label: i18n.t('turnOn'),
+                    label: i18n.t('generic.turnOn'),
                     onPress: async () => {
                         try {
                             const {
@@ -419,16 +419,16 @@ function BeneficiaryScreen() {
                             } = await Location.requestForegroundPermissionsAsync();
                             if (status !== Location.PermissionStatus.GRANTED) {
                                 Alert.alert(
-                                    i18n.t('failure'),
-                                    i18n.t('errorGettingGPSLocation'),
+                                    i18n.t('generic.failure'),
+                                    i18n.t('generic.errorGettingGPSLocation'),
                                     [
                                         {
-                                            text: i18n.t('tryAgain'),
+                                            text: i18n.t('generic.tryAgain'),
                                             onPress: async () =>
                                                 await Location.requestForegroundPermissionsAsync(),
                                         },
                                         {
-                                            text: i18n.t('cancel'),
+                                            text: i18n.t('generic.cancel'),
                                         },
                                     ],
                                     { cancelable: false }
@@ -440,11 +440,11 @@ function BeneficiaryScreen() {
                             });
                         } catch (e) {
                             Alert.alert(
-                                i18n.t('failure'),
-                                i18n.t('errorGettingGPSLocation'),
+                                i18n.t('generic.failure'),
+                                i18n.t('generic.errorGettingGPSLocation'),
                                 [
                                     {
-                                        text: i18n.t('tryAgain'),
+                                        text: i18n.t('generic.tryAgain'),
                                         onPress: async () => {
                                             await Location.getCurrentPositionAsync(
                                                 {
@@ -455,7 +455,7 @@ function BeneficiaryScreen() {
                                         },
                                     },
                                     {
-                                        text: i18n.t('cancel'),
+                                        text: i18n.t('generic.cancel'),
                                     },
                                 ],
                                 { cancelable: false }
@@ -464,7 +464,7 @@ function BeneficiaryScreen() {
                     },
                 }}
             >
-                {i18n.t('turnOnLocationHint')}
+                {i18n.t('generic.turnOnLocationHint')}
             </Snackbar>
             <Portal>
                 <Modal visible={suspectWrongDateTime} dismissable={false}>
@@ -486,7 +486,7 @@ function BeneficiaryScreen() {
                                         marginVertical: 16,
                                     }}
                                 >
-                                    {i18n.t('incorrectTime')}
+                                    {i18n.t('generic.incorrectTime')}
                                 </Headline>
                                 <Paragraph
                                     style={{
@@ -497,7 +497,7 @@ function BeneficiaryScreen() {
                                         textAlign: 'center',
                                     }}
                                 >
-                                    {i18n.t('incorrectTimeMessage', {
+                                    {i18n.t('generic.incorrectTimeMessage', {
                                         serverTime: moment(
                                             dateTimeDiffModal.getTime() -
                                                 timeDiff
@@ -521,7 +521,7 @@ function BeneficiaryScreen() {
                                     )
                                 }
                             >
-                                {i18n.t('openClockSettings')}
+                                {i18n.t('generic.openClockSettings')}
                             </Button>
                             <Button
                                 modeType="gray"
@@ -536,7 +536,7 @@ function BeneficiaryScreen() {
                                     )
                                 }
                             >
-                                {i18n.t('dismiss')}
+                                {i18n.t('generic.dismiss')}
                             </Button>
                         </Card.Content>
                     </Card>

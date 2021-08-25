@@ -98,7 +98,7 @@ class ConfirmModal extends Component<
                     });
                     // TODO: 'nonce too low' have happened here!
                     Alert.alert(
-                        i18n.t('failure'),
+                        i18n.t('generic.failure'),
                         i18n.t('errorDonating'),
                         [
                             { text: 'Try again', onPress: () => executeTx() },
@@ -167,7 +167,7 @@ class ConfirmModal extends Component<
                                 labelStyle={styles.donateLabel}
                                 onPress={goBackToDonateModal}
                             >
-                                {i18n.t('backWithSymbol')}
+                                {i18n.t('generic.backWithSymbol')}
                             </Button>
                             <Button
                                 modeType="default"

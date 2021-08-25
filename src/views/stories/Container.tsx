@@ -74,9 +74,9 @@ function Container({
 
     const renderInformativeModal = () => (
         <ModalGenericError
-            title={i18n.t('modalErrorTitle')}
-            description={i18n.t('modalErrorDescription')}
-            btnString={i18n.t('close')}
+            title={i18n.t('generic.modalErrorTitle')}
+            description={i18n.t('generic.modalErrorDescription')}
+            btnString={i18n.t('generic.close')}
             closeFn={setToggleInformativeModal(false)}
             btnFn={setToggleInformativeModal(false)}
         />
@@ -191,7 +191,7 @@ function Container({
                                 setOpenThreeDotsMenu={setOpenThreeDotsMenu}
                                 openThreeDotsMenu={openThreeDotsMenu}
                                 style={{ marginHorizontal: 6 }}
-                                title={i18n.t('story')}
+                                title={i18n.t('generic.story')}
                                 titleStyle={titleStyle}
                                 hasCloseBtn
                             >
@@ -209,7 +209,7 @@ function Container({
                                             hitSlop={15}
                                             onPress={() => {
                                                 Alert.alert(
-                                                    i18n.t('delete'),
+                                                    i18n.t('generic.delete'),
                                                     i18n.t('deleteWarning'),
                                                     [
                                                         {
@@ -261,7 +261,7 @@ function Container({
                                                     fontSize: 14,
                                                 }}
                                             >
-                                                {i18n.t('delete')}
+                                                {i18n.t('generic.delete')}
                                             </Text>
                                         </Pressable>
                                     )}
@@ -284,11 +284,15 @@ function Container({
                                                 ),
                                                 [
                                                     {
-                                                        text: i18n.t('cancel'),
+                                                        text: i18n.t(
+                                                            'generic.cancel'
+                                                        ),
                                                         style: 'cancel',
                                                     },
                                                     {
-                                                        text: i18n.t('confirm'),
+                                                        text: i18n.t(
+                                                            'generic.confirm'
+                                                        ),
                                                         onPress: () =>
                                                             Api.story
                                                                 .inapropriate(
@@ -377,7 +381,7 @@ function Container({
                                                     fontSize: 14,
                                                 }}
                                             >
-                                                {i18n.t('share')}
+                                                {i18n.t('generic.share')}
                                             </Text>
                                         </Pressable>
                                     )}

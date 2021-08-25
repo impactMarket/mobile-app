@@ -123,9 +123,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
 
         if (notEnoughToClaimOnContract) {
             Alert.alert(
-                i18n.t('failure'),
+                i18n.t('generic.failure'),
                 i18n.t('beneficiaryCommunityNoFunds'),
-                [{ text: i18n.t('close') }],
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -133,9 +133,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
 
         if (userBalance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('generic.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -144,11 +144,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         const isLocked = await CacheStore.getLockClaimUntil();
         if (isLocked !== null) {
             Alert.alert(
-                i18n.t('failure'),
+                i18n.t('generic.failure'),
                 i18n.t('claimLockedUntil', {
                     date: moment(isLocked).format('lll'),
                 }),
-                [{ text: i18n.t('close') }],
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -356,9 +356,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     });
                 }
                 Alert.alert(
-                    i18n.t('failure'),
+                    i18n.t('generic.failure'),
                     i18n.t('errorClaiming', { error: i18n.t(error) }),
-                    [{ text: i18n.t('close') }],
+                    [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             });

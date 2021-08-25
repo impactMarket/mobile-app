@@ -259,9 +259,9 @@ function Carousel(props: {
                                 setStories([...previousStoriesValues]);
                             } else {
                                 Alert.alert(
-                                    i18n.t('failure'),
+                                    i18n.t('generic.failure'),
                                     'You need to be authenticated!',
-                                    [{ text: i18n.t('close') }],
+                                    [{ text: i18n.t('generic.close') }],
                                     { cancelable: false }
                                 );
                             }
@@ -363,7 +363,7 @@ function Carousel(props: {
             <BottomPopup
                 isVisible={openPopup}
                 toggleVisibility={togglePopup}
-                title={i18n.t('story')}
+                title={i18n.t('generic.story')}
             >
                 <View
                     style={{

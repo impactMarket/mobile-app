@@ -29,7 +29,7 @@ function Tabs() {
             name="claim"
             component={BeneficiaryView}
             options={{
-                title: i18n.t('ubi'),
+                title: i18n.t('generic.ubi'),
                 tabBarIcon: (props: ITabBarIconProps) => (
                     <ClaimSvg focused={props.focused} />
                 ),
@@ -41,7 +41,7 @@ function Tabs() {
             name="manage"
             component={CommunityManagerView}
             options={{
-                title: i18n.t('manage'),
+                title: i18n.t('generic.manage'),
                 tabBarIcon: (props: ITabBarIconProps) => (
                     <ManageSvg focused={props.focused} />
                 ),
@@ -53,7 +53,7 @@ function Tabs() {
             name="communities"
             component={CommunitiesScreen}
             options={{
-                title: i18n.t('communities'),
+                title: i18n.t('generic.communities'),
                 tabBarIcon: (props: ITabBarIconProps) => (
                     <CommunitiesSvg focused={props.focused} />
                 ),

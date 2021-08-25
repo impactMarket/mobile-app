@@ -60,7 +60,7 @@ describe('create community [snapshot]', () => {
         const rendered = render(<FakeCreateCommunityScreen />);
         const tree = rendered.toJSON();
         await act(async () => {});
-        fireEvent.press(rendered.getByText(i18n.t('submit')));
+        fireEvent.press(rendered.getByText(i18n.t('generic.submit')));
         expect(tree).toMatchSnapshot();
     });
 
@@ -68,7 +68,7 @@ describe('create community [snapshot]', () => {
         const rendered = render(<FakeCreateCommunityScreen />);
         const tree = rendered.toJSON();
         await act(async () => {});
-        fireEvent.press(rendered.getByText(i18n.t('submit')));
+        fireEvent.press(rendered.getByText(i18n.t('generic.submit')));
         fireEvent.press(rendered.getByTestId('close-modal'));
         expect(tree).toMatchSnapshot();
     });

@@ -147,7 +147,7 @@ describe('create community', () => {
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
 
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -186,7 +186,7 @@ describe('create community', () => {
             getByLabelText(i18n.t('communityName')),
             'test community'
         );
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).toBeNull();
@@ -225,7 +225,7 @@ describe('create community', () => {
             getByLabelText(i18n.t('shortDescription')),
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
         );
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -258,8 +258,8 @@ describe('create community', () => {
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
 
-        fireEvent.changeText(getByLabelText(i18n.t('city')), 'Kampala');
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Kampala');
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -297,11 +297,11 @@ describe('create community', () => {
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
 
-        fireEvent.press(getByLabelText(i18n.t('country')));
-        fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+        fireEvent.press(getByLabelText(i18n.t('generic.country')));
+        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
         await act(async () => expect(getByLabelText('PT')));
         fireEvent.press(getByLabelText('PT'));
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -350,7 +350,7 @@ describe('create community', () => {
         await act(async () =>
             fireEvent.press(getByA11yLabel(i18n.t('getGPSLocation')))
         );
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -384,10 +384,13 @@ describe('create community', () => {
         expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
 
-        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example.io');
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.changeText(
+            getByLabelText(i18n.t('generic.email')),
+            'me@example.io'
+        );
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -403,7 +406,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('incrementalIntervalRequired'))
         ).not.toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
     });
 
     test('try to submit invalid email', async () => {
@@ -414,8 +417,11 @@ describe('create community', () => {
 
         expect(queryByText(i18n.t('emailInvalidFormat'))).toBeNull();
 
-        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example');
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.changeText(
+            getByLabelText(i18n.t('generic.email')),
+            'me@example'
+        );
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('emailInvalidFormat'))).not.toBeNull();
     });
@@ -432,7 +438,7 @@ describe('create community', () => {
             getByLabelText(i18n.t('shortDescription')),
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh.'
         );
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(
             queryByText(i18n.t('communityDescriptionTooShort'))
@@ -460,7 +466,7 @@ describe('create community', () => {
         await act(async () =>
             fireEvent.press(getByLabelText('image uploader'))
         );
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('imageDimensionsNotFit'))).not.toBeNull();
     });
@@ -481,10 +487,10 @@ describe('create community', () => {
         expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
 
         fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -500,7 +506,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('incrementalIntervalRequired'))
         ).not.toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
     });
 
     test('try to submit only max claim', async () => {
@@ -519,13 +525,13 @@ describe('create community', () => {
         expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
 
         fireEvent.changeText(
             getByLabelText(i18n.t('totalClaimPerBeneficiary')),
             '100'
         );
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -541,7 +547,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('incrementalIntervalRequired'))
         ).not.toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
     });
 
     test('try to submit only increment interval', async () => {
@@ -560,10 +566,10 @@ describe('create community', () => {
         expect(queryByText(i18n.t('claimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
 
         fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
-        fireEvent.press(getByText(i18n.t('submit')));
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(queryByText(i18n.t('coverImageRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('communityNameRequired'))).not.toBeNull();
@@ -577,7 +583,7 @@ describe('create community', () => {
         expect(queryByText(i18n.t('claimAmountRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('maxClaimAmountRequired'))).not.toBeNull();
         expect(queryByText(i18n.t('incrementalIntervalRequired'))).toBeNull();
-        expect(queryByText(i18n.t('modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
     });
 
     // TODO: this test is important but it's failling for unknown reasons
@@ -587,8 +593,8 @@ describe('create community', () => {
     //     );
     //     await act(async () => {});
 
-    //     fireEvent.press(getByLabelText(i18n.t('country')));
-    //     fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+    //     fireEvent.press(getByLabelText(i18n.t('generic.country')));
+    //     fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
     //     await act(async () => expect(getByLabelText('PT')));
     //     fireEvent.press(getByLabelText('PT'));
 
@@ -597,8 +603,8 @@ describe('create community', () => {
     //     );
 
     //     await act(async () => {});
-    //     fireEvent.press(getByLabelText(i18n.t('country')));
-    //     fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Ang');
+    //     fireEvent.press(getByLabelText(i18n.t('generic.country')));
+    //     fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Ang');
     //     await act(async () => expect(getByLabelText('AO')));
     //     fireEvent.press(getByLabelText('AO'));
 
@@ -710,11 +716,11 @@ describe('create community', () => {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('city')), 'Beja');
+        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Beja');
 
-        fireEvent.press(getByLabelText(i18n.t('country')));
+        fireEvent.press(getByLabelText(i18n.t('generic.country')));
 
-        fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
         await act(async () => expect(getByLabelText('PT')));
         fireEvent.press(getByLabelText('PT'));
 
@@ -722,7 +728,10 @@ describe('create community', () => {
             fireEvent.press(getByA11yLabel(i18n.t('getGPSLocation')))
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example.io');
+        fireEvent.changeText(
+            getByLabelText(i18n.t('generic.email')),
+            'me@example.io'
+        );
 
         fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
 
@@ -734,7 +743,7 @@ describe('create community', () => {
         fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
 
         await act(async () => {
-            fireEvent.press(getByText(i18n.t('submit')));
+            fireEvent.press(getByText(i18n.t('generic.submit')));
         });
 
         expect(queryByText(i18n.t('communityRequestError'))).toBeNull();
@@ -789,11 +798,11 @@ describe('create community', () => {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('city')), 'Beja');
+        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Beja');
 
-        fireEvent.press(getByLabelText(i18n.t('country')));
+        fireEvent.press(getByLabelText(i18n.t('generic.country')));
 
-        fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
         await act(async () => expect(getByLabelText('PT')));
         fireEvent.press(getByLabelText('PT'));
 
@@ -801,7 +810,10 @@ describe('create community', () => {
             fireEvent.press(getByA11yLabel(i18n.t('getGPSLocation')))
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example.io');
+        fireEvent.changeText(
+            getByLabelText(i18n.t('generic.email')),
+            'me@example.io'
+        );
 
         fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
 
@@ -813,7 +825,7 @@ describe('create community', () => {
         fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
 
         await act(async () => {
-            fireEvent.press(getByText(i18n.t('submit')));
+            fireEvent.press(getByText(i18n.t('generic.submit')));
         });
 
         expect(queryByText(i18n.t('communityRequestError'))).not.toBeNull();
@@ -871,11 +883,11 @@ describe('create community', () => {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('city')), 'Beja');
+        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Beja');
 
-        fireEvent.press(getByLabelText(i18n.t('country')));
+        fireEvent.press(getByLabelText(i18n.t('generic.country')));
 
-        fireEvent.changeText(getByA11yLabel(i18n.t('search')), 'Port');
+        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
         await act(async () => expect(getByLabelText('PT')));
         fireEvent.press(getByLabelText('PT'));
 
@@ -883,7 +895,10 @@ describe('create community', () => {
             fireEvent.press(getByA11yLabel(i18n.t('getGPSLocation')))
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('email')), 'me@example.io');
+        fireEvent.changeText(
+            getByLabelText(i18n.t('generic.email')),
+            'me@example.io'
+        );
 
         fireEvent.changeText(getByLabelText(i18n.t('claimAmount')), '1');
 
@@ -895,7 +910,7 @@ describe('create community', () => {
         fireEvent.changeText(getByLabelText(i18n.t('time')), '5');
 
         await act(async () => {
-            fireEvent.press(getByText(i18n.t('submit')));
+            fireEvent.press(getByText(i18n.t('generic.submit')));
         });
 
         expect(queryByText(i18n.t('communityRequestError'))).toBeNull();

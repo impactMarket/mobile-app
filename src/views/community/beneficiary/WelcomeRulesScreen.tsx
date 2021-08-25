@@ -111,7 +111,7 @@ function WelcomeRulesScreen() {
 WelcomeRulesScreen.navigationOptions = () => {
     return {
         headerLeft: () => null,
-        headerTitle: i18n.t('welcome'),
+        headerTitle: i18n.t('generic.welcome'),
     };
 };
 

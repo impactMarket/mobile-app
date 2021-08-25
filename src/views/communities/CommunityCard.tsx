@@ -87,7 +87,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                 {community.state.beneficiaries}
                             </Text>
                             <Text style={styles.cellDescription}>
-                                {i18n.t('beneficiaries')}
+                                {i18n.t('generic.beneficiaries')}
                             </Text>
                         </View>
                         <View style={{ flex: 1 }}>
@@ -108,7 +108,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                 {community.state.backers}
                             </Text>
                             <Text style={styles.cellDescription}>
-                                {i18n.t('backers', {
+                                {i18n.t('generic.backers', {
                                     count: community.state.backers,
                                 })}
                             </Text>

@@ -99,7 +99,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} ({countStories})
+                        {i18n.t('generic.viewAll')} ({countStories})
                     </Text>
                 </Pressable>
             </View>

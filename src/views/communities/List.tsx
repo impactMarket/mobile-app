@@ -55,8 +55,8 @@ function ListItem(props: {
     );
     const claimFrequency =
         community.contract.baseInterval === 86400
-            ? i18n.t('day')
-            : i18n.t('week');
+            ? i18n.t('generic.day')
+            : i18n.t('generic.week');
 
     let progress = 0;
     if (community.state.beneficiaries !== 0 && community.state.raised !== '0') {
@@ -110,7 +110,7 @@ function ListItem(props: {
                                 { fontFamily: 'Inter-Bold' },
                             ]}
                         >
-                            {i18n.t('ubi')}
+                            {i18n.t('generic.ubi')}
                         </Text>
                         <Text
                             style={[

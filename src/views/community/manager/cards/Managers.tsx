@@ -40,7 +40,7 @@ function Managers(props: IManagersProps) {
                             navigation.navigate(Screens.AddedManager)
                         }
                     >
-                        {i18n.t('added')} ({managers})
+                        {i18n.t('generic.added')} ({managers})
                     </Button>
                     <Button
                         modeType="green"

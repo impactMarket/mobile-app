@@ -409,7 +409,7 @@ function Auth() {
                             }
                             disabled={connecting}
                         >
-                            {i18n.t('dismiss')}
+                            {i18n.t('generic.dismiss')}
                         </Button>
                         <Button
                             modeType="default"
@@ -421,7 +421,7 @@ function Auth() {
                             loading={connecting}
                             disabled={connecting}
                         >
-                            {i18n.t('yes')}
+                            {i18n.t('generic.yes')}
                         </Button>
                     </View>
                 </View>
@@ -448,7 +448,7 @@ function Auth() {
                 <Card style={styles.timedOutCard}>
                     <View style={styles.timedOutCardContent}>
                         <Text style={styles.timedOutCardText}>
-                            {i18n.t('modalValoraTimeoutTitle')}
+                            {i18n.t('generic.modalValoraTimeoutTitle')}
                         </Text>
                         <CloseStorySvg
                             onPress={() => handleCloseErrorModal()}
@@ -456,7 +456,7 @@ function Auth() {
                     </View>
                     <View style={styles.timedOutCardDescriptionContainer}>
                         <Text style={styles.timedOutCardDescription}>
-                            {i18n.t('modalValoraTimeoutDescription')}
+                            {i18n.t('generic.modalValoraTimeoutDescription')}
                         </Text>
                     </View>
                     <View style={styles.timedOutCardButtons}>
@@ -465,7 +465,7 @@ function Auth() {
                             style={{ flex: 1, marginRight: 5 }}
                             onPress={() => handleCloseErrorModal()}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                         <Button
                             modeType="default"
@@ -475,7 +475,7 @@ function Auth() {
                                 setTimedOut(false);
                             }}
                         >
-                            {i18n.t('faq')}
+                            {i18n.t('generic.faq')}
                         </Button>
                     </View>
                 </Card>

@@ -511,7 +511,7 @@ function CreateCommunityScreen() {
                 style={{ width: '100%' }}
                 onPress={submitNewCommunity}
             >
-                {i18n.t('tryAgain')}
+                {i18n.t('generic.tryAgain')}
             </Button>
         </>
     );
@@ -537,7 +537,7 @@ function CreateCommunityScreen() {
                         navigation.goBack();
                     }}
                 >
-                    {i18n.t('continue')}
+                    {i18n.t('generic.continue')}
                 </Button>
             </View>
         </>
@@ -578,7 +578,7 @@ function CreateCommunityScreen() {
                         }
                     }}
                 >
-                    {i18n.t('yes')}
+                    {i18n.t('generic.yes')}
                 </Button>
                 <Button
                     modeType="default"
@@ -593,7 +593,7 @@ function CreateCommunityScreen() {
                         }
                     }}
                 >
-                    {i18n.t('no')}
+                    {i18n.t('generic.no')}
                 </Button>
             </View>
         </>
@@ -611,7 +611,7 @@ function CreateCommunityScreen() {
                     navigation.goBack();
                 }}
             >
-                {i18n.t('leave')}
+                {i18n.t('generic.leave')}
             </Button>
         </>
     );
@@ -645,7 +645,7 @@ function CreateCommunityScreen() {
                         isAnyFieldMissedModal ||
                         invalidInputAmounts !== undefined
                     }
-                    title={i18n.t('modalErrorTitle')}
+                    title={i18n.t('generic.modalErrorTitle')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);
@@ -661,7 +661,7 @@ function CreateCommunityScreen() {
                                 setInvalidInputAmounts(undefined);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     }
                 >
@@ -676,7 +676,7 @@ function CreateCommunityScreen() {
                 </Modal>
                 <Modal
                     visible={showSubmissionModal}
-                    title={i18n.t('submitting')}
+                    title={i18n.t('generic.submitting')}
                     onDismiss={
                         !submitting && !submittingSuccess
                             ? () => {
@@ -716,7 +716,7 @@ function CreateCommunityScreen() {
                                 navigation.goBack();
                             }}
                         >
-                            {i18n.t('leave')}
+                            {i18n.t('generic.leave')}
                         </Button>
                         <Button
                             modeType="default"

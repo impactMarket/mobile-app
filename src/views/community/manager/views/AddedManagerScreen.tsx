@@ -73,9 +73,9 @@ function AddedManagerScreen() {
     ) => {
         if (userWallet.balance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('generic.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -98,7 +98,7 @@ function AddedManagerScreen() {
                     return;
                 }
                 Alert.alert(
-                    i18n.t('success'),
+                    i18n.t('generic.success'),
                     i18n.t('userWasRemoved', {
                         user: formatAddressOrName(manager),
                     }),
@@ -152,7 +152,7 @@ function AddedManagerScreen() {
                     Sentry.Native.captureException(e);
                 }
                 Alert.alert(
-                    i18n.t('failure'),
+                    i18n.t('generic.failure'),
                     i18n.t('errorRemovingManager', { error: i18n.t(error) }),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -222,7 +222,7 @@ function AddedManagerScreen() {
                         style={{ marginVertical: 5 }}
                         onPress={() => handleRemoveManager(item, index)}
                     >
-                        {i18n.t('remove')}
+                        {i18n.t('generic.remove')}
                     </Button>
                 )
             }
@@ -279,7 +279,7 @@ function AddedManagerScreen() {
 AddedManagerScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('added'),
+        headerTitle: i18n.t('generic.added'),
     };
 };
 

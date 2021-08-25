@@ -166,9 +166,9 @@ class DonateModal extends Component<
                     labelStyle={styles.donateLabel}
                     onPress={() => {
                         Alert.alert(
-                            i18n.t('failure'),
-                            i18n.t('youAreNotConnected'),
-                            [{ text: i18n.t('close') }],
+                            i18n.t('generic.failure'),
+                            i18n.t('generic.youAreNotConnected'),
+                            [{ text: i18n.t('generic.close') }],
                             { cancelable: false }
                         );
                     }}
@@ -185,7 +185,7 @@ class DonateModal extends Component<
                         this.setState({ showCopiedToClipboard: false })
                     }
                     action={{
-                        label: i18n.t('close'),
+                        label: i18n.t('generic.close'),
                         onPress: () =>
                             this.setState({ showCopiedToClipboard: false }),
                     }}

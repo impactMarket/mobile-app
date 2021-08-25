@@ -52,7 +52,7 @@ function Welcome() {
                         color: ipctColors.nileBlue,
                     }}
                 >
-                    {i18n.t('oneTimeWelcomeMessage1')}
+                    {i18n.t('generic.oneTimeWelcomeMessage1')}
                 </Text>
             </ScrollView>
             <View
@@ -99,7 +99,7 @@ function Welcome() {
                         dispatch(SetAppFromWelcomeScreen(Screens.Communities));
                     }}
                 >
-                    {i18n.t('exploreCommunities')}
+                    {i18n.t('generic.exploreCommunities')}
                 </Button>
             </View>
         </View>

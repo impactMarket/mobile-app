@@ -7,8 +7,8 @@ export default {
         backers: 'Backers',
         cancel: 'Cancel',
         confirm: 'Confirm',
-        claimed: 'Claimed',
-        raised: 'Raised',
+        // claimed: 'Claimed',
+        // raised: 'Raised',
         ubi: 'UBI',
         manage: 'Manage',
         communities: 'Communities',
@@ -29,14 +29,14 @@ export default {
         city: 'City',
         email: 'Email',
         upload: 'Upload',
-        networkConnectionLost: 'The network connection was lost.',
-        networkIssuesRPC: 'RPC service unavailable. Please try again later.',
-        syncIssues: 'Seems like there were syncing issues. Please, try again.',
-        possiblyValoraNotSynced:
-            "It seems like your valora isn't synced with the network. Please, open Valora and make sure you don't see any message similar to 'Connecting...'",
-        unknown: 'Unknown.',
-        clockNotSynced:
-            'It seems like your date or time is incorrect. Please, fix it before trying again.',
+        // networkConnectionLost: 'The network connection was lost.',
+        // networkIssuesRPC: 'RPC service unavailable. Please try again later.',
+        // syncIssues: 'Seems like there were syncing issues. Please, try again.',
+        // possiblyValoraNotSynced:
+        // "It seems like your valora isn't synced with the network. Please, open Valora and make sure you don't see any message similar to 'Connecting...'",
+        // unknown: 'Unknown.',
+        // clockNotSynced:
+        // 'It seems like your date or time is incorrect. Please, fix it before trying again.',
         notEnoughForTransaction:
             "You don't have enough balance to submit the request. Celo's transactions are nearly free but not completely free. Always keep a few cents in your account.",
         continue: 'Continue',
@@ -75,8 +75,8 @@ export default {
         update: 'Update',
         skip: 'Skip',
         newVersionAvailable: 'New version available',
-        newVersionAvailableMessage:
-            'To get the latest improvements and features we need you to update to the latest version.',
+        // newVersionAvailableMessage:
+        // 'To get the latest improvements and features we need you to update to the latest version.',
         offline: 'The Internet connection appears to be offline',
         openClockSettings: 'Open Clock Settings',
         dismiss: 'Dismiss',

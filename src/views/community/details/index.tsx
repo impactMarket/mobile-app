@@ -196,11 +196,11 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 visible={showCopiedToClipboard}
                 onDismiss={() => setShowCopiedToClipboard(false)}
                 action={{
-                    label: i18n.t('close'),
+                    label: i18n.t('generic.close'),
                     onPress: () => setShowCopiedToClipboard(false),
                 }}
             >
-                {i18n.t('descriptionCopiedClipboard')}
+                {i18n.t('generic.descriptionCopiedClipboard')}
             </Snackbar>
             <ScrollView
                 refreshControl={
@@ -280,8 +280,8 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                                             interval:
                                                 community.contract
                                                     .baseInterval === 86400
-                                                    ? i18n.t('day')
-                                                    : i18n.t('week'),
+                                                    ? i18n.t('generic.day')
+                                                    : i18n.t('generic.week'),
                                             minIncrement:
                                                 community.contract
                                                     .incrementInterval / 60,

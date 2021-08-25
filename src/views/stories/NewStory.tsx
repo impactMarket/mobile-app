@@ -120,7 +120,7 @@ function NewStoryScreen() {
 
                 setSubmitedResult(r);
                 Alert.alert(
-                    i18n.t('success'),
+                    i18n.t('generic.success'),
                     i18n.t('storyCongrat'),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -128,7 +128,7 @@ function NewStoryScreen() {
                 setSubmittedWithSuccess(true);
             } else {
                 Alert.alert(
-                    i18n.t('failure'),
+                    i18n.t('generic.failure'),
                     i18n.t('emptyStoryFailure'),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -136,7 +136,7 @@ function NewStoryScreen() {
             }
         } catch (e) {
             Alert.alert(
-                i18n.t('failure'),
+                i18n.t('generic.failure'),
                 i18n.t('storyFailure'),
                 [{ text: 'OK' }],
                 { cancelable: false }
@@ -150,7 +150,7 @@ function NewStoryScreen() {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
-            alert(i18n.t('storyPermissionCamera'));
+            alert(i18n.t('generic.storyPermissionCamera'));
             return;
         }
 
@@ -169,7 +169,7 @@ function NewStoryScreen() {
     };
 
     if (userCommunity?.id === undefined || userCommunityStatus !== 'valid') {
-        return <Text>{i18n.t('notInComunity')}</Text>;
+        return <Text>{i18n.t('generic.notInComunity')}</Text>;
     }
 
     if (submittedWithSuccess && submitedResult) {
@@ -219,7 +219,7 @@ function NewStoryScreen() {
                         setOpenHelpCenter(true);
                     }}
                 >
-                    {i18n.t('knowMoreHelpCenter')}
+                    {i18n.t('generic.knowMoreHelpCenter')}
                 </Button>
             </View>
         </ScrollView>

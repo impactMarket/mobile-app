@@ -149,7 +149,7 @@ function RemovedBeneficiaryScreen() {
 RemovedBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('removed'),
+        headerTitle: i18n.t('generic.removed'),
     };
 };
 

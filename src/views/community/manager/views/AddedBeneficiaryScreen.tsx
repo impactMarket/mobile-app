@@ -85,9 +85,9 @@ function AddedBeneficiaryScreen() {
     ) => {
         if (userWallet.balance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('generic.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -112,7 +112,7 @@ function AddedBeneficiaryScreen() {
                     return;
                 }
                 Alert.alert(
-                    i18n.t('success'),
+                    i18n.t('generic.success'),
                     i18n.t('userWasRemoved', {
                         user: formatAddressOrName(beneficiary),
                     }),
@@ -163,7 +163,7 @@ function AddedBeneficiaryScreen() {
                     Sentry.Native.captureException(e);
                 }
                 Alert.alert(
-                    i18n.t('failure'),
+                    i18n.t('generic.failure'),
                     i18n.t('errorRemovingBeneficiary', {
                         error: i18n.t(error),
                     }),
@@ -244,7 +244,7 @@ function AddedBeneficiaryScreen() {
                     style={{ marginVertical: 5 }}
                     onPress={() => handleRemoveBeneficiary(item, index)}
                 >
-                    {i18n.t('remove')}
+                    {i18n.t('generic.remove')}
                 </Button>
             )}
             left={() =>
@@ -304,7 +304,7 @@ function AddedBeneficiaryScreen() {
                         fontSize: 18,
                     }}
                 >
-                    {i18n.t('noResults')}
+                    {i18n.t('generic.noResults')}
                 </Paragraph>
             );
         }
@@ -330,7 +330,7 @@ function AddedBeneficiaryScreen() {
     return (
         <>
             <Searchbar
-                placeholder={i18n.t('search')}
+                placeholder={i18n.t('generic.search')}
                 style={{
                     marginHorizontal: 22,
                     backgroundColor: 'rgba(206, 212, 218, 0.27)',
@@ -364,7 +364,7 @@ function AddedBeneficiaryScreen() {
 AddedBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('added'),
+        headerTitle: i18n.t('generic.added'),
     };
 };
 

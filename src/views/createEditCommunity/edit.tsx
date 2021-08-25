@@ -271,7 +271,7 @@ function EditCommunityScreen() {
                 style={{ width: '100%' }}
                 onPress={submitEditCommunity}
             >
-                {i18n.t('tryAgain')}
+                {i18n.t('generic.tryAgain')}
             </Button>
         </>
     );
@@ -309,7 +309,7 @@ function EditCommunityScreen() {
                         navigation.goBack();
                     }}
                 >
-                    {i18n.t('continue')}
+                    {i18n.t('generic.continue')}
                 </Button>
             </View>
         </>
@@ -380,7 +380,7 @@ function EditCommunityScreen() {
             <Portal>
                 <Modal
                     visible={isAnyFieldMissedModal}
-                    title={i18n.t('modalErrorTitle')}
+                    title={i18n.t('generic.modalErrorTitle')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);
@@ -394,7 +394,7 @@ function EditCommunityScreen() {
                                 setIsAnyFieldMissedModal(false);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     }
                 >

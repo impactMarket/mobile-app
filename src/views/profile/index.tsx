@@ -214,8 +214,8 @@ function ProfileScreen() {
             dispatch(setUserMetadata({ ...user, avatar: res.url }));
         } catch (e) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('errorUploadingAvatar'),
+                i18n.t('generic.failure'),
+                i18n.t('generic.errorUploadingAvatar'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
@@ -242,7 +242,7 @@ function ProfileScreen() {
             case 'o':
                 return i18n.t('others');
             default:
-                return i18n.t('select');
+                return i18n.t('generic.select');
         }
     };
 
@@ -356,7 +356,7 @@ function ProfileScreen() {
                             fontSize: 18,
                         }}
                     >
-                        {i18n.t('noResults')}
+                        {i18n.t('generic.noResults')}
                     </Paragraph>
                 );
             }
@@ -392,7 +392,7 @@ function ProfileScreen() {
             }}
         >
             <Searchbar
-                placeholder={i18n.t('search')}
+                placeholder={i18n.t('generic.search')}
                 style={styles.searchBarContainer}
                 inputStyle={{
                     marginLeft: -14,
@@ -455,7 +455,7 @@ function ProfileScreen() {
                                     textAlign: 'left',
                                 }}
                             >
-                                {i18n.t('modalErrorTitle')}
+                                {i18n.t('generic.modalErrorTitle')}
                             </Text>
                             <CloseStorySvg
                                 onPress={() => {
@@ -503,7 +503,7 @@ function ProfileScreen() {
                                 setToggleImageDimensionsModal(false);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     </Card>
                 </Modal>
@@ -595,7 +595,7 @@ function ProfileScreen() {
                         </TouchableOpacity>
                     </View>
                     <Input
-                        label={i18n.t('name')}
+                        label={i18n.t('generic.name')}
                         value={name}
                         maxLength={32}
                         onEndEditing={(e) => {
@@ -671,14 +671,14 @@ function ProfileScreen() {
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Select
-                            label={i18n.t('currency')}
+                            label={i18n.t('generic.currency')}
                             value={currencies[currency.toUpperCase()].name}
                             onPress={() => modalizeCurrencyRef.current?.open()}
                         />
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Select
-                            label={i18n.t('language')}
+                            label={i18n.t('generic.language')}
                             value={language === 'en' ? 'English' : ' Português'}
                             onPress={() => modalizeLanguageRef.current?.open()}
                         />
@@ -716,7 +716,7 @@ function ProfileScreen() {
                         rightElement={<LockSvg color={ipctColors.borderGray} />}
                     />
                     <Input
-                        label={i18n.t('country')}
+                        label={i18n.t('generic.country')}
                         boxStyle={{ marginTop: 28 }}
                         value={getCountryFromPhoneNumber(
                             userWallet.phoneNumber
@@ -771,7 +771,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeCurrencyRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('currency'),
+                        i18n.t('generic.currency'),
                         modalizeCurrencyRef,
                         () => setSearchCurrency('')
                     )}
@@ -781,7 +781,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeLanguageRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('language'),
+                        i18n.t('generic.language'),
                         modalizeLanguageRef
                     )}
                     adjustToContentHeight

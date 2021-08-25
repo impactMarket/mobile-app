@@ -66,7 +66,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         >
                             {i18n.t('raisedFrom')}
 
-                            {i18n.t('backers', {
+                            {i18n.t('generic.backers', {
                                 count: community.state.backers,
                             })}
                         </Text>

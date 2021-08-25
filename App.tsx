@@ -315,7 +315,7 @@ class App extends React.Component<any, IAppState> {
                                             textAlign: 'center',
                                         }}
                                     >
-                                        {i18n.t('offline')}
+                                        {i18n.t('generic.offline')}
                                     </Paragraph>
                                 </Card.Content>
                             </Card>
@@ -348,7 +348,9 @@ class App extends React.Component<any, IAppState> {
                                                 marginVertical: 16,
                                             }}
                                         >
-                                            {i18n.t('newVersionAvailable')}
+                                            {i18n.t(
+                                                'generic.newVersionAvailable'
+                                            )}
                                         </Headline>
                                         <Paragraph
                                             style={{
@@ -373,7 +375,7 @@ class App extends React.Component<any, IAppState> {
                                         bold
                                         onPress={this.handleUpdateClick}
                                     >
-                                        {i18n.t('update')}
+                                        {i18n.t('generic.update')}
                                     </Button>
                                     {!blockUserToUpdateApp && (
                                         <Button
@@ -388,7 +390,7 @@ class App extends React.Component<any, IAppState> {
                                                 })
                                             }
                                         >
-                                            {i18n.t('skip')}
+                                            {i18n.t('generic.skip')}
                                         </Button>
                                     )}
                                 </Card.Content>
@@ -434,7 +436,7 @@ class App extends React.Component<any, IAppState> {
                 }}
             >
                 <Text style={{ textAlign: 'center', width: '80%' }}>
-                    {i18n.t('testnetWarning')}
+                    {i18n.t('generic.testnetWarning')}
                 </Text>
                 <IconButton
                     style={{ width: '10%' }}
@@ -640,7 +642,7 @@ class App extends React.Component<any, IAppState> {
                                             textAlign: 'center',
                                         }}
                                     >
-                                        {i18n.t('unexpectedError')}
+                                        {i18n.t('generic.unexpectedError')}
                                     </Paragraph>
                                 </Card.Content>
                             </Card>
