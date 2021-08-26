@@ -200,15 +200,15 @@ function CreateCommunityScreen() {
         };
 
         dispatchRedux(createCommunityRequest(communityDetails));
-    };
 
-    if (
-        !requestCancel &&
-        communityCreationError === undefined &&
-        communityUploadDetails !== undefined
-    ) {
-        updateUIAfterSubmission(communityCreationError);
-    }
+        if (
+            !requestCancel &&
+            communityCreationError === undefined &&
+            communityUploadDetails !== undefined
+        ) {
+            updateUIAfterSubmission(communityCreationError);
+        }
+    };
 
     const uploadImages = () => {
         const profileUpload = async () => {
