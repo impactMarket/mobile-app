@@ -39,7 +39,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                             letterSpacing: 0.7,
                         }}
                     >
-                        {i18n.t('beneficiaries').toUpperCase()}
+                        {i18n.t('generic.beneficiaries').toUpperCase()}
                     </Headline>
                     <Button
                         modeType="gray"
@@ -50,7 +50,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                             navigation.navigate(Screens.AddedBeneficiary)
                         }
                     >
-                        {i18n.t('added')} ({beneficiaries})
+                        {i18n.t('generic.added')} ({beneficiaries})
                     </Button>
                     <Button
                         modeType="gray"
@@ -61,7 +61,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                             navigation.navigate(Screens.RemovedBeneficiary)
                         }
                     >
-                        {i18n.t('removed')} ({removedBeneficiaries})
+                        {i18n.t('generic.removed')} ({removedBeneficiaries})
                     </Button>
                     <View>
                         {hasFundsToNewBeneficiary ? (
@@ -75,7 +75,7 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                     navigation.navigate(Screens.AddBeneficiary)
                                 }
                             >
-                                {i18n.t('addBeneficiary')}
+                                {i18n.t('manager.addBeneficiary')}
                             </Button>
                         ) : (
                             <Button
@@ -87,14 +87,16 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                 }}
                                 onPress={() => {
                                     Alert.alert(
-                                        i18n.t('noFunds'),
-                                        i18n.t('notFundsToAddBeneficiary'),
-                                        [{ text: i18n.t('close') }],
+                                        i18n.t('beneficiary.noFunds'),
+                                        i18n.t(
+                                            'beneficiary.notFundsToAddBeneficiary'
+                                        ),
+                                        [{ text: i18n.t('generic.close') }],
                                         { cancelable: false }
                                     );
                                 }}
                             >
-                                {i18n.t('addBeneficiary')}
+                                {i18n.t('manager.addBeneficiary')}
                             </Button>
                         )}
                         {isSuspeciousDetected && <SuspiciousActivity />}

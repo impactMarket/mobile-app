@@ -214,8 +214,8 @@ function ProfileScreen() {
             dispatch(setUserMetadata({ ...user, avatar: res.url }));
         } catch (e) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('errorUploadingAvatar'),
+                i18n.t('generic.failure'),
+                i18n.t('generic.errorUploadingAvatar'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
@@ -236,13 +236,13 @@ function ProfileScreen() {
     const textGender = (g: string | null) => {
         switch (g) {
             case 'f':
-                return i18n.t('female');
+                return i18n.t('profile.female');
             case 'm':
-                return i18n.t('male');
+                return i18n.t('profile.male');
             case 'o':
-                return i18n.t('others');
+                return i18n.t('profile.others');
             default:
-                return i18n.t('select');
+                return i18n.t('generic.select');
         }
     };
 
@@ -356,7 +356,7 @@ function ProfileScreen() {
                             fontSize: 18,
                         }}
                     >
-                        {i18n.t('noResults')}
+                        {i18n.t('generic.noResults')}
                     </Paragraph>
                 );
             }
@@ -392,7 +392,7 @@ function ProfileScreen() {
             }}
         >
             <Searchbar
-                placeholder={i18n.t('search')}
+                placeholder={i18n.t('generic.search')}
                 style={styles.searchBarContainer}
                 inputStyle={{
                     marginLeft: -14,
@@ -419,9 +419,21 @@ function ProfileScreen() {
                 }}
                 value={gender ? gender : ''}
             >
-                <RadioButton.Item key="f" label={i18n.t('female')} value="f" />
-                <RadioButton.Item key="m" label={i18n.t('male')} value="m" />
-                <RadioButton.Item key="o" label={i18n.t('others')} value="o" />
+                <RadioButton.Item
+                    key="f"
+                    label={i18n.t('profile.female')}
+                    value="f"
+                />
+                <RadioButton.Item
+                    key="m"
+                    label={i18n.t('profile.male')}
+                    value="m"
+                />
+                <RadioButton.Item
+                    key="o"
+                    label={i18n.t('profile.others')}
+                    value="o"
+                />
             </RadioButton.Group>
         </View>
     );
@@ -455,7 +467,7 @@ function ProfileScreen() {
                                     textAlign: 'left',
                                 }}
                             >
-                                {i18n.t('modalErrorTitle')}
+                                {i18n.t('generic.modalErrorTitle')}
                             </Text>
                             <CloseStorySvg
                                 onPress={() => {
@@ -493,7 +505,9 @@ function ProfileScreen() {
                                     marginRight: 12,
                                 }}
                             >
-                                {i18n.t('imageDimensionsNotFit')}
+                                {i18n.t(
+                                    'createCommunity.imageDimensionsNotFit'
+                                )}
                             </Text>
                         </View>
                         <Button
@@ -503,7 +517,7 @@ function ProfileScreen() {
                                 setToggleImageDimensionsModal(false);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     </Card>
                 </Modal>
@@ -528,7 +542,7 @@ function ProfileScreen() {
                         onPress={() => Linking.openURL('celo://wallet')}
                     >
                         <Text style={styles.balanceValue}>
-                            {i18n.t('balance')}
+                            {i18n.t('profile.balance')}
                         </Text>
                         <View
                             style={{
@@ -595,7 +609,7 @@ function ProfileScreen() {
                         </TouchableOpacity>
                     </View>
                     <Input
-                        label={i18n.t('name')}
+                        label={i18n.t('generic.name')}
                         value={name}
                         maxLength={32}
                         onEndEditing={(e) => {
@@ -612,7 +626,7 @@ function ProfileScreen() {
                     >
                         <View style={{ flex: 1, marginRight: 10 }}>
                             <Select
-                                label={i18n.t('gender')}
+                                label={i18n.t('profile.gender')}
                                 value={textGender(gender)}
                                 onPress={() => {
                                     modalizeGenderRef.current?.open();
@@ -621,7 +635,7 @@ function ProfileScreen() {
                         </View>
                         <View style={{ flex: 1, marginLeft: 10 }}>
                             <Input
-                                label={i18n.t('age')}
+                                label={i18n.t('profile.age')}
                                 value={age}
                                 maxLength={4}
                                 keyboardType="numeric"
@@ -645,7 +659,7 @@ function ProfileScreen() {
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Input
-                            label={i18n.t('howManyChildren')}
+                            label={i18n.t('profile.howManyChildren')}
                             value={children}
                             maxLength={4}
                             keyboardType="numeric"
@@ -671,14 +685,14 @@ function ProfileScreen() {
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Select
-                            label={i18n.t('currency')}
+                            label={i18n.t('generic.currency')}
                             value={currencies[currency.toUpperCase()].name}
                             onPress={() => modalizeCurrencyRef.current?.open()}
                         />
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Select
-                            label={i18n.t('language')}
+                            label={i18n.t('generic.language')}
                             value={language === 'en' ? 'English' : ' Português'}
                             onPress={() => modalizeLanguageRef.current?.open()}
                         />
@@ -709,14 +723,14 @@ function ProfileScreen() {
                         />
                     </Text>
                     <Input
-                        label={i18n.t('phoneNumber')}
+                        label={i18n.t('profile.phoneNumber')}
                         boxStyle={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
                         rightElement={<LockSvg color={ipctColors.borderGray} />}
                     />
                     <Input
-                        label={i18n.t('country')}
+                        label={i18n.t('generic.country')}
                         boxStyle={{ marginTop: 28 }}
                         value={getCountryFromPhoneNumber(
                             userWallet.phoneNumber
@@ -771,7 +785,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeCurrencyRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('currency'),
+                        i18n.t('generic.currency'),
                         modalizeCurrencyRef,
                         () => setSearchCurrency('')
                     )}
@@ -781,7 +795,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeLanguageRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('language'),
+                        i18n.t('generic.language'),
                         modalizeLanguageRef
                     )}
                     adjustToContentHeight
@@ -791,7 +805,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeGenderRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('gender'),
+                        i18n.t('profile.gender'),
                         modalizeGenderRef
                     )}
                     adjustToContentHeight
@@ -826,8 +840,8 @@ function ProfileScreen() {
 ProfileScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('profile'),
-        tabBarLabel: i18n.t('profile'),
+        headerTitle: i18n.t('profile.profile'),
+        tabBarLabel: i18n.t('profile.profile'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

@@ -33,50 +33,50 @@ function CommunityRules({ caller }: { caller: string }) {
                     <WarningRedCircle style={{ width: 16, height: 16 }} />
                     <Headline style={styles.headerTitle}>
                         {caller === 'MANAGER'
-                            ? i18n.t('newManagerRules.title')
-                            : i18n.t('newBeneficiaryRules.title')}
+                            ? i18n.t('manager.rules.title')
+                            : i18n.t('beneficiary.rules.title')}
                     </Headline>
                 </View>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>1 -</Text>{' '}
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.first')
-                        : i18n.t('newBeneficiaryRules.first')}
+                        ? i18n.t('manager.rules.first')
+                        : i18n.t('beneficiary.rules.first')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>2 -</Text>{' '}
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.second')
-                        : i18n.t('newBeneficiaryRules.second')}
+                        ? i18n.t('manager.rules.second')
+                        : i18n.t('beneficiary.rules.second')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>3 -</Text>{' '}
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.third')
-                        : i18n.t('newBeneficiaryRules.third')}
+                        ? i18n.t('manager.rules.third')
+                        : i18n.t('beneficiary.rules.third')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>4 -</Text>{' '}
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.fourth')
-                        : i18n.t('newBeneficiaryRules.fourth')}
+                        ? i18n.t('manager.rules.fourth')
+                        : i18n.t('beneficiary.rules.fourth')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>6 -</Text>{' '}
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.fifth')
-                        : i18n.t('newBeneficiaryRules.fifth')}
+                        ? i18n.t('manager.rules.fifth')
+                        : i18n.t('beneficiary.rules.fifth')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     <Text style={styles.ordering}>7 -</Text>{' '}
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.sixth')
-                        : i18n.t('newBeneficiaryRules.sixth')}
+                        ? i18n.t('manager.rules.sixth')
+                        : i18n.t('beneficiary.rules.sixth')}
                 </Paragraph>
                 <Paragraph style={styles.paragraphContent}>
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.seventh')
-                        : i18n.t('newBeneficiaryRules.seventh')}
+                        ? i18n.t('manager.rules.seventh')
+                        : i18n.t('beneficiary.rules.seventh')}
                 </Paragraph>
                 <Paragraph
                     style={[
@@ -85,8 +85,8 @@ function CommunityRules({ caller }: { caller: string }) {
                     ]}
                 >
                     {caller === 'MANAGER'
-                        ? i18n.t('newManagerRules.warning')
-                        : i18n.t('newBeneficiaryRules.warning')}
+                        ? i18n.t('manager.rules.warning')
+                        : i18n.t('beneficiary.rules.warning')}
                 </Paragraph>
             </Card>
             <Button
@@ -95,7 +95,7 @@ function CommunityRules({ caller }: { caller: string }) {
                 style={styles.btnAccept}
                 onPress={handleAcceptRules}
             >
-                {i18n.t('newManagerRules.btnText')}
+                {i18n.t('manager.rules.btnText')}
             </Button>
         </View>
     );

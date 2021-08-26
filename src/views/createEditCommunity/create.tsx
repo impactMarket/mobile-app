@@ -328,15 +328,17 @@ function CreateCommunityScreen() {
         }
 
         if (new BigNumber(state.maxClaim).lte(state.claimAmount)) {
-            setInvalidInputAmounts(i18n.t('claimBiggerThanMax'));
+            setInvalidInputAmounts(
+                i18n.t('createCommunity.claimBiggerThanMax')
+            );
             return;
         }
         if (new BigNumber(state.claimAmount).eq(0)) {
-            setInvalidInputAmounts(i18n.t('claimNotZero'));
+            setInvalidInputAmounts(i18n.t('createCommunity.claimNotZero'));
             return;
         }
         if (new BigNumber(state.maxClaim).eq(0)) {
-            setInvalidInputAmounts(i18n.t('maxNotZero'));
+            setInvalidInputAmounts(i18n.t('createCommunity.maxNotZero'));
             return;
         }
 
@@ -480,17 +482,17 @@ function CreateCommunityScreen() {
             }}
         >
             <SubmissionActivity
-                description={i18n.t('changeCoverImage')}
+                description={i18n.t('createCommunity.changeCoverImage')}
                 submission={submittingCover}
                 uploadDetails={coverUploadDetails}
             />
             <SubmissionActivity
-                description={i18n.t('changeProfileImage')}
+                description={i18n.t('createCommunity.changeProfileImage')}
                 submission={submittingProfile}
                 uploadDetails={profileUploadDetails}
             />
             <SubmissionActivity
-                description={i18n.t('communityDetails')}
+                description={i18n.t('createCommunity.communityDetails')}
                 submission={submittingCommunity}
                 uploadDetails={undefined} // doesn't matter, once it's approved, jumps to another modal
             />
@@ -502,7 +504,7 @@ function CreateCommunityScreen() {
             <View style={styles.failedModalContainer}>
                 <WarningTriangle style={styles.errorModalWarningSvg} />
                 <Text style={styles.failedModalMessageText}>
-                    {i18n.t('communityRequestError')}
+                    {i18n.t('createCommunity.communityRequestError')}
                 </Text>
             </View>
             <SubmissionProgressDetails />
@@ -511,7 +513,7 @@ function CreateCommunityScreen() {
                 style={{ width: '100%' }}
                 onPress={submitNewCommunity}
             >
-                {i18n.t('tryAgain')}
+                {i18n.t('generic.tryAgain')}
             </Button>
         </>
     );
@@ -528,7 +530,7 @@ function CreateCommunityScreen() {
                         },
                     ]}
                 >
-                    {i18n.t('communityRequestSuccess')}
+                    {i18n.t('createCommunity.communityRequestSuccess')}
                 </Text>
                 <Button
                     modeType="gray"
@@ -537,7 +539,7 @@ function CreateCommunityScreen() {
                         navigation.goBack();
                     }}
                 >
-                    {i18n.t('continue')}
+                    {i18n.t('generic.continue')}
                 </Button>
             </View>
         </>
@@ -546,7 +548,7 @@ function CreateCommunityScreen() {
     const SubmissionInProgress = () => (
         <>
             <Text style={styles.submissionModalMessageText}>
-                {i18n.t('communityRequestSending')}
+                {i18n.t('createCommunity.communityRequestSending')}
             </Text>
             <SubmissionProgressDetails />
             <Button
@@ -564,7 +566,7 @@ function CreateCommunityScreen() {
     const SubmissionRequestCancel = () => (
         <>
             <Text style={styles.submissionModalMessageText}>
-                {i18n.t('communityRequestCancel')}
+                {i18n.t('createCommunity.communityRequestCancel')}
             </Text>
             <View style={styles.modalBoxTwoButtons}>
                 <Button
@@ -578,7 +580,7 @@ function CreateCommunityScreen() {
                         }
                     }}
                 >
-                    {i18n.t('yes')}
+                    {i18n.t('generic.yes')}
                 </Button>
                 <Button
                     modeType="default"
@@ -593,7 +595,7 @@ function CreateCommunityScreen() {
                         }
                     }}
                 >
-                    {i18n.t('no')}
+                    {i18n.t('generic.no')}
                 </Button>
             </View>
         </>
@@ -602,7 +604,7 @@ function CreateCommunityScreen() {
     const SubmissionCanceled = () => (
         <>
             <Text style={styles.submissionModalMessageText}>
-                {i18n.t('communityRequestCancel')}
+                {i18n.t('createCommunity.communityRequestCancel')}
             </Text>
             <Button
                 modeType="gray"
@@ -611,7 +613,7 @@ function CreateCommunityScreen() {
                     navigation.goBack();
                 }}
             >
-                {i18n.t('leave')}
+                {i18n.t('generic.leave')}
             </Button>
         </>
     );
@@ -645,7 +647,7 @@ function CreateCommunityScreen() {
                         isAnyFieldMissedModal ||
                         invalidInputAmounts !== undefined
                     }
-                    title={i18n.t('modalErrorTitle')}
+                    title={i18n.t('generic.modalErrorTitle')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);
@@ -661,7 +663,7 @@ function CreateCommunityScreen() {
                                 setInvalidInputAmounts(undefined);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     }
                 >
@@ -670,13 +672,13 @@ function CreateCommunityScreen() {
                         <Text style={styles.errorModalText}>
                             {invalidInputAmounts
                                 ? invalidInputAmounts
-                                : i18n.t('missingFieldError')}
+                                : i18n.t('createCommunity.missingFieldError')}
                         </Text>
                     </View>
                 </Modal>
                 <Modal
                     visible={showSubmissionModal}
-                    title={i18n.t('submitting')}
+                    title={i18n.t('generic.submitting')}
                     onDismiss={
                         !submitting && !submittingSuccess
                             ? () => {
@@ -716,7 +718,7 @@ function CreateCommunityScreen() {
                                 navigation.goBack();
                             }}
                         >
-                            {i18n.t('leave')}
+                            {i18n.t('generic.leave')}
                         </Button>
                         <Button
                             modeType="default"
@@ -736,7 +738,7 @@ function CreateCommunityScreen() {
 
 CreateCommunityScreen.navigationOptions = () => {
     return {
-        headerTitle: i18n.t('applyCommunity'),
+        headerTitle: i18n.t('createCommunity.applyCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

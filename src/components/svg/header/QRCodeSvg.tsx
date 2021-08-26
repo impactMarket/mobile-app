@@ -64,7 +64,7 @@ function QRCodeSvg(props: SvgProps) {
             <BottomPopup
                 isVisible={openQR}
                 toggleVisibility={toggleQR}
-                title={i18n.t('yourQRCode')}
+                title={i18n.t('generic.yourQRCode')}
             >
                 <SvgQRCode value={userAddress} size={200} />
             </BottomPopup>

@@ -93,7 +93,7 @@ function RemovedBeneficiaryScreen() {
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
-            description={i18n.t('claimedSince', {
+            description={i18n.t('manager.claimedSince', {
                 amount:
                     item.claimed === undefined
                         ? '0'
@@ -149,7 +149,7 @@ function RemovedBeneficiaryScreen() {
 RemovedBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('removed'),
+        headerTitle: i18n.t('generic.removed'),
     };
 };
 

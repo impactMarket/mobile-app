@@ -73,9 +73,9 @@ function AddedManagerScreen() {
     ) => {
         if (userWallet.balance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('generic.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -98,8 +98,8 @@ function AddedManagerScreen() {
                     return;
                 }
                 Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('userWasRemoved', {
+                    i18n.t('generic.success'),
+                    i18n.t('manager.userWasRemoved', {
                         user: formatAddressOrName(manager),
                     }),
                     [{ text: 'OK' }],
@@ -125,35 +125,37 @@ function AddedManagerScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
-                let error = 'unknown';
+                let error = 'generic.unknown';
                 if (e.message.includes('has been reverted')) {
-                    error = 'syncIssues';
+                    error = 'generic.syncIssues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'possiblyValoraNotSynced';
+                    error = 'generic.possiblyValoraNotSynced';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'unknown';
+                    error = 'generic.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'clockNotSynced';
+                        error = 'generic.clockNotSynced';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'networkConnectionLost';
+                        error = 'generic.networkConnectionLost';
                     }
-                    error = 'networkIssuesRPC';
+                    error = 'generic.networkIssuesRPC';
                 }
-                if (error === 'unknown') {
+                if (error === 'generic.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.captureException(e);
                 }
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorRemovingManager', { error: i18n.t(error) }),
+                    i18n.t('generic.failure'),
+                    i18n.t('manager.errorRemovingManager', {
+                        error: i18n.t(error),
+                    }),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -209,7 +211,7 @@ function AddedManagerScreen() {
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
-            description={i18n.t('managerSince', {
+            description={i18n.t('manager.managerSince', {
                 date: moment(item.createdAt).format('MMM, YYYY'),
             })}
             right={() =>
@@ -222,7 +224,7 @@ function AddedManagerScreen() {
                         style={{ marginVertical: 5 }}
                         onPress={() => handleRemoveManager(item, index)}
                     >
-                        {i18n.t('remove')}
+                        {i18n.t('generic.remove')}
                     </Button>
                 )
             }
@@ -279,7 +281,7 @@ function AddedManagerScreen() {
 AddedManagerScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('added'),
+        headerTitle: i18n.t('generic.added'),
     };
 };
 

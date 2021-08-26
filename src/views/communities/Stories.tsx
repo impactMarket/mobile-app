@@ -79,7 +79,7 @@ export default function Stories() {
                         color: '#1E3252',
                     }}
                 >
-                    {i18n.t('stories')}
+                    {i18n.t('stories.stories')}
                 </Text>
                 <Pressable
                     hitSlop={10}
@@ -99,7 +99,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} ({countStories})
+                        {i18n.t('generic.viewAll')} ({countStories})
                     </Text>
                 </Pressable>
             </View>

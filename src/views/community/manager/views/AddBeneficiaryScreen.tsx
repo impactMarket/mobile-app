@@ -47,9 +47,9 @@ function AddBeneficiaryScreen() {
 
         if (userBalance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('generic.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -59,9 +59,9 @@ function AddBeneficiaryScreen() {
             addressToAdd = kit.web3.utils.toChecksumAddress(inputAddress);
         } catch (e) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('addingInvalidAddress'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('manager.addingInvalidAddress'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -72,9 +72,9 @@ function AddBeneficiaryScreen() {
             setIsBeneficiarySuspect(true);
 
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('alreadyInCommunity'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('manager.alreadyInCommunity'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -83,9 +83,9 @@ function AddBeneficiaryScreen() {
         const userExist = await Api.user.exists(addressToAdd);
         if (!userExist) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('userNotRegistered'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('manager.userNotRegistered'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -111,44 +111,46 @@ function AddBeneficiaryScreen() {
                 }, 2500);
 
                 Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('addedNewBeneficiary'),
+                    i18n.t('generic.success'),
+                    i18n.t('manager.addedNewBeneficiary'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
                 navigation.goBack();
             })
             .catch(async (e) => {
-                let error = 'unknown';
+                let error = 'generic.unknown';
                 if (e.message.includes('has been reverted')) {
-                    error = 'syncIssues';
+                    error = 'generic.syncIssues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'possiblyValoraNotSynced';
+                    error = 'generic.possiblyValoraNotSynced';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'unknown';
+                    error = 'generic.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'clockNotSynced';
+                        error = 'generic.clockNotSynced';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'networkConnectionLost';
+                        error = 'generic.networkConnectionLost';
                     }
-                    error = 'networkIssuesRPC';
+                    error = 'generic.networkIssuesRPC';
                 }
-                if (error === 'unknown') {
+                if (error === 'generic.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.captureException(e);
                 }
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorAddingBeneficiary', { error: i18n.t(error) }),
-                    [{ text: i18n.t('close') }],
+                    i18n.t('generic.failure'),
+                    i18n.t('manager.errorAddingBeneficiary', {
+                        error: i18n.t(error),
+                    }),
+                    [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             })
@@ -173,7 +175,7 @@ function AddBeneficiaryScreen() {
                             textAlign: 'center',
                         }}
                     >
-                        {i18n.t('addingYourOwnAddress')}
+                        {i18n.t('manager.addingYourOwnAddress')}
                     </Paragraph>
                 </View>
             )}
@@ -196,7 +198,7 @@ function AddBeneficiaryScreen() {
                             backgroundColor: 'transparent',
                             paddingHorizontal: 0,
                         }}
-                        label={i18n.t('beneficiaryAddress')}
+                        label={i18n.t('manager.beneficiaryAddress')}
                         value={inputAddress}
                         // required
                         onChangeText={(value: string) => setInputAddress(value)}
@@ -227,7 +229,7 @@ function AddBeneficiaryScreen() {
                     loading={addInProgress === true}
                     onPress={() => handleModalScanQR()}
                 >
-                    {i18n.t('addBeneficiary')}
+                    {i18n.t('manager.addBeneficiary')}
                 </Button>
                 {/* Accessing community details to check suspicious activity */}
                 {communityMetadata.suspect !== null && <SuspiciousActivity />}
@@ -243,7 +245,7 @@ function AddBeneficiaryScreen() {
 AddBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('addBeneficiary'),
+        headerTitle: i18n.t('manager.addBeneficiary'),
     };
 };
 

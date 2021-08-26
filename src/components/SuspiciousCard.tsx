@@ -65,19 +65,21 @@ export default function SuspiciousCard(props: { suspectCounts: number }) {
     const setTextSuspects = (suspects: number) => {
         switch (true) {
             case suspects < 1:
-                return i18n.t('noSuspiciousActivityDetected');
+                return i18n.t('community.noSuspiciousActivityDetected');
 
             case suspects < 4:
-                return i18n.t('lowSuspiciousActivityDetected');
+                return i18n.t('community.lowSuspiciousActivityDetected');
 
             case suspects < 8:
-                return i18n.t('significantSuspiciousActivityDetected');
+                return i18n.t(
+                    'community.significantSuspiciousActivityDetected'
+                );
 
             case suspects > 7:
-                return i18n.t('largeSuspiciousActivityDetected');
+                return i18n.t('community.largeSuspiciousActivityDetected');
 
             default:
-                return i18n.t('noSuspiciousActivityDetected');
+                return i18n.t('community.noSuspiciousActivityDetected');
         }
     };
 

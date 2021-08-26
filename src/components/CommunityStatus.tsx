@@ -64,9 +64,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 },
                             ]}
                         >
-                            {i18n.t('raisedFrom')}
+                            {i18n.t('generic.raisedFrom')}
 
-                            {i18n.t('backers', {
+                            {i18n.t('generic.backers', {
                                 count: community.state.backers,
                             })}
                         </Text>
@@ -101,7 +101,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 },
                             ]}
                         >
-                            {i18n.t('goal')}
+                            {i18n.t('generic.goal')}
                         </Text>
                         <Text
                             style={[
@@ -160,10 +160,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             },
                         ]}
                     >
-                        {i18n.t('fundsRunOut', {
+                        {i18n.t('generic.fundsRunOut', {
                             days,
                         })}{' '}
-                        {i18n.t('days', {
+                        {i18n.t('createCommunity.days', {
                             count: days,
                         })}
                     </Text>

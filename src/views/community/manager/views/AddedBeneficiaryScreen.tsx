@@ -85,9 +85,9 @@ function AddedBeneficiaryScreen() {
     ) => {
         if (userWallet.balance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('generic.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -112,8 +112,8 @@ function AddedBeneficiaryScreen() {
                     return;
                 }
                 Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('userWasRemoved', {
+                    i18n.t('generic.success'),
+                    i18n.t('manager.userWasRemoved', {
                         user: formatAddressOrName(beneficiary),
                     }),
                     [{ text: 'OK' }],
@@ -136,35 +136,35 @@ function AddedBeneficiaryScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
-                let error = 'unknown';
+                let error = 'generic.unknown';
                 if (e.message.includes('has been reverted')) {
-                    error = 'syncIssues';
+                    error = 'generic.syncIssues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'possiblyValoraNotSynced';
+                    error = 'generic.possiblyValoraNotSynced';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'unknown';
+                    error = 'generic.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'clockNotSynced';
+                        error = 'generic.clockNotSynced';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'networkConnectionLost';
+                        error = 'generic.networkConnectionLost';
                     }
-                    error = 'networkIssuesRPC';
+                    error = 'generic.networkIssuesRPC';
                 }
-                if (error === 'unknown') {
+                if (error === 'generic.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.captureException(e);
                 }
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorRemovingBeneficiary', {
+                    i18n.t('generic.failure'),
+                    i18n.t('manager.errorRemovingBeneficiary', {
                         error: i18n.t(error),
                     }),
                     [{ text: 'OK' }],
@@ -224,7 +224,7 @@ function AddedBeneficiaryScreen() {
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
-            description={i18n.t('claimedSince', {
+            description={i18n.t('manager.claimedSince', {
                 amount:
                     item.claimed === undefined
                         ? '0'
@@ -244,7 +244,7 @@ function AddedBeneficiaryScreen() {
                     style={{ marginVertical: 5 }}
                     onPress={() => handleRemoveBeneficiary(item, index)}
                 >
-                    {i18n.t('remove')}
+                    {i18n.t('generic.remove')}
                 </Button>
             )}
             left={() =>
@@ -304,7 +304,7 @@ function AddedBeneficiaryScreen() {
                         fontSize: 18,
                     }}
                 >
-                    {i18n.t('noResults')}
+                    {i18n.t('generic.noResults')}
                 </Paragraph>
             );
         }
@@ -330,7 +330,7 @@ function AddedBeneficiaryScreen() {
     return (
         <>
             <Searchbar
-                placeholder={i18n.t('search')}
+                placeholder={i18n.t('generic.search')}
                 style={{
                     marginHorizontal: 22,
                     backgroundColor: 'rgba(206, 212, 218, 0.27)',
@@ -364,7 +364,7 @@ function AddedBeneficiaryScreen() {
 AddedBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('added'),
+        headerTitle: i18n.t('generic.added'),
     };
 };
 

@@ -79,7 +79,7 @@ function AnonymousReportScreen() {
             })
             .catch(() => {
                 Alert.alert(
-                    i18n.t('failure'),
+                    i18n.t('generic.failure'),
                     i18n.t('reportIlegal.alertFailure'),
                     [{ text: 'OK' }],
                     { cancelable: false }
@@ -194,7 +194,7 @@ function AnonymousReportScreen() {
                         }}
                         onPress={() => navigation.goBack()}
                     >
-                        {i18n.t('continue')}
+                        {i18n.t('generic.continue')}
                     </Button>
                 </Card.Content>
             </Card>
@@ -311,7 +311,7 @@ AnonymousReportScreen.navigationOptions = ({
 }) => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('report'),
+        headerTitle: i18n.t('report.report'),
         headerRight: () => (
             <SubmitStory
                 submit={submitReport}

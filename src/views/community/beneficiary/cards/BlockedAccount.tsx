@@ -23,11 +23,11 @@ function BlockedAccount() {
             <View style={styles.headlineContainer}>
                 <LockSvg />
                 <Headline style={styles.headerTitle}>
-                    {i18n.t('blockedAccountTitle')}
+                    {i18n.t('beneficiary.blockedAccountTitle')}
                 </Headline>
             </View>
             <Paragraph style={styles.paragraphContent}>
-                {i18n.t('blockedAccountDescription')}
+                {i18n.t('beneficiary.blockedAccountDescription')}
             </Paragraph>
         </Card>
     );
