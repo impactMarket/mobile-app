@@ -24,7 +24,7 @@ jest.mock('helpers/redux/actions/user', () => ({
  * NOTE: we are testing the component individually, but need the header
  * "submit button", so the entire navigator can be faked.
  */
-function FakeCreateCommunityScreen() {
+function WrappedCreateCommunityScreen() {
     const Stack = createStackNavigator();
     return (
         <Host>
@@ -132,7 +132,7 @@ describe('create community', () => {
 
     test('try to submit empty', async () => {
         const { getByText, queryByText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -199,7 +199,7 @@ describe('create community', () => {
 
     test('try to submit only name', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -270,7 +270,7 @@ describe('create community', () => {
 
     test('try to submit only description', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -341,7 +341,7 @@ describe('create community', () => {
 
     test('try to submit only city', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -411,7 +411,7 @@ describe('create community', () => {
             queryByText,
             getByLabelText,
             getByA11yLabel,
-        } = render(<FakeCreateCommunityScreen />);
+        } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
 
         expect(
@@ -492,7 +492,7 @@ describe('create community', () => {
         );
 
         const { getByText, queryByText, getByA11yLabel } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -564,7 +564,7 @@ describe('create community', () => {
 
     test('try to submit only email', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -635,7 +635,7 @@ describe('create community', () => {
 
     test('try to submit invalid email', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -656,7 +656,7 @@ describe('create community', () => {
 
     test('try to submit too short description', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -687,7 +687,7 @@ describe('create community', () => {
         );
 
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -707,7 +707,7 @@ describe('create community', () => {
 
     test('try to submit only claim amount', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -780,7 +780,7 @@ describe('create community', () => {
 
     test('try to submit only max claim', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -853,7 +853,7 @@ describe('create community', () => {
 
     test('try to submit only increment interval', async () => {
         const { getByText, queryByText, getByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -927,7 +927,7 @@ describe('create community', () => {
     // TODO: this test is important but it's failling for unknown reasons
     // test('change country', async () => {
     //     const { getByLabelText, queryAllByTestId, getByA11yLabel } = render(
-    //         <FakeCreateCommunityScreen />
+    //         <WrappedCreateCommunityScreen />
     //     );
     //     await act(async () => {});
 
@@ -969,7 +969,7 @@ describe('create community', () => {
         );
 
         const { getByLabelText, getByTestId, queryByLabelText } = render(
-            <FakeCreateCommunityScreen />
+            <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
 
@@ -1037,7 +1037,7 @@ describe('create community', () => {
             getByText,
             getByA11yLabel,
             queryByText,
-        } = render(<FakeCreateCommunityScreen />);
+        } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
 
         fireEvent.changeText(
@@ -1133,7 +1133,7 @@ describe('create community', () => {
             getByText,
             getByA11yLabel,
             queryByText,
-        } = render(<FakeCreateCommunityScreen />);
+        } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
 
         fireEvent.changeText(
@@ -1232,7 +1232,7 @@ describe('create community', () => {
             getByText,
             getByA11yLabel,
             queryByText,
-        } = render(<FakeCreateCommunityScreen />);
+        } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
 
         fireEvent.changeText(

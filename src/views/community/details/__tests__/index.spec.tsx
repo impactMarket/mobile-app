@@ -83,7 +83,7 @@ const community: CommunityAttributes = {
  * NOTE: we are testing the component individually, but need the header
  * "submit button", so the entire navigator can be faked.
  */
-function FakeCreateCommunityScreen() {
+function WrappedCommunityDetailsScreen() {
     const Stack = createStackNavigator();
     const store = createStore(combinedReducer);
     return (
@@ -135,7 +135,7 @@ describe('details [snapshot]', () => {
     });
 
     it('renders correctly', async () => {
-        const tree = render(<FakeCreateCommunityScreen />);
+        const tree = render(<WrappedCommunityDetailsScreen />);
         await act(async () => {});
         expect(tree.toJSON()).toMatchSnapshot();
     });
