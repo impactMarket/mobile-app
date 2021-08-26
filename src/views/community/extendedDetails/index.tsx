@@ -128,7 +128,7 @@ function ManagersBox(props: { manager: ManagerAttributes }) {
                         color: ipctColors.lynch,
                     }}
                 >
-                    {i18n.t('managerSince', {
+                    {i18n.t('manager.managerSince', {
                         date: moment(props.manager.createdAt).format(
                             'MMM DD, YYYY'
                         ),
@@ -169,21 +169,21 @@ function CommunityExtendedDetailsScreen() {
             </View>
             <Text style={styles.textDescription}>{community.description}</Text>
             <UBIParamsBox
-                title={i18n.t('claimAmount')}
+                title={i18n.t('createCommunity.claimAmount')}
                 body={`$${humanifyCurrencyAmount(
                     community.contract.claimAmount
                 )} / ${
                     community.contract.baseInterval === 86400
-                        ? i18n.t('day')
-                        : i18n.t('week')
+                        ? i18n.t('generic.day')
+                        : i18n.t('generic.week')
                 }`}
             />
             <UBIParamsBox
-                title={i18n.t('totalClaimPerBeneficiary')}
+                title={i18n.t('createCommunity.totalClaimPerBeneficiary')}
                 body={`$${humanifyCurrencyAmount(community.contract.maxClaim)}`}
             />
             <UBIParamsBox
-                title={i18n.t('incrementalFrequency')}
+                title={i18n.t('createCommunity.incrementalFrequency')}
                 body={`${community.contract.incrementInterval / 60} ${i18n.t(
                     'minutes'
                 )}`}
@@ -198,7 +198,7 @@ function CommunityExtendedDetailsScreen() {
                     marginBottom: 8,
                 }}
             >
-                {i18n.t('managers')}
+                {i18n.t('manager.managers')}
             </Text>
             {managers.map((manager) => (
                 <ManagersBox key={manager.address} manager={manager} />
