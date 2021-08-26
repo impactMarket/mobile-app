@@ -4,9 +4,14 @@ export default {
             "A friendly reminder you're using the Alfajores network build - the balances are not real.",
         share: 'Share',
         beneficiaries: 'Beneficiaries',
-        backers: 'Backers',
+        backers: 'Backer',
+        backers_plural: 'Backers',
+        or: 'or',
         cancel: 'Cancel',
         confirm: 'Confirm',
+        raisedFrom: 'Raised from {{backers}}',
+        goal: 'Goal',
+        fundsRunOut: 'Community funds will run out in {{days}}',
         ubi: 'UBI',
         manage: 'Manage',
         communities: 'Communities',
@@ -46,6 +51,8 @@ export default {
             'impactMarket enables any community to setup its own Unconditional Basic Income for their beneficiaries. Anyone can back those communities by donating directly to their UBI contracts.',
         exploreCommunities: 'Explore Communities',
         day: 'day',
+        days: 'day',
+        days_plural: 'days',
         week: 'week',
         scanningInvalidAddress: 'You are trying to scan an invalid address!',
         select: 'Select',
@@ -331,6 +338,14 @@ export default {
         suspiciousActivityDetected: 'Suspicious activities detected',
         suspiciousDescription:
             'The community funds may be put on hold if the beneficiaries or managers involved are not removed from this community.',
+        noSuspiciousActivityDetected:
+            'No suspicious activities detected in this community.',
+        lowSuspiciousActivityDetected:
+            'A very small  number of accounts may be involved in suspicious activities.',
+        significantSuspiciousActivityDetected:
+            'A significant number of accounts may be involved in suspicious activities.',
+        largeSuspiciousActivityDetected:
+            'A very large number of accounts  may be involved in suspicious activities.',
     },
     report: {
         report: 'Report',
@@ -370,6 +385,10 @@ export default {
             'You are trying to contribute with an amount bigger than your balance. Add funds on your Valora app.',
         amountShouldBe: 'Amount should be ${{claimAmount}}+ to calculate..',
         donationBeingProcessed: 'Your donation is being processed...',
+        donateWithCelo: 'Celo Dollar ($cUSD)',
+        donateWithESolidar: 'Credit Card / Paypal / BTC / ETH',
+        poweredByESolidar: 'Powered by',
+        contributeWith: 'Contribute with',
     },
     sagas: {
         messages: {

@@ -4,11 +4,14 @@ export default {
             'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
         share: 'Partilhar',
         beneficiaries: 'Beneficiários',
-        backers: 'Apoiantes',
+        backers: 'Apoiante',
+        backers_plural: 'Apoiantes',
+        or: 'ou',
         cancel: 'Fechar',
         confirm: 'Confirmar',
-        claimed: 'Distribuído',
-        raised: 'Angariado',
+        raisedFrom: 'Angariado por {{backers}}',
+        goal: 'Alvo',
+        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
         ubi: 'UBI',
         manage: 'Gerir',
         communities: 'Comunidades',
@@ -50,6 +53,8 @@ export default {
             'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
         exploreCommunities: 'Explorar Comunidades',
         day: 'dia',
+        days: 'dia',
+        days_plural: 'dias',
         week: 'semana',
         scanningInvalidAddress: 'Esse endereço parece inválido!',
         select: 'Selecionar',
@@ -348,6 +353,14 @@ export default {
         suspiciousActivityDetected: 'Atividade suspeita detectada',
         suspiciousDescription:
             'Os fundos comunitários podem ser suspensos se os beneficiários ou gerentes envolvidos não forem removidos desta comunidade.',
+        noSuspiciousActivityDetected:
+            'Nenhuma atividade suspeita detectada neste comunidade.',
+        lowSuspiciousActivityDetected:
+            'Um número muito pequeno de contas pode estar envolvido em atividades suspeitas.',
+        significantSuspiciousActivityDetected:
+            'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
+        largeSuspiciousActivityDetected:
+            'Um grande número de contas pode estar envolvido em atividades suspeitas.',
     },
     report: {
         report: 'Relatório',
@@ -387,6 +400,10 @@ export default {
             'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
         amountShouldBe: 'Quantidade deve ser ${{claimAmount}}+ para calcular..',
         donationBeingProcessed: 'O seu contributo está a ser processado...',
+        donateWithCelo: 'Celo Dollar ($cUSD)',
+        donateWithESolidar: 'Cartão de Crédito / Paypal / BTC / ETH',
+        poweredByESolidar: 'Distribuído por',
+        contributeWith: 'Contribuir com',
     },
     sagas: {
         messages: {

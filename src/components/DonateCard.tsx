@@ -46,7 +46,7 @@ export default function DonateCard(props: IDonateProps) {
                 <Title
                     style={[styles.title, { fontSize: width < 375 ? 14 : 20 }]}
                 >
-                    {i18n.t('contributeWith')}
+                    {i18n.t('donate.contributeWith')}
                 </Title>
                 <Pressable
                     style={styles.button}
@@ -69,7 +69,7 @@ export default function DonateCard(props: IDonateProps) {
                                 marginRight: 10,
                             }}
                         >
-                            {i18n.t('donateWithCelo')}
+                            {i18n.t('donate.donateWithCelo')}
                         </Text>
                         <Image
                             source={require('assets/images/celoDolar.png')}
@@ -84,7 +84,7 @@ export default function DonateCard(props: IDonateProps) {
                         { fontSize: width < 375 ? 11 : 16 },
                     ]}
                 >
-                    {i18n.t('or')}
+                    {i18n.t('donate.or')}
                 </Text>
                 <Pressable
                     style={[
@@ -113,7 +113,7 @@ export default function DonateCard(props: IDonateProps) {
                                 color: ipctColors.blueRibbon,
                             }}
                         >
-                            {i18n.t('donateWithESolidar')}
+                            {i18n.t('donate.donateWithESolidar')}
                         </Text>
                     </View>
                 </Pressable>
@@ -133,7 +133,7 @@ export default function DonateCard(props: IDonateProps) {
                             },
                         ]}
                     >
-                        {i18n.t('poweredByESolidar')}
+                        {i18n.t('donate.poweredByESolidar')}
                     </Text>
                     <Image source={require('assets/images/eSolidar.png')} />
                 </View>
