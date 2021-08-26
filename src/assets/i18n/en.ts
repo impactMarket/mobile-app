@@ -27,6 +27,7 @@ export default {
     ubi: 'UBI',
     manage: 'Manage',
     communities: 'Communities',
+    applyNewCommunity: 'Apply Your Community',
     emptyStoriesTitle: "Didn't create any story yet?",
     emptyStoriesDescription: "Don't miss the opportunity and create one, now!",
     pay: 'Send',
@@ -431,6 +432,10 @@ export default {
         warning:
             'If you find some suspicious activity, let us know, as it will be regarded as a good faith action that can prevent all the community to be affected because of a few bad actors.',
     },
+    noSuspiciousActivity: 'No Suspicious Activity',
+    lowSuspiciousActivity: 'Low Suspicious Activity',
+    significantSuspiciousActivity: 'Significant Suspicious Activity',
+    largeSuspiciousActivity: 'Large Suspicious Activity',
     noSuspiciousActivityDetected:
         'No suspicious activities detected in this community.',
     lowSuspiciousActivityDetected:

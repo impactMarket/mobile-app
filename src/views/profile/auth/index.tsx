@@ -40,14 +40,11 @@ import {
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Portal, Modal } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
-import { analytics } from 'services/analytics';
-import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import {
     registerForPushNotifications,

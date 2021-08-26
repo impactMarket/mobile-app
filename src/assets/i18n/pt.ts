@@ -28,6 +28,7 @@ export default {
     fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
     pay: 'Enviar',
     wallet: 'Carteira',
+    applyNewCommunity: 'Criar Sua Comunidade',
     emptyStoriesTitle: 'Ainda não criou uma story?',
     emptyStoriesDescription: 'Não perca tempo, e comece a criar agora mesmo!',
     profile: 'Perfil',
@@ -432,6 +433,10 @@ export default {
         warning:
             'Se você encontrar alguma atividade suspeita, avise-nos, pois será considerada uma ação de boa fé que pode evitar que toda a comunidade seja afetada por causa de alguns atores mal-intencionados.',
     },
+    noSuspiciousActivity: 'Nenhuma Atividade Suspeita',
+    lowSuspiciousActivity: 'Pequenas Atividades Suspeitas.',
+    significantSuspiciousActivity: 'Algumas Atividades Suspeitas.',
+    largeSuspiciousActivity: 'Muitas Atividades Suspeitas.',
     noSuspiciousActivityDetected:
         'Nenhuma atividade suspeita detectada neste comunidade.',
     lowSuspiciousActivityDetected:

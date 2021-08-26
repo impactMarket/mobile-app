@@ -1,28 +1,43 @@
 import i18n from 'assets/i18n';
-import renderHeader from 'components/core/HeaderBottomSheetTitle';
-import Select from 'components/core/Select';
+import Button from 'components/core/Button';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import * as Location from 'expo-location';
-import {
-    cleanCommunitiesListState,
-    fetchCommunitiesListRequest,
-} from 'helpers/redux/actions/communities';
+import { Screens } from 'helpers/constants';
+import { useNavigation } from '@react-navigation/native';
+import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useRef } from 'react';
-import { Alert, FlatList, View } from 'react-native';
+import {
+    Alert,
+    FlatList,
+    View,
+    StyleSheet,
+    Text,
+    ScrollView,
+} from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
+import { RadioButton, Portal } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import { ipctColors } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
 import Stories from './Stories';
 
 function CommunitiesScreen() {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
+
+    const walletAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
+
+    const isManager = useSelector(
+        (state: IRootState) => state.user.community.isManager
+    );
+
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
-    const modalizeOrderRef = useRef<Modalize>(null);
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
     const [userLocation, setUserLocation] = useState<
@@ -46,56 +61,6 @@ function CommunitiesScreen() {
             })
         );
     }, []);
-
-    const handleChangeOrder = async (order: string) => {
-        modalizeOrderRef.current?.close();
-        setRefreshing(true);
-        setCommuntiesOrder(order);
-        flatListRef.current?.scrollToIndex({ index: 0 });
-        if (order === 'nearest') {
-            try {
-                const { status } = await Location.requestPermissionsAsync();
-                if (status !== 'granted') {
-                    Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('errorGettingGPSLocation'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                    return;
-                }
-                const location = await Location.getCurrentPositionAsync({
-                    accuracy: Location.Accuracy.Low,
-                });
-
-                setUserLocation(location);
-                dispatch(cleanCommunitiesListState());
-
-                dispatch(
-                    fetchCommunitiesListRequest({
-                        offset: 0,
-                        limit: 5,
-                        orderBy: 'nearest',
-                        lat: location.coords.latitude,
-                        lng: location.coords.longitude,
-                    })
-                );
-
-                setCommuntiesOffset(0);
-            } catch (e) {
-                setCommuntiesOrder('bigger');
-                setRefreshing(false);
-            }
-        } else {
-            dispatch(cleanCommunitiesListState());
-            dispatch(
-                fetchCommunitiesListRequest({
-                    offset: 0,
-                    limit: 5,
-                })
-            );
-        }
-    };
 
     const handleOnEndReached = (info: { distanceFromEnd: number }) => {
         if (!reachedEndList) {
@@ -136,90 +101,45 @@ function CommunitiesScreen() {
         }
     };
 
-    const filterHeader = () => {
-        return (
-            <>
-                <Stories />
-                <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
-                    <Select
-                        value={textCommunitiesOrder(communtiesOrder)}
-                        onPress={() => modalizeOrderRef.current?.open()}
-                    />
-                </View>
-                {/* {refreshing && (
-                    <ActivityIndicator
-                        style={{ marginBottom: 22 }}
-                        animating
-                        color={ipctColors.blueRibbon}
-                    />
-                )} */}
-            </>
-        );
-    };
-
-    const renderCommunityOrder = () => {
-        return (
-            <Modalize
-                ref={modalizeOrderRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('order'),
-                    modalizeOrderRef
-                )}
-                adjustToContentHeight
-            >
-                <View
-                    style={{
-                        height: 110,
-                    }}
-                >
-                    <RadioButton.Group
-                        onValueChange={(value) => handleChangeOrder(value)}
-                        value={communtiesOrder}
-                    >
-                        <RadioButton.Item
-                            key="bigger"
-                            label={i18n.t('bigger')}
-                            value="bigger"
-                        />
-                        <RadioButton.Item
-                            key="nearest"
-                            label={i18n.t('nearest')}
-                            value="nearest"
-                        />
-                    </RadioButton.Group>
-                </View>
-            </Modalize>
-        );
-    };
-
     return (
-        <>
+        <ScrollView>
             <FlatList
                 data={[
                     { publicId: 'for-compliance-sake-really' } as any,
                 ].concat(communities)}
                 renderItem={({
                     item,
-                    index,
-                }: {
+                }: // index,
+                {
                     item: CommunityAttributes;
                     index: number;
-                }) =>
-                    index === 0 ? (
-                        filterHeader()
-                    ) : (
-                        <CommunityCard community={item} />
-                    )
-                }
+                }) => <CommunityCard community={item} />}
                 ref={flatListRef}
                 keyExtractor={(item) => item.publicId}
                 onEndReachedThreshold={0.5}
+                horizontal
                 onEndReached={handleOnEndReached}
-                showsVerticalScrollIndicator={false}
-                style={{ paddingTop: 20 }}
+                showsHorizontalScrollIndicator={false}
+                style={{ paddingTop: 20, marginLeft: 20 }}
             />
-            <Portal>{renderCommunityOrder()}</Portal>
-        </>
+            <Button
+                modeType="default"
+                style={{ marginHorizontal: 22, marginBottom: 36 }}
+                labelStyle={styles.buttomStoreText}
+                onPress={() =>
+                    walletAddress.length > 0
+                        ? navigation.navigate(Screens.CreateCommunity)
+                        : isManager
+                        ? navigation.navigate(Screens.CommunityManager)
+                        : navigation.navigate(Screens.Auth)
+                }
+            >
+                <Text style={styles.buttomStoreText}>
+                    {i18n.t('applyNewCommunity')}
+                </Text>
+            </Button>
+            <Stories />
+        </ScrollView>
     );
 }
 
@@ -232,5 +152,15 @@ CommunitiesScreen.navigationOptions = () => {
         ),
     };
 };
+
+const styles = StyleSheet.create({
+    buttomStoreText: {
+        fontSize: 15,
+        lineHeight: 28,
+        color: ipctColors.white,
+        fontFamily: 'Inter-Regular',
+        fontWeight: '500',
+    },
+});
 
 export default CommunitiesScreen;
