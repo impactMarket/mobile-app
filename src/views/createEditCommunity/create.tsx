@@ -225,12 +225,12 @@ function CreateCommunityScreen() {
                     const cachedUser = (await CacheStore.getUser())!;
                     await CacheStore.cacheUser({
                         ...cachedUser,
-                        avatar: res.url,
+                        avatar: res.media.url,
                     });
                     dispatchRedux(
                         setUserMetadata({
                             ...userMetadata,
-                            avatar: res.url,
+                            avatar: res.media.url,
                         })
                     );
                     return res;
@@ -425,7 +425,7 @@ function CreateCommunityScreen() {
                         color={
                             props.uploadDetails
                                 ? ipctColors.greenishTeal
-                                : '#EB5757'
+                                : ipctColors.errorRed
                         }
                         size={22}
                     />
@@ -715,7 +715,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 22,
         borderStyle: 'solid',
-        borderColor: '#EB5757',
+        borderColor: ipctColors.errorRed,
         borderWidth: 2,
         borderRadius: 8,
         width: '100%',
@@ -745,7 +745,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
         paddingHorizontal: 22,
         borderStyle: 'solid',
-        borderColor: '#EB5757',
+        borderColor: ipctColors.errorRed,
         borderWidth: 2,
         borderRadius: 8,
         width: '100%',

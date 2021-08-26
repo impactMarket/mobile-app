@@ -101,7 +101,7 @@ class ApiRouteUser {
         await this.api.put<void>('/user/avatar', {
             mediaId: preSigned.media.id,
         });
-        return preSigned.media;
+        return preSigned;
     }
 
     static async exists(address: string): Promise<boolean> {
