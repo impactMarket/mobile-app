@@ -161,7 +161,6 @@ describe('details [snapshot]', () => {
         await act(async () => {});
 
         fireEvent.press(getByTestId('donateWithESolidar'));
-
         expect(queryByTestId('webViewESolidar')).not.toBeNull();
     });
 
@@ -172,9 +171,11 @@ describe('details [snapshot]', () => {
         await act(async () => {});
 
         fireEvent.press(getByTestId('donateWithCelo'));
-
         expect(queryByTestId('modalDonateWithCelo')).not.toBeNull();
     });
+
+    // TODO: open and close "donate with esolidar"
+    // TODO: open and close "donate with celo dollar"
 
     it('press "see more"', async () => {
         const { getByTestId, queryByTestId } = render(
