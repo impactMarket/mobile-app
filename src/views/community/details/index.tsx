@@ -178,9 +178,19 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         {i18n.t('community.seeMore')}
                     </Text>
                 </Pressable>
-                <CommunityStatus community={community}>
+                <View
+                    style={{
+                        padding: 16,
+                        borderRadius: 12,
+                        borderColor: ipctColors.softGray,
+                        borderWidth: 1,
+                        marginVertical: 16,
+                    }}
+                >
+                    <CommunityStatus community={community} />
+                    <View style={styles.divider} />
                     <DonateCard community={community} />
-                </CommunityStatus>
+                </View>
             </ScrollView>
         </>
     );
@@ -195,6 +205,10 @@ CommunityDetailsScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
+    divider: {
+        height: 1,
+        backgroundColor: ipctColors.softGray,
+    },
     communityName: {
         fontSize: 18,
         lineHeight: 28,

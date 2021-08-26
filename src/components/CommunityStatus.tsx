@@ -14,11 +14,9 @@ import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 import SuspiciousCard from './SuspiciousCard';
-import Card from './core/Card';
 import WarningTriangle from './svg/WarningTriangle';
 
 interface ICommuntyStatusProps {
-    children?: any; // linter issues are a bit anoying sometimes
     community: CommunityAttributes;
 }
 
@@ -41,145 +39,136 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
     }
 
     return (
-        <Card elevation={0} style={{ marginTop: 16 }}>
+        <>
             {community.suspect !== undefined && community.suspect !== null && (
                 <SuspiciousCard suspectCounts={community.suspect.suspect} />
             )}
-            <View style={{ padding: 22 }}>
-                <View style={styles.cardWrap}>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'flex-start',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Text
-                            style={[
-                                styles.description,
-                                {
-                                    color: ipctColors.regentGray,
-                                    fontSize: width < 375 ? 11 : 14,
-                                    lineHeight: width < 375 ? 19 : 24,
-                                },
-                            ]}
-                        >
-                            {i18n.t('generic.raisedFrom')}
-
-                            {i18n.t('generic.backers', {
-                                count: community.state.backers,
-                            })}
-                        </Text>
-                        <Text
-                            style={[
-                                styles.Text,
-                                {
-                                    fontSize: width < 375 ? 14 : 20,
-                                },
-                            ]}
-                        >
-                            {amountToCurrency(
-                                community.state.raised,
-                                user.currency,
-                                exchangeRates
-                            )}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <Text
-                            style={[
-                                styles.description,
-                                {
-                                    color: ipctColors.regentGray,
-                                    fontSize: width < 375 ? 11 : 14,
-                                },
-                            ]}
-                        >
-                            {i18n.t('generic.goal')}
-                        </Text>
-                        <Text
-                            style={[
-                                styles.Text,
-                                { fontSize: width < 375 ? 14 : 20 },
-                            ]}
-                        >
-                            {goal
-                                ? amountToCurrency(
-                                      goal,
-                                      user.currency,
-                                      exchangeRates
-                                  )
-                                : 'N/A'}
-                        </Text>
-                    </View>
-                </View>
-                <View style={{ marginTop: 7.5 }}>
-                    <ProgressBar
-                        key="raised"
-                        style={{
-                            backgroundColor: ipctColors.softGray,
-                            position: 'absolute',
-                            borderRadius: 6.5,
-                            height: 6.32,
-                        }}
-                        progress={calculateCommunityProgress(
-                            'raised',
-                            community
-                        )}
-                        color={ipctColors.blueRibbon}
-                    />
-                </View>
+            <View style={styles.cardWrap}>
                 <View
-                    style={[
-                        styles.fundsContainer,
-                        {
-                            alignItems: width < 375 ? 'flex-start' : 'center',
-                            justifyContent: 'center',
-                        },
-                    ]}
+                    style={{
+                        flex: 1,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                    }}
                 >
-                    {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
-                    <WarningTriangle
-                        color="#FE9A22"
-                        style={{ marginTop: width < 375 ? 8 : 0 }}
-                    />
                     <Text
                         style={[
                             styles.description,
                             {
                                 color: ipctColors.regentGray,
-                                marginLeft: 7,
                                 fontSize: width < 375 ? 11 : 14,
                                 lineHeight: width < 375 ? 19 : 24,
                             },
                         ]}
                     >
-                        {i18n.t('generic.fundsRunOut', {
-                            days,
-                        })}{' '}
-                        {i18n.t('createCommunity.days', {
-                            count: days,
+                        {i18n.t('generic.raisedFrom')}
+
+                        {i18n.t('generic.backers', {
+                            count: community.state.backers,
                         })}
                     </Text>
+                    <Text
+                        style={[
+                            styles.Text,
+                            {
+                                fontSize: width < 375 ? 14 : 20,
+                            },
+                        ]}
+                    >
+                        {amountToCurrency(
+                            community.state.raised,
+                            user.currency,
+                            exchangeRates
+                        )}
+                    </Text>
                 </View>
-                {props.children && <View style={styles.divider} />}
-                {props.children}
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text
+                        style={[
+                            styles.description,
+                            {
+                                color: ipctColors.regentGray,
+                                fontSize: width < 375 ? 11 : 14,
+                                lineHeight: width < 375 ? 19 : 24,
+                            },
+                        ]}
+                    >
+                        {i18n.t('generic.goal')}
+                    </Text>
+                    <Text
+                        style={[
+                            styles.Text,
+                            { fontSize: width < 375 ? 14 : 20 },
+                        ]}
+                    >
+                        {goal
+                            ? amountToCurrency(
+                                  goal,
+                                  user.currency,
+                                  exchangeRates
+                              )
+                            : 'N/A'}
+                    </Text>
+                </View>
             </View>
-        </Card>
+            <View style={{ marginTop: 7.5 }}>
+                <ProgressBar
+                    key="raised"
+                    style={{
+                        backgroundColor: ipctColors.softGray,
+                        position: 'absolute',
+                        borderRadius: 6.5,
+                        height: 6.32,
+                    }}
+                    progress={calculateCommunityProgress('raised', community)}
+                    color={ipctColors.blueRibbon}
+                />
+            </View>
+            <View
+                style={[
+                    styles.fundsContainer,
+                    {
+                        alignItems: width < 375 ? 'flex-start' : 'center',
+                        justifyContent: 'center',
+                    },
+                ]}
+            >
+                {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
+                <WarningTriangle
+                    color="#FE9A22"
+                    style={{ marginTop: width < 375 ? 8 : 0 }}
+                />
+                <Text
+                    style={[
+                        styles.description,
+                        {
+                            color: ipctColors.regentGray,
+                            marginLeft: 7,
+                            fontSize: width < 375 ? 11 : 14,
+                            lineHeight: width < 375 ? 19 : 24,
+                        },
+                    ]}
+                >
+                    {i18n.t('generic.fundsRunOut', {
+                        days,
+                    })}{' '}
+                    {i18n.t('generic.days', {
+                        count: days,
+                    })}
+                    .
+                </Text>
+            </View>
+        </>
     );
 }
 
 const styles = StyleSheet.create({
-    divider: {
-        height: 1,
-        backgroundColor: ipctColors.softGray,
-    },
     sphereClaimed: {
         width: 8,
         height: 8,
@@ -212,7 +201,7 @@ const styles = StyleSheet.create({
     cardWrap: {
         flex: 2,
         flexDirection: 'row',
-        marginTop: 7,
+        // marginTop: 7,
         alignItems: 'flex-end',
         justifyContent: 'center',
     },

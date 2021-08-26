@@ -11,7 +11,7 @@ export default {
         confirm: 'Confirmar',
         raisedFrom: 'Angariado por {{backers}}',
         goal: 'Alvo',
-        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
+        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}}',
         ubi: 'UBI',
         manage: 'Gerir',
         communities: 'Comunidades',
