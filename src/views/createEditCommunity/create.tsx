@@ -124,19 +124,20 @@ function CreateCommunityScreen() {
                     userMetadata.avatar?.length > 0)
             ) {
                 cancelablePromise = makeCancelable(submitCommunity());
-                cancelablePromise.promise.catch().finally(() => {
-                    setSubmitting(false);
-                    setSubmittingCover(false);
-                    setSubmittingProfile(false);
-                    setSubmittingCommunity(false);
-                });
+                cancelablePromise.promise
+                    .catch((error) => console.log(error))
+                    .finally(() => {
+                        setSubmitting(false);
+                        setSubmittingCover(false);
+                        setSubmittingProfile(false);
+                        setSubmittingCommunity(false);
+                    });
             } else if (isUploadingContent) {
                 cancelablePromise = makeCancelable(uploadImages());
                 cancelablePromise.promise
                     .then((details) => {
                         setCoverUploadDetails(details[0].media);
                         if (state.profileImage.length > 0) {
-                            console.log({ details });
                             setProfileUploadDetails(details[1].media);
                         }
                         setSubmittingCover(false);
@@ -158,6 +159,7 @@ function CreateCommunityScreen() {
     ]);
 
     const updateUIAfterSubmission = async (error: any) => {
+        console.log({ updateUIAfterSubmissionErrorParam: error });
         if (error === undefined) {
             setSubmitting(false);
             setSubmittingSuccess(true);
@@ -204,7 +206,7 @@ function CreateCommunityScreen() {
             communityCreationError === undefined &&
             communityUploadDetails !== undefined
         ) {
-            await updateUIAfterSubmission(communityCreationError);
+            updateUIAfterSubmission(communityCreationError);
         }
     };
 
@@ -454,7 +456,7 @@ function CreateCommunityScreen() {
             <SubmissionActivity
                 description={i18n.t('communityDetails')}
                 submission={submittingCommunity}
-                uploadDetails={communityUploadDetails} // doesn't matter, once it's approved, jumps to another modal
+                uploadDetails={communityUploadDetails}
             />
         </View>
     );
@@ -534,7 +536,7 @@ function CreateCommunityScreen() {
                     style={{ width: '35%' }}
                     onPress={() => {
                         setCanceled(true);
-                        setRequestCancel(false);
+                        setRequestCancel(true);
                         if (communityUploadDetails !== undefined) {
                             // TODO: request API delete
                         }
