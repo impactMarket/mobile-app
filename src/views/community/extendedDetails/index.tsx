@@ -157,6 +157,7 @@ function CommunityExtendedDetailsScreen() {
             style={{
                 paddingHorizontal: 20,
             }}
+            testID="communityExtendedDetails"
         >
             <View>
                 <Text style={styles.communityName}>{community.name}</Text>

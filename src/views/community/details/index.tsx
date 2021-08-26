@@ -173,6 +173,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                             Screens.CommunityExtendedDetailsScreen
                         )
                     }
+                    testID="communitySeeMore"
                 >
                     <Text style={styles.textSeeMore}>
                         {i18n.t('community.seeMore')}

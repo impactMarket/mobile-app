@@ -57,6 +57,7 @@ export default function DonateCard(props: IDonateProps) {
                             payload: community,
                         })
                     }
+                    testID="donateWithCelo"
                 >
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -97,6 +98,7 @@ export default function DonateCard(props: IDonateProps) {
                         },
                     ]}
                     onPress={() => modalizeESolidar.current?.open()}
+                    testID="donateWithESolidar"
                 >
                     <View
                         style={{
@@ -162,6 +164,7 @@ export default function DonateCard(props: IDonateProps) {
                             style={{
                                 height: Dimensions.get('screen').height * 0.85,
                             }}
+                            testID="webViewESolidar"
                         />
                     </Modalize>
                 </Provider>

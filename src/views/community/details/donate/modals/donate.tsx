@@ -224,6 +224,7 @@ class DonateModal extends Component<
                             borderRadius: 5,
                             padding: 13,
                         }}
+                        testID="modalDonateWithCelo"
                     >
                         <View style={{ flexDirection: 'row' }}>
                             <Text

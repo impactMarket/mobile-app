@@ -586,6 +586,7 @@ Array [
                             onResponderTerminate={[Function]}
                             onResponderTerminationRequest={[Function]}
                             onStartShouldSetResponder={[Function]}
+                            testID="communitySeeMore"
                           >
                             <Text
                               style={
@@ -944,6 +945,7 @@ Array [
                                     "width": "100%",
                                   }
                                 }
+                                testID="donateWithCelo"
                               >
                                 <View
                                   style={
@@ -1038,6 +1040,7 @@ Array [
                                     },
                                   ]
                                 }
+                                testID="donateWithESolidar"
                               >
                                 <View
                                   style={

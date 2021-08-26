@@ -1,12 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { act, render } from '@testing-library/react-native';
+import { act, fireEvent, render } from '@testing-library/react-native';
+import { setAppExchangeRatesAction } from 'helpers/redux/actions/app';
 import combinedReducer from 'helpers/redux/reducers';
 import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 import { createStore } from 'redux';
+import CommunityExtendedDetailsScreen from 'views/community/extendedDetails';
 
 import CommunityDetailsScreen from '../';
 
@@ -86,6 +88,7 @@ const community: CommunityAttributes = {
 function WrappedCommunityDetailsScreen() {
     const Stack = createStackNavigator();
     const store = createStore(combinedReducer);
+    store.dispatch(setAppExchangeRatesAction({ USD: 1, BRL: 0.3 }));
     return (
         <Host>
             <reactRedux.Provider store={store}>
@@ -94,6 +97,17 @@ function WrappedCommunityDetailsScreen() {
                         <Stack.Screen
                             name="Home"
                             component={CommunityDetailsScreen}
+                            initialParams={{
+                                route: {
+                                    params: {
+                                        communityId: 1,
+                                    },
+                                },
+                            }}
+                        />
+                        <Stack.Screen
+                            name="CommunityExtendedDetailsScreen"
+                            component={CommunityExtendedDetailsScreen}
                             initialParams={{
                                 route: {
                                     params: {
@@ -139,4 +153,41 @@ describe('details [snapshot]', () => {
         await act(async () => {});
         expect(tree.toJSON()).toMatchSnapshot();
     });
+
+    it('open "donate with esolidar"', async () => {
+        const { getByTestId, queryByTestId } = render(
+            <WrappedCommunityDetailsScreen />
+        );
+        await act(async () => {});
+
+        fireEvent.press(getByTestId('donateWithESolidar'));
+
+        expect(queryByTestId('webViewESolidar')).not.toBeNull();
+    });
+
+    it('open "donate with celo dollar"', async () => {
+        const { getByTestId, queryByTestId } = render(
+            <WrappedCommunityDetailsScreen />
+        );
+        await act(async () => {});
+
+        fireEvent.press(getByTestId('donateWithCelo'));
+
+        expect(queryByTestId('modalDonateWithCelo')).not.toBeNull();
+    });
+
+    it('press "see more"', async () => {
+        const { getByTestId, queryByTestId } = render(
+            <WrappedCommunityDetailsScreen />
+        );
+        await act(async () => {});
+
+        fireEvent.press(getByTestId('communitySeeMore'));
+
+        expect(queryByTestId('communityExtendedDetails')).not.toBeNull();
+    });
+
+    // TODO: test donating with success
+    // TODO: test donating with higher amount that wallet balance
+    // TODO: test cancel donate process and start over again
 });
