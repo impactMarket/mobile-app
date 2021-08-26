@@ -14,6 +14,7 @@ import {
     cleanCommunityState,
     findCommunityByIdRequest,
 } from 'helpers/redux/actions/communities';
+import { UbiPromoter } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import {
@@ -28,6 +29,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
 interface ICommunityDetailsScreen {
@@ -58,20 +60,31 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 
     const [refreshing, setRefreshing] = useState(false);
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
+    const [promoter, setPromoter] = useState<UbiPromoter | null>(null);
 
     useEffect(() => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
-        if (community) {
+        return () => dispatch(cleanCommunityState());
+    }, []);
+
+    useEffect(() => {
+        const checkDonateOpen = () => {
             if (props.route.params.openDonate === true) {
                 dispatch({
                     type: modalDonateAction.OPEN,
                     payload: community,
                 });
             }
-            setRefreshing(false);
+        };
+        const getPromoter = () =>
+            Api.community
+                .getPromoter(community.id)
+                .then((r) => setPromoter(r.data));
+        if (community) {
+            checkDonateOpen();
+            getPromoter();
         }
-        return () => dispatch(cleanCommunityState());
-    }, []);
+    }, [community]);
 
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
@@ -106,6 +119,21 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             ? community.description.indexOf('.', 180) + 1
             : community.description.length
     );
+
+    const SponsoredBy = () => {
+        console.log(promoter);
+        if (promoter === null) {
+            return null;
+        }
+        return (
+            <View style={styles.inlineBox}>
+                <Text style={styles.textManagers}>
+                    {i18n.t('community.sponsoredBy')}
+                </Text>
+                <Text style={styles.textBeneficiaries}>{promoter.name}</Text>
+            </View>
+        );
+    };
 
     return (
         <>
@@ -165,6 +193,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                         {i18n.t('manager.managers').toLowerCase()}
                     </Text>
                 </View>
+                <SponsoredBy />
                 <Text style={styles.textDescription}>{description}</Text>
                 <Pressable
                     hitSlop={15}

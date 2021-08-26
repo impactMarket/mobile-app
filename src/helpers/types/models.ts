@@ -183,3 +183,21 @@ export interface UbiRequestChangeParams {
     baseInterval: number;
     incrementInterval: number;
 }
+
+export interface UbiPromoterSocialMedia {
+    id: number;
+    promoterId: number;
+    mediaType: string;
+    url: string;
+}
+
+export interface UbiPromoter {
+    id: number;
+    category: 'organization' | 'company' | 'individual';
+    name: string;
+    description: string;
+    logoMediaId: number;
+
+    logo?: AppMediaContent;
+    socialMedia?: UbiPromoterSocialMedia[];
+}

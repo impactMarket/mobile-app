@@ -361,6 +361,7 @@ export default {
             'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
         largeSuspiciousActivityDetected:
             'Um grande número de contas pode estar envolvido em atividades suspeitas.',
+        sponsoredBy: 'Sponsored by',
     },
     report: {
         report: 'Relatório',

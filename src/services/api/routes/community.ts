@@ -13,6 +13,7 @@ import {
     UbiCommunitySuspect,
     UbiRequestChangeParams,
     CommunityCampaing,
+    UbiPromoter,
 } from 'helpers/types/models';
 import { UbiCommunityContract } from 'helpers/types/ubi/ubiCommunityContract';
 import { UbiCommunityDailyMetrics } from 'helpers/types/ubi/ubiCommunityDailyMetrics';
@@ -24,6 +25,10 @@ import { ApiRequests, getRequest } from '../base';
 
 class ApiRouteCommunity {
     static api = new ApiRequests();
+
+    static async getPromoter(communityId: number) {
+        return this.api.get<UbiPromoter>(`/community/${communityId}/promoter`);
+    }
 
     static async findBeneficiary(
         beneficiaryQuery: string,
