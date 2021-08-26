@@ -1,0 +1,677 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`extended details community [snapshot] renders correctly 1`] = `
+<RCTScrollView
+  style={
+    Object {
+      "paddingHorizontal": 20,
+    }
+  }
+>
+  <View>
+    <View>
+      <Text
+        style={
+          Object {
+            "color": "#333239",
+            "fontFamily": "Manrope-Bold",
+            "fontSize": 18,
+            "lineHeight": 28,
+          }
+        }
+      >
+        Example Community
+      </Text>
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={12}
+          bbWidth={8}
+          fill="none"
+          focusable={false}
+          height={12}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "flex": 0,
+                "height": 12,
+                "width": 8,
+              },
+            ]
+          }
+          vbHeight={12}
+          vbWidth={8}
+          width={8}
+        >
+          <RNSVGGroup
+            fill={null}
+            propList={
+              Array [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGPath
+              clipRule={0}
+              d="M0 4.535C0 2.412 1.794.685 4 .685s4 1.727 4 3.85c0 2.634-3.58 6.502-3.732 6.665a.37.37 0 01-.536 0C3.58 11.037 0 7.17 0 4.535zm1.988 0c0 1.068.902 1.937 2.012 1.937 1.11 0 2.012-.87 2.012-1.937 0-1.068-.902-1.937-2.012-1.937-1.11 0-2.012.869-2.012 1.937z"
+              fill={4285760413}
+              fillRule={0}
+              propList={
+                Array [
+                  "fill",
+                  "fillRule",
+                ]
+              }
+            />
+          </RNSVGGroup>
+        </RNSVGSvgView>
+        <Text
+          style={
+            Object {
+              "color": "#73839D",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 14,
+              "lineHeight": 24,
+              "marginLeft": 4,
+            }
+          }
+        >
+          Lauro de Freitas
+          , 
+          Brazil
+        </Text>
+      </View>
+    </View>
+    <Text
+      style={
+        Object {
+          "color": "#333239",
+          "fontFamily": "Inter-Regular",
+          "fontSize": 14,
+          "lineHeight": 24,
+          "marginBottom": 28,
+          "marginTop": 16,
+        }
+      }
+    >
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis interdum justo, nec sollicitudin lectus. Quisque malesuada metus lacinia facilisis pretium. Maecenas semper lacus id ante porttitor, non ultricies nunc suscipit. Vestibulum hendrerit eros vel mollis blandit. Nam tincidunt libero nunc, sed gravida tortor vulputate ut. Donec ullamcorper dui erat, vitae consectetur neque auctor sit amet. Aliquam a lacus congue, scelerisque orci vitae, accumsan tellus. Nunc ultrices convallis euismod.
+    </Text>
+    <View
+      style={
+        Object {
+          "borderColor": "#E9EDF4",
+          "borderRadius": 12,
+          "borderWidth": 1,
+          "marginVertical": 4,
+          "padding": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#73839D",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 14,
+            "lineHeight": 24,
+          }
+        }
+      >
+        Amount per Claim
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#333239",
+            "fontFamily": "Inter-Bold",
+            "fontSize": 16,
+            "lineHeight": 22,
+          }
+        }
+      >
+        $0.75 / day
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "borderColor": "#E9EDF4",
+          "borderRadius": 12,
+          "borderWidth": 1,
+          "marginVertical": 4,
+          "padding": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#73839D",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 14,
+            "lineHeight": 24,
+          }
+        }
+      >
+        Amount
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#333239",
+            "fontFamily": "Inter-Bold",
+            "fontSize": 16,
+            "lineHeight": 22,
+          }
+        }
+      >
+        $400
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "borderColor": "#E9EDF4",
+          "borderRadius": 12,
+          "borderWidth": 1,
+          "marginVertical": 4,
+          "padding": 16,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#73839D",
+            "fontFamily": "Inter-Regular",
+            "fontSize": 14,
+            "lineHeight": 24,
+          }
+        }
+      >
+        Incremental Frequency
+      </Text>
+      <Text
+        style={
+          Object {
+            "color": "#333239",
+            "fontFamily": "Inter-Bold",
+            "fontSize": 16,
+            "lineHeight": 22,
+          }
+        }
+      >
+        5 Minutes
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "borderColor": "#E9EDF4",
+          "borderWidth": 1,
+          "marginVertical": 32,
+        }
+      }
+    />
+    <Text
+      style={
+        Object {
+          "color": "#333239",
+          "fontFamily": "Inter-Bold",
+          "fontSize": 20,
+          "lineHeight": 20,
+          "marginBottom": 8,
+        }
+      }
+    >
+      Managers
+    </Text>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "#E9EDF4",
+          "borderRadius": 12,
+          "borderWidth": 1,
+          "flexDirection": "row",
+          "marginVertical": 8,
+          "padding": 16,
+        }
+      }
+      testID="manager-box"
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={42}
+        bbWidth={42}
+        fill="none"
+        focusable={false}
+        height={42}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            Object {
+              "marginRight": 16,
+            },
+            Object {
+              "flex": 0,
+              "height": 42,
+              "width": 42,
+            },
+          ]
+        }
+        vbHeight={80}
+        vbWidth={81}
+        width={42}
+      >
+        <RNSVGGroup
+          fill={null}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGMask
+            height={60}
+            maskContentUnits={1}
+            maskTransform={
+              Array [
+                1,
+                0,
+                -0,
+                1,
+                10,
+                6,
+              ]
+            }
+            maskUnits={0}
+            name="prefix__a"
+            width={61}
+            x={10}
+            y={6}
+          >
+            <RNSVGPath
+              d="M69.5 35.958c0 15.9-12.977 28.8-29 28.8s-29-12.9-29-28.8 12.977-28.8 29-28.8 29 12.9 29 28.8z"
+              fill={4294967295}
+              propList={
+                Array [
+                  "fill",
+                  "strokeWidth",
+                ]
+              }
+              strokeWidth={2}
+            />
+          </RNSVGMask>
+          <RNSVGGroup
+            fill={4287274946}
+            mask="prefix__a"
+            propList={
+              Array [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGPath
+              d="M31.049 25.21c0-5.182 4.215-9.583 9.484-9.583 5.26 0 9.485 4.392 9.485 9.584 0 5.19-4.252 9.418-9.485 9.418-5.232 0-9.484-4.229-9.484-9.418zm3.992 0c0 3.014 2.467 5.46 5.492 5.46 3.026 0 5.493-2.446 5.493-5.46 0-3.041-2.498-5.624-5.493-5.624-2.994 0-5.492 2.583-5.492 5.625zM28.553 72.154v-.706l-.666.235a7 7 0 01-2.33.396c-3.856 0-6.989-3.116-6.989-6.939V50.263c0-6.557 5.372-11.898 11.981-11.898h19.97c6.609 0 11.981 5.34 11.981 11.898V64.12c0 3.823-3.132 6.94-6.989 6.94a7 7 0 01-2.33-.397l-.666-.235v24.633c0 3.822-3.132 6.938-6.988 6.938a6.986 6.986 0 01-4.66-1.772l-.333-.296-.332.296a6.986 6.986 0 01-4.66 1.772c-3.857 0-6.989-3.116-6.989-6.938V72.154zm6.989 25.886c.765 0 1.465-.287 1.996-.76v.173h1c0-1.09.89-1.98 1.996-1.98 1.106 0 1.996.89 1.996 1.98h1v-.172c.531.472 1.231.759 1.997.759a2.99 2.99 0 002.996-2.98V50.263c0-1.09.89-1.98 1.996-1.98 1.106 0 1.996.89 1.996 1.98V64.12a2.99 2.99 0 002.996 2.98 2.99 2.99 0 002.997-2.98V50.263c0-4.381-3.587-7.939-7.989-7.939h-19.97c-4.402 0-7.988 3.558-7.988 7.939V65.14a2.99 2.99 0 002.996 2.98 2.99 2.99 0 002.996-2.98V50.263c0-1.09.89-1.98 1.996-1.98 1.106 0 1.997.89 1.997 1.98V95.06a2.99 2.99 0 002.996 2.98z"
+            />
+          </RNSVGGroup>
+          <RNSVGCircle
+            cx={40.5}
+            cy={40}
+            propList={
+              Array [
+                "stroke",
+                "strokeWidth",
+              ]
+            }
+            r={38.5}
+            stroke={4287274946}
+            strokeWidth={3}
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+      <View
+        style={
+          Object {
+            "flexDirection": "column",
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#333239",
+              "fontFamily": "Inter-Bold",
+              "fontSize": 13,
+              "lineHeight": 22,
+            }
+          }
+        >
+          No Name
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#73839D",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 12,
+              "lineHeight": 20,
+            }
+          }
+        >
+          Manager since Ago 24, 2021
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "#E9EDF4",
+          "borderRadius": 12,
+          "borderWidth": 1,
+          "flexDirection": "row",
+          "marginVertical": 8,
+          "padding": 16,
+        }
+      }
+      testID="manager-box"
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={42}
+        bbWidth={42}
+        fill="none"
+        focusable={false}
+        height={42}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            Object {
+              "marginRight": 16,
+            },
+            Object {
+              "flex": 0,
+              "height": 42,
+              "width": 42,
+            },
+          ]
+        }
+        vbHeight={80}
+        vbWidth={81}
+        width={42}
+      >
+        <RNSVGGroup
+          fill={null}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGMask
+            height={60}
+            maskContentUnits={1}
+            maskTransform={
+              Array [
+                1,
+                0,
+                -0,
+                1,
+                10,
+                6,
+              ]
+            }
+            maskUnits={0}
+            name="prefix__a"
+            width={61}
+            x={10}
+            y={6}
+          >
+            <RNSVGPath
+              d="M69.5 35.958c0 15.9-12.977 28.8-29 28.8s-29-12.9-29-28.8 12.977-28.8 29-28.8 29 12.9 29 28.8z"
+              fill={4294967295}
+              propList={
+                Array [
+                  "fill",
+                  "strokeWidth",
+                ]
+              }
+              strokeWidth={2}
+            />
+          </RNSVGMask>
+          <RNSVGGroup
+            fill={4287274946}
+            mask="prefix__a"
+            propList={
+              Array [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGPath
+              d="M31.049 25.21c0-5.182 4.215-9.583 9.484-9.583 5.26 0 9.485 4.392 9.485 9.584 0 5.19-4.252 9.418-9.485 9.418-5.232 0-9.484-4.229-9.484-9.418zm3.992 0c0 3.014 2.467 5.46 5.492 5.46 3.026 0 5.493-2.446 5.493-5.46 0-3.041-2.498-5.624-5.493-5.624-2.994 0-5.492 2.583-5.492 5.625zM28.553 72.154v-.706l-.666.235a7 7 0 01-2.33.396c-3.856 0-6.989-3.116-6.989-6.939V50.263c0-6.557 5.372-11.898 11.981-11.898h19.97c6.609 0 11.981 5.34 11.981 11.898V64.12c0 3.823-3.132 6.94-6.989 6.94a7 7 0 01-2.33-.397l-.666-.235v24.633c0 3.822-3.132 6.938-6.988 6.938a6.986 6.986 0 01-4.66-1.772l-.333-.296-.332.296a6.986 6.986 0 01-4.66 1.772c-3.857 0-6.989-3.116-6.989-6.938V72.154zm6.989 25.886c.765 0 1.465-.287 1.996-.76v.173h1c0-1.09.89-1.98 1.996-1.98 1.106 0 1.996.89 1.996 1.98h1v-.172c.531.472 1.231.759 1.997.759a2.99 2.99 0 002.996-2.98V50.263c0-1.09.89-1.98 1.996-1.98 1.106 0 1.996.89 1.996 1.98V64.12a2.99 2.99 0 002.996 2.98 2.99 2.99 0 002.997-2.98V50.263c0-4.381-3.587-7.939-7.989-7.939h-19.97c-4.402 0-7.988 3.558-7.988 7.939V65.14a2.99 2.99 0 002.996 2.98 2.99 2.99 0 002.996-2.98V50.263c0-1.09.89-1.98 1.996-1.98 1.106 0 1.997.89 1.997 1.98V95.06a2.99 2.99 0 002.996 2.98z"
+            />
+          </RNSVGGroup>
+          <RNSVGCircle
+            cx={40.5}
+            cy={40}
+            propList={
+              Array [
+                "stroke",
+                "strokeWidth",
+              ]
+            }
+            r={38.5}
+            stroke={4287274946}
+            strokeWidth={3}
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+      <View
+        style={
+          Object {
+            "flexDirection": "column",
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#333239",
+              "fontFamily": "Inter-Bold",
+              "fontSize": 13,
+              "lineHeight": 22,
+            }
+          }
+        >
+          0xc10199414d...
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#73839D",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 12,
+              "lineHeight": 20,
+            }
+          }
+        >
+          Manager since Ago 24, 2021
+        </Text>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "borderColor": "#E9EDF4",
+          "borderRadius": 12,
+          "borderWidth": 1,
+          "flexDirection": "row",
+          "marginVertical": 8,
+          "padding": 16,
+        }
+      }
+      testID="manager-box"
+    >
+      <RNSVGSvgView
+        align="xMidYMid"
+        bbHeight={42}
+        bbWidth={42}
+        fill="none"
+        focusable={false}
+        height={42}
+        meetOrSlice={0}
+        minX={0}
+        minY={0}
+        style={
+          Array [
+            Object {
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+            },
+            Object {
+              "marginRight": 16,
+            },
+            Object {
+              "flex": 0,
+              "height": 42,
+              "width": 42,
+            },
+          ]
+        }
+        vbHeight={80}
+        vbWidth={81}
+        width={42}
+      >
+        <RNSVGGroup
+          fill={null}
+          propList={
+            Array [
+              "fill",
+            ]
+          }
+        >
+          <RNSVGMask
+            height={60}
+            maskContentUnits={1}
+            maskTransform={
+              Array [
+                1,
+                0,
+                -0,
+                1,
+                10,
+                6,
+              ]
+            }
+            maskUnits={0}
+            name="prefix__a"
+            width={61}
+            x={10}
+            y={6}
+          >
+            <RNSVGPath
+              d="M69.5 35.958c0 15.9-12.977 28.8-29 28.8s-29-12.9-29-28.8 12.977-28.8 29-28.8 29 12.9 29 28.8z"
+              fill={4294967295}
+              propList={
+                Array [
+                  "fill",
+                  "strokeWidth",
+                ]
+              }
+              strokeWidth={2}
+            />
+          </RNSVGMask>
+          <RNSVGGroup
+            fill={4287274946}
+            mask="prefix__a"
+            propList={
+              Array [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGPath
+              d="M31.049 25.21c0-5.182 4.215-9.583 9.484-9.583 5.26 0 9.485 4.392 9.485 9.584 0 5.19-4.252 9.418-9.485 9.418-5.232 0-9.484-4.229-9.484-9.418zm3.992 0c0 3.014 2.467 5.46 5.492 5.46 3.026 0 5.493-2.446 5.493-5.46 0-3.041-2.498-5.624-5.493-5.624-2.994 0-5.492 2.583-5.492 5.625zM28.553 72.154v-.706l-.666.235a7 7 0 01-2.33.396c-3.856 0-6.989-3.116-6.989-6.939V50.263c0-6.557 5.372-11.898 11.981-11.898h19.97c6.609 0 11.981 5.34 11.981 11.898V64.12c0 3.823-3.132 6.94-6.989 6.94a7 7 0 01-2.33-.397l-.666-.235v24.633c0 3.822-3.132 6.938-6.988 6.938a6.986 6.986 0 01-4.66-1.772l-.333-.296-.332.296a6.986 6.986 0 01-4.66 1.772c-3.857 0-6.989-3.116-6.989-6.938V72.154zm6.989 25.886c.765 0 1.465-.287 1.996-.76v.173h1c0-1.09.89-1.98 1.996-1.98 1.106 0 1.996.89 1.996 1.98h1v-.172c.531.472 1.231.759 1.997.759a2.99 2.99 0 002.996-2.98V50.263c0-1.09.89-1.98 1.996-1.98 1.106 0 1.996.89 1.996 1.98V64.12a2.99 2.99 0 002.996 2.98 2.99 2.99 0 002.997-2.98V50.263c0-4.381-3.587-7.939-7.989-7.939h-19.97c-4.402 0-7.988 3.558-7.988 7.939V65.14a2.99 2.99 0 002.996 2.98 2.99 2.99 0 002.996-2.98V50.263c0-1.09.89-1.98 1.996-1.98 1.106 0 1.997.89 1.997 1.98V95.06a2.99 2.99 0 002.996 2.98z"
+            />
+          </RNSVGGroup>
+          <RNSVGCircle
+            cx={40.5}
+            cy={40}
+            propList={
+              Array [
+                "stroke",
+                "strokeWidth",
+              ]
+            }
+            r={38.5}
+            stroke={4287274946}
+            strokeWidth={3}
+          />
+        </RNSVGGroup>
+      </RNSVGSvgView>
+      <View
+        style={
+          Object {
+            "flexDirection": "column",
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#333239",
+              "fontFamily": "Inter-Bold",
+              "fontSize": 13,
+              "lineHeight": 22,
+            }
+          }
+        >
+          0xd10199414d...
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#73839D",
+              "fontFamily": "Inter-Regular",
+              "fontSize": 12,
+              "lineHeight": 20,
+            }
+          }
+        >
+          Manager since Ago 24, 2021
+        </Text>
+      </View>
+    </View>
+  </View>
+</RCTScrollView>
+`;

@@ -38,10 +38,8 @@ function AddedManagerScreen() {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        Api.community.listManagers(community.metadata.id, 0, 10).then((l) => {
-            if (l.length < 10) {
-                setReachedEndList(true);
-            }
+        Api.community.listManagers(community.metadata.id).then((l) => {
+            setReachedEndList(true);
             setTotalManagers(l.length);
             setManagers(l);
             setManagersOffset(0);
@@ -52,17 +50,13 @@ function AddedManagerScreen() {
 
     useEffect(() => {
         const loadActiveBeneficiaries = () => {
-            Api.community
-                .listManagers(community.metadata.id, 0, 10)
-                .then((l) => {
-                    if (l.length < 10) {
-                        setReachedEndList(true);
-                    }
-                    setTotalManagers(l.length);
-                    setManagers(l);
-                    setManagersOffset(0);
-                    setRemoving(Array(l.length).fill(false));
-                });
+            Api.community.listManagers(community.metadata.id).then((l) => {
+                setReachedEndList(true);
+                setTotalManagers(l.length);
+                setManagers(l);
+                setManagersOffset(0);
+                setRemoving(Array(l.length).fill(false));
+            });
         };
         loadActiveBeneficiaries();
     }, []);
@@ -112,11 +106,9 @@ function AddedManagerScreen() {
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);
                     Api.community
-                        .listManagers(community.metadata.id, 0, 10)
+                        .listManagers(community.metadata.id)
                         .then((l) => {
-                            if (l.length < 10) {
-                                setReachedEndList(true);
-                            }
+                            setReachedEndList(true);
                             setManagers(l);
                             setManagersOffset(0);
                             setRemoving(Array(l.length).fill(false));
@@ -189,11 +181,9 @@ function AddedManagerScreen() {
         if (!refreshing && !reachedEndList) {
             setRefreshing(true);
             Api.community
-                .listManagers(community.metadata.id, managersOffset + 10, 10)
+                .listManagers(community.metadata.id)
                 .then((l) => {
-                    if (l.length < 10) {
-                        setReachedEndList(true);
-                    }
+                    setReachedEndList(true);
                     setManagers(managers.concat(l));
                     setManagersOffset(managersOffset + 10);
                     setRemoving(Array(managers.length + l.length).fill(false));

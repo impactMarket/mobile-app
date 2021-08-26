@@ -1,12 +1,14 @@
+import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import CommunityStatus from 'components/CommunityStatus';
 import DonateCard from 'components/DonateCard';
 import Dot from 'components/Dot';
 import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
-import { modalDonateAction } from 'helpers/constants';
+import { modalDonateAction, Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import {
     cleanCommunityState,
@@ -21,12 +23,12 @@ import {
     StatusBar,
     Image,
     Text,
+    Pressable,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
-import CommunityStatus from 'components/CommunityStatus';
 
 interface ICommunityDetailsScreen {
     route: {
@@ -47,6 +49,7 @@ const countries: {
     };
 } = countriesJSON;
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
+    const navigator = useNavigation();
     const dispatch = useDispatch();
 
     const community = useSelector(
@@ -154,16 +157,27 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <IconCommunity />
                     <Text style={styles.textBeneficiaries}>
                         {community.state!.beneficiaries}{' '}
-                        {i18n.t('beneficiaries').toLowerCase()}
+                        {i18n.t('generic.beneficiaries').toLowerCase()}
                     </Text>
                     <Dot />
                     <Text style={styles.textManagers}>
                         {community.state!.managers}{' '}
-                        {i18n.t('managers').toLowerCase()}
+                        {i18n.t('manager.managers').toLowerCase()}
                     </Text>
                 </View>
                 <Text style={styles.textDescription}>{description}</Text>
-                <Text style={styles.textSeeMore}>{i18n.t('seeMore')}</Text>
+                <Pressable
+                    hitSlop={15}
+                    onPress={() =>
+                        navigator.navigate(
+                            Screens.CommunityExtendedDetailsScreen
+                        )
+                    }
+                >
+                    <Text style={styles.textSeeMore}>
+                        {i18n.t('community.seeMore')}
+                    </Text>
+                </Pressable>
                 <CommunityStatus community={community}>
                     <DonateCard community={community} />
                 </CommunityStatus>
