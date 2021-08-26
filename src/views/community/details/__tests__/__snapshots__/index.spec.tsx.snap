@@ -1007,7 +1007,7 @@ Array [
                                   ]
                                 }
                               >
-                                general.or
+                                or
                               </Text>
                               <View
                                 accessible={true}

@@ -85,7 +85,7 @@ export default function DonateCard(props: IDonateProps) {
                         { fontSize: width < 375 ? 11 : 16 },
                     ]}
                 >
-                    {i18n.t('general.or')}
+                    {i18n.t('generic.or')}
                 </Text>
                 <Pressable
                     style={[
