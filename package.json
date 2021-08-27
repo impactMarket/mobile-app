@@ -10,7 +10,7 @@
         "prettier": "prettier --write ./**/*.{ts,tsx}",
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
         "prettier-no-fix": "prettier ./**/*.{ts,tsx}",
-        "eslint-no-fix": "eslint ./**/*.{ts,tsx}",
+        "eslint-no-fix": "eslint ./**/*.{ts,tsx} --max-warnings=0",
         "test": "jest --maxWorkers=50%",
         "test:watch": "jest --watch --maxWorkers=25%"
     },
@@ -134,8 +134,6 @@
         "vm-browserify": "1.1.2"
     },
     "devDependencies": {
-        "patch-package": "6.4.7",
-        "postinstall-postinstall": "2.1.0",
         "@babel/core": "7.9.0",
         "@testing-library/jest-dom": "5.14.1",
         "@testing-library/jest-native": "4.0.2",
@@ -158,11 +156,14 @@
         "eslint": "7.23.0",
         "eslint-config-prettier": "8.1.0",
         "eslint-config-universe": "7.0.1",
+        "eslint-plugin-react-hooks": "4.2.0",
         "eslint-plugin-tsc": "2.0.0",
         "husky": "6.0.0",
         "jest": "27.0.6",
         "jest-expo": "42.1.0",
         "lint-staged": ">=10",
+        "patch-package": "6.4.7",
+        "postinstall-postinstall": "2.1.0",
         "prettier": "2.2.1",
         "react-native-bundle-visualizer": "2.2.1",
         "react-test-renderer": "16.13.1",
