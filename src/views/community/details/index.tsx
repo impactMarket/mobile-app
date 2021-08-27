@@ -121,7 +121,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     );
 
     const SponsoredBy = () => {
-        console.log(promoter);
         if (promoter === null) {
             return null;
         }

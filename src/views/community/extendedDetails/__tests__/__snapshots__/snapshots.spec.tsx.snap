@@ -7,6 +7,7 @@ exports[`extended details community [snapshot] renders correctly 1`] = `
       "paddingHorizontal": 20,
     }
   }
+  testID="communityExtendedDetails"
 >
   <View>
     <View>
@@ -222,7 +223,7 @@ exports[`extended details community [snapshot] renders correctly 1`] = `
       style={
         Object {
           "borderColor": "#E9EDF4",
-          "borderWidth": 1,
+          "borderWidth": 0.5,
           "marginVertical": 32,
         }
       }
