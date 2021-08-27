@@ -108,76 +108,6 @@ function CreateCommunityScreen() {
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
-    useEffect(() => {
-        let cancelablePromise: {
-            promise: Promise<unknown>;
-            cancel(): void;
-        };
-        if (!canceled) {
-            // if community cover picture and user profile picture were uploded successfully, move on to upload community
-            // ignore user profile picture if the user has already has it
-            if (
-                coverUploadDetails !== undefined &&
-                ((state.profileImage.length > 0 &&
-                    profileUploadDetails !== undefined) ||
-                    userMetadata.avatar.length > 0)
-            ) {
-                cancelablePromise = makeCancelable(submitCommunity());
-                cancelablePromise.promise.catch().finally(() => {
-                    setSubmitting(false);
-                    setSubmittingCover(false);
-                    setSubmittingProfile(false);
-                    setSubmittingCommunity(false);
-                });
-            } else if (isUploadingContent) {
-                cancelablePromise = makeCancelable(uploadImages());
-                cancelablePromise.promise
-                    .then((details) => {
-                        setCoverUploadDetails(details[0].media);
-                        if (state.profileImage.length > 0) {
-                            setProfileUploadDetails(details[1].media);
-                        }
-                        setSubmittingCover(false);
-                        setSubmittingProfile(false);
-                    })
-                    .catch();
-            }
-        }
-        return () => {
-            if (cancelablePromise !== undefined) {
-                return cancelablePromise.cancel();
-            }
-        };
-    }, [
-        canceled,
-        coverUploadDetails,
-        profileUploadDetails,
-        isUploadingContent,
-    ]);
-
-    const updateUIAfterSubmission = async (
-        data: CommunityAttributes,
-        error: any
-    ) => {
-        if (error === undefined) {
-            await updateCommunityInfo(data.id, dispatchRedux);
-            const community = await Api.community.findById(data.id);
-            if (community !== undefined) {
-                batch(() => {
-                    dispatchRedux(setCommunityMetadata(community));
-                    dispatchRedux(setUserIsCommunityManager(true));
-                });
-            }
-            setSubmitting(false);
-            setSubmittingSuccess(true);
-        } else {
-            // Sentry.Native.captureException(e);
-            setSubmitting(false);
-            setSubmittingCommunity(false);
-            setSubmittingSuccess(false);
-        }
-    };
-
     const submitCommunity = async () => {
         const {
             name,
@@ -255,6 +185,78 @@ function CreateCommunityScreen() {
             return details;
         };
         return Promise.all([coverUpload(), profileUpload()]);
+    };
+
+    useEffect(() => {
+        let cancelablePromise: {
+            promise: Promise<unknown>;
+            cancel(): void;
+        };
+        if (!canceled) {
+            // if community cover picture and user profile picture were uploded successfully, move on to upload community
+            // ignore user profile picture if the user has already has it
+            if (
+                coverUploadDetails !== undefined &&
+                ((state.profileImage.length > 0 &&
+                    profileUploadDetails !== undefined) ||
+                    userMetadata.avatar.length > 0)
+            ) {
+                cancelablePromise = makeCancelable(submitCommunity());
+                cancelablePromise.promise.catch().finally(() => {
+                    setSubmitting(false);
+                    setSubmittingCover(false);
+                    setSubmittingProfile(false);
+                    setSubmittingCommunity(false);
+                });
+            } else if (isUploadingContent) {
+                cancelablePromise = makeCancelable(uploadImages());
+                cancelablePromise.promise
+                    .then((details) => {
+                        setCoverUploadDetails(details[0].media);
+                        if (state.profileImage.length > 0) {
+                            setProfileUploadDetails(details[1].media);
+                        }
+                        setSubmittingCover(false);
+                        setSubmittingProfile(false);
+                    })
+                    .catch();
+            }
+        }
+        return () => {
+            if (cancelablePromise !== undefined) {
+                return cancelablePromise.cancel();
+            }
+        };
+        // TODO: this needs refactoring. This methods are used within and outside the effect
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        canceled,
+        coverUploadDetails,
+        profileUploadDetails,
+        isUploadingContent,
+    ]);
+
+    const updateUIAfterSubmission = async (
+        data: CommunityAttributes,
+        error: any
+    ) => {
+        if (error === undefined) {
+            await updateCommunityInfo(data.id, dispatchRedux);
+            const community = await Api.community.findById(data.id);
+            if (community !== undefined) {
+                batch(() => {
+                    dispatchRedux(setCommunityMetadata(community));
+                    dispatchRedux(setUserIsCommunityManager(true));
+                });
+            }
+            setSubmitting(false);
+            setSubmittingSuccess(true);
+        } else {
+            // Sentry.Native.captureException(e);
+            setSubmitting(false);
+            setSubmittingCommunity(false);
+            setSubmittingSuccess(false);
+        }
     };
 
     const deployPrivateCommunity = async () => {
@@ -435,6 +437,8 @@ function CreateCommunityScreen() {
             ),
             headerLeft: () => <BackSvg onPress={handlePressGoBack} />,
         });
+        // TODO: this needs refactoring. This methods are used within and outside the effect
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, submitting, state]);
 
     const SubmissionActivity = (props: {

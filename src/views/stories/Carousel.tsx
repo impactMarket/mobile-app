@@ -77,7 +77,7 @@ function Carousel(props: {
                         }
                     });
         }
-    }, []);
+    }, [caller, myStories, props.communityId, userAddress]);
 
     const handlePressPrevious = () => {
         if (index === 0 && caller !== 'MY_STORIES') {

@@ -55,7 +55,7 @@ export default class Modal extends Component<IModalProps, IModalState> {
         this.setState({ keyboardOpen: true, bottom: e.endCoordinates.height });
     };
 
-    keyboardHide = (e: any) => {
+    keyboardHide = (_e: any) => {
         LayoutAnimation.easeInEaseOut();
         this.setState({ keyboardOpen: false, bottom: 0 });
     };

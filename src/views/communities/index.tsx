@@ -13,7 +13,7 @@ import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useRef } from 'react';
 import { Alert, FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
+import { RadioButton, Portal } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CommunityCard from './CommunityCard';
@@ -29,7 +29,7 @@ function CommunitiesScreen() {
         Location.LocationObject | undefined
     >(undefined);
 
-    const [refreshing, setRefreshing] = useState(true);
+    const [, setRefreshing] = useState(true);
     const communities = useSelector(
         (state: IRootState) => state.communities.communities
     );
@@ -45,7 +45,7 @@ function CommunitiesScreen() {
                 limit: 5,
             })
         );
-    }, []);
+    }, [dispatch]);
 
     const handleChangeOrder = async (order: string) => {
         modalizeOrderRef.current?.close();

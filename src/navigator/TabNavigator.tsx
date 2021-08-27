@@ -153,7 +153,14 @@ function TabNavigator({
                     userCommunity
                 ),
         });
-    }, [navigation, route]);
+    }, [
+        navigation,
+        route,
+        fromWelcomeScreen,
+        isBeneficiary,
+        isManager,
+        userCommunity,
+    ]);
 
     const tabBeneficiary = (
         <Tab.Screen

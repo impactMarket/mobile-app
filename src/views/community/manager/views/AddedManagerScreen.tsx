@@ -48,7 +48,7 @@ function AddedManagerScreen() {
             setRemoving(Array(l.length).fill(false));
             setRefreshing(false);
         });
-    }, []);
+    }, [community]);
 
     useEffect(() => {
         const loadActiveBeneficiaries = () => {
@@ -65,7 +65,7 @@ function AddedManagerScreen() {
                 });
         };
         loadActiveBeneficiaries();
-    }, []);
+    }, [community]);
 
     const handleRemoveManager = async (
         manager: ManagerAttributes,

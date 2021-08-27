@@ -9,11 +9,11 @@ import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { Divider, IconButton, Paragraph, TextInput } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import SuspiciousActivity from '../cards/SuspiciousActivity';
-import * as Sentry from 'sentry-expo';
 
+import SuspiciousActivity from '../cards/SuspiciousActivity';
 import ScanQR from './ScanQR';
 
 function AddBeneficiaryScreen() {
@@ -36,7 +36,6 @@ function AddBeneficiaryScreen() {
     const [inputAddress, setInputAddress] = useState('');
     const [usingCamera, setUsingCamera] = useState(false);
     const [addInProgress, setAddInProgress] = useState(false);
-    const [isBeneficiarySuspect, setIsBeneficiarySuspect] = useState(false);
 
     const handleModalScanQR = async () => {
         let addressToAdd: string;
@@ -69,8 +68,6 @@ function AddBeneficiaryScreen() {
 
         const searchResult = await Api.community.findBeneficiary(addressToAdd);
         if (searchResult.length !== 0) {
-            setIsBeneficiarySuspect(true);
-
             Alert.alert(
                 i18n.t('generic.failure'),
                 i18n.t('manager.alreadyInCommunity'),

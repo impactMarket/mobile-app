@@ -18,10 +18,6 @@ interface ISelectProps {
     error?: string;
 }
 export default class Select extends Component<ISelectProps, object> {
-    constructor(props: any) {
-        super(props);
-    }
-
     render() {
         const { label, value, help, onPress, onHelpPress, error } = this.props;
         return (

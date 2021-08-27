@@ -40,7 +40,12 @@ function WelcomeRulesScreen() {
         } else if (caller === 'MANAGER' && hasManagerAcceptedRulesAlready) {
             navigation.navigate(Screens.CommunityManager);
         }
-    }, [hasBeneficiaryAcceptedRulesAlready, hasManagerAcceptedRulesAlready]);
+    }, [
+        hasBeneficiaryAcceptedRulesAlready,
+        hasManagerAcceptedRulesAlready,
+        caller,
+        navigation,
+    ]);
 
     if (community === undefined || community.contract === undefined) {
         return (
