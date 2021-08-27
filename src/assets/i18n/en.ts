@@ -418,4 +418,8 @@ export default {
         duplicatedMsg3:
             'P.S: Funds will continue to exist on all other Valora accounts.',
     },
+    promoter: {
+        createdIn: 'Created community on {{date}}',
+        promoter: 'Promoter',
+    },
 };

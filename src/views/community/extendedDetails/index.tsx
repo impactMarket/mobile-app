@@ -5,7 +5,7 @@ import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { ManagerAttributes } from 'helpers/types/models';
+import { ManagerAttributes, UbiPromoter } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +29,7 @@ function Divider() {
         <View
             style={{
                 borderColor: ipctColors.softGray,
-                borderWidth: 1,
+                borderWidth: 0.5,
                 marginVertical: 32,
             }}
         />
@@ -139,17 +139,121 @@ function ManagersBox(props: { manager: ManagerAttributes }) {
     );
 }
 
+function PromoterBox(props: { promoter: UbiPromoter | null; createdAt: Date }) {
+    if (props.promoter === null) {
+        return null;
+    }
+    return (
+        <>
+            <Text
+                style={{
+                    fontSize: 20,
+                    lineHeight: 20,
+                    fontFamily: 'Inter-Bold',
+                    color: ipctColors.darBlue,
+                    marginVertical: 16,
+                }}
+            >
+                {i18n.t('promoter.promoter')}
+            </Text>
+            <View
+                style={{
+                    padding: 16,
+                    borderRadius: 12,
+                    borderColor: ipctColors.softGray,
+                    borderWidth: 1,
+                    marginVertical: 8,
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                    }}
+                >
+                    {props.promoter.logo ? (
+                        <Image
+                            source={{
+                                uri: chooseMediaThumbnail(props.promoter.logo, {
+                                    heigth: 42,
+                                    width: 42,
+                                }),
+                            }}
+                            style={{
+                                width: 42,
+                                height: 42,
+                                borderRadius: 21,
+                                marginRight: 16,
+                            }}
+                        />
+                    ) : (
+                        <AvatarPlaceholderSvg
+                            width={42}
+                            height={42}
+                            style={{ marginRight: 16 }}
+                        />
+                    )}
+                    <View style={{ flexDirection: 'column' }}>
+                        <Text
+                            style={{
+                                fontSize: 13,
+                                lineHeight: 22,
+                                fontFamily: 'Inter-Bold',
+                                color: ipctColors.darBlue,
+                            }}
+                        >
+                            {props.promoter.name}
+                        </Text>
+                        <Text
+                            style={{
+                                fontSize: 12,
+                                lineHeight: 20,
+                                fontFamily: 'Inter-Regular',
+                                color: ipctColors.lynch,
+                            }}
+                        >
+                            {i18n.t('promoter.createdIn', {
+                                date: moment(props.createdAt).format(
+                                    'MMM DD, YYYY'
+                                ),
+                            })}
+                        </Text>
+                    </View>
+                </View>
+                <Text
+                    style={{
+                        marginVertical: 10,
+                        fontSize: 14,
+                        lineHeight: 24,
+                        fontFamily: 'Inter-Regular',
+                        color: ipctColors.darBlue,
+                    }}
+                >
+                    {props.promoter.description}
+                </Text>
+            </View>
+        </>
+    );
+}
+
 function CommunityExtendedDetailsScreen() {
     const community = useSelector(
         (state: IRootState) => state.communities.community
     );
     const [managers, setManagers] = useState<ManagerAttributes[]>([]);
+    const [promoter, setPromoter] = useState<UbiPromoter | null>(null);
 
     useEffect(() => {
-        const loadManagers = () => {
+        const loadManagers = () =>
             Api.community.listManagers(community.id).then(setManagers);
-        };
-        loadManagers();
+        const getPromoter = () =>
+            Api.community
+                .getPromoter(community.id)
+                .then((r) => setPromoter(r.data));
+        if (community) {
+            loadManagers();
+            getPromoter();
+        }
     }, [community]);
 
     return (
@@ -204,6 +308,7 @@ function CommunityExtendedDetailsScreen() {
             {managers.map((manager) => (
                 <ManagersBox key={manager.address} manager={manager} />
             ))}
+            <PromoterBox promoter={promoter} createdAt={community.createdAt} />
         </ScrollView>
     );
 }
