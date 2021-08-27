@@ -8,12 +8,13 @@ import { Title, Text, Portal } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 import ConfirmModal from '../views/community/details/donate/modals/confirm';
 import DonateModal from '../views/community/details/donate/modals/donate';
 import ErrorModal from '../views/community/details/donate/modals/error';
 import renderHeader from './core/HeaderBottomSheetTitle';
+import EsolidarSvg from './svg/EsolidarSvg';
 
 interface IDonateProps {
     community: CommunityAttributes;
@@ -58,13 +59,17 @@ export default function DonateCard(props: IDonateProps) {
                     }
                 >
                     <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            padding: 12,
+                        }}
                     >
                         <Text
                             style={{
                                 fontFamily: 'Inter-Regular',
-                                fontSize: width < 375 ? 11 : 16,
-                                lineHeight: width < 375 ? 22 : 28,
+                                fontSize: ipctFontSize.small,
+                                lineHeight: ipctLineHeight.large,
                                 color: 'white',
                                 marginRight: 10,
                             }}
@@ -78,14 +83,7 @@ export default function DonateCard(props: IDonateProps) {
                         />
                     </View>
                 </Pressable>
-                <Text
-                    style={[
-                        styles.description,
-                        { fontSize: width < 375 ? 11 : 16 },
-                    ]}
-                >
-                    {i18n.t('or')}
-                </Text>
+                <Text style={[styles.description]}>{i18n.t('or')}</Text>
                 <Pressable
                     style={[
                         styles.button,
@@ -102,14 +100,16 @@ export default function DonateCard(props: IDonateProps) {
                             flexDirection: 'row',
                             flexWrap: 'wrap',
                             alignItems: 'center',
+                            padding: 4,
                         }}
                     >
                         <Text
+                            numberOfLines={1}
                             style={{
                                 fontFamily: 'Inter-Regular',
                                 fontWeight: '500',
-                                fontSize: width < 375 ? 11 : 16,
-                                lineHeight: width < 375 ? 22 : 28,
+                                fontSize: ipctFontSize.small,
+                                lineHeight: ipctLineHeight.large,
                                 color: ipctColors.blueRibbon,
                             }}
                         >
@@ -121,6 +121,7 @@ export default function DonateCard(props: IDonateProps) {
                     style={{
                         flexDirection: 'row',
                         alignItems: 'center',
+                        paddingHorizontal: 12,
                     }}
                 >
                     <Text
@@ -128,14 +129,13 @@ export default function DonateCard(props: IDonateProps) {
                             styles.description,
                             {
                                 color: ipctColors.regentGray,
-                                fontSize: width < 375 ? 11 : 14,
                                 marginRight: 4,
                             },
                         ]}
                     >
                         {i18n.t('poweredByESolidar')}
                     </Text>
-                    <Image source={require('assets/images/eSolidar.png')} />
+                    <EsolidarSvg />
                 </View>
             </View>
             <Portal>
@@ -173,16 +173,16 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'Inter-Bold',
         fontWeight: '700',
-        fontSize: 20,
-        lineHeight: 32,
+        fontSize: ipctFontSize.regular,
+        lineHeight: ipctLineHeight.xlarge,
         marginBottom: 8,
     },
     description: {
         fontFamily: 'Inter-Regular',
-        fontSize: 14,
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.bigger,
         fontStyle: 'normal',
         fontWeight: '400',
-        lineHeight: 24,
         letterSpacing: 0,
         marginVertical: 8,
     },

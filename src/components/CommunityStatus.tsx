@@ -11,7 +11,12 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { ipctColors } from 'styles/index';
+import {
+    ipctColors,
+    ipctFontSize,
+    ipctLineHeight,
+    ipctSpacing,
+} from 'styles/index';
 
 import SuspiciousCard from './SuspiciousCard';
 import Card from './core/Card';
@@ -59,8 +64,6 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 styles.description,
                                 {
                                     color: ipctColors.regentGray,
-                                    fontSize: width < 375 ? 11 : 14,
-                                    lineHeight: width < 375 ? 19 : 24,
                                 },
                             ]}
                         >
@@ -70,14 +73,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 count: community.state.backers,
                             })}
                         </Text>
-                        <Text
-                            style={[
-                                styles.Text,
-                                {
-                                    fontSize: width < 375 ? 14 : 20,
-                                },
-                            ]}
-                        >
+                        <Text style={styles.Text}>
                             {amountToCurrency(
                                 community.state.raised,
                                 user.currency,
@@ -97,18 +93,12 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 styles.description,
                                 {
                                     color: ipctColors.regentGray,
-                                    fontSize: width < 375 ? 11 : 14,
                                 },
                             ]}
                         >
                             {i18n.t('goal')}
                         </Text>
-                        <Text
-                            style={[
-                                styles.Text,
-                                { fontSize: width < 375 ? 14 : 20 },
-                            ]}
-                        >
+                        <Text style={styles.Text}>
                             {goal
                                 ? amountToCurrency(
                                       goal,
@@ -139,7 +129,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                     style={[
                         styles.fundsContainer,
                         {
-                            alignItems: width < 375 ? 'flex-start' : 'center',
+                            alignItems: 'flex-start',
                             justifyContent: 'center',
                         },
                     ]}
@@ -147,7 +137,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                     {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
                     <WarningTriangle
                         color="#FE9A22"
-                        style={{ marginTop: width < 375 ? 8 : 0 }}
+                        style={{ marginTop: ipctSpacing.small }}
                     />
                     <Text
                         style={[
@@ -155,8 +145,6 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             {
                                 color: ipctColors.regentGray,
                                 marginLeft: 7,
-                                fontSize: width < 375 ? 11 : 14,
-                                lineHeight: width < 375 ? 19 : 24,
                             },
                         ]}
                     >
@@ -197,15 +185,15 @@ const styles = StyleSheet.create({
     Text: {
         fontFamily: 'Inter-Bold',
         color: ipctColors.darBlue,
-        fontSize: 20,
-        lineHeight: 32,
+        fontSize: ipctFontSize.small,
+        lineHeight: ipctLineHeight.xlarge,
     },
     description: {
         fontFamily: 'Inter-Regular',
-        fontSize: 14,
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.bigger,
         fontStyle: 'normal',
         fontWeight: '400',
-        lineHeight: 24,
         letterSpacing: 0,
         textAlign: 'left',
     },

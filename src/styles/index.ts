@@ -26,20 +26,22 @@ export const ipctFontSize = {
     smaller: moderateScale(14),
     small: moderateScale(16),
     average: moderateScale(18),
+    regular: moderateScale(20),
     medium: moderateScale(24),
     large: moderateScale(36),
-    huge: moderateScale(54),
+    huge: moderateScale(50),
 };
 
-// export const ipctSpacing = {
-//     none: 0,
-//     tiny: 2,
-//     xsmall: 4,
-//     small: 8,
-//     medium: 16,
-//     big: 24,
-//     large: 32
-//   }
+export const ipctSpacing = {
+    none: 0,
+    tiny: moderateScale(2),
+    xsmall: moderateScale(4),
+    small: moderateScale(8),
+    medium: moderateScale(16),
+    regular: moderateScale(22),
+    big: moderateScale(24),
+    large: moderateScale(32),
+};
 
 export const ipctLineHeight = {
     none: 0,
@@ -51,6 +53,7 @@ export const ipctLineHeight = {
     big: moderateScale(22),
     bigger: moderateScale(24),
     large: moderateScale(28),
+    xlarge: moderateScale(32),
 };
 
 export default StyleSheet.create({});
