@@ -20,7 +20,7 @@ export default {
     confirm: 'Confirm',
     claimed: 'Claimed',
     raised: 'Raised',
-    raisedFrom: 'Raised from {{backers}}',
+    raisedFrom: 'Raised from {{backers}} ',
     goal: 'Goal',
     fundsRunOut: 'Community funds will run out in {{days}}',
     claim: 'Claim',

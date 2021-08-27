@@ -193,15 +193,23 @@ export function calculateCommunityRemainedFunds(
     const ubiRate = community.metrics?.ubiRate ?? 0;
     const beneficiaryCount = community.state.beneficiaries;
 
+    // const remainingFundToBeClaimedPerBeneficiary =
+    //     raised.toNumber() - claimed.toNumber() / ubiRate / beneficiaryCount;
+
     const remainingFundToBeClaimed =
-        raised.toNumber() - claimed.toNumber() / ubiRate / beneficiaryCount;
+        raised.toNumber() - claimed.toNumber() / ubiRate;
+
+    const claimInterval = community.contract.baseInterval;
 
     const claimAmountPerBeneficiary = new BigNumber(
         community.contract.claimAmount
     );
 
     const communityLimitPerDay =
-        claimAmountPerBeneficiary.toNumber() * beneficiaryCount;
+        // Check if claimInterval(baseInterval) is daily if not it takes claimAmountPerBeneficiary / 7 days (week) to delivery as a daily rate.
+        claimInterval === 86400
+            ? claimAmountPerBeneficiary.toNumber() * beneficiaryCount
+            : (claimAmountPerBeneficiary.toNumber() / 7) * beneficiaryCount;
 
     const remainingDays = remainingFundToBeClaimed / communityLimitPerDay;
 

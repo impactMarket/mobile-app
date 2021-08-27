@@ -21,7 +21,7 @@ export default {
     claimed: 'Distribuído',
     raised: 'Angariado',
     claim: 'Pegar',
-    raisedFrom: 'Angariado por {{backers}}',
+    raisedFrom: 'Angariado por {{backers}} ',
     goal: 'Alvo',
     manage: 'Gerir',
     communities: 'Comunidades',

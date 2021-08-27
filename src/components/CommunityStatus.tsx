@@ -8,7 +8,7 @@ import {
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import {
@@ -29,21 +29,33 @@ interface ICommuntyStatusProps {
 
 export default function CommunityStatus(props: ICommuntyStatusProps) {
     const { community } = props;
-    const { width } = Dimensions.get('screen');
     const user = useSelector((state: IRootState) => state.user.metadata);
 
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
 
-    const goal = new BigNumber(community.contract.maxClaim).multipliedBy(
-        community.state.beneficiaries
-    );
+    const maxClaim = new BigNumber(community.contract.maxClaim);
+    const maxClaimPerCommunity = maxClaim
+        .multipliedBy(community.state.beneficiaries)
+        .toString();
+
+    const humanizedValue = (amount: BigNumber | string): string => {
+        return amountToCurrency(amount, user.currency, exchangeRates);
+    };
+
     const days = calculateCommunityRemainedFunds(community);
 
     if (community.contract === undefined || community.state === undefined) {
         return null;
     }
+
+    const raisedPercentage =
+        (
+            (parseFloat(community.state.raised) /
+                parseFloat(maxClaimPerCommunity)) *
+            100
+        ).toFixed(2) + '%';
 
     return (
         <Card elevation={0} style={{ marginTop: 16 }}>
@@ -67,18 +79,19 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 },
                             ]}
                         >
-                            {i18n.t('raisedFrom')}
+                            {i18n.t('raisedFrom', {
+                                backers: community.state.backers,
+                            })}
 
                             {i18n.t('backers', {
                                 count: community.state.backers,
                             })}
                         </Text>
                         <Text style={styles.Text}>
-                            {amountToCurrency(
-                                community.state.raised,
-                                user.currency,
-                                exchangeRates
-                            )}
+                            {humanizedValue(community.state.raised) ?? 0}
+                            {raisedPercentage !== '0.00%' &&
+                                community.state.beneficiaries >= 1 &&
+                                ` (${raisedPercentage})`}
                         </Text>
                     </View>
                     <View
@@ -99,13 +112,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             {i18n.t('goal')}
                         </Text>
                         <Text style={styles.Text}>
-                            {goal
-                                ? amountToCurrency(
-                                      goal,
-                                      user.currency,
-                                      exchangeRates
-                                  )
-                                : 'N/A'}
+                            {humanizedValue(maxClaimPerCommunity) ?? 'N/A'}
                         </Text>
                     </View>
                 </View>
@@ -125,37 +132,39 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         color={ipctColors.blueRibbon}
                     />
                 </View>
-                <View
-                    style={[
-                        styles.fundsContainer,
-                        {
-                            alignItems: 'flex-start',
-                            justifyContent: 'center',
-                        },
-                    ]}
-                >
-                    {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
-                    <WarningTriangle
-                        color="#FE9A22"
-                        style={{ marginTop: ipctSpacing.small }}
-                    />
-                    <Text
+                {days < 5 && (
+                    <View
                         style={[
-                            styles.description,
+                            styles.fundsContainer,
                             {
-                                color: ipctColors.regentGray,
-                                marginLeft: 7,
+                                alignItems: 'flex-start',
+                                justifyContent: 'center',
                             },
                         ]}
                     >
-                        {i18n.t('fundsRunOut', {
-                            days,
-                        })}{' '}
-                        {i18n.t('days', {
-                            count: days,
-                        })}
-                    </Text>
-                </View>
+                        {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
+                        <WarningTriangle
+                            color="#FE9A22"
+                            style={{ marginTop: ipctSpacing.xsmall }}
+                        />
+                        <Text
+                            style={[
+                                styles.description,
+                                {
+                                    color: ipctColors.regentGray,
+                                    marginLeft: 7,
+                                },
+                            ]}
+                        >
+                            {i18n.t('fundsRunOut', {
+                                days,
+                            })}{' '}
+                            {i18n.t('days', {
+                                count: days,
+                            })}
+                        </Text>
+                    </View>
+                )}
                 {props.children && <View style={styles.divider} />}
                 {props.children}
             </View>
