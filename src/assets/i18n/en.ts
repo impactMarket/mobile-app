@@ -346,7 +346,6 @@ export default {
             'A significant number of accounts may be involved in suspicious activities.',
         largeSuspiciousActivityDetected:
             'A very large number of accounts  may be involved in suspicious activities.',
-        sponsoredBy: 'Sponsored by',
     },
     report: {
         report: 'Report',
@@ -421,5 +420,6 @@ export default {
     promoter: {
         createdIn: 'Created community on {{date}}',
         promoter: 'Promoter',
+        promotedBy: 'Promoted by',
     },
 };

@@ -127,7 +127,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         return (
             <View style={styles.inlineBox}>
                 <Text style={styles.textManagers}>
-                    {i18n.t('community.sponsoredBy')}
+                    {i18n.t('promoter.promotedBy')}
                 </Text>
                 <Text style={styles.textBeneficiaries}>{promoter.name}</Text>
             </View>

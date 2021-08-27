@@ -361,7 +361,6 @@ export default {
             'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
         largeSuspiciousActivityDetected:
             'Um grande número de contas pode estar envolvido em atividades suspeitas.',
-        sponsoredBy: 'Sponsored by',
     },
     report: {
         report: 'Relatório',
@@ -434,5 +433,10 @@ export default {
         duplicatedMsg2:
             'Pretende continuar com a autenticação, desabilitando todas as outras contas?',
         duplicatedMsg3: 'P.S: Os fundos serão mantidos nas outras contas.',
+    },
+    promoter: {
+        createdIn: 'Criou comunidade em {{date}}',
+        promoter: 'Promotor',
+        promotedBy: 'Promovido por',
     },
 };
