@@ -71,7 +71,8 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                             uri: community?.cover?.url,
                         }}
                     />
-                    <View
+                    {/* TODO: add run our of funds detection algorithm to decide whether show warning or not.  */}
+                    {/* <View
                         style={{
                             position: 'absolute',
                             zIndex: 5,
@@ -88,9 +89,10 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                         <Text style={styles.cardCommunityTagText}>
                             {i18n.t('funds')}
                         </Text>
-                    </View>
+                    </View> */}
 
-                    {!community.suspect && (
+                    {/* TODO: add suspect level algorithm.  */}
+                    {/* {!community.suspect && (
                         <View
                             style={{
                                 position: 'absolute',
@@ -106,10 +108,10 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                         >
                             <SuspiciousActivityMiddleSvg />
                             <Text style={styles.cardCommunityTagText}>
-                                {setTextSuspects(community.suspect)}
+                                {setTextSuspects(Number(community.suspect))}
                             </Text>
                         </View>
-                    )}
+                    )} */}
                     <View style={styles.darkerBackground} />
                 </View>
                 <View
