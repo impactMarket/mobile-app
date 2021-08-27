@@ -132,7 +132,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         color={ipctColors.blueRibbon}
                     />
                 </View>
-                {days < 5 && (
+                {Number(days) < 5 && (
                     <View
                         style={[
                             styles.fundsContainer,
@@ -157,10 +157,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             ]}
                         >
                             {i18n.t('fundsRunOut', {
-                                days,
+                                days: Math.round(Number(days)),
                             })}{' '}
                             {i18n.t('days', {
-                                count: days,
+                                count: Number(days),
                             })}
                         </Text>
                     </View>
