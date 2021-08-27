@@ -1,26 +1,17 @@
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import * as Location from 'expo-location';
 import { Screens } from 'helpers/constants';
-import { useNavigation } from '@react-navigation/native';
 import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useRef } from 'react';
-import {
-    Alert,
-    FlatList,
-    View,
-    StyleSheet,
-    Text,
-    ScrollView,
-} from 'react-native';
-import { Modalize } from 'react-native-modalize';
-import { RadioButton, Portal } from 'react-native-paper';
+import { FlatList, StyleSheet, Text, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
 import Stories from './Stories';
@@ -92,15 +83,6 @@ function CommunitiesScreen() {
         }
     };
 
-    const textCommunitiesOrder = (g: string | null) => {
-        switch (g) {
-            case 'nearest':
-                return i18n.t('nearest');
-            default:
-                return i18n.t('bigger');
-        }
-    };
-
     return (
         <ScrollView>
             <FlatList
@@ -120,7 +102,7 @@ function CommunitiesScreen() {
                 horizontal
                 onEndReached={handleOnEndReached}
                 showsHorizontalScrollIndicator={false}
-                style={{ paddingTop: 20, marginLeft: 20 }}
+                style={{ paddingTop: 20, marginLeft: 14 }}
             />
             <Button
                 modeType="default"
@@ -155,8 +137,8 @@ CommunitiesScreen.navigationOptions = () => {
 
 const styles = StyleSheet.create({
     buttomStoreText: {
-        fontSize: 15,
-        lineHeight: 28,
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.large,
         color: ipctColors.white,
         fontFamily: 'Inter-Regular',
         fontWeight: '500',

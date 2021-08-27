@@ -4,16 +4,16 @@ import i18n from 'assets/i18n';
 import CachedImage from 'components/CacheImage';
 import BeneficiariesSvg from 'components/svg/BeneficiariesSvg';
 import LocationsSvg from 'components/svg/LocationSvg';
-import SuspiciousActivityMiddleSvg from 'components/svg/suspicious/SuspiciousActivityMiddleSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
+import SuspiciousActivityMiddleSvg from 'components/svg/suspicious/SuspiciousActivityMiddleSvg';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 const countries: {
     [key: string]: {
@@ -75,7 +75,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                         style={{
                             position: 'absolute',
                             zIndex: 5,
-                            backgroundColor: 'white',
+                            backgroundColor: ipctColors.white,
                             left: 20,
                             bottom: 64,
                             flexDirection: 'row',
@@ -95,7 +95,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                             style={{
                                 position: 'absolute',
                                 zIndex: 5,
-                                backgroundColor: 'white',
+                                backgroundColor: ipctColors.white,
                                 left: 20,
                                 bottom: 18,
                                 flexDirection: 'row',
@@ -164,6 +164,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                     rates
                                 )}
                             </Text>
+                            <Text style={styles.interPunct}>{'\u2B24'}</Text>
                         </View>
                         <View
                             style={{
@@ -205,23 +206,29 @@ const styles = StyleSheet.create({
     },
     cardCommunityTagText: {
         marginLeft: 4,
-        fontSize: 11,
-        lineHeight: 18,
+        fontSize: ipctFontSize.tiny,
+        lineHeight: ipctLineHeight.small,
         fontFamily: 'Inter-Regular',
         color: ipctColors.nileBlue,
         textAlign: 'left',
     },
+    interPunct: {
+        fontSize: 2.5,
+        marginLeft: 4,
+        color: ipctColors.blueGray,
+    },
     cardCommunityName: {
-        fontSize: 16,
-        lineHeight: 22,
+        fontSize: ipctFontSize.small,
+        lineHeight: ipctLineHeight.big,
         fontFamily: 'Manrope-Bold',
         fontWeight: '800',
         color: ipctColors.almostBlack,
         textAlign: 'left',
     },
     cardCommunityDescription: {
-        fontSize: 15,
-        lineHeight: 24,
+        //TODO: Create a font size 15
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.bigger,
         fontFamily: 'Inter-Regular',
         fontWeight: '400',
         color: ipctColors.darBlue,
@@ -232,8 +239,8 @@ const styles = StyleSheet.create({
     cardLocation: {
         fontFamily: 'Inter-Regular',
         fontWeight: '400',
-        fontSize: 12,
-        lineHeight: 20,
+        fontSize: ipctFontSize.xsmall,
+        lineHeight: ipctLineHeight.medium,
         color: ipctColors.blueGray,
     },
     cardInfo: {
@@ -252,15 +259,15 @@ const styles = StyleSheet.create({
     },
     bottomCardText: {
         fontFamily: 'Inter-Regular',
-        fontSize: 12,
-        lineHeight: 20,
+        fontSize: ipctFontSize.xsmall,
+        lineHeight: ipctLineHeight.medium,
         textAlign: 'center',
         color: ipctColors.blueGray,
     },
     cellDescription: {
         fontFamily: 'Gelion-Regular',
-        fontSize: 14,
-        lineHeight: 16,
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.smaller,
         opacity: 0.7,
         textAlign: 'center',
         color: ipctColors.nileBlue,
