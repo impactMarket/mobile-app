@@ -642,7 +642,7 @@ class App extends React.Component<any, IAppState> {
                                             textAlign: 'center',
                                         }}
                                     >
-                                        {i18n.t('generic.unexpectedError')}
+                                        {i18n.t('errors.loadingApp')}
                                     </Paragraph>
                                 </Card.Content>
                             </Card>

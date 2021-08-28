@@ -184,7 +184,7 @@ function CommunityManagerScreen() {
                 Sentry.Native.captureException(e);
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.anErroHappenedTryAgain'),
+                    i18n.t('generic.generic'),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );

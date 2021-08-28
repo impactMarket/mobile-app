@@ -1,4 +1,48 @@
 export default {
+    errors: {
+        network: {
+            connectionLost: 'A ligação à internet foi perdida.',
+            rpc: 'Serviço RPC indisponivel. Tente novamente mais tarde.',
+        },
+        sync: {
+            issues:
+                'Parece que ocorreu um problema de sincronização. Por favor tente novamente.',
+            possiblyValora:
+                "Parece que a sua valora não está sincronizada com a rede. Por favor, abra a Valora e certifique-se que não tem nenhuma mensagem como 'Connecting...'",
+            clock:
+                'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
+        },
+        modals: {
+            valora: {
+                title: 'Request timeout',
+                description:
+                    'Sua solicitação de conexão foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
+            },
+            clock: {
+                title: 'Data/Hora incorreta',
+                description:
+                    'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}. Após terminar, reinicie o aplicativo.',
+            },
+            title: 'Ooops!',
+            description:
+                'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
+        },
+        unknown: 'Desconhecido.',
+        notEnoughForTransaction:
+            'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
+        scanningAddress: 'Esse endereço parece inválido!',
+        gettingGPS: 'Ocorreu um erro ao obter a localização GPS.',
+        uploadingAvatar:
+            'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente.',
+        generic: 'Ocorreu um erro, por favor, tente novamente.', // this will be deprecated
+        loadingApp:
+            'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
+    },
+    permissions: {
+        title: 'Perdido de permissão',
+        cameraMessage: 'impactMarket necessita ter acesso á camera.',
+        allowCamera: 'Permitir camera', // TODO: this should be replaced
+    },
     generic: {
         testnetWarning:
             'Lembre-se que está a usar a testnet Alfajores - os balanços não são reais.',
@@ -11,7 +55,6 @@ export default {
         confirm: 'Confirmar',
         raisedFrom: 'Angariado por {{backers}}',
         goal: 'Alvo',
-        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
         ubi: 'UBI',
         manage: 'Gerir',
         communities: 'Comunidades',
@@ -32,18 +75,6 @@ export default {
         city: 'Cidade',
         email: 'Email',
         upload: 'Carregar',
-        networkConnectionLost: 'A ligação à internet foi perdida.',
-        networkIssuesRPC:
-            'Serviço RPC indisponivel. Tente novamente mais tarde.',
-        syncIssues:
-            'Parece que ocorreu um problema de sincronização. Por favor tente novamente.',
-        possiblyValoraNotSynced:
-            "Parece que a sua valora não está sincronizada com a rede. Por favor, abra a Valora e certifique-se que não tem nenhuma mensagem como 'Connecting...'",
-        unknown: 'Desconhecido.',
-        clockNotSynced:
-            'Parece que sua data ou hora está incorreta. Por favor corriga antes de tentar novamente.',
-        notEnoughForTransaction:
-            'Você não tem saldo suficiente para submeter o pedido. As transações na Celo são quase grátis, mas não totalmente grátis. Mantenha sempre alguns centavos na sua conta.',
         continue: 'Continuar',
         yourQRCode: 'Seu código QR',
         close: 'Fechar',
@@ -56,19 +87,7 @@ export default {
         days: 'dia',
         days_plural: 'dias',
         week: 'semana',
-        scanningInvalidAddress: 'Esse endereço parece inválido!',
         select: 'Selecionar',
-        errorGettingGPSLocation: 'Ocorreu um erro ao obter a localização GPS.',
-        modalErrorTitle: 'Ooops!',
-        modalValoraTimeoutTitle: 'Request timeout',
-        modalValoraTimeoutDescription:
-            'Sua solicitação de conexão foi perdida. Por favor, tente novamente ou visite nosso FAQ.',
-
-        modalErrorDescription:
-            'Algo de errado aconteceu. Por favor tente novamente mais tarde.',
-        errorUploadingAvatar:
-            'Ocorreu um erro enquanto atualizavámios sua foto de perfil. Por favor tente novamente.',
-        anErroHappenedTryAgain: 'Ocorreu um erro, por favor, tente novamente.',
         openHelpCenter: 'Abrir o Centro de Ajuda',
         knowMoreHelpCenter: 'Saiba mais em nosso Centro de Ajuda',
         turnOn: 'Ativar',
@@ -77,9 +96,6 @@ export default {
         tryAgain: 'Tentar Novamente',
         youAreNotConnected:
             'Você não está conectado á sua Valora. Conecte-se para submeter diretamente.',
-        requestingPermission: 'Perdido de permissão',
-        requestCameraPermission:
-            'impactMarket necessita ter acesso á camera para poder realizar scan do código QR.',
         language: 'Idioma',
         update: 'Atualizar',
         skip: 'Mais Tarde',
@@ -89,9 +105,6 @@ export default {
         offline: 'Você não está conectado à internet.',
         openClockSettings: 'Abrir definições data/hora',
         dismiss: 'Fechar',
-        incorrectTime: 'Data/Hora incorreta',
-        incorrectTimeMessage:
-            'Detectámos que o seu dispositivo pode ter a data/hora ajustada incorrectamente. Por favor, abra as definições e corrija para {{serverTime}}. A sua hora é actualmente {{userTime}}. Após terminar, reinicie o aplicativo.',
         backWithSymbol: '< Voltar',
         order: 'Ordem',
         nearest: 'Mais próxima',
@@ -104,13 +117,9 @@ export default {
         notInComunity: 'Não estás associado a nenhuma comunidade!',
         delete: 'Apagar',
         story: 'Story',
-        storyPermissionCamera:
-            'É necessária permissão para acessar sua câmera!',
         descriptionCopiedClipboard:
             'Descrição copiada para a área de transferência!',
         welcome: 'Bem Vindo!',
-        unexpectedError:
-            'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
     },
     createCommunity: {
         pendingApprovalMessage:
@@ -210,28 +219,31 @@ export default {
             warning:
                 'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
         },
-        editCommunityDetails: 'Editar detalhes da comunidade',
-        viewAsPublic: 'Ver página da comunidade',
-        addBeneficiary: 'Adicionar Beneficiário',
-        beneficiaryAddress: 'Conta do Beneficiario',
-        allowCamera: 'Permitir camera',
-        userWasRemoved: '{{user}} foi removido com sucesso!',
-        errorRemovingBeneficiary:
-            'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
-        addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
+        noFunds:
+            'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
+        notFundsToAddBeneficiary:
+            'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
         addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
-        errorAddingBeneficiary:
-            'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
         addingYourOwnAddress:
             'Você está a tentar adicionar o seu endereço. Tem certeza?',
         alreadyInCommunity:
             'Você está a tentar adicionar um endereço que já está nesta comunidade!',
-        claimedSince: 'Recebeu {{amount}} desde {{date}}',
-        addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
+        errorRemovingBeneficiary:
+            'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
+        userWasRemoved: '{{user}} foi removido com sucesso!',
+        errorAddingBeneficiary:
+            'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
+        addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
         errorAddingManager:
             'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
+        addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
         errorRemovingManager:
             'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
+        claimedSince: 'Recebeu {{amount}} desde {{date}}',
+        editCommunityDetails: 'Editar detalhes da comunidade',
+        viewAsPublic: 'Ver página da comunidade',
+        addBeneficiary: 'Adicionar Beneficiário',
+        beneficiaryAddress: 'Conta do Beneficiario',
         managerAddress: 'Conta do Gestor',
         addManager: 'Adicionar Gestor',
         managers: 'Gestores',
@@ -306,10 +318,6 @@ export default {
         youCanClaimXin: 'Poderá pegar {{amount}} em',
         claimX: 'Pegar ', // {{amount}}
         youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
-        noFunds:
-            'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
-        notFundsToAddBeneficiary:
-            'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
         nextTimeWillWaitClaim:
             'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
         howClaimWorks: 'Como funciona?',
@@ -361,6 +369,7 @@ export default {
             'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
         largeSuspiciousActivityDetected:
             'Um grande número de contas pode estar envolvido em atividades suspeitas.',
+        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
     },
     report: {
         report: 'Relatório',

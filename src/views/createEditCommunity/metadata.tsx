@@ -219,7 +219,7 @@ function CommunityLocation() {
             if (status !== 'granted') {
                 // Alert.alert(
                 //     i18n.t('generic.failure'),
-                //     i18n.t('generic.errorGettingGPSLocation'),
+                //     i18n.t('errors.gettingGPS'),
                 //     [{ text: 'OK' }],
                 //     { cancelable: false }
                 // );
@@ -242,7 +242,7 @@ function CommunityLocation() {
         } catch (e) {
             // Alert.alert(
             //     i18n.t('generic.failure'),
-            //     i18n.t('generic.errorGettingGPSLocation'),
+            //     i18n.t('errors.gettingGPS'),
             //     [{ text: 'OK' }],
             //     { cancelable: false }
             // );
@@ -727,7 +727,7 @@ function CommunityCover() {
                 <Portal>
                     <Modal
                         visible={toggleDimensionsModal}
-                        title={i18n.t('generic.modalErrorTitle')}
+                        title={i18n.t('errors.modals.title')}
                         onDismiss={() => {
                             setToggleDimensionsModal(false);
                         }}
@@ -950,7 +950,7 @@ function UserProfilePicture() {
                 <Portal>
                     <Modal
                         visible={toggleDimensionsModal}
-                        title={i18n.t('generic.modalErrorTitle')}
+                        title={i18n.t('errors.modals.title')}
                         onDismiss={() => {
                             setToggleDimensionsModal(false);
                         }}

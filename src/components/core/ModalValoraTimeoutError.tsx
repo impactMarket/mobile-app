@@ -20,13 +20,13 @@ const ModalValoraTimeoutError: React.FC<ErrorProps> = ({
                 <Card style={styles.timedOutCard}>
                     <View style={styles.timedOutCardContent}>
                         <Text style={styles.timedOutCardText}>
-                            {i18n.t('generic.modalValoraTimeoutTitle')}
+                            {i18n.t('errors.modals.valora.title')}
                         </Text>
                         <CloseStorySvg onPress={() => handleCloseModal()} />
                     </View>
                     <View style={styles.timedOutCardDescriptionContainer}>
                         <Text style={styles.timedOutCardDescription}>
-                            {i18n.t('generic.modalValoraTimeoutDescription')}
+                            {i18n.t('errors.modals.valora.description')}
                         </Text>
                     </View>
                     <View style={styles.timedOutCardButtons}>
