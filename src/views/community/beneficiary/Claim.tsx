@@ -134,7 +134,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         if (userBalance.length < 16) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('generic.notEnoughForTransaction'),
+                i18n.t('errors.notEnoughForTransaction'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -251,28 +251,28 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 CacheStore.cacheFailedClaim();
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
-                let error = 'generic.unknown';
+                let error = 'errors.unknown';
                 if (e.message.includes('already known')) {
                     return;
                 } else if (e.message.includes('NOT_YET')) {
-                    error = 'generic.clockNotSynced';
+                    error = 'errors.sync.clock';
                 } else if (
                     e.message.includes('transfer value exceeded balance')
                 ) {
                     error = 'communityWentOutOfFunds';
                     this.setState({ notEnoughToClaimOnContract });
                 } else if (e.message.includes('has been reverted')) {
-                    error = 'generic.syncIssues';
+                    error = 'errors.sync.issues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'generic.possiblyValoraNotSynced';
+                    error = 'errors.sync.possiblyValora';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'generic.unknown';
+                    error = 'errors.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'generic.clockNotSynced';
+                        error = 'errors.sync.clock';
                     } else {
                         // verify remaining time to claim
                         const newCooldownTime = await updateCooldownTime();
@@ -280,7 +280,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             newCooldownTime * 1000 > new Date().getTime();
                         if (claimDisabled) {
                             // time to claim was wrong :/
-                            error = 'generic.syncIssues';
+                            error = 'errors.sync.issues';
                             this._loadAllowance(newCooldownTime).then(() => {
                                 this.setState({ claiming: false });
                                 updateClaimedAmount();
@@ -344,11 +344,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'generic.networkConnectionLost';
+                        error = 'errors.network.connectionLost';
                     }
-                    error = 'generic.networkIssuesRPC';
+                    error = 'errors.network.rpc';
                 }
-                if (error === 'generic.unknown') {
+                if (error === 'errors.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.withScope((scope) => {
                         scope.setTag('ipct-activity', 'claim');

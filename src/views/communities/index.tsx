@@ -58,7 +58,7 @@ function CommunitiesScreen() {
                 if (status !== 'granted') {
                     Alert.alert(
                         i18n.t('generic.failure'),
-                        i18n.t('generic.errorGettingGPSLocation'),
+                        i18n.t('errors.gettingGPS'),
                         [{ text: 'OK' }],
                         { cancelable: false }
                     );

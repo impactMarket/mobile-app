@@ -215,7 +215,7 @@ function ProfileScreen() {
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('generic.errorUploadingAvatar'),
+                i18n.t('generic.uploadingAvatar'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
@@ -467,7 +467,7 @@ function ProfileScreen() {
                                     textAlign: 'left',
                                 }}
                             >
-                                {i18n.t('generic.modalErrorTitle')}
+                                {i18n.t('errors.modals.title')}
                             </Text>
                             <CloseStorySvg
                                 onPress={() => {

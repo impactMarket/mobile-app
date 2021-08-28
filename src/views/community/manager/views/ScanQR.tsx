@@ -66,7 +66,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                 this.setState({ invalidAddressWarningOpen: true });
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.scanningInvalidAddress'),
+                    i18n.t('errors.scanningAddress'),
                     [
                         {
                             text: 'OK',
@@ -152,11 +152,11 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                     }
                 >
                     <Dialog.Title>
-                        {i18n.t('generic.requestingPermission')}
+                        {i18n.t('permissions.title')}
                     </Dialog.Title>
                     <Dialog.Content>
                         <Paragraph>
-                            {i18n.t('generic.requestCameraPermission')}
+                            {i18n.t('permissions.cameraMessage')}
                         </Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>

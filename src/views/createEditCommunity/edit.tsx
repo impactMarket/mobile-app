@@ -380,7 +380,7 @@ function EditCommunityScreen() {
             <Portal>
                 <Modal
                     visible={isAnyFieldMissedModal}
-                    title={i18n.t('generic.modalErrorTitle')}
+                    title={i18n.t('errors.modals.title')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);

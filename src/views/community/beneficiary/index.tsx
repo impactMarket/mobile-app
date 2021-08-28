@@ -420,7 +420,7 @@ function BeneficiaryScreen() {
                             if (status !== Location.PermissionStatus.GRANTED) {
                                 Alert.alert(
                                     i18n.t('generic.failure'),
-                                    i18n.t('generic.errorGettingGPSLocation'),
+                                    i18n.t('errors.gettingGPS'),
                                     [
                                         {
                                             text: i18n.t('generic.tryAgain'),
@@ -441,7 +441,7 @@ function BeneficiaryScreen() {
                         } catch (e) {
                             Alert.alert(
                                 i18n.t('generic.failure'),
-                                i18n.t('generic.errorGettingGPSLocation'),
+                                i18n.t('errors.gettingGPS'),
                                 [
                                     {
                                         text: i18n.t('generic.tryAgain'),
@@ -486,7 +486,7 @@ function BeneficiaryScreen() {
                                         marginVertical: 16,
                                     }}
                                 >
-                                    {i18n.t('generic.incorrectTime')}
+                                    {i18n.t('errors.modals.clock.title')}
                                 </Headline>
                                 <Paragraph
                                     style={{
@@ -497,7 +497,7 @@ function BeneficiaryScreen() {
                                         textAlign: 'center',
                                     }}
                                 >
-                                    {i18n.t('generic.incorrectTimeMessage', {
+                                    {i18n.t('errors.modals.clock.description', {
                                         serverTime: moment(
                                             dateTimeDiffModal.getTime() -
                                                 timeDiff

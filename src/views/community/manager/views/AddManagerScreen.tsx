@@ -46,7 +46,7 @@ function AddManagerScreen() {
         if (userBalance.length < 16) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('generic.notEnoughForTransaction'),
+                i18n.t('errors.notEnoughForTransaction'),
                 [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
@@ -115,29 +115,29 @@ function AddManagerScreen() {
                 navigation.goBack();
             })
             .catch(async (e) => {
-                let error = 'generic.unknown';
+                let error = 'errors.unknown';
                 if (e.message.includes('has been reverted')) {
-                    error = 'generic.syncIssues';
+                    error = 'errors.sync.issues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'generic.possiblyValoraNotSynced';
+                    error = 'errors.sync.possiblyValora';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'generic.unknown';
+                    error = 'errors.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'generic.clockNotSynced';
+                        error = 'errors.sync.clock';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'generic.networkConnectionLost';
+                        error = 'errors.network.connectionLost';
                     }
-                    error = 'generic.networkIssuesRPC';
+                    error = 'errors.network.rpc';
                 }
-                if (error === 'generic.unknown') {
+                if (error === 'errors.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.captureException(e);
                 }

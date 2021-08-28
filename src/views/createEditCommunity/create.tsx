@@ -647,7 +647,7 @@ function CreateCommunityScreen() {
                         isAnyFieldMissedModal ||
                         invalidInputAmounts !== undefined
                     }
-                    title={i18n.t('generic.modalErrorTitle')}
+                    title={i18n.t('errors.modals.title')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);
