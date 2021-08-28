@@ -39,6 +39,7 @@ export default {
     permissions: {
         title: 'Questing Permission',
         cameraMessage: 'impactMarket requires permission to use your camera.',
+        allowCamera: 'Allow camera', // TODO: this should be replaced
     },
     generic: {
         testnetWarning:
@@ -213,28 +214,30 @@ export default {
             warning:
                 'If you find suspicious activity among beneficiaries, let us know, as it will be regarded as a good-faith action that can prevent all the community to be affected because of a few bad actors.',
         },
-        editCommunityDetails: 'Edit community details',
-        viewAsPublic: 'View as public',
-        addBeneficiary: 'Add Beneficiary',
-        beneficiaryAddress: 'Beneficiary Account No (address)',
-        allowCamera: 'Allow camera',
-        userWasRemoved: '{{user}} was successfully removed!',
-        errorRemovingBeneficiary:
-            'An error happened while removing the beneficiary.\n\nError: {{error}}',
-        addedNewBeneficiary: "You've successfully added a new beneficiary!",
+        noFunds: 'No Funds',
+        notFundsToAddBeneficiary:
+            'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
         addingInvalidAddress: 'You are trying to add an invalid address!',
-        errorAddingBeneficiary:
-            'An error happened while adding the beneficiary.\n\nError: {{error}}',
         addingYourOwnAddress:
             'You are trying to add your own address. Are you sure?',
         alreadyInCommunity:
             'You are trying to add an address that already is in this community!',
-        claimedSince: '{{amount}} claimed since {{date}}',
-        addedNewManager: "You've successfully added a new manager!",
+        errorRemovingBeneficiary:
+            'An error happened while removing the beneficiary.\n\nError: {{error}}',
+        userWasRemoved: '{{user}} was successfully removed!',
+        errorAddingBeneficiary:
+            'An error happened while adding the beneficiary.\n\nError: {{error}}',
+        addedNewBeneficiary: "You've successfully added a new beneficiary!",
         errorAddingManager:
             'An error happened while adding the manager.\n\nError: {{error}}',
+        addedNewManager: "You've successfully added a new manager!",
         errorRemovingManager:
             'An error happened while removing the manager.\n\nError: {{error}}',
+        claimedSince: '{{amount}} claimed since {{date}}',
+        editCommunityDetails: 'Edit community details',
+        viewAsPublic: 'View as public',
+        addBeneficiary: 'Add Beneficiary',
+        beneficiaryAddress: 'Beneficiary Account No (address)',
         managerAddress: 'Manager Account No (address)',
         addManager: 'Add Manager',
         managers: 'Managers',
@@ -305,9 +308,6 @@ export default {
         youCanClaimXin: 'You can claim {{amount}} in',
         claimX: 'Claim ', // {{amount}}
         youHaveClaimedXoutOfY: 'You have claimed ${{claimed}} out of ${{max}}',
-        noFunds: 'No Funds',
-        notFundsToAddBeneficiary:
-            'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
         howClaimWorks: 'How claims work.',

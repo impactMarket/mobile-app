@@ -41,6 +41,7 @@ export default {
     permissions: {
         title: 'Perdido de permissão',
         cameraMessage: 'impactMarket necessita ter acesso á camera.',
+        allowCamera: 'Permitir camera', // TODO: this should be replaced
     },
     generic: {
         testnetWarning:
@@ -218,28 +219,31 @@ export default {
             warning:
                 'Se você encontrar atividades suspeitas entre os beneficiários, avise-nos, pois isso será considerado uma ação de boa-fé que pode evitar que toda a comunidade seja afetada por causa de alguns maus atores.',
         },
-        editCommunityDetails: 'Editar detalhes da comunidade',
-        viewAsPublic: 'Ver página da comunidade',
-        addBeneficiary: 'Adicionar Beneficiário',
-        beneficiaryAddress: 'Conta do Beneficiario',
-        allowCamera: 'Permitir camera',
-        userWasRemoved: '{{user}} foi removido com sucesso!',
-        errorRemovingBeneficiary:
-            'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
-        addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
+        noFunds:
+            'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
+        notFundsToAddBeneficiary:
+            'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
         addingInvalidAddress: 'Está a tentar adicionar um endereço inválido!',
-        errorAddingBeneficiary:
-            'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
         addingYourOwnAddress:
             'Você está a tentar adicionar o seu endereço. Tem certeza?',
         alreadyInCommunity:
             'Você está a tentar adicionar um endereço que já está nesta comunidade!',
-        claimedSince: 'Recebeu {{amount}} desde {{date}}',
-        addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
+        errorRemovingBeneficiary:
+            'Ocorreu um erro enquanto removia o beneficiário.\n\nErro: {{error}}',
+        userWasRemoved: '{{user}} foi removido com sucesso!',
+        errorAddingBeneficiary:
+            'Ocorreu um erro ao adicionar o beneficiário.\n\nErro: {{error}}',
+        addedNewBeneficiary: 'Um novo beneficiário foi adicionado com sucesso!',
         errorAddingManager:
             'Ocorreu um erro ao adicionar o gestor.\n\nErro: {{error}}',
+        addedNewManager: 'Um novo gestor foi adicionado com sucesso!',
         errorRemovingManager:
             'Ocorreu um erro enquanto removia o gestor.\n\nErro: {{error}}',
+        claimedSince: 'Recebeu {{amount}} desde {{date}}',
+        editCommunityDetails: 'Editar detalhes da comunidade',
+        viewAsPublic: 'Ver página da comunidade',
+        addBeneficiary: 'Adicionar Beneficiário',
+        beneficiaryAddress: 'Conta do Beneficiario',
         managerAddress: 'Conta do Gestor',
         addManager: 'Adicionar Gestor',
         managers: 'Gestores',
@@ -314,10 +318,6 @@ export default {
         youCanClaimXin: 'Poderá pegar {{amount}} em',
         claimX: 'Pegar ', // {{amount}}
         youHaveClaimedXoutOfY: 'Já recebeu ${{claimed}} em ${{max}}',
-        noFunds:
-            'Não existem fundos disponiveis de momento. Tente novamente mais tarde.',
-        notFundsToAddBeneficiary:
-            'A comunidade não tem fundos suficientes! $0.05 serão enviados ao beneficiário quando adicionado.',
         nextTimeWillWaitClaim:
             'Na próxima terá de esperar pelo menos {{nextWait}}. <a>Como funciona?</a>',
         howClaimWorks: 'Como funciona?',
