@@ -72,7 +72,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         Api.community
             .pastSSI(props.route.params.communityId)
             .then(setHistoricalSSI);
-    }, []);
+    }, [community, dispatch, props.route.params]);
 
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));

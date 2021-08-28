@@ -8,7 +8,6 @@ import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import { ICommunityStory } from 'helpers/types/endpoints';
-import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
 import React, { useLayoutEffect, useState, useRef, useCallback } from 'react';
@@ -36,7 +35,7 @@ function NewStoryScreen() {
     const [storyText, setStoryText] = useState('');
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
-    const [loadRefs, setLoadRefs] = useState(false);
+    const [, setLoadRefs] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
 
     const [openHelpCenter, setOpenHelpCenter] = useState(false);
@@ -53,6 +52,47 @@ function NewStoryScreen() {
     );
 
     useLayoutEffect(() => {
+        const submitNewStory = async () => {
+            setSubmitting(true);
+            try {
+                if (storyMedia.length > 0 || storyText.length > 0) {
+                    const r = await Api.story.add(
+                        storyMedia.length > 0 ? storyMedia : undefined,
+                        {
+                            communityId: userCommunity.id,
+                            message:
+                                storyText.length > 0 ? storyText : undefined,
+                            mediaId: 0,
+                        }
+                    );
+
+                    setSubmitedResult(r);
+                    Alert.alert(
+                        i18n.t('generic.success'),
+                        i18n.t('stories.storyCongrat'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                    setSubmittedWithSuccess(true);
+                } else {
+                    Alert.alert(
+                        i18n.t('generic.failure'),
+                        i18n.t('stories.emptyStoryFailure'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                }
+            } catch (e) {
+                Alert.alert(
+                    i18n.t('generic.failure'),
+                    i18n.t('stories.storyFailure'),
+                    [{ text: 'OK' }],
+                    { cancelable: false }
+                );
+            } finally {
+                setSubmitting(false);
+            }
+        };
         if (userCommunity?.id !== undefined) {
             navigation.setOptions({
                 headerShown: !submittedWithSuccess,
@@ -73,6 +113,7 @@ function NewStoryScreen() {
         submitting,
         userCommunity,
         submittedWithSuccess,
+        isDisabled,
     ]);
 
     useFocusEffect(
@@ -102,47 +143,6 @@ function NewStoryScreen() {
             }, 100);
         } else {
             modalizeStoryRef.current.open();
-        }
-    };
-
-    const submitNewStory = async () => {
-        setSubmitting(true);
-        try {
-            if (storyMedia.length > 0 || storyText.length > 0) {
-                const r = await Api.story.add(
-                    storyMedia.length > 0 ? storyMedia : undefined,
-                    {
-                        communityId: userCommunity.id,
-                        message: storyText.length > 0 ? storyText : undefined,
-                        mediaId: 0,
-                    }
-                );
-
-                setSubmitedResult(r);
-                Alert.alert(
-                    i18n.t('generic.success'),
-                    i18n.t('stories.storyCongrat'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                setSubmittedWithSuccess(true);
-            } else {
-                Alert.alert(
-                    i18n.t('generic.failure'),
-                    i18n.t('stories.emptyStoryFailure'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-            }
-        } catch (e) {
-            Alert.alert(
-                i18n.t('generic.failure'),
-                i18n.t('stories.storyFailure'),
-                [{ text: 'OK' }],
-                { cancelable: false }
-            );
-        } finally {
-            setSubmitting(false);
         }
     };
 

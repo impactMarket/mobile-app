@@ -155,6 +155,8 @@ function EditCommunityScreen() {
                 />
             ),
         });
+        // TODO: this needs refactoring. This methods are used within and outside the effect
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, submitting, state]);
 
     const SubmissionActivity = (props: {

@@ -100,7 +100,7 @@ function CommunityManagerScreen() {
             loadCommunityBalance();
             verifyRequestToChangeUbiParams();
         }
-    }, [community, kit]);
+    }, [community, kit, communityContract]);
 
     useFocusEffect(() => {
         async function loadCommunityRulesStats() {
@@ -130,7 +130,7 @@ function CommunityManagerScreen() {
                 ),
             });
         }
-    }, [openHelpCenter]);
+    }, [openHelpCenter, navigation]);
 
     const onRefresh = () => {
         updateCommunityInfo(community.id, dispatch).then(async () => {

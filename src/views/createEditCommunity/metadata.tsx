@@ -54,7 +54,7 @@ function CommunityCurrency() {
             type: formAction.SET_CURRENCY,
             payload: userCurrency,
         });
-    }, [dispatch]);
+    }, [dispatch, userCurrency]);
 
     const handleSelectCurrency = (item: string) => {
         dispatch({

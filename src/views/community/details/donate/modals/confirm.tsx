@@ -15,9 +15,9 @@ import { Trans } from 'react-i18next';
 import { Text, View, StyleSheet, Alert } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 import { batch, connect, ConnectedProps } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
-import * as Sentry from 'sentry-expo';
 
 interface IConfirmModalProps {}
 interface IConfirmModalState {

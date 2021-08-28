@@ -101,6 +101,8 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 notEnoughToClaimOnContract = true;
             }
 
+            // TODO:
+            // eslint-disable-next-line react/no-did-mount-set-state
             this.setState({ notEnoughToClaimOnContract, loading: false });
         }
     };

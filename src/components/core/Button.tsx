@@ -19,10 +19,6 @@ interface IButtonProps {
 interface IButtonState {}
 
 export default class Button extends Component<IButtonProps, IButtonState> {
-    constructor(props: any) {
-        super(props);
-    }
-
     render() {
         const {
             style,

@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import BackSvg from 'components/svg/header/BackSvg';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
@@ -184,7 +183,7 @@ function FAQScreen() {
 
     useEffect(() => {
         setFaq(language === 'en' ? enFAQ : ptFAQ);
-    }, []);
+    }, [language]);
 
     const handlePress = (tag: string) => {
         let newExpanded: string[];

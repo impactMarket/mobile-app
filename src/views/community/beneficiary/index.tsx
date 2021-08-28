@@ -6,7 +6,6 @@ import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
-import ReportCard from 'components/svg/header/ReportCard';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
 import { Screens } from 'helpers/constants';
@@ -15,12 +14,11 @@ import {
     setAppSuspectWrongDateTime,
     setAppHasBeneficiaryAcceptedTerms,
 } from 'helpers/redux/actions/app';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-// redux Actions
+import React, { useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next';
 import {
     StyleSheet,
@@ -42,20 +40,16 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
-import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
 import BlockedAccount from './cards/BlockedAccount';
-import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 function BeneficiaryScreen() {
-    let timeoutTimeDiff: NodeJS.Timer | undefined;
+    const timeoutTimeDiff = useRef<NodeJS.Timer | undefined>();
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [openModal, setOpenModal] = useState(false);
-    const [showReportCard, setShowReportCard] = useState<string | null>('');
 
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
@@ -153,16 +147,16 @@ function BeneficiaryScreen() {
 
     useEffect(() => {
         if (suspectWrongDateTime) {
-            timeoutTimeDiff = setInterval(
+            timeoutTimeDiff.current = setInterval(
                 () => setDateTimeDiffModal(new Date()),
                 1000
             );
         } else if (timeoutTimeDiff !== undefined) {
-            clearInterval(timeoutTimeDiff);
+            clearInterval(timeoutTimeDiff.current);
         }
         return () => {
             if (timeoutTimeDiff !== undefined) {
-                clearInterval(timeoutTimeDiff);
+                clearInterval(timeoutTimeDiff.current);
             }
         };
     }, [suspectWrongDateTime]);
@@ -177,7 +171,7 @@ function BeneficiaryScreen() {
             }
         }
         loadCommunityRulesStats();
-    }, []);
+    }, [dispatch, hasBeneficiaryAcceptedRulesAlready, navigation]);
 
     useEffect(() => {
         const isLocationAvailable = async () => {

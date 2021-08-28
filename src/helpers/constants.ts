@@ -98,7 +98,6 @@ export enum storiesAction {
     USER_STORIES_FAILURE = 'stories/user_failure',
 }
 
-
 export enum communityOrderOptions {
     bigger = 'bigger',
     nearest = 'nearest',

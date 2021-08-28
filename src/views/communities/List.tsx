@@ -156,9 +156,11 @@ function ListCommunitiesScreen() {
 
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     // TODO: use later with filters
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [communtiesOrder, setCommuntiesOrder] = useState(
         communityOrderOptions.bigger
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [userLocation, setUserLocation] = useState<
         Location.LocationObject | undefined
     >(undefined);

@@ -41,6 +41,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
 
     componentDidUpdate = (prevProps: Readonly<Props>) => {
         if (prevProps.isVisible !== this.props.isVisible) {
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ isVisible: this.props.isVisible });
             if (this.props.isVisible) {
                 this.handleAskCameraPermission();
