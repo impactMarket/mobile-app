@@ -1,9 +1,6 @@
-/* eslint handle-callback-err: "warn" */
-// Assets
 import { useNavigation } from '@react-navigation/native';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
-// Components
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -21,7 +18,6 @@ import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Linking from 'expo-linking';
-// Helpers
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
 import {
@@ -49,7 +45,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import {
     Portal,
-    Button as RNButton,
     Divider,
     Card,
     Modal,
@@ -61,13 +56,10 @@ import {
 } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { batch, useDispatch, useSelector } from 'react-redux';
-// Services
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-// Styles
 import { ipctColors } from 'styles/index';
 
-// Constants
 const currencies: {
     [key: string]: {
         symbol: string;
@@ -104,7 +96,6 @@ function ProfileScreen() {
     const [gender, setGender] = useState<string | null>(null);
     const [age, setAge] = useState('');
     const [children, setChildren] = useState('');
-    const [sending, setSending] = useState(false);
     const [
         toggleImageDimensionsModal,
         setToggleImageDimensionsModal,
@@ -142,7 +133,7 @@ function ProfileScreen() {
         });
         renderAvailableCurrencies();
         loadProfile();
-    }, [userWallet, user]);
+    }, [userWallet, user, navigation]);
 
     const updateUserMetadataCache = () => {
         CacheStore.cacheUser({
@@ -186,11 +177,9 @@ function ProfileScreen() {
 
     const handleChangeAvatar = async (avatar: string) => {
         try {
-            setSending(true);
             setUserAvatarImage(avatar);
 
             const res = await Api.user.updateProfilePicture(avatar);
-            setSending(false);
             CacheStore.cacheUser({
                 // TODO: we should use the generic method instead
                 address: userWallet.address,
@@ -215,11 +204,10 @@ function ProfileScreen() {
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('generic.errorUploadingAvatar'),
+                i18n.t('generic.uploadingAvatar'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
-            setSending(false);
         }
     };
 
@@ -264,7 +252,7 @@ function ProfileScreen() {
                         setToggleImageDimensionsModal(true);
                     }
                 },
-                (error) => {
+                (_error) => {
                     handleChangeAvatar(result.uri);
                 }
             );
@@ -467,7 +455,7 @@ function ProfileScreen() {
                                     textAlign: 'left',
                                 }}
                             >
-                                {i18n.t('generic.modalErrorTitle')}
+                                {i18n.t('errors.modals.title')}
                             </Text>
                             <CloseStorySvg
                                 onPress={() => {
@@ -612,7 +600,7 @@ function ProfileScreen() {
                         label={i18n.t('generic.name')}
                         value={name}
                         maxLength={32}
-                        onEndEditing={(e) => {
+                        onEndEditing={(_e) => {
                             Api.user.setUsername(name);
                             updateUserMetadataCache();
                             dispatch(
@@ -639,7 +627,7 @@ function ProfileScreen() {
                                 value={age}
                                 maxLength={4}
                                 keyboardType="numeric"
-                                onEndEditing={(e) => {
+                                onEndEditing={(_e) => {
                                     Api.user.setAge(parseInt(age, 10));
                                     updateUserMetadataCache();
                                     dispatch(
@@ -663,7 +651,7 @@ function ProfileScreen() {
                             value={children}
                             maxLength={4}
                             keyboardType="numeric"
-                            onEndEditing={(e) => {
+                            onEndEditing={(_e) => {
                                 Api.user.setChildren(
                                     children.length > 0
                                         ? parseInt(children, 10)

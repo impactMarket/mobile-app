@@ -40,14 +40,11 @@ import {
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Portal, Modal } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
-import { analytics } from 'services/analytics';
-import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import {
     registerForPushNotifications,
@@ -89,7 +86,7 @@ function Auth() {
         if (timedOutValidation && !duplicatedAccountsWarn) {
             setTimedOut(true);
         }
-    }, [timedOutValidation]);
+    }, [timedOutValidation, duplicatedAccountsWarn]);
 
     useEffect(() => {
         const finishAuth = async () => {
@@ -129,7 +126,7 @@ function Auth() {
             setDuplicatedAccountsWarn(true);
             setConnecting(false);
         }
-    }, [userAuthState, dappKitResponse]);
+    }, [userAuthState, dappKitResponse, dispatch, exchangeRates, kit]);
 
     useFocusEffect(() => {
         renderAuthModalize();
@@ -448,7 +445,7 @@ function Auth() {
                 <Card style={styles.timedOutCard}>
                     <View style={styles.timedOutCardContent}>
                         <Text style={styles.timedOutCardText}>
-                            {i18n.t('generic.modalValoraTimeoutTitle')}
+                            {i18n.t('errors.modals.valora.title')}
                         </Text>
                         <CloseStorySvg
                             onPress={() => handleCloseErrorModal()}
@@ -456,7 +453,7 @@ function Auth() {
                     </View>
                     <View style={styles.timedOutCardDescriptionContainer}>
                         <Text style={styles.timedOutCardDescription}>
-                            {i18n.t('generic.modalValoraTimeoutDescription')}
+                            {i18n.t('errors.modals.valora.description')}
                         </Text>
                     </View>
                     <View style={styles.timedOutCardButtons}>

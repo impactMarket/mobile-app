@@ -101,7 +101,7 @@ function CommunityManagerScreen() {
             loadCommunityBalance();
             verifyRequestToChangeUbiParams();
         }
-    }, [community, kit]);
+    }, [community, kit, communityContract]);
 
     useFocusEffect(() => {
         async function loadCommunityRulesStats() {
@@ -131,7 +131,7 @@ function CommunityManagerScreen() {
                 ),
             });
         }
-    }, [openHelpCenter]);
+    }, [openHelpCenter, navigation]);
 
     const onRefresh = () => {
         updateCommunityInfo(community.id, dispatch).then(async () => {
@@ -185,7 +185,7 @@ function CommunityManagerScreen() {
                 Sentry.Native.captureException(e);
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.anErroHappenedTryAgain'),
+                    i18n.t('generic.generic'),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );

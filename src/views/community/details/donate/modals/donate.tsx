@@ -42,6 +42,8 @@ class DonateModal extends Component<
 
     componentDidUpdate = (prevProps: IDonateModalProps & PropsFromRedux) => {
         if (prevProps.inputAmount !== this.props.inputAmount) {
+            // TODO:
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ amountDonate: this.props.inputAmount });
         }
     };

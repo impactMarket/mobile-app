@@ -74,8 +74,8 @@ function Container({
 
     const renderInformativeModal = () => (
         <ModalGenericError
-            title={i18n.t('generic.modalErrorTitle')}
-            description={i18n.t('generic.modalErrorDescription')}
+            title={i18n.t('errors.modals.title')}
+            description={i18n.t('errors.modals.description')}
             btnString={i18n.t('generic.close')}
             closeFn={setToggleInformativeModal(false)}
             btnFn={setToggleInformativeModal(false)}

@@ -41,6 +41,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
 
     componentDidUpdate = (prevProps: Readonly<Props>) => {
         if (prevProps.isVisible !== this.props.isVisible) {
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ isVisible: this.props.isVisible });
             if (this.props.isVisible) {
                 this.handleAskCameraPermission();
@@ -66,7 +67,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                 this.setState({ invalidAddressWarningOpen: true });
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.scanningInvalidAddress'),
+                    i18n.t('errors.scanningAddress'),
                     [
                         {
                             text: 'OK',
@@ -152,16 +153,16 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                     }
                 >
                     <Dialog.Title>
-                        {i18n.t('generic.requestingPermission')}
+                        {i18n.t('permissions.title')}
                     </Dialog.Title>
                     <Dialog.Content>
                         <Paragraph>
-                            {i18n.t('generic.requestCameraPermission')}
+                            {i18n.t('permissions.cameraMessage')}
                         </Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={this.handleAskCameraPermission}>
-                            {i18n.t('manager.allowCamera')}
+                            {i18n.t('permissions.allowCamera')}
                         </Button>
                         <Button
                             onPress={() =>

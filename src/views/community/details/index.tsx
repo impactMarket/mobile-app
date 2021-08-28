@@ -65,7 +65,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     useEffect(() => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
         return () => dispatch(cleanCommunityState());
-    }, []);
+    }, [dispatch, props.route.params.communityId]);
 
     useEffect(() => {
         const checkDonateOpen = () => {
@@ -84,7 +84,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             checkDonateOpen();
             getPromoter();
         }
-    }, [community]);
+    }, [community, dispatch, props.route.params]);
 
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));

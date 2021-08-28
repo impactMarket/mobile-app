@@ -155,7 +155,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         },
                     ]}
                 >
-                    {i18n.t('generic.fundsRunOut', {
+                    {i18n.t('community.fundsRunOut', {
                         days,
                     })}{' '}
                     {i18n.t('generic.days', {

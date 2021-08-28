@@ -39,14 +39,7 @@ import rootSagas from 'helpers/redux/sagas';
 import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
 import React from 'react';
-import {
-    Image,
-    View,
-    LogBox,
-    StatusBar,
-    Dimensions,
-    Platform,
-} from 'react-native';
+import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import {
     DefaultTheme,
@@ -228,6 +221,8 @@ class App extends React.Component<any, IAppState> {
         }
 
         if (config.testnet) {
+            // TODO:
+            // eslint-disable-next-line react/no-did-mount-set-state
             this.setState({ testnetWarningOpen: true });
             setTimeout(
                 () => this.setState({ testnetWarningOpen: false }),
@@ -642,7 +637,7 @@ class App extends React.Component<any, IAppState> {
                                             textAlign: 'center',
                                         }}
                                     >
-                                        {i18n.t('generic.unexpectedError')}
+                                        {i18n.t('errors.loadingApp')}
                                     </Paragraph>
                                 </Card.Content>
                             </Card>

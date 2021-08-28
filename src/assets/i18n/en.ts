@@ -1,4 +1,46 @@
 export default {
+    errors: {
+        network: {
+            connectionLost: 'The network connection was lost.',
+            rpc: 'RPC service unavailable. Please try again later.',
+        },
+        sync: {
+            issues: 'Seems like there were syncing issues. Please, try again.',
+            possiblyValora:
+                "It seems like your valora isn't synced with the network. Please, open Valora and make sure you don't see any message similar to 'Connecting...'",
+            clock:
+                'It seems like your date or time is incorrect. Please, fix it before trying again.',
+        },
+        modals: {
+            valora: {
+                title: 'Request timeout',
+                description:
+                    'Your request was lost. Please try again or visit our FAQ.',
+            },
+            clock: {
+                title: 'Incorrect Time',
+                description:
+                    'We have detected that your device may have the time incorrectly set. Please open the clock settings to match {{serverTime}}. Your time is currently {{userTime}}. After doing so, please, restart the app.',
+            },
+            title: 'Ooops!',
+            description: 'Something went wrong. Please try again later.',
+        },
+        unknown: 'Unknown.',
+        notEnoughForTransaction:
+            "You don't have enough balance to submit the request. Celo's transactions are nearly free but not completely free. Always keep a few cents in your account.",
+        scanningAddress: 'You are trying to scan an invalid address!',
+        gettingGPS: 'An error happened while getting the GPS location.',
+        uploadingAvatar:
+            'An error happened while uploading your image, try again later!',
+        generic: 'An error happened, please, try again.', // this will be deprecated
+        loadingApp:
+            'Unfortunately an unexpected error occurred while loading the app. Please restart the app and try again.',
+    },
+    permissions: {
+        title: 'Questing Permission',
+        cameraMessage: 'impactMarket requires permission to use your camera.',
+        allowCamera: 'Allow camera', // TODO: this should be replaced
+    },
     generic: {
         testnetWarning:
             "A friendly reminder you're using the Alfajores network build - the balances are not real.",
@@ -11,7 +53,6 @@ export default {
         confirm: 'Confirm',
         raisedFrom: 'Raised from {{backers}}',
         goal: 'Goal',
-        fundsRunOut: 'Community funds will run out in {{days}}',
         ubi: 'UBI',
         manage: 'Manage',
         communities: 'Communities',
@@ -32,16 +73,6 @@ export default {
         city: 'City',
         email: 'Email',
         upload: 'Upload',
-        networkConnectionLost: 'The network connection was lost.',
-        networkIssuesRPC: 'RPC service unavailable. Please try again later.',
-        syncIssues: 'Seems like there were syncing issues. Please, try again.',
-        possiblyValoraNotSynced:
-            "It seems like your valora isn't synced with the network. Please, open Valora and make sure you don't see any message similar to 'Connecting...'",
-        unknown: 'Unknown.',
-        clockNotSynced:
-            'It seems like your date or time is incorrect. Please, fix it before trying again.',
-        notEnoughForTransaction:
-            "You don't have enough balance to submit the request. Celo's transactions are nearly free but not completely free. Always keep a few cents in your account.",
         continue: 'Continue',
         yourQRCode: 'Your QR Code',
         close: 'Close',
@@ -54,28 +85,14 @@ export default {
         days: 'day',
         days_plural: 'days',
         week: 'week',
-        scanningInvalidAddress: 'You are trying to scan an invalid address!',
         select: 'Select',
-        errorGettingGPSLocation:
-            'An error happened while getting the GPS location.',
-        modalErrorTitle: 'Ooops!',
-        modalValoraTimeoutTitle: 'Request timeout',
-        modalValoraTimeoutDescription:
-            'Your request was lost. Please try again or visit our FAQ.',
-        modalErrorDescription: 'Something went wrong. Please try again later.',
-        errorUploadingAvatar:
-            'An error happened while uploading your image, try again later!',
-        anErroHappenedTryAgain: 'An error happened, please, try again.',
+        tryAgain: 'Try Again',
         openHelpCenter: 'Open Help Center',
         knowMoreHelpCenter: 'Know more about on our Help Center',
         turnOn: 'Turn On',
         turnOnLocationHint: 'Turn on your location for a better experience.',
-        tryAgain: 'Try Again',
         youAreNotConnected:
             'You are not connected to your Valora. Connect to send directly.',
-        requestingPermission: 'Questing Permission',
-        requestCameraPermission:
-            'impactMarket requires permission to use your camera in order to scan the QR code.',
         language: 'Language',
         update: 'Update',
         skip: 'Skip',
@@ -85,9 +102,6 @@ export default {
         offline: 'The Internet connection appears to be offline',
         openClockSettings: 'Open Clock Settings',
         dismiss: 'Dismiss',
-        incorrectTime: 'Incorrect Time',
-        incorrectTimeMessage:
-            'We have detected that your device may have the time incorrectly set. Please open the clock settings to match {{serverTime}}. Your time is currently {{userTime}}. After doing so, please, restart the app.',
         backWithSymbol: '< Back',
         order: 'Order',
         nearest: 'Nearest',
@@ -95,16 +109,13 @@ export default {
         pleaseWait: 'Please wait...',
         thankYou: 'Thank you!',
         search: 'Search',
-        noResults: 'No results founds!',
+        noResults: 'No results found!',
         story: 'Story',
         viewAll: 'View All',
         notInComunity: 'Not in a community!',
         delete: 'Delete',
-        storyPermissionCamera: 'Permission to access camera roll is required!',
         descriptionCopiedClipboard: 'Description copied to clipboard!',
         welcome: 'Welcome!',
-        unexpectedError:
-            'Unfortunately an unexpected error occurred while loading the app. Please restart the app and try again.',
     },
     createCommunity: {
         pendingApprovalMessage:
@@ -203,28 +214,30 @@ export default {
             warning:
                 'If you find suspicious activity among beneficiaries, let us know, as it will be regarded as a good-faith action that can prevent all the community to be affected because of a few bad actors.',
         },
-        editCommunityDetails: 'Edit community details',
-        viewAsPublic: 'View as public',
-        addBeneficiary: 'Add Beneficiary',
-        beneficiaryAddress: 'Beneficiary Account No (address)',
-        allowCamera: 'Allow camera',
-        userWasRemoved: '{{user}} was successfully removed!',
-        errorRemovingBeneficiary:
-            'An error happened while removing the beneficiary.\n\nError: {{error}}',
-        addedNewBeneficiary: "You've successfully added a new beneficiary!",
+        noFunds: 'No Funds',
+        notFundsToAddBeneficiary:
+            'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
         addingInvalidAddress: 'You are trying to add an invalid address!',
-        errorAddingBeneficiary:
-            'An error happened while adding the beneficiary.\n\nError: {{error}}',
         addingYourOwnAddress:
             'You are trying to add your own address. Are you sure?',
         alreadyInCommunity:
             'You are trying to add an address that already is in this community!',
-        claimedSince: '{{amount}} claimed since {{date}}',
-        addedNewManager: "You've successfully added a new manager!",
+        errorRemovingBeneficiary:
+            'An error happened while removing the beneficiary.\n\nError: {{error}}',
+        userWasRemoved: '{{user}} was successfully removed!',
+        errorAddingBeneficiary:
+            'An error happened while adding the beneficiary.\n\nError: {{error}}',
+        addedNewBeneficiary: "You've successfully added a new beneficiary!",
         errorAddingManager:
             'An error happened while adding the manager.\n\nError: {{error}}',
+        addedNewManager: "You've successfully added a new manager!",
         errorRemovingManager:
             'An error happened while removing the manager.\n\nError: {{error}}',
+        claimedSince: '{{amount}} claimed since {{date}}',
+        editCommunityDetails: 'Edit community details',
+        viewAsPublic: 'View as public',
+        addBeneficiary: 'Add Beneficiary',
+        beneficiaryAddress: 'Beneficiary Account No (address)',
         managerAddress: 'Manager Account No (address)',
         addManager: 'Add Manager',
         managers: 'Managers',
@@ -295,9 +308,6 @@ export default {
         youCanClaimXin: 'You can claim {{amount}} in',
         claimX: 'Claim ', // {{amount}}
         youHaveClaimedXoutOfY: 'You have claimed ${{claimed}} out of ${{max}}',
-        noFunds: 'No Funds',
-        notFundsToAddBeneficiary:
-            'Your community does not has enough funds! You need at least $0.05 cUSD in the contract to add a beneficiary.',
         nextTimeWillWaitClaim:
             'Next time you will have to wait at least {{nextWait}}. <a>How claims work.</a>',
         howClaimWorks: 'How claims work.',
@@ -346,6 +356,7 @@ export default {
             'A significant number of accounts may be involved in suspicious activities.',
         largeSuspiciousActivityDetected:
             'A very large number of accounts  may be involved in suspicious activities.',
+        fundsRunOut: 'Community funds will run out in {{days}}',
     },
     report: {
         report: 'Report',

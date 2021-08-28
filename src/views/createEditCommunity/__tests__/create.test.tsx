@@ -594,7 +594,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).toBeNull();
 
         fireEvent.changeText(
             getByLabelText(i18n.t('generic.email')),
@@ -630,7 +630,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).not.toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).not.toBeNull();
     });
 
     test('try to submit invalid email', async () => {
@@ -737,7 +737,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).toBeNull();
 
         fireEvent.changeText(
             getByLabelText(i18n.t('createCommunity.claimAmount')),
@@ -775,7 +775,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).not.toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).not.toBeNull();
     });
 
     test('try to submit only max claim', async () => {
@@ -810,7 +810,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).toBeNull();
 
         fireEvent.changeText(
             getByLabelText(i18n.t('createCommunity.totalClaimPerBeneficiary')),
@@ -848,7 +848,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).not.toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).not.toBeNull();
     });
 
     test('try to submit only increment interval', async () => {
@@ -883,7 +883,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).toBeNull();
 
         fireEvent.changeText(
             getByLabelText(i18n.t('createCommunity.time')),
@@ -921,7 +921,7 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('generic.modalErrorTitle'))).not.toBeNull();
+        expect(queryByText(i18n.t('errors.modals.title'))).not.toBeNull();
     });
 
     // TODO: this test is important but it's failling for unknown reasons

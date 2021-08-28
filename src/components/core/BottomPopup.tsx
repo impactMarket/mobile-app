@@ -1,11 +1,6 @@
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import React, { ReactElement } from 'react';
-import {
-    GestureResponderEvent,
-    View,
-    TextStyle,
-    StyleProp,
-} from 'react-native';
+import { View, TextStyle, StyleProp } from 'react-native';
 import { BottomSheet } from 'react-native-btr';
 import { Headline } from 'react-native-paper';
 

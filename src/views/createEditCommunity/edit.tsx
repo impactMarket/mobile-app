@@ -155,6 +155,8 @@ function EditCommunityScreen() {
                 />
             ),
         });
+        // TODO: this needs refactoring. This methods are used within and outside the effect
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, submitting, state]);
 
     const SubmissionActivity = (props: {
@@ -380,7 +382,7 @@ function EditCommunityScreen() {
             <Portal>
                 <Modal
                     visible={isAnyFieldMissedModal}
-                    title={i18n.t('generic.modalErrorTitle')}
+                    title={i18n.t('errors.modals.title')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);

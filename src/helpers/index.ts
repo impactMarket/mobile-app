@@ -161,7 +161,7 @@ export async function getUserBalance(kit: ContractKit, address: string) {
 export function claimFrequencyToText(frequency: number): string {
     if (frequency === 86400) return i18n.t('createCommunity.daily');
     if (frequency === 604800) return i18n.t('createCommunity.weekly');
-    return 'generic.unknown';
+    return 'errors.unknown';
 }
 
 export function calculateCommunityProgress(
@@ -237,7 +237,7 @@ export async function updateCommunityInfo(
 }
 
 export function validateEmail(email: string) {
-    const emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+    const emailRegex = /^[-!#$%&'*+\\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
     if (!email) return false;
 
     if (email.length === 0) return false;

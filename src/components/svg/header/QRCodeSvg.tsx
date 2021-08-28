@@ -1,11 +1,11 @@
 import i18n from 'assets/i18n';
+import BottomPopup from 'components/core/BottomPopup';
 import { IRootState } from 'helpers/types/state';
 import * as React from 'react';
 import { useState } from 'react';
 import SvgQRCode from 'react-native-qrcode-svg';
 import Svg, { SvgProps, Circle, Path } from 'react-native-svg';
 import { useSelector } from 'react-redux';
-import BottomPopup from 'components/core/BottomPopup';
 
 function QRCodeSvg(props: SvgProps) {
     const [openQR, setOpenQR] = useState(false);

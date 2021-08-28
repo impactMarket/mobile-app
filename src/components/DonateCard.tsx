@@ -39,7 +39,7 @@ export default function DonateCard(props: IDonateProps) {
             .catch((e) => {
                 console.log(e);
             });
-    }, []);
+    }, [community]);
 
     return (
         <>

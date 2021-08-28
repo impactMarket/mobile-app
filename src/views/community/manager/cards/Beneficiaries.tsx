@@ -87,9 +87,9 @@ function Beneficiaries(props: IBeneficiariesProps) {
                                 }}
                                 onPress={() => {
                                     Alert.alert(
-                                        i18n.t('beneficiary.noFunds'),
+                                        i18n.t('manager.noFunds'),
                                         i18n.t(
-                                            'beneficiary.notFundsToAddBeneficiary'
+                                            'manager.notFundsToAddBeneficiary'
                                         ),
                                         [{ text: i18n.t('generic.close') }],
                                         { cancelable: false }
