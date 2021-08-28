@@ -10,6 +10,7 @@ import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScre
 import WelcomeRulesScreen from 'views/community/beneficiary/WelcomeRulesScreen';
 import CommunityDetailsScreen from 'views/community/details';
 import WaitingTxScreen from 'views/community/details/donate/waitingTx';
+import CommunityExtendedDetailsScreen from 'views/community/extendedDetails';
 import AddBeneficiaryScreen from 'views/community/manager/views/AddBeneficiaryScreen';
 import AddManagerScreen from 'views/community/manager/views/AddManagerScreen';
 import AddedBeneficiaryScreen from 'views/community/manager/views/AddedBeneficiaryScreen';
@@ -25,7 +26,6 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
-import CommunityExtendedDetailsScreen from 'views/community/extendedDetails';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
