@@ -29,20 +29,20 @@ function CommunitiesScreen() {
     );
 
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
-    const [communtiesOffset, setCommuntiesOffset] = useState(0);
-    const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
-    const [userLocation, setUserLocation] = useState<
-        Location.LocationObject | undefined
-    >(undefined);
+    // const [communtiesOffset, setCommuntiesOffset] = useState(0);
+    // const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
+    // const [userLocation, setUserLocation] = useState<
+    //     Location.LocationObject | undefined
+    // >(undefined);
 
     const [, setRefreshing] = useState(true);
     const communities = useSelector(
         (state: IRootState) => state.communities.communities
     );
 
-    const reachedEndList = useSelector(
-        (state: IRootState) => state.communities.reachedEndList
-    );
+    // const reachedEndList = useSelector(
+    //     (state: IRootState) => state.communities.reachedEndList
+    // );
 
     useEffect(() => {
         dispatch(
@@ -53,35 +53,35 @@ function CommunitiesScreen() {
         );
     }, [dispatch]);
 
-    const handleOnEndReached = (info: { distanceFromEnd: number }) => {
-        if (!reachedEndList) {
-            setRefreshing(true);
-            if (communtiesOrder === 'nearest' && userLocation) {
-                dispatch(
-                    fetchCommunitiesListRequest({
-                        offset: communtiesOffset + 5,
-                        limit: 5,
-                        orderBy: 'nearest',
-                        lat: userLocation.coords.latitude,
-                        lng: userLocation.coords.longitude,
-                    })
-                );
+    // const handleOnEndReached = (info: { distanceFromEnd: number }) => {
+    //     if (!reachedEndList) {
+    //         setRefreshing(true);
+    //         if (communtiesOrder === 'nearest' && userLocation) {
+    //             dispatch(
+    //                 fetchCommunitiesListRequest({
+    //                     offset: communtiesOffset + 5,
+    //                     limit: 5,
+    //                     orderBy: 'nearest',
+    //                     lat: userLocation.coords.latitude,
+    //                     lng: userLocation.coords.longitude,
+    //                 })
+    //             );
 
-                setCommuntiesOffset(communtiesOffset + 5);
-                setRefreshing(false);
-            } else {
-                dispatch(
-                    fetchCommunitiesListRequest({
-                        offset: communtiesOffset + 5,
-                        limit: 5,
-                    })
-                );
+    //             setCommuntiesOffset(communtiesOffset + 5);
+    //             setRefreshing(false);
+    //         } else {
+    //             dispatch(
+    //                 fetchCommunitiesListRequest({
+    //                     offset: communtiesOffset + 5,
+    //                     limit: 5,
+    //                 })
+    //             );
 
-                setCommuntiesOffset(communtiesOffset + 5);
-                setRefreshing(false);
-            }
-        }
-    };
+    //             setCommuntiesOffset(communtiesOffset + 5);
+    //             setRefreshing(false);
+    //         }
+    //     }
+    // };
 
     return (
         <ScrollView>
@@ -98,9 +98,9 @@ function CommunitiesScreen() {
                 }) => <CommunityCard community={item} />}
                 ref={flatListRef}
                 keyExtractor={(item) => item.publicId}
-                onEndReachedThreshold={0.5}
+                // onEndReachedThreshold={0.5}
+                // onEndReached={handleOnEndReached}
                 horizontal
-                onEndReached={handleOnEndReached}
                 showsHorizontalScrollIndicator={false}
                 style={{ paddingTop: 20, marginLeft: 14 }}
             />
