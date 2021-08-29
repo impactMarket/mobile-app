@@ -17,6 +17,7 @@ export const ipctColors = {
     blueGray: '#73839D',
     warningOrange: '#FE9A22',
     errorRed: '#EB5757',
+    lynch: '#73839D',
 };
 
 export default StyleSheet.create({});

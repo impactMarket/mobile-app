@@ -10,6 +10,7 @@ import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScre
 import WelcomeRulesScreen from 'views/community/beneficiary/WelcomeRulesScreen';
 import CommunityDetailsScreen from 'views/community/details';
 import WaitingTxScreen from 'views/community/details/donate/waitingTx';
+import CommunityExtendedDetailsScreen from 'views/community/extendedDetails';
 import AddBeneficiaryScreen from 'views/community/manager/views/AddBeneficiaryScreen';
 import AddManagerScreen from 'views/community/manager/views/AddManagerScreen';
 import AddedBeneficiaryScreen from 'views/community/manager/views/AddedBeneficiaryScreen';
@@ -75,6 +76,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.CommunityDetails}
             component={CommunityDetailsScreen}
             options={CommunityDetailsScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.CommunityExtendedDetailsScreen}
+            component={CommunityExtendedDetailsScreen}
+            options={CommunityExtendedDetailsScreen.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.FAQ}

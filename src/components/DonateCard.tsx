@@ -4,7 +4,8 @@ import { CommunityAttributes } from 'helpers/types/models';
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { Title, Text, Portal } from 'react-native-paper';
+import { Title, Text } from 'react-native-paper';
+import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
 import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
@@ -56,6 +57,7 @@ export default function DonateCard(props: IDonateProps) {
                             payload: community,
                         })
                     }
+                    testID="donateWithCelo"
                 >
                     <View
                         style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -84,7 +86,7 @@ export default function DonateCard(props: IDonateProps) {
                         { fontSize: width < 375 ? 11 : 16 },
                     ]}
                 >
-                    {i18n.t('donate.or')}
+                    {i18n.t('generic.or')}
                 </Text>
                 <Pressable
                     style={[
@@ -96,6 +98,7 @@ export default function DonateCard(props: IDonateProps) {
                         },
                     ]}
                     onPress={() => modalizeESolidar.current?.open()}
+                    testID="donateWithESolidar"
                 >
                     <View
                         style={{
@@ -161,6 +164,7 @@ export default function DonateCard(props: IDonateProps) {
                             style={{
                                 height: Dimensions.get('screen').height * 0.85,
                             }}
+                            testID="webViewESolidar"
                         />
                     </Modalize>
                 </Provider>

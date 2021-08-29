@@ -2,6 +2,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
+import Dot from 'components/Dot';
 import IconCommunity from 'components/svg/IconCommunity';
 import BackSvg from 'components/svg/header/BackSvg';
 import NoSuspiciousSvg from 'components/svg/suspicious/NoSuspiciousSvg';
@@ -34,10 +35,6 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
-
-function Dot() {
-    return <Text style={styles.dot}>·</Text>;
-}
 
 function ListItem(props: {
     community: CommunityAttributes;
@@ -259,13 +256,6 @@ ListCommunitiesScreen.navigationOptions = () => {
 export default ListCommunitiesScreen;
 
 const styles = StyleSheet.create({
-    dot: {
-        marginHorizontal: 4,
-        fontFamily: 'Inter-Regular',
-        fontSize: 12,
-        lineHeight: 20,
-        color: '#73839D',
-    },
     container: {
         height: 82,
         marginBottom: 16,

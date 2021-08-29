@@ -443,4 +443,9 @@ export default {
             'Pretende continuar com a autenticação, desabilitando todas as outras contas?',
         duplicatedMsg3: 'P.S: Os fundos serão mantidos nas outras contas.',
     },
+    promoter: {
+        createdIn: 'Criou comunidade em {{date}}',
+        promoter: 'Promotor',
+        promotedBy: 'Promovido por',
+    },
 };

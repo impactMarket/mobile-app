@@ -5,6 +5,7 @@ import BaseCommunity from 'components/BaseCommunity';
 import CommunityStatus from 'components/CommunityStatus';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 import CommunityRules from 'components/core/CommunityRules';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import ManageSvg from 'components/svg/ManageSvg';
@@ -230,7 +231,12 @@ function CommunityManagerScreen() {
                                 <Managers
                                     managers={_community.state.managers}
                                 />
-                                <CommunityStatus community={_community} />
+                                <Card
+                                    elevation={0}
+                                    style={{ marginTop: 16, padding: 22 }}
+                                >
+                                    <CommunityStatus community={_community} />
+                                </Card>
                             </View>
                         </BaseCommunity>
                     </ScrollView>
