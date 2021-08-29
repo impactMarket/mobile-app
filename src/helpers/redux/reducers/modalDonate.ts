@@ -1,4 +1,4 @@
-import { modalDonateAction, SET_VIEW_MANAGER_DETAILS } from 'helpers/constants';
+import { modalDonateAction } from 'helpers/constants';
 import { ModalActionTypes } from 'helpers/types/redux';
 import { IModalDonateState } from 'helpers/types/state';
 

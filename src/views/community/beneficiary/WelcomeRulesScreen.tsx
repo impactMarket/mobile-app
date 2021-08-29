@@ -40,7 +40,12 @@ function WelcomeRulesScreen() {
         } else if (caller === 'MANAGER' && hasManagerAcceptedRulesAlready) {
             navigation.navigate(Screens.CommunityManager);
         }
-    }, [hasBeneficiaryAcceptedRulesAlready, hasManagerAcceptedRulesAlready]);
+    }, [
+        hasBeneficiaryAcceptedRulesAlready,
+        hasManagerAcceptedRulesAlready,
+        caller,
+        navigation,
+    ]);
 
     if (community === undefined || community.contract === undefined) {
         return (
@@ -74,30 +79,33 @@ function WelcomeRulesScreen() {
                     <View style={styles.welcomeBeneficiayContainer}>
                         <Text style={styles.welcomeBeneficiayTitle}>
                             {caller === 'BENEFICIARY'
-                                ? i18n.t('welcomeBeneficiayTitle', {
+                                ? i18n.t('beneficiary.welcomeBeneficiayTitle', {
                                       communityName: community.name,
                                   })
-                                : i18n.t('welcomeManagerTitle', {
+                                : i18n.t('manager.welcomeManagerTitle', {
                                       communityName: community.name,
                                   })}
                         </Text>
                         {caller === 'BENEFICIARY' && (
                             <Text style={styles.welcomeBeneficiayDescription}>
-                                {i18n.t('welcomeBeneficiaryDecription', {
-                                    claimXCCurrency: amountToCurrency(
-                                        community.contract.claimAmount,
-                                        community.currency,
-                                        rates
-                                    ),
-                                    interval:
-                                        community.contract.baseInterval ===
-                                        86400
-                                            ? '24h'
-                                            : '168h',
-                                    minIncrement:
-                                        community.contract.incrementInterval /
-                                        60,
-                                })}
+                                {i18n.t(
+                                    'beneficiary.welcomeBeneficiaryDecription',
+                                    {
+                                        claimXCCurrency: amountToCurrency(
+                                            community.contract.claimAmount,
+                                            community.currency,
+                                            rates
+                                        ),
+                                        interval:
+                                            community.contract.baseInterval ===
+                                            86400
+                                                ? '24h'
+                                                : '168h',
+                                        minIncrement:
+                                            community.contract
+                                                .incrementInterval / 60,
+                                    }
+                                )}
                             </Text>
                         )}
                     </View>
@@ -111,7 +119,7 @@ function WelcomeRulesScreen() {
 WelcomeRulesScreen.navigationOptions = () => {
     return {
         headerLeft: () => null,
-        headerTitle: i18n.t('welcome'),
+        headerTitle: i18n.t('generic.welcome'),
     };
 };
 

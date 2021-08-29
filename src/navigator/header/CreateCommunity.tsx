@@ -50,7 +50,7 @@ function CreateCommunity(props: {
                         : props.navigation.navigate(Screens.Auth)
                 }
             >
-                {i18n.t('create')}
+                {i18n.t('generic.create')}
             </Button>
         </View>
     );

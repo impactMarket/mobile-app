@@ -108,76 +108,6 @@ function CreateCommunityScreen() {
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
-    useEffect(() => {
-        let cancelablePromise: {
-            promise: Promise<unknown>;
-            cancel(): void;
-        };
-        if (!canceled) {
-            // if community cover picture and user profile picture were uploded successfully, move on to upload community
-            // ignore user profile picture if the user has already has it
-            if (
-                coverUploadDetails !== undefined &&
-                ((state.profileImage.length > 0 &&
-                    profileUploadDetails !== undefined) ||
-                    userMetadata.avatar.length > 0)
-            ) {
-                cancelablePromise = makeCancelable(submitCommunity());
-                cancelablePromise.promise.catch().finally(() => {
-                    setSubmitting(false);
-                    setSubmittingCover(false);
-                    setSubmittingProfile(false);
-                    setSubmittingCommunity(false);
-                });
-            } else if (isUploadingContent) {
-                cancelablePromise = makeCancelable(uploadImages());
-                cancelablePromise.promise
-                    .then((details) => {
-                        setCoverUploadDetails(details[0].media);
-                        if (state.profileImage.length > 0) {
-                            setProfileUploadDetails(details[1].media);
-                        }
-                        setSubmittingCover(false);
-                        setSubmittingProfile(false);
-                    })
-                    .catch();
-            }
-        }
-        return () => {
-            if (cancelablePromise !== undefined) {
-                return cancelablePromise.cancel();
-            }
-        };
-    }, [
-        canceled,
-        coverUploadDetails,
-        profileUploadDetails,
-        isUploadingContent,
-    ]);
-
-    const updateUIAfterSubmission = async (
-        data: CommunityAttributes,
-        error: any
-    ) => {
-        if (error === undefined) {
-            await updateCommunityInfo(data.id, dispatchRedux);
-            const community = await Api.community.findById(data.id);
-            if (community !== undefined) {
-                batch(() => {
-                    dispatchRedux(setCommunityMetadata(community));
-                    dispatchRedux(setUserIsCommunityManager(true));
-                });
-            }
-            setSubmitting(false);
-            setSubmittingSuccess(true);
-        } else {
-            // Sentry.Native.captureException(e);
-            setSubmitting(false);
-            setSubmittingCommunity(false);
-            setSubmittingSuccess(false);
-        }
-    };
-
     const submitCommunity = async () => {
         const {
             name,
@@ -257,6 +187,78 @@ function CreateCommunityScreen() {
         return Promise.all([coverUpload(), profileUpload()]);
     };
 
+    useEffect(() => {
+        let cancelablePromise: {
+            promise: Promise<unknown>;
+            cancel(): void;
+        };
+        if (!canceled) {
+            // if community cover picture and user profile picture were uploded successfully, move on to upload community
+            // ignore user profile picture if the user has already has it
+            if (
+                coverUploadDetails !== undefined &&
+                ((state.profileImage.length > 0 &&
+                    profileUploadDetails !== undefined) ||
+                    userMetadata.avatar.length > 0)
+            ) {
+                cancelablePromise = makeCancelable(submitCommunity());
+                cancelablePromise.promise.catch().finally(() => {
+                    setSubmitting(false);
+                    setSubmittingCover(false);
+                    setSubmittingProfile(false);
+                    setSubmittingCommunity(false);
+                });
+            } else if (isUploadingContent) {
+                cancelablePromise = makeCancelable(uploadImages());
+                cancelablePromise.promise
+                    .then((details) => {
+                        setCoverUploadDetails(details[0].media);
+                        if (state.profileImage.length > 0) {
+                            setProfileUploadDetails(details[1].media);
+                        }
+                        setSubmittingCover(false);
+                        setSubmittingProfile(false);
+                    })
+                    .catch();
+            }
+        }
+        return () => {
+            if (cancelablePromise !== undefined) {
+                return cancelablePromise.cancel();
+            }
+        };
+        // TODO: this needs refactoring. This methods are used within and outside the effect
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        canceled,
+        coverUploadDetails,
+        profileUploadDetails,
+        isUploadingContent,
+    ]);
+
+    const updateUIAfterSubmission = async (
+        data: CommunityAttributes,
+        error: any
+    ) => {
+        if (error === undefined) {
+            await updateCommunityInfo(data.id, dispatchRedux);
+            const community = await Api.community.findById(data.id);
+            if (community !== undefined) {
+                batch(() => {
+                    dispatchRedux(setCommunityMetadata(community));
+                    dispatchRedux(setUserIsCommunityManager(true));
+                });
+            }
+            setSubmitting(false);
+            setSubmittingSuccess(true);
+        } else {
+            // Sentry.Native.captureException(e);
+            setSubmitting(false);
+            setSubmittingCommunity(false);
+            setSubmittingSuccess(false);
+        }
+    };
+
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals),
             CommunityContract = new kit.web3.eth.Contract(
@@ -328,15 +330,17 @@ function CreateCommunityScreen() {
         }
 
         if (new BigNumber(state.maxClaim).lte(state.claimAmount)) {
-            setInvalidInputAmounts(i18n.t('claimBiggerThanMax'));
+            setInvalidInputAmounts(
+                i18n.t('createCommunity.claimBiggerThanMax')
+            );
             return;
         }
         if (new BigNumber(state.claimAmount).eq(0)) {
-            setInvalidInputAmounts(i18n.t('claimNotZero'));
+            setInvalidInputAmounts(i18n.t('createCommunity.claimNotZero'));
             return;
         }
         if (new BigNumber(state.maxClaim).eq(0)) {
-            setInvalidInputAmounts(i18n.t('maxNotZero'));
+            setInvalidInputAmounts(i18n.t('createCommunity.maxNotZero'));
             return;
         }
 
@@ -433,6 +437,8 @@ function CreateCommunityScreen() {
             ),
             headerLeft: () => <BackSvg onPress={handlePressGoBack} />,
         });
+        // TODO: this needs refactoring. This methods are used within and outside the effect
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, submitting, state]);
 
     const SubmissionActivity = (props: {
@@ -480,17 +486,17 @@ function CreateCommunityScreen() {
             }}
         >
             <SubmissionActivity
-                description={i18n.t('changeCoverImage')}
+                description={i18n.t('createCommunity.changeCoverImage')}
                 submission={submittingCover}
                 uploadDetails={coverUploadDetails}
             />
             <SubmissionActivity
-                description={i18n.t('changeProfileImage')}
+                description={i18n.t('createCommunity.changeProfileImage')}
                 submission={submittingProfile}
                 uploadDetails={profileUploadDetails}
             />
             <SubmissionActivity
-                description={i18n.t('communityDetails')}
+                description={i18n.t('createCommunity.communityDetails')}
                 submission={submittingCommunity}
                 uploadDetails={undefined} // doesn't matter, once it's approved, jumps to another modal
             />
@@ -502,7 +508,7 @@ function CreateCommunityScreen() {
             <View style={styles.failedModalContainer}>
                 <WarningTriangle style={styles.errorModalWarningSvg} />
                 <Text style={styles.failedModalMessageText}>
-                    {i18n.t('communityRequestError')}
+                    {i18n.t('createCommunity.communityRequestError')}
                 </Text>
             </View>
             <SubmissionProgressDetails />
@@ -511,7 +517,7 @@ function CreateCommunityScreen() {
                 style={{ width: '100%' }}
                 onPress={submitNewCommunity}
             >
-                {i18n.t('tryAgain')}
+                {i18n.t('generic.tryAgain')}
             </Button>
         </>
     );
@@ -528,7 +534,7 @@ function CreateCommunityScreen() {
                         },
                     ]}
                 >
-                    {i18n.t('communityRequestSuccess')}
+                    {i18n.t('createCommunity.communityRequestSuccess')}
                 </Text>
                 <Button
                     modeType="gray"
@@ -537,7 +543,7 @@ function CreateCommunityScreen() {
                         navigation.goBack();
                     }}
                 >
-                    {i18n.t('continue')}
+                    {i18n.t('generic.continue')}
                 </Button>
             </View>
         </>
@@ -546,7 +552,7 @@ function CreateCommunityScreen() {
     const SubmissionInProgress = () => (
         <>
             <Text style={styles.submissionModalMessageText}>
-                {i18n.t('communityRequestSending')}
+                {i18n.t('createCommunity.communityRequestSending')}
             </Text>
             <SubmissionProgressDetails />
             <Button
@@ -564,7 +570,7 @@ function CreateCommunityScreen() {
     const SubmissionRequestCancel = () => (
         <>
             <Text style={styles.submissionModalMessageText}>
-                {i18n.t('communityRequestCancel')}
+                {i18n.t('createCommunity.communityRequestCancel')}
             </Text>
             <View style={styles.modalBoxTwoButtons}>
                 <Button
@@ -578,7 +584,7 @@ function CreateCommunityScreen() {
                         }
                     }}
                 >
-                    {i18n.t('yes')}
+                    {i18n.t('generic.yes')}
                 </Button>
                 <Button
                     modeType="default"
@@ -593,7 +599,7 @@ function CreateCommunityScreen() {
                         }
                     }}
                 >
-                    {i18n.t('no')}
+                    {i18n.t('generic.no')}
                 </Button>
             </View>
         </>
@@ -602,7 +608,7 @@ function CreateCommunityScreen() {
     const SubmissionCanceled = () => (
         <>
             <Text style={styles.submissionModalMessageText}>
-                {i18n.t('communityRequestCancel')}
+                {i18n.t('createCommunity.communityRequestCancel')}
             </Text>
             <Button
                 modeType="gray"
@@ -611,7 +617,7 @@ function CreateCommunityScreen() {
                     navigation.goBack();
                 }}
             >
-                {i18n.t('leave')}
+                {i18n.t('generic.leave')}
             </Button>
         </>
     );
@@ -645,7 +651,7 @@ function CreateCommunityScreen() {
                         isAnyFieldMissedModal ||
                         invalidInputAmounts !== undefined
                     }
-                    title={i18n.t('modalErrorTitle')}
+                    title={i18n.t('errors.modals.title')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);
@@ -661,7 +667,7 @@ function CreateCommunityScreen() {
                                 setInvalidInputAmounts(undefined);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     }
                 >
@@ -670,13 +676,13 @@ function CreateCommunityScreen() {
                         <Text style={styles.errorModalText}>
                             {invalidInputAmounts
                                 ? invalidInputAmounts
-                                : i18n.t('missingFieldError')}
+                                : i18n.t('createCommunity.missingFieldError')}
                         </Text>
                     </View>
                 </Modal>
                 <Modal
                     visible={showSubmissionModal}
-                    title={i18n.t('submitting')}
+                    title={i18n.t('generic.submitting')}
                     onDismiss={
                         !submitting && !submittingSuccess
                             ? () => {
@@ -716,7 +722,7 @@ function CreateCommunityScreen() {
                                 navigation.goBack();
                             }}
                         >
-                            {i18n.t('leave')}
+                            {i18n.t('generic.leave')}
                         </Button>
                         <Button
                             modeType="default"
@@ -736,7 +742,7 @@ function CreateCommunityScreen() {
 
 CreateCommunityScreen.navigationOptions = () => {
     return {
-        headerTitle: i18n.t('applyCommunity'),
+        headerTitle: i18n.t('createCommunity.applyCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

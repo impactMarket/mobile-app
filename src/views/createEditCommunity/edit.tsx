@@ -155,6 +155,8 @@ function EditCommunityScreen() {
                 />
             ),
         });
+        // TODO: this needs refactoring. This methods are used within and outside the effect
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigation, submitting, state]);
 
     const SubmissionActivity = (props: {
@@ -262,7 +264,7 @@ function EditCommunityScreen() {
                         marginRight: 36,
                     }}
                 >
-                    {i18n.t('communityRequestError')}
+                    {i18n.t('createCommunity.communityRequestError')}
                 </Text>
             </View>
             <SubmissionProgressDetails />
@@ -271,7 +273,7 @@ function EditCommunityScreen() {
                 style={{ width: '100%' }}
                 onPress={submitEditCommunity}
             >
-                {i18n.t('tryAgain')}
+                {i18n.t('generic.tryAgain')}
             </Button>
         </>
     );
@@ -300,7 +302,7 @@ function EditCommunityScreen() {
                         textAlign: 'center',
                     }}
                 >
-                    {i18n.t('communityRequestSuccess')}
+                    {i18n.t('createCommunity.communityRequestSuccess')}
                 </Text>
                 <Button
                     modeType="gray"
@@ -309,7 +311,7 @@ function EditCommunityScreen() {
                         navigation.goBack();
                     }}
                 >
-                    {i18n.t('continue')}
+                    {i18n.t('generic.continue')}
                 </Button>
             </View>
         </>
@@ -331,7 +333,7 @@ function EditCommunityScreen() {
                     //         : 'left',
                 }}
             >
-                {i18n.t('communityRequestSending')}
+                {i18n.t('createCommunity.communityRequestSending')}
             </Text>
             <SubmissionProgressDetails />
             <Button
@@ -380,7 +382,7 @@ function EditCommunityScreen() {
             <Portal>
                 <Modal
                     visible={isAnyFieldMissedModal}
-                    title={i18n.t('modalErrorTitle')}
+                    title={i18n.t('errors.modals.title')}
                     onDismiss={() => {
                         setSubmitting(false);
                         setIsAnyFieldMissedModal(false);
@@ -394,7 +396,7 @@ function EditCommunityScreen() {
                                 setIsAnyFieldMissedModal(false);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     }
                 >
@@ -428,7 +430,7 @@ function EditCommunityScreen() {
                                 marginRight: 12,
                             }}
                         >
-                            {i18n.t('missingFieldError')}
+                            {i18n.t('createCommunity.missingFieldError')}
                         </Text>
                     </View>
                 </Modal>
@@ -478,7 +480,7 @@ EditCommunityScreen.navigationOptions = ({
 
     return {
         headerLeft: () => <BackSvg onPress={handlePressGoBack} />,
-        headerTitle: i18n.t('editCommunity'),
+        headerTitle: i18n.t('createCommunity.editCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

@@ -5,6 +5,7 @@ import BaseCommunity from 'components/BaseCommunity';
 import CommunityStatus from 'components/CommunityStatus';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
+import Card from 'components/core/Card';
 import CommunityRules from 'components/core/CommunityRules';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import ManageSvg from 'components/svg/ManageSvg';
@@ -100,7 +101,7 @@ function CommunityManagerScreen() {
             loadCommunityBalance();
             verifyRequestToChangeUbiParams();
         }
-    }, [community, kit]);
+    }, [community, kit, communityContract]);
 
     useFocusEffect(() => {
         async function loadCommunityRulesStats() {
@@ -130,7 +131,7 @@ function CommunityManagerScreen() {
                 ),
             });
         }
-    }, [openHelpCenter]);
+    }, [openHelpCenter, navigation]);
 
     const onRefresh = () => {
         updateCommunityInfo(community.id, dispatch).then(async () => {
@@ -174,8 +175,8 @@ function CommunityManagerScreen() {
                 }, 2500);
 
                 Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('ubiParamsUpdated'),
+                    i18n.t('generic.success'),
+                    i18n.t('manager.ubiParamsUpdated'),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -183,9 +184,9 @@ function CommunityManagerScreen() {
             .catch((e) => {
                 Sentry.Native.captureException(e);
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('anErroHappenedTryAgain'),
-                    [{ text: i18n.t('close') }],
+                    i18n.t('generic.failure'),
+                    i18n.t('generic.generic'),
+                    [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             })
@@ -230,7 +231,12 @@ function CommunityManagerScreen() {
                                 <Managers
                                     managers={_community.state.managers}
                                 />
-                                <CommunityStatus community={_community} />
+                                <Card
+                                    elevation={0}
+                                    style={{ marginTop: 16, padding: 22 }}
+                                >
+                                    <CommunityStatus community={_community} />
+                                </Card>
                             </View>
                         </BaseCommunity>
                     </ScrollView>
@@ -238,7 +244,7 @@ function CommunityManagerScreen() {
                         requiredUbiToChange !== null && (
                             <Portal>
                                 <Modal
-                                    title={i18n.t('ubiParams')}
+                                    title={i18n.t('manager.ubiParams')}
                                     visible
                                     buttons={
                                         <>
@@ -250,7 +256,9 @@ function CommunityManagerScreen() {
                                                 }
                                                 loading={editInProgress}
                                             >
-                                                {i18n.t('acceptNewUbiParams')}
+                                                {i18n.t(
+                                                    'manager.acceptNewUbiParams'
+                                                )}
                                             </Button>
                                         </>
                                     }
@@ -258,12 +266,12 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('ubiParamsChanged')}
+                                        {i18n.t('manager.ubiParamsChanged')}
                                     </Paragraph>
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('claimAmount')}:{' '}
+                                        {i18n.t('createCommunity.claimAmount')}:{' '}
                                         {amountToCurrency(
                                             requiredUbiToChange.claimAmount,
                                             userCurrency,
@@ -273,7 +281,10 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('totalClaimPerBeneficiary')}:{' '}
+                                        {i18n.t(
+                                            'createCommunity.totalClaimPerBeneficiary'
+                                        )}
+                                        :{' '}
                                         {amountToCurrency(
                                             requiredUbiToChange.maxClaim,
                                             userCurrency,
@@ -283,17 +294,23 @@ function CommunityManagerScreen() {
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('frequency')}:{' '}
+                                        {i18n.t('createCommunity.frequency')}:{' '}
                                         {requiredUbiToChange.baseInterval ===
                                         86400
-                                            ? i18n.t('day')
-                                            : i18n.t('week')}
+                                            ? i18n.t('generic.day')
+                                            : i18n.t('generic.week')}
                                     </Paragraph>
                                     <Paragraph
                                         style={styles.ubiChangeModalText}
                                     >
-                                        {i18n.t('timeIncrementAfterClaim')} (
-                                        {i18n.t('timeInMinutes')}):{' '}
+                                        {i18n.t(
+                                            'createCommunity.timeIncrementAfterClaim'
+                                        )}{' '}
+                                        (
+                                        {i18n.t(
+                                            'createCommunity.timeInMinutes'
+                                        )}
+                                        ):{' '}
                                         {requiredUbiToChange.incrementInterval /
                                             60}{' '}
                                     </Paragraph>
@@ -334,7 +351,7 @@ function CommunityManagerScreen() {
                                 textAlign: 'left',
                             }}
                         >
-                            {i18n.t('pendingApprovalMessage')}{' '}
+                            {i18n.t('createCommunity.pendingApprovalMessage')}{' '}
                         </Text>
                         <Button
                             modeType="gray"
@@ -353,7 +370,7 @@ function CommunityManagerScreen() {
                                 setOpenHelpCenter(true);
                             }}
                         >
-                            {i18n.t('openHelpCenter')}
+                            {i18n.t('generic.openHelpCenter')}
                         </Button>
                         {!hasManagerAcceptedRulesAlready && (
                             <CommunityRules caller="MANAGER" />
@@ -391,8 +408,8 @@ function CommunityManagerScreen() {
 
 CommunityManagerScreen.navigationOptions = () => {
     return {
-        title: i18n.t('manage'),
-        tabBarLabel: i18n.t('manage'),
+        title: i18n.t('generic.manage'),
+        tabBarLabel: i18n.t('generic.manage'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

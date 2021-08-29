@@ -32,6 +32,29 @@ function AnonymousReportScreen() {
     );
 
     useLayoutEffect(() => {
+        const submitReport = () => {
+            if (reportInput.length === 0) {
+                return;
+            }
+            setSubmitting(true);
+            Api.user
+                .report(userCommunity.id, reportInput, category)
+                .then((r) => {
+                    setSubmittedWithSuccess(true);
+                    navigation.goBack();
+                })
+                .catch(() => {
+                    Alert.alert(
+                        i18n.t('generic.failure'),
+                        i18n.t('reportIlegal.alertFailure'),
+                        [{ text: 'OK' }],
+                        { cancelable: false }
+                    );
+                })
+                .finally(() => {
+                    setSubmitting(false);
+                });
+        };
         if (userCommunity.publicId !== undefined) {
             navigation.setOptions({
                 headerLeft: () => <BackSvg />,
@@ -64,31 +87,8 @@ function AnonymousReportScreen() {
         userCommunity,
         submittedWithSuccess,
         showWebview,
+        category,
     ]);
-
-    const submitReport = () => {
-        if (reportInput.length === 0) {
-            return;
-        }
-        setSubmitting(true);
-        Api.user
-            .report(userCommunity.id, reportInput, category)
-            .then((r) => {
-                setSubmittedWithSuccess(true);
-                navigation.goBack();
-            })
-            .catch(() => {
-                Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('reportIlegal.alertFailure'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-            })
-            .finally(() => {
-                setSubmitting(false);
-            });
-    };
 
     const textCategory = (g: string | undefined) => {
         switch (g) {
@@ -132,8 +132,8 @@ function AnonymousReportScreen() {
                         uri:
                             'https://docs.impactmarket.com/general/anonymous-reporting',
                     }}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
+                    javaScriptEnabled
+                    domStorageEnabled
                     onLoadStart={() => setVisible(true)}
                     onLoad={() => setVisible(false)}
                 />
@@ -194,7 +194,7 @@ function AnonymousReportScreen() {
                         }}
                         onPress={() => navigation.goBack()}
                     >
-                        {i18n.t('continue')}
+                        {i18n.t('generic.continue')}
                     </Button>
                 </Card.Content>
             </Card>
@@ -311,7 +311,7 @@ AnonymousReportScreen.navigationOptions = ({
 }) => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('report'),
+        headerTitle: i18n.t('report.report'),
         headerRight: () => (
             <SubmitStory
                 submit={submitReport}

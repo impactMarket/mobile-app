@@ -12,7 +12,7 @@ import CreateCommunityScreen from '../create';
  * NOTE: we are testing the component individually, but need the header
  * "submit button", so the entire navigator can be faked.
  */
-function FakeCreateCommunityScreen() {
+function WrappedCreateCommunityScreen() {
     const Stack = createStackNavigator();
     return (
         <Host>
@@ -51,24 +51,24 @@ describe('create community [snapshot]', () => {
     });
 
     it('renders correctly', async () => {
-        const tree = render(<FakeCreateCommunityScreen />).toJSON();
+        const tree = render(<WrappedCreateCommunityScreen />).toJSON();
         await act(async () => {});
         expect(tree).toMatchSnapshot();
     });
 
     it('renders error messages and error modal', async () => {
-        const rendered = render(<FakeCreateCommunityScreen />);
+        const rendered = render(<WrappedCreateCommunityScreen />);
         const tree = rendered.toJSON();
         await act(async () => {});
-        fireEvent.press(rendered.getByText(i18n.t('submit')));
+        fireEvent.press(rendered.getByText(i18n.t('generic.submit')));
         expect(tree).toMatchSnapshot();
     });
 
     it('renders error messages without modal', async () => {
-        const rendered = render(<FakeCreateCommunityScreen />);
+        const rendered = render(<WrappedCreateCommunityScreen />);
         const tree = rendered.toJSON();
         await act(async () => {});
-        fireEvent.press(rendered.getByText(i18n.t('submit')));
+        fireEvent.press(rendered.getByText(i18n.t('generic.submit')));
         fireEvent.press(rendered.getByTestId('close-modal'));
         expect(tree).toMatchSnapshot();
     });

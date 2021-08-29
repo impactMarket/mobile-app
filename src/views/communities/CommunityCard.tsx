@@ -36,24 +36,24 @@ function CommunityCard(props: { community: CommunityAttributes }) {
         return null;
     }
 
-    const setTextSuspects = (suspects: number) => {
-        switch (true) {
-            case suspects < 1:
-                return i18n.t('noSuspiciousActivity');
+    // const setTextSuspects = (suspects: number) => {
+    //     switch (true) {
+    //         case suspects < 1:
+    //             return i18n.t('noSuspiciousActivity');
 
-            case suspects < 4:
-                return i18n.t('lowSuspiciousActivity');
+    //         case suspects < 4:
+    //             return i18n.t('lowSuspiciousActivity');
 
-            case suspects < 8:
-                return i18n.t('significantSuspiciousActivity');
+    //         case suspects < 8:
+    //             return i18n.t('significantSuspiciousActivity');
 
-            case suspects > 7:
-                return i18n.t('largeSuspiciousActivity');
+    //         case suspects > 7:
+    //             return i18n.t('largeSuspiciousActivity');
 
-            default:
-                return i18n.t('noSuspiciousActivity');
-        }
-    };
+    //         default:
+    //             return i18n.t('noSuspiciousActivity');
+    //     }
+    // };
 
     return (
         <Pressable

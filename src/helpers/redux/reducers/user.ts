@@ -47,7 +47,7 @@ export const userReducer = (
     action: UserActionTypes
 ): IUserState => {
     const community = state.community;
-    const { metadata } = state;
+    const { metadata, wallet } = state;
     switch (action.type) {
         case RESET_USER_APP:
             return INITIAL_STATE_USER;
@@ -58,7 +58,6 @@ export const userReducer = (
         case SET_USER_EXCHANGE_RATE:
             return { ...state, exchangeRate: action.payload };
         case SET_USER_WALLET_BALANCE:
-            const wallet = state.wallet;
             wallet.balance = action.payload;
             return { ...state, wallet };
         case SET_USER_LANGUAGE:

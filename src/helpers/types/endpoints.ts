@@ -1,4 +1,4 @@
-import { AppMediaContent, CommunityAttributes, UserAttributes } from './models';
+import { AppMediaContent, UserAttributes } from './models';
 
 /**
  * @deprecated use AppMediaContent

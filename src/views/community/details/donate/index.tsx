@@ -4,7 +4,7 @@ import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Portal } from 'react-native-paper';
+import { Portal } from 'react-native-portalize';
 import { useDispatch, Provider, useStore } from 'react-redux';
 
 import ConfirmModal from '../donate/modals/confirm';
@@ -35,7 +35,7 @@ export default function Donate(props: IDonateProps) {
                     })
                 }
             >
-                {i18n.t('donate')}
+                {i18n.t('donate.donate')}
             </Button>
             <Portal>
                 <Provider store={useStore()}>

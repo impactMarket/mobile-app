@@ -101,6 +101,8 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 notEnoughToClaimOnContract = true;
             }
 
+            // TODO:
+            // eslint-disable-next-line react/no-did-mount-set-state
             this.setState({ notEnoughToClaimOnContract, loading: false });
         }
     };
@@ -123,9 +125,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
 
         if (notEnoughToClaimOnContract) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('beneficiaryCommunityNoFunds'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('beneficiary.beneficiaryCommunityNoFunds'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -133,9 +135,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
 
         if (userBalance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('errors.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -144,11 +146,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         const isLocked = await CacheStore.getLockClaimUntil();
         if (isLocked !== null) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('claimLockedUntil', {
+                i18n.t('generic.failure'),
+                i18n.t('beneficiary.claimLockedUntil', {
                     date: moment(isLocked).format('lll'),
                 }),
-                [{ text: i18n.t('close') }],
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -251,28 +253,28 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 CacheStore.cacheFailedClaim();
                 analytics('claim', { device: Device.brand, success: 'false' });
                 this.setState({ claiming: false });
-                let error = 'unknown';
+                let error = 'errors.unknown';
                 if (e.message.includes('already known')) {
                     return;
                 } else if (e.message.includes('NOT_YET')) {
-                    error = 'clockNotSynced';
+                    error = 'errors.sync.clock';
                 } else if (
                     e.message.includes('transfer value exceeded balance')
                 ) {
                     error = 'communityWentOutOfFunds';
                     this.setState({ notEnoughToClaimOnContract });
                 } else if (e.message.includes('has been reverted')) {
-                    error = 'syncIssues';
+                    error = 'errors.sync.issues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'possiblyValoraNotSynced';
+                    error = 'errors.sync.possiblyValora';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'unknown';
+                    error = 'errors.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'clockNotSynced';
+                        error = 'errors.sync.clock';
                     } else {
                         // verify remaining time to claim
                         const newCooldownTime = await updateCooldownTime();
@@ -280,7 +282,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             newCooldownTime * 1000 > new Date().getTime();
                         if (claimDisabled) {
                             // time to claim was wrong :/
-                            error = 'syncIssues';
+                            error = 'errors.sync.issues';
                             this._loadAllowance(newCooldownTime).then(() => {
                                 this.setState({ claiming: false });
                                 updateClaimedAmount();
@@ -344,11 +346,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'networkConnectionLost';
+                        error = 'errors.network.connectionLost';
                     }
-                    error = 'networkIssuesRPC';
+                    error = 'errors.network.rpc';
                 }
-                if (error === 'unknown') {
+                if (error === 'errors.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.withScope((scope) => {
                         scope.setTag('ipct-activity', 'claim');
@@ -356,9 +358,11 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     });
                 }
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorClaiming', { error: i18n.t(error) }),
-                    [{ text: i18n.t('close') }],
+                    i18n.t('generic.failure'),
+                    i18n.t('beneficiary.errorClaiming', {
+                        error: i18n.t(error),
+                    }),
+                    [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             });
@@ -395,7 +399,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             return (
                 <View style={{ height: 90 }}>
                     <Text style={styles.mainPageContent}>
-                        {i18n.t('youCanClaimXin', {
+                        {i18n.t('beneficiary.youCanClaimXin', {
                             amount: amountToCurrency(
                                 claimAmount,
                                 userCurrency,
@@ -479,7 +483,9 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     }}
                 >
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.claimText}>{i18n.t('claimX')}</Text>
+                        <Text style={styles.claimText}>
+                            {i18n.t('beneficiary.claimX')}
+                        </Text>
                         <Text style={styles.claimTextCurrency}>
                             {getCurrencySymbol(userCurrency)}
                         </Text>

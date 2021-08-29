@@ -4,7 +4,8 @@ import { CommunityAttributes } from 'helpers/types/models';
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { Title, Text, Portal } from 'react-native-paper';
+import { Title, Text } from 'react-native-paper';
+import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
 import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
@@ -39,7 +40,7 @@ export default function DonateCard(props: IDonateProps) {
             .catch((e) => {
                 console.log(e);
             });
-    }, []);
+    }, [community]);
 
     return (
         <>
@@ -47,7 +48,7 @@ export default function DonateCard(props: IDonateProps) {
                 <Title
                     style={[styles.title, { fontSize: width < 375 ? 14 : 20 }]}
                 >
-                    {i18n.t('contributeWith')}
+                    {i18n.t('donate.contributeWith')}
                 </Title>
                 <Pressable
                     style={styles.button}
@@ -57,6 +58,7 @@ export default function DonateCard(props: IDonateProps) {
                             payload: community,
                         })
                     }
+                    testID="donateWithCelo"
                 >
                     <View
                         style={{
@@ -74,7 +76,7 @@ export default function DonateCard(props: IDonateProps) {
                                 marginRight: 10,
                             }}
                         >
-                            {i18n.t('donateWithCelo')}
+                            {i18n.t('donate.donateWithCelo')}
                         </Text>
                         <Image
                             source={require('assets/images/celoDolar.png')}
@@ -83,7 +85,7 @@ export default function DonateCard(props: IDonateProps) {
                         />
                     </View>
                 </Pressable>
-                <Text style={[styles.description]}>{i18n.t('or')}</Text>
+                <Text style={[styles.description]}>{i18n.t('generic.or')}</Text>
                 <Pressable
                     style={[
                         styles.button,
@@ -94,6 +96,7 @@ export default function DonateCard(props: IDonateProps) {
                         },
                     ]}
                     onPress={() => modalizeESolidar.current?.open()}
+                    testID="donateWithESolidar"
                 >
                     <View
                         style={{
@@ -113,7 +116,7 @@ export default function DonateCard(props: IDonateProps) {
                                 color: ipctColors.blueRibbon,
                             }}
                         >
-                            {i18n.t('donateWithESolidar')}
+                            {i18n.t('donate.donateWithESolidar')}
                         </Text>
                     </View>
                 </Pressable>
@@ -133,7 +136,7 @@ export default function DonateCard(props: IDonateProps) {
                             },
                         ]}
                     >
-                        {i18n.t('poweredByESolidar')}
+                        {i18n.t('donate.poweredByESolidar')}
                     </Text>
                     <EsolidarSvg />
                 </View>
@@ -161,6 +164,7 @@ export default function DonateCard(props: IDonateProps) {
                             style={{
                                 height: Dimensions.get('screen').height * 0.85,
                             }}
+                            testID="webViewESolidar"
                         />
                     </Modalize>
                 </Provider>

@@ -21,12 +21,12 @@ function SubmitCommunity(props: { submit: () => void; submitting: boolean }) {
                     // marginLeft: 8.4,
                     marginRight: 16,
                 }}
-                accessibilityLabel={i18n.t('submit')}
+                accessibilityLabel={i18n.t('generic.submit')}
                 onPress={props.submit}
                 loading={props.submitting}
                 disabled={props.submitting}
             >
-                {i18n.t('submit')}
+                {i18n.t('generic.submit')}
             </Button>
         </View>
     );

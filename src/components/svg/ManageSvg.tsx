@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, { Mask, Path, G, Circle } from 'react-native-svg';
+import Svg, { Path, G } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
 
 function ManageSvg(props: { focused: boolean }) {

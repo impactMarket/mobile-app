@@ -19,7 +19,6 @@ import {
 } from 'styles/index';
 
 import SuspiciousCard from './SuspiciousCard';
-import Card from './core/Card';
 import WarningTriangle from './svg/WarningTriangle';
 
 interface ICommuntyStatusProps {
@@ -58,80 +57,74 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
         ).toFixed(2) + '%';
 
     return (
-        <Card elevation={0} style={{ marginTop: 16 }}>
+        <>
             {community.suspect !== undefined && community.suspect !== null && (
                 <SuspiciousCard suspectCounts={community.suspect.suspect} />
             )}
-            <View style={{ padding: 22 }}>
-                <View style={styles.cardWrap}>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'flex-start',
-                            justifyContent: 'center',
-                        }}
+            <View style={styles.cardWrap}>
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text
+                        style={[
+                            styles.description,
+                            {
+                                color: ipctColors.regentGray,
+                            },
+                        ]}
                     >
-                        <Text
-                            style={[
-                                styles.description,
-                                {
-                                    color: ipctColors.regentGray,
-                                },
-                            ]}
-                        >
-                            {i18n.t('raisedFrom', {
-                                backers: community.state.backers,
-                            })}
+                        {i18n.t('generic.raisedFrom', {
+                            backers: community.state.backers,
+                        })}
 
-                            {i18n.t('backers', {
-                                count: community.state.backers,
-                            })}
-                        </Text>
-                        <Text style={styles.Text}>
-                            {humanizedValue(community.state.raised) ?? 0}
-                            {raisedPercentage !== '0.00%' &&
-                                community.state.beneficiaries >= 1 &&
-                                ` (${raisedPercentage})`}
-                        </Text>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                        }}
+                        {i18n.t('generic.backers', {
+                            count: community.state.backers,
+                        })}
+                    </Text>
+                    <Text style={styles.Text}>
+                        {humanizedValue(community.state.raised) ?? 0}
+                        {raisedPercentage !== '0.00%' &&
+                            community.state.beneficiaries >= 1 &&
+                            ` (${raisedPercentage})`}
+                    </Text>
+                </View>
+                <View
+                    style={{
+                        flex: 1,
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text
+                        style={[
+                            styles.description,
+                            {
+                                color: ipctColors.regentGray,
+                            },
+                        ]}
                     >
-                        <Text
-                            style={[
-                                styles.description,
-                                {
-                                    color: ipctColors.regentGray,
-                                },
-                            ]}
-                        >
-                            {i18n.t('goal')}
-                        </Text>
-                        <Text style={styles.Text}>
-                            {humanizedValue(maxClaimPerCommunity) ?? 'N/A'}
-                        </Text>
-                    </View>
+                        {i18n.t('goal')}
+                    </Text>
+                    <Text style={styles.Text}>
+                        {humanizedValue(maxClaimPerCommunity) ?? 'N/A'}
+                    </Text>
                 </View>
-                <View style={{ marginTop: 7.5 }}>
-                    <ProgressBar
-                        key="raised"
-                        style={{
-                            backgroundColor: ipctColors.softGray,
-                            position: 'absolute',
-                            borderRadius: 6.5,
-                            height: 6.32,
-                        }}
-                        progress={calculateCommunityProgress(
-                            'raised',
-                            community
-                        )}
-                        color={ipctColors.blueRibbon}
-                    />
-                </View>
+            </View>
+            <View style={{ marginTop: 7.5 }}>
+                <ProgressBar
+                    key="raised"
+                    style={{
+                        backgroundColor: ipctColors.softGray,
+                        position: 'absolute',
+                        borderRadius: 6.5,
+                        height: 6.32,
+                    }}
+                    progress={calculateCommunityProgress('raised', community)}
+                />
                 {Number(days) < 5 && (
                     <View
                         style={[
@@ -168,7 +161,51 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                 {props.children && <View style={styles.divider} />}
                 {props.children}
             </View>
-        </Card>
+            <View style={{ marginTop: 7.5 }}>
+                <ProgressBar
+                    key="raised"
+                    style={{
+                        backgroundColor: ipctColors.softGray,
+                        position: 'absolute',
+                        borderRadius: 6.5,
+                        height: 6.32,
+                    }}
+                    progress={calculateCommunityProgress('raised', community)}
+                    color={ipctColors.blueRibbon}
+                />
+            </View>
+            <View
+                style={[
+                    styles.fundsContainer,
+                    {
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                    },
+                ]}
+            >
+                {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
+                <WarningTriangle
+                    color="#FE9A22"
+                    style={{ marginTop: ipctSpacing.xsmall }}
+                />
+                <Text
+                    style={[
+                        styles.description,
+                        {
+                            color: ipctColors.regentGray,
+                            marginLeft: 7,
+                        },
+                    ]}
+                >
+                    {i18n.t('fundsRunOut', {
+                        days: Math.round(Number(days)),
+                    })}{' '}
+                    {i18n.t('days', {
+                        count: Number(days),
+                    })}
+                </Text>
+            </View>
+        </>
     );
 }
 

@@ -29,7 +29,7 @@ function SubmitStory(props: {
                 onPress={props.submit}
                 loading={props.submitting}
             >
-                {i18n.t('submit')}
+                {i18n.t('generic.submit')}
             </Button>
         </View>
     );

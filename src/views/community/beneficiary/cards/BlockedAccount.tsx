@@ -1,21 +1,10 @@
+import i18n from 'assets/i18n';
+import Card from 'components/core/Card';
+import LockSvg from 'components/svg/LockSvg';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Headline, Paragraph } from 'react-native-paper';
-
-// components
-import Card from 'components/core/Card';
-import LockSvg from 'components/svg/LockSvg';
-
-// translation
-import i18n from 'assets/i18n';
-
-// colors
 import { ipctColors } from 'styles/index';
-
-// usage
-// ----------------
-// import SuspiciousActivity from '../cards/SuspiciousActivity';
-// <SuspiciousActivity />
 
 function BlockedAccount() {
     return (
@@ -23,11 +12,11 @@ function BlockedAccount() {
             <View style={styles.headlineContainer}>
                 <LockSvg />
                 <Headline style={styles.headerTitle}>
-                    {i18n.t('blockedAccountTitle')}
+                    {i18n.t('beneficiary.blockedAccountTitle')}
                 </Headline>
             </View>
             <Paragraph style={styles.paragraphContent}>
-                {i18n.t('blockedAccountDescription')}
+                {i18n.t('beneficiary.blockedAccountDescription')}
             </Paragraph>
         </Card>
     );

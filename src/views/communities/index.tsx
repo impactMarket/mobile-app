@@ -35,7 +35,7 @@ function CommunitiesScreen() {
         Location.LocationObject | undefined
     >(undefined);
 
-    const [refreshing, setRefreshing] = useState(true);
+    const [, setRefreshing] = useState(true);
     const communities = useSelector(
         (state: IRootState) => state.communities.communities
     );
@@ -51,7 +51,7 @@ function CommunitiesScreen() {
                 limit: 5,
             })
         );
-    }, []);
+    }, [dispatch]);
 
     const handleOnEndReached = (info: { distanceFromEnd: number }) => {
         if (!reachedEndList) {
@@ -127,8 +127,8 @@ function CommunitiesScreen() {
 
 CommunitiesScreen.navigationOptions = () => {
     return {
-        headerTitle: i18n.t('communities'),
-        tabBarLabel: i18n.t('communities'),
+        headerTitle: i18n.t('generic.communities'),
+        tabBarLabel: i18n.t('generic.communities'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <CommunitiesSvg focused={props.focused} />
         ),
