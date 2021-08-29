@@ -117,7 +117,7 @@ function CommunitiesScreen() {
                 }
             >
                 <Text style={styles.buttomStoreText}>
-                    {i18n.t('applyNewCommunity')}
+                    {i18n.t('createCommunity.applyCommunity')}
                 </Text>
             </Button>
             <Stories />

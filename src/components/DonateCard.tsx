@@ -85,41 +85,49 @@ export default function DonateCard(props: IDonateProps) {
                         />
                     </View>
                 </Pressable>
-                <Text style={[styles.description]}>{i18n.t('generic.or')}</Text>
-                <Pressable
-                    style={[
-                        styles.button,
-                        {
-                            backgroundColor: 'transparent',
-                            borderColor: ipctColors.borderGray,
-                            borderWidth: 1,
-                        },
-                    ]}
-                    onPress={() => modalizeESolidar.current?.open()}
-                    testID="donateWithESolidar"
-                >
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                            padding: 4,
-                        }}
-                    >
-                        <Text
-                            numberOfLines={1}
-                            style={{
-                                fontFamily: 'Inter-Regular',
-                                fontWeight: '500',
-                                fontSize: ipctFontSize.small,
-                                lineHeight: ipctLineHeight.large,
-                                color: ipctColors.blueRibbon,
-                            }}
-                        >
-                            {i18n.t('donate.donateWithESolidar')}
+                {/* If a community doesn't have a crowdfunding page, do not show the esolidar button */}
+                {campaignUrl !== 'https://community.esolidar.com/pt' && (
+                    <>
+                        <Text style={[styles.description]}>
+                            {i18n.t('generic.or')}
                         </Text>
-                    </View>
-                </Pressable>
+                        <Pressable
+                            style={[
+                                styles.button,
+                                {
+                                    backgroundColor: 'transparent',
+                                    borderColor: ipctColors.borderGray,
+                                    borderWidth: 1,
+                                },
+                            ]}
+                            onPress={() => modalizeESolidar.current?.open()}
+                            testID="donateWithESolidar"
+                        >
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    flexWrap: 'wrap',
+                                    alignItems: 'center',
+                                    padding: 4,
+                                }}
+                            >
+                                <Text
+                                    numberOfLines={1}
+                                    style={{
+                                        fontFamily: 'Inter-Regular',
+                                        fontWeight: '500',
+                                        fontSize: ipctFontSize.small,
+                                        lineHeight: ipctLineHeight.large,
+                                        color: ipctColors.blueRibbon,
+                                    }}
+                                >
+                                    {i18n.t('donate.donateWithESolidar')}
+                                </Text>
+                            </View>
+                        </Pressable>
+                    </>
+                )}
+
                 <View
                     style={{
                         flexDirection: 'row',
