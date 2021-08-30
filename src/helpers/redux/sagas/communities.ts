@@ -22,20 +22,19 @@ const findCommunityByIdApi = (id: number) => Api.community.findById(id);
 
 export function* fetchCommunitiesList({ payload }: any) {
     try {
-        const communities: CommunityAttributes[] = yield call(
-            listCommunities,
-            payload
-        );
+        const communities = yield call(listCommunities, payload);
+
+        const { data, count } = communities;
 
         let reachedEndList: boolean;
 
-        if (communities.length < 5) {
+        if (data.length < 5) {
             reachedEndList = true;
         } else {
             reachedEndList = false;
         }
 
-        yield put(fetchCommunitiesListSuccess(communities, reachedEndList));
+        yield put(fetchCommunitiesListSuccess(data, count, reachedEndList));
     } catch (err) {
         yield put(fetchCommunitiesListFailure());
     }

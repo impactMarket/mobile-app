@@ -109,19 +109,17 @@ class ApiRouteCommunity {
         // extended?: boolean;
         lat?: number;
         lng?: number;
-    }): Promise<CommunityAttributes[]> {
-        return (
-            await this.api.get<CommunityAttributes[]>(
-                '/community/list?extended=true&offset=' +
-                    query.offset +
-                    '&limit=' +
-                    query.limit +
-                    (query.orderBy ? `&orderBy=${query.orderBy}` : '') +
-                    (query.filter ? `&filter=${query.filter}` : '') +
-                    (query.lat ? `&lat=${query.lat}` : '') +
-                    (query.lng ? `&lng=${query.lng}` : '')
-            )
-        ).data;
+    }): Promise<{ data: CommunityAttributes[]; count?: number }> {
+        return await this.api.get<CommunityAttributes[]>(
+            '/community/list?extended=true&offset=' +
+                query.offset +
+                '&limit=' +
+                query.limit +
+                (query.orderBy ? `&orderBy=${query.orderBy}` : '') +
+                (query.filter ? `&filter=${query.filter}` : '') +
+                (query.lat ? `&lat=${query.lat}` : '') +
+                (query.lng ? `&lng=${query.lng}` : '')
+        );
     }
 
     static async findById(id: number): Promise<CommunityAttributes> {

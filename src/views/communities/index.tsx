@@ -9,7 +9,14 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useRef } from 'react';
-import { FlatList, StyleSheet, Text, ScrollView } from 'react-native';
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    ScrollView,
+    View,
+    Pressable,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
@@ -29,20 +36,14 @@ function CommunitiesScreen() {
     );
 
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
-    // const [communtiesOffset, setCommuntiesOffset] = useState(0);
-    // const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
-    // const [userLocation, setUserLocation] = useState<
-    //     Location.LocationObject | undefined
-    // >(undefined);
 
-    const [, setRefreshing] = useState(true);
     const communities = useSelector(
         (state: IRootState) => state.communities.communities
     );
 
-    // const reachedEndList = useSelector(
-    //     (state: IRootState) => state.communities.reachedEndList
-    // );
+    const communitiesCount = useSelector(
+        (state: IRootState) => state.communities.count
+    );
 
     useEffect(() => {
         dispatch(
@@ -53,75 +54,73 @@ function CommunitiesScreen() {
         );
     }, [dispatch]);
 
-    // const handleOnEndReached = (info: { distanceFromEnd: number }) => {
-    //     if (!reachedEndList) {
-    //         setRefreshing(true);
-    //         if (communtiesOrder === 'nearest' && userLocation) {
-    //             dispatch(
-    //                 fetchCommunitiesListRequest({
-    //                     offset: communtiesOffset + 5,
-    //                     limit: 5,
-    //                     orderBy: 'nearest',
-    //                     lat: userLocation.coords.latitude,
-    //                     lng: userLocation.coords.longitude,
-    //                 })
-    //             );
-
-    //             setCommuntiesOffset(communtiesOffset + 5);
-    //             setRefreshing(false);
-    //         } else {
-    //             dispatch(
-    //                 fetchCommunitiesListRequest({
-    //                     offset: communtiesOffset + 5,
-    //                     limit: 5,
-    //                 })
-    //             );
-
-    //             setCommuntiesOffset(communtiesOffset + 5);
-    //             setRefreshing(false);
-    //         }
-    //     }
-    // };
-
     return (
-        <ScrollView>
-            <FlatList
-                data={[
-                    { publicId: 'for-compliance-sake-really' } as any,
-                ].concat(communities)}
-                renderItem={({
-                    item,
-                }: // index,
-                {
-                    item: CommunityAttributes;
-                    index: number;
-                }) => <CommunityCard community={item} />}
-                ref={flatListRef}
-                keyExtractor={(item) => item.publicId}
-                // onEndReachedThreshold={0.5}
-                // onEndReached={handleOnEndReached}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={{ paddingTop: 20, marginLeft: 14 }}
-            />
-            <Button
-                modeType="default"
-                style={{ marginHorizontal: 22, marginBottom: 36 }}
-                labelStyle={styles.buttomStoreText}
-                onPress={() =>
-                    walletAddress.length > 0
-                        ? navigation.navigate(Screens.CreateCommunity)
-                        : isManager
-                        ? navigation.navigate(Screens.CommunityManager)
-                        : navigation.navigate(Screens.Auth)
-                }
+        <>
+            <View
+                style={{
+                    marginHorizontal: 18,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    marginBottom: 9,
+                }}
             >
-                <Text style={styles.buttomStoreText}>
-                    {i18n.t('createCommunity.applyCommunity')}
-                </Text>
-            </Button>
-            <Stories />
-        </ScrollView>
+                <Pressable
+                    hitSlop={10}
+                    onPress={() => navigation.navigate(Screens.ListCommunities)}
+                >
+                    <Text
+                        style={{
+                            color: ipctColors.blueRibbon,
+                            fontFamily: 'Gelion-Regular',
+                            fontSize: 16,
+                            lineHeight: 19,
+                            textAlign: 'center',
+                            letterSpacing: 0.366667,
+                        }}
+                    >
+                        {i18n.t('generic.viewAll')} ({communitiesCount})
+                    </Text>
+                </Pressable>
+            </View>
+            <ScrollView>
+                <FlatList
+                    // TODO: Although the useEffect limits the number of items to 5, I added slice to make sure if communities.length is greater than 5, it will show the first 5 items.
+                    data={[
+                        { publicId: 'for-compliance-sake-really' } as any,
+                    ].concat(communities.slice(0, 5))}
+                    renderItem={({
+                        item,
+                    }: // index,
+                    {
+                        item: CommunityAttributes;
+                        index: number;
+                    }) => <CommunityCard community={item} />}
+                    ref={flatListRef}
+                    keyExtractor={(item) => item.publicId}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    style={{ paddingTop: 20, marginLeft: 14 }}
+                />
+                <Button
+                    modeType="default"
+                    style={{ marginHorizontal: 22, marginBottom: 36 }}
+                    labelStyle={styles.buttomStoreText}
+                    onPress={() =>
+                        walletAddress.length > 0
+                            ? navigation.navigate(Screens.CreateCommunity)
+                            : isManager
+                            ? navigation.navigate(Screens.CommunityManager)
+                            : navigation.navigate(Screens.Auth)
+                    }
+                >
+                    <Text style={styles.buttomStoreText}>
+                        {i18n.t('createCommunity.applyCommunity')}
+                    </Text>
+                </Button>
+                <Stories />
+            </ScrollView>
+        </>
     );
 }
 

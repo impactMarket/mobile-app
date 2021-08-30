@@ -17,11 +17,12 @@ export function fetchCommunitiesListRequest(query: {
 }
 export function fetchCommunitiesListSuccess(
     communities: CommunityAttributes[],
+    count: number,
     reachedEndList: boolean
 ): CommunitiesActionTypes {
     return {
         type: communitiesAction.INIT_SUCCESS,
-        payload: { communities, reachedEndList },
+        payload: { communities, count, reachedEndList },
     };
 }
 

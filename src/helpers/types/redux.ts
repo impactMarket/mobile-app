@@ -245,7 +245,11 @@ interface InitLoadCommunitiesActionRequest {
 
 interface InitLoadCommunitiesActionSuccess {
     type: typeof communitiesAction.INIT_SUCCESS;
-    payload: { communities: CommunityAttributes[]; reachedEndList: boolean };
+    payload: {
+        communities: CommunityAttributes[];
+        count?: number;
+        reachedEndList: boolean;
+    };
 }
 
 interface InitLoadCommunitiesActionFailure {
