@@ -1,14 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
-import CommunitiesSvg from 'components/svg/CommunitiesSvg';
-import * as Location from 'expo-location';
 import { Screens } from 'helpers/constants';
 import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
-import { ITabBarIconProps } from 'helpers/types/common';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
     FlatList,
     StyleSheet,
@@ -60,25 +57,19 @@ function CommunitiesScreen() {
                 style={{
                     marginHorizontal: 18,
                     flexDirection: 'row',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
                     marginBottom: 9,
                 }}
             >
+                <Text style={styles.communityHeader}>
+                    {i18n.t('generic.communities')}
+                </Text>
                 <Pressable
                     hitSlop={10}
                     onPress={() => navigation.navigate(Screens.ListCommunities)}
                 >
-                    <Text
-                        style={{
-                            color: ipctColors.blueRibbon,
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 16,
-                            lineHeight: 19,
-                            textAlign: 'center',
-                            letterSpacing: 0.366667,
-                        }}
-                    >
+                    <Text style={styles.viewAll}>
                         {i18n.t('generic.viewAll')} ({communitiesCount})
                     </Text>
                 </Pressable>
@@ -124,17 +115,22 @@ function CommunitiesScreen() {
     );
 }
 
-CommunitiesScreen.navigationOptions = () => {
-    return {
-        headerTitle: i18n.t('generic.communities'),
-        tabBarLabel: i18n.t('generic.communities'),
-        tabBarIcon: (props: ITabBarIconProps) => (
-            <CommunitiesSvg focused={props.focused} />
-        ),
-    };
-};
-
 const styles = StyleSheet.create({
+    communityHeader: {
+        color: ipctColors.darBlue,
+        fontFamily: 'Manrope-Bold',
+        fontSize: ipctFontSize.medium,
+        lineHeight: ipctLineHeight.xlarge,
+        textAlign: 'left',
+    },
+    viewAll: {
+        color: ipctColors.blueRibbon,
+        fontFamily: 'Gelion-Regular',
+        fontSize: ipctFontSize.small,
+        lineHeight: ipctLineHeight.small,
+        textAlign: 'center',
+        letterSpacing: 0.366667,
+    },
     buttomStoreText: {
         fontSize: ipctFontSize.smaller,
         lineHeight: ipctLineHeight.large,

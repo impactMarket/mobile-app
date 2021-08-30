@@ -60,16 +60,6 @@ function getHeaderRight(
             return <Beneficiary />;
         case Screens.CommunityManager:
             return <CommunityManager />;
-        case Screens.Communities:
-            if (!isManagerOrBeneficiary) {
-                return (
-                    <CreateCommunity
-                        navigation={navigation}
-                        userCommunity={userCommunity}
-                    />
-                );
-            }
-            return;
         case Screens.Profile:
             return <Logout />;
     }
