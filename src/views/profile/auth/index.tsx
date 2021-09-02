@@ -481,7 +481,7 @@ function Auth() {
     );
 }
 
-Auth.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
+Auth.navigationOptions = () => {
     return {
         headerShown: false,
     };

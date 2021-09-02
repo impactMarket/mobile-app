@@ -5,16 +5,19 @@ import {
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'assets/i18n';
+import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
+import FAQSvg from 'components/svg/header/FaqSvg';
+import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
 import { Screens } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
-import { Platform, Dimensions } from 'react-native';
+import { Platform, Dimensions, View } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 import CommunitiesScreen from 'views/communities';
 import BeneficiaryScreen from 'views/community/beneficiary';
 import CommunityManagerScreen from 'views/community/manager';
@@ -23,7 +26,6 @@ import Login from 'views/profile/auth';
 
 import Beneficiary from './header/Beneficiary';
 import CommunityManager from './header/CommunityManager';
-import CreateCommunity from './header/CreateCommunity';
 import Logout from './header/Logout';
 
 function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
@@ -38,7 +40,7 @@ function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
         case Screens.CommunityManager:
             return i18n.t('generic.manage');
         case Screens.Communities:
-            return i18n.t('generic.communities');
+            return null;
         case Screens.Profile:
             return i18n.t('profile.profile');
     }
@@ -62,15 +64,32 @@ function getHeaderRight(
             return <CommunityManager />;
         case Screens.Profile:
             return <Logout />;
+        default:
+            return (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginRight: 22,
+                    }}
+                >
+                    <FAQSvg style={{ marginRight: 10 }} />
+                    <ProfileSvg />
+                </View>
+            );
     }
 }
 
 function getHeaderLeft(route: RouteProp<any, any>) {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (routeName === Screens.Profile) {
-        return <BackSvg />;
+    if (!routeName || routeName === Screens.Communities) {
+        return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
+    } else if (routeName === Screens.Profile) {
+        <BackSvg />;
     }
 }
+
 function isLargeIphone() {
     const d = Dimensions.get('window');
     const isX = !!(Platform.OS === 'ios' && (d.height > 800 || d.width > 800));
@@ -105,22 +124,21 @@ function TabNavigator({
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         const headerLeftDetected = getHeaderLeft(route);
-
         navigation.setOptions({
             headerLeft: () => getHeaderLeft(route),
-            headerTitle: getHeaderTitle(
-                route,
-                isBeneficiary
-                    ? Screens.Beneficiary
-                    : isManager
-                    ? Screens.CommunityManager
-                    : Screens.Communities
-            ),
+            headerTitle: !routeName
+                ? null
+                : getHeaderTitle(
+                      route,
+                      isBeneficiary
+                          ? Screens.Beneficiary
+                          : isManager && Screens.CommunityManager
+                  ),
             headerTitleStyle: {
                 fontFamily: 'Manrope-Bold',
-                fontSize: 22,
-                lineHeight: 28,
-                color: '#333239',
+                fontSize: ipctFontSize.lowMedium,
+                lineHeight: ipctLineHeight.large,
+                color: ipctColors.darBlue,
             },
             headerTitleContainerStyle: {
                 left: headerLeftDetected ? 58 : 18,
@@ -167,11 +185,7 @@ function TabNavigator({
         />
     );
     const tabCommunities = (
-        <Tab.Screen
-            name={Screens.Communities}
-            component={CommunitiesScreen}
-            options={CommunitiesScreen.navigationOptions}
-        />
+        <Tab.Screen name={Screens.Communities} component={CommunitiesScreen} />
     );
     const tabProfile = (
         <Tab.Screen
@@ -198,10 +212,10 @@ function TabNavigator({
                     },
                     tabStyle: { marginVertical: 16 },
                     style: {
-                        height:
-                            Platform.OS === 'ios' && !!isLargeIphone()
-                                ? 82
-                                : 84 + insets.bottom,
+                        height: 0,
+                        // Platform.OS === 'ios' && !!isLargeIphone()
+                        //     ? 82
+                        //     : 84 + insets.bottom,
                     },
                     activeTintColor: ipctColors.blueRibbon,
                     inactiveTintColor: ipctColors.almostBlack,

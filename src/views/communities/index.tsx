@@ -52,7 +52,7 @@ function CommunitiesScreen() {
     }, [dispatch]);
 
     return (
-        <>
+        <ScrollView>
             <View
                 style={{
                     marginHorizontal: 18,
@@ -74,65 +74,61 @@ function CommunitiesScreen() {
                     </Text>
                 </Pressable>
             </View>
-            <ScrollView>
-                <FlatList
-                    // TODO: Although the useEffect limits the number of items to 5, I added slice to make sure if communities.length is greater than 5, it will show the first 5 items.
-                    data={[
-                        { publicId: 'for-compliance-sake-really' } as any,
-                    ].concat(communities.slice(0, 5))}
-                    renderItem={({
-                        item,
-                    }: // index,
-                    {
-                        item: CommunityAttributes;
-                        index: number;
-                    }) => <CommunityCard community={item} />}
-                    ref={flatListRef}
-                    keyExtractor={(item) => item.publicId}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    style={{ paddingTop: 20, marginLeft: 14 }}
-                />
-                <Button
-                    modeType="default"
-                    style={{ marginHorizontal: 22, marginBottom: 36 }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() =>
-                        walletAddress.length > 0
-                            ? navigation.navigate(Screens.CreateCommunity)
-                            : isManager
-                            ? navigation.navigate(Screens.CommunityManager)
-                            : navigation.navigate(Screens.Auth)
-                    }
-                >
-                    <Text style={styles.buttomStoreText}>
-                        {i18n.t('createCommunity.applyCommunity')}
-                    </Text>
-                </Button>
-                <Stories />
-            </ScrollView>
-        </>
+            <FlatList
+                // TODO: Although the useEffect limits the number of items to 5, I added slice to make sure if communities.length is greater than 5, it will show the first 5 items.
+                data={[
+                    { publicId: 'for-compliance-sake-really' } as any,
+                ].concat(communities.slice(0, 5))}
+                renderItem={({
+                    item,
+                }: // index,
+                {
+                    item: CommunityAttributes;
+                    index: number;
+                }) => <CommunityCard community={item} />}
+                ref={flatListRef}
+                keyExtractor={(item) => item.publicId}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{ paddingTop: 20, marginLeft: 14 }}
+            />
+            <Button
+                modeType="default"
+                style={{ marginHorizontal: 22, marginBottom: 36 }}
+                labelStyle={styles.buttomStoreText}
+                onPress={() =>
+                    walletAddress.length > 0
+                        ? navigation.navigate(Screens.CreateCommunity)
+                        : isManager
+                        ? navigation.navigate(Screens.CommunityManager)
+                        : navigation.navigate(Screens.Auth)
+                }
+            >
+                <Text style={styles.buttomStoreText}>
+                    {i18n.t('createCommunity.applyCommunity')}
+                </Text>
+            </Button>
+            <Stories />
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     communityHeader: {
-        color: ipctColors.darBlue,
         fontFamily: 'Manrope-Bold',
         fontSize: ipctFontSize.medium,
         lineHeight: ipctLineHeight.xlarge,
-        textAlign: 'left',
+        color: ipctColors.almostBlack,
     },
     viewAll: {
         color: ipctColors.blueRibbon,
-        fontFamily: 'Gelion-Regular',
+        fontFamily: 'Inter-Regular',
         fontSize: ipctFontSize.small,
-        lineHeight: ipctLineHeight.small,
+        lineHeight: ipctLineHeight.large,
         textAlign: 'center',
-        letterSpacing: 0.366667,
     },
     buttomStoreText: {
-        fontSize: ipctFontSize.smaller,
+        fontSize: ipctFontSize.small,
         lineHeight: ipctLineHeight.large,
         color: ipctColors.white,
         fontFamily: 'Inter-Regular',

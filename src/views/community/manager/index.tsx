@@ -419,9 +419,6 @@ CommunityManagerScreen.navigationOptions = () => {
         headerTitleContainerStyle: {
             left: 58,
         },
-        tabBarIcon: (props: ITabBarIconProps) => (
-            <ManageSvg focused={props.focused} />
-        ),
     };
 };
 

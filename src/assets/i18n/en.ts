@@ -325,6 +325,7 @@ export default {
     profile: {
         profile: 'Profile',
         balance: 'Valora Wallet Balance',
+        uploadProfilePicture: 'Update profile picture',
         phoneNumber: 'Phone Number',
         logout: 'Logout',
         stolenOrChangedPhone:

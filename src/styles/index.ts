@@ -28,6 +28,7 @@ export const ipctFontSize = {
     small: moderateScale(16),
     average: moderateScale(18),
     regular: moderateScale(20),
+    lowMedium: moderateScale(22),
     medium: moderateScale(24),
     large: moderateScale(36),
     huge: moderateScale(50),

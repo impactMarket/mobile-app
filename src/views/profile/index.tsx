@@ -10,7 +10,7 @@ import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CheckSvg from 'components/svg/CheckSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import LockSvg from 'components/svg/LockSvg';
-import ProfileSvg from 'components/svg/ProfileSvg';
+import ProfileSvg from 'components/svg/ProfileOutlineSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
@@ -26,7 +26,7 @@ import {
     setUserMetadata,
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
-import { ITabBarIconProps } from 'helpers/types/common';
+
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useState, useEffect, useRef } from 'react';
@@ -591,7 +591,7 @@ function ProfileScreen() {
                         >
                             <View style={styles.avatarText}>
                                 <Text style={styles.avatarCallToAction}>
-                                    {i18n.t('uploadProfile')}
+                                    {i18n.t('profile.uploadProfilePicture')}
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -692,7 +692,7 @@ function ProfileScreen() {
                     />
                     <Text style={styles.itemTitle}>
                         <Trans
-                            i18nKey="stolenOrChangedPhone"
+                            i18nKey="profile.stolenOrChangedPhone"
                             components={{
                                 blue: (
                                     <Text
@@ -829,7 +829,6 @@ ProfileScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('profile.profile'),
-        tabBarLabel: i18n.t('profile.profile'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,
@@ -839,9 +838,6 @@ ProfileScreen.navigationOptions = () => {
         headerTitleContainerStyle: {
             left: 58,
         },
-        tabBarIcon: (props: ITabBarIconProps) => (
-            <ProfileSvg focused={props.focused} />
-        ),
     };
 };
 

@@ -5,8 +5,9 @@ import { ipctColors } from 'styles/index';
 function ImpactMarketHeaderLogoSVG(props: SvgProps) {
     return (
         <Svg
-            width={163}
-            height={57}
+            style={{ marginLeft: 16 }}
+            width={props.width ?? 163}
+            height={props.height ?? 57}
             viewBox="0 0 163 57"
             fill="none"
             {...props}

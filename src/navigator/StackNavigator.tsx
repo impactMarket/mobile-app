@@ -1,10 +1,22 @@
+import {
+    getFocusedRouteNameFromRoute,
+    RouteProp,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import BackSvg from 'components/svg/BackSvg';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
+import { Text } from 'react-native';
 import { useSelector } from 'react-redux';
-import { ipctColors } from 'styles/index';
+import {
+    ipctColors,
+    ipctFontSize,
+    ipctLineHeight,
+    ipctSpacing,
+} from 'styles/index';
 import ListCommunitiesScreen from 'views/communities/List';
+import CommunitiesScreen from 'views/communities/index';
 import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
 import WelcomeRulesScreen from 'views/community/beneficiary/WelcomeRulesScreen';
@@ -26,7 +38,6 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
-
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
         name={Screens.Welcome}
