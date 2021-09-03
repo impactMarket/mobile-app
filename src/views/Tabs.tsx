@@ -3,7 +3,6 @@ import i18n from 'assets/i18n';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import ManageSvg from 'components/svg/ManageSvg';
-import ProfileSvg from 'components/svg/ProfileOutlineSvg';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
@@ -49,7 +48,15 @@ function Tabs() {
         />
     );
     const tabCommunities = (
-        <Tab.Screen name="communities" component={CommunitiesScreen} />
+        <Tab.Screen
+            name="communities"
+            component={CommunitiesScreen}
+            options={{
+                tabBarIcon: (props: ITabBarIconProps) => (
+                    <CommunitiesSvg focused={props.focused} />
+                ),
+            }}
+        />
     );
     return (
         <Host>
@@ -70,7 +77,7 @@ function Tabs() {
                 {isBeneficiary && tabBeneficiary}
                 {isManager && tabManager}
                 {!isBeneficiary && !isManager && tabCommunities}
-                <Tab.Screen name="profile" component={ProfileScreen} />
+                {/* <Tab.Screen name="profile" component={ProfileScreen} /> */}
             </Tab.Navigator>
         </Host>
     );

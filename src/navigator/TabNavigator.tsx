@@ -83,10 +83,12 @@ function getHeaderRight(
 
 function getHeaderLeft(route: RouteProp<any, any>) {
     const routeName = getFocusedRouteNameFromRoute(route);
-    if (!routeName || routeName === Screens.Communities) {
-        return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
-    } else if (routeName === Screens.Profile) {
-        <BackSvg />;
+
+    switch (routeName) {
+        case Screens.Communities:
+            return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
+        default:
+            return <BackSvg />;
     }
 }
 
@@ -185,22 +187,16 @@ function TabNavigator({
         />
     );
     const tabCommunities = (
-        <Tab.Screen name={Screens.Communities} component={CommunitiesScreen} />
-    );
-    const tabProfile = (
         <Tab.Screen
-            name={Screens.Profile}
-            component={ProfileScreen}
-            options={ProfileScreen.navigationOptions}
+            name={Screens.Communities}
+            component={CommunitiesScreen}
+            options={CommunitiesScreen.navigationOptions}
         />
     );
-    const tabAuth = (
-        <Tab.Screen
-            name={Screens.Auth}
-            component={Login}
-            options={ProfileScreen.navigationOptions}
-        />
-    );
+    // const tabProfile = (
+    //     <Tab.Screen name={Screens.Profile} component={ProfileScreen} />
+    // );
+    // const tabAuth = <Tab.Screen name={Screens.Auth} component={Login} />;
     return (
         <Host>
             <Tab.Navigator
@@ -212,10 +208,10 @@ function TabNavigator({
                     },
                     tabStyle: { marginVertical: 16 },
                     style: {
-                        height: 0,
-                        // Platform.OS === 'ios' && !!isLargeIphone()
-                        //     ? 82
-                        //     : 84 + insets.bottom,
+                        height:
+                            Platform.OS === 'ios' && !!isLargeIphone()
+                                ? 82
+                                : 84 + insets.bottom,
                     },
                     activeTintColor: ipctColors.blueRibbon,
                     inactiveTintColor: ipctColors.almostBlack,
@@ -234,7 +230,7 @@ function TabNavigator({
                 {tabCommunities}
                 {isBeneficiary && tabBeneficiary}
                 {isManager && tabManager}
-                {userWallet.address.length === 0 ? tabAuth : tabProfile}
+                {/* {userWallet.address.length === 0 ? tabAuth : tabProfile} */}
             </Tab.Navigator>
         </Host>
     );

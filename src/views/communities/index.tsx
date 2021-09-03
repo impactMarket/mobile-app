@@ -1,7 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
+import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import { Screens } from 'helpers/constants';
+import { ITabBarIconProps } from 'helpers/old-types';
 import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
@@ -112,6 +114,15 @@ function CommunitiesScreen() {
         </ScrollView>
     );
 }
+
+CommunitiesScreen.navigationOptions = () => {
+    return {
+        tabBarLabel: i18n.t('generic.communities'),
+        tabBarIcon: (props: ITabBarIconProps) => (
+            <CommunitiesSvg focused={props.focused} />
+        ),
+    };
+};
 
 const styles = StyleSheet.create({
     communityHeader: {

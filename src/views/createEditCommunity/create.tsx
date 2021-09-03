@@ -743,15 +743,6 @@ function CreateCommunityScreen() {
 CreateCommunityScreen.navigationOptions = () => {
     return {
         headerTitle: i18n.t('createCommunity.applyCommunity'),
-        headerTitleStyle: {
-            fontFamily: 'Manrope-Bold',
-            fontSize: 22,
-            lineHeight: 28,
-            color: '#333239',
-        },
-        headerTitleContainerStyle: {
-            left: 58,
-        },
     };
 };
 

@@ -222,7 +222,6 @@ FAQScreen.navigationOptions = () => {
         headerLeft: () => <BackSvg />,
     };
 };
-
 const styles = StyleSheet.create({
     contentView: {
         paddingHorizontal: 20,

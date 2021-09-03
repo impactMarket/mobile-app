@@ -38,6 +38,7 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
+import ProfileScreen from 'views/profile';
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
         name={Screens.Welcome}
@@ -51,7 +52,6 @@ const commonScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name="TabNavigator" // doesn't really matter here
             component={TabNavigator}
-            // options={TabNavigator.navigationOptions}
         />
         <Navigator.Screen
             name={Screens.CreateCommunity}
@@ -107,6 +107,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.ListCommunities}
             component={ListCommunitiesScreen}
             options={ListCommunitiesScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.Profile}
+            component={ProfileScreen}
+            options={ProfileScreen.navigationOptions}
         />
     </>
 );
