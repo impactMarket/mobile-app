@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     buttomStoreText: {
         fontSize: ipctFontSize.small,
-        lineHeight: ipctLineHeight.large,
+        // lineHeight: ipctLineHeight.large,
         color: ipctColors.white,
         fontFamily: 'Inter-Regular',
         fontWeight: '500',

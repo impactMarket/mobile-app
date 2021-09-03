@@ -16,6 +16,7 @@ function ProfileSvg(props: SvgProps) {
             width={33}
             height={32}
             viewBox="0 0 33 32"
+            style={{ marginLeft: 10 }}
             fill="none"
             {...props}
             onPress={() =>

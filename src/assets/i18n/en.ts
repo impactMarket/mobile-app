@@ -423,6 +423,7 @@ export default {
         whatIsValora: 'What is Valora?',
         installAndCreateValoraAccount: 'Install and create Valora Account',
         connectWithValora: 'Connect with Valora',
+        duplicatedTitle: 'Duplicated Account',
         duplicatedMsg1:
             'Your phone number {{phoneNumber}} is associated with other impactMarket account.',
         duplicatedMsg2: 'Do you want login and disable all other accounts?',

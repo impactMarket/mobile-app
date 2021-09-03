@@ -74,7 +74,7 @@ function getHeaderRight(
                         marginRight: 22,
                     }}
                 >
-                    <FAQSvg style={{ marginRight: 10 }} />
+                    <FAQSvg />
                     <ProfileSvg />
                 </View>
             );
