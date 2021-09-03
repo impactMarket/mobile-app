@@ -58,7 +58,7 @@ import { WebView } from 'react-native-webview';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 import Logout from 'navigator/header/Logout';
 
 const currencies: {
@@ -831,6 +831,13 @@ ProfileScreen.navigationOptions = () => {
         headerLeft: () => <BackSvg />,
         headerRight: () => <Logout />,
         headerTitle: i18n.t('profile.profile'),
+        headerTitleStyle: {
+            fontFamily: 'Manrope-Bold',
+            fontSize: ipctFontSize.lowMedium,
+            lineHeight: ipctLineHeight.large,
+            color: ipctColors.darBlue,
+            left: -12,
+        },
     };
 };
 

@@ -1,22 +1,10 @@
-import {
-    getFocusedRouteNameFromRoute,
-    RouteProp,
-} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import BackSvg from 'components/svg/BackSvg';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
-import { Text } from 'react-native';
 import { useSelector } from 'react-redux';
-import {
-    ipctColors,
-    ipctFontSize,
-    ipctLineHeight,
-    ipctSpacing,
-} from 'styles/index';
+import { ipctColors } from 'styles/index';
 import ListCommunitiesScreen from 'views/communities/List';
-import CommunitiesScreen from 'views/communities/index';
 import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
 import WelcomeRulesScreen from 'views/community/beneficiary/WelcomeRulesScreen';
@@ -31,6 +19,8 @@ import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBenef
 import CreateCommunityScreen from 'views/createEditCommunity/create';
 import EditCommunityScreen from 'views/createEditCommunity/edit';
 import FAQScreen from 'views/faq';
+import ProfileScreen from 'views/profile';
+import Auth from 'views/profile/auth';
 import StoriesScreen from 'views/stories';
 import Carousel from 'views/stories/Carousel';
 import NewStoryScreen from 'views/stories/NewStory';
@@ -38,7 +28,6 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
-import ProfileScreen from 'views/profile';
 const welcomeScreen = (Navigator: typeof Stack) => (
     <Navigator.Screen
         name={Screens.Welcome}
@@ -112,6 +101,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             name={Screens.Profile}
             component={ProfileScreen}
             options={ProfileScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.Auth}
+            component={Auth}
+            options={Auth.navigationOptions}
         />
     </>
 );
