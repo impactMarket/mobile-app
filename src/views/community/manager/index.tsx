@@ -39,7 +39,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 // redux Actions
 
@@ -398,6 +398,12 @@ CommunityManagerScreen.navigationOptions = () => {
     return {
         title: i18n.t('generic.manage'),
         tabBarLabel: i18n.t('generic.manage'),
+        headerTitleStyle: {
+            fontFamily: 'Manrope-Bold',
+            fontSize: ipctFontSize.lowMedium,
+            lineHeight: ipctLineHeight.large,
+            color: ipctColors.darBlue,
+        },
         headerTitleContainerStyle: {
             left: 58,
         },
