@@ -7,6 +7,7 @@ import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import CommunityRules from 'components/core/CommunityRules';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import ManageSvg from 'components/svg/ManageSvg';
 import { Screens } from 'helpers/constants';
@@ -20,7 +21,7 @@ import {
     UbiRequestChangeParams,
 } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import {
     StyleSheet,
     View,
@@ -31,6 +32,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 // services
+import { Modalize } from 'react-native-modalize';
 import { ActivityIndicator, Portal, Paragraph } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,6 +49,9 @@ import Managers from './cards/Managers';
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+
+    const modalizeHelpCenterRef = useRef<Modalize>(null);
+
     const [openHelpCenter, setOpenHelpCenter] = useState(false);
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userCurrency = useSelector(
@@ -114,24 +119,6 @@ function CommunityManagerScreen() {
         }
         loadCommunityRulesStats();
     });
-
-    useLayoutEffect(() => {
-        if (openHelpCenter) {
-            navigation.setOptions({
-                headerShown: !openHelpCenter,
-                headerRight: () => (
-                    <CloseStorySvg
-                        style={{
-                            alignSelf: 'flex-end',
-                            marginTop: 14,
-                            marginRight: 10,
-                        }}
-                        onPress={() => setOpenHelpCenter(false)}
-                    />
-                ),
-            });
-        }
-    }, [openHelpCenter, navigation]);
 
     const onRefresh = () => {
         updateCommunityInfo(community.id, dispatch).then(async () => {
@@ -321,63 +308,64 @@ function CommunityManagerScreen() {
             );
         }
 
-        const renderHelpCenter = () => {
-            if (openHelpCenter) {
-                return (
-                    <WebView
-                        originWhitelist={['*']}
-                        source={{ uri: 'https://docs.impactmarket.com/' }}
-                        style={{
-                            height: Dimensions.get('screen').height * 0.85,
-                        }}
-                    />
-                );
-            }
-        };
-
         return (
-            <ScrollView>
-                {openHelpCenter ? (
-                    renderHelpCenter()
-                ) : (
-                    <>
-                        <Text
-                            style={{
-                                fontFamily: 'Inter-Regular',
-                                fontSize: 15,
-                                lineHeight: 24,
-                                marginHorizontal: 18,
-                                letterSpacing: 0,
-                                textAlign: 'left',
-                            }}
-                        >
-                            {i18n.t('createCommunity.pendingApprovalMessage')}{' '}
-                        </Text>
-                        <Button
-                            modeType="gray"
-                            style={{
-                                marginHorizontal: 18,
-                                marginTop: 16,
-                                marginBottom: 16,
-                                // width: '100%',
-                            }}
-                            labelStyle={{
-                                fontSize: 18,
-                                lineHeight: 18,
-                                letterSpacing: 0.3,
-                            }}
-                            onPress={() => {
-                                setOpenHelpCenter(true);
-                            }}
-                        >
-                            {i18n.t('generic.openHelpCenter')}
-                        </Button>
-                        {!hasManagerAcceptedRulesAlready && (
-                            <CommunityRules caller="MANAGER" />
+            <>
+                <ScrollView>
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 15,
+                            lineHeight: 24,
+                            marginHorizontal: 18,
+                            letterSpacing: 0,
+                            textAlign: 'left',
+                        }}
+                    >
+                        {i18n.t('createCommunity.pendingApprovalMessage')}{' '}
+                    </Text>
+                    <Button
+                        modeType="gray"
+                        style={{
+                            marginHorizontal: 18,
+                            marginTop: 16,
+                            marginBottom: 16,
+                            // width: '100%',
+                        }}
+                        labelStyle={{
+                            fontSize: 18,
+                            lineHeight: 18,
+                            letterSpacing: 0.3,
+                        }}
+                        onPress={() => {
+                            modalizeHelpCenterRef.current?.open();
+                        }}
+                    >
+                        {i18n.t('generic.openHelpCenter')}
+                    </Button>
+                    {!hasManagerAcceptedRulesAlready && (
+                        <CommunityRules caller="MANAGER" />
+                    )}
+                </ScrollView>
+                <Portal>
+                    <Modalize
+                        ref={modalizeHelpCenterRef}
+                        HeaderComponent={renderHeader(
+                            null,
+                            modalizeHelpCenterRef,
+                            () => {},
+                            true
                         )}
-                    </>
-                )}
-            </ScrollView>
+                    >
+                        <WebView
+                            originWhitelist={['*']}
+                            source={{ uri: 'https://docs.impactmarket.com/' }}
+                            style={{
+                                height: Dimensions.get('screen').height * 0.85,
+                            }}
+                        />
+                    </Modalize>
+                </Portal>
+            </>
         );
     };
 

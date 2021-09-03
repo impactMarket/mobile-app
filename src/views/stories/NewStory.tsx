@@ -294,12 +294,6 @@ NewStoryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('stories.newStory'),
-        headerTitleStyle: {
-            fontFamily: 'Manrope-Bold',
-            fontSize: 22,
-            lineHeight: 28,
-            color: '#333239',
-        },
         headerTitleContainerStyle: {
             left: 58,
         },
