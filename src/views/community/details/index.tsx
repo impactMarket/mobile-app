@@ -8,6 +8,7 @@ import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
+import ShareSvg from 'components/svg/header/ShareSvg';
 import { modalDonateAction, Screens } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import {
@@ -228,7 +229,19 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
 CommunityDetailsScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerRight: () => <FaqSvg style={{ marginRight: 16 }} />,
+        headerRight: () => (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginRight: 16,
+                }}
+            >
+                <FaqSvg />
+                <ShareSvg />
+            </View>
+        ),
         headerTitle: '',
     };
 };
