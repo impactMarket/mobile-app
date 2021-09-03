@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
+import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Title, Text } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
@@ -15,6 +15,7 @@ import ConfirmModal from '../views/community/details/donate/modals/confirm';
 import DonateModal from '../views/community/details/donate/modals/donate';
 import ErrorModal from '../views/community/details/donate/modals/error';
 import renderHeader from './core/HeaderBottomSheetTitle';
+import CeloDolarSvg from './svg/CeloDolarSvg';
 import EsolidarSvg from './svg/EsolidarSvg';
 
 interface IDonateProps {
@@ -78,11 +79,7 @@ export default function DonateCard(props: IDonateProps) {
                         >
                             {i18n.t('donate.donateWithCelo')}
                         </Text>
-                        <Image
-                            source={require('assets/images/celoDolar.png')}
-                            width={22}
-                            height={22}
-                        />
+                        <CeloDolarSvg />
                     </View>
                 </Pressable>
                 {/* If a community doesn't have a crowdfunding page, do not show the esolidar button */}
