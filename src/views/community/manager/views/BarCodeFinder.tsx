@@ -9,10 +9,6 @@ interface IBarCodeFinderProps {
 }
 // Thanks to https://github.com/react-native-camera/react-native-camera/issues/1156#issuecomment-370035072
 export class BarCodeFinder extends Component<IBarCodeFinderProps, object> {
-    constructor(props: any) {
-        super(props);
-    }
-
     getSizeStyles() {
         return {
             width: this.props.width,
@@ -70,7 +66,7 @@ export class BarCodeFinder extends Component<IBarCodeFinderProps, object> {
     }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',

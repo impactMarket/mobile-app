@@ -6,7 +6,6 @@ import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
-import ReportCard from 'components/svg/header/ReportCard';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
 import { Screens } from 'helpers/constants';
@@ -15,12 +14,11 @@ import {
     setAppSuspectWrongDateTime,
     setAppHasBeneficiaryAcceptedTerms,
 } from 'helpers/redux/actions/app';
-import { setCommunityMetadata } from 'helpers/redux/actions/user';
+import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-// redux Actions
+import React, { useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next';
 import {
     StyleSheet,
@@ -42,20 +40,16 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
-import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
 import BlockedAccount from './cards/BlockedAccount';
-import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 
 function BeneficiaryScreen() {
-    let timeoutTimeDiff: NodeJS.Timer | undefined;
+    const timeoutTimeDiff = useRef<NodeJS.Timer | undefined>();
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [openModal, setOpenModal] = useState(false);
-    const [showReportCard, setShowReportCard] = useState<string | null>('');
 
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
@@ -153,16 +147,16 @@ function BeneficiaryScreen() {
 
     useEffect(() => {
         if (suspectWrongDateTime) {
-            timeoutTimeDiff = setInterval(
+            timeoutTimeDiff.current = setInterval(
                 () => setDateTimeDiffModal(new Date()),
                 1000
             );
         } else if (timeoutTimeDiff !== undefined) {
-            clearInterval(timeoutTimeDiff);
+            clearInterval(timeoutTimeDiff.current);
         }
         return () => {
             if (timeoutTimeDiff !== undefined) {
-                clearInterval(timeoutTimeDiff);
+                clearInterval(timeoutTimeDiff.current);
             }
         };
     }, [suspectWrongDateTime]);
@@ -177,7 +171,7 @@ function BeneficiaryScreen() {
             }
         }
         loadCommunityRulesStats();
-    }, []);
+    }, [dispatch, hasBeneficiaryAcceptedRulesAlready, navigation]);
 
     useEffect(() => {
         const isLocationAvailable = async () => {
@@ -307,7 +301,7 @@ function BeneficiaryScreen() {
                                 })
                             }
                         >
-                            {i18n.t('moreAboutYourCommunity')}
+                            {i18n.t('generic.moreAboutYourCommunity')}
                         </Button>
                     }
                 >
@@ -329,7 +323,7 @@ function BeneficiaryScreen() {
                                 }
                                 style={styles.haveClaimed}
                             >
-                                {i18n.t('youHaveClaimedXoutOfY', {
+                                {i18n.t('beneficiary.youHaveClaimedXoutOfY', {
                                     claimed: claimedAmount,
                                     max: humanifyCurrencyAmount(
                                         community.contract.maxClaim
@@ -367,7 +361,7 @@ function BeneficiaryScreen() {
                                     )
                                     .asSeconds() < 0 ? (
                                     <Trans
-                                        i18nKey="nextTimeWillWaitClaim"
+                                        i18nKey="beneficiary.nextTimeWillWaitClaim"
                                         values={{
                                             nextWait: formatedTimeNextCooldown(),
                                         }}
@@ -395,7 +389,7 @@ function BeneficiaryScreen() {
                                         }
                                         style={styles.howClaimsWorksLink}
                                     >
-                                        {i18n.t('howClaimWorks')}
+                                        {i18n.t('beneficiary.howClaimWorks')}
                                     </Text>
                                 )}
                             </Paragraph>
@@ -411,7 +405,7 @@ function BeneficiaryScreen() {
                 duration={10000}
                 onDismiss={() => setAskLocationOnOpen(false)}
                 action={{
-                    label: i18n.t('turnOn'),
+                    label: i18n.t('generic.turnOn'),
                     onPress: async () => {
                         try {
                             const {
@@ -419,16 +413,16 @@ function BeneficiaryScreen() {
                             } = await Location.requestForegroundPermissionsAsync();
                             if (status !== Location.PermissionStatus.GRANTED) {
                                 Alert.alert(
-                                    i18n.t('failure'),
-                                    i18n.t('errorGettingGPSLocation'),
+                                    i18n.t('generic.failure'),
+                                    i18n.t('errors.gettingGPS'),
                                     [
                                         {
-                                            text: i18n.t('tryAgain'),
+                                            text: i18n.t('generic.tryAgain'),
                                             onPress: async () =>
                                                 await Location.requestForegroundPermissionsAsync(),
                                         },
                                         {
-                                            text: i18n.t('cancel'),
+                                            text: i18n.t('generic.cancel'),
                                         },
                                     ],
                                     { cancelable: false }
@@ -440,11 +434,11 @@ function BeneficiaryScreen() {
                             });
                         } catch (e) {
                             Alert.alert(
-                                i18n.t('failure'),
-                                i18n.t('errorGettingGPSLocation'),
+                                i18n.t('generic.failure'),
+                                i18n.t('errors.gettingGPS'),
                                 [
                                     {
-                                        text: i18n.t('tryAgain'),
+                                        text: i18n.t('generic.tryAgain'),
                                         onPress: async () => {
                                             await Location.getCurrentPositionAsync(
                                                 {
@@ -455,7 +449,7 @@ function BeneficiaryScreen() {
                                         },
                                     },
                                     {
-                                        text: i18n.t('cancel'),
+                                        text: i18n.t('generic.cancel'),
                                     },
                                 ],
                                 { cancelable: false }
@@ -464,7 +458,7 @@ function BeneficiaryScreen() {
                     },
                 }}
             >
-                {i18n.t('turnOnLocationHint')}
+                {i18n.t('generic.turnOnLocationHint')}
             </Snackbar>
             <Portal>
                 <Modal visible={suspectWrongDateTime} dismissable={false}>
@@ -486,7 +480,7 @@ function BeneficiaryScreen() {
                                         marginVertical: 16,
                                     }}
                                 >
-                                    {i18n.t('incorrectTime')}
+                                    {i18n.t('errors.modals.clock.title')}
                                 </Headline>
                                 <Paragraph
                                     style={{
@@ -497,7 +491,7 @@ function BeneficiaryScreen() {
                                         textAlign: 'center',
                                     }}
                                 >
-                                    {i18n.t('incorrectTimeMessage', {
+                                    {i18n.t('errors.modals.clock.description', {
                                         serverTime: moment(
                                             dateTimeDiffModal.getTime() -
                                                 timeDiff
@@ -521,7 +515,7 @@ function BeneficiaryScreen() {
                                     )
                                 }
                             >
-                                {i18n.t('openClockSettings')}
+                                {i18n.t('generic.openClockSettings')}
                             </Button>
                             <Button
                                 modeType="gray"
@@ -536,7 +530,7 @@ function BeneficiaryScreen() {
                                     )
                                 }
                             >
-                                {i18n.t('dismiss')}
+                                {i18n.t('generic.dismiss')}
                             </Button>
                         </Card.Content>
                     </Card>
@@ -560,8 +554,8 @@ BeneficiaryScreen.navigationOptions = ({
     route: RouteProp<any, any>;
 }) => {
     return {
-        title: i18n.t('claim'),
-        tabBarLabel: i18n.t('claim'),
+        title: i18n.t('beneficiary.claim'),
+        tabBarLabel: i18n.t('beneficiary.claim'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <ClaimSvg focused={props.focused} />
         ),

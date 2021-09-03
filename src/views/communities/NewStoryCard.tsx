@@ -47,7 +47,7 @@ export default function NewStoriesCard() {
                         marginTop: 8,
                     }}
                 >
-                    {i18n.t('createStory')}
+                    {i18n.t('stories.createStory')}
                 </Text>
             </View>
         </Pressable>

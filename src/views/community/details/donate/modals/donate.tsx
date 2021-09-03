@@ -42,6 +42,8 @@ class DonateModal extends Component<
 
     componentDidUpdate = (prevProps: IDonateModalProps & PropsFromRedux) => {
         if (prevProps.inputAmount !== this.props.inputAmount) {
+            // TODO:
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ amountDonate: this.props.inputAmount });
         }
     };
@@ -153,7 +155,7 @@ class DonateModal extends Component<
                     }
                     onPress={this.handleConfirmDonateWithCeloWallet}
                 >
-                    {i18n.t('donateWithValora')}
+                    {i18n.t('donate.donateWithValora')}
                 </Button>
             ) : (
                 <Button
@@ -166,14 +168,14 @@ class DonateModal extends Component<
                     labelStyle={styles.donateLabel}
                     onPress={() => {
                         Alert.alert(
-                            i18n.t('failure'),
-                            i18n.t('youAreNotConnected'),
-                            [{ text: i18n.t('close') }],
+                            i18n.t('generic.failure'),
+                            i18n.t('generic.youAreNotConnected'),
+                            [{ text: i18n.t('generic.close') }],
                             { cancelable: false }
                         );
                     }}
                 >
-                    {i18n.t('donateWithValora')}
+                    {i18n.t('donate.donateWithValora')}
                 </Button>
             );
 
@@ -185,15 +187,15 @@ class DonateModal extends Component<
                         this.setState({ showCopiedToClipboard: false })
                     }
                     action={{
-                        label: i18n.t('close'),
+                        label: i18n.t('generic.close'),
                         onPress: () =>
                             this.setState({ showCopiedToClipboard: false }),
                     }}
                 >
-                    {i18n.t('addressCopiedClipboard')}
+                    {i18n.t('donate.addressCopiedClipboard')}
                 </Snackbar>
                 <Modal
-                    title={i18n.t('donateSymbol', {
+                    title={i18n.t('donate.donateSymbol', {
                         symbol: userCurrency,
                     })}
                     visible={visible}
@@ -206,7 +208,7 @@ class DonateModal extends Component<
                                 labelStyle={styles.donateLabel}
                                 onPress={this.handleCopyAddressToClipboard}
                             >
-                                {i18n.t('copyContractAddress')}
+                                {i18n.t('community.copyContractAddress')}
                             </Button>
                             {donateWithValoraButton}
                         </>
@@ -224,6 +226,7 @@ class DonateModal extends Component<
                             borderRadius: 5,
                             padding: 13,
                         }}
+                        testID="modalDonateWithCelo"
                     >
                         <View style={{ flexDirection: 'row' }}>
                             <Text
@@ -313,7 +316,7 @@ class DonateModal extends Component<
                                         : 'none',
                             }}
                         >
-                            {i18n.t('amountShouldBe', {
+                            {i18n.t('donate.amountShouldBe', {
                                 claimAmount: parseFloat(
                                     new BigNumber(
                                         community.contract.claimAmount
@@ -342,7 +345,7 @@ class DonateModal extends Component<
                                         : 'none',
                             }}
                         >
-                            {i18n.t('yourDonationWillBackFor', {
+                            {i18n.t('donate.yourDonationWillBackFor', {
                                 backNBeneficiaries: Math.min(
                                     community.state.beneficiaries,
                                     amountDonate.length > 0

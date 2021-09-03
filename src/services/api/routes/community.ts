@@ -12,6 +12,8 @@ import {
     UbiCommunity,
     UbiCommunitySuspect,
     UbiRequestChangeParams,
+    CommunityCampaing,
+    UbiPromoter,
 } from 'helpers/types/models';
 import { UbiCommunityContract } from 'helpers/types/ubi/ubiCommunityContract';
 import { UbiCommunityDailyMetrics } from 'helpers/types/ubi/ubiCommunityDailyMetrics';
@@ -23,6 +25,10 @@ import { ApiRequests, getRequest } from '../base';
 
 class ApiRouteCommunity {
     static api = new ApiRequests();
+
+    static async getPromoter(communityId: number) {
+        return this.api.get<UbiPromoter>(`/community/${communityId}/promoter`);
+    }
 
     static async findBeneficiary(
         beneficiaryQuery: string,
@@ -75,14 +81,22 @@ class ApiRouteCommunity {
     }
 
     static async listManagers(
-        communityId: number,
-        offset: number,
-        limit: number
+        communityId: number
     ): Promise<ManagerAttributes[]> {
         return (
             await this.api.get<ManagerAttributes[]>(
                 '/community/' + communityId + '/managers/',
                 true
+            )
+        ).data;
+    }
+
+    static async getCommunityFundraisingUrl(
+        communityId: number
+    ): Promise<CommunityCampaing> {
+        return (
+            await this.api.get<CommunityCampaing>(
+                '/community/' + communityId + '/campaign/'
             )
         ).data;
     }

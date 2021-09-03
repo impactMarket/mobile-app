@@ -40,14 +40,11 @@ import {
     Dimensions,
     TouchableOpacity,
 } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import { Portal, Modal } from 'react-native-paper';
 import { WebView } from 'react-native-webview';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
-import { analytics } from 'services/analytics';
-import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import {
     registerForPushNotifications,
@@ -89,7 +86,7 @@ function Auth() {
         if (timedOutValidation && !duplicatedAccountsWarn) {
             setTimedOut(true);
         }
-    }, [timedOutValidation]);
+    }, [timedOutValidation, duplicatedAccountsWarn]);
 
     useEffect(() => {
         const finishAuth = async () => {
@@ -129,7 +126,7 @@ function Auth() {
             setDuplicatedAccountsWarn(true);
             setConnecting(false);
         }
-    }, [userAuthState, dappKitResponse]);
+    }, [userAuthState, dappKitResponse, dispatch, exchangeRates, kit]);
 
     useFocusEffect(() => {
         renderAuthModalize();
@@ -233,7 +230,7 @@ function Auth() {
                     onPress={() => Linking.openURL(androidURL)}
                 >
                     <Text style={styles.buttomStoreText}>
-                        {i18n.t('installAndCreateValoraAccount')}
+                        {i18n.t('auth.installAndCreateValoraAccount')}
                     </Text>
                 </Button>
             );
@@ -247,7 +244,7 @@ function Auth() {
                     onPress={() => Linking.openURL(iosURL)}
                 >
                     <Text style={styles.buttomStoreText}>
-                        {i18n.t('installAndCreateValoraAccount')}
+                        {i18n.t('auth.installAndCreateValoraAccount')}
                     </Text>
                 </Button>
             );
@@ -317,7 +314,7 @@ function Auth() {
             <Modalize
                 ref={modalizeWelcomeRef}
                 HeaderComponent={renderHeader(
-                    i18n.t('connectWithValora'),
+                    i18n.t('auth.connectWithValora'),
                     modalizeWelcomeRef,
                     () => {
                         navigation.navigate(Screens.Communities);
@@ -330,10 +327,10 @@ function Auth() {
             >
                 <View style={{ width: '100%', paddingHorizontal: 22 }}>
                     <Text style={styles.descriptionTop}>
-                        {i18n.t('impactMarketDescription')}
+                        {i18n.t('auth.impactMarketDescription')}
                     </Text>
                     <Text style={styles.description}>
-                        {i18n.t('loginDescription')}
+                        {i18n.t('auth.loginDescription')}
                     </Text>
                 </View>
                 <View
@@ -343,7 +340,7 @@ function Auth() {
                         marginBottom: 22,
                     }}
                 >
-                    <Text style={styles.stepText1}>{i18n.t('step1')}</Text>
+                    <Text style={styles.stepText1}>{i18n.t('auth.step1')}</Text>
                     <View style={{ width: '100%', marginTop: 16 }}>
                         {buttonStoreLink()}
                     </View>
@@ -351,10 +348,10 @@ function Auth() {
                         onPress={() => modalizeWebViewRef.current?.open()}
                     >
                         <Text style={styles.whatIsValora}>
-                            {i18n.t('whatIsValora')}
+                            {i18n.t('auth.whatIsValora')}
                         </Text>
                     </TouchableOpacity>
-                    <Text style={styles.stepText2}>{i18n.t('step2')}</Text>
+                    <Text style={styles.stepText2}>{i18n.t('auth.step2')}</Text>
                     <Button
                         modeType="green"
                         bold
@@ -363,7 +360,7 @@ function Auth() {
                         style={{ width: '100%', marginTop: 16 }}
                         labelStyle={styles.buttomConnectValoraText}
                     >
-                        {i18n.t('connectWithValora')}
+                        {i18n.t('auth.connectWithValora')}
                     </Button>
                 </View>
             </Modalize>
@@ -409,7 +406,7 @@ function Auth() {
                             }
                             disabled={connecting}
                         >
-                            {i18n.t('dismiss')}
+                            {i18n.t('generic.dismiss')}
                         </Button>
                         <Button
                             modeType="default"
@@ -421,7 +418,7 @@ function Auth() {
                             loading={connecting}
                             disabled={connecting}
                         >
-                            {i18n.t('yes')}
+                            {i18n.t('generic.yes')}
                         </Button>
                     </View>
                 </View>
@@ -448,7 +445,7 @@ function Auth() {
                 <Card style={styles.timedOutCard}>
                     <View style={styles.timedOutCardContent}>
                         <Text style={styles.timedOutCardText}>
-                            {i18n.t('modalValoraTimeoutTitle')}
+                            {i18n.t('errors.modals.valora.title')}
                         </Text>
                         <CloseStorySvg
                             onPress={() => handleCloseErrorModal()}
@@ -456,7 +453,7 @@ function Auth() {
                     </View>
                     <View style={styles.timedOutCardDescriptionContainer}>
                         <Text style={styles.timedOutCardDescription}>
-                            {i18n.t('modalValoraTimeoutDescription')}
+                            {i18n.t('errors.modals.valora.description')}
                         </Text>
                     </View>
                     <View style={styles.timedOutCardButtons}>
@@ -465,7 +462,7 @@ function Auth() {
                             style={{ flex: 1, marginRight: 5 }}
                             onPress={() => handleCloseErrorModal()}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                         <Button
                             modeType="default"
@@ -475,7 +472,7 @@ function Auth() {
                                 setTimedOut(false);
                             }}
                         >
-                            {i18n.t('faq')}
+                            {i18n.t('generic.faq')}
                         </Button>
                     </View>
                 </Card>

@@ -9,8 +9,6 @@ import { CommunityAttributes } from 'helpers/types/models';
 import Api from 'services/api';
 import { call, put, all, takeEvery } from 'typed-redux-saga';
 
-import { setCommunityMetadata } from '../actions/user';
-
 const listCommunities = (query: {
     offset: number;
     limit: number;
@@ -52,7 +50,6 @@ export function* findCommunityById({ payload }: any) {
         );
 
         yield put(findCommunityByIdSuccess(community));
-        yield put(setCommunityMetadata(community));
     } catch (err) {
         yield put(findCommunityByIdFailure());
     }

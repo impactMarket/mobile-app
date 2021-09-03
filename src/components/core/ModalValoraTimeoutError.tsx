@@ -20,13 +20,13 @@ const ModalValoraTimeoutError: React.FC<ErrorProps> = ({
                 <Card style={styles.timedOutCard}>
                     <View style={styles.timedOutCardContent}>
                         <Text style={styles.timedOutCardText}>
-                            {i18n.t('modalValoraTimeoutTitle')}
+                            {i18n.t('errors.modals.valora.title')}
                         </Text>
                         <CloseStorySvg onPress={() => handleCloseModal()} />
                     </View>
                     <View style={styles.timedOutCardDescriptionContainer}>
                         <Text style={styles.timedOutCardDescription}>
-                            {i18n.t('modalValoraTimeoutDescription')}
+                            {i18n.t('errors.modals.valora.description')}
                         </Text>
                     </View>
                     <View style={styles.timedOutCardButtons}>
@@ -35,7 +35,7 @@ const ModalValoraTimeoutError: React.FC<ErrorProps> = ({
                             style={{ flex: 1, marginRight: 5 }}
                             onPress={() => handleCloseModal()}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                         <Button
                             modeType="default"
@@ -45,7 +45,7 @@ const ModalValoraTimeoutError: React.FC<ErrorProps> = ({
                                 // setTimedOut(false);
                             }}
                         >
-                            {i18n.t('faq')}
+                            {i18n.t('generic.faq')}
                         </Button>
                     </View>
                 </Card>

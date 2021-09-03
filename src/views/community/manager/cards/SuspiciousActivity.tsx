@@ -1,28 +1,22 @@
+import i18n from 'assets/i18n';
+import Card from 'components/core/Card';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Headline, Paragraph } from 'react-native-paper';
-
-// components
-import Card from 'components/core/Card';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
-
-// translation
-import i18n from 'assets/i18n';
-
-// colors
 import { ipctColors } from 'styles/index';
 
 function SuspiciousActivity() {
     return (
         <Card style={styles.cardContainer}>
             <View style={styles.headlineContainer}>
-                <WarningRedTriangle />
+                <WarningTriangle />
                 <Headline style={styles.headerTitle}>
-                    {i18n.t('suspiciousActivityDetected')}
+                    {i18n.t('community.suspiciousActivityDetected')}
                 </Headline>
             </View>
             <Paragraph style={styles.paragraphContent}>
-                {i18n.t('suspiciousDescription')}
+                {i18n.t('community.suspiciousDescription')}
             </Paragraph>
         </Card>
     );

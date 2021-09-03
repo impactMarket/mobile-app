@@ -1,9 +1,6 @@
-/* eslint handle-callback-err: "warn" */
-// Assets
 import { useNavigation } from '@react-navigation/native';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
-// Components
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -12,15 +9,15 @@ import ArrowForwardSvg from 'components/svg/ArrowForwardSvg';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CheckSvg from 'components/svg/CheckSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
+import LockSvg from 'components/svg/LockSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
-import WarningRedTriangle from 'components/svg/WarningRedTriangle';
+import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Linking from 'expo-linking';
-// Helpers
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
 import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
 import {
@@ -33,6 +30,7 @@ import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useState, useEffect, useRef } from 'react';
+import { Trans } from 'react-i18next';
 import {
     FlatList,
     RefreshControl,
@@ -47,7 +45,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import {
     Portal,
-    Button as RNButton,
     Divider,
     Card,
     Modal,
@@ -57,17 +54,12 @@ import {
     Headline,
     Searchbar,
 } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 import { batch, useDispatch, useSelector } from 'react-redux';
-// Services
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-// Styles
 import { ipctColors } from 'styles/index';
-import { Trans } from 'react-i18next';
-import { WebView } from 'react-native-webview';
-import LockSvg from 'components/svg/LockSvg';
 
-// Constants
 const currencies: {
     [key: string]: {
         symbol: string;
@@ -104,7 +96,6 @@ function ProfileScreen() {
     const [gender, setGender] = useState<string | null>(null);
     const [age, setAge] = useState('');
     const [children, setChildren] = useState('');
-    const [sending, setSending] = useState(false);
     const [
         toggleImageDimensionsModal,
         setToggleImageDimensionsModal,
@@ -142,7 +133,7 @@ function ProfileScreen() {
         });
         renderAvailableCurrencies();
         loadProfile();
-    }, [userWallet, user]);
+    }, [userWallet, user, navigation]);
 
     const updateUserMetadataCache = () => {
         CacheStore.cacheUser({
@@ -186,11 +177,9 @@ function ProfileScreen() {
 
     const handleChangeAvatar = async (avatar: string) => {
         try {
-            setSending(true);
             setUserAvatarImage(avatar);
 
             const res = await Api.user.updateProfilePicture(avatar);
-            setSending(false);
             CacheStore.cacheUser({
                 // TODO: we should use the generic method instead
                 address: userWallet.address,
@@ -214,12 +203,11 @@ function ProfileScreen() {
             dispatch(setUserMetadata({ ...user, avatar: res.media.url }));
         } catch (e) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('errorUploadingAvatar'),
+                i18n.t('generic.failure'),
+                i18n.t('generic.uploadingAvatar'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
-            setSending(false);
         }
     };
 
@@ -236,13 +224,13 @@ function ProfileScreen() {
     const textGender = (g: string | null) => {
         switch (g) {
             case 'f':
-                return i18n.t('female');
+                return i18n.t('profile.female');
             case 'm':
-                return i18n.t('male');
+                return i18n.t('profile.male');
             case 'o':
-                return i18n.t('others');
+                return i18n.t('profile.others');
             default:
-                return i18n.t('select');
+                return i18n.t('generic.select');
         }
     };
 
@@ -264,7 +252,7 @@ function ProfileScreen() {
                         setToggleImageDimensionsModal(true);
                     }
                 },
-                (error) => {
+                (_error) => {
                     handleChangeAvatar(result.uri);
                 }
             );
@@ -356,7 +344,7 @@ function ProfileScreen() {
                             fontSize: 18,
                         }}
                     >
-                        {i18n.t('noResults')}
+                        {i18n.t('generic.noResults')}
                     </Paragraph>
                 );
             }
@@ -392,7 +380,7 @@ function ProfileScreen() {
             }}
         >
             <Searchbar
-                placeholder={i18n.t('search')}
+                placeholder={i18n.t('generic.search')}
                 style={styles.searchBarContainer}
                 inputStyle={{
                     marginLeft: -14,
@@ -419,9 +407,21 @@ function ProfileScreen() {
                 }}
                 value={gender ? gender : ''}
             >
-                <RadioButton.Item key="f" label={i18n.t('female')} value="f" />
-                <RadioButton.Item key="m" label={i18n.t('male')} value="m" />
-                <RadioButton.Item key="o" label={i18n.t('others')} value="o" />
+                <RadioButton.Item
+                    key="f"
+                    label={i18n.t('profile.female')}
+                    value="f"
+                />
+                <RadioButton.Item
+                    key="m"
+                    label={i18n.t('profile.male')}
+                    value="m"
+                />
+                <RadioButton.Item
+                    key="o"
+                    label={i18n.t('profile.others')}
+                    value="o"
+                />
             </RadioButton.Group>
         </View>
     );
@@ -455,7 +455,7 @@ function ProfileScreen() {
                                     textAlign: 'left',
                                 }}
                             >
-                                {i18n.t('modalErrorTitle')}
+                                {i18n.t('errors.modals.title')}
                             </Text>
                             <CloseStorySvg
                                 onPress={() => {
@@ -476,7 +476,7 @@ function ProfileScreen() {
                                 marginBottom: 16,
                             }}
                         >
-                            <WarningRedTriangle
+                            <WarningTriangle
                                 style={{
                                     alignSelf: 'flex-start',
                                     marginRight: 16,
@@ -493,7 +493,9 @@ function ProfileScreen() {
                                     marginRight: 12,
                                 }}
                             >
-                                {i18n.t('imageDimensionsNotFit')}
+                                {i18n.t(
+                                    'createCommunity.imageDimensionsNotFit'
+                                )}
                             </Text>
                         </View>
                         <Button
@@ -503,7 +505,7 @@ function ProfileScreen() {
                                 setToggleImageDimensionsModal(false);
                             }}
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     </Card>
                 </Modal>
@@ -528,7 +530,7 @@ function ProfileScreen() {
                         onPress={() => Linking.openURL('celo://wallet')}
                     >
                         <Text style={styles.balanceValue}>
-                            {i18n.t('balance')}
+                            {i18n.t('profile.balance')}
                         </Text>
                         <View
                             style={{
@@ -595,10 +597,10 @@ function ProfileScreen() {
                         </TouchableOpacity>
                     </View>
                     <Input
-                        label={i18n.t('name')}
+                        label={i18n.t('generic.name')}
                         value={name}
                         maxLength={32}
-                        onEndEditing={(e) => {
+                        onEndEditing={(_e) => {
                             Api.user.setUsername(name);
                             updateUserMetadataCache();
                             dispatch(
@@ -612,7 +614,7 @@ function ProfileScreen() {
                     >
                         <View style={{ flex: 1, marginRight: 10 }}>
                             <Select
-                                label={i18n.t('gender')}
+                                label={i18n.t('profile.gender')}
                                 value={textGender(gender)}
                                 onPress={() => {
                                     modalizeGenderRef.current?.open();
@@ -621,11 +623,11 @@ function ProfileScreen() {
                         </View>
                         <View style={{ flex: 1, marginLeft: 10 }}>
                             <Input
-                                label={i18n.t('age')}
+                                label={i18n.t('profile.age')}
                                 value={age}
                                 maxLength={4}
                                 keyboardType="numeric"
-                                onEndEditing={(e) => {
+                                onEndEditing={(_e) => {
                                     Api.user.setAge(parseInt(age, 10));
                                     updateUserMetadataCache();
                                     dispatch(
@@ -645,11 +647,11 @@ function ProfileScreen() {
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Input
-                            label={i18n.t('howManyChildren')}
+                            label={i18n.t('profile.howManyChildren')}
                             value={children}
                             maxLength={4}
                             keyboardType="numeric"
-                            onEndEditing={(e) => {
+                            onEndEditing={(_e) => {
                                 Api.user.setChildren(
                                     children.length > 0
                                         ? parseInt(children, 10)
@@ -671,14 +673,14 @@ function ProfileScreen() {
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Select
-                            label={i18n.t('currency')}
+                            label={i18n.t('generic.currency')}
                             value={currencies[currency.toUpperCase()].name}
                             onPress={() => modalizeCurrencyRef.current?.open()}
                         />
                     </View>
                     <View style={{ marginTop: 28 }}>
                         <Select
-                            label={i18n.t('language')}
+                            label={i18n.t('generic.language')}
                             value={language === 'en' ? 'English' : ' Português'}
                             onPress={() => modalizeLanguageRef.current?.open()}
                         />
@@ -709,14 +711,14 @@ function ProfileScreen() {
                         />
                     </Text>
                     <Input
-                        label={i18n.t('phoneNumber')}
+                        label={i18n.t('profile.phoneNumber')}
                         boxStyle={{ marginTop: 28 }}
                         value={userWallet.phoneNumber}
                         editable={false}
                         rightElement={<LockSvg color={ipctColors.borderGray} />}
                     />
                     <Input
-                        label={i18n.t('country')}
+                        label={i18n.t('generic.country')}
                         boxStyle={{ marginTop: 28 }}
                         value={getCountryFromPhoneNumber(
                             userWallet.phoneNumber
@@ -771,7 +773,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeCurrencyRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('currency'),
+                        i18n.t('generic.currency'),
                         modalizeCurrencyRef,
                         () => setSearchCurrency('')
                     )}
@@ -781,7 +783,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeLanguageRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('language'),
+                        i18n.t('generic.language'),
                         modalizeLanguageRef
                     )}
                     adjustToContentHeight
@@ -791,7 +793,7 @@ function ProfileScreen() {
                 <Modalize
                     ref={modalizeGenderRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('gender'),
+                        i18n.t('profile.gender'),
                         modalizeGenderRef
                     )}
                     adjustToContentHeight
@@ -826,8 +828,8 @@ function ProfileScreen() {
 ProfileScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('profile'),
-        tabBarLabel: i18n.t('profile'),
+        headerTitle: i18n.t('profile.profile'),
+        tabBarLabel: i18n.t('profile.profile'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,
