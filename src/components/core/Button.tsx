@@ -31,9 +31,9 @@ export default class Button extends Component<IButtonProps, IButtonState> {
         } = this.props;
         let buttonStyle: StyleProp<ViewStyle> = {
             elevation: 0,
-            height: 42,
+            height: 44,
             justifyContent: 'center',
-            // borderRadius: 4,
+            borderRadius: 6,
         };
         if (!disabled) {
             if (modeType === 'green') {

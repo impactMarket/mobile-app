@@ -391,7 +391,7 @@ export default {
         donateConfirmMessage:
             "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
         yourDonationWillBackFor:
-            'It will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
+            'Your contribution will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         donationBiggerThanBalance:
             'You are trying to contribute with an amount bigger than your balance. Add funds on your Valora app.',
         amountShouldBe: 'Amount should be ${{claimAmount}}+ to calculate..',

@@ -8,7 +8,7 @@ import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, TextInput } from 'react-native';
-import { Paragraph, Snackbar } from 'react-native-paper';
+import { Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 import { ipctColors } from 'styles/index';
@@ -157,13 +157,7 @@ class DonateModal extends Component<
                 modeType="gray"
                 labelStyle={styles.donateLabel}
                 loading={donating}
-                disabled={
-                    donating ||
-                    amountDonate.length === 0 ||
-                    isNaN(parseInt(amountDonate, 10)) ||
-                    parseInt(amountDonate, 10) < 0
-                }
-                onPress={this.handleConfirmDonateWithCeloWallet}
+                onPress={this.handleCopyAddressToClipboard}
             >
                 {i18n.t('community.copyContractAddress')}
             </Button>
@@ -204,10 +198,10 @@ class DonateModal extends Component<
                             maxLength={9}
                             autoFocus
                             style={{
-                                fontFamily: 'Gelion-Regular',
-                                fontSize: 50,
-                                lineHeight: 60,
-                                height: 60,
+                                fontFamily: 'Manrope-Bold',
+                                fontSize: 48,
+                                lineHeight: 64,
+                                height: 68,
                                 textAlign: 'center',
                                 color: ipctColors.almostBlack,
                             }}
@@ -226,6 +220,7 @@ class DonateModal extends Component<
                                 textAlign: 'center',
                                 color: ipctColors.almostBlack,
                                 marginBottom: 8,
+                                marginLeft: 5,
                             }}
                         >
                             {community.currency}
@@ -233,13 +228,12 @@ class DonateModal extends Component<
                     </View>
                 </View>
                 {/** TODO: fix height */}
-                <View style={{ height: 23 * 2 + 19 * 2 }}>
-                    <Paragraph
+                <View style={{ height: 100 }}>
+                    <Text
                         style={{
                             marginVertical: 23,
-                            fontSize: 16,
-                            lineHeight: 19,
-                            height: 19 * 2 /** TODO: fix height */,
+                            fontSize: 14,
+                            lineHeight: 24,
                             textAlign: 'center',
                             fontStyle: 'italic',
                             color: ipctColors.regentGray,
@@ -262,13 +256,15 @@ class DonateModal extends Component<
                                     .toString()
                             ),
                         })}
-                    </Paragraph>
-                    <Paragraph
+                    </Text>
+                    <Text
                         style={{
+                            marginHorizontal: 53,
+                            flexWrap: 'wrap',
+                            fontFamily: 'Inter-Regular',
                             marginVertical: 23,
-                            fontSize: 16,
-                            lineHeight: 19,
-                            height: 19,
+                            fontSize: 14,
+                            lineHeight: 24,
                             textAlign: 'center',
                             display:
                                 amountDonate.length > 0 &&
@@ -300,7 +296,7 @@ class DonateModal extends Component<
                                     ? Math.max(1, Math.floor(backForDays))
                                     : 0,
                         })}
-                    </Paragraph>
+                    </Text>
                 </View>
                 {donateWithValoraButton}
                 {copycontractButton}

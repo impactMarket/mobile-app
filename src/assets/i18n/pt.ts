@@ -404,7 +404,7 @@ export default {
         donateConfirmMessage:
             "Ao selecionar 'Contribuir', irá enviar <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> para {{to}}.",
         yourDonationWillBackFor:
-            'Apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
+            'Sua contribuíção apoiará {{backNBeneficiaries}} beneficiários por {{backForDays}}+ dias.',
         donationBiggerThanBalance:
             'Não tem saldo suficiente para contribuir com este montante. Aumente o seu saldo na Valora.',
         amountShouldBe: 'Quantidade deve ser ${{claimAmount}}+ para calcular..',
