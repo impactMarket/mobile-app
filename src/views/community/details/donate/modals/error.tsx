@@ -1,39 +1,49 @@
 import i18n from 'assets/i18n';
-import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import { modalDonateAction } from 'helpers/constants';
 import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component, Dispatch } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Paragraph } from 'react-native-paper';
+import { StyleSheet, View, Text } from 'react-native';
 import { connect, ConnectedProps } from 'react-redux';
 
 interface IErrorModalProps {}
 class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
     render() {
         return (
-            <View
-                style={{
-                    borderRadius: 8,
-                    borderColor: 'red',
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    marginHorizontal: 22,
-                }}
-            >
-                <Paragraph
+            <>
+                <View
                     style={{
-                        marginHorizontal: 44,
-                        marginVertical: 50,
-                        fontSize: 19,
-                        lineHeight: 23,
-                        textAlign: 'center',
+                        borderRadius: 8,
+                        borderColor: 'red',
+                        borderWidth: 1,
+                        borderStyle: 'solid',
+                        margin: 22,
                     }}
                 >
-                    {i18n.t('donate.donationBiggerThanBalance')}
-                </Paragraph>
-            </View>
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Regular',
+                            marginHorizontal: 22,
+                            marginVertical: 22,
+                            fontSize: 14,
+                            lineHeight: 24,
+                            textAlign: 'center',
+                        }}
+                    >
+                        {i18n.t('donate.donationBiggerThanBalance')}
+                    </Text>
+                </View>
+                {/* TODO: add function to go back to donation step 1 */}
+                <Button
+                    style={{ width: '90%', alignSelf: 'center' }}
+                    modeType="default"
+                    labelStyle={styles.donateLabel}
+                    onPress={() => {}}
+                >
+                    {i18n.t('donate.donateWithValora')}
+                </Button>
+            </>
         );
     }
 }

@@ -387,9 +387,10 @@ export default {
         donate: 'Contribute',
         attach: 'Attach',
         donateWithValora: 'Complete contribution using Valora',
+        confirmContributionWithValora: 'Confirm contribution',
         donateSymbol: 'Contribute ({{symbol}})',
         donateConfirmMessage:
-            "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
+            'By confirming this contribution you will send <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.',
         yourDonationWillBackFor:
             'Your contribution will back {{backNBeneficiaries}} beneficiaries for {{backForDays}}+ days.',
         donationBiggerThanBalance:

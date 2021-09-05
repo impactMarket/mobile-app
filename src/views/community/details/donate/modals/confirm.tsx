@@ -1,19 +1,17 @@
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
-import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import * as Device from 'expo-device';
 import { modalDonateAction, Screens } from 'helpers/constants';
 import { getCurrencySymbol } from 'helpers/currency';
-import { getUserBalance } from 'helpers/index';
+import { chooseMediaThumbnail, getUserBalance } from 'helpers/index';
 import { setUserWalletBalance } from 'helpers/redux/actions/user';
 import { navigationRef } from 'helpers/rootNavigation';
 import { ModalActionTypes, UserActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component, Dispatch } from 'react';
 import { Trans } from 'react-i18next';
-import { Text, View, StyleSheet, Alert } from 'react-native';
-import { Paragraph } from 'react-native-paper';
+import { Text, View, StyleSheet, Alert, Image } from 'react-native';
 import { batch, connect, ConnectedProps } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
@@ -141,12 +139,23 @@ class ConfirmModal extends Component<
 
         return (
             <View>
-                <Paragraph
+                <Image
+                    style={styles.cover}
+                    source={{
+                        uri: chooseMediaThumbnail(community.cover!, {
+                            width: 330,
+                            heigth: 183,
+                        }),
+                    }}
+                />
+                <View style={styles.darkerBackground} />
+
+                <Text
                     style={{
-                        marginHorizontal: 44,
-                        marginVertical: 50,
-                        fontSize: 19,
-                        lineHeight: 23,
+                        marginHorizontal: 22,
+                        marginBottom: 70,
+                        fontSize: 14,
+                        lineHeight: 24,
                         textAlign: 'center',
                     }}
                 >
@@ -170,7 +179,17 @@ class ConfirmModal extends Component<
                             ),
                         }}
                     />
-                </Paragraph>
+                </Text>
+                <Button
+                    style={{ width: '90%', alignSelf: 'center' }}
+                    modeType="green"
+                    labelStyle={styles.donateLabel}
+                    loading={donating}
+                    // disabled={}
+                    onPress={() => {}}
+                >
+                    {i18n.t('donate.confirmContributionWithValora')}
+                </Button>
             </View>
         );
     }
@@ -185,6 +204,24 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 19,
         letterSpacing: 0.3,
+    },
+    cover: {
+        width: '90%',
+        height: 183,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+        marginVertical: 19,
+        marginHorizontal: 20,
+        alignSelf: 'center',
+    },
+    darkerBackground: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: 183,
     },
 });
 

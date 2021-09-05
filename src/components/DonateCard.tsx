@@ -11,9 +11,7 @@ import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
 
-import ConfirmModal from '../views/community/details/donate/modals/confirm';
 import DonateModal from '../views/community/details/donate/modals/donate';
-import ErrorModal from '../views/community/details/donate/modals/error';
 import renderHeader from './core/HeaderBottomSheetTitle';
 
 interface IDonateProps {
@@ -30,6 +28,7 @@ export default function DonateCard(props: IDonateProps) {
     );
     const modalizeESolidar = useRef<Modalize>(null);
     const modalizeCelo = useRef<Modalize>(null);
+    const modalizeWebViewRef = useRef<Modalize>(null);
 
     useEffect(() => {
         Api.community
@@ -155,8 +154,24 @@ export default function DonateCard(props: IDonateProps) {
                         )}
                     >
                         <DonateModal />
-                        <ConfirmModal />
-                        <ErrorModal />
+                    </Modalize>
+                    <Modalize
+                        ref={modalizeWebViewRef}
+                        HeaderComponent={renderHeader(
+                            null,
+                            modalizeWebViewRef,
+                            () => {},
+                            true
+                        )}
+                        adjustToContentHeight
+                    >
+                        <WebView
+                            originWhitelist={['*']}
+                            source={{ uri: 'https://valoraapp.com/' }}
+                            style={{
+                                height: Dimensions.get('screen').height * 0.85,
+                            }}
+                        />
                     </Modalize>
 
                     <Modalize
