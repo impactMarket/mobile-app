@@ -140,50 +140,7 @@ class ConfirmModal extends Component<
         }
 
         return (
-            <Modal
-                title={i18n.t('donate.donateSymbol', {
-                    symbol: userCurrency,
-                })}
-                visible={visible}
-                buttons={
-                    <View
-                        style={{
-                            height: 42 /** TODO: this is currently th buttons height */,
-                        }}
-                    >
-                        <View
-                            style={{
-                                flex: 2,
-                                flexDirection: 'row',
-                            }}
-                        >
-                            <Button
-                                modeType="gray"
-                                bold
-                                style={{
-                                    marginRight: 14.48,
-                                    flex: 1,
-                                }}
-                                labelStyle={styles.donateLabel}
-                                onPress={goBackToDonateModal}
-                            >
-                                {i18n.t('generic.backWithSymbol')}
-                            </Button>
-                            <Button
-                                modeType="default"
-                                bold
-                                style={{ flex: 1 }}
-                                loading={donating}
-                                labelStyle={styles.donateLabel}
-                                onPress={this.donateWithCeloWallet}
-                            >
-                                {i18n.t('donate.donate')}
-                            </Button>
-                        </View>
-                    </View>
-                }
-                onDismiss={dismissModal}
-            >
+            <View>
                 <Paragraph
                     style={{
                         marginHorizontal: 44,
@@ -194,7 +151,7 @@ class ConfirmModal extends Component<
                     }}
                 >
                     <Trans
-                        i18nKey="donateConfirmMessage"
+                        i18nKey="donate.donateConfirmMessage"
                         values={{
                             symbol: getCurrencySymbol(userCurrency),
                             amount: amountDonate
@@ -214,7 +171,7 @@ class ConfirmModal extends Component<
                         }}
                     />
                 </Paragraph>
-            </Modal>
+            </View>
         );
     }
 }

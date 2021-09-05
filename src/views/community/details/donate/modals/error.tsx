@@ -5,37 +5,22 @@ import { modalDonateAction } from 'helpers/constants';
 import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component, Dispatch } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 
 interface IErrorModalProps {}
 class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
     render() {
-        const {
-            visible,
-            dismissModal,
-            userCurrency,
-            goBackToDonateModal,
-        } = this.props;
-
         return (
-            <Modal
-                title={i18n.t('donate.donateSymbol', {
-                    symbol: userCurrency,
-                })}
-                visible={visible}
-                buttons={
-                    <Button
-                        modeType="gray"
-                        bold
-                        labelStyle={styles.donateLabel}
-                        onPress={goBackToDonateModal}
-                    >
-                        {i18n.t('generic.backWithSymbol')}
-                    </Button>
-                }
-                onDismiss={dismissModal}
+            <View
+                style={{
+                    borderRadius: 8,
+                    borderColor: 'red',
+                    borderWidth: 1,
+                    borderStyle: 'solid',
+                    marginHorizontal: 22,
+                }}
             >
                 <Paragraph
                     style={{
@@ -48,7 +33,7 @@ class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
                 >
                     {i18n.t('donate.donationBiggerThanBalance')}
                 </Paragraph>
-            </Modal>
+            </View>
         );
     }
 }

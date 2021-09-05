@@ -399,7 +399,7 @@ export default {
             'Endereço da comunidade copiado! Envie apenas $cUSD (Celo Dollar) para este contrato.',
         donate: 'Contribuir',
         attach: 'Anexar',
-        donateWithValora: 'Contribuir com Valora',
+        donateWithValora: 'Complete a contribuição com Valora',
         donateSymbol: 'Contribuir ({{symbol}})',
         donateConfirmMessage:
             "Ao selecionar 'Contribuir', irá enviar <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> para {{to}}.",

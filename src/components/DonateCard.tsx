@@ -29,6 +29,7 @@ export default function DonateCard(props: IDonateProps) {
         'https://community.esolidar.com/pt'
     );
     const modalizeESolidar = useRef<Modalize>(null);
+    const modalizeCelo = useRef<Modalize>(null);
 
     useEffect(() => {
         Api.community
@@ -51,12 +52,13 @@ export default function DonateCard(props: IDonateProps) {
                 </Title>
                 <Pressable
                     style={styles.button}
-                    onPress={() =>
+                    onPress={() => {
+                        modalizeCelo.current?.open();
                         dispatch({
                             type: modalDonateAction.OPEN,
                             payload: community,
-                        })
-                    }
+                        });
+                    }}
                     testID="donateWithCelo"
                 >
                     <View
@@ -143,9 +145,20 @@ export default function DonateCard(props: IDonateProps) {
             </View>
             <Portal>
                 <Provider store={useStore()}>
-                    <DonateModal />
-                    <ConfirmModal />
-                    <ErrorModal />
+                    <Modalize
+                        ref={modalizeCelo}
+                        HeaderComponent={renderHeader(
+                            'Contribute',
+                            modalizeCelo,
+                            () => {},
+                            false
+                        )}
+                    >
+                        <DonateModal />
+                        <ConfirmModal />
+                        <ErrorModal />
+                    </Modalize>
+
                     <Modalize
                         ref={modalizeESolidar}
                         HeaderComponent={renderHeader(

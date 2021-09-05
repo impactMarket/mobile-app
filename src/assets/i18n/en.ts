@@ -386,7 +386,7 @@ export default {
             'Community address copied to clipboard! Send only $cUSD (Celo Dollar) to this contract',
         donate: 'Contribute',
         attach: 'Attach',
-        donateWithValora: 'Contribute with Valora',
+        donateWithValora: 'Complete contribution using Valora',
         donateSymbol: 'Contribute ({{symbol}})',
         donateConfirmMessage:
             "By pressing 'Contribute', you will contribute <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.",
