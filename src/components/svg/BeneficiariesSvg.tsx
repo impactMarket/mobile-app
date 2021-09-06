@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, { Path, G, SvgProps } from 'react-native-svg';
+import Svg, { Path, SvgProps } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
 
 function BeneficiariesSvg(props: SvgProps) {

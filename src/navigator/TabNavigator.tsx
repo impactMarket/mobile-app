@@ -21,8 +21,6 @@ import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 import CommunitiesScreen from 'views/communities';
 import BeneficiaryScreen from 'views/community/beneficiary';
 import CommunityManagerScreen from 'views/community/manager';
-import ProfileScreen from 'views/profile';
-import Login from 'views/profile/auth';
 
 import Beneficiary from './header/Beneficiary';
 import CommunityManager from './header/CommunityManager';
@@ -121,7 +119,6 @@ function TabNavigator({
     const fromWelcomeScreen = useSelector(
         (state: IRootState) => state.app.fromWelcomeScreen
     );
-    const userWallet = useSelector((state: IRootState) => state.user.wallet);
 
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
@@ -193,10 +190,7 @@ function TabNavigator({
             options={CommunitiesScreen.navigationOptions}
         />
     );
-    // const tabProfile = (
-    //     <Tab.Screen name={Screens.Profile} component={ProfileScreen} />
-    // );
-    // const tabAuth = <Tab.Screen name={Screens.Auth} component={Login} />;
+
     return (
         <Host>
             <Tab.Navigator
@@ -230,7 +224,6 @@ function TabNavigator({
                 {tabCommunities}
                 {isBeneficiary && tabBeneficiary}
                 {isManager && tabManager}
-                {/* {userWallet.address.length === 0 ? tabAuth : tabProfile} */}
             </Tab.Navigator>
         </Host>
     );

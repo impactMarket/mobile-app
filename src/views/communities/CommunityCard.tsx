@@ -1,11 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
-import i18n from 'assets/i18n';
 import CachedImage from 'components/CacheImage';
 import BeneficiariesSvg from 'components/svg/BeneficiariesSvg';
 import LocationsSvg from 'components/svg/LocationSvg';
-import WarningTriangle from 'components/svg/WarningTriangle';
-import SuspiciousActivityMiddleSvg from 'components/svg/suspicious/SuspiciousActivityMiddleSvg';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { CommunityAttributes } from 'helpers/types/models';

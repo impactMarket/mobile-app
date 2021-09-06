@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 import CommunitiesScreen from './communities';
 import BeneficiaryView from './community/beneficiary/WelcomeRulesScreen';
 import CommunityManagerView from './community/manager';
-import ProfileScreen from './profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -77,7 +76,6 @@ function Tabs() {
                 {isBeneficiary && tabBeneficiary}
                 {isManager && tabManager}
                 {!isBeneficiary && !isManager && tabCommunities}
-                {/* <Tab.Screen name="profile" component={ProfileScreen} /> */}
             </Tab.Navigator>
         </Host>
     );

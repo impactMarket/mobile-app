@@ -190,11 +190,7 @@ export function calculateCommunityRemainedFunds(
 
     const raised = new BigNumber(community.state.raised); // 10.15 string
     const claimed = new BigNumber(community.state.claimed); // 0
-    const ubiRate = community.metrics?.ubiRate ?? 0;
     const beneficiaryCount = community.state.beneficiaries;
-
-    // const remainingFundToBeClaimedPerBeneficiary =
-    //     raised.toNumber() - claimed.toNumber() / ubiRate / beneficiaryCount;
 
     const remainingFundToBeClaimed = raised.minus(claimed);
 

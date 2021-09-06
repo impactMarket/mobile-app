@@ -10,7 +10,6 @@ import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CheckSvg from 'components/svg/CheckSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import LockSvg from 'components/svg/LockSvg';
-import ProfileSvg from 'components/svg/ProfileOutlineSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
@@ -26,9 +25,9 @@ import {
     setUserMetadata,
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
-
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
+import Logout from 'navigator/header/Logout';
 import React, { useState, useEffect, useRef } from 'react';
 import { Trans } from 'react-i18next';
 import {
@@ -59,7 +58,6 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
-import Logout from 'navigator/header/Logout';
 
 const currencies: {
     [key: string]: {

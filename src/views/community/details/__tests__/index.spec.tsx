@@ -8,8 +8,8 @@ import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 import { createStore } from 'redux';
-import CommunityExtendedDetailsScreen from 'views/community/extendedDetails';
 import Api from 'services/api';
+import CommunityExtendedDetailsScreen from 'views/community/extendedDetails';
 
 import CommunityDetailsScreen from '../';
 

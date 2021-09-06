@@ -8,7 +8,6 @@ import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import CommunityRules from 'components/core/CommunityRules';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
-import CloseStorySvg from 'components/svg/CloseStorySvg';
 import ManageSvg from 'components/svg/ManageSvg';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
@@ -21,7 +20,7 @@ import {
     UbiRequestChangeParams,
 } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     StyleSheet,
     View,
@@ -52,7 +51,6 @@ function CommunityManagerScreen() {
 
     const modalizeHelpCenterRef = useRef<Modalize>(null);
 
-    const [openHelpCenter, setOpenHelpCenter] = useState(false);
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userCurrency = useSelector(
         (state: IRootState) => state.user.metadata.currency

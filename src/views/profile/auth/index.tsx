@@ -2,11 +2,7 @@ import { newKitFromWeb3 } from '@celo/contractkit';
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import { AccountAuthResponseSuccess } from '@celo/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-    RouteProp,
-    useNavigation,
-    useFocusEffect,
-} from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
