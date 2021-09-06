@@ -66,7 +66,7 @@ function CommunityMinimunExpectedDuration() {
                 lineHeight: 28,
             }}
         >
-            {i18n.t('expectedUBIDuration', {
+            {i18n.t('createCommunity.expectedUBIDuration', {
                 years,
                 months,
                 days,
@@ -86,17 +86,21 @@ function CommunityVisibility(props: HelperProps) {
     return (
         <View style={{ marginTop: 28, marginBottom: 22 }}>
             <Select
-                label={i18n.t('visibility')}
+                label={i18n.t('createCommunity.visibility')}
                 help
                 onHelpPress={() => {
-                    props.setHelperInfo.title(i18n.t('visibility'));
-                    props.setHelperInfo.content(i18n.t('visibilityHelp'));
+                    props.setHelperInfo.title(
+                        i18n.t('createCommunity.visibility')
+                    );
+                    props.setHelperInfo.content(
+                        i18n.t('createCommunity.visibilityHelp')
+                    );
                     props.helperRef.current.open();
                 }}
                 value={
                     state.visibility === 'public'
-                        ? i18n.t('public')
-                        : i18n.t('private')
+                        ? i18n.t('createCommunity.public')
+                        : i18n.t('createCommunity.private')
                 }
                 onPress={() => modalizeVisibilityRef.current?.open()}
             />
@@ -104,7 +108,7 @@ function CommunityVisibility(props: HelperProps) {
                 <Modalize
                     ref={modalizeVisibilityRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('visibility'),
+                        i18n.t('createCommunity.visibility'),
                         modalizeVisibilityRef
                     )}
                     adjustToContentHeight
@@ -127,11 +131,11 @@ function CommunityVisibility(props: HelperProps) {
                             value={state.visibility}
                         >
                             <RadioButton.Item
-                                label={i18n.t('public')}
+                                label={i18n.t('createCommunity.public')}
                                 value="public"
                             />
                             <RadioButton.Item
-                                label={i18n.t('private')}
+                                label={i18n.t('createCommunity.private')}
                                 value="private"
                             />
                         </RadioButton.Group>
@@ -167,7 +171,7 @@ function CommunityIncrementInterval(props: HelperProps) {
 
     const error = state.validation.incrementInterval
         ? undefined
-        : i18n.t('incrementalIntervalRequired');
+        : i18n.t('createCommunity.incrementalIntervalRequired');
 
     return (
         <>
@@ -179,7 +183,7 @@ function CommunityIncrementInterval(props: HelperProps) {
                     lineHeight: 24,
                 }}
             >
-                {i18n.t('contractIncrementTitle')}
+                {i18n.t('createCommunity.contractIncrementTitle')}
             </Text>
             <View
                 style={{
@@ -190,16 +194,20 @@ function CommunityIncrementInterval(props: HelperProps) {
             >
                 <View style={{ flex: 1, marginRight: 10 }}>
                     <Input
-                        accessibilityLabel={i18n.t('time')}
-                        label={i18n.t('time')}
+                        accessibilityLabel={i18n.t('createCommunity.time')}
+                        label={i18n.t('createCommunity.time')}
                         value={state.incrementInterval}
                         help
                         onPress={() => {
                             props.setHelperInfo.title(
-                                i18n.t('timeIncrementAfterClaim')
+                                i18n.t(
+                                    'createCommunity.timeIncrementAfterClaim'
+                                )
                             );
                             props.setHelperInfo.content(
-                                i18n.t('timeIncrementAfterClaimHelp')
+                                i18n.t(
+                                    'createCommunity.timeIncrementAfterClaimHelp'
+                                )
                             );
                             props.helperRef.current.open();
                         }}
@@ -215,10 +223,10 @@ function CommunityIncrementInterval(props: HelperProps) {
                     <Select
                         value={
                             state.incrementIntervalUnit === 60
-                                ? i18n.t('minutes')
+                                ? i18n.t('createCommunity.minutes')
                                 : state.incrementIntervalUnit === 3600
-                                ? i18n.t('hours')
-                                : i18n.t('days')
+                                ? i18n.t('createCommunity.hours')
+                                : i18n.t('createCommunity.days')
                         }
                         onPress={() =>
                             modalizeClaimIncrementRef.current?.open()
@@ -230,7 +238,7 @@ function CommunityIncrementInterval(props: HelperProps) {
                 <Modalize
                     ref={modalizeClaimIncrementRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('incrementalFrequency'),
+                        i18n.t('createCommunity.incrementalFrequency'),
                         modalizeClaimIncrementRef
                     )}
                     adjustToContentHeight
@@ -247,15 +255,15 @@ function CommunityIncrementInterval(props: HelperProps) {
                             value={state.incrementIntervalUnit.toString()}
                         >
                             <RadioButton.Item
-                                label={i18n.t('minutes')}
+                                label={i18n.t('createCommunity.minutes')}
                                 value="60"
                             />
                             <RadioButton.Item
-                                label={i18n.t('hours')}
+                                label={i18n.t('createCommunity.hours')}
                                 value="3600"
                             />
                             <RadioButton.Item
-                                label={i18n.t('days')}
+                                label={i18n.t('createCommunity.days')}
                                 value="86400"
                             />
                         </RadioButton.Group>
@@ -292,20 +300,22 @@ function CommunityMaxClaim(props: HelperProps) {
 
     const error = state.validation.maxClaim
         ? undefined
-        : i18n.t('maxClaimAmountRequired');
+        : i18n.t('createCommunity.maxClaimAmountRequired');
 
     return (
         <View style={{ marginTop: 28 }}>
             <Input
-                accessibilityLabel={i18n.t('totalClaimPerBeneficiary')}
-                label={i18n.t('totalClaimPerBeneficiary')}
+                accessibilityLabel={i18n.t(
+                    'createCommunity.totalClaimPerBeneficiary'
+                )}
+                label={i18n.t('createCommunity.totalClaimPerBeneficiary')}
                 help
                 onPress={() => {
                     props.setHelperInfo.title(
-                        i18n.t('totalClaimPerBeneficiary')
+                        i18n.t('createCommunity.totalClaimPerBeneficiary')
                     );
                     props.setHelperInfo.content(
-                        i18n.t('totalClaimPerBeneficiaryHelp')
+                        i18n.t('createCommunity.totalClaimPerBeneficiaryHelp')
                     );
                     props.helperRef.current.open();
                 }}
@@ -330,7 +340,7 @@ function CommunityMaxClaim(props: HelperProps) {
                         color: ipctColors.regentGray,
                     }}
                 >
-                    {i18n.t('aroundValue', {
+                    {i18n.t('createCommunity.aroundValue', {
                         amount: amountInUserCurrency,
                     })}
                 </Text>
@@ -348,17 +358,21 @@ function CommunityClaimFrequency(props: HelperProps) {
     return (
         <View style={{ marginTop: 28 }}>
             <Select
-                label={i18n.t('frequency')}
+                label={i18n.t('createCommunity.frequency')}
                 help
                 onHelpPress={() => {
-                    props.setHelperInfo.title(i18n.t('frequency'));
-                    props.setHelperInfo.content(i18n.t('frequencyHelp'));
+                    props.setHelperInfo.title(
+                        i18n.t('createCommunity.frequency')
+                    );
+                    props.setHelperInfo.content(
+                        i18n.t('createCommunity.frequencyHelp')
+                    );
                     props.helperRef.current.open();
                 }}
                 value={
                     state.baseInterval === '86400'
-                        ? i18n.t('daily')
-                        : i18n.t('weekly')
+                        ? i18n.t('createCommunity.daily')
+                        : i18n.t('createCommunity.weekly')
                 }
                 onPress={() => modalizeFrequencyRef.current?.open()}
             />
@@ -366,7 +380,7 @@ function CommunityClaimFrequency(props: HelperProps) {
                 <Modalize
                     ref={modalizeFrequencyRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('frequency'),
+                        i18n.t('createCommunity.frequency'),
                         modalizeFrequencyRef
                     )}
                     adjustToContentHeight
@@ -389,11 +403,11 @@ function CommunityClaimFrequency(props: HelperProps) {
                             value={state.baseInterval}
                         >
                             <RadioButton.Item
-                                label={i18n.t('daily')}
+                                label={i18n.t('createCommunity.daily')}
                                 value="86400"
                             />
                             <RadioButton.Item
-                                label={i18n.t('weekly')}
+                                label={i18n.t('createCommunity.weekly')}
                                 value="604800"
                             />
                         </RadioButton.Group>
@@ -430,17 +444,21 @@ function CommunityClaimAmount(props: HelperProps) {
 
     const error = state.validation.claimAmount
         ? undefined
-        : i18n.t('claimAmountRequired');
+        : i18n.t('createCommunity.claimAmountRequired');
 
     return (
         <View style={{ marginTop: 28 }}>
             <Input
-                accessibilityLabel={i18n.t('claimAmount')}
-                label={i18n.t('claimAmount')}
+                accessibilityLabel={i18n.t('createCommunity.claimAmount')}
+                label={i18n.t('createCommunity.claimAmount')}
                 help
                 onPress={() => {
-                    props.setHelperInfo.title(i18n.t('claimAmount'));
-                    props.setHelperInfo.content(i18n.t('claimAmountHelp'));
+                    props.setHelperInfo.title(
+                        i18n.t('createCommunity.claimAmount')
+                    );
+                    props.setHelperInfo.content(
+                        i18n.t('createCommunity.claimAmountHelp')
+                    );
                     props.helperRef.current.open();
                 }}
                 value={state.claimAmount}
@@ -464,7 +482,7 @@ function CommunityClaimAmount(props: HelperProps) {
                         color: ipctColors.regentGray,
                     }}
                 >
-                    {i18n.t('aroundValue', {
+                    {i18n.t('createCommunity.aroundValue', {
                         amount: amountInUserCurrency,
                     })}
                 </Text>
@@ -488,7 +506,7 @@ export default function Contract() {
                     lineHeight: 24,
                 }}
             >
-                {i18n.t('contractDetails')}
+                {i18n.t('createCommunity.contractDetails')}
             </Headline>
             <Text
                 style={{
@@ -497,7 +515,7 @@ export default function Contract() {
                     lineHeight: 24,
                 }}
             >
-                {i18n.t('contractDescriptionLabel')}
+                {i18n.t('createCommunity.contractDescriptionLabel')}
             </Text>
             <CommunityClaimAmount
                 helperRef={modalizeHelperRef}

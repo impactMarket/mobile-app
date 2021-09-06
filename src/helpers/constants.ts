@@ -1,5 +1,6 @@
 export enum Screens {
     CommunityDetails = 'CommunityDetails',
+    CommunityExtendedDetailsScreen = 'CommunityExtendedDetailsScreen',
     FAQ = 'FAQ',
     Welcome = 'Welcome',
     CreateCommunity = 'CreateCommunity',

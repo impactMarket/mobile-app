@@ -159,9 +159,9 @@ export async function getUserBalance(kit: ContractKit, address: string) {
 }
 
 export function claimFrequencyToText(frequency: number): string {
-    if (frequency === 86400) return i18n.t('daily');
-    if (frequency === 604800) return i18n.t('weekly');
-    return 'unknown';
+    if (frequency === 86400) return i18n.t('createCommunity.daily');
+    if (frequency === 604800) return i18n.t('createCommunity.weekly');
+    return 'errors.unknown';
 }
 
 export function calculateCommunityProgress(
@@ -180,6 +180,32 @@ export function calculateCommunityProgress(
             : community.state.claimed
     ).div(m.eq(0) ? 1 : m);
     return parseFloat(result.decimalPlaces(5, 1).toString());
+}
+export function calculateCommunityRemainedFunds(
+    community: CommunityAttributes
+): number {
+    if (community.contract === undefined || community.state === undefined) {
+        return 0;
+    }
+
+    const raised = new BigNumber(community.state.raised);
+    const claimed = new BigNumber(community.state.claimed);
+    const ubiRate = community.metrics?.ubiRate ?? 0;
+    const beneficiaryCount = community.state.beneficiaries;
+
+    const remainingFundToBeClaimed =
+        raised.toNumber() - claimed.toNumber() / ubiRate / beneficiaryCount;
+
+    const claimAmountPerBeneficiary = new BigNumber(
+        community.contract.claimAmount
+    );
+
+    const communityLimitPerDay =
+        claimAmountPerBeneficiary.toNumber() * beneficiaryCount;
+
+    const remainingDays = remainingFundToBeClaimed / communityLimitPerDay;
+
+    return remainingDays <= 1 ? 1 : Math.round(remainingDays);
 }
 
 export function getCountryFromPhoneNumber(pnumber: string) {
@@ -211,7 +237,7 @@ export async function updateCommunityInfo(
 }
 
 export function validateEmail(email: string) {
-    const emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+    const emailRegex = /^[-!#$%&'*+\\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
     if (!email) return false;
 
     if (email.length === 0) return false;

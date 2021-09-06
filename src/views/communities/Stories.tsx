@@ -22,43 +22,23 @@ export default function Stories() {
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
-
-    // const storiesCommunity = useSelector(
-    //     (state: IRootState) => state.stories.stories
-    // );
-
-    // const refreshing = useSelector(
-    //     (state: IRootState) => state.stories.refreshing
-    // );
-    const [refreshing, setRefreshing] = useState(false);
-
     const userCommunityMetadata = useSelector(
         (state: IRootState) => state.user.community
     );
 
+    const [refreshing, setRefreshing] = useState(false);
     const [storiesCommunity, setStoriesCommunity] = useState([]);
     const [countStories, setCountStories] = useState(0);
-
-    // This is necessary because the useEffect doesn't triggers when coming from the same stack (stackNavigation).
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         dispatch(addStoriesToStateRequest(0, 5));
-    //     }, [])
-    // );
-    /**
-     * Code Before Sagas
-     * */
 
     useEffect(() => {
         setRefreshing(true);
         Api.story.list<ICommunitiesListStories[]>(0, 5).then((s) => {
             setStoriesCommunity(s.data);
             setCountStories(s.count);
-            // dispatch(addStoriesToState(s));
             dispatch(addStoriesToStateRequest(0, 5));
             setRefreshing(false);
         });
-    }, []);
+    }, [dispatch]);
 
     return (
         <SafeAreaView>
@@ -79,7 +59,7 @@ export default function Stories() {
                         color: '#1E3252',
                     }}
                 >
-                    {i18n.t('stories')}
+                    {i18n.t('stories.stories')}
                 </Text>
                 <Pressable
                     hitSlop={10}
@@ -99,7 +79,7 @@ export default function Stories() {
                             letterSpacing: 0.366667,
                         }}
                     >
-                        {i18n.t('viewAll')} ({countStories})
+                        {i18n.t('generic.viewAll')} ({countStories})
                     </Text>
                 </Pressable>
             </View>

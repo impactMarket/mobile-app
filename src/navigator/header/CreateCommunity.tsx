@@ -16,7 +16,11 @@ function CreateCommunity(props: {
     const walletAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
-    // TODO: create should always be visible, but allowed only after login
+
+    const isManager = useSelector(
+        (state: IRootState) => state.user.community.isManager
+    );
+
     return (
         <View
             style={{
@@ -36,16 +40,17 @@ function CreateCommunity(props: {
                     textAlign: 'center',
                     letterSpacing: 0.366667,
                     color: ipctColors.blueRibbon,
-                    // marginLeft: 8.4,
                     marginRight: 16,
                 }}
                 onPress={() =>
                     !props.userCommunity && walletAddress.length > 0
                         ? props.navigation.navigate(Screens.CreateCommunity)
+                        : isManager
+                        ? props.navigation.navigate(Screens.CommunityManager)
                         : props.navigation.navigate(Screens.Auth)
                 }
             >
-                {i18n.t('create')}
+                {i18n.t('generic.create')}
             </Button>
         </View>
     );

@@ -5,6 +5,7 @@ jobs:
     working_directory: ~/publish-to-expo
     docker:
       - image: circleci/node:14.15.1
+    resource_class: medium+
     environment:
       EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
       EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
@@ -75,6 +76,7 @@ jobs:
     working_directory: ~/my-app
     docker:
       - image: circleci/node:14.15.1
+    resource_class: small
     environment:
       NODE_ENV: development
     steps:

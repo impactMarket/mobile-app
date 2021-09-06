@@ -13,7 +13,11 @@ export const ipctColors = {
     borderGray: '#8A9FC2',
     darBlue: '#333239',
     white: '#FFFFFF',
+    softWhite: '#DCDFE44F',
+    blueGray: '#73839D',
+    warningOrange: '#FE9A22',
     errorRed: '#EB5757',
+    lynch: '#73839D',
 };
 
 export default StyleSheet.create({});

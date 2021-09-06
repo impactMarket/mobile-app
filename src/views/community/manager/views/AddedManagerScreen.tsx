@@ -38,34 +38,28 @@ function AddedManagerScreen() {
 
     const onRefresh = useCallback(() => {
         setRefreshing(true);
-        Api.community.listManagers(community.metadata.id, 0, 10).then((l) => {
-            if (l.length < 10) {
-                setReachedEndList(true);
-            }
+        Api.community.listManagers(community.metadata.id).then((l) => {
+            setReachedEndList(true);
             setTotalManagers(l.length);
             setManagers(l);
             setManagersOffset(0);
             setRemoving(Array(l.length).fill(false));
             setRefreshing(false);
         });
-    }, []);
+    }, [community]);
 
     useEffect(() => {
         const loadActiveBeneficiaries = () => {
-            Api.community
-                .listManagers(community.metadata.id, 0, 10)
-                .then((l) => {
-                    if (l.length < 10) {
-                        setReachedEndList(true);
-                    }
-                    setTotalManagers(l.length);
-                    setManagers(l);
-                    setManagersOffset(0);
-                    setRemoving(Array(l.length).fill(false));
-                });
+            Api.community.listManagers(community.metadata.id).then((l) => {
+                setReachedEndList(true);
+                setTotalManagers(l.length);
+                setManagers(l);
+                setManagersOffset(0);
+                setRemoving(Array(l.length).fill(false));
+            });
         };
         loadActiveBeneficiaries();
-    }, []);
+    }, [community]);
 
     const handleRemoveManager = async (
         manager: ManagerAttributes,
@@ -73,9 +67,9 @@ function AddedManagerScreen() {
     ) => {
         if (userWallet.balance.length < 16) {
             Alert.alert(
-                i18n.t('failure'),
-                i18n.t('notEnoughForTransaction'),
-                [{ text: i18n.t('close') }],
+                i18n.t('generic.failure'),
+                i18n.t('errors.notEnoughForTransaction'),
+                [{ text: i18n.t('generic.close') }],
                 { cancelable: false }
             );
             return;
@@ -98,8 +92,8 @@ function AddedManagerScreen() {
                     return;
                 }
                 Alert.alert(
-                    i18n.t('success'),
-                    i18n.t('userWasRemoved', {
+                    i18n.t('generic.success'),
+                    i18n.t('manager.userWasRemoved', {
                         user: formatAddressOrName(manager),
                     }),
                     [{ text: 'OK' }],
@@ -112,11 +106,9 @@ function AddedManagerScreen() {
                     flatListRef.current?.scrollToIndex({ index: 0 });
                     setRefreshing(true);
                     Api.community
-                        .listManagers(community.metadata.id, 0, 10)
+                        .listManagers(community.metadata.id)
                         .then((l) => {
-                            if (l.length < 10) {
-                                setReachedEndList(true);
-                            }
+                            setReachedEndList(true);
                             setManagers(l);
                             setManagersOffset(0);
                             setRemoving(Array(l.length).fill(false));
@@ -125,35 +117,37 @@ function AddedManagerScreen() {
                 }, 2500);
             })
             .catch(async (e) => {
-                let error = 'unknown';
+                let error = 'errors.unknown';
                 if (e.message.includes('has been reverted')) {
-                    error = 'syncIssues';
+                    error = 'errors.sync.issues';
                 } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
-                    error = 'possiblyValoraNotSynced';
+                    error = 'errors.sync.possiblyValora';
                 } else if (e.message.includes('gas required exceeds')) {
-                    error = 'unknown';
+                    error = 'errors.unknown';
                     // verify clock time
                     if (await isOutOfTime()) {
-                        error = 'clockNotSynced';
+                        error = 'errors.sync.clock';
                     }
                 } else if (e.message.includes('Invalid JSON RPC response:')) {
                     if (
                         e.message.includes('The network connection was lost.')
                     ) {
-                        error = 'networkConnectionLost';
+                        error = 'errors.network.connectionLost';
                     }
-                    error = 'networkIssuesRPC';
+                    error = 'errors.network.rpc';
                 }
-                if (error === 'unknown') {
+                if (error === 'errors.unknown') {
                     //only submit to sentry if it's unknown
                     Sentry.Native.captureException(e);
                 }
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('errorRemovingManager', { error: i18n.t(error) }),
+                    i18n.t('generic.failure'),
+                    i18n.t('manager.errorRemovingManager', {
+                        error: i18n.t(error),
+                    }),
                     [{ text: 'OK' }],
                     { cancelable: false }
                 );
@@ -187,11 +181,9 @@ function AddedManagerScreen() {
         if (!refreshing && !reachedEndList) {
             setRefreshing(true);
             Api.community
-                .listManagers(community.metadata.id, managersOffset + 10, 10)
+                .listManagers(community.metadata.id)
                 .then((l) => {
-                    if (l.length < 10) {
-                        setReachedEndList(true);
-                    }
+                    setReachedEndList(true);
                     setManagers(managers.concat(l));
                     setManagersOffset(managersOffset + 10);
                     setRemoving(Array(managers.length + l.length).fill(false));
@@ -209,7 +201,7 @@ function AddedManagerScreen() {
     }) => (
         <List.Item
             title={formatAddressOrName(item)}
-            description={i18n.t('managerSince', {
+            description={i18n.t('manager.managerSince', {
                 date: moment(item.createdAt).format('MMM, YYYY'),
             })}
             right={() =>
@@ -222,12 +214,12 @@ function AddedManagerScreen() {
                         style={{ marginVertical: 5 }}
                         onPress={() => handleRemoveManager(item, index)}
                     >
-                        {i18n.t('remove')}
+                        {i18n.t('generic.remove')}
                     </Button>
                 )
             }
             // left={() =>
-            //     item.suspect && <WarningRedTriangle style={{ marginTop: 14 }} />
+            //     item.suspect && <WarningTriangle style={{ marginTop: 14 }} />
             // }
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}
@@ -279,7 +271,7 @@ function AddedManagerScreen() {
 AddedManagerScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('added'),
+        headerTitle: i18n.t('generic.added'),
     };
 };
 

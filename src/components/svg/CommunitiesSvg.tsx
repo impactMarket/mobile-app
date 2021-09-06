@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Svg, { Path, Mask, G } from 'react-native-svg';
+import Svg, { Path, G } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
 
 function CommunitiesSvg(props: { focused: boolean }) {

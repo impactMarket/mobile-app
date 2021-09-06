@@ -69,6 +69,10 @@ export interface CommunityAttributes extends UbiCommunity {
     organization?: UbiOrganization;
 }
 
+export interface CommunityCampaing {
+    communityId: number;
+    campaignUrl: string;
+}
 export interface AppMediaThumbnail {
     id: number;
     mediaContentId: number;
@@ -178,4 +182,22 @@ export interface UbiRequestChangeParams {
     maxClaim: string;
     baseInterval: number;
     incrementInterval: number;
+}
+
+export interface UbiPromoterSocialMedia {
+    id: number;
+    promoterId: number;
+    mediaType: string;
+    url: string;
+}
+
+export interface UbiPromoter {
+    id: number;
+    category: 'organization' | 'company' | 'individual';
+    name: string;
+    description: string;
+    logoMediaId: number;
+
+    logo?: AppMediaContent;
+    socialMedia?: UbiPromoterSocialMedia[];
 }

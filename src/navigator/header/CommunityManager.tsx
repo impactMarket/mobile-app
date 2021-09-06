@@ -45,7 +45,7 @@ function CommunityManager() {
                                 });
                             }}
                         >
-                            {i18n.t('viewAsPublic')}
+                            {i18n.t('manager.viewAsPublic')}
                         </Button>
                         <Button
                             modeType="gray"
@@ -56,7 +56,7 @@ function CommunityManager() {
                                 navigation.navigate(Screens.EditCommunity);
                             }}
                         >
-                            {i18n.t('editCommunityDetails')}
+                            {i18n.t('manager.editCommunityDetails')}
                         </Button>
                     </>
                 </ThreeDotsSvg>

@@ -13,7 +13,7 @@ import { IRootState } from 'helpers/types/state';
 import React, { useState, useEffect, useRef } from 'react';
 import { Alert, FlatList, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { ActivityIndicator, RadioButton, Portal } from 'react-native-paper';
+import { RadioButton, Portal } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CommunityCard from './CommunityCard';
@@ -29,7 +29,7 @@ function CommunitiesScreen() {
         Location.LocationObject | undefined
     >(undefined);
 
-    const [refreshing, setRefreshing] = useState(true);
+    const [, setRefreshing] = useState(true);
     const communities = useSelector(
         (state: IRootState) => state.communities.communities
     );
@@ -45,7 +45,7 @@ function CommunitiesScreen() {
                 limit: 5,
             })
         );
-    }, []);
+    }, [dispatch]);
 
     const handleChangeOrder = async (order: string) => {
         modalizeOrderRef.current?.close();
@@ -57,8 +57,8 @@ function CommunitiesScreen() {
                 const { status } = await Location.requestPermissionsAsync();
                 if (status !== 'granted') {
                     Alert.alert(
-                        i18n.t('failure'),
-                        i18n.t('errorGettingGPSLocation'),
+                        i18n.t('generic.failure'),
+                        i18n.t('errors.gettingGPS'),
                         [{ text: 'OK' }],
                         { cancelable: false }
                     );
@@ -130,9 +130,9 @@ function CommunitiesScreen() {
     const textCommunitiesOrder = (g: string | null) => {
         switch (g) {
             case 'nearest':
-                return i18n.t('nearest');
+                return i18n.t('generic.nearest');
             default:
-                return i18n.t('bigger');
+                return i18n.t('generic.bigger');
         }
     };
 
@@ -162,7 +162,7 @@ function CommunitiesScreen() {
             <Modalize
                 ref={modalizeOrderRef}
                 HeaderComponent={renderHeader(
-                    i18n.t('order'),
+                    i18n.t('generic.order'),
                     modalizeOrderRef
                 )}
                 adjustToContentHeight
@@ -178,12 +178,12 @@ function CommunitiesScreen() {
                     >
                         <RadioButton.Item
                             key="bigger"
-                            label={i18n.t('bigger')}
+                            label={i18n.t('generic.bigger')}
                             value="bigger"
                         />
                         <RadioButton.Item
                             key="nearest"
-                            label={i18n.t('nearest')}
+                            label={i18n.t('generic.nearest')}
                             value="nearest"
                         />
                     </RadioButton.Group>
@@ -225,8 +225,8 @@ function CommunitiesScreen() {
 
 CommunitiesScreen.navigationOptions = () => {
     return {
-        headerTitle: i18n.t('communities'),
-        tabBarLabel: i18n.t('communities'),
+        headerTitle: i18n.t('generic.communities'),
+        tabBarLabel: i18n.t('generic.communities'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <CommunitiesSvg focused={props.focused} />
         ),

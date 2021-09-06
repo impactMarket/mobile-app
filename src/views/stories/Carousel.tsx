@@ -77,7 +77,7 @@ function Carousel(props: {
                         }
                     });
         }
-    }, []);
+    }, [caller, myStories, props.communityId, userAddress]);
 
     const handlePressPrevious = () => {
         if (index === 0 && caller !== 'MY_STORIES') {
@@ -131,9 +131,11 @@ function Carousel(props: {
                     alignSelf: 'center',
                 }}
             >
-                <Text style={styles.title}>{i18n.t('emptyStoriesTitle')}</Text>
+                <Text style={styles.title}>
+                    {i18n.t('stories.emptyStoriesTitle')}
+                </Text>
                 <Text style={styles.text}>
-                    {i18n.t('emptyStoriesDescription')}
+                    {i18n.t('stories.emptyStoriesDescription')}
                 </Text>
                 <Pressable
                     style={{
@@ -170,7 +172,7 @@ function Carousel(props: {
                                 color: ipctColors.white,
                             }}
                         >
-                            {i18n.t('createStory')}
+                            {i18n.t('stories.createStory')}
                         </Text>
                     </View>
                 </Pressable>
@@ -259,9 +261,9 @@ function Carousel(props: {
                                 setStories([...previousStoriesValues]);
                             } else {
                                 Alert.alert(
-                                    i18n.t('failure'),
+                                    i18n.t('generic.failure'),
                                     'You need to be authenticated!',
-                                    [{ text: i18n.t('close') }],
+                                    [{ text: i18n.t('generic.close') }],
                                     { cancelable: false }
                                 );
                             }
@@ -302,7 +304,7 @@ function Carousel(props: {
                                     )
                                 }
                             >
-                                {i18n.t('donate')}
+                                {i18n.t('donate.donate')}
                             </Button>
                         )}
                 </View>
@@ -363,7 +365,7 @@ function Carousel(props: {
             <BottomPopup
                 isVisible={openPopup}
                 toggleVisibility={togglePopup}
-                title={i18n.t('story')}
+                title={i18n.t('generic.story')}
             >
                 <View
                     style={{

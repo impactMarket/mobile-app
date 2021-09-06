@@ -62,7 +62,9 @@ function WaitingTxScreen() {
                             color: ipctColors.almostBlack,
                         }}
                     >
-                        {inProgress ? i18n.t('pleaseWait') : i18n.t('thankYou')}
+                        {inProgress
+                            ? i18n.t('generic.pleaseWait')
+                            : i18n.t('generic.thankYou')}
                     </Text>
                     <Text
                         style={{
@@ -75,8 +77,8 @@ function WaitingTxScreen() {
                         }}
                     >
                         {inProgress
-                            ? i18n.t('donationBeingProcessed')
-                            : i18n.t('yourDonationWillBackFor', {
+                            ? i18n.t('donate.donationBeingProcessed')
+                            : i18n.t('donate.yourDonationWillBackFor', {
                                   backNBeneficiaries:
                                       donationValues.backNBeneficiaries,
                                   backForDays: donationValues.backForDays,
@@ -92,7 +94,7 @@ function WaitingTxScreen() {
                     }}
                     onPress={() => navigation.goBack()}
                 >
-                    {i18n.t('continue')}
+                    {i18n.t('generic.continue')}
                 </Button>
             </View>
         </View>

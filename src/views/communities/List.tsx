@@ -2,6 +2,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
+import Dot from 'components/Dot';
 import IconCommunity from 'components/svg/IconCommunity';
 import BackSvg from 'components/svg/header/BackSvg';
 import NoSuspiciousSvg from 'components/svg/suspicious/NoSuspiciousSvg';
@@ -35,10 +36,6 @@ const countries: {
     };
 } = countriesJSON;
 
-function Dot() {
-    return <Text style={styles.dot}>·</Text>;
-}
-
 function ListItem(props: {
     community: CommunityAttributes;
     userCurrency: string;
@@ -55,8 +52,8 @@ function ListItem(props: {
     );
     const claimFrequency =
         community.contract.baseInterval === 86400
-            ? i18n.t('day')
-            : i18n.t('week');
+            ? i18n.t('generic.day')
+            : i18n.t('generic.week');
 
     let progress = 0;
     if (community.state.beneficiaries !== 0 && community.state.raised !== '0') {
@@ -110,7 +107,7 @@ function ListItem(props: {
                                 { fontFamily: 'Inter-Bold' },
                             ]}
                         >
-                            {i18n.t('ubi')}
+                            {i18n.t('generic.ubi')}
                         </Text>
                         <Text
                             style={[
@@ -156,9 +153,11 @@ function ListCommunitiesScreen() {
 
     const [communtiesOffset, setCommuntiesOffset] = useState(0);
     // TODO: use later with filters
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [communtiesOrder, setCommuntiesOrder] = useState(
         communityOrderOptions.bigger
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [userLocation, setUserLocation] = useState<
         Location.LocationObject | undefined
     >(undefined);
@@ -257,13 +256,6 @@ ListCommunitiesScreen.navigationOptions = () => {
 export default ListCommunitiesScreen;
 
 const styles = StyleSheet.create({
-    dot: {
-        marginHorizontal: 4,
-        fontFamily: 'Inter-Regular',
-        fontSize: 12,
-        lineHeight: 20,
-        color: '#73839D',
-    },
     container: {
         height: 82,
         marginBottom: 16,

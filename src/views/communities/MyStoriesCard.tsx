@@ -61,7 +61,7 @@ export default function MyStoriesCard() {
                         textAlign: 'center',
                     }}
                 >
-                    {i18n.t('myStories')}
+                    {i18n.t('stories.myStories')}
                 </Text>
             </View>
         </Pressable>

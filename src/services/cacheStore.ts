@@ -13,8 +13,6 @@ const CACHE_STORE_BENEFICIARY_COMMUNITY_RULES_ACCEPTED =
 const CACHE_STORE_MANAGER_COMMUNITY_RULES_ACCEPTED =
     '@CacheStore:communityRulesAcceptedByManager';
 //
-const CACHE_STORE_EXCHANGE_RATES = '@CacheStore:exchangeRates';
-const CACHE_STORE_LAST_EXCHANGE_RATES = '@CacheStore:lastExchangeRates';
 const CACHE_STORE_LAST_VERSION = '@CacheStore:lastVersion';
 const CACHE_STORE_LAST_LAST_VERSION = '@CacheStore:lastLastVersion';
 const CACHE_STORE_APP_NEEDS_UPDATE = '@CacheStore:appNeedsUpdate';
@@ -214,7 +212,7 @@ export default class CacheStore {
         if (updateDate === null) {
             return 0;
         }
-        return parseInt(updateDate);
+        return parseInt(updateDate, 10);
     }
 
     static async getAppNeedsUpdate(): Promise<boolean> {

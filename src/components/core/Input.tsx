@@ -1,4 +1,3 @@
-import LockSvg from 'components/svg/LockSvg';
 import React, { Component } from 'react';
 import {
     TextInput,
@@ -23,10 +22,6 @@ interface IInputProps extends TextInputProps {
     error?: string;
 }
 export default class Input extends Component<IInputProps, object> {
-    constructor(props: any) {
-        super(props);
-    }
-
     render() {
         const { label, help, onPress, error, rightElement } = this.props;
 

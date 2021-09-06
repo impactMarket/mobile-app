@@ -45,7 +45,8 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
         };
     }
 
-    toggleQR = () => this.setState({ openQR: !this.state.openQR });
+    toggleQR = () =>
+        this.setState((previousState) => ({ openQR: !previousState.openQR }));
 
     render() {
         const {
@@ -119,7 +120,7 @@ class Header extends Component<PropsFromRedux & IHeaderProps, IHeaderState> {
                     >
                         <Card.Content>
                             <Headline style={{ textAlign: 'center' }}>
-                                {i18n.t('yourQRCode')}
+                                {i18n.t('generic.yourQRCode')}
                             </Headline>
                             <View style={styles.qrView}>
                                 <SvgQRCode

@@ -3,7 +3,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { addStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import Api from 'services/api';
@@ -13,20 +13,9 @@ import StoriesCard from 'views/communities/StoriesCard';
 function StoriesScreen() {
     const dispatch = useDispatch();
 
-    // const stories = useSelector((state: IRootState) => state.stories.stories);
-    // const refreshing = useSelector(
-    //     (state: IRootState) => state.stories.refreshing
-    // );
     const [refreshing, setRefreshing] = useState(false);
     const [stories, setStories] = useState([]);
 
-    // useEffect(() => {
-    //     dispatch(addStoriesToStateRequest(0, 5));
-    // }, []);
-
-    /**
-     * Code Before Sagas
-     * */
     useEffect(() => {
         setRefreshing(true);
         Api.story.list<any[]>().then((s) => {
@@ -34,7 +23,7 @@ function StoriesScreen() {
             dispatch(addStoriesToStateRequest(0, s.count));
             setRefreshing(false);
         });
-    }, []);
+    }, [dispatch]);
 
     if (refreshing) {
         return (
@@ -54,7 +43,7 @@ function StoriesScreen() {
             columnWrapperStyle={{ justifyContent: 'space-between' }}
             keyExtractor={(item) => item.name}
             showsVerticalScrollIndicator={false}
-            numColumns={3} // Número de colunas
+            numColumns={3}
             renderItem={({ item }) => {
                 return (
                     <StoriesCard
@@ -79,39 +68,10 @@ function StoriesScreen() {
     );
 }
 
-const styles = StyleSheet.create({
-    itemEmpty: {
-        backgroundColor: 'transparent',
-    },
-    item: {
-        backgroundColor: '#dcda48',
-        flexGrow: 1,
-        flexBasis: 0,
-        height: 167,
-        borderRadius: 8,
-    },
-    title: {
-        fontFamily: 'Manrope-Regular',
-        fontSize: 22,
-        fontWeight: '800',
-        lineHeight: 28,
-        textAlign: 'center',
-        color: '#172032',
-    },
-    text: {
-        fontFamily: 'Inter-Regular',
-        fontSize: 14,
-        fontWeight: '400',
-        lineHeight: 24,
-        textAlign: 'center',
-        color: '#172032',
-    },
-});
-
 StoriesScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('stories'),
+        headerTitle: i18n.t('stories.stories'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
             fontSize: 22,

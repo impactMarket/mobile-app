@@ -41,6 +41,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
 
     componentDidUpdate = (prevProps: Readonly<Props>) => {
         if (prevProps.isVisible !== this.props.isVisible) {
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ isVisible: this.props.isVisible });
             if (this.props.isVisible) {
                 this.handleAskCameraPermission();
@@ -65,8 +66,8 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
             } catch (e) {
                 this.setState({ invalidAddressWarningOpen: true });
                 Alert.alert(
-                    i18n.t('failure'),
-                    i18n.t('scanningInvalidAddress'),
+                    i18n.t('generic.failure'),
+                    i18n.t('errors.scanningAddress'),
                     [
                         {
                             text: 'OK',
@@ -124,7 +125,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                                 }}
                                 onPress={onDismiss}
                             >
-                                {i18n.t('close')}
+                                {i18n.t('generic.close')}
                             </Button>
                         </Camera>
                     </View>
@@ -152,16 +153,16 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                     }
                 >
                     <Dialog.Title>
-                        {i18n.t('requestingPermission')}
+                        {i18n.t('permissions.title')}
                     </Dialog.Title>
                     <Dialog.Content>
                         <Paragraph>
-                            {i18n.t('requestCameraPermission')}
+                            {i18n.t('permissions.cameraMessage')}
                         </Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={this.handleAskCameraPermission}>
-                            {i18n.t('allowCamera')}
+                            {i18n.t('permissions.allowCamera')}
                         </Button>
                         <Button
                             onPress={() =>
@@ -170,7 +171,7 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                                 })
                             }
                         >
-                            {i18n.t('close')}
+                            {i18n.t('generic.close')}
                         </Button>
                     </Dialog.Actions>
                 </Dialog> */}
