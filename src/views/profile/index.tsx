@@ -46,6 +46,7 @@ import {
     Dimensions,
     TouchableOpacity,
     Alert,
+    Switch,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
@@ -96,6 +97,7 @@ function ProfileScreen() {
     const [name, setName] = useState('');
     const [userAvatarImage, setUserAvatarImage] = useState<string | null>('');
     const [currency, setCurrency] = useState('usd');
+    const [email, setEmail] = useState('');
     const [userCusdBalance, setUserCusdBalance] = useState('0');
     const [language, setLanguage] = useState('en');
     const [gender, setGender] = useState<string | null>(null);
@@ -156,6 +158,7 @@ function ProfileScreen() {
                 children && children.length > 0 ? parseInt(children, 10) : null,
             currency,
             gender,
+            email,
             language,
             avatar: userAvatarImage, // this does not change
             username: name,
@@ -206,6 +209,7 @@ function ProfileScreen() {
                 gender,
                 language,
                 avatar: res.media.url,
+                email,
                 username: name,
                 //TODO: Change these props below to be optional
                 blocked: false,
@@ -701,6 +705,79 @@ function ProfileScreen() {
                         />
                     </View>
                     <Divider />
+                    <View
+                        style={{
+                            marginTop: 28,
+                            paddingVertical: 22,
+                            paddingHorizontal: 16,
+                            borderWidth: 1,
+                            borderStyle: 'solid',
+                            borderRadius: 6,
+                            borderColor: '#8A9FC266',
+                        }}
+                    >
+                        <Input
+                            label={i18n.t('profile.email')}
+                            value={email}
+                            keyboardType="email-address"
+                            onEndEditing={(_e) => {
+                                //TODO: Call API to update email
+                                // Api.user.setEmail(email);
+                                updateUserMetadataCache();
+                                dispatch(
+                                    setUserMetadata({
+                                        ...user,
+                                        email,
+                                    })
+                                );
+                            }}
+                            onChangeText={(value) => setEmail(value)}
+                        />
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <View style={{ marginTop: 10, width: '85%' }}>
+                                <Text style={styles.newsLetterTitle}>
+                                    {i18n.t('profile.newsLetterTitle')}
+                                </Text>
+                                <Text style={styles.newsLetterDescription}>
+                                    {i18n.t('profile.newsLetterDescription')}
+                                </Text>
+                            </View>
+                            <Switch />
+                        </View>
+                    </View>
+                    <View style={{ marginTop: 28 }}>
+                        <Input
+                            label={i18n.t('profile.howManyChildren')}
+                            value={children}
+                            maxLength={4}
+                            keyboardType="numeric"
+                            onEndEditing={(_e) => {
+                                Api.user.setChildren(
+                                    children.length > 0
+                                        ? parseInt(children, 10)
+                                        : null
+                                );
+                                updateUserMetadataCache();
+                                dispatch(
+                                    setUserMetadata({
+                                        ...user,
+                                        children:
+                                            children.length > 0
+                                                ? parseInt(children, 10)
+                                                : null,
+                                    })
+                                );
+                            }}
+                            onChangeText={(value) => setChildren(value)}
+                        />
+                    </View>
+                    <Divider />
                     <Text style={styles.itemTitle}>
                         <Trans
                             i18nKey="profile.stolenOrChangedPhone"
@@ -916,6 +993,21 @@ ProfileScreen.navigationOptions = () => {
 
 const styles = StyleSheet.create({
     scrollView: {},
+    newsLetterTitle: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 15,
+        fontWeight: '400',
+        lineHeight: 24,
+        textAlign: 'left',
+    },
+    newsLetterDescription: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 12,
+        fontWeight: '400',
+        lineHeight: 20,
+        textAlign: 'left',
+        color: ipctColors.blueGray,
+    },
     card: {
         borderTopWidth: 1,
         borderTopColor: '#E1E4E7',

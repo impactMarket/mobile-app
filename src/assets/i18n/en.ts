@@ -329,6 +329,11 @@ export default {
             msg2:
                 'This process will take 15 days and it can be terminated by connecting again to the same wallet address during this period.',
         },
+        newsletter: {
+            title: 'Subscribe Newsletter',
+            description:
+                'Get updates about our progress, new features and impact measurement.',
+        },
         profile: 'Profile',
         balance: 'Valora Wallet Balance',
         uploadProfilePicture: 'Upload profile picture',
@@ -337,6 +342,7 @@ export default {
         stolenOrChangedPhone:
             'Please read the following instruction in case your phone is <blue>stolen/lost</blue> or you need to <blue>change your phone number.</blue>',
         age: 'Age',
+        email: 'Email',
         gender: 'Gender',
         male: 'Male',
         female: 'Female',

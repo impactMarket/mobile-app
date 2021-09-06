@@ -340,6 +340,11 @@ export default {
             msg2:
                 'Este processo demorará 15 dias. Para abortar esse processo necessita apenas de ligar-se novamente com a mesma carteira durante este período.',
         },
+        newsletter: {
+            title: 'Subscreva a Newsletter',
+            description:
+                'Receba atualizações sobre nosso progresso, novos recursos e medida de nosso impacto.',
+        },
         profile: 'Perfil',
         balance: 'Balanço',
         uploadProfilePicture: 'Atualizar foto de perfil',
@@ -348,6 +353,7 @@ export default {
         stolenOrChangedPhone:
             'Leia as instruções a seguir caso seu telefone seja <blue>roubado/perdido</blue> ou você precise <blue>alterar seu número de telefone.</blue>',
         age: 'Idade',
+        email: 'Email',
         gender: 'Género',
         male: 'Masculino',
         female: 'Feminino',

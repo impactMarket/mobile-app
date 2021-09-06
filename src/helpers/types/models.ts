@@ -159,6 +159,7 @@ export interface UserAttributes {
     address: string;
     username: string | null;
     language: string;
+    email: string;
     currency: string;
     avatar: string | null;
     // avatarMediaId: number | null;
