@@ -620,6 +620,7 @@ Array [
                                   "flex": 2,
                                   "flexDirection": "row",
                                   "justifyContent": "center",
+                                  "marginTop": 7,
                                 }
                               }
                             >
@@ -637,40 +638,35 @@ Array [
                                     Array [
                                       Object {
                                         "fontFamily": "Inter-Regular",
-                                        "fontSize": 14,
+                                        "fontSize": 22,
                                         "fontStyle": "normal",
                                         "fontWeight": "400",
                                         "letterSpacing": 0,
-                                        "lineHeight": 24,
+                                        "lineHeight": 37.714285714285715,
                                         "textAlign": "left",
                                       },
                                       Object {
                                         "color": "#7E8DA6",
-                                        "fontSize": 14,
-                                        "lineHeight": 24,
                                       },
                                     ]
                                   }
                                 >
-                                  Raised from 
+                                  Raised from 37
+                                   
                                   Backers
                                 </Text>
                                 <Text
                                   style={
-                                    Array [
-                                      Object {
-                                        "color": "#333239",
-                                        "fontFamily": "Inter-Bold",
-                                        "fontSize": 20,
-                                        "lineHeight": 32,
-                                      },
-                                      Object {
-                                        "fontSize": 20,
-                                      },
-                                    ]
+                                    Object {
+                                      "color": "#333239",
+                                      "fontFamily": "Inter-Bold",
+                                      "fontSize": 25.142857142857142,
+                                      "lineHeight": 50.285714285714285,
+                                    }
                                   }
                                 >
                                   $62,151.14
+                                   (23.69%)
                                 </Text>
                               </View>
                               <View
@@ -687,17 +683,15 @@ Array [
                                     Array [
                                       Object {
                                         "fontFamily": "Inter-Regular",
-                                        "fontSize": 14,
+                                        "fontSize": 22,
                                         "fontStyle": "normal",
                                         "fontWeight": "400",
                                         "letterSpacing": 0,
-                                        "lineHeight": 24,
+                                        "lineHeight": 37.714285714285715,
                                         "textAlign": "left",
                                       },
                                       Object {
                                         "color": "#7E8DA6",
-                                        "fontSize": 14,
-                                        "lineHeight": 24,
                                       },
                                     ]
                                   }
@@ -706,17 +700,12 @@ Array [
                                 </Text>
                                 <Text
                                   style={
-                                    Array [
-                                      Object {
-                                        "color": "#333239",
-                                        "fontFamily": "Inter-Bold",
-                                        "fontSize": 20,
-                                        "lineHeight": 32,
-                                      },
-                                      Object {
-                                        "fontSize": 20,
-                                      },
-                                    ]
+                                    Object {
+                                      "color": "#333239",
+                                      "fontFamily": "Inter-Bold",
+                                      "fontSize": 25.142857142857142,
+                                      "lineHeight": 50.285714285714285,
+                                    }
                                   }
                                 >
                                   $262,400
@@ -750,7 +739,7 @@ Array [
                                   <View
                                     style={
                                       Object {
-                                        "backgroundColor": "#2362FB",
+                                        "backgroundColor": "#6200ee",
                                         "flex": 1,
                                         "transform": Array [
                                           Object {
@@ -766,101 +755,98 @@ Array [
                                   />
                                 </View>
                               </View>
-                            </View>
-                            <View
-                              style={
-                                Array [
-                                  Object {
-                                    "alignItems": "center",
-                                    "flex": 1,
-                                    "flexDirection": "row",
-                                    "marginVertical": 22,
-                                    "paddingHorizontal": 8,
-                                  },
-                                  Object {
-                                    "alignItems": "center",
-                                    "justifyContent": "center",
-                                  },
-                                ]
-                              }
-                            >
-                              <RNSVGSvgView
-                                align="xMidYMid"
-                                bbHeight={16}
-                                bbWidth={16}
-                                color={4294875682}
-                                fill="none"
-                                focusable={false}
-                                height={16}
-                                meetOrSlice={0}
-                                minX={0}
-                                minY={0}
+                              <View
                                 style={
                                   Array [
                                     Object {
-                                      "backgroundColor": "transparent",
-                                      "borderWidth": 0,
+                                      "alignItems": "center",
+                                      "flex": 1,
+                                      "flexDirection": "row",
+                                      "marginVertical": 22,
+                                      "paddingHorizontal": 8,
                                     },
                                     Object {
-                                      "marginTop": 0,
-                                    },
-                                    Object {
-                                      "flex": 0,
-                                      "height": 16,
-                                      "width": 16,
+                                      "alignItems": "flex-start",
+                                      "justifyContent": "center",
                                     },
                                   ]
                                 }
-                                tintColor={4294875682}
-                                vbHeight={16}
-                                vbWidth={16}
-                                width={16}
                               >
-                                <RNSVGGroup
-                                  fill={null}
-                                  propList={
+                                <RNSVGSvgView
+                                  align="xMidYMid"
+                                  bbHeight={16}
+                                  bbWidth={16}
+                                  color={4294875682}
+                                  fill="none"
+                                  focusable={false}
+                                  height={16}
+                                  meetOrSlice={0}
+                                  minX={0}
+                                  minY={0}
+                                  style={
                                     Array [
-                                      "fill",
+                                      Object {
+                                        "backgroundColor": "transparent",
+                                        "borderWidth": 0,
+                                      },
+                                      Object {
+                                        "marginTop": 6.285714285714286,
+                                      },
+                                      Object {
+                                        "flex": 0,
+                                        "height": 16,
+                                        "width": 16,
+                                      },
                                     ]
                                   }
+                                  tintColor={4294875682}
+                                  vbHeight={16}
+                                  vbWidth={16}
+                                  width={16}
                                 >
-                                  <RNSVGPath
-                                    d="M15.22 11.998L9.73 1.608a2.244 2.244 0 00-3.917 0l-5.49 10.39c-.902 1.563.19 3.54 1.958 3.54h10.981c1.766 0 2.86-1.976 1.958-3.54zM7.77 13.664c-.502 0-.91-.42-.91-.938 0-.517.408-.937.91-.937s.911.42.911.937c0 .517-.409.938-.91.938zm.911-3.75c0 .517-.409.937-.91.937-.503 0-.911-.42-.911-.937V5.226c0-.517.408-.937.91-.937s.911.42.911.937v4.688z"
-                                    fill={4294875682}
+                                  <RNSVGGroup
+                                    fill={null}
                                     propList={
                                       Array [
                                         "fill",
                                       ]
                                     }
-                                  />
-                                </RNSVGGroup>
-                              </RNSVGSvgView>
-                              <Text
-                                style={
-                                  Array [
-                                    Object {
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 14,
-                                      "fontStyle": "normal",
-                                      "fontWeight": "400",
-                                      "letterSpacing": 0,
-                                      "lineHeight": 24,
-                                      "textAlign": "left",
-                                    },
-                                    Object {
-                                      "color": "#7E8DA6",
-                                      "fontSize": 14,
-                                      "lineHeight": 24,
-                                      "marginLeft": 7,
-                                    },
-                                  ]
-                                }
-                              >
-                                Community funds will run out in 1
-                                 
-                                day
-                                .
-                              </Text>
+                                  >
+                                    <RNSVGPath
+                                      d="M15.22 11.998L9.73 1.608a2.244 2.244 0 00-3.917 0l-5.49 10.39c-.902 1.563.19 3.54 1.958 3.54h10.981c1.766 0 2.86-1.976 1.958-3.54zM7.77 13.664c-.502 0-.91-.42-.91-.938 0-.517.408-.937.91-.937s.911.42.911.937c0 .517-.409.938-.91.938zm.911-3.75c0 .517-.409.937-.91.937-.503 0-.911-.42-.911-.937V5.226c0-.517.408-.937.91-.937s.911.42.911.937v4.688z"
+                                      fill={4294875682}
+                                      propList={
+                                        Array [
+                                          "fill",
+                                        ]
+                                      }
+                                    />
+                                  </RNSVGGroup>
+                                </RNSVGSvgView>
+                                <Text
+                                  style={
+                                    Array [
+                                      Object {
+                                        "fontFamily": "Inter-Regular",
+                                        "fontSize": 22,
+                                        "fontStyle": "normal",
+                                        "fontWeight": "400",
+                                        "letterSpacing": 0,
+                                        "lineHeight": 37.714285714285715,
+                                        "textAlign": "left",
+                                      },
+                                      Object {
+                                        "color": "#7E8DA6",
+                                        "marginLeft": 7,
+                                      },
+                                    ]
+                                  }
+                                >
+                                  Community funds will run out in 1
+                                   
+                                  days
+                                </Text>
+                              </View>
                             </View>
                             <View
                               style={
@@ -907,9 +893,9 @@ Array [
                                         Array [
                                           Object {
                                             "fontFamily": "Inter-Bold",
-                                            "fontSize": 20,
+                                            "fontSize": 31.428571428571427,
                                             "fontWeight": "700",
-                                            "lineHeight": 32,
+                                            "lineHeight": 50.285714285714285,
                                             "marginBottom": 8,
                                           },
                                           Object {
@@ -952,6 +938,7 @@ Array [
                                     Object {
                                       "alignItems": "center",
                                       "flexDirection": "row",
+                                      "padding": 12,
                                     }
                                   }
                                 >
@@ -967,8 +954,8 @@ Array [
                                         Object {
                                           "color": "white",
                                           "fontFamily": "Inter-Regular",
-                                          "fontSize": 16,
-                                          "lineHeight": 28,
+                                          "fontSize": 25.142857142857142,
+                                          "lineHeight": 44,
                                           "marginRight": 10,
                                         },
                                       ]
@@ -976,102 +963,75 @@ Array [
                                   >
                                     Celo Dollar ($cUSD)
                                   </Text>
-                                  <Image
-                                    height={22}
-                                    source={1}
-                                    width={22}
-                                  />
-                                </View>
-                              </View>
-                              <Text
-                                style={
-                                  Array [
-                                    Object {
-                                      "color": "#000000",
-                                      "fontFamily": "System",
-                                      "fontWeight": "400",
-                                      "textAlign": "left",
-                                    },
-                                    Array [
-                                      Object {
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 14,
-                                        "fontStyle": "normal",
-                                        "fontWeight": "400",
-                                        "letterSpacing": 0,
-                                        "lineHeight": 24,
-                                        "marginVertical": 8,
-                                      },
-                                      Object {
-                                        "fontSize": 16,
-                                      },
-                                    ],
-                                  ]
-                                }
-                              >
-                                or
-                              </Text>
-                              <View
-                                accessible={true}
-                                focusable={true}
-                                onBlur={[Function]}
-                                onClick={[Function]}
-                                onFocus={[Function]}
-                                onResponderGrant={[Function]}
-                                onResponderMove={[Function]}
-                                onResponderRelease={[Function]}
-                                onResponderTerminate={[Function]}
-                                onResponderTerminationRequest={[Function]}
-                                onStartShouldSetResponder={[Function]}
-                                style={
-                                  Array [
-                                    Object {
-                                      "alignItems": "center",
-                                      "backgroundColor": "#2362FB",
-                                      "borderRadius": 6,
-                                      "height": 44,
-                                      "justifyContent": "center",
-                                      "width": "100%",
-                                    },
-                                    Object {
-                                      "backgroundColor": "transparent",
-                                      "borderColor": "#8A9FC2",
-                                      "borderWidth": 1,
-                                    },
-                                  ]
-                                }
-                                testID="donateWithESolidar"
-                              >
-                                <View
-                                  style={
-                                    Object {
-                                      "alignItems": "center",
-                                      "flexDirection": "row",
-                                      "flexWrap": "wrap",
-                                    }
-                                  }
-                                >
-                                  <Text
+                                  <RNSVGSvgView
+                                    align="xMidYMid"
+                                    bbHeight={28}
+                                    bbWidth={28}
+                                    fill="none"
+                                    focusable={false}
+                                    height={28}
+                                    meetOrSlice={0}
+                                    minX={0}
+                                    minY={0}
                                     style={
                                       Array [
                                         Object {
-                                          "color": "#000000",
-                                          "fontFamily": "System",
-                                          "fontWeight": "400",
-                                          "textAlign": "left",
+                                          "backgroundColor": "transparent",
+                                          "borderWidth": 0,
                                         },
                                         Object {
-                                          "color": "#2362FB",
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 16,
-                                          "fontWeight": "500",
-                                          "lineHeight": 28,
+                                          "flex": 0,
+                                          "height": 28,
+                                          "width": 28,
                                         },
                                       ]
                                     }
+                                    vbHeight={28}
+                                    vbWidth={28}
+                                    width={28}
                                   >
-                                    Credit Card / Paypal / BTC / ETH
-                                  </Text>
+                                    <RNSVGGroup
+                                      fill={null}
+                                      propList={
+                                        Array [
+                                          "fill",
+                                        ]
+                                      }
+                                    >
+                                      <RNSVGCircle
+                                        cx={14}
+                                        cy={14}
+                                        fill={4282764677}
+                                        propList={
+                                          Array [
+                                            "fill",
+                                          ]
+                                        }
+                                        r={14}
+                                      />
+                                      <RNSVGPath
+                                        clipRule={0}
+                                        d="M18.1 17.111a4.457 4.457 0 11-5.93-6.217V8.58a6.588 6.588 0 108.285 8.533h-2.354z"
+                                        fill={4294967295}
+                                        fillRule={0}
+                                        propList={
+                                          Array [
+                                            "fill",
+                                            "fillRule",
+                                          ]
+                                        }
+                                      />
+                                      <RNSVGPath
+                                        d="M17.79 6.372a3.119 3.119 0 011.768.855c.203.203.36.413.469.632.11.219.168.414.175.586a.22.22 0 01-.07.187.28.28 0 01-.187.07h-.48a.421.421 0 01-.211-.047.558.558 0 01-.152-.21 1.768 1.768 0 00-.2-.293 1.422 1.422 0 00-.363-.352 1.927 1.927 0 00-.55-.292 2.073 2.073 0 00-.762-.13c-.218 0-.429.028-.632.083-.195.047-.37.12-.527.222a1.18 1.18 0 00-.375.387.966.966 0 00-.14.527.97.97 0 00.128.515c.094.14.239.27.434.387.203.11.457.21.761.304.305.094.676.2 1.113.316.445.118.82.247 1.124.387.313.14.566.3.762.48.195.172.335.375.421.61.094.226.14.483.14.772 0 .32-.062.617-.187.89a2.083 2.083 0 01-.538.715c-.227.203-.504.37-.832.504a3.906 3.906 0 01-1.09.257v.761c0 .086-.03.16-.093.223a.304.304 0 01-.223.094h-.48a.304.304 0 01-.222-.094.304.304 0 01-.094-.223v-.784a3.448 3.448 0 01-1.019-.305 3.685 3.685 0 01-.796-.515 2.417 2.417 0 01-.516-.633 1.562 1.562 0 01-.199-.679c0-.07.024-.129.07-.176a.258.258 0 01.188-.082h.48c.078 0 .145.016.2.047.062.032.116.102.163.211.047.11.117.23.211.363.101.125.234.246.398.363.164.11.363.203.598.281.234.079.511.117.831.117.273 0 .531-.03.773-.093.25-.063.469-.152.656-.27.187-.117.336-.257.445-.421a.97.97 0 00.164-.55.748.748 0 00-.187-.516 1.668 1.668 0 00-.54-.398 4.75 4.75 0 00-.866-.316 27.16 27.16 0 00-1.148-.317 4.86 4.86 0 01-.995-.363 2.537 2.537 0 01-.668-.503 1.764 1.764 0 01-.375-.621 2.478 2.478 0 01-.105-.738 2.165 2.165 0 01.55-1.44 2.41 2.41 0 01.703-.516c.281-.14.61-.234.984-.281v-.773c0-.086.031-.16.094-.223a.304.304 0 01.222-.093h.48c.086 0 .16.03.223.093a.304.304 0 01.094.223v.785z"
+                                        fill={4294967295}
+                                        propList={
+                                          Array [
+                                            "fill",
+                                          ]
+                                        }
+                                      />
+                                    </RNSVGGroup>
+                                  </RNSVGSvgView>
                                 </View>
                               </View>
                               <View
@@ -1079,6 +1039,7 @@ Array [
                                   Object {
                                     "alignItems": "center",
                                     "flexDirection": "row",
+                                    "paddingHorizontal": 12,
                                   }
                                 }
                               >
@@ -1094,16 +1055,15 @@ Array [
                                       Array [
                                         Object {
                                           "fontFamily": "Inter-Regular",
-                                          "fontSize": 14,
+                                          "fontSize": 22,
                                           "fontStyle": "normal",
                                           "fontWeight": "400",
                                           "letterSpacing": 0,
-                                          "lineHeight": 24,
+                                          "lineHeight": 37.714285714285715,
                                           "marginVertical": 8,
                                         },
                                         Object {
                                           "color": "#7E8DA6",
-                                          "fontSize": 14,
                                           "marginRight": 4,
                                         },
                                       ],
@@ -1112,9 +1072,64 @@ Array [
                                 >
                                   Powered by
                                 </Text>
-                                <Image
-                                  source={1}
-                                />
+                                <RNSVGSvgView
+                                  align="xMidYMid"
+                                  bbHeight={14}
+                                  bbWidth={65}
+                                  fill="none"
+                                  focusable={false}
+                                  height={14}
+                                  meetOrSlice={0}
+                                  minX={0}
+                                  minY={0}
+                                  style={
+                                    Array [
+                                      Object {
+                                        "backgroundColor": "transparent",
+                                        "borderWidth": 0,
+                                      },
+                                      Object {
+                                        "flex": 0,
+                                        "height": 14,
+                                        "width": 65,
+                                      },
+                                    ]
+                                  }
+                                  vbHeight={14}
+                                  vbWidth={65}
+                                  width={65}
+                                >
+                                  <RNSVGGroup
+                                    fill={null}
+                                    propList={
+                                      Array [
+                                        "fill",
+                                      ]
+                                    }
+                                  >
+                                    <RNSVGPath
+                                      d="M17.293 7.562l2.054-.132s.076-.246.076-.605c0-1.456-1.483-2.514-3.632-2.514-2.264 0-3.747 1.096-3.747 2.76 0 3.27 5.173 2.306 5.173 3.857 0 .51-.514.85-1.56.85-1.35 0-2.624-.85-2.871-1.077l-1.16 1.417c.323.265 1.54 1.343 4.088 1.343 2.378 0 3.861-1.021 3.861-2.628-.038-3.422-5.325-1.985-5.325-3.857 0-.605.514-1.04 1.464-1.04.99 0 1.617.492 1.617 1.267 0 .132-.02.284-.038.36zM25 4.31c-2.814 0-4.697 1.91-4.697 4.595 0 2.684 1.883 4.556 4.698 4.556 2.833 0 4.697-1.872 4.697-4.556 0-2.685-1.864-4.594-4.697-4.594zm0 7.26c-1.426 0-2.338-1.096-2.338-2.665 0-1.589.912-2.704 2.339-2.704 1.426 0 2.339 1.115 2.339 2.704 0 1.569-.913 2.665-2.34 2.665zM30.902 13.347h2.3V0h-2.3v13.347zM37.632 1.55c0-.832-.684-1.455-1.521-1.455-.856 0-1.522.623-1.522 1.455 0 .851.666 1.456 1.522 1.456.837 0 1.521-.605 1.521-1.456zm-2.7 11.797h2.32V4.348l-2.32.076v8.923zM45.485 0v5.615c-.533-.756-1.446-1.305-2.796-1.305-2.377 0-4.184 1.72-4.184 4.595 0 2.665 1.617 4.556 4.07 4.556 1.597 0 2.605-.813 3.1-1.91h.057c-.02.284.095 1.286.228 1.872l1.845-.076V0h-2.32zm-2.32 11.532c-1.427 0-2.32-1.058-2.32-2.627 0-1.626.893-2.666 2.243-2.666 1.598 0 2.397 1.285 2.397 2.382v.53c0 1.134-.856 2.381-2.32 2.381zM58.031 11.514a1.69 1.69 0 01-.323.037c-.38 0-.532-.15-.532-.605V7.808c0-2.174-1.427-3.497-3.994-3.497-2.416 0-3.88 1.134-3.88 2.816 0 .473.114.832.114.832l2.054-.34a.919.919 0 01-.076-.36c0-.737.608-1.171 1.712-1.171 1.198 0 1.806.661 1.806 1.663v.435h-.152c-3.537.057-5.724.68-5.724 2.817 0 1.475 1.084 2.458 3.042 2.458 1.921 0 2.682-.927 2.948-1.437.152.964.8 1.418 1.959 1.418.628 0 1.141-.132 1.141-.132l-.095-1.796zm-5.344.189c-.894 0-1.388-.34-1.388-.946 0-.888 1.027-1.266 3.461-1.304h.152v.756c0 .756-.818 1.494-2.225 1.494zM63.714 4.31c-1.332 0-2.073.908-2.416 2.042h-.057c0-.378-.114-1.38-.285-2.004l-1.788.076v8.923h2.32V8.923c0-1.607.933-2.42 1.94-2.42.4 0 .704.095.97.284l.59-2.25a3.401 3.401 0 00-1.274-.226z"
+                                      fill={4278654753}
+                                      propList={
+                                        Array [
+                                          "fill",
+                                        ]
+                                      }
+                                    />
+                                    <RNSVGPath
+                                      clipRule={0}
+                                      d="M1.973 9.062a6.114 6.114 0 00-.005.262c0 1.16.375 2.126 1.026 2.854.641.717 1.503 1.151 2.403 1.349 1.768.388 3.872-.098 5.224-1.443l-1.26-1.253c-.877.87-2.339 1.238-3.58.965-.604-.133-1.107-.407-1.455-.796A2.23 2.23 0 013.8 9.888c1.402.434 2.73.396 3.822.056 1.002-.313 1.86-.905 2.308-1.683a2.23 2.23 0 00.306-1.352c-.052-.497-.285-.946-.654-1.313-2.072-2.06-5.927-1.318-7.196 1.613a9.21 9.21 0 01-1.124-.957L0 7.505a10.483 10.483 0 001.973 1.557zm1.988-.993c1.227.468 2.327.433 3.126.184.706-.22 1.13-.587 1.294-.873a.48.48 0 00.081-.285c-.005-.05-.028-.133-.142-.246-1.149-1.142-3.623-.775-4.359 1.22z"
+                                      fill={4279747506}
+                                      fillRule={0}
+                                      propList={
+                                        Array [
+                                          "fill",
+                                          "fillRule",
+                                        ]
+                                      }
+                                    />
+                                  </RNSVGGroup>
+                                </RNSVGSvgView>
                               </View>
                             </View>
                           </View>
