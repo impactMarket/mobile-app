@@ -692,7 +692,7 @@ function ProfileScreen() {
                     />
                     <Text style={styles.itemTitle}>
                         <Trans
-                            i18nKey="stolenOrChangedPhone"
+                            i18nKey="profile.stolenOrChangedPhone"
                             components={{
                                 blue: (
                                     <Text

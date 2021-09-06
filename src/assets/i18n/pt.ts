@@ -401,6 +401,8 @@ export default {
         attach: 'Anexar',
         donateWithValora: 'Completar contribuição com Valora',
         confirmContributionWithValora: 'Confirmar contribuição',
+        addFundsToYourValora: 'Adicionar fundos a sua Valora',
+        adjustContributionAmount: 'Ajustar o valor da contribuíção',
         donateSymbol: 'Contribuir ({{symbol}})',
         donateConfirmMessage:
             "Ao confirmar esta contribuíção', irá enviar <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> para {{to}}.",

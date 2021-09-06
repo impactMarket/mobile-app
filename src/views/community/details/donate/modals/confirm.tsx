@@ -115,8 +115,6 @@ class ConfirmModal extends Component<
 
     render() {
         const {
-            visible,
-            dismissModal,
             // user,
             community,
             // confirmAmount,
@@ -185,8 +183,8 @@ class ConfirmModal extends Component<
                     modeType="green"
                     labelStyle={styles.donateLabel}
                     loading={donating}
-                    // disabled={}
-                    onPress={() => {}}
+                    disabled={donating}
+                    onPress={this.donateWithCeloWallet}
                 >
                     {i18n.t('donate.confirmContributionWithValora')}
                 </Button>

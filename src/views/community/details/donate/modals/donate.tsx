@@ -51,7 +51,7 @@ class DonateModal extends Component<
             const { contractAddress } = this.props.community;
             Clipboard.setString(contractAddress!);
             this.setState({ showCopiedToClipboard: true });
-            this.props.dismissModal();
+            // this.props.dismissModal();
         }
     };
 
@@ -107,7 +107,7 @@ class DonateModal extends Component<
     };
 
     render() {
-        const { community, exchangeRate, visible } = this.props;
+        const { community, exchangeRate } = this.props;
         const { amountDonate, donating, showCopiedToClipboard } = this.state;
 
         if (
@@ -164,11 +164,10 @@ class DonateModal extends Component<
                 {i18n.t('community.copyContractAddress')}
             </Button>
         );
-        console.log({ visible });
-        console.log(this.props.modalErrorOpen);
+
         return (
             <>
-                {visible ? (
+                {this.props.modalDonateOpen ? (
                     <View>
                         <Snackbar
                             visible={showCopiedToClipboard}
@@ -330,7 +329,7 @@ class DonateModal extends Component<
                             </Text>
                         </Pressable>
                     </View>
-                ) : !this.props.modalErrorOpen ? (
+                ) : this.props.modalConfirmOpen ? (
                     <ConfirmModal />
                 ) : (
                     <ErrorModal />
@@ -368,9 +367,10 @@ const mapStateToProps = (state: IRootState) => {
     const { exchangeRate } = state.user;
     const {
         modalDonateOpen,
+        modalConfirmOpen,
+        modalErrorOpen,
         community,
         donationValues,
-        modalErrorOpen,
     } = state.modalDonate;
     return {
         exchangeRates,
@@ -378,7 +378,8 @@ const mapStateToProps = (state: IRootState) => {
         userAddress: address,
         userBalance: state.user.wallet.balance,
         exchangeRate,
-        visible: modalDonateOpen,
+        modalDonateOpen,
+        modalConfirmOpen,
         modalErrorOpen,
         community,
         inputAmount: donationValues.inputAmount,

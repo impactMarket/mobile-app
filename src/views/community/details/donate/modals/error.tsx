@@ -34,14 +34,17 @@ class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
                         {i18n.t('donate.donationBiggerThanBalance')}
                     </Text>
                 </View>
-                {/* TODO: add function to go back to donation step 1 */}
                 <Button
-                    style={{ width: '90%', alignSelf: 'center' }}
+                    style={{
+                        width: '90%',
+                        alignSelf: 'center',
+                        marginTop: 10,
+                    }}
                     modeType="default"
                     labelStyle={styles.donateLabel}
-                    onPress={() => {}}
+                    onPress={this.props.goBackToDonateModal}
                 >
-                    {i18n.t('donate.donateWithValora')}
+                    {i18n.t('donate.adjustContributionAmount')}
                 </Button>
             </>
         );

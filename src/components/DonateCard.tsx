@@ -2,7 +2,15 @@ import i18n from 'assets/i18n';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
+import {
+    View,
+    StyleSheet,
+    Pressable,
+    Image,
+    Dimensions,
+    ScrollView,
+    Animated,
+} from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Title, Text } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
@@ -29,6 +37,8 @@ export default function DonateCard(props: IDonateProps) {
     const modalizeESolidar = useRef<Modalize>(null);
     const modalizeCelo = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
+    const scrowViewRef = useRef<Modalize>(null);
+    const [scrollX] = useState(new Animated.Value(0));
 
     useEffect(() => {
         Api.community

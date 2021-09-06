@@ -388,6 +388,8 @@ export default {
         attach: 'Attach',
         donateWithValora: 'Complete contribution using Valora',
         confirmContributionWithValora: 'Confirm contribution',
+        addFundsToYourValora: 'Add funds to your Valora',
+        adjustContributionAmount: 'Adjust contribution amount',
         donateSymbol: 'Contribute ({{symbol}})',
         donateConfirmMessage:
             'By confirming this contribution you will send <bold>{{symbol}}{{amount}} (${{amountInDollars}} cUSD)</bold> to {{to}}.',
