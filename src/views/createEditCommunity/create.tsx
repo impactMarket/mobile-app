@@ -6,7 +6,7 @@ import Button from 'components/core/Button';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
-import { celoNetwork } from 'helpers/constants';
+import { celoNetwork, Screens } from 'helpers/constants';
 import { formatInputAmountToTransfer } from 'helpers/currency';
 import { createCommunityRequest } from 'helpers/redux/actions/communities';
 import { setUserMetadata } from 'helpers/redux/actions/user';
@@ -28,6 +28,7 @@ import {
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
@@ -127,12 +128,9 @@ function CreateCommunityScreen() {
             ) {
                 cancelablePromise = makeCancelable(submitCommunity());
                 cancelablePromise.promise
-                    .catch((error) => console.log(error))
+                    .catch((error) => Sentry.Native.captureException(error))
                     .finally(() => {
-                        setSubmitting(false);
-                        setSubmittingCover(false);
-                        setSubmittingProfile(false);
-                        setSubmittingCommunity(false);
+                        updateUIAfterSubmission(communityCreationError);
                     });
             } else if (isUploadingContent) {
                 cancelablePromise = makeCancelable(uploadImages());
@@ -145,31 +143,36 @@ function CreateCommunityScreen() {
                         setSubmittingCover(false);
                         setSubmittingProfile(false);
                     })
-                    .catch((error) => console.log(error));
+                    .catch((error) => Sentry.Native.captureException(error));
             }
         }
+
         return () => {
             if (cancelablePromise !== undefined) {
                 return cancelablePromise.cancel();
             }
         };
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         canceled,
+        isUploadingContent,
         coverUploadDetails,
         profileUploadDetails,
-        isUploadingContent,
     ]);
 
     const updateUIAfterSubmission = async (error: any) => {
         console.log({ updateUIAfterSubmissionErrorParam: error });
-        if (error === undefined) {
-            setSubmitting(false);
+
+        if (!error) {
             setSubmittingSuccess(true);
-        } else {
-            // Sentry.Native.captureException(e);
+            setIsUploadingContent(false);
             setSubmitting(false);
             setSubmittingCommunity(false);
+        } else {
+            setSubmitting(false);
+            setSubmittingCommunity(false);
+            setIsUploadingContent(false);
             setSubmittingSuccess(false);
         }
     };
@@ -203,14 +206,6 @@ function CreateCommunityScreen() {
         };
 
         dispatchRedux(createCommunityRequest(communityDetails));
-
-        if (
-            !requestCancel &&
-            communityCreationError === undefined &&
-            communityUploadDetails !== undefined
-        ) {
-            updateUIAfterSubmission(communityCreationError);
-        }
     };
 
     const uploadImages = () => {
@@ -348,7 +343,6 @@ function CreateCommunityScreen() {
         if (coverUploadDetails === undefined) {
             setSubmittingCover(true);
         }
-        //TODO: Check this condition
         if (
             state.profileImage.length > 0 &&
             profileUploadDetails === undefined

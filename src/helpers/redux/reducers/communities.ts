@@ -59,6 +59,12 @@ export const communitiesReducer = (
                 refreshing: false,
             };
 
+        case communitiesAction.CREATE_COMMUNITY_REQUEST:
+            return {
+                ...state,
+                refreshing: true,
+            };
+
         case communitiesAction.CREATE_COMMUNITY_SUCCESS:
             return {
                 ...state,
