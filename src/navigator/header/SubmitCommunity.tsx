@@ -25,6 +25,7 @@ function SubmitCommunity(props: { submit: () => void; submitting: boolean }) {
                 onPress={props.submit}
                 loading={props.submitting}
                 disabled={props.submitting}
+                testID="submit-community-button"
             >
                 {i18n.t('generic.submit')}
             </Button>

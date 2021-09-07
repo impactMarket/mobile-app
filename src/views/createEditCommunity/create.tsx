@@ -258,55 +258,6 @@ function CreateCommunityScreen() {
         return Promise.all([coverUpload(), profileUpload()]);
     };
 
-    useEffect(() => {
-        let cancelablePromise: {
-            promise: Promise<unknown>;
-            cancel(): void;
-        };
-        if (!canceled) {
-            // if community cover picture and user profile picture were uploded successfully, move on to upload community
-            // ignore user profile picture if the user has already has it
-            if (
-                coverUploadDetails !== undefined &&
-                ((state.profileImage.length > 0 &&
-                    profileUploadDetails !== undefined) ||
-                    userMetadata.avatar.length > 0)
-            ) {
-                cancelablePromise = makeCancelable(submitCommunity());
-                cancelablePromise.promise.catch().finally(() => {
-                    setSubmitting(false);
-                    setSubmittingCover(false);
-                    setSubmittingProfile(false);
-                    setSubmittingCommunity(false);
-                });
-            } else if (isUploadingContent) {
-                cancelablePromise = makeCancelable(uploadImages());
-                cancelablePromise.promise
-                    .then((details) => {
-                        setCoverUploadDetails(details[0].media);
-                        if (state.profileImage.length > 0) {
-                            setProfileUploadDetails(details[1].media);
-                        }
-                        setSubmittingCover(false);
-                        setSubmittingProfile(false);
-                    })
-                    .catch();
-            }
-        }
-        return () => {
-            if (cancelablePromise !== undefined) {
-                return cancelablePromise.cancel();
-            }
-        };
-        // TODO: this needs refactoring. This methods are used within and outside the effect
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        canceled,
-        coverUploadDetails,
-        profileUploadDetails,
-        isUploadingContent,
-    ]);
-
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals),
             CommunityContract = new kit.web3.eth.Contract(
