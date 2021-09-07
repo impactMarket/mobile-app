@@ -39,7 +39,7 @@ import {
     IUserAuth,
     CommunityCreationAttributes,
 } from './endpoints';
-import { AppMediaContent, CommunityAttributes, UserAttributes } from './models';
+import { CommunityAttributes, UserAttributes } from './models';
 import { IUserWallet } from './state';
 
 // action

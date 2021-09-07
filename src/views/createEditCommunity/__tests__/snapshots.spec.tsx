@@ -2,9 +2,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { act, fireEvent, render } from '@testing-library/react-native';
 import i18n from 'assets/i18n';
+import combinedReducer from 'helpers/redux/reducers';
 import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
+import { createStore } from 'redux';
 
 import CreateCommunityScreen from '../create';
 
@@ -14,16 +16,19 @@ import CreateCommunityScreen from '../create';
  */
 function WrappedCreateCommunityScreen() {
     const Stack = createStackNavigator();
+    const store = createStore(combinedReducer);
     return (
         <Host>
-            <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name="Home"
-                        component={CreateCommunityScreen}
-                    />
-                </Stack.Navigator>
-            </NavigationContainer>
+            <reactRedux.Provider store={store}>
+                <NavigationContainer>
+                    <Stack.Navigator>
+                        <Stack.Screen
+                            name="Home"
+                            component={CreateCommunityScreen}
+                        />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </reactRedux.Provider>
         </Host>
     );
 }
@@ -45,6 +50,9 @@ describe('create community [snapshot]', () => {
                     wallet: {
                         address: '0xd7632B7588DF8532C0aBA55586167C2a315Fd768',
                     },
+                },
+                communities: {
+                    communityCreationError: null,
                 },
             });
         });

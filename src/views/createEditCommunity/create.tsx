@@ -153,6 +153,7 @@ function CreateCommunityScreen() {
                 return cancelablePromise.cancel();
             }
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         canceled,
         coverUploadDetails,
@@ -305,29 +306,6 @@ function CreateCommunityScreen() {
         profileUploadDetails,
         isUploadingContent,
     ]);
-
-    const updateUIAfterSubmission = async (
-        data: CommunityAttributes,
-        error: any
-    ) => {
-        if (error === undefined) {
-            await updateCommunityInfo(data.id, dispatchRedux);
-            const community = await Api.community.findById(data.id);
-            if (community !== undefined) {
-                batch(() => {
-                    dispatchRedux(setCommunityMetadata(community));
-                    dispatchRedux(setUserIsCommunityManager(true));
-                });
-            }
-            setSubmitting(false);
-            setSubmittingSuccess(true);
-        } else {
-            // Sentry.Native.captureException(e);
-            setSubmitting(false);
-            setSubmittingCommunity(false);
-            setSubmittingSuccess(false);
-        }
-    };
 
     const deployPrivateCommunity = async () => {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals),
