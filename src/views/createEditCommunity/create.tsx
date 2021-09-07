@@ -6,7 +6,7 @@ import Button from 'components/core/Button';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
-import { celoNetwork, Screens } from 'helpers/constants';
+import { celoNetwork } from 'helpers/constants';
 import { formatInputAmountToTransfer } from 'helpers/currency';
 import { createCommunityRequest } from 'helpers/redux/actions/communities';
 import { setUserMetadata } from 'helpers/redux/actions/user';
