@@ -151,7 +151,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             {i18n.t('community.fundsRunOut', {
                                 days: Math.round(Number(days)),
                             })}{' '}
-                            {i18n.t('days', {
+                            {i18n.t('generic.days', {
                                 count: Number(days),
                             })}
                         </Text>

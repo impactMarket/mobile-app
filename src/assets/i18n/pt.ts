@@ -369,7 +369,7 @@ export default {
             'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
         largeSuspiciousActivityDetected:
             'Um grande número de contas pode estar envolvido em atividades suspeitas.',
-        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
+        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}}',
         shareTitle:
             'Impact Market | Protocolo Descentralizado de Alívio da Pobreza',
     },
