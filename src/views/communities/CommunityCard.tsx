@@ -68,7 +68,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                             uri: community?.cover?.url,
                         }}
                     />
-                    {/* TODO: add run our of funds detection algorithm to decide whether show warning or not.  */}
+                    {/* TODO: add run out of funds detection algorithm to decide whether show warning or not.  */}
                     {/* <View
                         style={{
                             position: 'absolute',
@@ -139,7 +139,6 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flexDirection: 'row',
-                                marginRight: 12,
                             }}
                         >
                             <BeneficiariesSvg style={{ marginRight: 4 }} />
@@ -147,12 +146,13 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                 {community.state.beneficiaries}
                             </Text>
                         </View>
+                        <Text style={styles.interPunct}>{'\u2B24'}</Text>
                         <View
                             style={{
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flexDirection: 'row',
-                                marginRight: 12,
+                                marginRight: 4,
                             }}
                         >
                             <Text style={styles.bottomCardText}>
@@ -163,7 +163,6 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                     rates
                                 )}
                             </Text>
-                            <Text style={styles.interPunct}>{'\u2B24'}</Text>
                         </View>
                         <View
                             style={{
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
     },
     interPunct: {
         fontSize: 2.5,
-        marginLeft: 4,
+        marginHorizontal: 4,
         color: ipctColors.blueGray,
     },
     cardCommunityName: {
