@@ -325,7 +325,7 @@ export default {
     profile: {
         profile: 'Profile',
         balance: 'Valora Wallet Balance',
-        uploadProfilePicture: 'Update profile picture',
+        uploadProfilePicture: 'Upload profile picture',
         phoneNumber: 'Phone Number',
         logout: 'Logout',
         stolenOrChangedPhone:
@@ -358,8 +358,7 @@ export default {
         largeSuspiciousActivityDetected:
             'A very large number of accounts  may be involved in suspicious activities.',
         fundsRunOut: 'Community funds will run out in {{days}}',
-        shareTitle:
-            'Impact Market | Decentralized Poverty Alleviation Protocol',
+        shareTitle: 'impactMarket | Decentralized Poverty Alleviation Protocol',
     },
     report: {
         report: 'Report',

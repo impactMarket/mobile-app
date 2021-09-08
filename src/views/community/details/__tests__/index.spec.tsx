@@ -186,7 +186,7 @@ describe('details [snapshot]', () => {
         communityFundraisingUrl.mockImplementation(() =>
             Promise.resolve({
                 communityId: 1,
-                campaignUrl: 'https://community.esolidar.com/pt',
+                campaignUrl: null,
             })
         );
 
