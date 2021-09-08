@@ -127,23 +127,19 @@ function CreateCommunityScreen() {
                     userMetadata.avatar?.length > 0)
             ) {
                 cancelablePromise = makeCancelable(submitCommunity());
-                cancelablePromise.promise
-                    .catch((error) => Sentry.Native.captureException(error))
-                    .finally(() => {
-                        updateUIAfterSubmission(communityCreationError);
-                    });
+                cancelablePromise.promise.finally(() => {
+                    updateUIAfterSubmission(communityCreationError);
+                });
             } else if (isUploadingContent) {
                 cancelablePromise = makeCancelable(uploadImages());
-                cancelablePromise.promise
-                    .then((details) => {
-                        setCoverUploadDetails(details[0].media);
-                        if (state.profileImage.length > 0) {
-                            setProfileUploadDetails(details[1].media);
-                        }
-                        setSubmittingCover(false);
-                        setSubmittingProfile(false);
-                    })
-                    .catch((error) => Sentry.Native.captureException(error));
+                cancelablePromise.promise.then((details) => {
+                    setCoverUploadDetails(details[0].media);
+                    if (state.profileImage.length > 0) {
+                        setProfileUploadDetails(details[1].media);
+                    }
+                    setSubmittingCover(false);
+                    setSubmittingProfile(false);
+                });
             }
         }
 

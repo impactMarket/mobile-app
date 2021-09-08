@@ -1,6 +1,12 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
+import {
+    render,
+    fireEvent,
+    cleanup,
+    act,
+    waitFor,
+} from '@testing-library/react-native';
 import i18n from 'assets/i18n';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
@@ -1048,16 +1054,12 @@ describe('create community', () => {
             })
         );
 
-        communityCreateMock.mockImplementationOnce(() => {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve({
-                        data: communityDummyData,
-                        error: undefined,
-                    });
-                }, 5000);
-            });
-        });
+        communityCreateMock.mockImplementationOnce(() =>
+            Promise.resolve({
+                data: communityDummyData,
+                error: undefined,
+            })
+        );
 
         const {
             getByLabelText,
@@ -1121,19 +1123,23 @@ describe('create community', () => {
 
         // Keep failing for no reason with the error (Couldn't find a navigation context. Have you wrapped your app with 'NavigationContainer'?)
         // Since we'he two conditions out of three matched, I'm commenting out the expect for now.
-        // expect(
-        //     queryByText(i18n.t('createCommunity.communityRequestError'))
-        // ).toBeNull();
-        expect(
-            setTimeout(() => {
-                queryByText(i18n.t('createCommunity.communityRequestSending'));
-            }, 5000)
-        ).not.toBeNull();
-        setTimeout(() => {
+
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestError'))
+            ).toBeNull()
+        );
+
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestSending'))
+            ).not.toBeNull()
+        );
+        await act(async () =>
             expect(
                 queryByText(i18n.t('createCommunity.communityRequestSuccess'))
-            ).toBeNull();
-        }, 5000);
+            ).toBeNull()
+        );
     });
 
     test('failed submit', async () => {
@@ -1221,17 +1227,21 @@ describe('create community', () => {
             fireEvent.press(getByText(i18n.t('generic.submit')));
         });
 
-        expect(
-            setTimeout(() => {
-                queryByText(i18n.t('createCommunity.communityRequestError'));
-            }, 5000)
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityRequestSending'))
-        ).toBeNull();
-        // expect(
-        //     queryByText(i18n.t('createCommunity.communityRequestSuccess'))
-        // ).toBeNull();
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestSuccess'))
+            ).toBeNull()
+        );
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestSending'))
+            ).toBeNull()
+        );
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestError'))
+            ).not.toBeNull()
+        );
     });
 
     test('submit successfully', async () => {
@@ -1324,17 +1334,23 @@ describe('create community', () => {
 
         // Keep failing for no reason with the error (Couldn't find a navigation context. Have you wrapped your app with 'NavigationContainer'?)
         // Since we'he the main condition matched, I'm commenting out these expect for now.
-        // expect(
-        //     queryByText(i18n.t('createCommunity.communityRequestError'))
-        // ).toBeNull();
-        // expect(
-        //     queryByText(i18n.t('createCommunity.communityRequestSending'))
-        // ).toBeNull();
-        expect(
-            setTimeout(() => {
-                queryByText(i18n.t('createCommunity.communityRequestSuccess'));
-            }, 5000)
-        ).not.toBeNull();
+        // expect
+
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestSuccess'))
+            ).not.toBeNull()
+        );
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestSending'))
+            ).toBeNull()
+        );
+        await act(async () =>
+            expect(
+                queryByText(i18n.t('createCommunity.communityRequestError'))
+            ).toBeNull()
+        );
     });
 
     // TODO: cancel during image upload
