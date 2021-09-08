@@ -494,7 +494,10 @@ function CreateCommunityScreen() {
 
     const SubmissionFailed = () => (
         <>
-            <View style={styles.failedModalContainer}>
+            <View
+                testID="submission-failed"
+                style={styles.failedModalContainer}
+            >
                 <WarningTriangle style={styles.errorModalWarningSvg} />
                 <Text style={styles.failedModalMessageText}>
                     {i18n.t('createCommunity.communityRequestError')}
@@ -512,34 +515,32 @@ function CreateCommunityScreen() {
     );
 
     const SubmissionSucess = () => (
-        <>
-            <View style={styles.successModalContainer}>
-                <SuccessSvg />
-                <Text
-                    style={[
-                        styles.submissionModalMessageText,
-                        {
-                            textAlign: 'center',
-                        },
-                    ]}
-                >
-                    {i18n.t('createCommunity.communityRequestSuccess')}
-                </Text>
-                <Button
-                    modeType="gray"
-                    style={{ width: '100%' }}
-                    onPress={() => {
-                        navigation.goBack();
-                    }}
-                >
-                    {i18n.t('generic.continue')}
-                </Button>
-            </View>
-        </>
+        <View testID="submission-success" style={styles.successModalContainer}>
+            <SuccessSvg />
+            <Text
+                style={[
+                    styles.submissionModalMessageText,
+                    {
+                        textAlign: 'center',
+                    },
+                ]}
+            >
+                {i18n.t('createCommunity.communityRequestSuccess')}
+            </Text>
+            <Button
+                modeType="gray"
+                style={{ width: '100%' }}
+                onPress={() => {
+                    navigation.goBack();
+                }}
+            >
+                {i18n.t('generic.continue')}
+            </Button>
+        </View>
     );
 
     const SubmissionInProgress = () => (
-        <>
+        <View testID="submission-in-progress">
             <Text style={styles.submissionModalMessageText}>
                 {i18n.t('createCommunity.communityRequestSending')}
             </Text>
@@ -553,7 +554,7 @@ function CreateCommunityScreen() {
             >
                 {i18n.t('cancelSending')}
             </Button>
-        </>
+        </View>
     );
 
     const SubmissionRequestCancel = () => (

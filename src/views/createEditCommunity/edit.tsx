@@ -235,6 +235,7 @@ function EditCommunityScreen() {
     const SubmissionFailed = () => (
         <>
             <View
+                testID="submission-failed"
                 style={{
                     marginVertical: 16,
                     paddingVertical: 16,
@@ -281,6 +282,7 @@ function EditCommunityScreen() {
     const SubmissionSucess = () => (
         <>
             <View
+                testID="submission-success"
                 style={{
                     paddingVertical: 14,
                     display: 'flex',
@@ -327,11 +329,8 @@ function EditCommunityScreen() {
                     color: ipctColors.almostBlack,
                     width: '100%',
                     marginVertical: 12,
-                    // textAlign:
-                    //     sendingSuccess || sending
-                    //         ? 'center'
-                    //         : 'left',
                 }}
+                testID="submission-in-progress"
             >
                 {i18n.t('createCommunity.communityRequestSending')}
             </Text>
