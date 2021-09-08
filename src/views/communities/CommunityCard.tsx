@@ -122,11 +122,13 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                     <Text style={styles.cardCommunityName}>
                         {community.name}
                     </Text>
-                    <Text style={styles.cardCommunityDescription}>
-                        {community.description?.length > 100
-                            ? community.description.substr(0, 100) + '...'
-                            : community.description}
-                    </Text>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.cardCommunityDescription}>
+                            {community.description?.length > 100
+                                ? community.description.substr(0, 100) + '...'
+                                : community.description}
+                        </Text>
+                    </View>
                     <View
                         style={{
                             flexDirection: 'row',
@@ -232,7 +234,6 @@ const styles = StyleSheet.create({
         color: ipctColors.darBlue,
         textAlign: 'left',
         marginVertical: 8,
-        height: 120,
     },
     cardLocation: {
         fontFamily: 'Inter-Regular',
