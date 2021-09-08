@@ -28,7 +28,6 @@ import {
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useDispatch, useSelector } from 'react-redux';
-import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';

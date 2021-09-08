@@ -1,12 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-    render,
-    fireEvent,
-    cleanup,
-    act,
-    waitFor,
-} from '@testing-library/react-native';
+import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
 import i18n from 'assets/i18n';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
