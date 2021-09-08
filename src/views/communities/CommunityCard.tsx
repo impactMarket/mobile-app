@@ -27,12 +27,6 @@ function CommunityCard(props: { community: CommunityAttributes }) {
 
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
 
-    if (community.state === undefined || community.contract === undefined) {
-        navigation.goBack();
-        // TODO: throw some error!
-        return null;
-    }
-
     // const setTextSuspects = (suspects: number) => {
     //     switch (true) {
     //         case suspects < 1:
