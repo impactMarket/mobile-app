@@ -78,9 +78,7 @@ function CommunitiesScreen() {
             </View>
             <FlatList
                 // TODO: Although the useEffect limits the number of items to 5, I added slice to make sure if communities.length is greater than 5, it will show the first 5 items.
-                data={[
-                    { publicId: 'for-compliance-sake-really' } as any,
-                ].concat(communities.slice(0, 5))}
+                data={communities}
                 renderItem={({
                     item,
                 }: // index,

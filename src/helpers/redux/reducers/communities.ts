@@ -18,10 +18,7 @@ export const communitiesReducer = (
         case communitiesAction.INIT_SUCCESS:
             return {
                 ...state,
-                communities: [
-                    ...state.communities,
-                    ...action.payload.communities,
-                ],
+                communities: [...action.payload.communities],
                 refreshing: false,
                 reachedEndList: action.payload.reachedEndList,
                 count: action.payload.count,

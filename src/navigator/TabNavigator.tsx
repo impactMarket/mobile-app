@@ -85,6 +85,10 @@ function getHeaderLeft(route: RouteProp<any, any>) {
     switch (routeName) {
         case Screens.Communities:
             return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
+        case Screens.CommunityManager:
+            return null;
+        case Screens.Beneficiary:
+            return null;
         default:
             return <BackSvg />;
     }
