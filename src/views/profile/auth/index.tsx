@@ -72,21 +72,22 @@ function Auth() {
     >(undefined);
     const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
-    const [duplicatedAccountsWarn, setDuplicatedAccountsWarn] = useState(false);
+    const [toggleWarn, setToggleWarn] = useState(false);
     const [timedOutValidation, setTimedOutValidation] = useState(false);
 
     const [, setLoadRefs] = useState(false);
     const modalizeDuplicatedAccountsRef = useRef<Modalize>(null);
+    const modalizeDeleteAccountsRef = useRef<Modalize>(null);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
     const modalizeHelpCenterRef = useRef<Modalize>(null);
 
     // i don't like. We must do it differently when replacing the header
     useEffect(() => {
-        if (timedOutValidation && !duplicatedAccountsWarn) {
+        if (timedOutValidation && !toggleWarn) {
             setTimedOut(true);
         }
-    }, [timedOutValidation, duplicatedAccountsWarn]);
+    }, [timedOutValidation, toggleWarn]);
 
     useEffect(() => {
         const finishAuth = async () => {
@@ -123,7 +124,15 @@ function Auth() {
         ) {
             modalizeDuplicatedAccountsRef.current.open();
             modalizeWelcomeRef.current.close();
-            setDuplicatedAccountsWarn(true);
+            setToggleWarn(true);
+            setConnecting(false);
+        } else if (
+            userAuthState.error !== undefined &&
+            userAuthState.error.indexOf('account in deletion process')
+        ) {
+            modalizeDeleteAccountsRef.current.open();
+            modalizeWelcomeRef.current.close();
+            setToggleWarn(true);
             setConnecting(false);
         }
     }, [userAuthState, dappKitResponse, dispatch, exchangeRates, kit]);
@@ -135,8 +144,9 @@ function Auth() {
     const apiAuthRequest = async (props: {
         response?: AccountAuthResponseSuccess;
         overwrite?: boolean;
+        recover?: boolean;
     }) => {
-        const { response, overwrite } = props;
+        const { response, overwrite, recover } = props;
         let language = Localization.locale;
         if (language.includes('-')) {
             language = language.substr(0, language.indexOf('-'));
@@ -171,6 +181,7 @@ function Auth() {
                 phone: phoneNumber,
                 pushNotificationToken,
                 overwrite,
+                recover,
             })
         );
     };
@@ -419,6 +430,56 @@ function Auth() {
                             disabled={connecting}
                         >
                             {i18n.t('generic.yes')}
+                        </Button>
+                    </View>
+                </View>
+            </Modalize>
+            <Modalize
+                ref={modalizeDeleteAccountsRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('auth.welcomeBack'),
+                    modalizeDeleteAccountsRef,
+                    () => {
+                        navigation.navigate(Screens.Communities);
+                    }
+                )}
+                adjustToContentHeight
+                onClose={() => {
+                    navigation.navigate(Screens.Communities);
+                }}
+            >
+                <View style={{ width: '100%', paddingHorizontal: 22 }}>
+                    <Text style={styles.description}>
+                        {i18n.t('auth.recoverMsg1')}
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginBottom: 18,
+                        }}
+                    >
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={() =>
+                                modalizeDeleteAccountsRef.current.close()
+                            }
+                            disabled={connecting}
+                        >
+                            {i18n.t('generic.dismiss')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ width: '45%' }}
+                            onPress={() => {
+                                setConnecting(true);
+                                apiAuthRequest({ recover: true });
+                            }}
+                            loading={connecting}
+                            disabled={connecting}
+                        >
+                            {i18n.t('auth.recover')}
                         </Button>
                     </View>
                 </View>

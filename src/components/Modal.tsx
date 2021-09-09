@@ -71,7 +71,6 @@ export default class Modal extends Component<IModalProps, IModalState> {
             cardModalStyle = {
                 ...cardModalStyle,
                 position: 'absolute',
-                // width: Dimensions.get('window').width - 40,
             };
             if (keyboardOpen) {
                 cardModalStyle = {

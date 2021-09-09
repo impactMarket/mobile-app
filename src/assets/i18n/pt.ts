@@ -449,6 +449,10 @@ export default {
         duplicatedMsg2:
             'Pretende continuar com a autenticação, desabilitando todas as outras contas?',
         duplicatedMsg3: 'P.S: Os fundos serão mantidos nas outras contas.',
+        welcomeBack: 'Bem-vindo novamente',
+        recover: 'Recuperar',
+        recoverMsg1:
+            'Uma vez que iniciou este processo de eliminação de conta há menos de 15 dias, pode recuperar os seus dados privados e públicos.',
     },
     promoter: {
         createdIn: 'Criou comunidade em {{date}}',

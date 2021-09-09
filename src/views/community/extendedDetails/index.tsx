@@ -1,5 +1,6 @@
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import Divider from 'components/Divider';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -23,18 +24,6 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
-
-function Divider() {
-    return (
-        <View
-            style={{
-                borderColor: ipctColors.softGray,
-                borderWidth: 0.5,
-                marginVertical: 32,
-            }}
-        />
-    );
-}
 
 function UBIParamsBox(props: { title: string; body: string }) {
     return (

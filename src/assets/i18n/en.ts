@@ -434,6 +434,10 @@ export default {
         duplicatedMsg2: 'Do you want login and disable all other accounts?',
         duplicatedMsg3:
             'P.S: Funds will continue to exist on all other Valora accounts.',
+        welcomeBack: 'Welcome back!',
+        recover: 'Recover',
+        recoverMsg1:
+            'Because you have initiated this account deletion process less than 15 days ago, you can recover your private and public data.',
     },
     promoter: {
         createdIn: 'Created community on {{date}}',
