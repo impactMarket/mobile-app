@@ -128,8 +128,6 @@ function TabNavigator({
 
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
-        console.log({ routeName });
-        console.log({ fromWelcomeScreen });
         const headerLeftDetected = getHeaderLeft(route);
         navigation.setOptions({
             headerLeft: () => getHeaderLeft(route),
