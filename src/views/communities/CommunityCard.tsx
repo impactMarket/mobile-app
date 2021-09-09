@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import CachedImage from 'components/CacheImage';
+import Dot from 'components/Dot';
 import BeneficiariesSvg from 'components/svg/BeneficiariesSvg';
 import LocationsSvg from 'components/svg/LocationSvg';
 import { Screens } from 'helpers/constants';
@@ -142,7 +143,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                 {community.state.beneficiaries}
                             </Text>
                         </View>
-                        <Text style={styles.interPunct}>{'\u2B24'}</Text>
+                        <Dot />
                         <View
                             style={{
                                 alignItems: 'center',
@@ -205,11 +206,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Regular',
         color: ipctColors.nileBlue,
         textAlign: 'left',
-    },
-    interPunct: {
-        fontSize: 2.5,
-        marginHorizontal: 4,
-        color: ipctColors.blueGray,
     },
     cardCommunityName: {
         fontSize: ipctFontSize.small,
