@@ -3,13 +3,14 @@ import CloseSvg from 'components/svg/CloseSvg';
 import React, { Component, ReactNode } from 'react';
 import {
     View,
-    Dimensions,
     Keyboard,
     LayoutAnimation,
     Platform,
     Pressable,
+    Text,
 } from 'react-native';
-import { Modal as ModalRNP, Headline } from 'react-native-paper';
+import { Modal as ModalRNP } from 'react-native-paper';
+import { ipctColors } from 'styles/index';
 
 interface IModalProps {
     visible: boolean;
@@ -70,7 +71,7 @@ export default class Modal extends Component<IModalProps, IModalState> {
             cardModalStyle = {
                 ...cardModalStyle,
                 position: 'absolute',
-                width: Dimensions.get('window').width - 40,
+                // width: Dimensions.get('window').width - 40,
             };
             if (keyboardOpen) {
                 cardModalStyle = {
@@ -88,11 +89,13 @@ export default class Modal extends Component<IModalProps, IModalState> {
             >
                 <Card
                     style={{
-                        marginHorizontal: 20,
+                        marginHorizontal: 22,
                         ...cardModalStyle,
                     }}
                 >
-                    <Card.Content>
+                    <Card.Content
+                        style={{ paddingHorizontal: 22, paddingVertical: 16 }}
+                    >
                         <View
                             style={{
                                 height: 24,
@@ -108,15 +111,17 @@ export default class Modal extends Component<IModalProps, IModalState> {
                                     alignItems: 'center',
                                 }}
                             >
-                                <Headline
+                                <Text
                                     style={{
-                                        fontFamily: 'Gelion-Bold',
-                                        fontSize: 24,
-                                        lineHeight: 24,
+                                        fontFamily: 'Manrope-ExtraBold',
+                                        fontSize: 22,
+                                        lineHeight: 28,
+                                        height: 28,
+                                        color: ipctColors.darBlue,
                                     }}
                                 >
                                     {title}
-                                </Headline>
+                                </Text>
                                 {onDismiss !== undefined && (
                                     <Pressable
                                         hitSlop={15}
