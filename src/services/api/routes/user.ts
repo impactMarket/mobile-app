@@ -4,7 +4,7 @@ import { AppMediaContent } from 'helpers/types/models';
 import path from 'path';
 import * as mime from 'react-native-mime-types';
 
-import { ApiRequests } from '../base';
+import { ApiRequests, IApiResult } from '../base';
 
 export interface AuthParams {
     address: string;
@@ -12,6 +12,7 @@ export interface AuthParams {
     currency: string;
     phone: string;
     overwrite?: boolean;
+    recover?: boolean;
     pushNotificationToken?: string;
 }
 class ApiRouteUser {
@@ -152,6 +153,10 @@ class ApiRouteUser {
                 children,
             })
         ).data;
+    }
+
+    static async delete(): Promise<IApiResult<boolean>> {
+        return this.api.delete<boolean>('/user');
     }
 }
 

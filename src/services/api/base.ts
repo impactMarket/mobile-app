@@ -250,37 +250,17 @@ class ApiRequests {
         // return response;
     }
 
-    async delete<T>(endpoint: string, id?: any): Promise<T> {
-        // let response: T | undefined;
-        // try {
-        // handle success
-        // const requestOptions = {
-        //     headers: {
-        //         Authorization: `Bearer ${this.token}`,
-        //         'Content-Type': 'application/json',
-        //         Accept: 'application/json',
-        //     },
-        //     data: { id },
-        // };
-        const result = await axios.delete(
-            endpoint,
-            await this._requestOptions({ data: { id } })
-        );
-        // if (result.status === 401) {
-        //     await AsyncStorage.clear();
-        //     DevSettings.reload();
-        //     return undefined;
-        // }
-        // if (result.status >= 400) {
-        //     return undefined;
-        // }
-        // response = result.data as T;
-        const r = result.data as IApiResult<T>;
-        return r.data as T;
-        // } catch (e) {
-        //     Sentry.Native.captureException(e);
-        // }
-        // return response;
+    async delete<T>(endpoint: string, id?: any): Promise<IApiResult<T>> {
+        try {
+            return (
+                await axios.delete<IApiResult<T>>(
+                    endpoint,
+                    await this._requestOptions({ data: { id } })
+                )
+            ).data;
+        } catch (e) {
+            return e.response.data;
+        }
     }
 
     head(endpoint: string) {
