@@ -28,12 +28,15 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
+
 const welcomeScreen = (Navigator: typeof Stack) => (
-    <Navigator.Screen
-        name={Screens.Welcome}
-        component={WelcomeScreen}
-        options={WelcomeScreen.navigationOptions}
-    />
+    <>
+        <Navigator.Screen
+            name={Screens.Welcome}
+            component={WelcomeScreen}
+            options={WelcomeScreen.navigationOptions}
+        />
+    </>
 );
 
 const commonScreens = (Navigator: typeof Stack) => (
@@ -123,7 +126,6 @@ const beneficiaryScreens = (Navigator: typeof Stack) => (
         />
     </>
 );
-
 const managerScreens = (Navigator: typeof Stack) => (
     <>
         <Navigator.Screen
@@ -184,7 +186,6 @@ function StackNavigator() {
                 headerStyle: {
                     elevation: 0, // remove shadow on Android
                     shadowOpacity: 0, // remove shadow on iOS
-                    // backgroundColor: 'tomato',
                     height: 100,
                 },
                 headerTintColor: '#fff',
