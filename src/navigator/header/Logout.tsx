@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import { Screens } from 'helpers/constants';
 import {
     resetUserApp,
     setUserIsBeneficiary,
@@ -13,7 +15,7 @@ import { ipctColors } from 'styles/index';
 
 function Logout() {
     const dispatch = useDispatch();
-
+    const navigation = useNavigation();
     const [logingOut, setLogingOut] = useState(false);
 
     const handleLogout = async () => {
@@ -23,6 +25,7 @@ function Logout() {
             dispatch(setUserIsBeneficiary(false));
             dispatch(setUserIsCommunityManager(false));
             dispatch(resetUserApp());
+            navigation.navigate(Screens.Communities);
         });
     };
 

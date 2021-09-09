@@ -81,6 +81,7 @@ function Auth() {
     useEffect(() => {
         if (timedOutValidation && !duplicatedAccountsWarn) {
             setTimedOut(true);
+            modalizeWelcomeRef.current.close();
         }
     }, [timedOutValidation, duplicatedAccountsWarn]);
 
