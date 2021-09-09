@@ -39,7 +39,14 @@ import rootSagas from 'helpers/redux/sagas';
 import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
 import React from 'react';
-import { Image, View, LogBox, StatusBar, Dimensions } from 'react-native';
+import {
+    Image,
+    View,
+    LogBox,
+    StatusBar,
+    Dimensions,
+    Platform,
+} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import {
     DefaultTheme,
@@ -451,7 +458,10 @@ class App extends React.Component<any, IAppState> {
                     />
                     <FlashMessage
                         position={{
-                            top: StatusBar.currentHeight,
+                            top:
+                                Platform.OS === 'android'
+                                    ? StatusBar.currentHeight
+                                    : 50,
                             left: 0,
                             right: 0,
                         }}
