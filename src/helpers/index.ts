@@ -206,11 +206,7 @@ export function calculateCommunityRemainedFunds(
             ? claimAmountPerBeneficiary.multipliedBy(beneficiaryCount)
             : claimAmountPerBeneficiary.div(7).multipliedBy(beneficiaryCount);
 
-    console.log({ communityLimitPerDay });
-
     const remainingDays = remainingFundToBeClaimed.div(communityLimitPerDay);
-
-    console.log({ remainingDays });
 
     return remainingDays.lte(1) ? 1 : remainingDays;
 }
