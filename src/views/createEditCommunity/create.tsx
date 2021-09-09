@@ -157,8 +157,6 @@ function CreateCommunityScreen() {
     ]);
 
     const updateUIAfterSubmission = async (error: any) => {
-        console.log({ updateUIAfterSubmissionErrorParam: error });
-
         if (!error) {
             setSubmittingSuccess(true);
             setIsUploadingContent(false);

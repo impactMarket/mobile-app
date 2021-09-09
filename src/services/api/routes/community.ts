@@ -234,13 +234,13 @@ class ApiRouteCommunity {
 
     static async create(
         details: CommunityCreationAttributes
-    ): Promise<{ data: CommunityAttributes; error: any }> {
+    ): Promise<{ data: CommunityAttributes; error: string | null }> {
         return this.api.post<CommunityAttributes>('/community/create', details);
     }
 
     static async edit(
         details: CommunityEditionAttributes
-    ): Promise<{ data: CommunityAttributes; error: any }> {
+    ): Promise<{ data: CommunityAttributes; error: string | null }> {
         return this.api.put<CommunityAttributes>('/community', details);
     }
 
