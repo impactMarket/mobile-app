@@ -1,16 +1,22 @@
 import * as React from 'react';
-import Svg, { SvgProps, Path } from 'react-native-svg';
+import Svg, { SvgProps, Path, Circle } from 'react-native-svg';
 
 function CloseSvg(props: SvgProps) {
     return (
-        <Svg width={17} height={16} viewBox="0 0 17 16" fill="none" {...props}>
+        <Svg width={34} height={35} fill="none" {...props}>
+            <Circle cx={17.2} cy={17.5} r={16.8} fill="#E9EDF4" />
             <Path
-                d="M10.58 7.533l5.838-5.634a.802.802 0 000-1.165l-.512-.493A.863.863 0 0015.303 0a.862.862 0 00-.604.24L7.75 6.949a.803.803 0 00-.249.585c0 .221.088.429.249.585l6.944 6.7c.16.156.375.242.603.242a.863.863 0 00.604-.241l.511-.494a.805.805 0 000-1.165l-5.83-5.627z"
-                fill="#172B4D"
+                stroke="#172B4D"
+                strokeWidth={2}
+                strokeLinecap="round"
+                d="M11.177 23.864l12.728-12.728"
             />
             <Path
-                d="M6.92 7.527L1.083 13.16a.803.803 0 000 1.164l.511.494c.16.155.375.24.604.24a.863.863 0 00.603-.24l6.95-6.708a.802.802 0 00.25-.584.802.802 0 00-.25-.585L2.808.24A.862.862 0 002.204 0 .863.863 0 001.6.24l-.51.494a.805.805 0 000 1.165l5.83 5.628z"
-                fill="#172B4D"
+                stroke="#172B4D"
+                strokeWidth={2}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M23.905 23.864L11.177 11.136"
             />
         </Svg>
     );

@@ -1,4 +1,5 @@
 import { ContractKit } from '@celo/contractkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
@@ -23,6 +24,7 @@ import {
     setUserWallet,
     setUserIsBlocked,
     setUserIsSuspect,
+    resetUserApp,
 } from './redux/actions/user';
 import {
     AppMediaContent,
@@ -39,6 +41,15 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
+
+export async function logout(dispatch: Dispatch<any>) {
+    await AsyncStorage.clear();
+    batch(() => {
+        dispatch(setUserIsBeneficiary(false));
+        dispatch(setUserIsCommunityManager(false));
+        dispatch(resetUserApp());
+    });
+}
 
 export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');

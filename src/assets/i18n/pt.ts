@@ -334,6 +334,12 @@ export default {
             'Todos os dias, você poderá reivindicar/pedir/pegar ~{{claimXCCurrency}}. Depois de reivindicar/pedir/pegar, você precisará aguardar por {{interval}} + {{minIncrement}} minutos.',
     },
     profile: {
+        deleteAccountWarn: {
+            msg1:
+                'Todos os dados pessoais privados e públicos serão apagados permanentemente (excepto todos os dados públicos guardados na blockchain celo) e esta conta será encerrada.',
+            msg2:
+                'Este processo demorará 15 dias. Para abortar esse processo necessita apenas de ligar-se novamente com a mesma carteira durante este período.',
+        },
         profile: 'Perfil',
         balance: 'Balanço',
         uploadProfilePicture: 'Atualizar foto de perfil',
@@ -347,6 +353,7 @@ export default {
         female: 'Feminino',
         others: 'Outros',
         howManyChildren: 'Quantos filhos você tem?',
+        deleteAccount: 'Apagar Conta',
     },
     community: {
         ssi: 'Índice de Autossustentabilidade',
@@ -442,6 +449,10 @@ export default {
         duplicatedMsg2:
             'Pretende continuar com a autenticação, desabilitando todas as outras contas?',
         duplicatedMsg3: 'P.S: Os fundos serão mantidos nas outras contas.',
+        welcomeBack: 'Bem-vindo novamente',
+        recover: 'Recuperar',
+        recoverMsg1:
+            'Uma vez que iniciou este processo de eliminação de conta há menos de 15 dias, pode recuperar os seus dados privados e públicos.',
     },
     promoter: {
         createdIn: 'Criou comunidade em {{date}}',

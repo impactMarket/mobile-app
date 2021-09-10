@@ -30,6 +30,7 @@ import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import {
     addUserAuthToStateRequest,
     setPushNotificationsToken,
+    userAuthToStateReset,
 } from 'helpers/redux/actions/auth';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useRef, useEffect } from 'react';
@@ -72,21 +73,22 @@ function Auth() {
     >(undefined);
     const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
-    const [duplicatedAccountsWarn, setDuplicatedAccountsWarn] = useState(false);
+    const [toggleWarn, setToggleWarn] = useState(false);
     const [timedOutValidation, setTimedOutValidation] = useState(false);
 
     const [, setLoadRefs] = useState(false);
     const modalizeDuplicatedAccountsRef = useRef<Modalize>(null);
+    const modalizeDeleteAccountsRef = useRef<Modalize>(null);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
     const modalizeHelpCenterRef = useRef<Modalize>(null);
 
     // i don't like. We must do it differently when replacing the header
     useEffect(() => {
-        if (timedOutValidation && !duplicatedAccountsWarn) {
+        if (timedOutValidation && !toggleWarn) {
             setTimedOut(true);
         }
-    }, [timedOutValidation, duplicatedAccountsWarn]);
+    }, [timedOutValidation, toggleWarn]);
 
     useEffect(() => {
         const finishAuth = async () => {
@@ -112,6 +114,7 @@ function Auth() {
                 dispatch,
                 user.user
             );
+            dispatch(userAuthToStateReset());
         };
         if (userAuthState.user !== undefined) {
             if (dappKitResponse !== undefined) {
@@ -119,12 +122,23 @@ function Auth() {
             }
         } else if (
             userAuthState.error !== undefined &&
-            userAuthState.error.indexOf('associated with another account')
+            userAuthState.error.indexOf('associated with another account') !==
+                -1
         ) {
             modalizeDuplicatedAccountsRef.current.open();
             modalizeWelcomeRef.current.close();
-            setDuplicatedAccountsWarn(true);
+            setToggleWarn(true);
             setConnecting(false);
+            dispatch(userAuthToStateReset());
+        } else if (
+            userAuthState.error !== undefined &&
+            userAuthState.error.indexOf('in deletion process') !== -1
+        ) {
+            modalizeDeleteAccountsRef.current.open();
+            modalizeWelcomeRef.current.close();
+            setToggleWarn(true);
+            setConnecting(false);
+            dispatch(userAuthToStateReset());
         }
     }, [userAuthState, dappKitResponse, dispatch, exchangeRates, kit]);
 
@@ -135,8 +149,9 @@ function Auth() {
     const apiAuthRequest = async (props: {
         response?: AccountAuthResponseSuccess;
         overwrite?: boolean;
+        recover?: boolean;
     }) => {
-        const { response, overwrite } = props;
+        const { response, overwrite, recover } = props;
         let language = Localization.locale;
         if (language.includes('-')) {
             language = language.substr(0, language.indexOf('-'));
@@ -171,6 +186,7 @@ function Auth() {
                 phone: phoneNumber,
                 pushNotificationToken,
                 overwrite,
+                recover,
             })
         );
     };
@@ -419,6 +435,56 @@ function Auth() {
                             disabled={connecting}
                         >
                             {i18n.t('generic.yes')}
+                        </Button>
+                    </View>
+                </View>
+            </Modalize>
+            <Modalize
+                ref={modalizeDeleteAccountsRef}
+                HeaderComponent={renderHeader(
+                    i18n.t('auth.welcomeBack'),
+                    modalizeDeleteAccountsRef,
+                    () => {
+                        navigation.navigate(Screens.Communities);
+                    }
+                )}
+                adjustToContentHeight
+                onClose={() => {
+                    navigation.navigate(Screens.Communities);
+                }}
+            >
+                <View style={{ width: '100%', paddingHorizontal: 22 }}>
+                    <Text style={styles.description}>
+                        {i18n.t('auth.recoverMsg1')}
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginBottom: 18,
+                        }}
+                    >
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={() =>
+                                modalizeDeleteAccountsRef.current.close()
+                            }
+                            disabled={connecting}
+                        >
+                            {i18n.t('generic.dismiss')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ width: '45%' }}
+                            onPress={() => {
+                                setConnecting(true);
+                                apiAuthRequest({ recover: true });
+                            }}
+                            loading={connecting}
+                            disabled={connecting}
+                        >
+                            {i18n.t('auth.recover')}
                         </Button>
                     </View>
                 </View>

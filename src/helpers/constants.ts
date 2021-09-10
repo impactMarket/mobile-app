@@ -58,6 +58,7 @@ export const SHOW_REPORT_CARD = 'SHOW_REPORT_CARD';
 export const SET_USER_AUTH_REQUEST = 'SET_USER_AUTH_REQUEST';
 export const SET_USER_AUTH_SUCCESS = 'SET_USER_AUTH_SUCCESS';
 export const SET_USER_AUTH_FAILURE = 'SET_USER_AUTH_FAILURE';
+export const SET_USER_AUTH_RESET = 'SET_USER_AUTH_RESET';
 
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
