@@ -154,7 +154,9 @@ function CreateCommunityScreen() {
                     };
                 }
                 try {
-                    const res = await Api.user.updateProfilePicture(
+                    const r = await Api.user.preSignedUrl(state.profileImage);
+                    const res = await Api.user.uploadPicture(
+                        r,
                         state.profileImage
                     );
                     const cachedUser = (await CacheStore.getUser())!;
@@ -181,7 +183,11 @@ function CreateCommunityScreen() {
                     media: coverUploadDetails,
                 };
             }
-            const details = await Api.community.uploadCover(state.coverImage);
+            const r = await Api.community.preSignedUrl(state.coverImage);
+            const details = await Api.community.uploadImage(
+                r,
+                state.coverImage
+            );
             return details;
         };
         return Promise.all([coverUpload(), profileUpload()]);

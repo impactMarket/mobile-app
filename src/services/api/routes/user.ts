@@ -1,4 +1,3 @@
-import * as FileSystem from 'expo-file-system';
 import { IUserHello, IUserAuth } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import path from 'path';
@@ -63,7 +62,9 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async updateProfilePicture(uri: string): Promise<AppMediaContent> {
+    static async preSignedUrl(
+        uri: string
+    ): Promise<{ uploadURL: string; media: AppMediaContent }> {
         const mimetype = mime
             .contentType(path.basename(uri))
             .match(/\/(\w+);?/)[1];
@@ -73,16 +74,21 @@ class ApiRouteUser {
                 true
             )
         ).data;
-        const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
-            httpMethod: 'PUT',
-            mimeType: mimetype,
-            uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
-            headers: {
-                'Content-Type': 'image/' + mimetype,
-            },
+        return preSigned;
+    }
+    static async uploadPicture(
+        preSigned: { uploadURL: string; media: AppMediaContent },
+        uri: string
+    ): Promise<AppMediaContent> {
+        const resp = await fetch(uri);
+        const imageBody = await resp.blob();
+
+        const result = await fetch(preSigned.uploadURL, {
+            method: 'PUT',
+            body: imageBody,
         });
-        if (ru.status >= 400) {
-            throw new Error(ru.body.toString());
+        if (result.status >= 400) {
+            throw new Error('not uploaded');
         }
         // wait until image exists on real endpoint
         // TODO: improve this
