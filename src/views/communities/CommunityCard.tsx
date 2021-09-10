@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
+import i18n from 'assets/i18n';
 import CachedImage from 'components/CacheImage';
 import Dot from 'components/Dot';
-import BeneficiariesSvg from 'components/svg/BeneficiariesSvg';
+import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
@@ -27,6 +28,19 @@ function CommunityCard(props: { community: CommunityAttributes }) {
     const { community } = props;
 
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
+
+    const claimAmount = amountToCurrency(
+        community.contract.claimAmount,
+        userCurrency,
+        rates
+    );
+    const claimFrequency =
+        community.contract.baseInterval === 86400
+            ? i18n.t('generic.day')
+            : i18n.t('generic.week');
 
     // const setTextSuspects = (suspects: number) => {
     //     switch (true) {
@@ -108,8 +122,8 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                 </View>
                 <View
                     style={{
-                        marginVertical: 16,
-                        height: 210,
+                        marginTop: 16,
+                        height: 144,
                         width: 254,
                         justifyContent: 'space-between',
                     }}
@@ -117,18 +131,16 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                     <Text style={styles.cardCommunityName}>
                         {community.name}
                     </Text>
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.cardCommunityDescription}>
-                            {community.description?.length > 100
-                                ? community.description.substr(0, 100) + '...'
-                                : community.description}
-                        </Text>
-                    </View>
+                    <Text style={styles.cardCommunityDescription}>
+                        {community.description?.length > 90
+                            ? community.description.substr(0, 90) + '...'
+                            : community.description}
+                    </Text>
                     <View
                         style={{
                             flexDirection: 'row',
                             alignItems: 'center',
-                            bottom: 0,
+                            // bottom: 0,
                         }}
                     >
                         <View
@@ -138,7 +150,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                                 flexDirection: 'row',
                             }}
                         >
-                            <BeneficiariesSvg style={{ marginRight: 4 }} />
+                            <IconCommunity style={{ marginRight: 4 }} />
                             <Text style={styles.bottomCardText}>
                                 {community.state.beneficiaries}
                             </Text>
@@ -153,12 +165,7 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                             }}
                         >
                             <Text style={styles.bottomCardText}>
-                                ~
-                                {amountToCurrency(
-                                    community.contract.claimAmount,
-                                    community.currency,
-                                    rates
-                                )}
+                                {claimAmount}/{claimFrequency}
                             </Text>
                         </View>
                         <View
@@ -216,7 +223,6 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     cardCommunityDescription: {
-        //TODO: Create a font size 15
         fontSize: ipctFontSize.smaller,
         lineHeight: ipctLineHeight.bigger,
         fontFamily: 'Inter-Regular',
@@ -232,11 +238,6 @@ const styles = StyleSheet.create({
         lineHeight: ipctLineHeight.medium,
         color: ipctColors.blueGray,
     },
-    cardInfo: {
-        flex: 3,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-    },
     card: {
         marginHorizontal: 8,
         borderRadius: 8,
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'space-between',
         maxWidth: 254,
-        marginBottom: 11,
+        paddingBottom: 21,
     },
     bottomCardText: {
         fontFamily: 'Inter-Regular',

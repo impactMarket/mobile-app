@@ -90,7 +90,9 @@ function CommunitiesScreen() {
                 keyExtractor={(item) => item.publicId}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                style={{ paddingTop: 20, marginLeft: 14 }}
+                style={{
+                    marginLeft: 14,
+                }}
             />
             <Button
                 modeType="default"
