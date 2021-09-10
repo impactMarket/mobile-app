@@ -30,6 +30,7 @@ import {
     SET_USER_AUTH_REQUEST,
     SET_USER_AUTH_SUCCESS,
     SET_USER_AUTH_FAILURE,
+    SET_USER_AUTH_RESET,
 } from 'helpers/constants';
 import { AuthParams } from 'services/api/routes/user';
 
@@ -134,6 +135,9 @@ interface InitUserAuthActionSuccess {
 interface InitUserAuthActionFailure {
     type: typeof SET_USER_AUTH_FAILURE;
     payload: string;
+}
+interface InitUserAuthActionReset {
+    type: typeof SET_USER_AUTH_RESET;
 }
 interface UserLanguageAction {
     type: typeof SET_USER_LANGUAGE;
@@ -295,7 +299,8 @@ export type AuthActionTypes =
     | SetAuthTokenAction
     | InitUserAuthActionRequest
     | InitUserAuthActionSuccess
-    | InitUserAuthActionFailure;
+    | InitUserAuthActionFailure
+    | InitUserAuthActionReset;
 
 export type AppActionTypes =
     | CeloKitAction

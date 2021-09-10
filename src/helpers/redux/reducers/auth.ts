@@ -4,6 +4,7 @@ import {
     SET_USER_AUTH_REQUEST,
     SET_USER_AUTH_SUCCESS,
     SET_USER_AUTH_FAILURE,
+    SET_USER_AUTH_RESET,
 } from 'helpers/constants';
 import { AuthActionTypes } from 'helpers/types/redux';
 import { IAuthState } from 'helpers/types/state';
@@ -31,6 +32,8 @@ export const authReducer = (
             return { ...state, refreshing: true };
         case SET_USER_AUTH_FAILURE:
             return { ...state, error: action.payload, refreshing: false };
+        case SET_USER_AUTH_RESET:
+            return INITIAL_STATE_AUTH;
         default:
             return state;
     }

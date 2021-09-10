@@ -30,6 +30,7 @@ import { setPushNotificationListeners } from 'helpers/redux/actions/app';
 import {
     addUserAuthToStateRequest,
     setPushNotificationsToken,
+    userAuthToStateReset,
 } from 'helpers/redux/actions/auth';
 import { IRootState } from 'helpers/types/state';
 import React, { useState, useRef, useEffect } from 'react';
@@ -113,6 +114,7 @@ function Auth() {
                 dispatch,
                 user.user
             );
+            dispatch(userAuthToStateReset());
         };
         if (userAuthState.user !== undefined) {
             if (dappKitResponse !== undefined) {
@@ -120,20 +122,23 @@ function Auth() {
             }
         } else if (
             userAuthState.error !== undefined &&
-            userAuthState.error.indexOf('associated with another account')
+            userAuthState.error.indexOf('associated with another account') !==
+                -1
         ) {
             modalizeDuplicatedAccountsRef.current.open();
             modalizeWelcomeRef.current.close();
             setToggleWarn(true);
             setConnecting(false);
+            dispatch(userAuthToStateReset());
         } else if (
             userAuthState.error !== undefined &&
-            userAuthState.error.indexOf('account in deletion process')
+            userAuthState.error.indexOf('in deletion process') !== -1
         ) {
             modalizeDeleteAccountsRef.current.open();
             modalizeWelcomeRef.current.close();
             setToggleWarn(true);
             setConnecting(false);
+            dispatch(userAuthToStateReset());
         }
     }, [userAuthState, dappKitResponse, dispatch, exchangeRates, kit]);
 
