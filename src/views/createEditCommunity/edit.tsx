@@ -105,7 +105,8 @@ function EditCommunityScreen() {
                     media: community.cover,
                 };
             }
-            const details = await Api.community.uploadCover(_cover);
+            const details = await Api.community.preSignedUrl(_cover);
+            await Api.community.uploadImage(details, _cover);
             setCoverUploadDetails(details.media);
             setSubmittingCover(false);
             return details;

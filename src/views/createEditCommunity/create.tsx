@@ -221,12 +221,6 @@ function CreateCommunityScreen() {
                     userMetadata.avatar.length > 0)
             ) {
                 cancelablePromiseCommunity = makeCancelable(submitCommunity());
-                cancelablePromiseCommunity.promise.finally(() => {
-                    setSubmitting(false);
-                    setSubmittingCover(false);
-                    setSubmittingProfile(false);
-                    setSubmittingCommunity(false);
-                });
             } else if (isUploadingContent) {
                 cancelablePromiseImages = makeCancelable(uploadImages());
                 cancelablePromiseImages.promise
