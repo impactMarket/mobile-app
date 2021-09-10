@@ -79,7 +79,8 @@ describe('create community', () => {
         any,
         any
     >;
-    const communityUploadCoverMock = jest.spyOn(Api.community, 'uploadCover');
+    const communityPreSignedUrlMock = jest.spyOn(Api.community, 'preSignedUrl');
+    const communityUploadCoverMock = jest.spyOn(Api.community, 'uploadImage');
     const communityCreateMock = jest.spyOn(Api.community, 'create');
     const communityFindByIdMock = jest.spyOn(Api.community, 'findById');
     const updateCommunityInfoMock = jest.spyOn(helpers, 'updateCommunityInfo');
@@ -102,7 +103,7 @@ describe('create community', () => {
             });
         });
 
-        communityUploadCoverMock.mockImplementation(() =>
+        communityPreSignedUrlMock.mockImplementation(() =>
             Promise.resolve({
                 media: {
                     id: 1,
@@ -113,6 +114,8 @@ describe('create community', () => {
                 uploadURL: 'abc.xyz',
             })
         );
+
+        communityUploadCoverMock.mockImplementation(() => Promise.resolve());
 
         // communityCreateMock.mockImplementation mocked below
 
@@ -1103,7 +1106,7 @@ describe('create community', () => {
         ).toBeNull();
     });
 
-    test('failed submit', async () => {
+    test('failed submit (cover)', async () => {
         launchImageLibraryAsyncMock.mockReturnValueOnce(
             Promise.resolve({
                 uri: '/some/fake/image/uri.jpg',
@@ -1124,7 +1127,8 @@ describe('create community', () => {
             })
         );
 
-        communityCreateMock.mockImplementationOnce(() => {
+        communityUploadCoverMock.mockClear();
+        communityUploadCoverMock.mockImplementationOnce(() => {
             throw new Error('bruh, wat?');
         });
 
@@ -1133,6 +1137,7 @@ describe('create community', () => {
             getByText,
             getByA11yLabel,
             queryByText,
+            queryByTestId,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
 
@@ -1188,9 +1193,7 @@ describe('create community', () => {
             fireEvent.press(getByText(i18n.t('generic.submit')));
         });
 
-        expect(
-            queryByText(i18n.t('createCommunity.communityRequestError'))
-        ).not.toBeNull();
+        expect(queryByTestId('community-request-failed')).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.communityRequestSending'))
         ).toBeNull();
@@ -1198,6 +1201,10 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityRequestSuccess'))
         ).toBeNull();
     });
+
+    // TODO: failed submit (profile)
+
+    // TODO: failed submit (community)
 
     test('submit successfully', async () => {
         launchImageLibraryAsyncMock.mockReturnValueOnce(
@@ -1220,6 +1227,18 @@ describe('create community', () => {
             })
         );
 
+        communityCreateMock.mockClear();
+        communityCreateMock.mockImplementationOnce(() => {
+            return new Promise((resolve, reject) => {
+                resolve({
+                    data: communityDummyData,
+                    error: undefined,
+                });
+            });
+        });
+
+        communityUploadCoverMock.mockClear();
+        communityUploadCoverMock.mockImplementation(() => Promise.resolve());
         communityCreateMock.mockImplementationOnce(() =>
             Promise.resolve({
                 data: communityDummyData,
@@ -1232,6 +1251,7 @@ describe('create community', () => {
             getByText,
             getByA11yLabel,
             queryByText,
+            queryByTestId,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
 
@@ -1287,9 +1307,7 @@ describe('create community', () => {
             fireEvent.press(getByText(i18n.t('generic.submit')));
         });
 
-        expect(
-            queryByText(i18n.t('createCommunity.communityRequestError'))
-        ).toBeNull();
+        expect(queryByTestId('community-request-failed')).toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.communityRequestSending'))
         ).toBeNull();

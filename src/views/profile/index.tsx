@@ -190,7 +190,8 @@ function ProfileScreen() {
         try {
             setUserAvatarImage(avatar);
 
-            const res = await Api.user.updateProfilePicture(avatar);
+            const res = await Api.user.preSignedUrl(avatar);
+            await Api.user.uploadPicture(res, avatar);
             CacheStore.cacheUser({
                 // TODO: we should use the generic method instead
                 address: userWallet.address,
@@ -205,13 +206,13 @@ function ProfileScreen() {
                 currency,
                 gender,
                 language,
-                avatar: res.url,
+                avatar: res.media.url,
                 username: name,
                 //TODO: Change these props below to be optional
                 blocked: false,
                 suspect: false,
             });
-            dispatch(setUserMetadata({ ...user, avatar: res.url }));
+            dispatch(setUserMetadata({ ...user, avatar: res.media.url }));
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),

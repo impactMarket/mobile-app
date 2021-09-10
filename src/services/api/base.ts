@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import { AppMediaContent } from 'helpers/types/models';
 import { DevSettings } from 'react-native';
@@ -272,6 +273,29 @@ class ApiRequests {
                 status: 404,
             };
         }
+    }
+
+    async uploadImage(endpoint: string, mediaURI: string) {
+        const resp = await fetch(mediaURI);
+        const fileBody = await resp.blob();
+        const fileType = fileBody['type'];
+
+        const base64 = await FileSystem.readAsStringAsync(mediaURI, {
+            encoding: FileSystem.EncodingType.Base64,
+        });
+        const buffer = Buffer.from(base64, 'base64');
+
+        const response = await axios({
+            method: 'PUT',
+            url: endpoint,
+            data: buffer,
+            headers: { 'Content-Type': fileType ?? 'image/jpeg' },
+            onUploadProgress: (progressEvent: any) => {
+                console.log('progressEvent', progressEvent);
+            },
+        });
+
+        console.log(response.status);
     }
 
     async uploadSingleImage(
