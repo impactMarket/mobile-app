@@ -108,6 +108,7 @@ function CreateCommunityScreen() {
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const submitCommunity = async () => {
         const {
             name,
@@ -144,6 +145,7 @@ function CreateCommunityScreen() {
         }
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const uploadImages = () => {
         const profileUpload = async () => {
             if (state.profileImage.length > 0) {
@@ -170,9 +172,12 @@ function CreateCommunityScreen() {
                             avatar: res.url,
                         })
                     );
-                    return res;
+                    return r;
                 } catch (e) {
-                    // TODO: block community creation if this fails, for now, lets ignore
+                    setSubmitting(false);
+                    setSubmittingProfile(false);
+                    setSubmittingSuccess(false);
+                    return undefined;
                 }
             }
         };
@@ -183,18 +188,26 @@ function CreateCommunityScreen() {
                     media: coverUploadDetails,
                 };
             }
-            const r = await Api.community.preSignedUrl(state.coverImage);
-            const details = await Api.community.uploadImage(
-                r,
-                state.coverImage
-            );
-            return details;
+            try {
+                const r = await Api.community.preSignedUrl(state.coverImage);
+                await Api.community.uploadImage(r, state.coverImage);
+                return r;
+            } catch {
+                setSubmitting(false);
+                setSubmittingCover(false);
+                setSubmittingSuccess(false);
+                return undefined;
+            }
         };
         return Promise.all([coverUpload(), profileUpload()]);
     };
 
     useEffect(() => {
-        let cancelablePromise: {
+        let cancelablePromiseImages: {
+            promise: Promise<unknown>;
+            cancel(): void;
+        };
+        let cancelablePromiseCommunity: {
             promise: Promise<unknown>;
             cancel(): void;
         };
@@ -207,16 +220,16 @@ function CreateCommunityScreen() {
                     profileUploadDetails !== undefined) ||
                     userMetadata.avatar.length > 0)
             ) {
-                cancelablePromise = makeCancelable(submitCommunity());
-                cancelablePromise.promise.catch().finally(() => {
+                cancelablePromiseCommunity = makeCancelable(submitCommunity());
+                cancelablePromiseCommunity.promise.finally(() => {
                     setSubmitting(false);
                     setSubmittingCover(false);
                     setSubmittingProfile(false);
                     setSubmittingCommunity(false);
                 });
             } else if (isUploadingContent) {
-                cancelablePromise = makeCancelable(uploadImages());
-                cancelablePromise.promise
+                cancelablePromiseImages = makeCancelable(uploadImages());
+                cancelablePromiseImages.promise
                     .then((details) => {
                         setCoverUploadDetails(details[0].media);
                         if (state.profileImage.length > 0) {
@@ -229,17 +242,22 @@ function CreateCommunityScreen() {
             }
         }
         return () => {
-            if (cancelablePromise !== undefined) {
-                return cancelablePromise.cancel();
+            if (cancelablePromiseCommunity !== undefined) {
+                return cancelablePromiseCommunity.cancel();
+            }
+            if (cancelablePromiseImages !== undefined) {
+                return cancelablePromiseImages.cancel();
             }
         };
-        // TODO: this needs refactoring. This methods are used within and outside the effect
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         canceled,
         coverUploadDetails,
         profileUploadDetails,
         isUploadingContent,
+        state.profileImage.length,
+        userMetadata.avatar.length,
+        submitCommunity,
+        uploadImages,
     ]);
 
     const updateUIAfterSubmission = async (
@@ -511,7 +529,10 @@ function CreateCommunityScreen() {
 
     const SubmissionFailed = () => (
         <>
-            <View style={styles.failedModalContainer}>
+            <View
+                testID="community-request-failed"
+                style={styles.failedModalContainer}
+            >
                 <WarningTriangle style={styles.errorModalWarningSvg} />
                 <Text style={styles.failedModalMessageText}>
                     {i18n.t('createCommunity.communityRequestError')}
