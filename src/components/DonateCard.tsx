@@ -26,21 +26,15 @@ export default function DonateCard(props: IDonateProps) {
     const { width } = Dimensions.get('screen');
     const { community } = props;
     const dispatch = useDispatch();
-    //TODO: Create a page to be shown when the community isnt's fundraising on eSolidar.
-    const [campaignUrl, setCampaignUrl] = useState<string>(
-        'https://community.esolidar.com/pt'
-    );
+    const [campaignUrl, setCampaignUrl] = useState<string | null>(null);
     const modalizeESolidar = useRef<Modalize>(null);
 
     useEffect(() => {
         Api.community
-            .getCommunityFundraisingUrl(community.id)
-            .then((res) => {
-                res?.campaignUrl && setCampaignUrl(res.campaignUrl);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+            .getCampaign(community.id)
+            .then((res) =>
+                setCampaignUrl(res === null ? null : res.campaignUrl)
+            );
     }, [community]);
 
     return (
@@ -82,8 +76,7 @@ export default function DonateCard(props: IDonateProps) {
                         <CeloDolarSvg />
                     </View>
                 </Pressable>
-                {/* If a community doesn't have a crowdfunding page, do not show the esolidar button */}
-                {campaignUrl !== 'https://community.esolidar.com/pt' && (
+                {campaignUrl !== null && (
                     <>
                         <Text style={[styles.description]}>
                             {i18n.t('generic.or')}
@@ -122,29 +115,28 @@ export default function DonateCard(props: IDonateProps) {
                                 </Text>
                             </View>
                         </Pressable>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                paddingHorizontal: 12,
+                            }}
+                        >
+                            <Text
+                                style={[
+                                    styles.description,
+                                    {
+                                        color: ipctColors.regentGray,
+                                        marginRight: 4,
+                                    },
+                                ]}
+                            >
+                                {i18n.t('donate.poweredByESolidar')}
+                            </Text>
+                            <EsolidarSvg />
+                        </View>
                     </>
                 )}
-
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        paddingHorizontal: 12,
-                    }}
-                >
-                    <Text
-                        style={[
-                            styles.description,
-                            {
-                                color: ipctColors.regentGray,
-                                marginRight: 4,
-                            },
-                        ]}
-                    >
-                        {i18n.t('donate.poweredByESolidar')}
-                    </Text>
-                    <EsolidarSvg />
-                </View>
             </View>
             <Portal>
                 <Provider store={useStore()}>

@@ -183,7 +183,7 @@ export function calculateCommunityProgress(
 }
 export function calculateCommunityRemainedFunds(
     community: CommunityAttributes
-): number | BigNumber {
+): number {
     if (community.contract === undefined || community.state === undefined) {
         return 0;
     }
@@ -208,7 +208,7 @@ export function calculateCommunityRemainedFunds(
 
     const remainingDays = remainingFundToBeClaimed.div(communityLimitPerDay);
 
-    return remainingDays.lte(1) ? 1 : remainingDays;
+    return remainingDays.lte(1) ? 1 : remainingDays.toNumber();
 }
 
 export function getCountryFromPhoneNumber(pnumber: string) {

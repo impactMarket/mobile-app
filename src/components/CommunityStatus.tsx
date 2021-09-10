@@ -22,7 +22,6 @@ import SuspiciousCard from './SuspiciousCard';
 import WarningTriangle from './svg/WarningTriangle';
 
 interface ICommuntyStatusProps {
-    children?: any; // linter issues are a bit anoying sometimes
     community: CommunityAttributes;
 }
 
@@ -34,14 +33,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
         (state: IRootState) => state.app.exchangeRates
     );
 
-    const maxClaim = new BigNumber(community.contract.maxClaim);
-    const maxClaimPerCommunity = maxClaim
+    const maxClaim = new BigNumber(community.contract.maxClaim)
         .multipliedBy(community.state.beneficiaries)
         .toString();
-
-    const humanizedValue = (amount: BigNumber | string): string => {
-        return amountToCurrency(amount, user.currency, exchangeRates);
-    };
 
     const days = calculateCommunityRemainedFunds(community);
 
@@ -51,8 +45,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
 
     const raisedPercentage =
         (
-            (parseFloat(community.state.raised) /
-                parseFloat(maxClaimPerCommunity)) *
+            (parseFloat(community.state.raised) / parseFloat(maxClaim)) *
             100
         ).toFixed(2) + '%';
 
@@ -61,12 +54,16 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
             {community.suspect !== undefined && community.suspect !== null && (
                 <SuspiciousCard suspectCounts={community.suspect.suspect} />
             )}
-            <View style={styles.cardWrap}>
+            <View
+                style={{
+                    marginTop: 7,
+                }}
+            >
                 <View
                     style={{
                         flex: 1,
-                        alignItems: 'flex-start',
-                        justifyContent: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                     }}
                 >
                     <Text
@@ -84,20 +81,6 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             count: community.state.backers,
                         })}
                     </Text>
-                    <Text style={styles.Text}>
-                        {humanizedValue(community.state.raised) ?? 0}
-                        {raisedPercentage !== '0.00%' &&
-                            community.state.beneficiaries >= 1 &&
-                            ` (${raisedPercentage})`}
-                    </Text>
-                </View>
-                <View
-                    style={{
-                        flex: 1,
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
-                    }}
-                >
                     <Text
                         style={[
                             styles.description,
@@ -108,8 +91,30 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                     >
                         {i18n.t('generic.goal')}
                     </Text>
+                </View>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                    }}
+                >
                     <Text style={styles.Text}>
-                        {humanizedValue(maxClaimPerCommunity) ?? 'N/A'}
+                        {amountToCurrency(
+                            community.state.raised,
+                            user.currency,
+                            exchangeRates
+                        )}
+                        {raisedPercentage !== '0.00%' &&
+                            community.state.beneficiaries >= 1 &&
+                            ` (${raisedPercentage})`}
+                    </Text>
+                    <Text style={styles.Text}>
+                        {amountToCurrency(
+                            maxClaim,
+                            user.currency,
+                            exchangeRates
+                        )}
                     </Text>
                 </View>
             </View>
@@ -124,7 +129,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                     }}
                     progress={calculateCommunityProgress('raised', community)}
                 />
-                {Number(days) < 5 && (
+                {days < 5 && (
                     <View
                         style={[
                             styles.fundsContainer,
@@ -136,8 +141,11 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                     >
                         {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
                         <WarningTriangle
-                            color="#FE9A22"
-                            style={{ marginTop: ipctSpacing.xsmall }}
+                            color={ipctColors.warningOrange}
+                            style={{
+                                marginTop: ipctSpacing.xsmall,
+                                alignSelf: 'center',
+                            }}
                         />
                         <Text
                             style={[
@@ -149,16 +157,14 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             ]}
                         >
                             {i18n.t('community.fundsRunOut', {
-                                days: Math.round(Number(days)),
+                                days: Math.floor(days),
                             })}{' '}
                             {i18n.t('generic.days', {
-                                count: Number(days),
+                                count: days,
                             })}
                         </Text>
                     </View>
                 )}
-                {props.children && <View style={styles.divider} />}
-                {props.children}
             </View>
         </>
     );
@@ -197,13 +203,6 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         letterSpacing: 0,
         textAlign: 'left',
-    },
-    cardWrap: {
-        flex: 2,
-        flexDirection: 'row',
-        marginTop: 7,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
     },
     fundsContainer: {
         flex: 1,

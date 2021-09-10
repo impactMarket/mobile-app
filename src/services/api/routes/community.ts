@@ -91,11 +91,11 @@ class ApiRouteCommunity {
         ).data;
     }
 
-    static async getCommunityFundraisingUrl(
+    static async getCampaign(
         communityId: number
-    ): Promise<CommunityCampaing> {
+    ): Promise<CommunityCampaing | null> {
         return (
-            await this.api.get<CommunityCampaing>(
+            await this.api.get<CommunityCampaing | null>(
                 '/community/' + communityId + '/campaign/'
             )
         ).data;

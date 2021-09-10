@@ -4,6 +4,7 @@ import { showMessage } from 'react-native-flash-message';
 import { OFFLINE, ONLINE } from 'redux-offline-queue';
 import { eventChannel } from 'redux-saga';
 import { put, take } from 'redux-saga/effects';
+import { ipctColors } from 'styles/index';
 
 export function* startWatchingNetworkConnectivity(): any {
     const channel = eventChannel((emitter) => {
@@ -23,7 +24,7 @@ export function* startWatchingNetworkConnectivity(): any {
                 showMessage({
                     message: i18n.t('sagas.messages.yourNetworkisWeak'),
                     type: 'warning',
-                    backgroundColor: '#FE9A22',
+                    backgroundColor: ipctColors.warningOrange,
                     style: {
                         display: 'flex',
                         alignItems: 'center',
@@ -39,7 +40,7 @@ export function* startWatchingNetworkConnectivity(): any {
                 showMessage({
                     message: i18n.t('sagas.messages.yourNetworkisWeak'),
                     type: 'warning',
-                    backgroundColor: '#FE9A22',
+                    backgroundColor: ipctColors.warningOrange,
                     style: {
                         display: 'flex',
                         alignItems: 'center',
