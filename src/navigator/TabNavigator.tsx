@@ -10,7 +10,6 @@ import BackSvg from 'components/svg/header/BackSvg';
 import FAQSvg from 'components/svg/header/FaqSvg';
 import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
 import { Screens } from 'helpers/constants';
-import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
 import { Platform, Dimensions, View } from 'react-native';
@@ -26,8 +25,7 @@ import Beneficiary from './header/Beneficiary';
 import CommunityManager from './header/CommunityManager';
 import Logout from './header/Logout';
 
-function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
-    let routeName = getFocusedRouteNameFromRoute(route);
+function getHeaderTitle(routeName: string, defaultValue: string) {
     if (routeName === undefined) {
         routeName = defaultValue;
     }
@@ -43,14 +41,7 @@ function getHeaderTitle(route: RouteProp<any, any>, defaultValue: string) {
             return i18n.t('profile.profile');
     }
 }
-function getHeaderRight(
-    route: RouteProp<any, any>,
-    navigation: StackNavigationProp<any, any>,
-    defaultValue: string,
-    isManagerOrBeneficiary: boolean,
-    userCommunity: CommunityAttributes
-) {
-    let routeName = getFocusedRouteNameFromRoute(route);
+function getHeaderRight(routeName: string, defaultValue: string) {
     if (routeName === undefined) {
         routeName = defaultValue;
     }
@@ -79,14 +70,12 @@ function getHeaderRight(
     }
 }
 
-function getHeaderLeft(route: RouteProp<any, any>) {
-    const routeName = getFocusedRouteNameFromRoute(route);
-
+function getHeaderLeft(routeName: string) {
     switch (routeName) {
         case Screens.Communities:
             return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
         case undefined:
-            return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
+            return null;
         case Screens.CommunityManager:
             return null;
         case Screens.Beneficiary:
@@ -128,17 +117,15 @@ function TabNavigator({
 
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
-        const headerLeftDetected = getHeaderLeft(route);
+        const headerLeftDetected = getHeaderLeft(routeName);
         navigation.setOptions({
-            headerLeft: () => getHeaderLeft(route),
-            headerTitle: !routeName
-                ? null
-                : getHeaderTitle(
-                      route,
-                      isBeneficiary
-                          ? Screens.Beneficiary
-                          : isManager && Screens.CommunityManager
-                  ),
+            headerLeft: () => headerLeftDetected,
+            headerTitle: getHeaderTitle(
+                routeName,
+                isBeneficiary
+                    ? Screens.Beneficiary
+                    : isManager && Screens.CommunityManager
+            ),
             headerTitleStyle: {
                 fontFamily: 'Manrope-Bold',
                 fontSize: ipctFontSize.lowMedium,
@@ -151,15 +138,12 @@ function TabNavigator({
             headerShown: !(routeName === Screens.Auth),
             headerRight: () =>
                 getHeaderRight(
-                    route,
-                    navigation,
+                    routeName,
                     isBeneficiary
                         ? Screens.Beneficiary
                         : isManager
                         ? Screens.CommunityManager
-                        : Screens.Communities,
-                    isBeneficiary || isBeneficiary,
-                    userCommunity
+                        : Screens.Communities
                 ),
         });
     }, [
@@ -221,9 +205,9 @@ function TabNavigator({
                         : Screens.CommunityManager
                 }
             >
-                {tabCommunities}
                 {isBeneficiary && tabBeneficiary}
                 {isManager && tabManager}
+                {tabCommunities}
             </Tab.Navigator>
         </Host>
     );

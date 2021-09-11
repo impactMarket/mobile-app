@@ -28,6 +28,7 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
+import CommunitiesScreen from 'views/communities';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <>
@@ -39,12 +40,20 @@ const welcomeScreen = (Navigator: typeof Stack) => (
     </>
 );
 
-const commonScreens = (Navigator: typeof Stack) => (
+const commonScreens = (Navigator: typeof Stack, isInCommunity: boolean) => (
     <>
-        <Navigator.Screen
-            name="TabNavigator" // doesn't really matter here
-            component={TabNavigator}
-        />
+        {isInCommunity ? (
+            <Navigator.Screen
+                name="TabNavigator" // doesn't really matter here
+                component={TabNavigator}
+            />
+        ) : (
+            <Navigator.Screen
+                name={Screens.Communities}
+                component={CommunitiesScreen}
+                options={CommunitiesScreen.navigationOptions as any}
+            />
+        )}
         <Navigator.Screen
             name={Screens.CreateCommunity}
             component={CreateCommunityScreen}
@@ -199,7 +208,7 @@ function StackNavigator() {
             initialRouteName={fromWelcomeScreen}
         >
             {isAuthenticated || fromWelcomeScreen.length > 0
-                ? commonScreens(Stack)
+                ? commonScreens(Stack, isBeneficiary || isManager)
                 : welcomeScreen(Stack)}
             {isBeneficiary && beneficiaryScreens(Stack)}
             {isManager && managerScreens(Stack)}

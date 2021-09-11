@@ -559,6 +559,7 @@ BeneficiaryScreen.navigationOptions = ({
         tabBarIcon: (props: ITabBarIconProps) => (
             <ClaimSvg focused={props.focused} />
         ),
+        headerTitle: i18n.t('beneficiary.claim'),
     };
 };
 
