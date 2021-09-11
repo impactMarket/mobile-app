@@ -1,16 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import { Screens } from 'helpers/constants';
-import {
-    resetUserApp,
-    setUserIsBeneficiary,
-    setUserIsCommunityManager,
-} from 'helpers/redux/actions/user';
+import { logout } from 'helpers/index';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
-import { batch, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 function Logout() {
@@ -20,13 +13,7 @@ function Logout() {
 
     const handleLogout = async () => {
         setLogingOut(true);
-        await AsyncStorage.clear();
-        batch(() => {
-            dispatch(setUserIsBeneficiary(false));
-            dispatch(setUserIsCommunityManager(false));
-            dispatch(resetUserApp());
-            navigation.navigate(Screens.Communities);
-        });
+        logout(dispatch);
     };
 
     return (

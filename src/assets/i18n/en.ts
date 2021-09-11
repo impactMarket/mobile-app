@@ -323,6 +323,12 @@ export default {
             'Every day, you can claim ~{{claimXCCurrency}}. After claiming, you need to wait for {{interval}} + {{minIncrement}} minutes.',
     },
     profile: {
+        deleteAccountWarn: {
+            msg1:
+                'All private and public personal data will be permanently erased (except all public data saved on the celo blockchain) and this account will be closed.',
+            msg2:
+                'This process will take 15 days and it can be terminated by connecting again to the same wallet address during this period.',
+        },
         profile: 'Profile',
         balance: 'Valora Wallet Balance',
         uploadProfilePicture: 'Upload profile picture',
@@ -336,6 +342,7 @@ export default {
         female: 'Female',
         others: 'Others',
         howManyChildren: 'How many children do you have?',
+        deleteAccount: 'Delete Account',
     },
     community: {
         ssi: 'Self-Sustainability Index',
@@ -430,6 +437,10 @@ export default {
         duplicatedMsg2: 'Do you want login and disable all other accounts?',
         duplicatedMsg3:
             'P.S: Funds will continue to exist on all other Valora accounts.',
+        welcomeBack: 'Welcome back!',
+        recover: 'Recover',
+        recoverMsg1:
+            'Because you have initiated this account deletion process less than 15 days ago, you can recover your private and public data.',
     },
     promoter: {
         createdIn: 'Created community on {{date}}',

@@ -16,7 +16,7 @@ export function* submitUserAuthenticationRequest(action: {
 }) {
     const result = yield call(getUser, action.payload);
     if (result.error !== undefined) {
-        yield put(addUserAuthToStateFailure(result.data));
+        yield put(addUserAuthToStateFailure(result.error));
     } else {
         yield put(addUserAuthToStateSuccess(result.data));
     }

@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
+import Divider from 'components/Divider';
+import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -17,8 +19,13 @@ import * as Device from 'expo-device';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Linking from 'expo-linking';
+import { Screens } from 'helpers/constants';
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
-import { getCountryFromPhoneNumber, getUserBalance } from 'helpers/index';
+import {
+    getCountryFromPhoneNumber,
+    getUserBalance,
+    logout,
+} from 'helpers/index';
 import {
     setUserExchangeRate,
     setUserLanguage,
@@ -44,9 +51,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Modalize } from 'react-native-modalize';
 import {
     Portal,
-    Divider,
-    Card,
-    Modal,
+    Card as RNPCard,
+    Modal as RNPModal,
     Paragraph,
     RadioButton,
     Text,
@@ -99,10 +105,15 @@ function ProfileScreen() {
         toggleImageDimensionsModal,
         setToggleImageDimensionsModal,
     ] = useState<boolean>(false);
+    const [
+        toggleDeleteAccountModal,
+        setToggleDeleteAccountModal,
+    ] = useState<boolean>(false);
 
     const [selectedCurrencyId, setSelectedCurrencyId] = useState<string | null>(
         null
     );
+    const [deleting, setDeleting] = useState(false);
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -178,7 +189,8 @@ function ProfileScreen() {
         try {
             setUserAvatarImage(avatar);
 
-            const res = await Api.user.updateProfilePicture(avatar);
+            const res = await Api.user.preSignedUrl(avatar);
+            await Api.user.uploadPicture(res, avatar);
             CacheStore.cacheUser({
                 // TODO: we should use the generic method instead
                 address: userWallet.address,
@@ -193,13 +205,13 @@ function ProfileScreen() {
                 currency,
                 gender,
                 language,
-                avatar: res.url,
+                avatar: res.media.url,
                 username: name,
                 //TODO: Change these props below to be optional
                 blocked: false,
                 suspect: false,
             });
-            dispatch(setUserMetadata({ ...user, avatar: res.url }));
+            dispatch(setUserMetadata({ ...user, avatar: res.media.url }));
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),
@@ -300,6 +312,10 @@ function ProfileScreen() {
         });
         setSelectedCurrencyId(currency);
         modalizeCurrencyRef.current?.close();
+    };
+
+    const handlePressDeleteAccount = () => {
+        setToggleDeleteAccountModal(true);
     };
 
     const renderItemCurrencyQuery = ({ item }: { item: string }) => (
@@ -428,8 +444,8 @@ function ProfileScreen() {
     if (toggleImageDimensionsModal) {
         return (
             <Portal>
-                <Modal visible dismissable={false}>
-                    <Card
+                <RNPModal visible dismissable={false}>
+                    <RNPCard
                         style={{
                             marginHorizontal: 22,
                             borderRadius: 12,
@@ -506,8 +522,8 @@ function ProfileScreen() {
                         >
                             {i18n.t('generic.close')}
                         </Button>
-                    </Card>
-                </Modal>
+                    </RNPCard>
+                </RNPModal>
             </Portal>
         );
     }
@@ -684,11 +700,7 @@ function ProfileScreen() {
                             onPress={() => modalizeLanguageRef.current?.open()}
                         />
                     </View>
-                    <Divider
-                        style={{
-                            marginVertical: 32,
-                        }}
-                    />
+                    <Divider />
                     <Text style={styles.itemTitle}>
                         <Trans
                             i18nKey="profile.stolenOrChangedPhone"
@@ -725,6 +737,10 @@ function ProfileScreen() {
                         editable={false}
                         rightElement={<LockSvg color={ipctColors.borderGray} />}
                     />
+                    <Divider />
+                    <Button modeType="gray" onPress={handlePressDeleteAccount}>
+                        {i18n.t('profile.deleteAccount')}
+                    </Button>
                     <View
                         style={{
                             flex: 1,
@@ -769,6 +785,65 @@ function ProfileScreen() {
                 </View>
             </ScrollView>
             <Portal>
+                <Modal
+                    title={i18n.t('profile.deleteAccount')}
+                    visible={toggleDeleteAccountModal}
+                    onDismiss={() => setToggleDeleteAccountModal(false)}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 14,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('profile.deleteAccountWarn.msg1')}
+                    </Text>
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Bold',
+                            fontSize: 14,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('profile.deleteAccountWarn.msg2')}
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginTop: 16,
+                        }}
+                    >
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={() => setToggleDeleteAccountModal(false)}
+                            disabled={deleting}
+                        >
+                            {i18n.t('generic.dismiss')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ width: '45%' }}
+                            onPress={() => {
+                                setDeleting(true);
+                                Api.user.delete().then(() => {
+                                    logout(dispatch).then(() => {
+                                        // TODO: clear navigator history
+                                        navigation.navigate(
+                                            Screens.Communities
+                                        );
+                                    });
+                                });
+                            }}
+                            loading={deleting}
+                            disabled={deleting}
+                        >
+                            {i18n.t('generic.delete')}
+                        </Button>
+                    </View>
+                </Modal>
                 <Modalize
                     ref={modalizeCurrencyRef}
                     HeaderComponent={renderHeader(

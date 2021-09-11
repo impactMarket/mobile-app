@@ -10,7 +10,7 @@ import path from 'path';
 import * as mime from 'react-native-mime-types';
 
 import config from '../../../../config';
-import { ApiRequests } from '../base';
+import { ApiRequests, IApiResult } from '../base';
 
 axios.defaults.baseURL = config.baseApiUrl;
 
@@ -104,8 +104,8 @@ class ApiRouteStory {
         return this.api.put('/story/inapropriate/' + storyId, {});
     }
 
-    static async remove(storyId: number): Promise<void> {
-        return this.api.delete('/story/' + storyId, {});
+    static async remove(storyId: number): Promise<IApiResult<void>> {
+        return this.api.delete<void>('/story/' + storyId, {});
     }
 
     static async me(): Promise<ICommunityStories> {
