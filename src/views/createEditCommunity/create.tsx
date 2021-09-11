@@ -41,6 +41,7 @@ import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
 import CommunityBytecode from '../../contracts/CommunityBytecode.json';
+import InfoIcon from './InfoIcon';
 import Contract from './contract';
 import Metadata from './metadata';
 import {
@@ -50,7 +51,6 @@ import {
     StateContext,
     validateField,
 } from './state';
-import InfoIcon from './InfoIcon';
 
 const makeCancelable = (promise: Promise<any>) => {
     let hasCanceled_ = false;
