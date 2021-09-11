@@ -4,6 +4,7 @@ import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
+import CommunitiesScreen from 'views/communities';
 import ListCommunitiesScreen from 'views/communities/List';
 import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
@@ -20,7 +21,6 @@ import CreateCommunityScreen from 'views/createEditCommunity/create';
 import EditCommunityScreen from 'views/createEditCommunity/edit';
 import FAQScreen from 'views/faq';
 import ProfileScreen from 'views/profile';
-import Auth from 'views/profile/auth';
 import StoriesScreen from 'views/stories';
 import Carousel from 'views/stories/Carousel';
 import NewStoryScreen from 'views/stories/NewStory';
@@ -28,7 +28,6 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
-import CommunitiesScreen from 'views/communities';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <>

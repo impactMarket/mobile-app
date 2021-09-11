@@ -74,9 +74,8 @@ function Auth() {
     const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
     const [toggleWarn, setToggleWarn] = useState(false);
-    const [timedOutValidation, setTimedOutValidation] = useState(false);
+    const [timedOutValidation] = useState(false);
 
-    const [, setLoadRefs] = useState(false);
     const modalizeDuplicatedAccountsRef = useRef<Modalize>(null);
     const modalizeDeleteAccountsRef = useRef<Modalize>(null);
     const modalizeWelcomeRef = useRef<Modalize>(null);
