@@ -200,6 +200,7 @@ export default {
         claimAmountRequired: 'Quantidade a pegar é obrigatório!',
         maxClaimAmountRequired: 'Quantidade máxima a pegar é obrigatório!',
         incrementalIntervalRequired: 'Intervalo de incremento é obrigatório!',
+        baseIntervalRequired: 'Frequência é obrigatório!',
     },
     manager: {
         rules: {

@@ -329,6 +329,7 @@ function CreateCommunityScreen() {
         const _claimAmount = validate.claimAmount();
         const _maxClaim = validate.maxClaim();
         const _incrementInterval = validate.incrementInterval();
+        const _baseInterval = validate.baseInterval();
         const isAllValid =
             _name &&
             _cover &&
@@ -340,7 +341,8 @@ function CreateCommunityScreen() {
             _gps &&
             _claimAmount &&
             _maxClaim &&
-            _incrementInterval;
+            _incrementInterval &&
+            _baseInterval;
 
         if (!isAllValid) {
             setIsAnyFieldMissedModal(true);
@@ -681,7 +683,6 @@ function CreateCommunityScreen() {
                     buttons={
                         <Button
                             modeType="gray"
-                            style={{ width: '100%' }}
                             onPress={() => {
                                 setSubmitting(false);
                                 setIsAnyFieldMissedModal(false);
@@ -835,7 +836,6 @@ const styles = StyleSheet.create({
         borderColor: '#EB5757',
         borderWidth: 2,
         borderRadius: 8,
-        width: '100%',
         flexDirection: 'row',
         marginBottom: 16,
     },

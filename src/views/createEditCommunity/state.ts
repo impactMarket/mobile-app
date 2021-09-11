@@ -264,7 +264,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
     email: '',
     currency: '',
     claimAmount: '',
-    baseInterval: '86400',
+    baseInterval: '',
     maxClaim: '',
     incrementInterval: '',
     incrementIntervalUnit: 60,
@@ -570,6 +570,15 @@ export const validateField = (
             });
         }
         return state.incrementInterval.length > 0;
+    },
+    baseInterval: (isValidated: boolean = true) => {
+        if (isValidated) {
+            dispatch({
+                type: formAction.SET_BASE_INTERVAL_VALID,
+                payload: state.baseInterval.length > 0,
+            });
+        }
+        return state.baseInterval.length > 0;
     },
     // no base interval unit validation. minutes by default
     // no visibility validation. public by default

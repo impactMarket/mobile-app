@@ -355,10 +355,15 @@ function CommunityClaimFrequency(props: HelperProps) {
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
+    const error = state.validation.baseInterval
+        ? undefined
+        : i18n.t('createCommunity.baseIntervalRequired');
+
     return (
         <View style={{ marginTop: 28 }}>
             <Select
                 label={i18n.t('createCommunity.frequency')}
+                error={error}
                 help
                 onHelpPress={() => {
                     props.setHelperInfo.title(
@@ -370,7 +375,9 @@ function CommunityClaimFrequency(props: HelperProps) {
                     props.helperRef.current.open();
                 }}
                 value={
-                    state.baseInterval === '86400'
+                    state.baseInterval.length === 0
+                        ? i18n.t('generic.select')
+                        : state.baseInterval === '86400'
                         ? i18n.t('createCommunity.daily')
                         : i18n.t('createCommunity.weekly')
                 }

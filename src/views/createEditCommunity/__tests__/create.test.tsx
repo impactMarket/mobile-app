@@ -95,6 +95,7 @@ describe('create community', () => {
                     metadata: {
                         currency: 'USD',
                         avatar: 'something.jpg',
+                        language: 'pt',
                     },
                     wallet: {
                         address: '0xd7632B7588DF8532C0aBA55586167C2a315Fd768',
@@ -1071,6 +1072,12 @@ describe('create community', () => {
             )
         );
 
+        fireEvent.press(getByLabelText(i18n.t('createCommunity.frequency')));
+        await act(async () =>
+            expect(getByText(i18n.t('createCommunity.daily')))
+        );
+        fireEvent.press(getByText(i18n.t('createCommunity.daily')));
+
         fireEvent.changeText(
             getByLabelText(i18n.t('generic.email')),
             'me@example.io'
@@ -1169,6 +1176,12 @@ describe('create community', () => {
             )
         );
 
+        fireEvent.press(getByLabelText(i18n.t('createCommunity.frequency')));
+        await act(async () =>
+            expect(getByText(i18n.t('createCommunity.daily')))
+        );
+        fireEvent.press(getByText(i18n.t('createCommunity.daily')));
+
         fireEvent.changeText(
             getByLabelText(i18n.t('generic.email')),
             'me@example.io'
@@ -1227,16 +1240,6 @@ describe('create community', () => {
             })
         );
 
-        communityCreateMock.mockClear();
-        communityCreateMock.mockImplementationOnce(() => {
-            return new Promise((resolve, reject) => {
-                resolve({
-                    data: communityDummyData,
-                    error: undefined,
-                });
-            });
-        });
-
         communityUploadCoverMock.mockClear();
         communityUploadCoverMock.mockImplementation(() => Promise.resolve());
         communityCreateMock.mockImplementationOnce(() =>
@@ -1287,6 +1290,12 @@ describe('create community', () => {
             getByLabelText(i18n.t('generic.email')),
             'me@example.io'
         );
+
+        fireEvent.press(getByLabelText(i18n.t('createCommunity.frequency')));
+        await act(async () =>
+            expect(getByText(i18n.t('createCommunity.daily')))
+        );
+        fireEvent.press(getByText(i18n.t('createCommunity.daily')));
 
         fireEvent.changeText(
             getByLabelText(i18n.t('createCommunity.claimAmount')),
