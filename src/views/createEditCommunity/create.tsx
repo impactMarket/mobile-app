@@ -28,6 +28,7 @@ import {
     Image,
     StyleSheet,
     Keyboard,
+    Pressable,
 } from 'react-native';
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -49,6 +50,7 @@ import {
     StateContext,
     validateField,
 } from './state';
+import InfoIcon from './InfoIcon';
 
 const makeCancelable = (promise: Promise<any>) => {
     let hasCanceled_ = false;
@@ -73,6 +75,7 @@ const makeCancelable = (promise: Promise<any>) => {
 function CreateCommunityScreen() {
     const navigation = useNavigation();
     const dispatchRedux = useDispatch();
+    const [isAlertVisible, setIsAlertVisible] = useState(true);
     const [toggleLeaveFormModal, setToggleLeaveFormModal] = useState(false);
     const [isUploadingContent, setIsUploadingContent] = useState(false);
     const [contractParams, setContractParams] = useState({});
@@ -643,6 +646,37 @@ function CreateCommunityScreen() {
         </>
     );
 
+    const CommunityCreationProcessDisclaimer = () => {
+        if (!isAlertVisible) {
+            return null;
+        }
+        return (
+            <View style={styles.createCommunityAlert}>
+                <InfoIcon style={{ marginLeft: 26 }} />
+
+                <Text
+                    style={[
+                        styles.createCommunityAlertDescription,
+                        { flexWrap: 'wrap', marginHorizontal: 42 },
+                    ]}
+                >
+                    {i18n.t('createCommunity.alert')}
+                </Text>
+                <Pressable
+                    hitSlop={15}
+                    onPress={() => setIsAlertVisible(!isAlertVisible)}
+                >
+                    <Icon
+                        name="close"
+                        size={18}
+                        color={ipctColors.almostBlack}
+                        style={{ marginRight: 26 }}
+                    />
+                </Pressable>
+            </View>
+        );
+    };
+
     return (
         <>
             <KeyboardAvoidingView
@@ -660,6 +694,7 @@ function CreateCommunityScreen() {
                 >
                     <DispatchContext.Provider value={dispatch}>
                         <StateContext.Provider value={state}>
+                            <CommunityCreationProcessDisclaimer />
                             <Metadata />
                             <Contract />
                         </StateContext.Provider>
@@ -777,6 +812,23 @@ CreateCommunityScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
+    createCommunityAlertDescription: {
+        fontFamily: 'Inter-Regular',
+        fontSize: 14,
+        lineHeight: 20,
+    },
+    createCommunityAlert: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'space-around',
+        borderColor: ipctColors.blueRibbon,
+        borderRadius: 8,
+        borderWidth: 2,
+        borderStyle: 'solid',
+        paddingVertical: 12,
+        marginBottom: 16,
+    },
     submissionActivityContainer: {
         flexDirection: 'row',
         alignItems: 'center',

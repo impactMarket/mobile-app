@@ -122,6 +122,8 @@ export default {
         welcome: 'Bem Vindo!',
     },
     createCommunity: {
+        alert:
+            'Após o envio, entraremos em contacto com você dentro de poucas semanas.',
         pendingApprovalMessage:
             'Estamos revisando seu envio e entraremos em contato dentro de poucas semanas. Se você tiver outras perguntas, visite nossa Central de Ajuda para ler nosso F.A.Q.s ou enviar um tíquete.',
         applyCommunity: 'Criar Comunidade',

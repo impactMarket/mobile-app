@@ -533,6 +533,106 @@ Array [
                           }
                         >
                           <View>
+                            <View
+                              style={
+                                Object {
+                                  "alignItems": "flex-start",
+                                  "borderColor": "#2362FB",
+                                  "borderRadius": 8,
+                                  "borderStyle": "solid",
+                                  "borderWidth": 2,
+                                  "display": "flex",
+                                  "flexDirection": "row",
+                                  "justifyContent": "space-around",
+                                  "marginBottom": 16,
+                                  "paddingVertical": 12,
+                                }
+                              }
+                            >
+                              <RNSVGSvgView
+                                bbHeight={16}
+                                bbWidth={16}
+                                fill="none"
+                                focusable={false}
+                                height={16}
+                                style={
+                                  Array [
+                                    Object {
+                                      "backgroundColor": "transparent",
+                                      "borderWidth": 0,
+                                    },
+                                    Object {
+                                      "marginLeft": 26,
+                                    },
+                                    Object {
+                                      "flex": 0,
+                                      "height": 16,
+                                      "width": 16,
+                                    },
+                                  ]
+                                }
+                                width={16}
+                              >
+                                <RNSVGGroup
+                                  fill={null}
+                                  propList={
+                                    Array [
+                                      "fill",
+                                    ]
+                                  }
+                                >
+                                  <RNSVGPath
+                                    d="M8 0a8 8 0 100 16A8 8 0 008 0zm.338 3.165a1.052 1.052 0 110 2.103 1.052 1.052 0 010-2.103zm.943 9.304s-.828.695-1.872.171a1.35 1.35 0 01-.553-.538c-.354-.627-.218-1.3-.218-1.3l.105-.824.27-2.151-.737.016a.623.623 0 01-.242-1.204l1.888-.743a.874.874 0 011.173 1.008l-.025.112-.739 3.242-.184.81c-.027.122-.031.15-.039.214-.02.365.499.091.499.091a.643.643 0 01.674 1.096z"
+                                    fill={4280509179}
+                                    propList={
+                                      Array [
+                                        "fill",
+                                      ]
+                                    }
+                                  />
+                                </RNSVGGroup>
+                              </RNSVGSvgView>
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "fontFamily": "Inter-Regular",
+                                      "fontSize": 14,
+                                      "lineHeight": 20,
+                                    },
+                                    Object {
+                                      "flexWrap": "wrap",
+                                      "marginHorizontal": 42,
+                                    },
+                                  ]
+                                }
+                              >
+                                After submitting, we’ll will contact you in a few weeks.
+                              </Text>
+                              <View
+                                accessible={true}
+                                focusable={true}
+                                hitSlop={
+                                  Object {
+                                    "bottom": 15,
+                                    "left": 15,
+                                    "right": 15,
+                                    "top": 15,
+                                  }
+                                }
+                                onBlur={[Function]}
+                                onClick={[Function]}
+                                onFocus={[Function]}
+                                onResponderGrant={[Function]}
+                                onResponderMove={[Function]}
+                                onResponderRelease={[Function]}
+                                onResponderTerminate={[Function]}
+                                onResponderTerminationRequest={[Function]}
+                                onStartShouldSetResponder={[Function]}
+                              >
+                                <Text />
+                              </View>
+                            </View>
                             <View>
                               <Text
                                 style={
@@ -3116,6 +3216,127 @@ Array [
                           }
                         >
                           <View>
+                            <View
+                              style={
+                                Object {
+                                  "alignItems": "flex-start",
+                                  "borderColor": "#2362FB",
+                                  "borderRadius": 8,
+                                  "borderStyle": "solid",
+                                  "borderWidth": 2,
+                                  "display": "flex",
+                                  "flexDirection": "row",
+                                  "justifyContent": "space-around",
+                                  "marginBottom": 16,
+                                  "paddingVertical": 12,
+                                }
+                              }
+                            >
+                              <RNSVGSvgView
+                                bbHeight={16}
+                                bbWidth={16}
+                                fill="none"
+                                focusable={false}
+                                height={16}
+                                style={
+                                  Array [
+                                    Object {
+                                      "backgroundColor": "transparent",
+                                      "borderWidth": 0,
+                                    },
+                                    Object {
+                                      "marginLeft": 26,
+                                    },
+                                    Object {
+                                      "flex": 0,
+                                      "height": 16,
+                                      "width": 16,
+                                    },
+                                  ]
+                                }
+                                width={16}
+                              >
+                                <RNSVGGroup
+                                  fill={null}
+                                  propList={
+                                    Array [
+                                      "fill",
+                                    ]
+                                  }
+                                >
+                                  <RNSVGPath
+                                    d="M8 0a8 8 0 100 16A8 8 0 008 0zm.338 3.165a1.052 1.052 0 110 2.103 1.052 1.052 0 010-2.103zm.943 9.304s-.828.695-1.872.171a1.35 1.35 0 01-.553-.538c-.354-.627-.218-1.3-.218-1.3l.105-.824.27-2.151-.737.016a.623.623 0 01-.242-1.204l1.888-.743a.874.874 0 011.173 1.008l-.025.112-.739 3.242-.184.81c-.027.122-.031.15-.039.214-.02.365.499.091.499.091a.643.643 0 01.674 1.096z"
+                                    fill={4280509179}
+                                    propList={
+                                      Array [
+                                        "fill",
+                                      ]
+                                    }
+                                  />
+                                </RNSVGGroup>
+                              </RNSVGSvgView>
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "fontFamily": "Inter-Regular",
+                                      "fontSize": 14,
+                                      "lineHeight": 20,
+                                    },
+                                    Object {
+                                      "flexWrap": "wrap",
+                                      "marginHorizontal": 42,
+                                    },
+                                  ]
+                                }
+                              >
+                                After submitting, we’ll will contact you in a few weeks.
+                              </Text>
+                              <View
+                                accessible={true}
+                                focusable={true}
+                                hitSlop={
+                                  Object {
+                                    "bottom": 15,
+                                    "left": 15,
+                                    "right": 15,
+                                    "top": 15,
+                                  }
+                                }
+                                onBlur={[Function]}
+                                onClick={[Function]}
+                                onFocus={[Function]}
+                                onResponderGrant={[Function]}
+                                onResponderMove={[Function]}
+                                onResponderRelease={[Function]}
+                                onResponderTerminate={[Function]}
+                                onResponderTerminationRequest={[Function]}
+                                onStartShouldSetResponder={[Function]}
+                              >
+                                <Text
+                                  allowFontScaling={false}
+                                  style={
+                                    Array [
+                                      Object {
+                                        "color": "#1E3252",
+                                        "fontSize": 18,
+                                      },
+                                      Object {
+                                        "marginRight": 26,
+                                      },
+                                      Object {
+                                        "fontFamily": "material-community",
+                                        "fontStyle": "normal",
+                                        "fontWeight": "normal",
+                                      },
+                                      Object {},
+                                    ]
+                                  }
+                                >
+                                  󰅖
+                                </Text>
+                              </View>
+                            </View>
                             <View>
                               <Text
                                 style={
@@ -5699,6 +5920,127 @@ Array [
                           }
                         >
                           <View>
+                            <View
+                              style={
+                                Object {
+                                  "alignItems": "flex-start",
+                                  "borderColor": "#2362FB",
+                                  "borderRadius": 8,
+                                  "borderStyle": "solid",
+                                  "borderWidth": 2,
+                                  "display": "flex",
+                                  "flexDirection": "row",
+                                  "justifyContent": "space-around",
+                                  "marginBottom": 16,
+                                  "paddingVertical": 12,
+                                }
+                              }
+                            >
+                              <RNSVGSvgView
+                                bbHeight={16}
+                                bbWidth={16}
+                                fill="none"
+                                focusable={false}
+                                height={16}
+                                style={
+                                  Array [
+                                    Object {
+                                      "backgroundColor": "transparent",
+                                      "borderWidth": 0,
+                                    },
+                                    Object {
+                                      "marginLeft": 26,
+                                    },
+                                    Object {
+                                      "flex": 0,
+                                      "height": 16,
+                                      "width": 16,
+                                    },
+                                  ]
+                                }
+                                width={16}
+                              >
+                                <RNSVGGroup
+                                  fill={null}
+                                  propList={
+                                    Array [
+                                      "fill",
+                                    ]
+                                  }
+                                >
+                                  <RNSVGPath
+                                    d="M8 0a8 8 0 100 16A8 8 0 008 0zm.338 3.165a1.052 1.052 0 110 2.103 1.052 1.052 0 010-2.103zm.943 9.304s-.828.695-1.872.171a1.35 1.35 0 01-.553-.538c-.354-.627-.218-1.3-.218-1.3l.105-.824.27-2.151-.737.016a.623.623 0 01-.242-1.204l1.888-.743a.874.874 0 011.173 1.008l-.025.112-.739 3.242-.184.81c-.027.122-.031.15-.039.214-.02.365.499.091.499.091a.643.643 0 01.674 1.096z"
+                                    fill={4280509179}
+                                    propList={
+                                      Array [
+                                        "fill",
+                                      ]
+                                    }
+                                  />
+                                </RNSVGGroup>
+                              </RNSVGSvgView>
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "fontFamily": "Inter-Regular",
+                                      "fontSize": 14,
+                                      "lineHeight": 20,
+                                    },
+                                    Object {
+                                      "flexWrap": "wrap",
+                                      "marginHorizontal": 42,
+                                    },
+                                  ]
+                                }
+                              >
+                                After submitting, we’ll will contact you in a few weeks.
+                              </Text>
+                              <View
+                                accessible={true}
+                                focusable={true}
+                                hitSlop={
+                                  Object {
+                                    "bottom": 15,
+                                    "left": 15,
+                                    "right": 15,
+                                    "top": 15,
+                                  }
+                                }
+                                onBlur={[Function]}
+                                onClick={[Function]}
+                                onFocus={[Function]}
+                                onResponderGrant={[Function]}
+                                onResponderMove={[Function]}
+                                onResponderRelease={[Function]}
+                                onResponderTerminate={[Function]}
+                                onResponderTerminationRequest={[Function]}
+                                onStartShouldSetResponder={[Function]}
+                              >
+                                <Text
+                                  allowFontScaling={false}
+                                  style={
+                                    Array [
+                                      Object {
+                                        "color": "#1E3252",
+                                        "fontSize": 18,
+                                      },
+                                      Object {
+                                        "marginRight": 26,
+                                      },
+                                      Object {
+                                        "fontFamily": "material-community",
+                                        "fontStyle": "normal",
+                                        "fontWeight": "normal",
+                                      },
+                                      Object {},
+                                    ]
+                                  }
+                                >
+                                  󰅖
+                                </Text>
+                              </View>
+                            </View>
                             <View>
                               <Text
                                 style={
