@@ -14,6 +14,7 @@ const INITIAL_STATE_APP: IAppState = {
     kit: undefined as any,
     exchangeRates: undefined as any, // save exhangeRates on load
     suspectWrongDateTime: false,
+    authModalOpen: false,
     hasBeneficiaryAcceptedRulesAlready: false,
     hasManagerAcceptedRulesAlready: false,
     timeDiff: 0,
@@ -23,7 +24,7 @@ const INITIAL_STATE_APP: IAppState = {
 export const appReducer = (
     state = INITIAL_STATE_APP,
     action: AppActionTypes
-) => {
+): IAppState => {
     switch (action.type) {
         case SET_CELO_KIT:
             return { ...state, kit: action.payload };
@@ -54,6 +55,11 @@ export const appReducer = (
             return {
                 ...state,
                 notificationsListeners: action.payload,
+            };
+        case appAction.SET_OPEN_AUTH_MODAL:
+            return {
+                ...state,
+                authModalOpen: action.payload,
             };
         default:
             return state;

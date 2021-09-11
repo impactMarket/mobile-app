@@ -114,11 +114,6 @@ const commonScreens = (Navigator: typeof Stack, isInCommunity: boolean) => (
             component={ProfileScreen}
             options={ProfileScreen.navigationOptions}
         />
-        <Navigator.Screen
-            name={Screens.Auth}
-            component={Auth}
-            options={Auth.navigationOptions}
-        />
     </>
 );
 const beneficiaryScreens = (Navigator: typeof Stack) => (

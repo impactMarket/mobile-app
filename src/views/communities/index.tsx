@@ -2,9 +2,9 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
+import ProfileSvg from 'components/svg/ProfileSvg';
 import FAQSvg from 'components/svg/header/FaqSvg';
 import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
-import ProfileSvg from 'components/svg/ProfileSvg';
 import { Screens } from 'helpers/constants';
 import { ITabBarIconProps } from 'helpers/old-types';
 import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
+import Auth from 'views/profile/auth';
 
 import CommunityCard from './CommunityCard';
 import Stories from './Stories';
@@ -109,6 +110,7 @@ function CommunitiesScreen() {
                 </Text>
             </Button>
             <Stories />
+            <Auth />
         </ScrollView>
     );
 }

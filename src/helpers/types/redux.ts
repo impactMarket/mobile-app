@@ -157,6 +157,11 @@ interface SetAppFromWelcomeScreen {
     payload: string;
 }
 
+interface SetOpenAuthModalAction {
+    type: typeof appAction.SET_OPEN_AUTH_MODAL;
+    payload: boolean;
+}
+
 interface SetAppEchangeRatesAction {
     type: typeof SET_EXCHANGE_RATES;
     payload: any;
@@ -311,6 +316,7 @@ export type AppActionTypes =
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime
     | SetAppFromWelcomeScreen
+    | SetOpenAuthModalAction
     | SetAppPushNotificationListeners
     | UserSetBeneficiaryAcceptedRulesAction
     | UserSetManagerAcceptedRulesAction;

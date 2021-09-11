@@ -1,14 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import { Screens } from 'helpers/constants';
+import { setOpenAuthModal } from 'helpers/redux/actions/app';
 import { IRootState } from 'helpers/types/state';
 import * as React from 'react';
 import { Pressable } from 'react-native';
 import Svg, { Circle, G, Mask, Path, SvgProps } from 'react-native-svg';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 function ProfileSvg(props: SvgProps) {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const walletAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
     );
@@ -18,7 +20,7 @@ function ProfileSvg(props: SvgProps) {
             onPress={() =>
                 walletAddress.length > 0
                     ? navigation.navigate(Screens.Profile)
-                    : navigation.navigate(Screens.Auth)
+                    : dispatch(setOpenAuthModal(true))
             }
         >
             <Svg

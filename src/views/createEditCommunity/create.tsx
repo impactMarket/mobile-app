@@ -248,8 +248,8 @@ function CreateCommunityScreen() {
         coverUploadDetails,
         profileUploadDetails,
         isUploadingContent,
-        state.profileImage.length,
-        userMetadata.avatar.length,
+        state.profileImage,
+        userMetadata.avatar,
         submitCommunity,
         uploadImages,
     ]);
