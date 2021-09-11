@@ -18,7 +18,6 @@ import {
     ipctSpacing,
 } from 'styles/index';
 
-import SuspiciousCard from './SuspiciousCard';
 import WarningTriangle from './svg/WarningTriangle';
 
 interface ICommuntyStatusProps {
@@ -51,9 +50,6 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
 
     return (
         <>
-            {community.suspect !== undefined && community.suspect !== null && (
-                <SuspiciousCard suspectCounts={community.suspect.suspect} />
-            )}
             <View
                 style={{
                     marginTop: 7,
@@ -139,7 +135,6 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             },
                         ]}
                     >
-                        {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
                         <WarningTriangle
                             color={ipctColors.warningOrange}
                             style={{

@@ -32,7 +32,7 @@ function CommunityManager() {
                 <ThreeDotsSvg
                     setOpenThreeDotsMenu={setOpenThreeDotsMenu}
                     openThreeDotsMenu={openThreeDotsMenu}
-                    style={{ marginRight: 16 }}
+                    style={{ marginRight: 16, marginLeft: 10 }}
                     hasCloseBtn={false}
                 >
                     <>

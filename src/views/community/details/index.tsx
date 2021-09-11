@@ -4,6 +4,7 @@ import i18n from 'assets/i18n';
 import CommunityStatus from 'components/CommunityStatus';
 import DonateCard from 'components/DonateCard';
 import Dot from 'components/Dot';
+import SuspiciousCard from 'components/SuspiciousCard';
 import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -210,16 +211,23 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 </Pressable>
                 <View
                     style={{
-                        padding: 16,
                         borderRadius: 12,
                         borderColor: ipctColors.softGray,
                         borderWidth: 1,
                         marginVertical: 16,
                     }}
                 >
-                    <CommunityStatus community={community} />
-                    <View style={styles.divider} />
-                    <DonateCard community={community} />
+                    {community.suspect !== undefined &&
+                        community.suspect !== null && (
+                            <SuspiciousCard
+                                suspectCounts={community.suspect.suspect}
+                            />
+                        )}
+                    <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+                        <CommunityStatus community={community} />
+                        <View style={styles.divider} />
+                        <DonateCard community={community} />
+                    </View>
                 </View>
             </ScrollView>
         </>

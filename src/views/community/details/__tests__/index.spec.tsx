@@ -158,7 +158,7 @@ describe('details [snapshot]', () => {
     it('open "donate with esolidar when URL is present"', async () => {
         const communityFundraisingUrl = jest.spyOn(
             Api.community,
-            'getCommunityFundraisingUrl'
+            'getCampaign'
         );
 
         communityFundraisingUrl.mockImplementation(() =>
@@ -180,7 +180,7 @@ describe('details [snapshot]', () => {
     it('dont show "donate with esolidar button when URL isnt present"', async () => {
         const communityFundraisingUrl = jest.spyOn(
             Api.community,
-            'getCommunityFundraisingUrl'
+            'getCampaign'
         );
 
         communityFundraisingUrl.mockImplementation(() =>
