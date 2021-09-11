@@ -1,4 +1,3 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
@@ -6,13 +5,10 @@ import CommunityStatus from 'components/CommunityStatus';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
-import CommunityRules from 'components/core/CommunityRules';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import ManageSvg from 'components/svg/ManageSvg';
-import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
-import { setAppHasManagerAcceptedTerms } from 'helpers/redux/actions/app';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import {
@@ -47,7 +43,6 @@ import Managers from './cards/Managers';
 
 function CommunityManagerScreen() {
     const dispatch = useDispatch();
-    const navigation = useNavigation();
 
     const modalizeHelpCenterRef = useRef<Modalize>(null);
 
@@ -65,10 +60,6 @@ function CommunityManagerScreen() {
     );
     const community = useSelector(
         (state: IRootState) => state.user.community.metadata
-    );
-
-    const hasManagerAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasManagerAcceptedRulesAlready
     );
 
     const [refreshing, setRefreshing] = useState(false);
@@ -105,18 +96,6 @@ function CommunityManagerScreen() {
             verifyRequestToChangeUbiParams();
         }
     }, [community, kit, communityContract]);
-
-    useFocusEffect(() => {
-        async function loadCommunityRulesStats() {
-            if (!hasManagerAcceptedRulesAlready) {
-                dispatch(setAppHasManagerAcceptedTerms(false));
-                navigation.navigate(Screens.WelcomeRulesScreen, {
-                    caller: 'MANAGER',
-                });
-            }
-        }
-        loadCommunityRulesStats();
-    });
 
     const onRefresh = () => {
         updateCommunityInfo(community.id, dispatch).then(async () => {
@@ -327,12 +306,6 @@ function CommunityManagerScreen() {
                             marginHorizontal: 18,
                             marginTop: 16,
                             marginBottom: 16,
-                            // width: '100%',
-                        }}
-                        labelStyle={{
-                            fontSize: 18,
-                            lineHeight: 18,
-                            letterSpacing: 0.3,
                         }}
                         onPress={() => {
                             modalizeHelpCenterRef.current?.open();
@@ -340,9 +313,32 @@ function CommunityManagerScreen() {
                     >
                         {i18n.t('generic.openHelpCenter')}
                     </Button>
-                    {!hasManagerAcceptedRulesAlready && (
-                        <CommunityRules caller="MANAGER" />
-                    )}
+                    <View style={styles.rulesView}>
+                        <Text style={styles.rulesTitle}>
+                            {i18n.t('manager.rules.title')}
+                        </Text>
+                        <Text style={styles.rulesMessage}>
+                            1 - {i18n.t('manager.rules.first')}
+                        </Text>
+                        <Text style={styles.rulesMessage}>
+                            2 - {i18n.t('manager.rules.second')}
+                        </Text>
+                        <Text style={styles.rulesMessage}>
+                            3 - {i18n.t('manager.rules.third')}
+                        </Text>
+                        <Text style={styles.rulesMessage}>
+                            4 - {i18n.t('manager.rules.fourth')}
+                        </Text>
+                        <Text style={styles.rulesMessage}>
+                            5 - {i18n.t('manager.rules.fifth')}
+                        </Text>
+                        <Text style={styles.rulesMessage}>
+                            6 - {i18n.t('manager.rules.sixth')}
+                        </Text>
+                        <Text style={styles.rulesMessage}>
+                            7 - {i18n.t('manager.rules.seventh')}
+                        </Text>
+                    </View>
                 </ScrollView>
                 <Portal>
                     <Modalize
@@ -412,6 +408,24 @@ CommunityManagerScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
+    rulesView: {
+        backgroundColor: ipctColors.softWhite,
+        padding: 22,
+    },
+    rulesTitle: {
+        fontFamily: 'Manrope-Bold',
+        fontSize: ipctFontSize.small,
+        lineHeight: ipctLineHeight.big,
+        color: ipctColors.mirage,
+        marginBottom: 8,
+    },
+    rulesMessage: {
+        fontFamily: 'Inter-Regular',
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.bigger,
+        color: ipctColors.nileBlue,
+        marginBottom: 18,
+    },
     ubiChangeModalText: {
         marginBottom: 8,
         fontSize: 16,
