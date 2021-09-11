@@ -329,6 +329,7 @@ function CreateCommunityScreen() {
         const _claimAmount = validate.claimAmount();
         const _maxClaim = validate.maxClaim();
         const _incrementInterval = validate.incrementInterval();
+        const _incrementIntervalUnit = validate.incrementIntervalUnit();
         const _baseInterval = validate.baseInterval();
         const isAllValid =
             _name &&
@@ -342,6 +343,7 @@ function CreateCommunityScreen() {
             _claimAmount &&
             _maxClaim &&
             _incrementInterval &&
+            _incrementIntervalUnit &&
             _baseInterval;
 
         if (!isAllValid) {

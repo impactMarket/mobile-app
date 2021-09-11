@@ -195,6 +195,8 @@ export default {
         claimAmountRequired: 'Claim amount is required!',
         maxClaimAmountRequired: 'Max claim amount is required!',
         incrementalIntervalRequired: 'Incremental interval is required!',
+        incrementalIntervalUnitRequired:
+            'Incremental interval unit is required!',
         baseIntervalRequired: 'Base interval is required!',
     },
     manager: {

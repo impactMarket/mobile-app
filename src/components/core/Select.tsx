@@ -16,10 +16,19 @@ interface ISelectProps {
     onHelpPress?: (event: GestureResponderEvent) => void;
     onPress?: (event: GestureResponderEvent) => void;
     error?: string;
+    testID?: string;
 }
 export default class Select extends Component<ISelectProps, object> {
     render() {
-        const { label, value, help, onPress, onHelpPress, error } = this.props;
+        const {
+            label,
+            value,
+            help,
+            onPress,
+            onHelpPress,
+            error,
+            testID,
+        } = this.props;
         return (
             <>
                 <View
@@ -27,6 +36,7 @@ export default class Select extends Component<ISelectProps, object> {
                         width: '100%',
                         height: 48,
                     }}
+                    testID={testID}
                     accessibilityLabel={label}
                 >
                     <Text

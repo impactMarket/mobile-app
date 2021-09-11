@@ -153,6 +153,12 @@ function CommunityIncrementInterval(props: HelperProps) {
     const dispatch = useContext(DispatchContext);
 
     const handleChangeIncrementIntervalUnit = (value: string) => {
+        if (!state.validation.incrementIntervalUnit) {
+            dispatch({
+                type: formAction.SET_INCREMENT_INTERVAL_UNIT_VALID,
+                payload: true,
+            });
+        }
         dispatch({
             type: formAction.SET_INCREMENT_INTERVAL_UNIT,
             payload: Number(value),
@@ -172,6 +178,10 @@ function CommunityIncrementInterval(props: HelperProps) {
     const error = state.validation.incrementInterval
         ? undefined
         : i18n.t('createCommunity.incrementalIntervalRequired');
+
+    const errorUnit = state.validation.incrementIntervalUnit
+        ? undefined
+        : i18n.t('createCommunity.incrementalIntervalUnitRequired');
 
     return (
         <>
@@ -221,13 +231,17 @@ function CommunityIncrementInterval(props: HelperProps) {
                 </View>
                 <View style={{ flex: 1, marginLeft: 10 }}>
                     <Select
+                        testID="increment-interval-unit"
                         value={
-                            state.incrementIntervalUnit === 60
+                            state.incrementIntervalUnit === 0
+                                ? i18n.t('generic.select')
+                                : state.incrementIntervalUnit === 60
                                 ? i18n.t('createCommunity.minutes')
                                 : state.incrementIntervalUnit === 3600
                                 ? i18n.t('createCommunity.hours')
                                 : i18n.t('createCommunity.days')
                         }
+                        error={errorUnit}
                         onPress={() =>
                             modalizeClaimIncrementRef.current?.open()
                         }
@@ -359,6 +373,20 @@ function CommunityClaimFrequency(props: HelperProps) {
         ? undefined
         : i18n.t('createCommunity.baseIntervalRequired');
 
+    const handleChangeBaseInterval = (value: string) => {
+        if (!state.validation.baseInterval) {
+            dispatch({
+                type: formAction.SET_BASE_INTERVAL_VALID,
+                payload: true,
+            });
+        }
+        dispatch({
+            type: formAction.SET_BASE_INTERVAL,
+            payload: value,
+        });
+        modalizeFrequencyRef.current?.close();
+    };
+
     return (
         <View style={{ marginTop: 28 }}>
             <Select
@@ -400,13 +428,7 @@ function CommunityClaimFrequency(props: HelperProps) {
                         }}
                     >
                         <RadioButton.Group
-                            onValueChange={(value) => {
-                                dispatch({
-                                    type: formAction.SET_BASE_INTERVAL,
-                                    payload: value,
-                                });
-                                modalizeFrequencyRef.current?.close();
-                            }}
+                            onValueChange={handleChangeBaseInterval}
                             value={state.baseInterval}
                         >
                             <RadioButton.Item
