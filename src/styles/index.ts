@@ -19,6 +19,7 @@ export const ipctColors = {
     warningOrange: '#FE9A22',
     errorRed: '#EB5757',
     lynch: '#73839D',
+    mirage: '#172032',
 };
 
 export const ipctFontSize = {
