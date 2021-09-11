@@ -80,15 +80,10 @@ function CommunitiesScreen() {
                 </Pressable>
             </View>
             <FlatList
-                // TODO: Although the useEffect limits the number of items to 5, I added slice to make sure if communities.length is greater than 5, it will show the first 5 items.
                 data={communities}
-                renderItem={({
-                    item,
-                }: // index,
-                {
-                    item: CommunityAttributes;
-                    index: number;
-                }) => <CommunityCard community={item} />}
+                renderItem={({ item }: { item: CommunityAttributes }) => (
+                    <CommunityCard community={item} />
+                )}
                 ref={flatListRef}
                 keyExtractor={(item) => item.publicId}
                 horizontal

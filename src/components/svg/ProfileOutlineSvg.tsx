@@ -2,7 +2,7 @@ import * as React from 'react';
 import Svg, { G, Path, SvgProps } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
 
-function ProfileSvg(props: SvgProps) {
+function ProfileOutlineSvg(props: SvgProps) {
     return (
         <Svg width={30} height={30} viewBox="0 0 30 30" {...props}>
             <G fill={ipctColors.darBlue} fillRule="nonzero">
@@ -13,4 +13,4 @@ function ProfileSvg(props: SvgProps) {
     );
 }
 
-export default ProfileSvg;
+export default ProfileOutlineSvg;

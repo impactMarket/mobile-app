@@ -23,18 +23,8 @@ const findCommunityByIdApi = (id: number) => Api.community.findById(id);
 export function* fetchCommunitiesList({ payload }: any) {
     try {
         const communities = yield call(listCommunities, payload);
-
         const { data, count } = communities;
-
-        let reachedEndList: boolean;
-
-        if (data.length < 5) {
-            reachedEndList = true;
-        } else {
-            reachedEndList = false;
-        }
-
-        yield put(fetchCommunitiesListSuccess(data, count, reachedEndList));
+        yield put(fetchCommunitiesListSuccess(data, count, data.length < 5));
     } catch (err) {
         yield put(fetchCommunitiesListFailure());
     }

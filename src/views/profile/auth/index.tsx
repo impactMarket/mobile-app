@@ -111,8 +111,11 @@ function Auth() {
                 dispatch,
                 user.user
             );
+            modalizeWelcomeRef.current.close();
+            setConnecting(false);
             dispatch(userAuthToStateReset());
         };
+        console.log('userAuthState', userAuthState);
         if (userAuthState.user !== undefined) {
             if (dappKitResponse !== undefined) {
                 finishAuth();
@@ -209,14 +212,14 @@ function Auth() {
                     setDappKitResponse(response);
                     _dappkitResponse = response;
                 }),
-                (async () => {
-                    await new Promise((res) => setTimeout(res, 10000)).then(
-                        () => {
-                            // TODO: this generates a "state update on an unmounted component". Needs fix.
-                            setTimedOutValidation(true);
-                        }
-                    );
-                })(),
+                // (async () => {
+                //     await new Promise((res) => setTimeout(res, 10000)).then(
+                //         () => {
+                //             // TODO: this generates a "state update on an unmounted component". Needs fix.
+                //             setTimedOutValidation(true);
+                //         }
+                //     );
+                // })(),
             ]);
         } catch (e) {
             Sentry.Native.withScope((scope) => {
@@ -370,6 +373,7 @@ function Auth() {
                         bold
                         onPress={login}
                         loading={connecting || userAuthState.refreshing}
+                        disabled={connecting || userAuthState.refreshing}
                         style={{ width: '100%', marginTop: 16 }}
                         labelStyle={styles.buttomConnectValoraText}
                     >

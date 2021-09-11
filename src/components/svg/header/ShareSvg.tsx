@@ -5,7 +5,6 @@ import Svg, { SvgProps, Ellipse, Path } from 'react-native-svg';
 import { ipctColors } from 'styles/index';
 
 function ShareSvg(props: SvgProps) {
-    //TODO: Check with design team about the content and links of this share button
     const onShare = async () => {
         try {
             const result = await Share.share({
@@ -20,9 +19,7 @@ function ShareSvg(props: SvgProps) {
             } else if (result.action === Share.dismissedAction) {
                 // dismissed
             }
-        } catch (error) {
-            alert(error.message);
-        }
+        } catch (_) {}
     };
 
     return (

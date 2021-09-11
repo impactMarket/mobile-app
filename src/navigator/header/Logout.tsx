@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { logout } from 'helpers/index';
 import React, { useState } from 'react';
@@ -7,13 +8,13 @@ import { useDispatch } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
 function Logout() {
-    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [logingOut, setLogingOut] = useState(false);
 
     const handleLogout = async () => {
         setLogingOut(true);
-        logout(dispatch);
+        logout(dispatch).then(() => navigation.goBack());
     };
 
     return (
