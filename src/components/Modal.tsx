@@ -89,11 +89,16 @@ export default class Modal extends Component<IModalProps, IModalState> {
                 <Card
                     style={{
                         marginHorizontal: 22,
+                        alignSelf: 'center',
                         ...cardModalStyle,
                     }}
                 >
                     <Card.Content
-                        style={{ paddingHorizontal: 22, paddingVertical: 16 }}
+                        style={{
+                            paddingHorizontal: 22,
+                            paddingTop: 13,
+                            paddingBottom: 22,
+                        }}
                     >
                         <View
                             style={{

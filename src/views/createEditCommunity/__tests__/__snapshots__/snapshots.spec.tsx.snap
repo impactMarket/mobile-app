@@ -1812,7 +1812,7 @@ If there is another person or organization among your community you believe is m
                                       }
                                       testID="selected-value"
                                     >
-                                      Daily
+                                      Select
                                     </Text>
                                     <RNSVGSvgView
                                       align="xMidYMid"
@@ -2182,6 +2182,7 @@ If there is another person or organization among your community you believe is m
                                         "width": "100%",
                                       }
                                     }
+                                    testID="increment-interval-unit"
                                   >
                                     <Text
                                       style={
@@ -2249,7 +2250,7 @@ If there is another person or organization among your community you believe is m
                                         }
                                         testID="selected-value"
                                       >
-                                        Minutes
+                                        Select
                                       </Text>
                                       <RNSVGSvgView
                                         align="xMidYMid"
@@ -4395,7 +4396,7 @@ If there is another person or organization among your community you believe is m
                                       }
                                       testID="selected-value"
                                     >
-                                      Daily
+                                      Select
                                     </Text>
                                     <RNSVGSvgView
                                       align="xMidYMid"
@@ -4765,6 +4766,7 @@ If there is another person or organization among your community you believe is m
                                         "width": "100%",
                                       }
                                     }
+                                    testID="increment-interval-unit"
                                   >
                                     <Text
                                       style={
@@ -4832,7 +4834,7 @@ If there is another person or organization among your community you believe is m
                                         }
                                         testID="selected-value"
                                       >
-                                        Minutes
+                                        Select
                                       </Text>
                                       <RNSVGSvgView
                                         align="xMidYMid"
@@ -6978,7 +6980,7 @@ If there is another person or organization among your community you believe is m
                                       }
                                       testID="selected-value"
                                     >
-                                      Daily
+                                      Select
                                     </Text>
                                     <RNSVGSvgView
                                       align="xMidYMid"
@@ -7348,6 +7350,7 @@ If there is another person or organization among your community you believe is m
                                         "width": "100%",
                                       }
                                     }
+                                    testID="increment-interval-unit"
                                   >
                                     <Text
                                       style={
@@ -7415,7 +7418,7 @@ If there is another person or organization among your community you believe is m
                                         }
                                         testID="selected-value"
                                       >
-                                        Minutes
+                                        Select
                                       </Text>
                                       <RNSVGSvgView
                                         align="xMidYMid"

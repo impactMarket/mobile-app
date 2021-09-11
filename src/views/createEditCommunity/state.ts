@@ -35,6 +35,7 @@ interface INITIAL_FORM_STATE {
         baseInterval: boolean;
         maxClaim: boolean;
         incrementInterval: boolean;
+        incrementIntervalUnit: boolean;
     };
 }
 export enum formAction {
@@ -67,6 +68,7 @@ export enum formAction {
     SET_BASE_INTERVAL_VALID = 'form/setBaseIntervalValid',
     SET_MAX_CLAIM_VALID = 'form/setMaxClaimValid',
     SET_INCREMENT_INTERVAL_VALID = 'form/setIncrementIntervalValid',
+    SET_INCREMENT_INTERVAL_UNIT_VALID = 'form/setIncrementIntervalUnitValid',
 }
 
 interface communityNameAction {
@@ -219,6 +221,11 @@ interface communityIncrementIntervalValidAction {
     payload: boolean;
 }
 
+interface communityIncrementIntervalUnitValidAction {
+    type: formAction.SET_INCREMENT_INTERVAL_UNIT_VALID;
+    payload: boolean;
+}
+
 type FormActionTypes =
     | communityNameAction
     | communityCoverImageAction
@@ -248,7 +255,8 @@ type FormActionTypes =
     | communityClaimAmountValidAction
     | communityBaseIntervalValidAction
     | communityMaxClaimValidAction
-    | communityIncrementIntervalValidAction;
+    | communityIncrementIntervalValidAction
+    | communityIncrementIntervalUnitValidAction;
 
 export const formInitialState: INITIAL_FORM_STATE = {
     name: '',
@@ -264,10 +272,10 @@ export const formInitialState: INITIAL_FORM_STATE = {
     email: '',
     currency: '',
     claimAmount: '',
-    baseInterval: '86400',
+    baseInterval: '',
     maxClaim: '',
     incrementInterval: '',
-    incrementIntervalUnit: 60,
+    incrementIntervalUnit: 0,
     visibility: 'public',
     validation: {
         name: true,
@@ -284,6 +292,7 @@ export const formInitialState: INITIAL_FORM_STATE = {
         baseInterval: true,
         maxClaim: true,
         incrementInterval: true,
+        incrementIntervalUnit: true,
     },
 };
 
@@ -431,6 +440,14 @@ export function reducer(
                     incrementInterval: action.payload,
                 },
             };
+        case formAction.SET_INCREMENT_INTERVAL_UNIT_VALID:
+            return {
+                ...state,
+                validation: {
+                    ...state.validation,
+                    incrementIntervalUnit: action.payload,
+                },
+            };
         default:
             return state;
     }
@@ -446,8 +463,8 @@ export const validateField = (
     state: INITIAL_FORM_STATE,
     dispatch: React.Dispatch<FormActionTypes>
 ) => ({
-    name: (isValidated: boolean = true) => {
-        if (isValidated) {
+    name: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_NAME_VALID,
                 payload: state.name.length > 0,
@@ -455,8 +472,8 @@ export const validateField = (
         }
         return state.name.length > 0;
     },
-    description: (isValidated: boolean = true) => {
-        if (isValidated) {
+    description: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_DESCRIPTION_VALID,
                 payload: state.description.length !== 0,
@@ -470,8 +487,8 @@ export const validateField = (
             state.description.length !== 0 && state.description.length >= 240
         );
     },
-    city: (isValidated: boolean = true) => {
-        if (isValidated) {
+    city: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_CITY_VALID,
                 payload: state.city.length > 0,
@@ -479,8 +496,8 @@ export const validateField = (
         }
         return state.city.length > 0;
     },
-    country: (isValidated: boolean = true) => {
-        if (isValidated) {
+    country: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_COUNTRY_VALID,
                 payload: state.country.length > 0,
@@ -488,8 +505,8 @@ export const validateField = (
         }
         return state.country.length > 0;
     },
-    email: (isValidated: boolean = true) => {
-        if (isValidated) {
+    email: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_EMAIL_VALID,
                 payload: state.email.length > 0,
@@ -501,8 +518,8 @@ export const validateField = (
         }
         return state.email.length > 0 && validateEmail(state.email);
     },
-    gps: (isValidated: boolean = true) => {
-        if (isValidated) {
+    gps: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_GPS_VALID,
                 payload: state.gps.latitude !== 0 || state.gps.longitude !== 0,
@@ -510,8 +527,8 @@ export const validateField = (
         }
         return state.gps.latitude !== 0 || state.gps.longitude !== 0;
     },
-    cover: (isValidated: boolean = true) => {
-        if (isValidated) {
+    cover: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_COVER_VALID,
                 payload: state.coverImage.length > 0,
@@ -519,8 +536,8 @@ export const validateField = (
         }
         return state.coverImage.length > 0;
     },
-    profile: (userProfilePicture: string, isValidated: boolean = true) => {
-        if (isValidated) {
+    profile: (userProfilePicture: string, updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_PROFILE_VALID,
                 payload:
@@ -535,8 +552,8 @@ export const validateField = (
         );
     },
     // no currency validation. User's currency is used by default
-    claimAmount: (isValidated: boolean = true) => {
-        if (isValidated) {
+    claimAmount: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_CLAIM_AMOUNT_VALID,
                 payload:
@@ -549,8 +566,8 @@ export const validateField = (
             /^\d*[.,]?\d*$/.test(state.claimAmount)
         );
     },
-    maxClaim: (isValidated: boolean = true) => {
-        if (isValidated) {
+    maxClaim: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_MAX_CLAIM_VALID,
                 payload:
@@ -562,8 +579,8 @@ export const validateField = (
             state.maxClaim.length > 0 && /^\d*[.,]?\d*$/.test(state.maxClaim)
         );
     },
-    incrementInterval: (isValidated: boolean = true) => {
-        if (isValidated) {
+    incrementInterval: (updateState: boolean = true) => {
+        if (updateState) {
             dispatch({
                 type: formAction.SET_INCREMENT_INTERVAL_VALID,
                 payload: state.incrementInterval.length > 0,
@@ -571,6 +588,23 @@ export const validateField = (
         }
         return state.incrementInterval.length > 0;
     },
-    // no base interval unit validation. minutes by default
+    incrementIntervalUnit: (updateState: boolean = true) => {
+        if (updateState) {
+            dispatch({
+                type: formAction.SET_INCREMENT_INTERVAL_UNIT_VALID,
+                payload: state.incrementIntervalUnit !== 0,
+            });
+        }
+        return state.incrementIntervalUnit !== 0;
+    },
+    baseInterval: (updateState: boolean = true) => {
+        if (updateState) {
+            dispatch({
+                type: formAction.SET_BASE_INTERVAL_VALID,
+                payload: state.baseInterval.length > 0,
+            });
+        }
+        return state.baseInterval.length > 0;
+    },
     // no visibility validation. public by default
 });
