@@ -11,8 +11,8 @@
         "eslint": "eslint --fix ./**/*.{ts,tsx}",
         "prettier-no-fix": "prettier ./**/*.{ts,tsx}",
         "eslint-no-fix": "eslint ./**/*.{ts,tsx} --max-warnings=0",
-        "test": "jest --maxWorkers=50%",
-        "test:watch": "jest --watch --maxWorkers=25%"
+        "test": "jest",
+        "test:watch": "jest --watch"
     },
     "jest": {
         "preset": "jest-expo",

@@ -118,6 +118,7 @@ export default {
         welcome: 'Welcome!',
     },
     createCommunity: {
+        alert: 'After submitting, we’ll will contact you in a few weeks.',
         pendingApprovalMessage:
             'We are reviewing your submission and will contact you in a few weeks. If you have any additional questions visit our Help Center to read our F.A.Q.s or submit a ticket.',
         applyCommunity: 'Apply Community',
