@@ -12,7 +12,6 @@ import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import CheckSvg from 'components/svg/CheckSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import LockSvg from 'components/svg/LockSvg';
-import ProfileSvg from 'components/svg/ProfileSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import Constants from 'expo-constants';
@@ -33,9 +32,9 @@ import {
     setUserMetadata,
     setUserWalletBalance,
 } from 'helpers/redux/actions/user';
-import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
+import Logout from 'navigator/header/Logout';
 import React, { useState, useEffect, useRef } from 'react';
 import { Trans } from 'react-i18next';
 import {
@@ -64,7 +63,7 @@ import { WebView } from 'react-native-webview';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 const currencies: {
     [key: string]: {
@@ -607,7 +606,7 @@ function ProfileScreen() {
                         >
                             <View style={styles.avatarText}>
                                 <Text style={styles.avatarCallToAction}>
-                                    {i18n.t('uploadProfile')}
+                                    {i18n.t('profile.uploadProfilePicture')}
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -704,7 +703,7 @@ function ProfileScreen() {
                     <Divider />
                     <Text style={styles.itemTitle}>
                         <Trans
-                            i18nKey="stolenOrChangedPhone"
+                            i18nKey="profile.stolenOrChangedPhone"
                             components={{
                                 blue: (
                                     <Text
@@ -903,20 +902,15 @@ function ProfileScreen() {
 ProfileScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
+        headerRight: () => <Logout />,
         headerTitle: i18n.t('profile.profile'),
-        tabBarLabel: i18n.t('profile.profile'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
-            fontSize: 22,
-            lineHeight: 28,
-            color: '#333239',
+            fontSize: ipctFontSize.lowMedium,
+            lineHeight: ipctLineHeight.large,
+            color: ipctColors.darBlue,
+            left: -12,
         },
-        headerTitleContainerStyle: {
-            left: 58,
-        },
-        tabBarIcon: (props: ITabBarIconProps) => (
-            <ProfileSvg focused={props.focused} />
-        ),
     };
 };
 

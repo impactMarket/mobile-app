@@ -56,6 +56,13 @@ export function SetAppFromWelcomeScreen(nextScreen: string): AppActionTypes {
     };
 }
 
+export function setOpenAuthModal(open: boolean): AppActionTypes {
+    return {
+        type: appAction.SET_OPEN_AUTH_MODAL,
+        payload: open,
+    };
+}
+
 export function setAppExchangeRatesAction(exchangeRates: {
     [key: string]: number;
 }): AppActionTypes {

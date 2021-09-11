@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
+import ProfileSvg from 'components/svg/ProfileSvg';
 import FAQSvg from 'components/svg/header/FaqSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
 import { Screens } from 'helpers/constants';
@@ -26,11 +27,12 @@ function CommunityManager() {
             }}
         >
             <FAQSvg />
+            <ProfileSvg />
             {community.status === 'valid' && (
                 <ThreeDotsSvg
                     setOpenThreeDotsMenu={setOpenThreeDotsMenu}
                     openThreeDotsMenu={openThreeDotsMenu}
-                    style={{ marginLeft: 8.4, marginRight: 16 }}
+                    style={{ marginRight: 16, marginLeft: 10 }}
                     hasCloseBtn={false}
                 >
                     <>

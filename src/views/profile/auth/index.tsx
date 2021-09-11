@@ -2,11 +2,6 @@ import { newKitFromWeb3 } from '@celo/contractkit';
 import { requestAccountAddress, waitForAccountAuth } from '@celo/dappkit';
 import { AccountAuthResponseSuccess } from '@celo/utils';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-    RouteProp,
-    useNavigation,
-    useFocusEffect,
-} from '@react-navigation/native';
 import i18n, { supportedLanguages } from 'assets/i18n';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
@@ -16,7 +11,6 @@ import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import * as Localization from 'expo-localization';
 import {
-    Screens,
     STORAGE_USER_ADDRESS,
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
@@ -26,7 +20,10 @@ import {
     makeDeeplinkUrl,
     welcomeUser,
 } from 'helpers/index';
-import { setPushNotificationListeners } from 'helpers/redux/actions/app';
+import {
+    setOpenAuthModal,
+    setPushNotificationListeners,
+} from 'helpers/redux/actions/app';
 import {
     addUserAuthToStateRequest,
     setPushNotificationsToken,
@@ -55,8 +52,8 @@ import { ipctColors } from 'styles/index';
 import Web3 from 'web3';
 
 import config from '../../../../config';
+
 function Auth() {
-    const navigation = useNavigation();
     const dispatch = useDispatch();
 
     const kit = useSelector((state: IRootState) => state.app.kit);
@@ -68,15 +65,17 @@ function Auth() {
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
+    const authModalOpen = useSelector(
+        (state: IRootState) => state.app.authModalOpen
+    );
     const [dappKitResponse, setDappKitResponse] = useState<
         AccountAuthResponseSuccess | undefined
     >(undefined);
     const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
     const [toggleWarn, setToggleWarn] = useState(false);
-    const [timedOutValidation, setTimedOutValidation] = useState(false);
+    const [timedOutValidation] = useState(false);
 
-    const [, setLoadRefs] = useState(false);
     const modalizeDuplicatedAccountsRef = useRef<Modalize>(null);
     const modalizeDeleteAccountsRef = useRef<Modalize>(null);
     const modalizeWelcomeRef = useRef<Modalize>(null);
@@ -87,8 +86,19 @@ function Auth() {
     useEffect(() => {
         if (timedOutValidation && !toggleWarn) {
             setTimedOut(true);
+            modalizeWelcomeRef.current.close();
         }
     }, [timedOutValidation, toggleWarn]);
+
+    useEffect(() => {
+        if (modalizeWelcomeRef.current !== null) {
+            if (authModalOpen) {
+                modalizeWelcomeRef.current.open();
+            } else {
+                modalizeWelcomeRef.current.close();
+            }
+        }
+    }, [authModalOpen]);
 
     useEffect(() => {
         const finishAuth = async () => {
@@ -114,8 +124,11 @@ function Auth() {
                 dispatch,
                 user.user
             );
+            dispatch(setOpenAuthModal(false));
             dispatch(userAuthToStateReset());
+            setConnecting(false);
         };
+
         if (userAuthState.user !== undefined) {
             if (dappKitResponse !== undefined) {
                 finishAuth();
@@ -141,10 +154,6 @@ function Auth() {
             dispatch(userAuthToStateReset());
         }
     }, [userAuthState, dappKitResponse, dispatch, exchangeRates, kit]);
-
-    useFocusEffect(() => {
-        renderAuthModalize();
-    });
 
     const apiAuthRequest = async (props: {
         response?: AccountAuthResponseSuccess;
@@ -212,14 +221,14 @@ function Auth() {
                     setDappKitResponse(response);
                     _dappkitResponse = response;
                 }),
-                (async () => {
-                    await new Promise((res) => setTimeout(res, 10000)).then(
-                        () => {
-                            // TODO: this generates a "state update on an unmounted component". Needs fix.
-                            setTimedOutValidation(true);
-                        }
-                    );
-                })(),
+                // (async () => {
+                //     await new Promise((res) => setTimeout(res, 10000)).then(
+                //         () => {
+                //             // TODO: this generates a "state update on an unmounted component". Needs fix.
+                //             setTimedOutValidation(true);
+                //         }
+                //     );
+                // })(),
             ]);
         } catch (e) {
             Sentry.Native.withScope((scope) => {
@@ -289,19 +298,9 @@ function Auth() {
         );
     };
 
-    const renderAuthModalize = () => {
-        if (modalizeWelcomeRef.current === null) {
-            setTimeout(() => {
-                setLoadRefs(true);
-            }, 100);
-        } else {
-            modalizeWelcomeRef.current.open();
-        }
-    };
-
     const handleCloseErrorModal = () => {
         setTimedOut(false);
-        navigation.navigate(Screens.Communities);
+        // navigation.navigate(Screens.Communities);
     };
 
     return (
@@ -333,12 +332,16 @@ function Auth() {
                     i18n.t('auth.connectWithValora'),
                     modalizeWelcomeRef,
                     () => {
-                        navigation.navigate(Screens.Communities);
+                        // navigation.navigate(Screens.Communities);
+                        dispatch(setOpenAuthModal(false));
+                        setConnecting(false);
                     }
                 )}
                 adjustToContentHeight
                 onClose={() => {
-                    navigation.navigate(Screens.Communities);
+                    // navigation.navigate(Screens.Communities);
+                    dispatch(setOpenAuthModal(false));
+                    setConnecting(false);
                 }}
             >
                 <View style={{ width: '100%', paddingHorizontal: 22 }}>
@@ -373,6 +376,7 @@ function Auth() {
                         bold
                         onPress={login}
                         loading={connecting || userAuthState.refreshing}
+                        disabled={connecting || userAuthState.refreshing}
                         style={{ width: '100%', marginTop: 16 }}
                         labelStyle={styles.buttomConnectValoraText}
                     >
@@ -386,12 +390,12 @@ function Auth() {
                     i18n.t('auth.duplicatedTitle'),
                     modalizeDuplicatedAccountsRef,
                     () => {
-                        navigation.navigate(Screens.Communities);
+                        // navigation.navigate(Screens.Communities);
                     }
                 )}
                 adjustToContentHeight
                 onClose={() => {
-                    navigation.navigate(Screens.Communities);
+                    // navigation.navigate(Screens.Communities);
                 }}
             >
                 <View style={{ width: '100%', paddingHorizontal: 22 }}>
@@ -445,12 +449,12 @@ function Auth() {
                     i18n.t('auth.welcomeBack'),
                     modalizeDeleteAccountsRef,
                     () => {
-                        navigation.navigate(Screens.Communities);
+                        // navigation.navigate(Screens.Communities);
                     }
                 )}
                 adjustToContentHeight
                 onClose={() => {
-                    navigation.navigate(Screens.Communities);
+                    // navigation.navigate(Screens.Communities);
                 }}
             >
                 <View style={{ width: '100%', paddingHorizontal: 22 }}>
@@ -546,12 +550,6 @@ function Auth() {
         </Portal>
     );
 }
-
-Auth.navigationOptions = ({ route }: { route: RouteProp<any, any> }) => {
-    return {
-        headerShown: false,
-    };
-};
 
 export default Auth;
 

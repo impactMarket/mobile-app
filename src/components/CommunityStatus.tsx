@@ -8,12 +8,16 @@ import {
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-import { ipctColors } from 'styles/index';
+import {
+    ipctColors,
+    ipctFontSize,
+    ipctLineHeight,
+    ipctSpacing,
+} from 'styles/index';
 
-import SuspiciousCard from './SuspiciousCard';
 import WarningTriangle from './svg/WarningTriangle';
 
 interface ICommuntyStatusProps {
@@ -22,33 +26,40 @@ interface ICommuntyStatusProps {
 
 export default function CommunityStatus(props: ICommuntyStatusProps) {
     const { community } = props;
-    const { width } = Dimensions.get('screen');
     const user = useSelector((state: IRootState) => state.user.metadata);
 
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
 
-    const goal = new BigNumber(community.contract.maxClaim).multipliedBy(
-        community.state.beneficiaries
-    );
+    const maxClaim = new BigNumber(community.contract.maxClaim)
+        .multipliedBy(community.state.beneficiaries)
+        .toString();
+
     const days = calculateCommunityRemainedFunds(community);
 
     if (community.contract === undefined || community.state === undefined) {
         return null;
     }
 
+    const raisedPercentage =
+        (
+            (parseFloat(community.state.raised) / parseFloat(maxClaim)) *
+            100
+        ).toFixed(2) + '%';
+
     return (
         <>
-            {community.suspect !== undefined && community.suspect !== null && (
-                <SuspiciousCard suspectCounts={community.suspect.suspect} />
-            )}
-            <View style={styles.cardWrap}>
+            <View
+                style={{
+                    marginTop: 7,
+                }}
+            >
                 <View
                     style={{
                         flex: 1,
-                        alignItems: 'flex-start',
-                        justifyContent: 'center',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                     }}
                 >
                     <Text
@@ -56,64 +67,50 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                             styles.description,
                             {
                                 color: ipctColors.regentGray,
-                                fontSize: width < 375 ? 11 : 14,
-                                lineHeight: width < 375 ? 19 : 24,
                             },
                         ]}
                     >
-                        {i18n.t('generic.raisedFrom')}
-
+                        {i18n.t('generic.raisedFrom', {
+                            backers: community.state.backers,
+                        })}{' '}
                         {i18n.t('generic.backers', {
                             count: community.state.backers,
                         })}
                     </Text>
                     <Text
                         style={[
-                            styles.Text,
-                            {
-                                fontSize: width < 375 ? 14 : 20,
-                            },
-                        ]}
-                    >
-                        {amountToCurrency(
-                            community.state.raised,
-                            user.currency,
-                            exchangeRates
-                        )}
-                    </Text>
-                </View>
-                <View
-                    style={{
-                        flex: 1,
-                        alignItems: 'flex-end',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Text
-                        style={[
                             styles.description,
                             {
                                 color: ipctColors.regentGray,
-                                fontSize: width < 375 ? 11 : 14,
-                                lineHeight: width < 375 ? 19 : 24,
                             },
                         ]}
                     >
                         {i18n.t('generic.goal')}
                     </Text>
-                    <Text
-                        style={[
-                            styles.Text,
-                            { fontSize: width < 375 ? 14 : 20 },
-                        ]}
-                    >
-                        {goal
-                            ? amountToCurrency(
-                                  goal,
-                                  user.currency,
-                                  exchangeRates
-                              )
-                            : 'N/A'}
+                </View>
+                <View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <Text style={styles.Text}>
+                        {amountToCurrency(
+                            community.state.raised,
+                            user.currency,
+                            exchangeRates
+                        )}
+                        {raisedPercentage !== '0.00%' &&
+                            community.state.beneficiaries >= 1 &&
+                            ` (${raisedPercentage})`}
+                    </Text>
+                    <Text style={styles.Text}>
+                        {amountToCurrency(
+                            maxClaim,
+                            user.currency,
+                            exchangeRates
+                        )}
                     </Text>
                 </View>
             </View>
@@ -127,48 +124,52 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         height: 6.32,
                     }}
                     progress={calculateCommunityProgress('raised', community)}
-                    color={ipctColors.blueRibbon}
                 />
-            </View>
-            <View
-                style={[
-                    styles.fundsContainer,
-                    {
-                        alignItems: width < 375 ? 'flex-start' : 'center',
-                        justifyContent: 'center',
-                    },
-                ]}
-            >
-                {/* TODO: Add a condition to avoid show this message when community is finacial health. */}
-                <WarningTriangle
-                    color="#FE9A22"
-                    style={{ marginTop: width < 375 ? 8 : 0 }}
-                />
-                <Text
-                    style={[
-                        styles.description,
-                        {
-                            color: ipctColors.regentGray,
-                            marginLeft: 7,
-                            fontSize: width < 375 ? 11 : 14,
-                            lineHeight: width < 375 ? 19 : 24,
-                        },
-                    ]}
-                >
-                    {i18n.t('community.fundsRunOut', {
-                        days,
-                    })}{' '}
-                    {i18n.t('generic.days', {
-                        count: days,
-                    })}
-                    .
-                </Text>
+                {days < 5 && (
+                    <View
+                        style={[
+                            styles.fundsContainer,
+                            {
+                                alignItems: 'flex-start',
+                                justifyContent: 'center',
+                            },
+                        ]}
+                    >
+                        <WarningTriangle
+                            color={ipctColors.warningOrange}
+                            style={{
+                                marginTop: ipctSpacing.xsmall,
+                                alignSelf: 'center',
+                            }}
+                        />
+                        <Text
+                            style={[
+                                styles.description,
+                                {
+                                    color: ipctColors.regentGray,
+                                    marginLeft: 7,
+                                },
+                            ]}
+                        >
+                            {i18n.t('community.fundsRunOut', {
+                                days: Math.floor(days),
+                            })}{' '}
+                            {i18n.t('generic.days', {
+                                count: days,
+                            })}
+                        </Text>
+                    </View>
+                )}
             </View>
         </>
     );
 }
 
 const styles = StyleSheet.create({
+    divider: {
+        height: 1,
+        backgroundColor: ipctColors.softGray,
+    },
     sphereClaimed: {
         width: 8,
         height: 8,
@@ -186,24 +187,17 @@ const styles = StyleSheet.create({
     Text: {
         fontFamily: 'Inter-Bold',
         color: ipctColors.darBlue,
-        fontSize: 20,
-        lineHeight: 32,
+        fontSize: ipctFontSize.small,
+        lineHeight: ipctLineHeight.xlarge,
     },
     description: {
         fontFamily: 'Inter-Regular',
-        fontSize: 14,
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.bigger,
         fontStyle: 'normal',
         fontWeight: '400',
-        lineHeight: 24,
         letterSpacing: 0,
         textAlign: 'left',
-    },
-    cardWrap: {
-        flex: 2,
-        flexDirection: 'row',
-        // marginTop: 7,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
     },
     fundsContainer: {
         flex: 1,

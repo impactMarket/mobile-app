@@ -1,21 +1,18 @@
-import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import CachedImage from 'components/CacheImage';
-import Card from 'components/core/Card';
+import Dot from 'components/Dot';
+import IconCommunity from 'components/svg/IconCommunity';
+import LocationsSvg from 'components/svg/LocationSvg';
 import { Screens } from 'helpers/constants';
-import { humanifyCurrencyAmount } from 'helpers/currency';
-import {
-    calculateCommunityProgress,
-    claimFrequencyToText,
-} from 'helpers/index';
-// import { ICommunityLightDetails } from 'helpers/types/endpoints';
+import { amountToCurrency } from 'helpers/currency';
 import { CommunityAttributes } from 'helpers/types/models';
+import { IRootState } from 'helpers/types/state';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { ProgressBar } from 'react-native-paper';
-import { ipctColors } from 'styles/index';
+import { Pressable, Text, View, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 const countries: {
     [key: string]: {
@@ -30,24 +27,49 @@ function CommunityCard(props: { community: CommunityAttributes }) {
     const navigation = useNavigation();
     const { community } = props;
 
-    if (community.state === undefined || community.contract === undefined) {
-        navigation.goBack();
-        // TODO: throw some error!
-        return null;
-    }
+    const rates = useSelector((state: IRootState) => state.app.exchangeRates);
+    const userCurrency = useSelector(
+        (state: IRootState) => state.user.metadata.currency
+    );
+
+    const claimAmount = amountToCurrency(
+        community.contract.claimAmount,
+        userCurrency,
+        rates
+    );
+    const claimFrequency =
+        community.contract.baseInterval === 86400
+            ? i18n.t('generic.day')
+            : i18n.t('generic.week');
+
+    // const setTextSuspects = (suspects: number) => {
+    //     switch (true) {
+    //         case suspects < 1:
+    //             return i18n.t('noSuspiciousActivity');
+
+    //         case suspects < 4:
+    //             return i18n.t('lowSuspiciousActivity');
+
+    //         case suspects < 8:
+    //             return i18n.t('significantSuspiciousActivity');
+
+    //         case suspects > 7:
+    //             return i18n.t('largeSuspiciousActivity');
+
+    //         default:
+    //             return i18n.t('noSuspiciousActivity');
+    //     }
+    // };
 
     return (
-        <Card
-            key={community.name}
-            // elevation={8}
-            style={styles.card}
+        <Pressable
             onPress={() =>
                 navigation.navigate(Screens.CommunityDetails, {
                     communityId: community.id,
                 })
             }
         >
-            <Card.Content style={{ margin: -16 }}>
+            <View key={community.name} style={styles.card}>
                 <View style={{ position: 'relative' }}>
                     <CachedImage
                         style={styles.cardImage}
@@ -55,159 +77,187 @@ function CommunityCard(props: { community: CommunityAttributes }) {
                             uri: community?.cover?.url,
                         }}
                     />
-                    <View
+                    {/* TODO: add run out of funds detection algorithm to decide whether show warning or not.  */}
+                    {/* <View
                         style={{
                             position: 'absolute',
                             zIndex: 5,
-                            ...styles.cardImage,
+                            backgroundColor: ipctColors.white,
+                            left: 20,
+                            bottom: 64,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            borderRadius: 8,
+                            padding: 8,
                         }}
                     >
-                        <Text style={styles.cardCommunityName}>
-                            {community.name}
+                        <WarningTriangle color={ipctColors.warningOrange} />
+                        <Text style={styles.cardCommunityTagText}>
+                            {i18n.t('funds')}
                         </Text>
-                        <Text style={styles.cardLocation}>
-                            <Entypo name="location-pin" size={15} />{' '}
-                            {community.city},{' '}
-                            {countries[community.country].name}
-                        </Text>
-                    </View>
+                    </View> */}
+
+                    {/* TODO: add suspect level algorithm.  */}
+                    {/* {!community.suspect && (
+                        <View
+                            style={{
+                                position: 'absolute',
+                                zIndex: 5,
+                                backgroundColor: ipctColors.white,
+                                left: 20,
+                                bottom: 18,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                borderRadius: 8,
+                                padding: 8,
+                            }}
+                        >
+                            <SuspiciousActivityMiddleSvg />
+                            <Text style={styles.cardCommunityTagText}>
+                                {setTextSuspects(Number(community.suspect))}
+                            </Text>
+                        </View>
+                    )} */}
                     <View style={styles.darkerBackground} />
                 </View>
-                <View style={{ marginHorizontal: 17, marginBottom: 16.24 }}>
+                <View
+                    style={{
+                        marginTop: 16,
+                        height: 144,
+                        width: 254,
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <Text style={styles.cardCommunityName}>
+                        {community.name}
+                    </Text>
+                    <Text style={styles.cardCommunityDescription}>
+                        {community.description?.length > 90
+                            ? community.description.substr(0, 90) + '...'
+                            : community.description}
+                    </Text>
                     <View
                         style={{
-                            flex: 3,
                             flexDirection: 'row',
-                            marginTop: 19.27,
-                            marginBottom: 17.85,
+                            alignItems: 'center',
+                            // bottom: 0,
                         }}
                     >
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.cellHeader}>
+                        <View
+                            style={{
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexDirection: 'row',
+                            }}
+                        >
+                            <IconCommunity style={{ marginRight: 4 }} />
+                            <Text style={styles.bottomCardText}>
                                 {community.state.beneficiaries}
                             </Text>
-                            <Text style={styles.cellDescription}>
-                                {i18n.t('generic.beneficiaries')}
-                            </Text>
                         </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.cellHeader}>
-                                $
-                                {humanifyCurrencyAmount(
-                                    community.contract.claimAmount
-                                )}
-                            </Text>
-                            <Text style={styles.cellDescription}>
-                                {claimFrequencyToText(
-                                    community.contract.baseInterval
-                                )}
-                            </Text>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            <Text style={styles.cellHeader}>
-                                {community.state.backers}
-                            </Text>
-                            <Text style={styles.cellDescription}>
-                                {i18n.t('generic.backers', {
-                                    count: community.state.backers,
-                                })}
-                            </Text>
-                        </View>
-                    </View>
-                    <View>
-                        <ProgressBar
-                            key="raised"
+                        <Dot />
+                        <View
                             style={{
-                                backgroundColor: ipctColors.softGray,
-                                position: 'absolute',
-                                borderRadius: 6.5,
-                                height: 6.32,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexDirection: 'row',
+                                marginRight: 4,
                             }}
-                            progress={calculateCommunityProgress(
-                                'raised',
-                                community
-                            )}
-                            color={ipctColors.blueRibbon}
-                        />
-                        <ProgressBar
-                            key="claimed"
+                        >
+                            <Text style={styles.bottomCardText}>
+                                {claimAmount}/{claimFrequency}
+                            </Text>
+                        </View>
+                        <View
                             style={{
-                                backgroundColor: 'rgba(255,255,255,0)',
-                                borderRadius: 6.5,
-                                height: 6.32,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexDirection: 'row',
+                                marginRight: 12,
                             }}
-                            progress={calculateCommunityProgress(
-                                'claimed',
-                                community
-                            )}
-                            color={ipctColors.greenishTeal}
-                        />
+                        >
+                            <LocationsSvg style={{ marginRight: 4 }} />
+                            <Text style={styles.bottomCardText}>
+                                {countries[community.country].name}
+                            </Text>
+                        </View>
                     </View>
                 </View>
-            </Card.Content>
-        </Card>
+            </View>
+        </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
     cardImage: {
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
-        width: '100%',
-        height: 147,
+        borderRadius: 8,
+        width: 254,
+        height: 254,
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
     },
     darkerBackground: {
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
+        borderRadius: 8,
         backgroundColor: 'rgba(0,0,0,0.15)',
         position: 'absolute',
         left: 0,
         right: 0,
         bottom: 0,
-        height: 147,
+        height: 254,
+    },
+    cardCommunityTagText: {
+        marginLeft: 4,
+        fontSize: ipctFontSize.tiny,
+        lineHeight: ipctLineHeight.small,
+        fontFamily: 'Inter-Regular',
+        color: ipctColors.nileBlue,
+        textAlign: 'left',
     },
     cardCommunityName: {
-        zIndex: 5,
-        marginHorizontal: 15,
-        fontSize: 28,
-        lineHeight: 34,
-        fontFamily: 'Gelion-Bold',
-        color: 'white',
-        textAlign: 'center',
+        fontSize: ipctFontSize.small,
+        lineHeight: ipctLineHeight.big,
+        fontFamily: 'Manrope-Bold',
+        fontWeight: '800',
+        color: ipctColors.almostBlack,
+        textAlign: 'left',
+    },
+    cardCommunityDescription: {
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.bigger,
+        fontFamily: 'Inter-Regular',
+        fontWeight: '400',
+        color: ipctColors.darBlue,
+        textAlign: 'left',
+        marginVertical: 8,
     },
     cardLocation: {
-        zIndex: 5,
-        fontFamily: 'Gelion-Regular',
-        fontSize: 16,
-        lineHeight: 19,
-        color: 'white',
-    },
-    cardInfo: {
-        flex: 3,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        fontFamily: 'Inter-Regular',
+        fontWeight: '400',
+        fontSize: ipctFontSize.xsmall,
+        lineHeight: ipctLineHeight.medium,
+        color: ipctColors.blueGray,
     },
     card: {
-        marginHorizontal: 16,
-        minWidth: 290,
-        marginBottom: 22,
-        // marginTop: 8,
-        padding: 0,
+        marginHorizontal: 8,
+        borderRadius: 8,
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between',
+        maxWidth: 254,
+        paddingBottom: 21,
     },
-    cellHeader: {
-        fontFamily: 'Gelion-Bold',
-        fontSize: 24,
-        lineHeight: 24,
+    bottomCardText: {
+        fontFamily: 'Inter-Regular',
+        fontSize: ipctFontSize.xsmall,
+        lineHeight: ipctLineHeight.medium,
         textAlign: 'center',
-        color: ipctColors.nileBlue,
+        color: ipctColors.blueGray,
     },
     cellDescription: {
         fontFamily: 'Gelion-Regular',
-        fontSize: 14,
-        lineHeight: 16,
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.smaller,
         opacity: 0.7,
         textAlign: 'center',
         color: ipctColors.nileBlue,

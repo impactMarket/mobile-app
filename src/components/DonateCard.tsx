@@ -2,19 +2,21 @@ import i18n from 'assets/i18n';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Pressable, Image, Dimensions } from 'react-native';
+import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Title, Text } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
 import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 import ConfirmModal from '../views/community/details/donate/modals/confirm';
 import DonateModal from '../views/community/details/donate/modals/donate';
 import ErrorModal from '../views/community/details/donate/modals/error';
 import renderHeader from './core/HeaderBottomSheetTitle';
+import CeloDolarSvg from './svg/CeloDolarSvg';
+import EsolidarSvg from './svg/EsolidarSvg';
 
 interface IDonateProps {
     community: CommunityAttributes;
@@ -24,21 +26,15 @@ export default function DonateCard(props: IDonateProps) {
     const { width } = Dimensions.get('screen');
     const { community } = props;
     const dispatch = useDispatch();
-    //TODO: Create a page to be shown when the community isnt's fundraising on eSolidar.
-    const [campaignUrl, setCampaignUrl] = useState<string>(
-        'https://community.esolidar.com/pt'
-    );
+    const [campaignUrl, setCampaignUrl] = useState<string | null>(null);
     const modalizeESolidar = useRef<Modalize>(null);
 
     useEffect(() => {
         Api.community
-            .getCommunityFundraisingUrl(community.id)
-            .then((res) => {
-                res.campaignUrl && setCampaignUrl(res?.campaignUrl);
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+            .getCampaign(community.id)
+            .then((res) =>
+                setCampaignUrl(res === null ? null : res.campaignUrl)
+            );
     }, [community]);
 
     return (
@@ -60,86 +56,87 @@ export default function DonateCard(props: IDonateProps) {
                     testID="donateWithCelo"
                 >
                     <View
-                        style={{ flexDirection: 'row', alignItems: 'center' }}
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            padding: 12,
+                        }}
                     >
                         <Text
                             style={{
                                 fontFamily: 'Inter-Regular',
-                                fontSize: width < 375 ? 11 : 16,
-                                lineHeight: width < 375 ? 22 : 28,
+                                fontSize: ipctFontSize.small,
+                                lineHeight: ipctLineHeight.large,
                                 color: 'white',
                                 marginRight: 10,
                             }}
                         >
                             {i18n.t('donate.donateWithCelo')}
                         </Text>
-                        <Image
-                            source={require('assets/images/celoDolar.png')}
-                            width={22}
-                            height={22}
-                        />
+                        <CeloDolarSvg />
                     </View>
                 </Pressable>
-                <Text
-                    style={[
-                        styles.description,
-                        { fontSize: width < 375 ? 11 : 16 },
-                    ]}
-                >
-                    {i18n.t('generic.or')}
-                </Text>
-                <Pressable
-                    style={[
-                        styles.button,
-                        {
-                            backgroundColor: 'transparent',
-                            borderColor: ipctColors.borderGray,
-                            borderWidth: 1,
-                        },
-                    ]}
-                    onPress={() => modalizeESolidar.current?.open()}
-                    testID="donateWithESolidar"
-                >
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Text
+                {campaignUrl !== null && (
+                    <>
+                        <Text style={[styles.description]}>
+                            {i18n.t('generic.or')}
+                        </Text>
+                        <Pressable
+                            style={[
+                                styles.button,
+                                {
+                                    backgroundColor: 'transparent',
+                                    borderColor: ipctColors.borderGray,
+                                    borderWidth: 1,
+                                },
+                            ]}
+                            onPress={() => modalizeESolidar.current?.open()}
+                            testID="donateWithESolidar"
+                        >
+                            <View
+                                style={{
+                                    flexDirection: 'row',
+                                    flexWrap: 'wrap',
+                                    alignItems: 'center',
+                                    padding: 4,
+                                }}
+                            >
+                                <Text
+                                    numberOfLines={1}
+                                    style={{
+                                        fontFamily: 'Inter-Regular',
+                                        fontWeight: '500',
+                                        fontSize: ipctFontSize.small,
+                                        lineHeight: ipctLineHeight.large,
+                                        color: ipctColors.blueRibbon,
+                                    }}
+                                >
+                                    {i18n.t('donate.donateWithESolidar')}
+                                </Text>
+                            </View>
+                        </Pressable>
+                        <View
                             style={{
-                                fontFamily: 'Inter-Regular',
-                                fontWeight: '500',
-                                fontSize: width < 375 ? 11 : 16,
-                                lineHeight: width < 375 ? 22 : 28,
-                                color: ipctColors.blueRibbon,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                paddingHorizontal: 12,
                             }}
                         >
-                            {i18n.t('donate.donateWithESolidar')}
-                        </Text>
-                    </View>
-                </Pressable>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Text
-                        style={[
-                            styles.description,
-                            {
-                                color: ipctColors.regentGray,
-                                fontSize: width < 375 ? 11 : 14,
-                                marginRight: 4,
-                            },
-                        ]}
-                    >
-                        {i18n.t('donate.poweredByESolidar')}
-                    </Text>
-                    <Image source={require('assets/images/eSolidar.png')} />
-                </View>
+                            <Text
+                                style={[
+                                    styles.description,
+                                    {
+                                        color: ipctColors.regentGray,
+                                        marginRight: 4,
+                                    },
+                                ]}
+                            >
+                                {i18n.t('donate.poweredByESolidar')}
+                            </Text>
+                            <EsolidarSvg />
+                        </View>
+                    </>
+                )}
             </View>
             <Portal>
                 <Provider store={useStore()}>
@@ -177,16 +174,16 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: 'Inter-Bold',
         fontWeight: '700',
-        fontSize: 20,
-        lineHeight: 32,
+        fontSize: ipctFontSize.regular,
+        lineHeight: ipctLineHeight.xlarge,
         marginBottom: 8,
     },
     description: {
         fontFamily: 'Inter-Regular',
-        fontSize: 14,
+        fontSize: ipctFontSize.smaller,
+        lineHeight: ipctLineHeight.bigger,
         fontStyle: 'normal',
         fontWeight: '400',
-        lineHeight: 24,
         letterSpacing: 0,
         marginVertical: 8,
     },

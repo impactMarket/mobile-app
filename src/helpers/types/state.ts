@@ -59,6 +59,7 @@ export interface IAppState {
     kit: ContractKit;
     exchangeRates: { [key: string]: number };
     suspectWrongDateTime: boolean;
+    authModalOpen: boolean;
     hasBeneficiaryAcceptedRulesAlready: boolean;
     hasManagerAcceptedRulesAlready: boolean;
     timeDiff: number;
@@ -76,6 +77,7 @@ export interface IOfflineState {
 
 export interface ICommunitiesState {
     communities: CommunityAttributes[];
+    count: number;
     community: CommunityAttributes;
     refreshing: boolean;
     reachedEndList: boolean;

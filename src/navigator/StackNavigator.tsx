@@ -4,6 +4,7 @@ import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
+import CommunitiesScreen from 'views/communities';
 import ListCommunitiesScreen from 'views/communities/List';
 import AnonymousReportScreen from 'views/community/beneficiary/AnonymousReportScreen';
 import ClaimExplainedScreen from 'views/community/beneficiary/ClaimExplainedScreen';
@@ -19,6 +20,7 @@ import RemovedBeneficiaryScreen from 'views/community/manager/views/RemovedBenef
 import CreateCommunityScreen from 'views/createEditCommunity/create';
 import EditCommunityScreen from 'views/createEditCommunity/edit';
 import FAQScreen from 'views/faq';
+import ProfileScreen from 'views/profile';
 import StoriesScreen from 'views/stories';
 import Carousel from 'views/stories/Carousel';
 import NewStoryScreen from 'views/stories/NewStory';
@@ -28,20 +30,29 @@ import WelcomeScreen from 'views/welcome/index';
 import TabNavigator from './TabNavigator';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
-    <Navigator.Screen
-        name={Screens.Welcome}
-        component={WelcomeScreen}
-        options={WelcomeScreen.navigationOptions}
-    />
-);
-
-const commonScreens = (Navigator: typeof Stack) => (
     <>
         <Navigator.Screen
-            name="TabNavigator" // doesn't really matter here
-            component={TabNavigator}
-            // options={TabNavigator.navigationOptions}
+            name={Screens.Welcome}
+            component={WelcomeScreen}
+            options={WelcomeScreen.navigationOptions}
         />
+    </>
+);
+
+const commonScreens = (Navigator: typeof Stack, isInCommunity: boolean) => (
+    <>
+        {isInCommunity ? (
+            <Navigator.Screen
+                name="TabNavigator" // doesn't really matter here
+                component={TabNavigator}
+            />
+        ) : (
+            <Navigator.Screen
+                name={Screens.Communities}
+                component={CommunitiesScreen}
+                options={CommunitiesScreen.navigationOptions as any}
+            />
+        )}
         <Navigator.Screen
             name={Screens.CreateCommunity}
             component={CreateCommunityScreen}
@@ -97,6 +108,11 @@ const commonScreens = (Navigator: typeof Stack) => (
             component={ListCommunitiesScreen}
             options={ListCommunitiesScreen.navigationOptions}
         />
+        <Navigator.Screen
+            name={Screens.Profile}
+            component={ProfileScreen}
+            options={ProfileScreen.navigationOptions}
+        />
     </>
 );
 const beneficiaryScreens = (Navigator: typeof Stack) => (
@@ -113,7 +129,6 @@ const beneficiaryScreens = (Navigator: typeof Stack) => (
         />
     </>
 );
-
 const managerScreens = (Navigator: typeof Stack) => (
     <>
         <Navigator.Screen
@@ -174,7 +189,6 @@ function StackNavigator() {
                 headerStyle: {
                     elevation: 0, // remove shadow on Android
                     shadowOpacity: 0, // remove shadow on iOS
-                    // backgroundColor: 'tomato',
                     height: 100,
                 },
                 headerTintColor: '#fff',
@@ -188,7 +202,7 @@ function StackNavigator() {
             initialRouteName={fromWelcomeScreen}
         >
             {isAuthenticated || fromWelcomeScreen.length > 0
-                ? commonScreens(Stack)
+                ? commonScreens(Stack, isBeneficiary || isManager)
                 : welcomeScreen(Stack)}
             {isBeneficiary && beneficiaryScreens(Stack)}
             {isManager && managerScreens(Stack)}

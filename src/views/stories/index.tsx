@@ -7,7 +7,7 @@ import { FlatList } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import Api from 'services/api';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 import StoriesCard from 'views/communities/StoriesCard';
 
 function StoriesScreen() {
@@ -74,9 +74,9 @@ StoriesScreen.navigationOptions = () => {
         headerTitle: i18n.t('stories.stories'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
-            fontSize: 22,
-            lineHeight: 28,
-            color: '#333239',
+            fontSize: ipctFontSize.lowMedium,
+            lineHeight: ipctLineHeight.large,
+            color: ipctColors.darBlue,
         },
         headerTitleContainerStyle: {
             left: 58,

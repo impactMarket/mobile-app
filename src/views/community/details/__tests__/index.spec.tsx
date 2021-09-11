@@ -8,6 +8,7 @@ import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 import { createStore } from 'redux';
+import Api from 'services/api';
 import CommunityExtendedDetailsScreen from 'views/community/extendedDetails';
 
 import CommunityDetailsScreen from '../';
@@ -154,7 +155,19 @@ describe('details [snapshot]', () => {
         expect(tree.toJSON()).toMatchSnapshot();
     });
 
-    it('open "donate with esolidar"', async () => {
+    it('open "donate with esolidar when URL is present"', async () => {
+        const communityFundraisingUrl = jest.spyOn(
+            Api.community,
+            'getCampaign'
+        );
+
+        communityFundraisingUrl.mockImplementation(() =>
+            Promise.resolve({
+                communityId: 1,
+                campaignUrl: 'https://community.esolidar.com/pt/fake',
+            })
+        );
+
         const { getByTestId, queryByTestId } = render(
             <WrappedCommunityDetailsScreen />
         );
@@ -162,6 +175,25 @@ describe('details [snapshot]', () => {
 
         fireEvent.press(getByTestId('donateWithESolidar'));
         expect(queryByTestId('webViewESolidar')).not.toBeNull();
+    });
+
+    it('dont show "donate with esolidar button when URL isnt present"', async () => {
+        const communityFundraisingUrl = jest.spyOn(
+            Api.community,
+            'getCampaign'
+        );
+
+        communityFundraisingUrl.mockImplementation(() =>
+            Promise.resolve({
+                communityId: 1,
+                campaignUrl: null,
+            })
+        );
+
+        const { queryByTestId } = render(<WrappedCommunityDetailsScreen />);
+        await act(async () => {});
+
+        expect(queryByTestId('donateWithESolidar')).toBeNull();
     });
 
     it('open "donate with celo dollar"', async () => {

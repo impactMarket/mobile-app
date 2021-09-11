@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'react-native';
+import { ipctColors } from 'styles/index';
 
 export default function Dot() {
     return (
@@ -9,7 +10,7 @@ export default function Dot() {
                 fontFamily: 'Inter-Regular',
                 fontSize: 12,
                 lineHeight: 20,
-                color: '#73839D',
+                color: ipctColors.blueGray,
             }}
         >
             ·

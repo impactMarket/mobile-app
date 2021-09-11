@@ -331,6 +331,7 @@ export default {
         },
         profile: 'Profile',
         balance: 'Valora Wallet Balance',
+        uploadProfilePicture: 'Upload profile picture',
         phoneNumber: 'Phone Number',
         logout: 'Logout',
         stolenOrChangedPhone:
@@ -364,6 +365,7 @@ export default {
         largeSuspiciousActivityDetected:
             'A very large number of accounts  may be involved in suspicious activities.',
         fundsRunOut: 'Community funds will run out in {{days}}',
+        shareTitle: 'impactMarket | Decentralized Poverty Alleviation Protocol',
     },
     report: {
         report: 'Report',
@@ -429,6 +431,7 @@ export default {
         whatIsValora: 'What is Valora?',
         installAndCreateValoraAccount: 'Install and create Valora Account',
         connectWithValora: 'Connect with Valora',
+        duplicatedTitle: 'Duplicated Account',
         duplicatedMsg1:
             'Your phone number {{phoneNumber}} is associated with other impactMarket account.',
         duplicatedMsg2: 'Do you want login and disable all other accounts?',

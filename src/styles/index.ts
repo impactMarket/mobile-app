@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { moderateScale } from 'react-native-size-matters';
 
 // use https://chir.ag/projects/name-that-color
 export const ipctColors = {
@@ -18,6 +19,43 @@ export const ipctColors = {
     warningOrange: '#FE9A22',
     errorRed: '#EB5757',
     lynch: '#73839D',
+};
+
+export const ipctFontSize = {
+    tiny: moderateScale(11),
+    xsmall: moderateScale(12),
+    smaller: moderateScale(14),
+    small: moderateScale(16),
+    average: moderateScale(18),
+    regular: moderateScale(20),
+    lowMedium: moderateScale(22),
+    medium: moderateScale(24),
+    large: moderateScale(36),
+    huge: moderateScale(50),
+};
+
+export const ipctSpacing = {
+    none: 0,
+    tiny: moderateScale(2),
+    xsmall: moderateScale(4),
+    small: moderateScale(8),
+    medium: moderateScale(16),
+    regular: moderateScale(22),
+    big: moderateScale(24),
+    large: moderateScale(32),
+};
+
+export const ipctLineHeight = {
+    none: 0,
+    tiny: moderateScale(2),
+    xsmall: moderateScale(14),
+    smaller: moderateScale(16),
+    small: moderateScale(18),
+    medium: moderateScale(20),
+    big: moderateScale(22),
+    bigger: moderateScale(24),
+    large: moderateScale(28),
+    xlarge: moderateScale(32),
 };
 
 export default StyleSheet.create({});

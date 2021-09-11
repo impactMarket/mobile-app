@@ -1,41 +1,51 @@
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import renderHeader from 'components/core/HeaderBottomSheetTitle';
-import Select from 'components/core/Select';
+import Button from 'components/core/Button';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
-import * as Location from 'expo-location';
-import {
-    cleanCommunitiesListState,
-    fetchCommunitiesListRequest,
-} from 'helpers/redux/actions/communities';
-import { ITabBarIconProps } from 'helpers/types/common';
+import ProfileSvg from 'components/svg/ProfileSvg';
+import FAQSvg from 'components/svg/header/FaqSvg';
+import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
+import { Screens } from 'helpers/constants';
+import { ITabBarIconProps } from 'helpers/old-types';
+import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useState, useEffect, useRef } from 'react';
-import { Alert, FlatList, View } from 'react-native';
-import { Modalize } from 'react-native-modalize';
-import { RadioButton, Portal } from 'react-native-paper';
+import React, { useEffect, useRef } from 'react';
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    ScrollView,
+    View,
+    Pressable,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
+import Auth from 'views/profile/auth';
 
 import CommunityCard from './CommunityCard';
 import Stories from './Stories';
 
 function CommunitiesScreen() {
     const dispatch = useDispatch();
-    const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
-    const modalizeOrderRef = useRef<Modalize>(null);
-    const [communtiesOffset, setCommuntiesOffset] = useState(0);
-    const [communtiesOrder, setCommuntiesOrder] = useState('bigger');
-    const [userLocation, setUserLocation] = useState<
-        Location.LocationObject | undefined
-    >(undefined);
+    const navigation = useNavigation();
 
-    const [, setRefreshing] = useState(true);
+    const walletAddress = useSelector(
+        (state: IRootState) => state.user.wallet.address
+    );
+
+    const isManager = useSelector(
+        (state: IRootState) => state.user.community.isManager
+    );
+
+    const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
+
     const communities = useSelector(
         (state: IRootState) => state.communities.communities
     );
 
-    const reachedEndList = useSelector(
-        (state: IRootState) => state.communities.reachedEndList
+    const communitiesCount = useSelector(
+        (state: IRootState) => state.communities.count
     );
 
     useEffect(() => {
@@ -47,190 +57,111 @@ function CommunitiesScreen() {
         );
     }, [dispatch]);
 
-    const handleChangeOrder = async (order: string) => {
-        modalizeOrderRef.current?.close();
-        setRefreshing(true);
-        setCommuntiesOrder(order);
-        flatListRef.current?.scrollToIndex({ index: 0 });
-        if (order === 'nearest') {
-            try {
-                const { status } = await Location.requestPermissionsAsync();
-                if (status !== 'granted') {
-                    Alert.alert(
-                        i18n.t('generic.failure'),
-                        i18n.t('errors.gettingGPS'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
-                    return;
-                }
-                const location = await Location.getCurrentPositionAsync({
-                    accuracy: Location.Accuracy.Low,
-                });
-
-                setUserLocation(location);
-                dispatch(cleanCommunitiesListState());
-
-                dispatch(
-                    fetchCommunitiesListRequest({
-                        offset: 0,
-                        limit: 5,
-                        orderBy: 'nearest',
-                        lat: location.coords.latitude,
-                        lng: location.coords.longitude,
-                    })
-                );
-
-                setCommuntiesOffset(0);
-            } catch (e) {
-                setCommuntiesOrder('bigger');
-                setRefreshing(false);
-            }
-        } else {
-            dispatch(cleanCommunitiesListState());
-            dispatch(
-                fetchCommunitiesListRequest({
-                    offset: 0,
-                    limit: 5,
-                })
-            );
-        }
-    };
-
-    const handleOnEndReached = (info: { distanceFromEnd: number }) => {
-        if (!reachedEndList) {
-            setRefreshing(true);
-            if (communtiesOrder === 'nearest' && userLocation) {
-                dispatch(
-                    fetchCommunitiesListRequest({
-                        offset: communtiesOffset + 5,
-                        limit: 5,
-                        orderBy: 'nearest',
-                        lat: userLocation.coords.latitude,
-                        lng: userLocation.coords.longitude,
-                    })
-                );
-
-                setCommuntiesOffset(communtiesOffset + 5);
-                setRefreshing(false);
-            } else {
-                dispatch(
-                    fetchCommunitiesListRequest({
-                        offset: communtiesOffset + 5,
-                        limit: 5,
-                    })
-                );
-
-                setCommuntiesOffset(communtiesOffset + 5);
-                setRefreshing(false);
-            }
-        }
-    };
-
-    const textCommunitiesOrder = (g: string | null) => {
-        switch (g) {
-            case 'nearest':
-                return i18n.t('generic.nearest');
-            default:
-                return i18n.t('generic.bigger');
-        }
-    };
-
-    const filterHeader = () => {
-        return (
-            <>
-                <Stories />
-                <View style={{ marginHorizontal: 16, marginBottom: 22 }}>
-                    <Select
-                        value={textCommunitiesOrder(communtiesOrder)}
-                        onPress={() => modalizeOrderRef.current?.open()}
-                    />
-                </View>
-                {/* {refreshing && (
-                    <ActivityIndicator
-                        style={{ marginBottom: 22 }}
-                        animating
-                        color={ipctColors.blueRibbon}
-                    />
-                )} */}
-            </>
-        );
-    };
-
-    const renderCommunityOrder = () => {
-        return (
-            <Modalize
-                ref={modalizeOrderRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('generic.order'),
-                    modalizeOrderRef
-                )}
-                adjustToContentHeight
-            >
-                <View
-                    style={{
-                        height: 110,
-                    }}
-                >
-                    <RadioButton.Group
-                        onValueChange={(value) => handleChangeOrder(value)}
-                        value={communtiesOrder}
-                    >
-                        <RadioButton.Item
-                            key="bigger"
-                            label={i18n.t('generic.bigger')}
-                            value="bigger"
-                        />
-                        <RadioButton.Item
-                            key="nearest"
-                            label={i18n.t('generic.nearest')}
-                            value="nearest"
-                        />
-                    </RadioButton.Group>
-                </View>
-            </Modalize>
-        );
-    };
-
     return (
-        <>
+        <ScrollView>
+            <View
+                style={{
+                    marginHorizontal: 18,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 9,
+                }}
+            >
+                <Text style={styles.communityHeader}>
+                    {i18n.t('generic.communities')}
+                </Text>
+                <Pressable
+                    hitSlop={10}
+                    onPress={() => navigation.navigate(Screens.ListCommunities)}
+                >
+                    <Text style={styles.viewAll}>
+                        {i18n.t('generic.viewAll')} ({communitiesCount})
+                    </Text>
+                </Pressable>
+            </View>
             <FlatList
-                data={[
-                    { publicId: 'for-compliance-sake-really' } as any,
-                ].concat(communities)}
-                renderItem={({
-                    item,
-                    index,
-                }: {
-                    item: CommunityAttributes;
-                    index: number;
-                }) =>
-                    index === 0 ? (
-                        filterHeader()
-                    ) : (
-                        <CommunityCard community={item} />
-                    )
-                }
+                data={communities}
+                renderItem={({ item }: { item: CommunityAttributes }) => (
+                    <CommunityCard community={item} />
+                )}
                 ref={flatListRef}
                 keyExtractor={(item) => item.publicId}
-                onEndReachedThreshold={0.5}
-                onEndReached={handleOnEndReached}
-                showsVerticalScrollIndicator={false}
-                style={{ paddingTop: 20 }}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={{
+                    marginLeft: 14,
+                }}
             />
-            <Portal>{renderCommunityOrder()}</Portal>
-        </>
+            <Button
+                modeType="default"
+                style={{ marginHorizontal: 22, marginBottom: 36 }}
+                labelStyle={styles.buttomStoreText}
+                onPress={() =>
+                    walletAddress.length > 0
+                        ? navigation.navigate(Screens.CreateCommunity)
+                        : isManager
+                        ? navigation.navigate(Screens.CommunityManager)
+                        : navigation.navigate(Screens.Auth)
+                }
+            >
+                <Text style={styles.buttomStoreText}>
+                    {i18n.t('createCommunity.applyCommunity')}
+                </Text>
+            </Button>
+            <Stories />
+            <Auth />
+        </ScrollView>
     );
 }
 
 CommunitiesScreen.navigationOptions = () => {
     return {
-        headerTitle: i18n.t('generic.communities'),
         tabBarLabel: i18n.t('generic.communities'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <CommunitiesSvg focused={props.focused} />
         ),
+        headerLeft: () => (
+            <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />
+        ),
+        headerRight: () => (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginRight: 22,
+                }}
+            >
+                <FAQSvg />
+                <ProfileSvg />
+            </View>
+        ),
+        headerTitle: '',
     };
 };
+
+const styles = StyleSheet.create({
+    communityHeader: {
+        fontFamily: 'Manrope-Bold',
+        fontSize: ipctFontSize.medium,
+        lineHeight: ipctLineHeight.xlarge,
+        color: ipctColors.almostBlack,
+    },
+    viewAll: {
+        color: ipctColors.blueRibbon,
+        fontFamily: 'Inter-Regular',
+        fontSize: ipctFontSize.small,
+        lineHeight: ipctLineHeight.large,
+        textAlign: 'center',
+    },
+    buttomStoreText: {
+        fontSize: ipctFontSize.small,
+        // lineHeight: ipctLineHeight.large,
+        color: ipctColors.white,
+        fontFamily: 'Inter-Regular',
+        fontWeight: '500',
+    },
+});
 
 export default CommunitiesScreen;

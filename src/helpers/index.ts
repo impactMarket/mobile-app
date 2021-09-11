@@ -199,24 +199,27 @@ export function calculateCommunityRemainedFunds(
         return 0;
     }
 
-    const raised = new BigNumber(community.state.raised);
-    const claimed = new BigNumber(community.state.claimed);
-    const ubiRate = community.metrics?.ubiRate ?? 0;
+    const raised = new BigNumber(community.state.raised); // 10.15 string
+    const claimed = new BigNumber(community.state.claimed); // 0
     const beneficiaryCount = community.state.beneficiaries;
 
-    const remainingFundToBeClaimed =
-        raised.toNumber() - claimed.toNumber() / ubiRate / beneficiaryCount;
+    const remainingFundToBeClaimed = raised.minus(claimed);
+
+    const claimInterval = community.contract.baseInterval;
 
     const claimAmountPerBeneficiary = new BigNumber(
         community.contract.claimAmount
     );
 
     const communityLimitPerDay =
-        claimAmountPerBeneficiary.toNumber() * beneficiaryCount;
+        // Check if claimInterval(baseInterval) is daily if not it takes claimAmountPerBeneficiary / 7 days (week) to delivery as a daily rate.
+        claimInterval === 86400
+            ? claimAmountPerBeneficiary.multipliedBy(beneficiaryCount)
+            : claimAmountPerBeneficiary.div(7).multipliedBy(beneficiaryCount);
 
-    const remainingDays = remainingFundToBeClaimed / communityLimitPerDay;
+    const remainingDays = remainingFundToBeClaimed.div(communityLimitPerDay);
 
-    return remainingDays <= 1 ? 1 : Math.round(remainingDays);
+    return remainingDays.lte(1) ? 1 : remainingDays.toNumber();
 }
 
 export function getCountryFromPhoneNumber(pnumber: string) {

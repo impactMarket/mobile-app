@@ -157,6 +157,11 @@ interface SetAppFromWelcomeScreen {
     payload: string;
 }
 
+interface SetOpenAuthModalAction {
+    type: typeof appAction.SET_OPEN_AUTH_MODAL;
+    payload: boolean;
+}
+
 interface SetAppEchangeRatesAction {
     type: typeof SET_EXCHANGE_RATES;
     payload: any;
@@ -249,7 +254,11 @@ interface InitLoadCommunitiesActionRequest {
 
 interface InitLoadCommunitiesActionSuccess {
     type: typeof communitiesAction.INIT_SUCCESS;
-    payload: { communities: CommunityAttributes[]; reachedEndList: boolean };
+    payload: {
+        communities: CommunityAttributes[];
+        count?: number;
+        reachedEndList: boolean;
+    };
 }
 
 interface InitLoadCommunitiesActionFailure {
@@ -307,6 +316,7 @@ export type AppActionTypes =
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime
     | SetAppFromWelcomeScreen
+    | SetOpenAuthModalAction
     | SetAppPushNotificationListeners
     | UserSetBeneficiaryAcceptedRulesAction
     | UserSetManagerAcceptedRulesAction;

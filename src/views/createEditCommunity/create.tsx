@@ -35,7 +35,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 import config from '../../../config';
 import CommunityContractABI from '../../contracts/CommunityABI.json';
@@ -248,8 +248,8 @@ function CreateCommunityScreen() {
         coverUploadDetails,
         profileUploadDetails,
         isUploadingContent,
-        state.profileImage.length,
-        userMetadata.avatar.length,
+        state.profileImage,
+        userMetadata.avatar,
         submitCommunity,
         uploadImages,
     ]);
@@ -766,9 +766,9 @@ CreateCommunityScreen.navigationOptions = () => {
         headerTitle: i18n.t('createCommunity.applyCommunity'),
         headerTitleStyle: {
             fontFamily: 'Manrope-Bold',
-            fontSize: 22,
-            lineHeight: 28,
-            color: '#333239',
+            fontSize: ipctFontSize.lowMedium,
+            lineHeight: ipctLineHeight.large,
+            color: ipctColors.darBlue,
         },
         headerTitleContainerStyle: {
             left: 58,

@@ -609,476 +609,264 @@ Array [
                                 "borderRadius": 12,
                                 "borderWidth": 1,
                                 "marginVertical": 16,
-                                "padding": 16,
                               }
                             }
                           >
                             <View
                               style={
                                 Object {
-                                  "alignItems": "flex-end",
-                                  "flex": 2,
-                                  "flexDirection": "row",
-                                  "justifyContent": "center",
+                                  "paddingBottom": 16,
+                                  "paddingHorizontal": 16,
                                 }
                               }
                             >
                               <View
                                 style={
                                   Object {
-                                    "alignItems": "flex-start",
-                                    "flex": 1,
-                                    "justifyContent": "center",
+                                    "marginTop": 7,
                                   }
                                 }
-                              >
-                                <Text
-                                  style={
-                                    Array [
-                                      Object {
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 14,
-                                        "fontStyle": "normal",
-                                        "fontWeight": "400",
-                                        "letterSpacing": 0,
-                                        "lineHeight": 24,
-                                        "textAlign": "left",
-                                      },
-                                      Object {
-                                        "color": "#7E8DA6",
-                                        "fontSize": 14,
-                                        "lineHeight": 24,
-                                      },
-                                    ]
-                                  }
-                                >
-                                  Raised from 
-                                  Backers
-                                </Text>
-                                <Text
-                                  style={
-                                    Array [
-                                      Object {
-                                        "color": "#333239",
-                                        "fontFamily": "Inter-Bold",
-                                        "fontSize": 20,
-                                        "lineHeight": 32,
-                                      },
-                                      Object {
-                                        "fontSize": 20,
-                                      },
-                                    ]
-                                  }
-                                >
-                                  $62,151.14
-                                </Text>
-                              </View>
-                              <View
-                                style={
-                                  Object {
-                                    "alignItems": "flex-end",
-                                    "flex": 1,
-                                    "justifyContent": "center",
-                                  }
-                                }
-                              >
-                                <Text
-                                  style={
-                                    Array [
-                                      Object {
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 14,
-                                        "fontStyle": "normal",
-                                        "fontWeight": "400",
-                                        "letterSpacing": 0,
-                                        "lineHeight": 24,
-                                        "textAlign": "left",
-                                      },
-                                      Object {
-                                        "color": "#7E8DA6",
-                                        "fontSize": 14,
-                                        "lineHeight": 24,
-                                      },
-                                    ]
-                                  }
-                                >
-                                  Goal
-                                </Text>
-                                <Text
-                                  style={
-                                    Array [
-                                      Object {
-                                        "color": "#333239",
-                                        "fontFamily": "Inter-Bold",
-                                        "fontSize": 20,
-                                        "lineHeight": 32,
-                                      },
-                                      Object {
-                                        "fontSize": 20,
-                                      },
-                                    ]
-                                  }
-                                >
-                                  $262,400
-                                </Text>
-                              </View>
-                            </View>
-                            <View
-                              style={
-                                Object {
-                                  "marginTop": 7.5,
-                                }
-                              }
-                            >
-                              <View
-                                accessibilityRole="progressbar"
-                                accessible={true}
-                                onLayout={[Function]}
                               >
                                 <View
                                   style={
                                     Object {
-                                      "backgroundColor": "#E9EDF4",
-                                      "borderRadius": 6.5,
-                                      "height": 6.32,
-                                      "opacity": 0,
-                                      "overflow": "hidden",
-                                      "position": "absolute",
+                                      "flex": 1,
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
                                     }
                                   }
+                                >
+                                  <Text
+                                    style={
+                                      Array [
+                                        Object {
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 22,
+                                          "fontStyle": "normal",
+                                          "fontWeight": "400",
+                                          "letterSpacing": 0,
+                                          "lineHeight": 37.714285714285715,
+                                          "textAlign": "left",
+                                        },
+                                        Object {
+                                          "color": "#7E8DA6",
+                                        },
+                                      ]
+                                    }
+                                  >
+                                    Raised from 37
+                                     
+                                    Backers
+                                  </Text>
+                                  <Text
+                                    style={
+                                      Array [
+                                        Object {
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 22,
+                                          "fontStyle": "normal",
+                                          "fontWeight": "400",
+                                          "letterSpacing": 0,
+                                          "lineHeight": 37.714285714285715,
+                                          "textAlign": "left",
+                                        },
+                                        Object {
+                                          "color": "#7E8DA6",
+                                        },
+                                      ]
+                                    }
+                                  >
+                                    Goal
+                                  </Text>
+                                </View>
+                                <View
+                                  style={
+                                    Object {
+                                      "flex": 1,
+                                      "flexDirection": "row",
+                                      "justifyContent": "space-between",
+                                    }
+                                  }
+                                >
+                                  <Text
+                                    style={
+                                      Object {
+                                        "color": "#333239",
+                                        "fontFamily": "Inter-Bold",
+                                        "fontSize": 25.142857142857142,
+                                        "lineHeight": 50.285714285714285,
+                                      }
+                                    }
+                                  >
+                                    $62,151.14
+                                     (23.69%)
+                                  </Text>
+                                  <Text
+                                    style={
+                                      Object {
+                                        "color": "#333239",
+                                        "fontFamily": "Inter-Bold",
+                                        "fontSize": 25.142857142857142,
+                                        "lineHeight": 50.285714285714285,
+                                      }
+                                    }
+                                  >
+                                    $262,400
+                                  </Text>
+                                </View>
+                              </View>
+                              <View
+                                style={
+                                  Object {
+                                    "marginTop": 7.5,
+                                  }
+                                }
+                              >
+                                <View
+                                  accessibilityRole="progressbar"
+                                  accessible={true}
+                                  onLayout={[Function]}
                                 >
                                   <View
                                     style={
                                       Object {
-                                        "backgroundColor": "#2362FB",
-                                        "flex": 1,
-                                        "transform": Array [
-                                          Object {
-                                            "translateX": -0,
-                                          },
-                                          Object {
-                                            "scaleX": 0.0001,
-                                          },
-                                        ],
-                                        "width": 0,
+                                        "backgroundColor": "#E9EDF4",
+                                        "borderRadius": 6.5,
+                                        "height": 6.32,
+                                        "opacity": 0,
+                                        "overflow": "hidden",
+                                        "position": "absolute",
                                       }
                                     }
-                                  />
+                                  >
+                                    <View
+                                      style={
+                                        Object {
+                                          "backgroundColor": "#6200ee",
+                                          "flex": 1,
+                                          "transform": Array [
+                                            Object {
+                                              "translateX": -0,
+                                            },
+                                            Object {
+                                              "scaleX": 0.0001,
+                                            },
+                                          ],
+                                          "width": 0,
+                                        }
+                                      }
+                                    />
+                                  </View>
                                 </View>
-                              </View>
-                            </View>
-                            <View
-                              style={
-                                Array [
-                                  Object {
-                                    "alignItems": "center",
-                                    "flex": 1,
-                                    "flexDirection": "row",
-                                    "marginVertical": 22,
-                                    "paddingHorizontal": 8,
-                                  },
-                                  Object {
-                                    "alignItems": "center",
-                                    "justifyContent": "center",
-                                  },
-                                ]
-                              }
-                            >
-                              <RNSVGSvgView
-                                align="xMidYMid"
-                                bbHeight={16}
-                                bbWidth={16}
-                                color={4294875682}
-                                fill="none"
-                                focusable={false}
-                                height={16}
-                                meetOrSlice={0}
-                                minX={0}
-                                minY={0}
-                                style={
-                                  Array [
-                                    Object {
-                                      "backgroundColor": "transparent",
-                                      "borderWidth": 0,
-                                    },
-                                    Object {
-                                      "marginTop": 0,
-                                    },
-                                    Object {
-                                      "flex": 0,
-                                      "height": 16,
-                                      "width": 16,
-                                    },
-                                  ]
-                                }
-                                tintColor={4294875682}
-                                vbHeight={16}
-                                vbWidth={16}
-                                width={16}
-                              >
-                                <RNSVGGroup
-                                  fill={null}
-                                  propList={
+                                <View
+                                  style={
                                     Array [
-                                      "fill",
+                                      Object {
+                                        "alignItems": "center",
+                                        "flex": 1,
+                                        "flexDirection": "row",
+                                        "marginVertical": 22,
+                                        "paddingHorizontal": 8,
+                                      },
+                                      Object {
+                                        "alignItems": "flex-start",
+                                        "justifyContent": "center",
+                                      },
                                     ]
                                   }
                                 >
-                                  <RNSVGPath
-                                    d="M15.22 11.998L9.73 1.608a2.244 2.244 0 00-3.917 0l-5.49 10.39c-.902 1.563.19 3.54 1.958 3.54h10.981c1.766 0 2.86-1.976 1.958-3.54zM7.77 13.664c-.502 0-.91-.42-.91-.938 0-.517.408-.937.91-.937s.911.42.911.937c0 .517-.409.938-.91.938zm.911-3.75c0 .517-.409.937-.91.937-.503 0-.911-.42-.911-.937V5.226c0-.517.408-.937.91-.937s.911.42.911.937v4.688z"
-                                    fill={4294875682}
-                                    propList={
-                                      Array [
-                                        "fill",
-                                      ]
-                                    }
-                                  />
-                                </RNSVGGroup>
-                              </RNSVGSvgView>
-                              <Text
-                                style={
-                                  Array [
-                                    Object {
-                                      "fontFamily": "Inter-Regular",
-                                      "fontSize": 14,
-                                      "fontStyle": "normal",
-                                      "fontWeight": "400",
-                                      "letterSpacing": 0,
-                                      "lineHeight": 24,
-                                      "textAlign": "left",
-                                    },
-                                    Object {
-                                      "color": "#7E8DA6",
-                                      "fontSize": 14,
-                                      "lineHeight": 24,
-                                      "marginLeft": 7,
-                                    },
-                                  ]
-                                }
-                              >
-                                Community funds will run out in 1
-                                 
-                                day
-                                .
-                              </Text>
-                            </View>
-                            <View
-                              style={
-                                Object {
-                                  "backgroundColor": "#E9EDF4",
-                                  "height": 1,
-                                }
-                              }
-                            />
-                            <View
-                              style={
-                                Object {
-                                  "alignItems": "center",
-                                  "flex": 1,
-                                  "justifyContent": "center",
-                                  "marginTop": 18,
-                                }
-                              }
-                            >
-                              <Text
-                                style={
-                                  Array [
-                                    Object {
-                                      "color": "#000000",
-                                      "fontFamily": "System",
-                                      "fontWeight": "400",
-                                      "textAlign": "left",
-                                    },
-                                    Array [
-                                      Object {
-                                        "color": "rgba(0, 0, 0, 0.87)",
-                                        "fontFamily": "System",
-                                        "fontWeight": "500",
-                                        "textAlign": "left",
-                                        "writingDirection": "ltr",
-                                      },
+                                  <RNSVGSvgView
+                                    align="xMidYMid"
+                                    bbHeight={16}
+                                    bbWidth={16}
+                                    color={4294875682}
+                                    fill="none"
+                                    focusable={false}
+                                    height={16}
+                                    meetOrSlice={0}
+                                    minX={0}
+                                    minY={0}
+                                    style={
                                       Array [
                                         Object {
-                                          "fontSize": 20,
-                                          "letterSpacing": 0.15,
-                                          "lineHeight": 30,
-                                          "marginVertical": 2,
+                                          "backgroundColor": "transparent",
+                                          "borderWidth": 0,
                                         },
+                                        Object {
+                                          "alignSelf": "center",
+                                          "marginTop": 6.285714285714286,
+                                        },
+                                        Object {
+                                          "flex": 0,
+                                          "height": 16,
+                                          "width": 16,
+                                        },
+                                      ]
+                                    }
+                                    tintColor={4294875682}
+                                    vbHeight={16}
+                                    vbWidth={16}
+                                    width={16}
+                                  >
+                                    <RNSVGGroup
+                                      fill={null}
+                                      propList={
                                         Array [
-                                          Object {
-                                            "fontFamily": "Inter-Bold",
-                                            "fontSize": 20,
-                                            "fontWeight": "700",
-                                            "lineHeight": 32,
-                                            "marginBottom": 8,
-                                          },
-                                          Object {
-                                            "fontSize": 20,
-                                          },
-                                        ],
-                                      ],
-                                    ],
-                                  ]
-                                }
-                              >
-                                Contribute with
-                              </Text>
+                                          "fill",
+                                        ]
+                                      }
+                                    >
+                                      <RNSVGPath
+                                        d="M15.22 11.998L9.73 1.608a2.244 2.244 0 00-3.917 0l-5.49 10.39c-.902 1.563.19 3.54 1.958 3.54h10.981c1.766 0 2.86-1.976 1.958-3.54zM7.77 13.664c-.502 0-.91-.42-.91-.938 0-.517.408-.937.91-.937s.911.42.911.937c0 .517-.409.938-.91.938zm.911-3.75c0 .517-.409.937-.91.937-.503 0-.911-.42-.911-.937V5.226c0-.517.408-.937.91-.937s.911.42.911.937v4.688z"
+                                        fill={4294875682}
+                                        propList={
+                                          Array [
+                                            "fill",
+                                          ]
+                                        }
+                                      />
+                                    </RNSVGGroup>
+                                  </RNSVGSvgView>
+                                  <Text
+                                    style={
+                                      Array [
+                                        Object {
+                                          "fontFamily": "Inter-Regular",
+                                          "fontSize": 22,
+                                          "fontStyle": "normal",
+                                          "fontWeight": "400",
+                                          "letterSpacing": 0,
+                                          "lineHeight": 37.714285714285715,
+                                          "textAlign": "left",
+                                        },
+                                        Object {
+                                          "color": "#7E8DA6",
+                                          "marginLeft": 7,
+                                        },
+                                      ]
+                                    }
+                                  >
+                                    Community funds will run out in 1
+                                     
+                                    day
+                                  </Text>
+                                </View>
+                              </View>
                               <View
-                                accessible={true}
-                                focusable={true}
-                                onBlur={[Function]}
-                                onClick={[Function]}
-                                onFocus={[Function]}
-                                onResponderGrant={[Function]}
-                                onResponderMove={[Function]}
-                                onResponderRelease={[Function]}
-                                onResponderTerminate={[Function]}
-                                onResponderTerminationRequest={[Function]}
-                                onStartShouldSetResponder={[Function]}
+                                style={
+                                  Object {
+                                    "backgroundColor": "#E9EDF4",
+                                    "height": 1,
+                                  }
+                                }
+                              />
+                              <View
                                 style={
                                   Object {
                                     "alignItems": "center",
-                                    "backgroundColor": "#2362FB",
-                                    "borderRadius": 6,
-                                    "height": 44,
+                                    "flex": 1,
                                     "justifyContent": "center",
-                                    "width": "100%",
-                                  }
-                                }
-                                testID="donateWithCelo"
-                              >
-                                <View
-                                  style={
-                                    Object {
-                                      "alignItems": "center",
-                                      "flexDirection": "row",
-                                    }
-                                  }
-                                >
-                                  <Text
-                                    style={
-                                      Array [
-                                        Object {
-                                          "color": "#000000",
-                                          "fontFamily": "System",
-                                          "fontWeight": "400",
-                                          "textAlign": "left",
-                                        },
-                                        Object {
-                                          "color": "white",
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 16,
-                                          "lineHeight": 28,
-                                          "marginRight": 10,
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    Celo Dollar ($cUSD)
-                                  </Text>
-                                  <Image
-                                    height={22}
-                                    source={1}
-                                    width={22}
-                                  />
-                                </View>
-                              </View>
-                              <Text
-                                style={
-                                  Array [
-                                    Object {
-                                      "color": "#000000",
-                                      "fontFamily": "System",
-                                      "fontWeight": "400",
-                                      "textAlign": "left",
-                                    },
-                                    Array [
-                                      Object {
-                                        "fontFamily": "Inter-Regular",
-                                        "fontSize": 14,
-                                        "fontStyle": "normal",
-                                        "fontWeight": "400",
-                                        "letterSpacing": 0,
-                                        "lineHeight": 24,
-                                        "marginVertical": 8,
-                                      },
-                                      Object {
-                                        "fontSize": 16,
-                                      },
-                                    ],
-                                  ]
-                                }
-                              >
-                                or
-                              </Text>
-                              <View
-                                accessible={true}
-                                focusable={true}
-                                onBlur={[Function]}
-                                onClick={[Function]}
-                                onFocus={[Function]}
-                                onResponderGrant={[Function]}
-                                onResponderMove={[Function]}
-                                onResponderRelease={[Function]}
-                                onResponderTerminate={[Function]}
-                                onResponderTerminationRequest={[Function]}
-                                onStartShouldSetResponder={[Function]}
-                                style={
-                                  Array [
-                                    Object {
-                                      "alignItems": "center",
-                                      "backgroundColor": "#2362FB",
-                                      "borderRadius": 6,
-                                      "height": 44,
-                                      "justifyContent": "center",
-                                      "width": "100%",
-                                    },
-                                    Object {
-                                      "backgroundColor": "transparent",
-                                      "borderColor": "#8A9FC2",
-                                      "borderWidth": 1,
-                                    },
-                                  ]
-                                }
-                                testID="donateWithESolidar"
-                              >
-                                <View
-                                  style={
-                                    Object {
-                                      "alignItems": "center",
-                                      "flexDirection": "row",
-                                      "flexWrap": "wrap",
-                                    }
-                                  }
-                                >
-                                  <Text
-                                    style={
-                                      Array [
-                                        Object {
-                                          "color": "#000000",
-                                          "fontFamily": "System",
-                                          "fontWeight": "400",
-                                          "textAlign": "left",
-                                        },
-                                        Object {
-                                          "color": "#2362FB",
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 16,
-                                          "fontWeight": "500",
-                                          "lineHeight": 28,
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    Credit Card / Paypal / BTC / ETH
-                                  </Text>
-                                </View>
-                              </View>
-                              <View
-                                style={
-                                  Object {
-                                    "alignItems": "center",
-                                    "flexDirection": "row",
+                                    "marginTop": 18,
                                   }
                                 }
                               >
@@ -1093,28 +881,163 @@ Array [
                                       },
                                       Array [
                                         Object {
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 14,
-                                          "fontStyle": "normal",
-                                          "fontWeight": "400",
-                                          "letterSpacing": 0,
-                                          "lineHeight": 24,
-                                          "marginVertical": 8,
+                                          "color": "rgba(0, 0, 0, 0.87)",
+                                          "fontFamily": "System",
+                                          "fontWeight": "500",
+                                          "textAlign": "left",
+                                          "writingDirection": "ltr",
                                         },
-                                        Object {
-                                          "color": "#7E8DA6",
-                                          "fontSize": 14,
-                                          "marginRight": 4,
-                                        },
+                                        Array [
+                                          Object {
+                                            "fontSize": 20,
+                                            "letterSpacing": 0.15,
+                                            "lineHeight": 30,
+                                            "marginVertical": 2,
+                                          },
+                                          Array [
+                                            Object {
+                                              "fontFamily": "Inter-Bold",
+                                              "fontSize": 31.428571428571427,
+                                              "fontWeight": "700",
+                                              "lineHeight": 50.285714285714285,
+                                              "marginBottom": 8,
+                                            },
+                                            Object {
+                                              "fontSize": 20,
+                                            },
+                                          ],
+                                        ],
                                       ],
                                     ]
                                   }
                                 >
-                                  Powered by
+                                  Contribute with
                                 </Text>
-                                <Image
-                                  source={1}
-                                />
+                                <View
+                                  accessible={true}
+                                  focusable={true}
+                                  onBlur={[Function]}
+                                  onClick={[Function]}
+                                  onFocus={[Function]}
+                                  onResponderGrant={[Function]}
+                                  onResponderMove={[Function]}
+                                  onResponderRelease={[Function]}
+                                  onResponderTerminate={[Function]}
+                                  onResponderTerminationRequest={[Function]}
+                                  onStartShouldSetResponder={[Function]}
+                                  style={
+                                    Object {
+                                      "alignItems": "center",
+                                      "backgroundColor": "#2362FB",
+                                      "borderRadius": 6,
+                                      "height": 44,
+                                      "justifyContent": "center",
+                                      "width": "100%",
+                                    }
+                                  }
+                                  testID="donateWithCelo"
+                                >
+                                  <View
+                                    style={
+                                      Object {
+                                        "alignItems": "center",
+                                        "flexDirection": "row",
+                                        "padding": 12,
+                                      }
+                                    }
+                                  >
+                                    <Text
+                                      style={
+                                        Array [
+                                          Object {
+                                            "color": "#000000",
+                                            "fontFamily": "System",
+                                            "fontWeight": "400",
+                                            "textAlign": "left",
+                                          },
+                                          Object {
+                                            "color": "white",
+                                            "fontFamily": "Inter-Regular",
+                                            "fontSize": 25.142857142857142,
+                                            "lineHeight": 44,
+                                            "marginRight": 10,
+                                          },
+                                        ]
+                                      }
+                                    >
+                                      Celo Dollar ($cUSD)
+                                    </Text>
+                                    <RNSVGSvgView
+                                      align="xMidYMid"
+                                      bbHeight={28}
+                                      bbWidth={28}
+                                      fill="none"
+                                      focusable={false}
+                                      height={28}
+                                      meetOrSlice={0}
+                                      minX={0}
+                                      minY={0}
+                                      style={
+                                        Array [
+                                          Object {
+                                            "backgroundColor": "transparent",
+                                            "borderWidth": 0,
+                                          },
+                                          Object {
+                                            "flex": 0,
+                                            "height": 28,
+                                            "width": 28,
+                                          },
+                                        ]
+                                      }
+                                      vbHeight={28}
+                                      vbWidth={28}
+                                      width={28}
+                                    >
+                                      <RNSVGGroup
+                                        fill={null}
+                                        propList={
+                                          Array [
+                                            "fill",
+                                          ]
+                                        }
+                                      >
+                                        <RNSVGCircle
+                                          cx={14}
+                                          cy={14}
+                                          fill={4282764677}
+                                          propList={
+                                            Array [
+                                              "fill",
+                                            ]
+                                          }
+                                          r={14}
+                                        />
+                                        <RNSVGPath
+                                          clipRule={0}
+                                          d="M18.1 17.111a4.457 4.457 0 11-5.93-6.217V8.58a6.588 6.588 0 108.285 8.533h-2.354z"
+                                          fill={4294967295}
+                                          fillRule={0}
+                                          propList={
+                                            Array [
+                                              "fill",
+                                              "fillRule",
+                                            ]
+                                          }
+                                        />
+                                        <RNSVGPath
+                                          d="M17.79 6.372a3.119 3.119 0 011.768.855c.203.203.36.413.469.632.11.219.168.414.175.586a.22.22 0 01-.07.187.28.28 0 01-.187.07h-.48a.421.421 0 01-.211-.047.558.558 0 01-.152-.21 1.768 1.768 0 00-.2-.293 1.422 1.422 0 00-.363-.352 1.927 1.927 0 00-.55-.292 2.073 2.073 0 00-.762-.13c-.218 0-.429.028-.632.083-.195.047-.37.12-.527.222a1.18 1.18 0 00-.375.387.966.966 0 00-.14.527.97.97 0 00.128.515c.094.14.239.27.434.387.203.11.457.21.761.304.305.094.676.2 1.113.316.445.118.82.247 1.124.387.313.14.566.3.762.48.195.172.335.375.421.61.094.226.14.483.14.772 0 .32-.062.617-.187.89a2.083 2.083 0 01-.538.715c-.227.203-.504.37-.832.504a3.906 3.906 0 01-1.09.257v.761c0 .086-.03.16-.093.223a.304.304 0 01-.223.094h-.48a.304.304 0 01-.222-.094.304.304 0 01-.094-.223v-.784a3.448 3.448 0 01-1.019-.305 3.685 3.685 0 01-.796-.515 2.417 2.417 0 01-.516-.633 1.562 1.562 0 01-.199-.679c0-.07.024-.129.07-.176a.258.258 0 01.188-.082h.48c.078 0 .145.016.2.047.062.032.116.102.163.211.047.11.117.23.211.363.101.125.234.246.398.363.164.11.363.203.598.281.234.079.511.117.831.117.273 0 .531-.03.773-.093.25-.063.469-.152.656-.27.187-.117.336-.257.445-.421a.97.97 0 00.164-.55.748.748 0 00-.187-.516 1.668 1.668 0 00-.54-.398 4.75 4.75 0 00-.866-.316 27.16 27.16 0 00-1.148-.317 4.86 4.86 0 01-.995-.363 2.537 2.537 0 01-.668-.503 1.764 1.764 0 01-.375-.621 2.478 2.478 0 01-.105-.738 2.165 2.165 0 01.55-1.44 2.41 2.41 0 01.703-.516c.281-.14.61-.234.984-.281v-.773c0-.086.031-.16.094-.223a.304.304 0 01.222-.093h.48c.086 0 .16.03.223.093a.304.304 0 01.094.223v.785z"
+                                          fill={4294967295}
+                                          propList={
+                                            Array [
+                                              "fill",
+                                            ]
+                                          }
+                                        />
+                                      </RNSVGGroup>
+                                    </RNSVGSvgView>
+                                  </View>
+                                </View>
                               </View>
                             </View>
                           </View>

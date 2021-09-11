@@ -173,12 +173,12 @@ function ListCommunitiesScreen() {
                 limit: 10,
             })
             .then((c) => {
-                if (c.length < 10) {
+                if (c.data.length < 10) {
                     setReachedEndList(true);
                 } else {
                     setReachedEndList(false);
                 }
-                setCommunities(c);
+                setCommunities(c.data);
             })
             .finally(() => setRefreshing(false));
     }, []);
@@ -208,14 +208,14 @@ function ListCommunitiesScreen() {
             Api.community
                 .list(queryList)
                 .then((c) => {
-                    if (c.length < 10) {
+                    if (c.data.length < 10) {
                         setReachedEndList(true);
                     }
                     // as the users keeps scrolling, communities might get a different order
                     // and eventually be repeated
                     setCommunities([
                         ...new Map(
-                            [...communities, ...c].map((item) => [
+                            [...communities, ...c.data].map((item) => [
                                 item.id,
                                 item,
                             ])

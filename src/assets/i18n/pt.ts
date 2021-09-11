@@ -376,7 +376,9 @@ export default {
             'Um número significativo de contas pode estar envolvido em atividades suspeitas.',
         largeSuspiciousActivityDetected:
             'Um grande número de contas pode estar envolvido em atividades suspeitas.',
-        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}} dias.',
+        fundsRunOut: 'Os fundos da comunidade acabarão em {{days}}',
+        shareTitle:
+            'impactMarket | Protocolo Descentralizado de Redução da Pobreza',
     },
     report: {
         report: 'Relatório',

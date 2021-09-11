@@ -10,7 +10,7 @@ import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
-import { ipctColors } from 'styles/index';
+import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 import MyStoriesCard from './MyStoriesCard';
 import NewStoryCard from './NewStoryCard';
@@ -53,10 +53,10 @@ export default function Stories() {
             >
                 <Text
                     style={{
-                        fontFamily: 'Gelion-Bold',
-                        fontSize: 20,
-                        lineHeight: 23.44,
-                        color: '#1E3252',
+                        fontFamily: 'Manrope-Bold',
+                        fontSize: ipctFontSize.medium,
+                        lineHeight: ipctLineHeight.xlarge,
+                        color: ipctColors.almostBlack,
                     }}
                 >
                     {i18n.t('stories.stories')}
@@ -72,11 +72,10 @@ export default function Stories() {
                     <Text
                         style={{
                             color: ipctColors.blueRibbon,
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 16,
-                            lineHeight: 19,
+                            fontFamily: 'Inter-Regular',
+                            fontSize: ipctFontSize.small,
+                            lineHeight: ipctLineHeight.large,
                             textAlign: 'center',
-                            letterSpacing: 0.366667,
                         }}
                     >
                         {i18n.t('generic.viewAll')} ({countStories})
