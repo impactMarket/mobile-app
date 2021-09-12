@@ -49,6 +49,7 @@ export default {
         backers: 'Backer',
         backers_plural: 'Backers',
         or: 'or',
+        ok: 'Ok',
         cancel: 'Cancel',
         confirm: 'Confirm',
         raisedFrom: 'Raised from {{backers}}',
@@ -77,7 +78,6 @@ export default {
         yourQRCode: 'Your QR Code',
         close: 'Close',
         faq: 'FAQ',
-        leave: 'Leave',
         oneTimeWelcomeMessage1:
             'impactMarket enables any community to setup its own Unconditional Basic Income for their beneficiaries. Anyone can back those communities by donating directly to their UBI contracts.',
         exploreCommunities: 'Explore Communities',
@@ -118,6 +118,16 @@ export default {
         welcome: 'Welcome!',
     },
     createCommunity: {
+        recoverForm: {
+            title: 'Continue submission',
+            message:
+                'We have saved your previous application. Do you want to continue editing it?',
+        },
+        leave: {
+            title: 'Leave form',
+            message:
+                'All the information you provided in this form will still be available next time you continue this application.',
+        },
         alert: 'After submitting, we’ll will contact you in a few weeks.',
         pendingApprovalMessage:
             'We are reviewing your submission and will contact you in a few weeks. If you have any additional questions visit our Help Center to read our F.A.Q.s or submit a ticket.',

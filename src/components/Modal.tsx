@@ -138,20 +138,6 @@ export default class Modal extends Component<IModalProps, IModalState> {
                             </View>
                         </View>
                         {children}
-                        {/* <View
-                            style={{
-                                height: 42
-                            }}
-                        >
-                            <View
-                                style={{
-                                    flex: 2,
-                                    flexDirection: 'row',
-                                }}
-                            >
-                                {buttons}
-                            </View>
-                        </View> */}
                         {buttons}
                     </Card.Content>
                 </Card>

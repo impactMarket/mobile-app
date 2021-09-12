@@ -46,11 +46,13 @@ import Contract from './contract';
 import Metadata from './metadata';
 import {
     DispatchContext,
+    formAction,
     formInitialState,
     reducer,
     StateContext,
     validateField,
 } from './state';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const makeCancelable = (promise: Promise<any>) => {
     let hasCanceled_ = false;
@@ -75,10 +77,22 @@ const makeCancelable = (promise: Promise<any>) => {
 function CreateCommunityScreen() {
     const navigation = useNavigation();
     const dispatchRedux = useDispatch();
+    const [hasPendingForm, setHasPendingForm] = useState(false);
+    const [loadingForm, setLoadingForm] = useState(false);
     const [isAlertVisible, setIsAlertVisible] = useState(true);
     const [toggleLeaveFormModal, setToggleLeaveFormModal] = useState(false);
     const [isUploadingContent, setIsUploadingContent] = useState(false);
-    const [contractParams, setContractParams] = useState({});
+    const [contractParams, setContractParams] = useState<{
+        claimAmount: string;
+        maxClaim: string;
+        baseInterval: number;
+        incrementInterval: number;
+    }>({
+        claimAmount: '',
+        maxClaim: '',
+        baseInterval: 0,
+        incrementInterval: 0,
+    });
     const [privateParams, setPrivateParams] = useState(undefined);
     const [submitting, setSubmitting] = useState(false);
     const [submittingSuccess, setSubmittingSuccess] = useState(false);
@@ -108,6 +122,54 @@ function CreateCommunityScreen() {
         (state: IRootState) => state.user.metadata
     );
     const kit = useSelector((state: IRootState) => state.app.kit);
+
+    useEffect(() => {
+        AsyncStorage.getItem('@community_form').then((r) => {
+            if (r !== null) {
+                const previous: CommunityCreationAttributes & {
+                    coverUri: string;
+                    incrementIntervalUnit: number;
+                } = JSON.parse(r);
+                const isValid =
+                    previous.name.length > 0 ||
+                    previous.coverUri.length > 0 ||
+                    previous.description.length > 0 ||
+                    previous.city.length > 0 ||
+                    previous.gps.latitude !== 0 ||
+                    previous.gps.longitude !== 0 ||
+                    previous.email.length > 0 ||
+                    previous.contractParams.maxClaim.length > 0 ||
+                    previous.contractParams.claimAmount.length > 0 ||
+                    previous.contractParams.baseInterval > 0 ||
+                    previous.contractParams.incrementInterval > 0 ||
+                    previous.incrementIntervalUnit > 0;
+
+                if (isValid) {
+                    setHasPendingForm(true);
+                }
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        const isValid =
+            state.name.length > 0 ||
+            state.coverImage.length > 0 ||
+            state.description.length > 0 ||
+            state.city.length > 0 ||
+            state.gps.latitude !== 0 ||
+            state.gps.longitude !== 0 ||
+            state.email.length > 0 ||
+            state.maxClaim.length > 0 ||
+            state.claimAmount.length > 0 ||
+            state.baseInterval.length > 0 ||
+            state.incrementInterval.length > 0 ||
+            state.incrementIntervalUnit > 0;
+        if (loadingForm && isValid) {
+            setHasPendingForm(false);
+            setLoadingForm(false);
+        }
+    }, [loadingForm, state]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const submitCommunity = async () => {
@@ -429,10 +491,12 @@ function CreateCommunityScreen() {
         const _claimAmount = validate.claimAmount(false);
         const _maxClaim = validate.maxClaim(false);
         const _incrementInterval = validate.incrementInterval(false);
+        const _incrementIntervalUnit = validate.incrementIntervalUnit(false);
+        const _baseInterval = validate.baseInterval(false);
         const isAnyValid =
             _name ||
             _cover ||
-            _profile ||
+            (userMetadata.avatar.length === 0 && _profile) ||
             _description ||
             _city ||
             _country ||
@@ -440,7 +504,9 @@ function CreateCommunityScreen() {
             _gps ||
             _claimAmount ||
             _maxClaim ||
-            _incrementInterval;
+            _incrementInterval ||
+            _incrementIntervalUnit ||
+            _baseInterval;
 
         if (isAnyValid) {
             Keyboard.dismiss();
@@ -448,6 +514,134 @@ function CreateCommunityScreen() {
         } else {
             navigation.goBack();
         }
+    };
+
+    const handleRecoverPreviousForm = async () => {
+        setLoadingForm(true);
+        AsyncStorage.getItem('@community_form').then((r) => {
+            const previous: CommunityCreationAttributes & {
+                coverUri: string;
+                incrementIntervalUnit: number;
+            } = JSON.parse(r);
+
+            dispatch({
+                type: formAction.SET_NAME,
+                payload: previous.name,
+            });
+            dispatch({
+                type: formAction.SET_COVER_IMAGE,
+                payload: previous.coverUri,
+            });
+            dispatch({
+                type: formAction.SET_DESCRIPTION,
+                payload: previous.description,
+            });
+            dispatch({
+                type: formAction.SET_CITY,
+                payload: previous.city,
+            });
+            dispatch({
+                type: formAction.SET_COUNTRY,
+                payload: previous.country,
+            });
+            dispatch({
+                type: formAction.SET_GPS,
+                payload: previous.gps,
+            });
+            dispatch({
+                type: formAction.SET_EMAIL,
+                payload: previous.email,
+            });
+            dispatch({
+                type: formAction.SET_CURRENCY,
+                payload: previous.currency,
+            });
+            dispatch({
+                type: formAction.SET_MAX_CLAIM,
+                payload: previous.contractParams.maxClaim,
+            });
+            dispatch({
+                type: formAction.SET_BASE_INTERVAL,
+                payload:
+                    previous.contractParams.baseInterval === 0
+                        ? ''
+                        : previous.contractParams.baseInterval.toString(),
+            });
+            dispatch({
+                type: formAction.SET_CLAIM_AMOUNT,
+                payload: previous.contractParams.claimAmount,
+            });
+            dispatch({
+                type: formAction.SET_INCREMENT_INTERVAL,
+                payload:
+                    previous.contractParams.incrementInterval === 0
+                        ? ''
+                        : previous.contractParams.incrementInterval.toString(),
+            });
+            dispatch({
+                type: formAction.SET_INCREMENT_INTERVAL_UNIT,
+                payload: previous.incrementIntervalUnit,
+            });
+        });
+    };
+
+    const handleClearPreviousForm = () => {
+        setHasPendingForm(false);
+        AsyncStorage.removeItem('@community_form');
+    };
+
+    const handleSaveForm = async () => {
+        setToggleLeaveFormModal(false);
+        const {
+            name,
+            description,
+            currency,
+            city,
+            country,
+            gps,
+            email,
+            coverImage,
+            incrementIntervalUnit,
+            baseInterval,
+            claimAmount,
+            maxClaim,
+            incrementInterval,
+        } = state;
+        const communityDetails: CommunityCreationAttributes & {
+            coverUri: string;
+            incrementIntervalUnit: number;
+        } = {
+            requestByAddress: userAddress,
+            name,
+            description,
+            language: userMetadata.language,
+            currency,
+            city,
+            country,
+            gps: {
+                latitude: gps.latitude,
+                longitude: gps.longitude,
+            },
+            email,
+            coverMediaId: coverUploadDetails ? coverUploadDetails.id : 0,
+            contractParams: {
+                baseInterval:
+                    baseInterval.length === 0 ? 0 : parseInt(baseInterval, 10),
+                claimAmount,
+                maxClaim,
+                incrementInterval:
+                    incrementInterval.length === 0
+                        ? 0
+                        : parseInt(incrementInterval, 10),
+            },
+            coverUri: coverImage,
+            incrementIntervalUnit,
+        };
+        await AsyncStorage.setItem(
+            '@community_form',
+            JSON.stringify(communityDetails)
+        );
+        navigation.goBack();
     };
 
     useLayoutEffect(() => {
@@ -708,23 +902,12 @@ function CreateCommunityScreen() {
                 </Modal>
                 <Modal
                     visible={toggleLeaveFormModal}
-                    title={i18n.t('modalLeaveTitle')}
-                    onDismiss={() => setToggleLeaveFormModal(false)}
+                    title={i18n.t('createCommunity.leave.title')}
                 >
                     <Text style={styles.submissionModalMessageText}>
-                        {i18n.t('modalLeaveDescription')}
+                        {i18n.t('createCommunity.leave.message')}
                     </Text>
                     <View style={styles.modalBoxTwoButtons}>
-                        <Button
-                            modeType="gray"
-                            style={{ width: '45%' }}
-                            onPress={() => {
-                                setToggleLeaveFormModal(false);
-                                navigation.goBack();
-                            }}
-                        >
-                            {i18n.t('generic.leave')}
-                        </Button>
                         <Button
                             modeType="default"
                             style={{ width: '45%' }}
@@ -732,7 +915,41 @@ function CreateCommunityScreen() {
                                 setToggleLeaveFormModal(false);
                             }}
                         >
-                            {i18n.t('generic.stay')}
+                            {i18n.t('generic.cancel')}
+                        </Button>
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={handleSaveForm}
+                        >
+                            {i18n.t('generic.ok')}
+                        </Button>
+                    </View>
+                </Modal>
+                <Modal
+                    visible={hasPendingForm}
+                    title={i18n.t('createCommunity.recoverForm.title')}
+                >
+                    <Text style={styles.submissionModalMessageText}>
+                        {i18n.t('createCommunity.recoverForm.message')}
+                    </Text>
+                    <View style={styles.modalBoxTwoButtons}>
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={handleClearPreviousForm}
+                            disabled={loadingForm}
+                        >
+                            {i18n.t('generic.no')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ width: '45%' }}
+                            onPress={handleRecoverPreviousForm}
+                            loading={loadingForm}
+                            disabled={loadingForm}
+                        >
+                            {i18n.t('generic.yes')}
                         </Button>
                     </View>
                 </Modal>
@@ -820,7 +1037,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 24,
         color: ipctColors.almostBlack,
-        marginVertical: 12,
+        marginBottom: 12,
     },
     errorModalContainer: {
         paddingVertical: 16,
