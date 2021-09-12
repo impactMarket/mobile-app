@@ -594,10 +594,10 @@ function CommunityName() {
     );
 }
 
-function CommunityCover() {
+function CommunityCover(props: { edit?: boolean }) {
     const [toggleDimensionsModal, setToggleDimensionsModal] = useState(false);
 
-    const [loadedImage, setLoadedImage] = useState(false);
+    const [loadedImage, setLoadedImage] = useState(props.edit !== true);
 
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
@@ -1062,7 +1062,7 @@ export default function Metadata(props: { edit?: boolean }) {
                     {i18n.t('createCommunity.communityDescriptionLabel')}
                 </Text>
                 <CommunityName />
-                <CommunityCover />
+                <CommunityCover edit={props.edit} />
                 <CommunityDescription />
                 <CommunityCurrency />
             </View>

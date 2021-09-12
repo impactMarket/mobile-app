@@ -36,7 +36,9 @@ function CommunityMinimunExpectedDuration() {
     if (
         state.claimAmount.length === 0 ||
         state.maxClaim.length === 0 ||
-        state.incrementInterval.length === 0
+        state.incrementInterval.length === 0 ||
+        state.incrementIntervalUnit === 0 ||
+        state.baseInterval.length === 0
     ) {
         return null;
     }
