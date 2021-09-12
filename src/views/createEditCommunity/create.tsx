@@ -586,8 +586,8 @@ function CreateCommunityScreen() {
                     setSubmitting(false);
                     setShowSubmissionModal(false);
                     if (communityUploadDetails !== undefined) {
-                        // TODO: request API delete community
-                        // TODO: request API delete profile picture
+                        // TODO: [IPCT1-460] request API delete community
+                        // TODO: [IPCT1-460] request API delete profile picture
                     }
                 }}
             >
