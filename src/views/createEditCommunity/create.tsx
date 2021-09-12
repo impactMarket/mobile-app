@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
@@ -52,7 +53,6 @@ import {
     StateContext,
     validateField,
 } from './state';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const makeCancelable = (promise: Promise<any>) => {
     let hasCanceled_ = false;
