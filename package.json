@@ -104,6 +104,7 @@
         "react-native-elements": "3.4.2",
         "react-native-flash-message": "0.1.23",
         "react-native-gesture-handler": "1.10.2",
+        "react-native-google-places-autocomplete": "2.4.1",
         "react-native-mime-types": "2.3.0",
         "react-native-modalize": "2.0.8",
         "react-native-paper": "4.5.0",

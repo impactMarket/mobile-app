@@ -21,6 +21,7 @@ import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import {
     DispatchContext,
@@ -511,8 +512,14 @@ function CommunityCity() {
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
+    const [toggleModal, setToggleModal] = useState(false);
+
     const handleChangeCity = (value: string) => {
         dispatch({ type: formAction.SET_CITY, payload: value });
+    };
+
+    const handleOnFocus = () => {
+        setToggleModal(true);
     };
 
     const handleEndEdit = () => validateField(state, dispatch).city();
@@ -522,16 +529,43 @@ function CommunityCity() {
         : i18n.t('createCommunity.cityRequired');
 
     return (
-        <Input
-            accessibilityLabel={i18n.t('generic.city')}
-            label={i18n.t('generic.city')}
-            value={state.city}
-            maxLength={32}
-            onChangeText={handleChangeCity}
-            onEndEditing={handleEndEdit}
-            error={error}
-            boxStyle={{ marginTop: 28 }}
-        />
+        <>
+            <Input
+                accessibilityLabel={i18n.t('generic.city')}
+                label={i18n.t('generic.city')}
+                value={state.city}
+                maxLength={32}
+                onChangeText={handleChangeCity}
+                onEndEditing={handleEndEdit}
+                onFocus={handleOnFocus}
+                error={error}
+                boxStyle={{ marginTop: 28 }}
+            />
+            <Portal>
+                <Modal title="" visible={toggleModal}>
+                    <GooglePlacesAutocomplete
+                        styles={{
+                            textInput: {
+                                width: 100,
+                                backgroundColor: 'green',
+                            },
+                            container: {
+                                width: 100,
+                            },
+                        }}
+                        placeholder="Search"
+                        onPress={(data, details = null) => {
+                            // 'details' is provided when fetchDetails = true
+                            console.log(data, details);
+                        }}
+                        query={{
+                            key: '-key-',
+                            language: 'en',
+                        }}
+                    />
+                </Modal>
+            </Portal>
+        </>
     );
 }
 
