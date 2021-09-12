@@ -2,6 +2,7 @@ import { ContractKit } from '@celo/contractkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import axios from 'axios';
 import BigNumber from 'bignumber.js';
 import * as Linking from 'expo-linking';
 import { IUserBaseAuth } from 'helpers/types/endpoints';
@@ -41,6 +42,14 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
+
+export async function translate(text: string, target: string, source: string) {
+    const q = encodeURI(text);
+    const query = `https://translation.googleapis.com/language/translate/v2?key=${config.googleApiKey}&target=${target}&source=${source}&q=${q}`;
+    const response = await axios.get(query);
+    const result = response.data?.data?.translations[0]?.translatedText;
+    return result ? result : text;
+}
 
 export async function logout(dispatch: Dispatch<any>) {
     await AsyncStorage.clear();

@@ -11,7 +11,7 @@ import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import ShareSvg from 'components/svg/header/ShareSvg';
 import { modalDonateAction, Screens } from 'helpers/constants';
-import { chooseMediaThumbnail } from 'helpers/index';
+import { chooseMediaThumbnail, translate } from 'helpers/index';
 import {
     cleanCommunityState,
     findCommunityByIdRequest,
@@ -59,10 +59,15 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
     const community = useSelector(
         (state: IRootState) => state.communities.community
     );
+    const userLanguage = useSelector(
+        (state: IRootState) => state.user.metadata.language
+    );
 
     const [refreshing, setRefreshing] = useState(false);
     const [showCopiedToClipboard, setShowCopiedToClipboard] = useState(false);
     const [promoter, setPromoter] = useState<UbiPromoter | null>(null);
+    const [description, setDescription] = useState('');
+    const [translating, setTranslating] = useState(false);
 
     useEffect(() => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
@@ -85,8 +90,30 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         if (community) {
             checkDonateOpen();
             getPromoter();
+            if (!translating) {
+                const _description = community.description.slice(
+                    0,
+                    community.description.indexOf('.') !== -1
+                        ? community.description.indexOf('.', 180) + 1
+                        : community.description.length
+                );
+
+                if (community.language !== userLanguage) {
+                    translate(
+                        _description,
+                        userLanguage,
+                        community.language
+                    ).then((r) => {
+                        setDescription(r);
+                        setTranslating(false);
+                    });
+                    setTranslating(true);
+                } else {
+                    setDescription(_description);
+                }
+            }
         }
-    }, [community, dispatch, props.route.params]);
+    }, [community, dispatch, props.route.params, translating, userLanguage]);
 
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
@@ -114,13 +141,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             </View>
         );
     }
-
-    const description = community.description.slice(
-        0,
-        community.description.indexOf('.') !== -1
-            ? community.description.indexOf('.', 180) + 1
-            : community.description.length
-    );
 
     const SponsoredBy = () => {
         if (promoter === null) {
