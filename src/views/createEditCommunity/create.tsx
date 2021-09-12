@@ -518,12 +518,7 @@ function CreateCommunityScreen() {
 
     const handleRecoverPreviousForm = async () => {
         setLoadingForm(true);
-        AsyncStorage.getItem('@community_form').then((r) => {
-            const previous: CommunityCreationAttributes & {
-                coverUri: string;
-                incrementIntervalUnit: number;
-            } = JSON.parse(r);
-
+        CacheStore.getCreateCommunityForm().then((previous) => {
             dispatch({
                 type: formAction.SET_NAME,
                 payload: previous.name,
@@ -586,8 +581,8 @@ function CreateCommunityScreen() {
     };
 
     const handleClearPreviousForm = () => {
+        CacheStore.clearCreateCommunityForm();
         setHasPendingForm(false);
-        AsyncStorage.removeItem('@community_form');
     };
 
     const handleSaveForm = async () => {
@@ -637,10 +632,7 @@ function CreateCommunityScreen() {
             coverUri: coverImage,
             incrementIntervalUnit,
         };
-        await AsyncStorage.setItem(
-            '@community_form',
-            JSON.stringify(communityDetails)
-        );
+        await CacheStore.cacheCreateCommunityForm(communityDetails);
         navigation.goBack();
     };
 

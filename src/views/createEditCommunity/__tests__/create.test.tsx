@@ -1595,4 +1595,8 @@ describe('create community', () => {
     // TODO: cancel during community upload
 
     // TODO: test without mocking user profile picture
+
+    // TODO: test recover past form saved
+
+    // TODO: test leaving with half filled form
 });
