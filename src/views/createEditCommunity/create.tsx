@@ -81,8 +81,6 @@ function CreateCommunityScreen() {
     const [contractParams, setContractParams] = useState({});
     const [privateParams, setPrivateParams] = useState(undefined);
     const [submitting, setSubmitting] = useState(false);
-    const [canceled, setCanceled] = useState(false);
-    const [requestCancel, setRequestCancel] = useState(false);
     const [submittingSuccess, setSubmittingSuccess] = useState(false);
     const [submittingCover, setSubmittingCover] = useState(false);
     const [submittingProfile, setSubmittingProfile] = useState(false);
@@ -143,7 +141,7 @@ function CreateCommunityScreen() {
         if (error === undefined) {
             setCommunityUploadDetails(data);
         }
-        if (!requestCancel) {
+        if (submitting) {
             await updateUIAfterSubmission(data, error);
         }
     };
@@ -214,7 +212,7 @@ function CreateCommunityScreen() {
             promise: Promise<unknown>;
             cancel(): void;
         };
-        if (!canceled) {
+        if (submitting) {
             // if community cover picture and user profile picture were uploded successfully, move on to upload community
             // ignore user profile picture if the user has already has it
             if (
@@ -247,7 +245,7 @@ function CreateCommunityScreen() {
             }
         };
     }, [
-        canceled,
+        submitting,
         coverUploadDetails,
         profileUploadDetails,
         isUploadingContent,
@@ -507,7 +505,6 @@ function CreateCommunityScreen() {
         <View
             style={{
                 flexDirection: 'column',
-                width: '100%',
             }}
         >
             <SubmissionActivity
@@ -585,67 +582,16 @@ function CreateCommunityScreen() {
             <SubmissionProgressDetails />
             <Button
                 modeType="gray"
-                style={{ width: '100%' }}
                 onPress={() => {
-                    setRequestCancel(true);
+                    setSubmitting(false);
+                    setShowSubmissionModal(false);
+                    if (communityUploadDetails !== undefined) {
+                        // TODO: request API delete community
+                        // TODO: request API delete profile picture
+                    }
                 }}
             >
-                {i18n.t('cancelSending')}
-            </Button>
-        </>
-    );
-
-    const SubmissionRequestCancel = () => (
-        <>
-            <Text style={styles.submissionModalMessageText}>
-                {i18n.t('createCommunity.communityRequestCancel')}
-            </Text>
-            <View style={styles.modalBoxTwoButtons}>
-                <Button
-                    modeType="gray"
-                    style={{ width: '45%' }}
-                    onPress={() => {
-                        setCanceled(true);
-                        setRequestCancel(false);
-                        if (communityUploadDetails !== undefined) {
-                            // TODO: request API delete
-                        }
-                    }}
-                >
-                    {i18n.t('generic.yes')}
-                </Button>
-                <Button
-                    modeType="default"
-                    style={{ width: '45%' }}
-                    onPress={() => {
-                        setRequestCancel(false);
-                        if (communityUploadDetails !== undefined) {
-                            updateUIAfterSubmission(
-                                communityUploadDetails,
-                                undefined
-                            );
-                        }
-                    }}
-                >
-                    {i18n.t('generic.no')}
-                </Button>
-            </View>
-        </>
-    );
-
-    const SubmissionCanceled = () => (
-        <>
-            <Text style={styles.submissionModalMessageText}>
-                {i18n.t('createCommunity.communityRequestCancel')}
-            </Text>
-            <Button
-                modeType="gray"
-                style={{ width: '100%' }}
-                onPress={() => {
-                    navigation.goBack();
-                }}
-            >
-                {i18n.t('generic.leave')}
+                {i18n.t('generic.cancel')}
             </Button>
         </>
     );
@@ -689,7 +635,7 @@ function CreateCommunityScreen() {
                 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 // enabled
-                keyboardVerticalOffset={140}
+                // keyboardVerticalOffset={140}
             >
                 <ScrollView
                     style={{
@@ -751,11 +697,7 @@ function CreateCommunityScreen() {
                     }
                 >
                     <View style={styles.modalSubmissionContainer}>
-                        {canceled ? (
-                            <SubmissionCanceled />
-                        ) : requestCancel ? (
-                            <SubmissionRequestCancel />
-                        ) : submitting ? (
+                        {submitting ? (
                             <SubmissionInProgress />
                         ) : submittingSuccess ? (
                             <SubmissionSucess />
@@ -790,7 +732,7 @@ function CreateCommunityScreen() {
                                 setToggleLeaveFormModal(false);
                             }}
                         >
-                            {i18n.t('stay')}
+                            {i18n.t('generic.stay')}
                         </Button>
                     </View>
                 </Modal>
@@ -834,8 +776,6 @@ const styles = StyleSheet.create({
     },
     submissionActivityContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
         justifyContent: 'space-between',
         paddingVertical: 16,
     },
@@ -880,7 +820,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 24,
         color: ipctColors.almostBlack,
-        width: '100%',
         marginVertical: 12,
     },
     errorModalContainer: {
@@ -908,9 +847,6 @@ const styles = StyleSheet.create({
     modalSubmissionContainer: {
         paddingBottom: 14,
         display: 'flex',
-        width: '88%',
-        alignItems: 'center',
-        alignSelf: 'center',
     },
 });
 
