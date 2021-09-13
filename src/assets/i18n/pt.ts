@@ -51,6 +51,7 @@ export default {
         backers: 'Apoiante',
         backers_plural: 'Apoiantes',
         or: 'ou',
+        ok: 'Ok',
         cancel: 'Fechar',
         confirm: 'Confirmar',
         raisedFrom: 'Angariado por {{backers}}',
@@ -79,7 +80,6 @@ export default {
         yourQRCode: 'Seu código QR',
         close: 'Fechar',
         faq: 'FAQ',
-        leave: 'Sair',
         oneTimeWelcomeMessage1:
             'impactMarket é um sistema de rendimento mínimo incondicional, que permite que qualquer comunidade crie o seu próprio sistema de distribuição de rendimento entre os seus beneficiários, de forma independente e decentralizada',
         exploreCommunities: 'Explorar Comunidades',
@@ -122,6 +122,16 @@ export default {
         welcome: 'Bem Vindo!',
     },
     createCommunity: {
+        recoverForm: {
+            title: 'Continuar submissão',
+            message:
+                'Salvámos a sua candidatura anterior. Quer continuar a editá-lo?',
+        },
+        leave: {
+            title: 'Deixar formulário',
+            message:
+                'Toda a informação que forneceu neste formulário estará disponível na próxima vez.',
+        },
         alert:
             'Após o envio, entraremos em contacto com você dentro de poucas semanas.',
         pendingApprovalMessage:

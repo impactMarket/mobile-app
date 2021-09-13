@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CommunityCreationAttributes } from 'helpers/types/endpoints';
 import { UserAttributes } from 'helpers/types/models';
 
 const CACHE_STORE_USER = '@CacheStore:user';
@@ -16,6 +17,8 @@ const CACHE_STORE_MANAGER_COMMUNITY_RULES_ACCEPTED =
 const CACHE_STORE_LAST_VERSION = '@CacheStore:lastVersion';
 const CACHE_STORE_LAST_LAST_VERSION = '@CacheStore:lastLastVersion';
 const CACHE_STORE_APP_NEEDS_UPDATE = '@CacheStore:appNeedsUpdate';
+
+const CACHE_STORE_CREATE_COMMUNITY_FORM = '@CacheStore:createCommunityForm';
 
 interface IBeneficiaryClaim {
     communityId: string;
@@ -223,5 +226,36 @@ export default class CacheStore {
             return false;
         }
         return appNeedsUpdate === 'true';
+    }
+
+    // create community form
+
+    static async cacheCreateCommunityForm(
+        communityDetails: CommunityCreationAttributes & {
+            coverUri: string;
+            incrementIntervalUnit: number;
+        }
+    ) {
+        return AsyncStorage.setItem(
+            CACHE_STORE_CREATE_COMMUNITY_FORM,
+            JSON.stringify(communityDetails)
+        );
+    }
+
+    static async getCreateCommunityForm(): Promise<
+        | (CommunityCreationAttributes & {
+              coverUri: string;
+              incrementIntervalUnit: number;
+          })
+        | null
+    > {
+        const res = await AsyncStorage.getItem(
+            CACHE_STORE_CREATE_COMMUNITY_FORM
+        );
+        return res ? JSON.parse(res) : null;
+    }
+
+    static async clearCreateCommunityForm() {
+        return AsyncStorage.removeItem(CACHE_STORE_CREATE_COMMUNITY_FORM);
     }
 }
