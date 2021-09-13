@@ -120,6 +120,10 @@ function AddBeneficiaryScreen() {
                 if (e.message.includes('has been reverted')) {
                     error = 'errors.sync.issues';
                 } else if (
+                    e.message.includes('transfer value exceeded balance')
+                ) {
+                    error = 'communityWentOutOfFunds';
+                } else if (
                     e.message.includes('nonce') ||
                     e.message.includes('gasprice is less')
                 ) {
