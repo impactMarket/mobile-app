@@ -21,6 +21,8 @@ jest.mock('react-redux', () => ({
     batch: jest.fn(),
 }));
 
+jest.mock('components/community/Description');
+
 const community: CommunityAttributes = {
     id: 1,
     publicId: '3f49b131-e097-4155-8f28-46c95590d42f',

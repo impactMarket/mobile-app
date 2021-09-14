@@ -1,4 +1,4 @@
 // .eslintrc.js
 module.exports = {
-    extends: ['universe/native', 'prettier', 'plugin:react-hooks/recommended'],
+    extends: ['universe/native', 'prettier'],
 };

@@ -35,6 +35,11 @@ export default {
     cUSDContract: process.env.EXPO_CUSD_CONTRACT_ADDRESS!,
 
     /**
+     * Google API key, used for Translation API
+     */
+    googleApiKey: process.env.EXPO_GOOGLE_API_KEY!,
+
+    /**
      * Is it in testnet?
      */
     testnet: process.env.EXPO_IS_TESTNET! === 'true',

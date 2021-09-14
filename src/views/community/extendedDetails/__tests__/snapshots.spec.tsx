@@ -1,10 +1,15 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { act, render } from '@testing-library/react-native';
 import { CommunityAttributes, ManagerAttributes } from 'helpers/types/models';
 import React from 'react';
+import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 import Api from 'services/api';
 
 import CommunityExtendedDetailsScreen from '../';
+
+jest.mock('components/community/Description');
 
 const community: CommunityAttributes = {
     id: 1,
@@ -49,6 +54,33 @@ const community: CommunityAttributes = {
         communityId: 1,
     },
 };
+
+/**
+ * NOTE: we are testing the component individually, but need the header
+ * "submit button", so the entire navigator can be faked.
+ */
+function WrappedCommunityDetailsScreen() {
+    const Stack = createStackNavigator();
+    return (
+        <Host>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="Home"
+                        component={CommunityExtendedDetailsScreen}
+                        initialParams={{
+                            route: {
+                                params: {
+                                    communityId: 1,
+                                },
+                            },
+                        }}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Host>
+    );
+}
 
 describe('extended details community [snapshot]', () => {
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
@@ -135,7 +167,7 @@ describe('extended details community [snapshot]', () => {
     });
 
     it('renders correctly', async () => {
-        const tree = render(<CommunityExtendedDetailsScreen />);
+        const tree = render(<WrappedCommunityDetailsScreen />);
         const { queryAllByTestId } = tree;
         await act(async () => {});
         await act(async () => {

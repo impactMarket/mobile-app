@@ -1,4 +1,4 @@
-import { LinearGradient, LinearGradientProps } from 'expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { PureComponent } from 'react';
 import { Animated, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
@@ -21,7 +21,7 @@ interface IShimmerPlaceholderProps {
     location?: number[];
     style?: any;
     contentStyle?: StyleProp<ViewStyle>;
-    shimmerStyle?: StyleProp<LinearGradientProps>;
+    shimmerStyle?: StyleProp<ViewStyle>;
     isInteraction?: boolean;
     children?: any;
     animatedValue?: Animated.CompositeAnimation;

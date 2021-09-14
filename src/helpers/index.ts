@@ -2,6 +2,8 @@ import { ContractKit } from '@celo/contractkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
+import languagesJSON from 'assets/languages.json';
+import axios from 'axios';
 import BigNumber from 'bignumber.js';
 import * as Linking from 'expo-linking';
 import { IUserBaseAuth } from 'helpers/types/endpoints';
@@ -41,6 +43,37 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
+
+const languages: {
+    [key: string]: {
+        name: string;
+        nativeName: string;
+    };
+} = languagesJSON;
+
+export async function translate(
+    text: string,
+    target: string
+): Promise<{ detectedSourceLanguage?: string; translatedText: string }> {
+    try {
+        const q = encodeURIComponent(text);
+        const query = `https://translation.googleapis.com/language/translate/v2?key=${config.googleApiKey}&format=text&target=${target}&q=${q}`;
+        const response = await axios.get(query);
+        const result = response.data?.data?.translations;
+        return result &&
+            result.length > 0 &&
+            result[0].translatedText.length > 0
+            ? {
+                  translatedText: result[0].translatedText,
+                  detectedSourceLanguage:
+                      languages[result[0].detectedSourceLanguage.toLowerCase()]
+                          .name,
+              }
+            : { translatedText: text };
+    } catch (_) {
+        return { translatedText: text };
+    }
+}
 
 export async function logout(dispatch: Dispatch<any>) {
     await AsyncStorage.clear();

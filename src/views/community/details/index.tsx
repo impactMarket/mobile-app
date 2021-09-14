@@ -1,16 +1,16 @@
-import { useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import CommunityStatus from 'components/CommunityStatus';
 import DonateCard from 'components/DonateCard';
 import Dot from 'components/Dot';
 import SuspiciousCard from 'components/SuspiciousCard';
+import Description from 'components/community/Description';
 import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
 import ShareSvg from 'components/svg/header/ShareSvg';
-import { modalDonateAction, Screens } from 'helpers/constants';
+import { modalDonateAction } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import {
     cleanCommunityState,
@@ -26,7 +26,6 @@ import {
     StatusBar,
     Image,
     Text,
-    Pressable,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator, Snackbar } from 'react-native-paper';
@@ -53,7 +52,6 @@ const countries: {
     };
 } = countriesJSON;
 export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
-    const navigator = useNavigation();
     const dispatch = useDispatch();
 
     const community = useSelector(
@@ -78,15 +76,20 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                 });
             }
         };
+        if (community) {
+            checkDonateOpen();
+        }
+    }, [community, props.route.params]);
+
+    useEffect(() => {
         const getPromoter = () =>
             Api.community
                 .getPromoter(community.id)
                 .then((r) => setPromoter(r.data));
-        if (community) {
-            checkDonateOpen();
+        if (community !== undefined && community !== null) {
             getPromoter();
         }
-    }, [community, dispatch, props.route.params]);
+    }, [community]);
 
     const onRefresh = () => {
         dispatch(findCommunityByIdRequest(props.route.params.communityId));
@@ -114,13 +117,6 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
             </View>
         );
     }
-
-    const description = community.description.slice(
-        0,
-        community.description.indexOf('.') !== -1
-            ? community.description.indexOf('.', 180) + 1
-            : community.description.length
-    );
 
     const SponsoredBy = () => {
         if (promoter === null) {
@@ -195,20 +191,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     </Text>
                 </View>
                 <SponsoredBy />
-                <Text style={styles.textDescription}>{description}</Text>
-                <Pressable
-                    hitSlop={15}
-                    onPress={() =>
-                        navigator.navigate(
-                            Screens.CommunityExtendedDetailsScreen
-                        )
-                    }
-                    testID="communitySeeMore"
-                >
-                    <Text style={styles.textSeeMore}>
-                        {i18n.t('community.seeMore')}
-                    </Text>
-                </Pressable>
+                <Description community={community} isShort />
                 <View
                     style={{
                         borderRadius: 12,
@@ -309,19 +292,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
         lineHeight: 24,
         color: ipctColors.darBlue,
-    },
-    textDescription: {
-        marginTop: 16,
-        fontSize: 14,
-        lineHeight: 24,
-        fontFamily: 'Inter-Regular',
-        color: ipctColors.darBlue,
-    },
-    textSeeMore: {
-        marginTop: 8,
-        fontSize: 16,
-        lineHeight: 28,
-        fontFamily: 'Inter-Regular',
-        color: ipctColors.blueRibbon,
     },
 });
