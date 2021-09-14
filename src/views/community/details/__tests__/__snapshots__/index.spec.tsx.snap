@@ -560,47 +560,122 @@ Array [
                                 "fontFamily": "Inter-Regular",
                                 "fontSize": 14,
                                 "lineHeight": 24,
-                                "marginTop": 16,
                               }
                             }
                           >
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse quis interdum justo, nec sollicitudin lectus. Quisque malesuada metus lacinia facilisis pretium. Maecenas semper lacus id ante porttitor, non ultricies nunc suscipit.
                           </Text>
                           <View
-                            accessible={true}
-                            focusable={true}
-                            hitSlop={
+                            style={
                               Object {
-                                "bottom": 15,
-                                "left": 15,
-                                "right": 15,
-                                "top": 15,
+                                "alignItems": "center",
+                                "flexDirection": "row",
                               }
                             }
-                            onBlur={[Function]}
-                            onClick={[Function]}
-                            onFocus={[Function]}
-                            onResponderGrant={[Function]}
-                            onResponderMove={[Function]}
-                            onResponderRelease={[Function]}
-                            onResponderTerminate={[Function]}
-                            onResponderTerminationRequest={[Function]}
-                            onStartShouldSetResponder={[Function]}
-                            testID="communitySeeMore"
                           >
                             <Text
                               style={
                                 Object {
-                                  "color": "#2362FB",
+                                  "color": "#73839D",
                                   "fontFamily": "Inter-Regular",
-                                  "fontSize": 16,
+                                  "fontSize": 13,
                                   "lineHeight": 28,
-                                  "marginTop": 8,
                                 }
                               }
                             >
-                              See More
+                              Translated from English
                             </Text>
+                            <Text
+                              style={
+                                Object {
+                                  "color": "#73839D",
+                                  "fontFamily": "Inter-Regular",
+                                  "fontSize": 12,
+                                  "lineHeight": 20,
+                                  "marginHorizontal": 4,
+                                }
+                              }
+                            >
+                              ·
+                            </Text>
+                            <View
+                              accessible={true}
+                              focusable={true}
+                              hitSlop={
+                                Object {
+                                  "bottom": 15,
+                                  "left": 15,
+                                  "right": 15,
+                                  "top": 15,
+                                }
+                              }
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onResponderGrant={[Function]}
+                              onResponderMove={[Function]}
+                              onResponderRelease={[Function]}
+                              onResponderTerminate={[Function]}
+                              onResponderTerminationRequest={[Function]}
+                              onStartShouldSetResponder={[Function]}
+                            >
+                              <Text
+                                style={
+                                  Object {
+                                    "color": "#2362FB",
+                                    "fontFamily": "Inter-Regular",
+                                    "fontSize": 13,
+                                    "lineHeight": 28,
+                                  }
+                                }
+                              >
+                                See Original
+                              </Text>
+                            </View>
+                          </View>
+                          <View
+                            style={
+                              Object {
+                                "flexDirection": "row",
+                              }
+                            }
+                          >
+                            <View
+                              accessible={true}
+                              focusable={true}
+                              hitSlop={
+                                Object {
+                                  "bottom": 15,
+                                  "left": 15,
+                                  "right": 15,
+                                  "top": 15,
+                                }
+                              }
+                              onBlur={[Function]}
+                              onClick={[Function]}
+                              onFocus={[Function]}
+                              onResponderGrant={[Function]}
+                              onResponderMove={[Function]}
+                              onResponderRelease={[Function]}
+                              onResponderTerminate={[Function]}
+                              onResponderTerminationRequest={[Function]}
+                              onStartShouldSetResponder={[Function]}
+                              testID="communitySeeMore"
+                            >
+                              <Text
+                                style={
+                                  Object {
+                                    "color": "#2362FB",
+                                    "fontFamily": "Inter-Regular",
+                                    "fontSize": 16,
+                                    "lineHeight": 28,
+                                    "marginTop": 8,
+                                  }
+                                }
+                              >
+                                See More
+                              </Text>
+                            </View>
                           </View>
                           <View
                             style={
