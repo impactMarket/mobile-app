@@ -21,7 +21,7 @@ interface IShimmerPlaceholderProps {
     location?: number[];
     style?: any;
     contentStyle?: StyleProp<ViewStyle>;
-    shimmerStyle?: StyleProp<LinearGradientProps>;
+    shimmerStyle?: StyleProp<ViewStyle>;
     isInteraction?: boolean;
     children?: any;
     animatedValue?: Animated.CompositeAnimation;
