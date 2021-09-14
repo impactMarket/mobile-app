@@ -120,6 +120,7 @@ export default {
         descriptionCopiedClipboard:
             'Descrição copiada para a área de transferência!',
         welcome: 'Bem Vindo!',
+        translatedFrom: 'Traduzido de {{from}}',
     },
     createCommunity: {
         alert:
@@ -365,6 +366,7 @@ export default {
         ssiDescription:
             'SSI mede a sustentabilidade financeira de uma comunidade.',
         seeMore: 'Ver Mais',
+        seeOriginal: 'Ver Original',
         seeLess: 'Ver Menos',
         exploreCommunityContract: 'Ver Contrato da Comunidade',
         eachBeneficiaryCanClaimXUpToY:

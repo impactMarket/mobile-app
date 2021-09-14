@@ -116,6 +116,7 @@ export default {
         delete: 'Delete',
         descriptionCopiedClipboard: 'Description copied to clipboard!',
         welcome: 'Welcome!',
+        translatedFrom: 'Translated from {{from}}',
     },
     createCommunity: {
         alert: 'After submitting, we’ll will contact you in a few weeks.',
@@ -353,6 +354,7 @@ export default {
         ssiDescription:
             'SSI measures how financially sustainable a community is, and its progress.',
         seeMore: 'See More',
+        seeOriginal: 'See Original',
         seeLess: 'See Less',
         eachBeneficiaryCanClaimXUpToY:
             'Each beneficiary can claim ~{{claimXCCurrency}} ($<bold>{{claimX}}</bold> cUSD) per <bold>{{interval}}</bold>, up till $<bold>{{upToY}}</bold> cUSD. Each claim adds <bold>{{minIncrement}}</bold> min to its waiting interval.',

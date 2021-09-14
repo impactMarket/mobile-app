@@ -1,6 +1,7 @@
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import Divider from 'components/Divider';
+import Description from 'components/community/Description';
 import AvatarPlaceholderSvg from 'components/svg/AvatarPlaceholderSvg';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -261,7 +262,9 @@ function CommunityExtendedDetailsScreen() {
                     </Text>
                 </View>
             </View>
-            <Text style={styles.textDescription}>{community.description}</Text>
+            <View style={styles.descriptionBox}>
+                <Description community={community} />
+            </View>
             <UBIParamsBox
                 title={i18n.t('createCommunity.claimAmount')}
                 body={`$${humanifyCurrencyAmount(
@@ -325,13 +328,9 @@ const styles = StyleSheet.create({
     },
     inlineBox: { flexDirection: 'row', alignItems: 'center' },
 
-    textDescription: {
+    descriptionBox: {
         marginTop: 16,
         marginBottom: 28,
-        fontSize: 14,
-        lineHeight: 24,
-        fontFamily: 'Inter-Regular',
-        color: ipctColors.darBlue,
     },
 });
 
