@@ -14,7 +14,14 @@ import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Location from 'expo-location';
 import { IRootState } from 'helpers/types/state';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
+import {
+    View,
+    Text,
+    Pressable,
+    Image,
+    Modal as RNModal,
+    ScrollView,
+} from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Headline, Searchbar } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
@@ -29,6 +36,10 @@ import {
     StateContext,
     validateField,
 } from './state';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import BackSvg from 'components/svg/BackSvg';
+import config from '../../../config';
+import axios from 'axios';
 
 function CommunityCurrency() {
     const currencies: {
@@ -509,8 +520,13 @@ function CommunityCountry() {
 }
 
 function CommunityCity() {
+    const insets = useSafeAreaInsets();
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
+
+    const userLanguage = useSelector(
+        (state: IRootState) => state.user.metadata.language
+    );
 
     const [toggleModal, setToggleModal] = useState(false);
 
@@ -542,28 +558,75 @@ function CommunityCity() {
                 boxStyle={{ marginTop: 28 }}
             />
             <Portal>
-                <Modal title="" visible={toggleModal}>
-                    <GooglePlacesAutocomplete
-                        styles={{
-                            textInput: {
-                                width: 100,
-                                backgroundColor: 'green',
-                            },
-                            container: {
-                                width: 100,
-                            },
+                <RNModal visible={toggleModal}>
+                    <View
+                        style={{
+                            marginTop: insets.top + 15,
+                            flexDirection: 'row',
+                            marginHorizontal: 20,
                         }}
-                        placeholder="Search"
-                        onPress={(data, details = null) => {
-                            // 'details' is provided when fetchDetails = true
-                            console.log(data, details);
-                        }}
-                        query={{
-                            key: '-key-',
-                            language: 'en',
-                        }}
-                    />
-                </Modal>
+                    >
+                        <BackSvg
+                            onPress={() => setToggleModal(false)}
+                            style={{ marginRight: 18, marginTop: 6 }}
+                        />
+                        <GooglePlacesAutocomplete
+                            placeholder={i18n.t('generic.search')}
+                            textInputProps={{ autoFocus: true }}
+                            styles={{
+                                textInput: {
+                                    borderWidth: 1,
+                                    borderColor: ipctColors.softGray,
+                                },
+                                container: {},
+                            }}
+                            onPress={(data) => {
+                                dispatch({
+                                    type: formAction.SET_CITY,
+                                    payload: data.description,
+                                });
+                                dispatch({
+                                    type: formAction.SET_CITY_VALID,
+                                    payload: true,
+                                });
+                                axios
+                                    .get(
+                                        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${data.place_id}&key=${config.googleApiKey}`
+                                    )
+                                    .then((response) => {
+                                        const {
+                                            address_components,
+                                            geometry,
+                                        } = response.data.result;
+                                        const { lat, lng } = geometry.location;
+                                        dispatch({
+                                            type: formAction.SET_GPS,
+                                            payload: {
+                                                latitude: lat,
+                                                longitude: lng,
+                                            },
+                                        });
+                                        dispatch({
+                                            type: formAction.SET_COUNTRY,
+                                            payload: address_components.find(
+                                                (c) =>
+                                                    c.types.includes('country')
+                                            ).short_name,
+                                        });
+                                    })
+                                    .catch((_) => {
+                                        // TODO: do something here
+                                    });
+                                setToggleModal(false);
+                            }}
+                            query={{
+                                key: config.googleApiKey,
+                                language: userLanguage.toLowerCase(),
+                                type: '(regions)',
+                            }}
+                        />
+                    </View>
+                </RNModal>
             </Portal>
         </>
     );
