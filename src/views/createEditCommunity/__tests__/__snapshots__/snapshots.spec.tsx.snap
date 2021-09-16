@@ -1125,7 +1125,13 @@ Array [
                                   />
                                 </View>
                               </View>
-                              <View>
+                              <View
+                                style={
+                                  Object {
+                                    "marginTop": 28,
+                                  }
+                                }
+                              >
                                 <View
                                   style={
                                     Array [
@@ -1193,6 +1199,11 @@ Array [
                                   <TextInput
                                     accessibilityLabel="Email"
                                     allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
                                     keyboardType="email-address"
                                     label="Email"
                                     maxLength={64}
@@ -3706,7 +3717,13 @@ Array [
                                   />
                                 </View>
                               </View>
-                              <View>
+                              <View
+                                style={
+                                  Object {
+                                    "marginTop": 28,
+                                  }
+                                }
+                              >
                                 <View
                                   style={
                                     Array [
@@ -3774,6 +3791,11 @@ Array [
                                   <TextInput
                                     accessibilityLabel="Email"
                                     allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
                                     keyboardType="email-address"
                                     label="Email"
                                     maxLength={64}
@@ -6287,7 +6309,13 @@ Array [
                                   />
                                 </View>
                               </View>
-                              <View>
+                              <View
+                                style={
+                                  Object {
+                                    "marginTop": 28,
+                                  }
+                                }
+                              >
                                 <View
                                   style={
                                     Array [
@@ -6355,6 +6383,11 @@ Array [
                                   <TextInput
                                     accessibilityLabel="Email"
                                     allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
                                     keyboardType="email-address"
                                     label="Email"
                                     maxLength={64}

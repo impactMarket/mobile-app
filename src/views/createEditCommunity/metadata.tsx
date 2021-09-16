@@ -204,6 +204,7 @@ function CommunityEmail() {
             onChangeText={handleEmailChange}
             onEndEditing={handleEndEdit}
             error={error}
+            boxStyle={{ marginTop: 28 }}
         />
     );
 }
