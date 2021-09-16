@@ -1,45 +1,36 @@
-import countriesJSON from 'assets/countries.json';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
+import axios from 'axios';
 import Modal from 'components/Modal';
 import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
 import Select from 'components/core/Select';
+import BackSvg from 'components/svg/BackSvg';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
-import * as Location from 'expo-location';
 import { IRootState } from 'helpers/types/state';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-    View,
-    Text,
-    Pressable,
-    Image,
-    Modal as RNModal,
-    ScrollView,
-} from 'react-native';
+import { View, Text, Pressable, Image, Modal as RNModal } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Headline, Searchbar } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
+import config from '../../../config';
+import PlaceSearch from './component/PlaceSearch';
 import {
     DispatchContext,
     formAction,
     StateContext,
     validateField,
 } from './state';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import BackSvg from 'components/svg/BackSvg';
-import config from '../../../config';
-import axios from 'axios';
 
 function CommunityCurrency() {
     const currencies: {
@@ -217,308 +208,6 @@ function CommunityEmail() {
     );
 }
 
-function CommunityLocation() {
-    const [isEnabling, setIsEnabling] = useState(false);
-
-    const state = useContext(StateContext);
-    const dispatch = useContext(DispatchContext);
-
-    const enableGPSLocation = async () => {
-        setIsEnabling(true);
-        try {
-            const {
-                status,
-            } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                // Alert.alert(
-                //     i18n.t('generic.failure'),
-                //     i18n.t('errors.gettingGPS'),
-                //     [{ text: 'OK' }],
-                //     { cancelable: false }
-                // );
-                return;
-            }
-
-            const {
-                coords: { latitude, longitude },
-            } = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.Low,
-            });
-            dispatch({
-                type: formAction.SET_GPS,
-                payload: { latitude, longitude },
-            });
-            dispatch({
-                type: formAction.SET_GPS_VALID,
-                payload: latitude !== 0 || longitude !== 0,
-            });
-        } catch (e) {
-            // Alert.alert(
-            //     i18n.t('generic.failure'),
-            //     i18n.t('errors.gettingGPS'),
-            //     [{ text: 'OK' }],
-            //     { cancelable: false }
-            // );
-        } finally {
-            setIsEnabling(false);
-        }
-    };
-
-    if (state.gps.latitude !== 0 || state.gps.longitude !== 0) {
-        return (
-            <View
-                style={{
-                    marginVertical: 16,
-                    marginBottom: 24,
-                }}
-            >
-                <Pressable
-                    style={{
-                        backgroundColor: '#E9EDF4',
-                        borderWidth: 0,
-                        width: '100%',
-                        height: 44,
-                        paddingVertical: 8,
-                        borderRadius: 6,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexDirection: 'row',
-                    }}
-                >
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignSelf: 'center',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Icon
-                            name="check-circle-outline"
-                            size={22}
-                            color={ipctColors.greenishTeal}
-                        />
-                        <Text
-                            style={{
-                                color: ipctColors.darBlue,
-                                marginLeft: 10,
-                                fontFamily: 'Inter-Regular',
-                                fontSize: 15,
-                                lineHeight: 28,
-                            }}
-                        >
-                            {i18n.t('createCommunity.validCoordinates')}
-                        </Text>
-                    </View>
-                </Pressable>
-            </View>
-        );
-    }
-
-    return (
-        <View
-            style={{
-                marginVertical: 16,
-                marginBottom: 24,
-            }}
-        >
-            <Button
-                // mode="contained"
-                accessibilityLabel={i18n.t('createCommunity.getGPSLocation')}
-                modeType="default"
-                style={{
-                    paddingVertical: 0,
-                    width: '100%',
-                    height: 44,
-                    borderRadius: 6,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                }}
-                onPress={() => enableGPSLocation()}
-                loading={isEnabling}
-            >
-                <Text
-                    style={{
-                        color: ipctColors.white,
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 15,
-                        lineHeight: 28,
-                    }}
-                >
-                    {i18n.t('createCommunity.getGPSLocation')}
-                </Text>
-            </Button>
-            {!state.validation.gps && (
-                <Text
-                    style={{
-                        color: '#EB5757',
-                        fontSize: 12,
-                        lineHeight: 20,
-                        fontFamily: 'Inter-Regular',
-                        justifyContent: 'flex-start',
-                    }}
-                >
-                    {i18n.t('createCommunity.enablingGPSRequired')}
-                </Text>
-            )}
-        </View>
-    );
-}
-
-function CommunityCountry() {
-    const countries: {
-        [key: string]: {
-            name: string;
-            native: string;
-            currency: string;
-            languages: string[];
-            emoji: string;
-        };
-    } = countriesJSON;
-
-    const [searchCountryQuery, setSearchCountryQuery] = useState('');
-    const [countriesList, setCountriesList] = useState(Object.keys(countries));
-    const state = useContext(StateContext);
-    const dispatch = useContext(DispatchContext);
-
-    const modalizeCountryRef = useRef<Modalize>(null);
-
-    const handleSelectCountry = (item: string) => {
-        dispatch({
-            type: formAction.SET_COUNTRY,
-            payload: item,
-        });
-        modalizeCountryRef.current?.close();
-        dispatch({
-            type: formAction.SET_COUNTRY_VALID,
-            payload: true,
-        });
-    };
-
-    const countryItem = ({ item }: { item: string }) => (
-        <Pressable
-            accessibilityLabel={item}
-            onPress={() => handleSelectCountry(item)}
-        >
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    width: '100%',
-                    justifyContent: 'space-between',
-                    paddingVertical: 16,
-                    paddingHorizontal: 22,
-                }}
-            >
-                <Text
-                    style={{
-                        fontSize: 15,
-                        lineHeight: 24,
-                        fontFamily: 'Inter-Regular',
-                    }}
-                >{`${countries[item].emoji} ${countries[item].name}`}</Text>
-                {item === state.country && (
-                    <Icon
-                        name="check"
-                        color={ipctColors.greenishTeal}
-                        size={22}
-                    />
-                )}
-            </View>
-        </Pressable>
-    );
-
-    const error = state.validation.country
-        ? undefined
-        : i18n.t('createCommunity.countryRequired');
-
-    return (
-        <>
-            <View style={{ marginTop: 28 }}>
-                <Select
-                    label={i18n.t('generic.country')}
-                    value={
-                        state.country.length > 0
-                            ? `${countries[state.country].emoji} ${
-                                  countries[state.country].name
-                              }`
-                            : i18n.t('createCommunity.selectCountry')
-                    }
-                    onPress={() => modalizeCountryRef.current?.open()}
-                    error={error}
-                />
-            </View>
-            <Portal>
-                <Modalize
-                    ref={modalizeCountryRef}
-                    HeaderComponent={
-                        <View>
-                            {renderHeader(
-                                i18n.t('generic.country'),
-                                modalizeCountryRef,
-                                () => {
-                                    modalizeCountryRef.current?.close();
-                                    validateField(state, dispatch).country();
-                                    setCountriesList(Object.keys(countries));
-                                    setSearchCountryQuery('');
-                                }
-                            )}
-                            <Searchbar
-                                accessibilityLabel={i18n.t('generic.search')}
-                                placeholder={i18n.t('generic.search')}
-                                style={{
-                                    borderColor: ipctColors.borderGray,
-                                    borderWidth: 1,
-                                    borderStyle: 'solid',
-                                    shadowRadius: 0,
-                                    elevation: 0,
-                                    borderRadius: 6,
-                                    marginHorizontal: 22,
-                                }}
-                                // autoFocus
-                                inputStyle={{
-                                    marginLeft: -14,
-                                }}
-                                onChangeText={(e) => {
-                                    if (e.length === 0) {
-                                        setCountriesList(
-                                            Object.keys(countries)
-                                        );
-                                    } else {
-                                        const foundCountries = [];
-                                        for (const [
-                                            key,
-                                            value,
-                                        ] of Object.entries(countries)) {
-                                            if (
-                                                value.name
-                                                    .toLowerCase()
-                                                    .indexOf(
-                                                        e.toLowerCase()
-                                                    ) !== -1
-                                            ) {
-                                                foundCountries.push(key);
-                                            }
-                                        }
-                                        setCountriesList(foundCountries);
-                                    }
-                                    setSearchCountryQuery(e);
-                                }}
-                                value={searchCountryQuery}
-                            />
-                        </View>
-                    }
-                    flatListProps={{
-                        data: countriesList,
-                        renderItem: countryItem,
-                        keyExtractor: (item) => item,
-                    }}
-                />
-            </Portal>
-        </>
-    );
-}
-
 function CommunityCity() {
     const insets = useSafeAreaInsets();
     const state = useContext(StateContext);
@@ -530,29 +219,24 @@ function CommunityCity() {
 
     const [toggleModal, setToggleModal] = useState(false);
 
-    const handleChangeCity = (value: string) => {
-        dispatch({ type: formAction.SET_CITY, payload: value });
-    };
+    const handleChangeCity = (value: string) => {};
 
     const handleOnFocus = () => {
         setToggleModal(true);
     };
 
-    const handleEndEdit = () => validateField(state, dispatch).city();
-
     const error = state.validation.city
         ? undefined
-        : i18n.t('createCommunity.cityRequired');
+        : i18n.t('createCommunity.cityCountryRequired');
 
     return (
         <>
             <Input
-                accessibilityLabel={i18n.t('generic.city')}
-                label={i18n.t('generic.city')}
+                accessibilityLabel={i18n.t('generic.cityCountry')}
+                label={i18n.t('generic.cityCountry')}
                 value={state.city}
                 maxLength={32}
                 onChangeText={handleChangeCity}
-                onEndEditing={handleEndEdit}
                 onFocus={handleOnFocus}
                 error={error}
                 boxStyle={{ marginTop: 28 }}
@@ -570,16 +254,8 @@ function CommunityCity() {
                             onPress={() => setToggleModal(false)}
                             style={{ marginRight: 18, marginTop: 6 }}
                         />
-                        <GooglePlacesAutocomplete
-                            placeholder={i18n.t('generic.search')}
-                            textInputProps={{ autoFocus: true }}
-                            styles={{
-                                textInput: {
-                                    borderWidth: 1,
-                                    borderColor: ipctColors.softGray,
-                                },
-                                container: {},
-                            }}
+                        <PlaceSearch
+                            userLanguage={userLanguage}
                             onPress={(data) => {
                                 dispatch({
                                     type: formAction.SET_CITY,
@@ -618,11 +294,6 @@ function CommunityCity() {
                                         // TODO: do something here
                                     });
                                 setToggleModal(false);
-                            }}
-                            query={{
-                                key: config.googleApiKey,
-                                language: userLanguage.toLowerCase(),
-                                type: '(regions)',
                             }}
                         />
                     </View>
@@ -1201,8 +872,6 @@ export default function Metadata(props: { edit?: boolean }) {
             </Text>
             <CommunityDescription />
             <CommunityCity />
-            <CommunityCountry />
-            <CommunityLocation />
             <CommunityEmail />
             <CommunityCurrency />
         </View>
