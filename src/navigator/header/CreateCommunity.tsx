@@ -17,10 +17,6 @@ function CreateCommunity(props: {
         (state: IRootState) => state.user.wallet.address
     );
 
-    const isManager = useSelector(
-        (state: IRootState) => state.user.community.isManager
-    );
-
     return (
         <View
             style={{
@@ -43,11 +39,9 @@ function CreateCommunity(props: {
                     marginRight: 16,
                 }}
                 onPress={() =>
-                    !props.userCommunity && walletAddress.length > 0
+                    walletAddress.length > 0
                         ? props.navigation.navigate(Screens.CreateCommunity)
-                        : isManager
-                        ? props.navigation.navigate(Screens.CommunityManager)
-                        : props.navigation.navigate(Screens.Auth)
+                        : null
                 }
             >
                 {i18n.t('generic.create')}

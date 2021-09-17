@@ -75,7 +75,6 @@ function Welcome() {
                     disabled={redirecting}
                     onPress={() => {
                         setRedirecting(true);
-                        dispatch(SetAppFromWelcomeScreen(Screens.Auth));
                     }}
                 >
                     {i18n.t('auth.connectWithValora')}
