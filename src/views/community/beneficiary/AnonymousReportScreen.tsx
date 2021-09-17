@@ -1,7 +1,4 @@
-import {
-    DefaultNavigatorOptions,
-    useNavigation,
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
