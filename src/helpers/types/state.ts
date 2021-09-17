@@ -2,6 +2,7 @@ import { ContractKit } from '@celo/contractkit';
 import { Subscription } from '@unimodules/core';
 
 import {
+    ApiErrorReturn,
     ICommunitiesListStories,
     ICommunityStory,
     IUserAuth,
@@ -33,7 +34,7 @@ export interface IAuthState {
     authToken: string;
     user: IUserAuth | undefined;
     refreshing: boolean;
-    error: string | undefined;
+    error: ApiErrorReturn | undefined;
 }
 export interface IModalDonateState {
     donationValues: {

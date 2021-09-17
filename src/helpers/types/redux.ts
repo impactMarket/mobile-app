@@ -35,6 +35,7 @@ import {
 import { AuthParams } from 'services/api/routes/user';
 
 import {
+    ApiErrorReturn,
     ICommunitiesListStories,
     ICommunityStory,
     IUserAuth,
@@ -134,7 +135,7 @@ interface InitUserAuthActionSuccess {
 
 interface InitUserAuthActionFailure {
     type: typeof SET_USER_AUTH_FAILURE;
-    payload: string;
+    payload: ApiErrorReturn;
 }
 interface InitUserAuthActionReset {
     type: typeof SET_USER_AUTH_RESET;
