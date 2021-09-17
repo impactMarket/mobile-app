@@ -125,7 +125,7 @@ const beneficiaryScreens = (Navigator: typeof Stack) => (
         <Navigator.Screen
             name={Screens.AnonymousReport}
             component={AnonymousReportScreen}
-            // options={AnonymousReportScreen.navigationOptions}
+            options={AnonymousReportScreen.navigationOptions}
         />
     </>
 );

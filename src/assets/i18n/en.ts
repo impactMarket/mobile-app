@@ -390,6 +390,8 @@ export default {
         alertCongrat: 'Thank you for reporting potential illegal activity.',
         alertCongratLink: 'Know more about anonymous reporting.',
         alertFailure: 'Error uploading report!',
+        categoryIsRequired: 'Category is required!',
+        descriptionIsRequired: 'Description is required!',
     },
     communityFundsRunOut: {
         title: 'Community funds run out',

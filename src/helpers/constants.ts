@@ -25,7 +25,6 @@ export enum Screens {
     CommunityManager = 'CommunityManager',
     Communities = 'Communities',
     Profile = 'Profile',
-    Auth = 'Auth',
 }
 
 // async storage

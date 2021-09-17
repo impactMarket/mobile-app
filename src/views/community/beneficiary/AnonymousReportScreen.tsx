@@ -1,4 +1,7 @@
-import { useNavigation } from '@react-navigation/native';
+import {
+    DefaultNavigatorOptions,
+    useNavigation,
+} from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
@@ -27,26 +30,31 @@ function AnonymousReportScreen() {
     const [isVisible, setVisible] = useState(false);
     const [showWebview, setShowWebview] = useState(false);
 
+    const [isValidCategory, setIsValidCategory] = useState(true);
+    const [isValidDescription, setIsValidDescription] = useState(true);
+
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
 
     useLayoutEffect(() => {
         const submitReport = () => {
-            if (reportInput.length === 0) {
+            const isValid = reportInput.length > 0 && category !== undefined;
+            setIsValidDescription(reportInput.length > 0);
+            setIsValidCategory(category !== undefined);
+            if (!isValid) {
                 return;
             }
             setSubmitting(true);
             Api.user
                 .report(userCommunity.id, reportInput, category)
-                .then((r) => {
+                .then((_) => {
                     setSubmittedWithSuccess(true);
-                    navigation.goBack();
                 })
                 .catch(() => {
                     Alert.alert(
                         i18n.t('generic.failure'),
-                        i18n.t('reportIlegal.alertFailure'),
+                        i18n.t('report.alertFailure'),
                         [{ text: 'OK' }],
                         { cancelable: false }
                     );
@@ -60,14 +68,13 @@ function AnonymousReportScreen() {
                 headerLeft: () => <BackSvg />,
                 headerRight: () => (
                     <SubmitStory
-                        disabled={reportInput.length === 0}
+                        disabled={false}
                         submit={submitReport}
                         submitting={submitting}
                     />
                 ),
             });
-        }
-        if (showWebview) {
+        } else if (showWebview) {
             navigation.setOptions({
                 headerLeft: null,
                 headerRight: () => (
@@ -80,33 +87,36 @@ function AnonymousReportScreen() {
                 ),
             });
         }
-    }, [
-        navigation,
-        reportInput,
-        submitting,
-        userCommunity,
-        submittedWithSuccess,
-        showWebview,
-        category,
-    ]);
+    }, [submitting, userCommunity, showWebview, reportInput, category]);
+
+    const errorCategory = isValidCategory
+        ? null
+        : i18n.t('report.categoryIsRequired');
+    const errorDescription = isValidDescription
+        ? null
+        : i18n.t('report.descriptionIsRequired');
 
     const textCategory = (g: string | undefined) => {
         switch (g) {
             case 'general':
-                return i18n.t('reportIlegal.general');
+                return i18n.t('report.general');
             case 'potential-fraud':
-                return i18n.t('reportIlegal.potencialFraud');
+                return i18n.t('report.potencialFraud');
             default:
-                return i18n.t('reportIlegal.selectCategory');
+                return i18n.t('report.selectCategory');
         }
     };
 
     const handleChangeCategory = async (category: string | undefined) => {
         setCategory(category);
+        setIsValidCategory(true);
         modalizeCategoryRef.current?.close();
     };
 
-    const renderWebview = () => {
+    const HelpWebview = () => {
+        if (!showWebview) {
+            return null;
+        }
         return (
             <>
                 {isVisible ? (
@@ -141,67 +151,72 @@ function AnonymousReportScreen() {
         );
     };
 
-    const renderSubmitSuccessModal = () => (
-        <Modal visible dismissable={false}>
-            <Card
-                style={{
-                    marginHorizontal: 20,
-                    borderRadius: 8,
-                }}
-            >
-                <Card.Content
+    const SuccessSubmission = () => {
+        if (!submittedWithSuccess) {
+            return null;
+        }
+        return (
+            <Modal visible dismissable={false}>
+                <Card
                     style={{
-                        alignItems: 'center',
+                        marginHorizontal: 20,
+                        borderRadius: 8,
                     }}
                 >
-                    <Text
+                    <Card.Content
                         style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 17,
-                            lineHeight: 21,
-                            color: ipctColors.nileBlue,
-                            marginBottom: 16,
-                            textAlign: 'center',
+                            alignItems: 'center',
                         }}
                     >
-                        {i18n.t('reportIlegal.alertCongrat')}
-                    </Text>
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 17,
-                            lineHeight: 21,
-                            color: ipctColors.blueRibbon,
-                            marginBottom: 16,
-                            textAlign: 'center',
-                        }}
-                        onPress={() => {
-                            setSubmittedWithSuccess(true);
-                            setShowWebview(true);
-                        }}
-                    >
-                        {i18n.t('reportIlegal.alertCongratLink')}
-                    </Text>
-                    <Button
-                        modeType="gray"
-                        style={{
-                            backgroundColor: 'rgba(206, 212, 218, .27)',
-                            width: '100%',
-                        }}
-                        labelStyle={{
-                            fontSize: 15,
-                            lineHeight: 18,
-                        }}
-                        onPress={() => navigation.goBack()}
-                    >
-                        {i18n.t('generic.continue')}
-                    </Button>
-                </Card.Content>
-            </Card>
-        </Modal>
-    );
+                        <Text
+                            style={{
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 17,
+                                lineHeight: 21,
+                                color: ipctColors.nileBlue,
+                                marginBottom: 16,
+                                textAlign: 'center',
+                            }}
+                        >
+                            {i18n.t('report.alertCongrat')}
+                        </Text>
+                        <Text
+                            style={{
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 17,
+                                lineHeight: 21,
+                                color: ipctColors.blueRibbon,
+                                marginBottom: 16,
+                                textAlign: 'center',
+                            }}
+                            onPress={() => {
+                                setSubmittedWithSuccess(true);
+                                setShowWebview(true);
+                            }}
+                        >
+                            {i18n.t('report.alertCongratLink')}
+                        </Text>
+                        <Button
+                            modeType="gray"
+                            style={{
+                                backgroundColor: 'rgba(206, 212, 218, .27)',
+                                width: '100%',
+                            }}
+                            labelStyle={{
+                                fontSize: 15,
+                                lineHeight: 18,
+                            }}
+                            onPress={() => navigation.goBack()}
+                        >
+                            {i18n.t('generic.continue')}
+                        </Button>
+                    </Card.Content>
+                </Card>
+            </Modal>
+        );
+    };
 
-    const renderCategoryContent = () => (
+    const Categories = () => (
         <View style={{ flex: 1, height: '50%', paddingLeft: 8 }}>
             <RadioButton.Group
                 onValueChange={(value) => {
@@ -211,12 +226,12 @@ function AnonymousReportScreen() {
             >
                 <RadioButton.Item
                     key="general"
-                    label={i18n.t('reportIlegal.general')}
+                    label={i18n.t('report.general')}
                     value="general"
                 />
                 <RadioButton.Item
                     key="potential-fraud"
-                    label={i18n.t('reportIlegal.potencialFraud')}
+                    label={i18n.t('report.potencialFraud')}
                     value="potential-fraud"
                 />
             </RadioButton.Group>
@@ -225,100 +240,85 @@ function AnonymousReportScreen() {
 
     return (
         <>
-            {submittedWithSuccess ? (
-                renderSubmitSuccessModal()
-            ) : showWebview ? (
-                renderWebview()
-            ) : (
-                <View
+            <View
+                style={{
+                    padding: 22,
+                }}
+            >
+                <Text
                     style={{
-                        padding: 22,
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 17,
+                        lineHeight: 21,
+                        color: ipctColors.nileBlue,
+                        marginBottom: 16,
                     }}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 17,
-                            lineHeight: 21,
-                            color: ipctColors.nileBlue,
-                            marginBottom: 16,
-                        }}
-                    >
-                        {i18n.t('reportIlegal.message')}
-                    </Text>
-                    <Text
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 17,
-                            lineHeight: 21,
-                            color: ipctColors.blueRibbon,
-                            marginBottom: 16,
-                        }}
+                    {i18n.t('report.message')}
+                </Text>
+                <Text
+                    style={{
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 17,
+                        lineHeight: 21,
+                        color: ipctColors.blueRibbon,
+                        marginBottom: 16,
+                    }}
+                    onPress={() => {
+                        setShowWebview(true);
+                    }}
+                >
+                    {i18n.t('report.alertCongratLink')}
+                </Text>
+                <View style={{ marginBottom: 28 }}>
+                    <Select
+                        label={i18n.t('report.category')}
+                        value={textCategory(category)}
+                        error={errorCategory}
                         onPress={() => {
-                            setShowWebview(true);
-                        }}
-                    >
-                        {i18n.t('reportIlegal.alertCongratLink')}
-                    </Text>
-                    <View style={{ marginBottom: 28 }}>
-                        <Select
-                            label={i18n.t('reportIlegal.category')}
-                            value={textCategory(category)}
-                            onPress={() => {
-                                modalizeCategoryRef.current?.open();
-                            }}
-                        />
-                    </View>
-                    <Input
-                        label={i18n.t('reportIlegal.label')}
-                        multiline
-                        numberOfLines={12}
-                        value={reportInput}
-                        maxLength={256}
-                        isBig
-                        onChangeText={(value) => setReportInput(value)}
-                        style={{
-                            fontFamily: 'Gelion-Regular',
-                            fontSize: 17,
+                            modalizeCategoryRef.current?.open();
                         }}
                     />
                 </View>
-            )}
+                <Input
+                    label={i18n.t('report.label')}
+                    multiline
+                    numberOfLines={12}
+                    value={reportInput}
+                    maxLength={256}
+                    error={errorDescription}
+                    isBig
+                    onChangeText={(value) => setReportInput(value)}
+                    onEndEditing={(_) =>
+                        setIsValidDescription(reportInput.length > 0)
+                    }
+                    style={{
+                        fontFamily: 'Gelion-Regular',
+                        fontSize: 17,
+                    }}
+                />
+            </View>
             <Portal>
+                <SuccessSubmission />
+                <HelpWebview />
                 <Modalize
                     ref={modalizeCategoryRef}
                     HeaderComponent={renderHeader(
-                        i18n.t('reportIlegal.category'),
+                        i18n.t('report.category'),
                         modalizeCategoryRef
                     )}
                     adjustToContentHeight
                 >
-                    {renderCategoryContent()}
+                    <Categories />
                 </Modalize>
             </Portal>
         </>
     );
 }
 
-AnonymousReportScreen.navigationOptions = ({
-    submitReport,
-    submitting,
-    disabled,
-}: {
-    submitReport: () => void;
-    submitting: boolean;
-    disabled: boolean;
-}) => {
+AnonymousReportScreen.navigationOptions = () => {
     return {
-        headerLeft: () => <BackSvg />,
         headerTitle: i18n.t('report.report'),
-        headerRight: () => (
-            <SubmitStory
-                submit={submitReport}
-                submitting={submitting}
-                disabled={disabled}
-            />
-        ),
     };
 };
 
