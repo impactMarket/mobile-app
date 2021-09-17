@@ -34,10 +34,6 @@ function CommunitiesScreen() {
         (state: IRootState) => state.user.wallet.address
     );
 
-    const isManager = useSelector(
-        (state: IRootState) => state.user.community.isManager
-    );
-
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
 
     const communities = useSelector(
