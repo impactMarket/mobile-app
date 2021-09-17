@@ -1,13 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
-import ProfileSvg from 'components/svg/ProfileSvg';
 import FAQSvg from 'components/svg/header/FaqSvg';
 import ThreeDotsSvg from 'components/svg/header/ThreeDotsSvg';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React, { useState } from 'react';
-import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 
 function CommunityManager() {
@@ -18,21 +16,13 @@ function CommunityManager() {
         (state: IRootState) => state.user.community.metadata
     );
     return (
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginRight: community.status !== 'valid' ? 22 : 0,
-            }}
-        >
+        <>
             <FAQSvg />
-            <ProfileSvg />
             {community.status === 'valid' && (
                 <ThreeDotsSvg
                     setOpenThreeDotsMenu={setOpenThreeDotsMenu}
                     openThreeDotsMenu={openThreeDotsMenu}
-                    style={{ marginRight: 16, marginLeft: 10 }}
+                    style={{ marginLeft: 8.4 }}
                     hasCloseBtn={false}
                 >
                     <>
@@ -63,7 +53,7 @@ function CommunityManager() {
                     </>
                 </ThreeDotsSvg>
             )}
-        </View>
+        </>
     );
 }
 

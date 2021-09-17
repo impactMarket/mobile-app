@@ -111,27 +111,11 @@ function CommunitiesScreen() {
 
 CommunitiesScreen.navigationOptions = () => {
     return {
+        headerTitle: null,
         tabBarLabel: i18n.t('generic.communities'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <CommunitiesSvg focused={props.focused} />
         ),
-        headerLeft: () => (
-            <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />
-        ),
-        headerRight: () => (
-            <View
-                style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginRight: 22,
-                }}
-            >
-                <FAQSvg />
-                <ProfileSvg />
-            </View>
-        ),
-        headerTitle: '',
     };
 };
 

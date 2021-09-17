@@ -45,6 +45,7 @@ import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
 import BlockedAccount from './cards/BlockedAccount';
+import FAQSvg from 'components/svg/header/FaqSvg';
 
 function BeneficiaryScreen() {
     const timeoutTimeDiff = useRef<NodeJS.Timer | undefined>();
@@ -554,12 +555,11 @@ BeneficiaryScreen.navigationOptions = ({
     route: RouteProp<any, any>;
 }) => {
     return {
-        title: i18n.t('beneficiary.claim'),
+        headerTitle: i18n.t('beneficiary.claim'),
         tabBarLabel: i18n.t('beneficiary.claim'),
         tabBarIcon: (props: ITabBarIconProps) => (
             <ClaimSvg focused={props.focused} />
         ),
-        headerTitle: i18n.t('beneficiary.claim'),
     };
 };
 

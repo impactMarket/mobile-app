@@ -904,13 +904,6 @@ ProfileScreen.navigationOptions = () => {
         headerLeft: () => <BackSvg />,
         headerRight: () => <Logout />,
         headerTitle: i18n.t('profile.profile'),
-        headerTitleStyle: {
-            fontFamily: 'Manrope-Bold',
-            fontSize: ipctFontSize.lowMedium,
-            lineHeight: ipctLineHeight.large,
-            color: ipctColors.darBlue,
-            left: -12,
-        },
     };
 };
 
