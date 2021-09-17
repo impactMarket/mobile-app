@@ -9,7 +9,6 @@ import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
-import ShareSvg from 'components/svg/header/ShareSvg';
 import { modalDonateAction } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import {
@@ -124,7 +123,7 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
         }
         return (
             <View style={styles.inlineBox}>
-                <Text style={styles.textManagers}>
+                <Text style={[styles.textManagers, { marginLeft: 0 }]}>
                     {i18n.t('promoter.promotedBy')}
                 </Text>
                 <Text style={styles.textBeneficiaries}>{promoter.name}</Text>
@@ -191,7 +190,9 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     </Text>
                 </View>
                 <SponsoredBy />
-                <Description community={community} isShort />
+                <View style={{ marginTop: 8 }}>
+                    <Description community={community} isShort />
+                </View>
                 <View
                     style={{
                         borderRadius: 12,
@@ -230,7 +231,6 @@ CommunityDetailsScreen.navigationOptions = () => {
                 }}
             >
                 <FaqSvg />
-                <ShareSvg />
             </View>
         ),
         headerTitle: '',
@@ -255,7 +255,10 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter-Regular',
         color: ipctColors.lynch,
     },
-    inlineBox: { flexDirection: 'row', alignItems: 'center' },
+    inlineBox: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     cover: {
         width: '100%',
         height: 329,
