@@ -6,6 +6,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as helpers from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
+import mockAxios from 'jest-mock-axios';
 import React from 'react';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
@@ -19,6 +20,8 @@ jest.mock('helpers/redux/actions/user', () => ({
     setCommunityMetadata: jest.fn(),
     setUserIsCommunityManager: jest.fn(),
 }));
+
+jest.mock('../component/PlaceSearch');
 
 /**
  * NOTE: we are testing the component individually, but need the header
@@ -149,12 +152,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -179,13 +178,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -224,12 +217,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -258,13 +247,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -303,12 +286,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -337,13 +316,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -368,85 +341,12 @@ describe('create community', () => {
     });
 
     test('try to submit only city', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
-            <WrappedCreateCommunityScreen />
-        );
-        await act(async () => {});
-
-        expect(
-            queryByText(i18n.t('createCommunity.coverImageRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityNameRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
-        ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
-        ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.claimAmountRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.maxClaimAmountRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
-        ).toBeNull();
-
-        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Kampala');
-        fireEvent.press(getByText(i18n.t('generic.submit')));
-
-        expect(
-            queryByText(i18n.t('createCommunity.coverImageRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityNameRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
-        ).not.toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.emailRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.claimAmountRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.maxClaimAmountRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.baseIntervalRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(
-                i18n.t('createCommunity.incrementalIntervalUnitRequired')
-            )
-        ).not.toBeNull();
-    });
-
-    test('try to submit only country', async () => {
         const {
             getByText,
             queryByText,
             getByLabelText,
-            getByA11yLabel,
+            getByPlaceholderText,
+            getByTestId,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
 
@@ -459,12 +359,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -477,10 +373,30 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
         ).toBeNull();
 
-        fireEvent.press(getByLabelText(i18n.t('generic.country')));
-        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
-        await act(async () => expect(getByLabelText('PT')));
-        fireEvent.press(getByLabelText('PT'));
+        fireEvent.changeText(getByLabelText(i18n.t('generic.cityCountry')), '');
+        fireEvent.changeText(
+            getByPlaceholderText(i18n.t('generic.search')),
+            'Beja, Portugal'
+        );
+
+        await act(async () => fireEvent.press(getByTestId('select-place')));
+
+        await act(async () => {
+            const req = mockAxios.getReqByMatchUrl(/maps\.googleapis\.com/gm);
+            mockAxios.mockResponse(
+                {
+                    data: {
+                        result: {
+                            geometry: { location: { lat: 1, lng: 1 } },
+                            address_components: [
+                                { short_name: 'PT', types: ['country'] },
+                            ],
+                        },
+                    },
+                },
+                req
+            );
+        });
         fireEvent.press(getByText(i18n.t('generic.submit')));
 
         expect(
@@ -493,104 +409,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.emailRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.claimAmountRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.maxClaimAmountRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.baseIntervalRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(
-                i18n.t('createCommunity.incrementalIntervalUnitRequired')
-            )
-        ).not.toBeNull();
-    });
-
-    test('try to submit only location', async () => {
-        requestForegroundPermissionsAsyncMock.mockReturnValueOnce(
-            Promise.resolve({
-                status: 'granted',
-            })
-        );
-        getCurrentPositionAsyncMock.mockReturnValueOnce(
-            Promise.resolve({
-                coords: { latitude: 3.0, longitude: 2.0 },
-            })
-        );
-
-        const { getByText, queryByText, getByA11yLabel } = render(
-            <WrappedCreateCommunityScreen />
-        );
-        await act(async () => {});
-
-        expect(
-            queryByText(i18n.t('createCommunity.coverImageRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityNameRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
-        ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
-        ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.claimAmountRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.maxClaimAmountRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.incrementalIntervalRequired'))
-        ).toBeNull();
-
-        await act(async () =>
-            fireEvent.press(
-                getByA11yLabel(i18n.t('createCommunity.getGPSLocation'))
-            )
-        );
-        fireEvent.press(getByText(i18n.t('generic.submit')));
-
-        expect(
-            queryByText(i18n.t('createCommunity.coverImageRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityNameRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -629,12 +448,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -664,13 +479,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -780,12 +589,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -815,13 +620,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -861,12 +660,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -896,13 +691,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -942,12 +731,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -977,13 +762,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -1023,12 +802,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -1059,13 +834,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -1105,12 +874,8 @@ describe('create community', () => {
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).toBeNull();
-        expect(queryByText(i18n.t('createCommunity.cityRequired'))).toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).toBeNull();
         expect(queryByText(i18n.t('createCommunity.emailRequired'))).toBeNull();
         expect(
@@ -1141,13 +906,7 @@ describe('create community', () => {
             queryByText(i18n.t('createCommunity.communityDescriptionRequired'))
         ).not.toBeNull();
         expect(
-            queryByText(i18n.t('createCommunity.cityRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.countryRequired'))
-        ).not.toBeNull();
-        expect(
-            queryByText(i18n.t('createCommunity.enablingGPSRequired'))
+            queryByText(i18n.t('createCommunity.cityCountryRequired'))
         ).not.toBeNull();
         expect(
             queryByText(i18n.t('createCommunity.emailRequired'))
@@ -1284,7 +1043,7 @@ describe('create community', () => {
             getByLabelText,
             getByTestId,
             getByText,
-            getByA11yLabel,
+            getByPlaceholderText,
             queryByText,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
@@ -1303,19 +1062,31 @@ describe('create community', () => {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Beja');
-
-        fireEvent.press(getByLabelText(i18n.t('generic.country')));
-
-        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
-        await act(async () => expect(getByLabelText('PT')));
-        fireEvent.press(getByLabelText('PT'));
-
-        await act(async () =>
-            fireEvent.press(
-                getByA11yLabel(i18n.t('createCommunity.getGPSLocation'))
-            )
+        fireEvent.changeText(getByLabelText(i18n.t('generic.cityCountry')), '');
+        fireEvent.changeText(
+            getByPlaceholderText(i18n.t('generic.search')),
+            'Beja, Portugal'
         );
+
+        await act(async () => fireEvent.press(getByTestId('select-place')));
+
+        await act(async () => {
+            const req = mockAxios.getReqByMatchUrl(/maps\.googleapis\.com/gm);
+            mockAxios.mockResponse(
+                {
+                    data: {
+                        result: {
+                            geometry: { location: { lat: 1, lng: 1 } },
+                            address_components: [
+                                { short_name: 'PT', types: ['country'] },
+                            ],
+                        },
+                    },
+                },
+                req
+            );
+        });
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         fireEvent.press(getByLabelText(i18n.t('createCommunity.frequency')));
         await act(async () =>
@@ -1394,7 +1165,7 @@ describe('create community', () => {
             getByLabelText,
             getByTestId,
             getByText,
-            getByA11yLabel,
+            getByPlaceholderText,
             queryByText,
             queryByTestId,
         } = render(<WrappedCreateCommunityScreen />);
@@ -1414,19 +1185,31 @@ describe('create community', () => {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Beja');
-
-        fireEvent.press(getByLabelText(i18n.t('generic.country')));
-
-        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
-        await act(async () => expect(getByLabelText('PT')));
-        fireEvent.press(getByLabelText('PT'));
-
-        await act(async () =>
-            fireEvent.press(
-                getByA11yLabel(i18n.t('createCommunity.getGPSLocation'))
-            )
+        fireEvent.changeText(getByLabelText(i18n.t('generic.cityCountry')), '');
+        fireEvent.changeText(
+            getByPlaceholderText(i18n.t('generic.search')),
+            'Beja, Portugal'
         );
+
+        await act(async () => fireEvent.press(getByTestId('select-place')));
+
+        await act(async () => {
+            const req = mockAxios.getReqByMatchUrl(/maps\.googleapis\.com/gm);
+            mockAxios.mockResponse(
+                {
+                    data: {
+                        result: {
+                            geometry: { location: { lat: 1, lng: 1 } },
+                            address_components: [
+                                { short_name: 'PT', types: ['country'] },
+                            ],
+                        },
+                    },
+                },
+                req
+            );
+        });
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         fireEvent.press(getByLabelText(i18n.t('createCommunity.frequency')));
         await act(async () =>
@@ -1473,9 +1256,9 @@ describe('create community', () => {
         ).toBeNull();
     });
 
-    // TODO: failed submit (profile)
+    // // TODO: failed submit (profile)
 
-    // TODO: failed submit (community)
+    // // TODO: failed submit (community)
 
     test('submit successfully', async () => {
         launchImageLibraryAsyncMock.mockReturnValueOnce(
@@ -1511,7 +1294,7 @@ describe('create community', () => {
             getByLabelText,
             getByTestId,
             getByText,
-            getByA11yLabel,
+            getByPlaceholderText,
             queryByText,
             queryByTestId,
         } = render(<WrappedCreateCommunityScreen />);
@@ -1531,19 +1314,31 @@ describe('create community', () => {
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
         );
 
-        fireEvent.changeText(getByLabelText(i18n.t('generic.city')), 'Beja');
-
-        fireEvent.press(getByLabelText(i18n.t('generic.country')));
-
-        fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
-        await act(async () => expect(getByLabelText('PT')));
-        fireEvent.press(getByLabelText('PT'));
-
-        await act(async () =>
-            fireEvent.press(
-                getByA11yLabel(i18n.t('createCommunity.getGPSLocation'))
-            )
+        fireEvent.changeText(getByLabelText(i18n.t('generic.cityCountry')), '');
+        fireEvent.changeText(
+            getByPlaceholderText(i18n.t('generic.search')),
+            'Beja, Portugal'
         );
+
+        await act(async () => fireEvent.press(getByTestId('select-place')));
+
+        await act(async () => {
+            const req = mockAxios.getReqByMatchUrl(/maps\.googleapis\.com/gm);
+            mockAxios.mockResponse(
+                {
+                    data: {
+                        result: {
+                            geometry: { location: { lat: 1, lng: 1 } },
+                            address_components: [
+                                { short_name: 'PT', types: ['country'] },
+                            ],
+                        },
+                    },
+                },
+                req
+            );
+        });
+        fireEvent.press(getByText(i18n.t('generic.submit')));
 
         fireEvent.changeText(
             getByLabelText(i18n.t('generic.email')),

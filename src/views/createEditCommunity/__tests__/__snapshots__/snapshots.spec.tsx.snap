@@ -1078,7 +1078,7 @@ Array [
                                       }
                                     }
                                   >
-                                    City
+                                    City, Country
                                   </Text>
                                 </View>
                                 <View
@@ -1092,17 +1092,17 @@ Array [
                                   }
                                 >
                                   <TextInput
-                                    accessibilityLabel="City"
+                                    accessibilityLabel="City, Country"
                                     allowFontScaling={true}
                                     boxStyle={
                                       Object {
                                         "marginTop": 28,
                                       }
                                     }
-                                    label="City"
+                                    label="City, Country"
                                     maxLength={32}
                                     onChangeText={[Function]}
-                                    onEndEditing={[Function]}
+                                    onFocus={[Function]}
                                     rejectResponderTermination={true}
                                     style={
                                       Object {
@@ -1132,262 +1132,6 @@ Array [
                                   }
                                 }
                               >
-                                <View
-                                  accessibilityLabel="Country"
-                                  style={
-                                    Object {
-                                      "height": 48,
-                                      "width": "100%",
-                                    }
-                                  }
-                                >
-                                  <Text
-                                    style={
-                                      Array [
-                                        Object {
-                                          "backgroundColor": "#FFFFFF",
-                                          "color": "#7E8DA6",
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 12,
-                                          "fontWeight": "500",
-                                          "left": 12,
-                                          "lineHeight": 14,
-                                          "paddingHorizontal": 4,
-                                          "position": "absolute",
-                                          "top": -8,
-                                          "zIndex": 1,
-                                        },
-                                        Object {
-                                          "backgroundColor": "#FFFFFF",
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    Country
-                                     
-                                  </Text>
-                                  <View
-                                    accessible={true}
-                                    focusable={true}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
-                                    style={
-                                      Array [
-                                        Object {
-                                          "borderRadius": 6,
-                                          "borderWidth": 0.5,
-                                          "bottom": 0,
-                                          "flexDirection": "row",
-                                          "left": 0,
-                                          "paddingHorizontal": 16,
-                                          "position": "absolute",
-                                          "right": 0,
-                                          "top": 0,
-                                        },
-                                        Object {
-                                          "borderColor": "#8A9FC2",
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    <Text
-                                      style={
-                                        Object {
-                                          "alignSelf": "center",
-                                          "color": "#1E3252",
-                                          "flexGrow": 1,
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 15,
-                                          "zIndex": 1,
-                                        }
-                                      }
-                                      testID="selected-value"
-                                    >
-                                      Select country
-                                    </Text>
-                                    <RNSVGSvgView
-                                      align="xMidYMid"
-                                      bbHeight={9}
-                                      bbWidth={14}
-                                      fill="none"
-                                      focusable={false}
-                                      height={9}
-                                      meetOrSlice={0}
-                                      minX={0}
-                                      minY={0}
-                                      style={
-                                        Array [
-                                          Object {
-                                            "backgroundColor": "transparent",
-                                            "borderWidth": 0,
-                                          },
-                                          Object {
-                                            "alignSelf": "center",
-                                          },
-                                          Object {
-                                            "flex": 0,
-                                            "height": 9,
-                                            "width": 14,
-                                          },
-                                        ]
-                                      }
-                                      vbHeight={9}
-                                      vbWidth={14}
-                                      width={14}
-                                    >
-                                      <RNSVGGroup
-                                        fill={null}
-                                        propList={
-                                          Array [
-                                            "fill",
-                                          ]
-                                        }
-                                      >
-                                        <RNSVGPath
-                                          d="M6.997 5.812L11.861.717a.69.69 0 011.005 0l.426.447c.134.14.208.327.208.527s-.074.386-.208.526l-5.79 6.066a.69.69 0 01-.504.217.69.69 0 01-.505-.217L.708 2.223A.757.757 0 01.5 1.696c0-.2.074-.386.208-.527l.426-.446a.69.69 0 011.005 0l4.858 5.089z"
-                                          fill={4285760413}
-                                          opacity={0.833}
-                                          propList={
-                                            Array [
-                                              "fill",
-                                            ]
-                                          }
-                                        />
-                                      </RNSVGGroup>
-                                    </RNSVGSvgView>
-                                  </View>
-                                </View>
-                              </View>
-                              <View
-                                style={
-                                  Object {
-                                    "marginBottom": 24,
-                                    "marginVertical": 16,
-                                  }
-                                }
-                              >
-                                <View
-                                  modeType="default"
-                                  style={
-                                    Object {
-                                      "alignItems": "center",
-                                      "backgroundColor": "#2362FB",
-                                      "borderColor": "transparent",
-                                      "borderRadius": 6,
-                                      "borderStyle": "solid",
-                                      "borderWidth": 0,
-                                      "elevation": 0,
-                                      "flexDirection": "row",
-                                      "height": 44,
-                                      "justifyContent": "center",
-                                      "minWidth": 64,
-                                      "paddingVertical": 0,
-                                      "width": "100%",
-                                    }
-                                  }
-                                >
-                                  <View
-                                    accessibilityLabel="Get GPS Location"
-                                    accessibilityRole="button"
-                                    accessibilityState={
-                                      Object {
-                                        "disabled": undefined,
-                                      }
-                                    }
-                                    accessible={true}
-                                    focusable={true}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
-                                    style={
-                                      Array [
-                                        Object {
-                                          "overflow": "hidden",
-                                        },
-                                        Object {
-                                          "borderRadius": 6,
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    <View
-                                      style={
-                                        Array [
-                                          Object {
-                                            "alignItems": "center",
-                                            "flexDirection": "row",
-                                            "justifyContent": "center",
-                                          },
-                                          undefined,
-                                        ]
-                                      }
-                                    >
-                                      <Text
-                                        numberOfLines={1}
-                                        selectable={false}
-                                        style={
-                                          Array [
-                                            Object {
-                                              "color": "#000000",
-                                              "fontFamily": "System",
-                                              "fontWeight": "400",
-                                              "textAlign": "left",
-                                            },
-                                            Array [
-                                              Object {
-                                                "letterSpacing": 1,
-                                                "marginHorizontal": 16,
-                                                "marginVertical": 9,
-                                                "textAlign": "center",
-                                              },
-                                              undefined,
-                                              false,
-                                              Object {
-                                                "color": "#ffffff",
-                                                "fontFamily": "System",
-                                                "fontWeight": "500",
-                                              },
-                                              Object {
-                                                "fontFamily": "System",
-                                                "fontWeight": "500",
-                                              },
-                                              Object {
-                                                "color": "white",
-                                                "fontFamily": "Inter-Regular",
-                                                "fontSize": 15,
-                                                "lineHeight": 17.58,
-                                              },
-                                            ],
-                                          ]
-                                        }
-                                      >
-                                        <Text
-                                          style={
-                                            Object {
-                                              "color": "#FFFFFF",
-                                              "fontFamily": "Inter-Regular",
-                                              "fontSize": 15,
-                                              "lineHeight": 28,
-                                            }
-                                          }
-                                        >
-                                          Get GPS Location
-                                        </Text>
-                                      </Text>
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-                              <View>
                                 <View
                                   style={
                                     Array [
@@ -1455,6 +1199,11 @@ Array [
                                   <TextInput
                                     accessibilityLabel="Email"
                                     allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
                                     keyboardType="email-address"
                                     label="Email"
                                     maxLength={64}
@@ -2602,7 +2351,145 @@ If there is another person or organization among your community you believe is m
         "top": 0,
       }
     }
-  />,
+  >
+    <Modal
+      hardwareAccelerated={false}
+      visible={false}
+    >
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "marginHorizontal": 20,
+            "marginTop": 15,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={34}
+          bbWidth={34}
+          fill="none"
+          focusable={false}
+          height={34}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          onPress={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          responsible={true}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "marginRight": 18,
+                "marginTop": 6,
+              },
+              Object {
+                "flex": 0,
+                "height": 34,
+                "width": 34,
+              },
+            ]
+          }
+          vbHeight={34}
+          vbWidth={34}
+          width={34}
+        >
+          <RNSVGGroup
+            fill={null}
+            propList={
+              Array [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGCircle
+              cx={16.8}
+              cy={16.8}
+              fill={4293586416}
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              r={16.8}
+            />
+            <RNSVGPath
+              d="M13.696 17.04l7.005-6.761a.963.963 0 000-1.398l-.614-.592A1.035 1.035 0 0019.363 8c-.274 0-.532.103-.724.289l-8.34 8.05a.963.963 0 00-.299.7c0 .266.105.515.299.702l8.332 8.042c.193.186.45.288.724.288.275 0 .532-.102.725-.288l.613-.593a.966.966 0 000-1.398l-6.997-6.753z"
+              fill={4279708493}
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+            />
+          </RNSVGGroup>
+        </RNSVGSvgView>
+        <View
+          pointerEvents="box-none"
+          style={
+            Array [
+              Object {
+                "flex": 1,
+              },
+              Object {},
+            ]
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "flexDirection": "row",
+                },
+                undefined,
+              ]
+            }
+          >
+            <TextInput
+              allowFontScaling={true}
+              autoFocus={true}
+              clearButtonMode="while-editing"
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Search"
+              rejectResponderTermination={true}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 5,
+                    "flex": 1,
+                    "fontSize": 15,
+                    "height": 44,
+                    "marginBottom": 5,
+                    "paddingHorizontal": 10,
+                    "paddingVertical": 5,
+                  },
+                  Object {
+                    "borderColor": "#E9EDF4",
+                    "borderWidth": 1,
+                  },
+                ]
+              }
+              underlineColorAndroid="transparent"
+              value=""
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
+  </View>,
   <View
     collapsable={false}
     pointerEvents="box-none"
@@ -3783,7 +3670,7 @@ Array [
                                       }
                                     }
                                   >
-                                    City
+                                    City, Country
                                   </Text>
                                 </View>
                                 <View
@@ -3797,17 +3684,17 @@ Array [
                                   }
                                 >
                                   <TextInput
-                                    accessibilityLabel="City"
+                                    accessibilityLabel="City, Country"
                                     allowFontScaling={true}
                                     boxStyle={
                                       Object {
                                         "marginTop": 28,
                                       }
                                     }
-                                    label="City"
+                                    label="City, Country"
                                     maxLength={32}
                                     onChangeText={[Function]}
-                                    onEndEditing={[Function]}
+                                    onFocus={[Function]}
                                     rejectResponderTermination={true}
                                     style={
                                       Object {
@@ -3837,262 +3724,6 @@ Array [
                                   }
                                 }
                               >
-                                <View
-                                  accessibilityLabel="Country"
-                                  style={
-                                    Object {
-                                      "height": 48,
-                                      "width": "100%",
-                                    }
-                                  }
-                                >
-                                  <Text
-                                    style={
-                                      Array [
-                                        Object {
-                                          "backgroundColor": "#FFFFFF",
-                                          "color": "#7E8DA6",
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 12,
-                                          "fontWeight": "500",
-                                          "left": 12,
-                                          "lineHeight": 14,
-                                          "paddingHorizontal": 4,
-                                          "position": "absolute",
-                                          "top": -8,
-                                          "zIndex": 1,
-                                        },
-                                        Object {
-                                          "backgroundColor": "#FFFFFF",
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    Country
-                                     
-                                  </Text>
-                                  <View
-                                    accessible={true}
-                                    focusable={true}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
-                                    style={
-                                      Array [
-                                        Object {
-                                          "borderRadius": 6,
-                                          "borderWidth": 0.5,
-                                          "bottom": 0,
-                                          "flexDirection": "row",
-                                          "left": 0,
-                                          "paddingHorizontal": 16,
-                                          "position": "absolute",
-                                          "right": 0,
-                                          "top": 0,
-                                        },
-                                        Object {
-                                          "borderColor": "#8A9FC2",
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    <Text
-                                      style={
-                                        Object {
-                                          "alignSelf": "center",
-                                          "color": "#1E3252",
-                                          "flexGrow": 1,
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 15,
-                                          "zIndex": 1,
-                                        }
-                                      }
-                                      testID="selected-value"
-                                    >
-                                      Select country
-                                    </Text>
-                                    <RNSVGSvgView
-                                      align="xMidYMid"
-                                      bbHeight={9}
-                                      bbWidth={14}
-                                      fill="none"
-                                      focusable={false}
-                                      height={9}
-                                      meetOrSlice={0}
-                                      minX={0}
-                                      minY={0}
-                                      style={
-                                        Array [
-                                          Object {
-                                            "backgroundColor": "transparent",
-                                            "borderWidth": 0,
-                                          },
-                                          Object {
-                                            "alignSelf": "center",
-                                          },
-                                          Object {
-                                            "flex": 0,
-                                            "height": 9,
-                                            "width": 14,
-                                          },
-                                        ]
-                                      }
-                                      vbHeight={9}
-                                      vbWidth={14}
-                                      width={14}
-                                    >
-                                      <RNSVGGroup
-                                        fill={null}
-                                        propList={
-                                          Array [
-                                            "fill",
-                                          ]
-                                        }
-                                      >
-                                        <RNSVGPath
-                                          d="M6.997 5.812L11.861.717a.69.69 0 011.005 0l.426.447c.134.14.208.327.208.527s-.074.386-.208.526l-5.79 6.066a.69.69 0 01-.504.217.69.69 0 01-.505-.217L.708 2.223A.757.757 0 01.5 1.696c0-.2.074-.386.208-.527l.426-.446a.69.69 0 011.005 0l4.858 5.089z"
-                                          fill={4285760413}
-                                          opacity={0.833}
-                                          propList={
-                                            Array [
-                                              "fill",
-                                            ]
-                                          }
-                                        />
-                                      </RNSVGGroup>
-                                    </RNSVGSvgView>
-                                  </View>
-                                </View>
-                              </View>
-                              <View
-                                style={
-                                  Object {
-                                    "marginBottom": 24,
-                                    "marginVertical": 16,
-                                  }
-                                }
-                              >
-                                <View
-                                  modeType="default"
-                                  style={
-                                    Object {
-                                      "alignItems": "center",
-                                      "backgroundColor": "#2362FB",
-                                      "borderColor": "transparent",
-                                      "borderRadius": 6,
-                                      "borderStyle": "solid",
-                                      "borderWidth": 0,
-                                      "elevation": 0,
-                                      "flexDirection": "row",
-                                      "height": 44,
-                                      "justifyContent": "center",
-                                      "minWidth": 64,
-                                      "paddingVertical": 0,
-                                      "width": "100%",
-                                    }
-                                  }
-                                >
-                                  <View
-                                    accessibilityLabel="Get GPS Location"
-                                    accessibilityRole="button"
-                                    accessibilityState={
-                                      Object {
-                                        "disabled": undefined,
-                                      }
-                                    }
-                                    accessible={true}
-                                    focusable={true}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
-                                    style={
-                                      Array [
-                                        Object {
-                                          "overflow": "hidden",
-                                        },
-                                        Object {
-                                          "borderRadius": 6,
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    <View
-                                      style={
-                                        Array [
-                                          Object {
-                                            "alignItems": "center",
-                                            "flexDirection": "row",
-                                            "justifyContent": "center",
-                                          },
-                                          undefined,
-                                        ]
-                                      }
-                                    >
-                                      <Text
-                                        numberOfLines={1}
-                                        selectable={false}
-                                        style={
-                                          Array [
-                                            Object {
-                                              "color": "#000000",
-                                              "fontFamily": "System",
-                                              "fontWeight": "400",
-                                              "textAlign": "left",
-                                            },
-                                            Array [
-                                              Object {
-                                                "letterSpacing": 1,
-                                                "marginHorizontal": 16,
-                                                "marginVertical": 9,
-                                                "textAlign": "center",
-                                              },
-                                              undefined,
-                                              false,
-                                              Object {
-                                                "color": "#ffffff",
-                                                "fontFamily": "System",
-                                                "fontWeight": "500",
-                                              },
-                                              Object {
-                                                "fontFamily": "System",
-                                                "fontWeight": "500",
-                                              },
-                                              Object {
-                                                "color": "white",
-                                                "fontFamily": "Inter-Regular",
-                                                "fontSize": 15,
-                                                "lineHeight": 17.58,
-                                              },
-                                            ],
-                                          ]
-                                        }
-                                      >
-                                        <Text
-                                          style={
-                                            Object {
-                                              "color": "#FFFFFF",
-                                              "fontFamily": "Inter-Regular",
-                                              "fontSize": 15,
-                                              "lineHeight": 28,
-                                            }
-                                          }
-                                        >
-                                          Get GPS Location
-                                        </Text>
-                                      </Text>
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-                              <View>
                                 <View
                                   style={
                                     Array [
@@ -4160,6 +3791,11 @@ Array [
                                   <TextInput
                                     accessibilityLabel="Email"
                                     allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
                                     keyboardType="email-address"
                                     label="Email"
                                     maxLength={64}
@@ -5307,7 +4943,145 @@ If there is another person or organization among your community you believe is m
         "top": 0,
       }
     }
-  />,
+  >
+    <Modal
+      hardwareAccelerated={false}
+      visible={false}
+    >
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "marginHorizontal": 20,
+            "marginTop": 15,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={34}
+          bbWidth={34}
+          fill="none"
+          focusable={false}
+          height={34}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          onPress={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          responsible={true}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "marginRight": 18,
+                "marginTop": 6,
+              },
+              Object {
+                "flex": 0,
+                "height": 34,
+                "width": 34,
+              },
+            ]
+          }
+          vbHeight={34}
+          vbWidth={34}
+          width={34}
+        >
+          <RNSVGGroup
+            fill={null}
+            propList={
+              Array [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGCircle
+              cx={16.8}
+              cy={16.8}
+              fill={4293586416}
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              r={16.8}
+            />
+            <RNSVGPath
+              d="M13.696 17.04l7.005-6.761a.963.963 0 000-1.398l-.614-.592A1.035 1.035 0 0019.363 8c-.274 0-.532.103-.724.289l-8.34 8.05a.963.963 0 00-.299.7c0 .266.105.515.299.702l8.332 8.042c.193.186.45.288.724.288.275 0 .532-.102.725-.288l.613-.593a.966.966 0 000-1.398l-6.997-6.753z"
+              fill={4279708493}
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+            />
+          </RNSVGGroup>
+        </RNSVGSvgView>
+        <View
+          pointerEvents="box-none"
+          style={
+            Array [
+              Object {
+                "flex": 1,
+              },
+              Object {},
+            ]
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "flexDirection": "row",
+                },
+                undefined,
+              ]
+            }
+          >
+            <TextInput
+              allowFontScaling={true}
+              autoFocus={true}
+              clearButtonMode="while-editing"
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Search"
+              rejectResponderTermination={true}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 5,
+                    "flex": 1,
+                    "fontSize": 15,
+                    "height": 44,
+                    "marginBottom": 5,
+                    "paddingHorizontal": 10,
+                    "paddingVertical": 5,
+                  },
+                  Object {
+                    "borderColor": "#E9EDF4",
+                    "borderWidth": 1,
+                  },
+                ]
+              }
+              underlineColorAndroid="transparent"
+              value=""
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
+  </View>,
   <View
     collapsable={false}
     pointerEvents="box-none"
@@ -6488,7 +6262,7 @@ Array [
                                       }
                                     }
                                   >
-                                    City
+                                    City, Country
                                   </Text>
                                 </View>
                                 <View
@@ -6502,17 +6276,17 @@ Array [
                                   }
                                 >
                                   <TextInput
-                                    accessibilityLabel="City"
+                                    accessibilityLabel="City, Country"
                                     allowFontScaling={true}
                                     boxStyle={
                                       Object {
                                         "marginTop": 28,
                                       }
                                     }
-                                    label="City"
+                                    label="City, Country"
                                     maxLength={32}
                                     onChangeText={[Function]}
-                                    onEndEditing={[Function]}
+                                    onFocus={[Function]}
                                     rejectResponderTermination={true}
                                     style={
                                       Object {
@@ -6542,262 +6316,6 @@ Array [
                                   }
                                 }
                               >
-                                <View
-                                  accessibilityLabel="Country"
-                                  style={
-                                    Object {
-                                      "height": 48,
-                                      "width": "100%",
-                                    }
-                                  }
-                                >
-                                  <Text
-                                    style={
-                                      Array [
-                                        Object {
-                                          "backgroundColor": "#FFFFFF",
-                                          "color": "#7E8DA6",
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 12,
-                                          "fontWeight": "500",
-                                          "left": 12,
-                                          "lineHeight": 14,
-                                          "paddingHorizontal": 4,
-                                          "position": "absolute",
-                                          "top": -8,
-                                          "zIndex": 1,
-                                        },
-                                        Object {
-                                          "backgroundColor": "#FFFFFF",
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    Country
-                                     
-                                  </Text>
-                                  <View
-                                    accessible={true}
-                                    focusable={true}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
-                                    style={
-                                      Array [
-                                        Object {
-                                          "borderRadius": 6,
-                                          "borderWidth": 0.5,
-                                          "bottom": 0,
-                                          "flexDirection": "row",
-                                          "left": 0,
-                                          "paddingHorizontal": 16,
-                                          "position": "absolute",
-                                          "right": 0,
-                                          "top": 0,
-                                        },
-                                        Object {
-                                          "borderColor": "#8A9FC2",
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    <Text
-                                      style={
-                                        Object {
-                                          "alignSelf": "center",
-                                          "color": "#1E3252",
-                                          "flexGrow": 1,
-                                          "fontFamily": "Inter-Regular",
-                                          "fontSize": 15,
-                                          "zIndex": 1,
-                                        }
-                                      }
-                                      testID="selected-value"
-                                    >
-                                      Select country
-                                    </Text>
-                                    <RNSVGSvgView
-                                      align="xMidYMid"
-                                      bbHeight={9}
-                                      bbWidth={14}
-                                      fill="none"
-                                      focusable={false}
-                                      height={9}
-                                      meetOrSlice={0}
-                                      minX={0}
-                                      minY={0}
-                                      style={
-                                        Array [
-                                          Object {
-                                            "backgroundColor": "transparent",
-                                            "borderWidth": 0,
-                                          },
-                                          Object {
-                                            "alignSelf": "center",
-                                          },
-                                          Object {
-                                            "flex": 0,
-                                            "height": 9,
-                                            "width": 14,
-                                          },
-                                        ]
-                                      }
-                                      vbHeight={9}
-                                      vbWidth={14}
-                                      width={14}
-                                    >
-                                      <RNSVGGroup
-                                        fill={null}
-                                        propList={
-                                          Array [
-                                            "fill",
-                                          ]
-                                        }
-                                      >
-                                        <RNSVGPath
-                                          d="M6.997 5.812L11.861.717a.69.69 0 011.005 0l.426.447c.134.14.208.327.208.527s-.074.386-.208.526l-5.79 6.066a.69.69 0 01-.504.217.69.69 0 01-.505-.217L.708 2.223A.757.757 0 01.5 1.696c0-.2.074-.386.208-.527l.426-.446a.69.69 0 011.005 0l4.858 5.089z"
-                                          fill={4285760413}
-                                          opacity={0.833}
-                                          propList={
-                                            Array [
-                                              "fill",
-                                            ]
-                                          }
-                                        />
-                                      </RNSVGGroup>
-                                    </RNSVGSvgView>
-                                  </View>
-                                </View>
-                              </View>
-                              <View
-                                style={
-                                  Object {
-                                    "marginBottom": 24,
-                                    "marginVertical": 16,
-                                  }
-                                }
-                              >
-                                <View
-                                  modeType="default"
-                                  style={
-                                    Object {
-                                      "alignItems": "center",
-                                      "backgroundColor": "#2362FB",
-                                      "borderColor": "transparent",
-                                      "borderRadius": 6,
-                                      "borderStyle": "solid",
-                                      "borderWidth": 0,
-                                      "elevation": 0,
-                                      "flexDirection": "row",
-                                      "height": 44,
-                                      "justifyContent": "center",
-                                      "minWidth": 64,
-                                      "paddingVertical": 0,
-                                      "width": "100%",
-                                    }
-                                  }
-                                >
-                                  <View
-                                    accessibilityLabel="Get GPS Location"
-                                    accessibilityRole="button"
-                                    accessibilityState={
-                                      Object {
-                                        "disabled": undefined,
-                                      }
-                                    }
-                                    accessible={true}
-                                    focusable={true}
-                                    onClick={[Function]}
-                                    onResponderGrant={[Function]}
-                                    onResponderMove={[Function]}
-                                    onResponderRelease={[Function]}
-                                    onResponderTerminate={[Function]}
-                                    onResponderTerminationRequest={[Function]}
-                                    onStartShouldSetResponder={[Function]}
-                                    style={
-                                      Array [
-                                        Object {
-                                          "overflow": "hidden",
-                                        },
-                                        Object {
-                                          "borderRadius": 6,
-                                        },
-                                      ]
-                                    }
-                                  >
-                                    <View
-                                      style={
-                                        Array [
-                                          Object {
-                                            "alignItems": "center",
-                                            "flexDirection": "row",
-                                            "justifyContent": "center",
-                                          },
-                                          undefined,
-                                        ]
-                                      }
-                                    >
-                                      <Text
-                                        numberOfLines={1}
-                                        selectable={false}
-                                        style={
-                                          Array [
-                                            Object {
-                                              "color": "#000000",
-                                              "fontFamily": "System",
-                                              "fontWeight": "400",
-                                              "textAlign": "left",
-                                            },
-                                            Array [
-                                              Object {
-                                                "letterSpacing": 1,
-                                                "marginHorizontal": 16,
-                                                "marginVertical": 9,
-                                                "textAlign": "center",
-                                              },
-                                              undefined,
-                                              false,
-                                              Object {
-                                                "color": "#ffffff",
-                                                "fontFamily": "System",
-                                                "fontWeight": "500",
-                                              },
-                                              Object {
-                                                "fontFamily": "System",
-                                                "fontWeight": "500",
-                                              },
-                                              Object {
-                                                "color": "white",
-                                                "fontFamily": "Inter-Regular",
-                                                "fontSize": 15,
-                                                "lineHeight": 17.58,
-                                              },
-                                            ],
-                                          ]
-                                        }
-                                      >
-                                        <Text
-                                          style={
-                                            Object {
-                                              "color": "#FFFFFF",
-                                              "fontFamily": "Inter-Regular",
-                                              "fontSize": 15,
-                                              "lineHeight": 28,
-                                            }
-                                          }
-                                        >
-                                          Get GPS Location
-                                        </Text>
-                                      </Text>
-                                    </View>
-                                  </View>
-                                </View>
-                              </View>
-                              <View>
                                 <View
                                   style={
                                     Array [
@@ -6865,6 +6383,11 @@ Array [
                                   <TextInput
                                     accessibilityLabel="Email"
                                     allowFontScaling={true}
+                                    boxStyle={
+                                      Object {
+                                        "marginTop": 28,
+                                      }
+                                    }
                                     keyboardType="email-address"
                                     label="Email"
                                     maxLength={64}
@@ -8012,7 +7535,145 @@ If there is another person or organization among your community you believe is m
         "top": 0,
       }
     }
-  />,
+  >
+    <Modal
+      hardwareAccelerated={false}
+      visible={false}
+    >
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "marginHorizontal": 20,
+            "marginTop": 15,
+          }
+        }
+      >
+        <RNSVGSvgView
+          align="xMidYMid"
+          bbHeight={34}
+          bbWidth={34}
+          fill="none"
+          focusable={false}
+          height={34}
+          meetOrSlice={0}
+          minX={0}
+          minY={0}
+          onPress={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          responsible={true}
+          style={
+            Array [
+              Object {
+                "backgroundColor": "transparent",
+                "borderWidth": 0,
+              },
+              Object {
+                "marginRight": 18,
+                "marginTop": 6,
+              },
+              Object {
+                "flex": 0,
+                "height": 34,
+                "width": 34,
+              },
+            ]
+          }
+          vbHeight={34}
+          vbWidth={34}
+          width={34}
+        >
+          <RNSVGGroup
+            fill={null}
+            propList={
+              Array [
+                "fill",
+              ]
+            }
+          >
+            <RNSVGCircle
+              cx={16.8}
+              cy={16.8}
+              fill={4293586416}
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+              r={16.8}
+            />
+            <RNSVGPath
+              d="M13.696 17.04l7.005-6.761a.963.963 0 000-1.398l-.614-.592A1.035 1.035 0 0019.363 8c-.274 0-.532.103-.724.289l-8.34 8.05a.963.963 0 00-.299.7c0 .266.105.515.299.702l8.332 8.042c.193.186.45.288.724.288.275 0 .532-.102.725-.288l.613-.593a.966.966 0 000-1.398l-6.997-6.753z"
+              fill={4279708493}
+              propList={
+                Array [
+                  "fill",
+                ]
+              }
+            />
+          </RNSVGGroup>
+        </RNSVGSvgView>
+        <View
+          pointerEvents="box-none"
+          style={
+            Array [
+              Object {
+                "flex": 1,
+              },
+              Object {},
+            ]
+          }
+        >
+          <View
+            style={
+              Array [
+                Object {
+                  "flexDirection": "row",
+                },
+                undefined,
+              ]
+            }
+          >
+            <TextInput
+              allowFontScaling={true}
+              autoFocus={true}
+              clearButtonMode="while-editing"
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="Search"
+              rejectResponderTermination={true}
+              style={
+                Array [
+                  Object {
+                    "backgroundColor": "#FFFFFF",
+                    "borderRadius": 5,
+                    "flex": 1,
+                    "fontSize": 15,
+                    "height": 44,
+                    "marginBottom": 5,
+                    "paddingHorizontal": 10,
+                    "paddingVertical": 5,
+                  },
+                  Object {
+                    "borderColor": "#E9EDF4",
+                    "borderWidth": 1,
+                  },
+                ]
+              }
+              underlineColorAndroid="transparent"
+              value=""
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
+  </View>,
   <View
     collapsable={false}
     pointerEvents="box-none"

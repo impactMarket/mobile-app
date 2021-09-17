@@ -41,6 +41,7 @@ describe('create community [snapshot]', () => {
                     metadata: {
                         currency: 'USD',
                         avatar: 'something.jpg',
+                        language: 'pt',
                     },
                     wallet: {
                         address: '0xd7632B7588DF8532C0aBA55586167C2a315Fd768',

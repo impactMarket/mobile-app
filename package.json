@@ -104,6 +104,7 @@
         "react-native-elements": "3.4.2",
         "react-native-flash-message": "0.1.23",
         "react-native-gesture-handler": "1.10.2",
+        "react-native-google-places-autocomplete": "2.4.1",
         "react-native-mime-types": "2.3.0",
         "react-native-modalize": "2.0.8",
         "react-native-paper": "4.5.0",
@@ -133,7 +134,6 @@
     },
     "devDependencies": {
         "@babel/core": "7.9.0",
-        "@testing-library/jest-dom": "5.14.1",
         "@testing-library/jest-native": "4.0.2",
         "@testing-library/react-native": "7.2.0",
         "@types/jest": "26.0.24",
@@ -159,6 +159,7 @@
         "husky": "6.0.0",
         "jest": "27.0.6",
         "jest-expo": "42.1.0",
+        "jest-mock-axios": "4.4.0",
         "lint-staged": ">=10",
         "patch-package": "6.4.7",
         "postinstall-postinstall": "2.1.0",
