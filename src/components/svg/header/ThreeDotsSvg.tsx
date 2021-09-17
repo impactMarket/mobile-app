@@ -30,7 +30,6 @@ function ThreeDotsSvg(props: IThreeDotsProps) {
                 height={34}
                 viewBox="0 0 34 34"
                 fill="none"
-                style={{ marginLeft: 10 }}
                 onPress={() => setOpenThreeDotsMenu(true)}
                 {...props}
             >

@@ -3,11 +3,13 @@ import {
     getFocusedRouteNameFromRoute,
     RouteProp,
 } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {
+    StackNavigationOptions,
+    StackNavigationProp,
+} from '@react-navigation/stack';
 import i18n from 'assets/i18n';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
-import FAQSvg from 'components/svg/header/FaqSvg';
 import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
@@ -25,6 +27,19 @@ import Beneficiary from './header/Beneficiary';
 import CommunityManager from './header/CommunityManager';
 import Logout from './header/Logout';
 
+const headerStyles: Partial<StackNavigationOptions> = {
+    headerTitleStyle: {
+        fontFamily: 'Manrope-Bold',
+        fontSize: ipctFontSize.lowMedium,
+        lineHeight: ipctLineHeight.large,
+        color: ipctColors.darBlue,
+    },
+};
+
+/**
+ * Only screens within tabnavigator need to be added here.
+ * https://reactnavigation.org/docs/screen-options-resolution/#setting-parent-screen-options-based-on-child-navigators-state
+ */
 function getHeaderTitle(routeName: string, defaultValue: string) {
     if (routeName === undefined) {
         routeName = defaultValue;
@@ -37,8 +52,6 @@ function getHeaderTitle(routeName: string, defaultValue: string) {
             return i18n.t('generic.manage');
         case Screens.Communities:
             return null;
-        case Screens.Profile:
-            return i18n.t('profile.profile');
     }
 }
 function getHeaderRight(routeName: string, defaultValue: string) {
@@ -53,20 +66,6 @@ function getHeaderRight(routeName: string, defaultValue: string) {
             return <CommunityManager />;
         case Screens.Profile:
             return <Logout />;
-        default:
-            return (
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        marginRight: 22,
-                    }}
-                >
-                    <FAQSvg />
-                    <ProfileSvg />
-                </View>
-            );
     }
 }
 
@@ -74,21 +73,13 @@ function getHeaderLeft(routeName: string) {
     switch (routeName) {
         case Screens.Communities:
             return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
-        case undefined:
-            return null;
         case Screens.CommunityManager:
-            return null;
         case Screens.Beneficiary:
+        case undefined:
             return null;
         default:
             return <BackSvg />;
     }
-}
-
-function isLargeIphone() {
-    const d = Dimensions.get('window');
-    const isX = !!(Platform.OS === 'ios' && (d.height > 800 || d.width > 800));
-    return isX;
 }
 
 const Tab = createBottomTabNavigator();
@@ -101,50 +92,44 @@ function TabNavigator({
     navigation: StackNavigationProp<any, any>;
 }) {
     const insets = useSafeAreaInsets();
-    const isManager = useSelector(
-        (state: IRootState) => state.user.community.isManager
-    );
 
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
-    const isBeneficiary = useSelector(
-        (state: IRootState) => state.user.community.isBeneficiary
-    );
     const fromWelcomeScreen = useSelector(
         (state: IRootState) => state.app.fromWelcomeScreen
     );
+    const { isBeneficiary, isManager } = useSelector(
+        (state: IRootState) => state.user.community
+    );
+
+    const defaultValue = isBeneficiary
+        ? Screens.Beneficiary
+        : isManager && Screens.CommunityManager;
 
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         const headerLeftDetected = getHeaderLeft(routeName);
         navigation.setOptions({
             headerLeft: () => headerLeftDetected,
-            headerTitle: getHeaderTitle(
-                routeName,
-                isBeneficiary
-                    ? Screens.Beneficiary
-                    : isManager && Screens.CommunityManager
-            ),
-            headerTitleStyle: {
-                fontFamily: 'Manrope-Bold',
-                fontSize: ipctFontSize.lowMedium,
-                lineHeight: ipctLineHeight.large,
-                color: ipctColors.darBlue,
-            },
+            headerTitle: getHeaderTitle(routeName, defaultValue),
+            ...headerStyles,
             headerTitleContainerStyle: {
                 left: headerLeftDetected ? 58 : 18,
             },
-            headerShown: true,
-            headerRight: () =>
-                getHeaderRight(
-                    routeName,
-                    isBeneficiary
-                        ? Screens.Beneficiary
-                        : isManager
-                        ? Screens.CommunityManager
-                        : Screens.Communities
-                ),
+            headerRight: () => (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginRight: 22,
+                    }}
+                >
+                    {getHeaderRight(routeName, defaultValue)}
+                    <ProfileSvg style={{ marginLeft: 8.4 }} />
+                </View>
+            ),
         });
     }, [
         navigation,
@@ -177,6 +162,15 @@ function TabNavigator({
         />
     );
 
+    const isLargeIphone = () => {
+        const d = Dimensions.get('window');
+        const isX = !!(
+            Platform.OS === 'ios' &&
+            (d.height > 800 || d.width > 800)
+        );
+        return isX;
+    };
+
     return (
         <Host>
             <Tab.Navigator
@@ -188,10 +182,7 @@ function TabNavigator({
                     },
                     tabStyle: { marginVertical: 16 },
                     style: {
-                        height:
-                            Platform.OS === 'ios' && !!isLargeIphone()
-                                ? 82
-                                : 84 + insets.bottom,
+                        height: !isLargeIphone() ? 82 : 84 + insets.bottom,
                     },
                     activeTintColor: ipctColors.blueRibbon,
                     inactiveTintColor: ipctColors.almostBlack,

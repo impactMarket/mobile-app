@@ -390,17 +390,8 @@ function CommunityManagerScreen() {
 
 CommunityManagerScreen.navigationOptions = () => {
     return {
-        title: i18n.t('generic.manage'),
+        headerTitle: i18n.t('generic.manage'),
         tabBarLabel: i18n.t('generic.manage'),
-        headerTitleStyle: {
-            fontFamily: 'Manrope-Bold',
-            fontSize: ipctFontSize.lowMedium,
-            lineHeight: ipctLineHeight.large,
-            color: ipctColors.darBlue,
-        },
-        headerTitleContainerStyle: {
-            left: 58,
-        },
         tabBarIcon: (props: ITabBarIconProps) => (
             <ManageSvg focused={props.focused} />
         ),
