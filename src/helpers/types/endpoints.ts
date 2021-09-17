@@ -1,5 +1,10 @@
 import { AppMediaContent, UserAttributes } from './models';
 
+export interface ApiErrorReturn {
+    name: string;
+    message: string;
+}
+
 /**
  * @deprecated use AppMediaContent
  */

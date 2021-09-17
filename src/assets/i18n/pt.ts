@@ -404,6 +404,8 @@ export default {
         alertCongrat: 'Obrigado por denunciar potenciais atividades ilegais.',
         alertCongratLink: 'Saiba mais sobre denúncia anônima.',
         alertFailure: 'Erro ao submeter seu relatório!',
+        categoryIsRequired: 'Categoria é obrigatório!',
+        descriptionIsRequired: 'Descrição é obrigatório!',
     },
     communityFundsRunOut: {
         title: 'Comunidade sem fundos',

@@ -34,10 +34,6 @@ function CommunitiesScreen() {
         (state: IRootState) => state.user.wallet.address
     );
 
-    const isManager = useSelector(
-        (state: IRootState) => state.user.community.isManager
-    );
-
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
 
     const communities = useSelector(
@@ -100,9 +96,7 @@ function CommunitiesScreen() {
                 onPress={() =>
                     walletAddress.length > 0
                         ? navigation.navigate(Screens.CreateCommunity)
-                        : isManager
-                        ? navigation.navigate(Screens.CommunityManager)
-                        : navigation.navigate(Screens.Auth)
+                        : null
                 }
             >
                 <Text style={styles.buttomStoreText}>

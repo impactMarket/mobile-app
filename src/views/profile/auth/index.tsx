@@ -74,10 +74,10 @@ function Auth() {
     const [timedOut, setTimedOut] = useState(false);
     const [connecting, setConnecting] = useState(false);
     const [toggleWarn, setToggleWarn] = useState(false);
+    const [accountWarningType, setAccountWarningType] = useState(-1);
     const [timedOutValidation] = useState(false);
 
-    const modalizeDuplicatedAccountsRef = useRef<Modalize>(null);
-    const modalizeDeleteAccountsRef = useRef<Modalize>(null);
+    const modalizeAccountWarningRef = useRef<Modalize>(null);
     const modalizeWelcomeRef = useRef<Modalize>(null);
     const modalizeWebViewRef = useRef<Modalize>(null);
     const modalizeHelpCenterRef = useRef<Modalize>(null);
@@ -127,6 +127,8 @@ function Auth() {
             dispatch(setOpenAuthModal(false));
             dispatch(userAuthToStateReset());
             setConnecting(false);
+            modalizeAccountWarningRef.current.close();
+            modalizeWelcomeRef.current.close();
         };
 
         if (userAuthState.user !== undefined) {
@@ -135,19 +137,20 @@ function Auth() {
             }
         } else if (
             userAuthState.error !== undefined &&
-            userAuthState.error.indexOf('associated with another account') !==
-                -1
+            userAuthState.error.name === 'PHONE_CONFLICT'
         ) {
-            modalizeDuplicatedAccountsRef.current.open();
+            setAccountWarningType(1);
+            modalizeAccountWarningRef.current.open();
             modalizeWelcomeRef.current.close();
             setToggleWarn(true);
             setConnecting(false);
             dispatch(userAuthToStateReset());
         } else if (
             userAuthState.error !== undefined &&
-            userAuthState.error.indexOf('in deletion process') !== -1
+            userAuthState.error.name === 'DELETION_PROCESS'
         ) {
-            modalizeDeleteAccountsRef.current.open();
+            setAccountWarningType(2);
+            modalizeAccountWarningRef.current.open();
             modalizeWelcomeRef.current.close();
             setToggleWarn(true);
             setConnecting(false);
@@ -303,6 +306,85 @@ function Auth() {
         // navigation.navigate(Screens.Communities);
     };
 
+    const DuplicatedAccountsView = () => (
+        <View style={{ width: '100%', paddingHorizontal: 22 }}>
+            <Text style={styles.descriptionTop}>
+                {i18n.t(
+                    'auth.duplicatedMsg1',
+                    dappKitResponse ? dappKitResponse.phoneNumber : ''
+                )}
+            </Text>
+            <Text style={styles.description}>
+                {i18n.t('auth.duplicatedMsg2')}
+            </Text>
+            <Text style={styles.description}>
+                {i18n.t('auth.duplicatedMsg3')}
+            </Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginBottom: 18,
+                }}
+            >
+                <Button
+                    modeType="gray"
+                    style={{ width: '45%' }}
+                    onPress={() => modalizeAccountWarningRef.current.close()}
+                    disabled={connecting}
+                >
+                    {i18n.t('generic.dismiss')}
+                </Button>
+                <Button
+                    modeType="default"
+                    style={{ width: '45%' }}
+                    onPress={() => {
+                        setConnecting(true);
+                        apiAuthRequest({ overwrite: true });
+                    }}
+                    loading={connecting}
+                    disabled={connecting}
+                >
+                    {i18n.t('generic.yes')}
+                </Button>
+            </View>
+        </View>
+    );
+
+    const DeleteAccountView = () => (
+        <View style={{ width: '100%', paddingHorizontal: 22 }}>
+            <Text style={styles.description}>{i18n.t('auth.recoverMsg1')}</Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginBottom: 18,
+                }}
+            >
+                <Button
+                    modeType="gray"
+                    style={{ width: '45%' }}
+                    onPress={() => modalizeAccountWarningRef.current.close()}
+                    disabled={connecting}
+                >
+                    {i18n.t('generic.dismiss')}
+                </Button>
+                <Button
+                    modeType="default"
+                    style={{ width: '45%' }}
+                    onPress={() => {
+                        setConnecting(true);
+                        apiAuthRequest({ recover: true });
+                    }}
+                    loading={connecting}
+                    disabled={connecting}
+                >
+                    {i18n.t('auth.recover')}
+                </Button>
+            </View>
+        </View>
+    );
+
     return (
         <Portal>
             <Modalize
@@ -385,113 +467,21 @@ function Auth() {
                 </View>
             </Modalize>
             <Modalize
-                ref={modalizeDuplicatedAccountsRef}
+                ref={modalizeAccountWarningRef}
                 HeaderComponent={renderHeader(
-                    i18n.t('auth.duplicatedTitle'),
-                    modalizeDuplicatedAccountsRef,
-                    () => {
-                        // navigation.navigate(Screens.Communities);
-                    }
+                    accountWarningType === 1
+                        ? i18n.t('auth.duplicatedTitle')
+                        : i18n.t('auth.welcomeBack'),
+                    modalizeAccountWarningRef,
+                    () => modalizeAccountWarningRef.current.close()
                 )}
                 adjustToContentHeight
-                onClose={() => {
-                    // navigation.navigate(Screens.Communities);
-                }}
             >
-                <View style={{ width: '100%', paddingHorizontal: 22 }}>
-                    <Text style={styles.descriptionTop}>
-                        {i18n.t(
-                            'auth.duplicatedMsg1',
-                            dappKitResponse ? dappKitResponse.phoneNumber : ''
-                        )}
-                    </Text>
-                    <Text style={styles.description}>
-                        {i18n.t('auth.duplicatedMsg2')}
-                    </Text>
-                    <Text style={styles.description}>
-                        {i18n.t('auth.duplicatedMsg3')}
-                    </Text>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginBottom: 18,
-                        }}
-                    >
-                        <Button
-                            modeType="gray"
-                            style={{ width: '45%' }}
-                            onPress={() =>
-                                modalizeDuplicatedAccountsRef.current.close()
-                            }
-                            disabled={connecting}
-                        >
-                            {i18n.t('generic.dismiss')}
-                        </Button>
-                        <Button
-                            modeType="default"
-                            style={{ width: '45%' }}
-                            onPress={() => {
-                                setConnecting(true);
-                                apiAuthRequest({ overwrite: true });
-                            }}
-                            loading={connecting}
-                            disabled={connecting}
-                        >
-                            {i18n.t('generic.yes')}
-                        </Button>
-                    </View>
-                </View>
-            </Modalize>
-            <Modalize
-                ref={modalizeDeleteAccountsRef}
-                HeaderComponent={renderHeader(
-                    i18n.t('auth.welcomeBack'),
-                    modalizeDeleteAccountsRef,
-                    () => {
-                        // navigation.navigate(Screens.Communities);
-                    }
+                {accountWarningType === 1 ? (
+                    <DuplicatedAccountsView />
+                ) : (
+                    <DeleteAccountView />
                 )}
-                adjustToContentHeight
-                onClose={() => {
-                    // navigation.navigate(Screens.Communities);
-                }}
-            >
-                <View style={{ width: '100%', paddingHorizontal: 22 }}>
-                    <Text style={styles.description}>
-                        {i18n.t('auth.recoverMsg1')}
-                    </Text>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginBottom: 18,
-                        }}
-                    >
-                        <Button
-                            modeType="gray"
-                            style={{ width: '45%' }}
-                            onPress={() =>
-                                modalizeDeleteAccountsRef.current.close()
-                            }
-                            disabled={connecting}
-                        >
-                            {i18n.t('generic.dismiss')}
-                        </Button>
-                        <Button
-                            modeType="default"
-                            style={{ width: '45%' }}
-                            onPress={() => {
-                                setConnecting(true);
-                                apiAuthRequest({ recover: true });
-                            }}
-                            loading={connecting}
-                            disabled={connecting}
-                        >
-                            {i18n.t('auth.recover')}
-                        </Button>
-                    </View>
-                </View>
             </Modalize>
             <Modalize
                 ref={modalizeWebViewRef}

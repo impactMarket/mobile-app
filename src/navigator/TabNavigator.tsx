@@ -135,7 +135,7 @@ function TabNavigator({
             headerTitleContainerStyle: {
                 left: headerLeftDetected ? 58 : 18,
             },
-            headerShown: !(routeName === Screens.Auth),
+            headerShown: true,
             headerRight: () =>
                 getHeaderRight(
                     routeName,

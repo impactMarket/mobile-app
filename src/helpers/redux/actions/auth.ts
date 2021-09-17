@@ -6,7 +6,7 @@ import {
     SET_AUTH_TOKEN,
     SET_USER_AUTH_RESET,
 } from 'helpers/constants';
-import { IUserAuth } from 'helpers/types/endpoints';
+import { ApiErrorReturn, IUserAuth } from 'helpers/types/endpoints';
 import { AuthActionTypes } from 'helpers/types/redux';
 import { markActionsOffline } from 'redux-offline-queue';
 import { AuthParams } from 'services/api/routes/user';
@@ -29,10 +29,12 @@ export function addUserAuthToStateSuccess(user: IUserAuth): AuthActionTypes {
     };
 }
 
-export function addUserAuthToStateFailure(err: string): AuthActionTypes {
+export function addUserAuthToStateFailure(
+    error: ApiErrorReturn
+): AuthActionTypes {
     return {
         type: SET_USER_AUTH_FAILURE,
-        payload: err,
+        payload: error,
     };
 }
 
