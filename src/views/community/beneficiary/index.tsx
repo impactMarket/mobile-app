@@ -45,7 +45,6 @@ import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
 import BlockedAccount from './cards/BlockedAccount';
-import FAQSvg from 'components/svg/header/FaqSvg';
 
 function BeneficiaryScreen() {
     const timeoutTimeDiff = useRef<NodeJS.Timer | undefined>();

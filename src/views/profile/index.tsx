@@ -63,7 +63,7 @@ import { WebView } from 'react-native-webview';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import CacheStore from 'services/cacheStore';
-import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
+import { ipctColors } from 'styles/index';
 
 const currencies: {
     [key: string]: {

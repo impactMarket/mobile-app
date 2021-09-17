@@ -10,7 +10,6 @@ import {
 import i18n from 'assets/i18n';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
-import FAQSvg from 'components/svg/header/FaqSvg';
 import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
@@ -114,7 +113,7 @@ function TabNavigator({
         navigation.setOptions({
             headerLeft: () => headerLeftDetected,
             headerTitle: getHeaderTitle(routeName, defaultValue),
-            // ...headerStyles,
+            ...headerStyles,
             headerTitleContainerStyle: {
                 left: headerLeftDetected ? 58 : 18,
             },
