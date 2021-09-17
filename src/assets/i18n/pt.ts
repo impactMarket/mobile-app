@@ -272,6 +272,7 @@ export default {
     },
     stories: {
         stories: 'Stories',
+        description: 'Mensagem da Story · Opcional',
         emptyStoriesTitle: 'Ainda não criou uma story?',
         emptyStoriesDescription:
             'Não perca tempo, e comece a criar agora mesmo!',

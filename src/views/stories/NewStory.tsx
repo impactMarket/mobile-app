@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -8,11 +9,12 @@ import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import { ICommunityStory } from 'helpers/types/endpoints';
+import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
 import React, { useLayoutEffect, useState, useRef, useEffect } from 'react';
 import { Trans } from 'react-i18next';
-import { View, Text, ImageBackground, Alert, StyleSheet } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
@@ -29,6 +31,7 @@ function NewStoryScreen() {
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
     const [showWebview, setShowWebview] = useState(false);
+    const [showModalType, setShowModalType] = useState(-1);
     const [submitedResult, setSubmitedResult] = useState<
         ICommunityStory | undefined
     >();
@@ -46,39 +49,29 @@ function NewStoryScreen() {
             setSubmitting(true);
             try {
                 if (storyMedia.length > 0 || storyText.length > 0) {
-                    const r = await Api.story.add(
-                        storyMedia.length > 0 ? storyMedia : undefined,
-                        {
-                            communityId: userCommunity.id,
-                            message:
-                                storyText.length > 0 ? storyText : undefined,
-                            mediaId: 0,
-                        }
-                    );
+                    let media: AppMediaContent | undefined;
+                    if (storyMedia.length > 0) {
+                        const d = await Api.story.preSignedUrl(storyMedia);
+                        await Api.story.uploadImage(d, storyMedia);
+                        media = d.media;
+                    }
+                    const r = await Api.story.add({
+                        communityId: userCommunity.id,
+                        message: storyText.length > 0 ? storyText : undefined,
+                        mediaId: media ? media.id : 0,
+                    });
+                    if (r.error !== undefined) {
+                        throw new Error(r.error.name);
+                    }
 
-                    setSubmitedResult(r);
-                    Alert.alert(
-                        i18n.t('generic.success'),
-                        i18n.t('stories.storyCongrat'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
+                    setSubmitedResult(r.data);
+                    setShowModalType(1);
                     setSubmittedWithSuccess(true);
                 } else {
-                    Alert.alert(
-                        i18n.t('generic.failure'),
-                        i18n.t('stories.emptyStoryFailure'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
+                    setShowModalType(3);
                 }
             } catch (e) {
-                Alert.alert(
-                    i18n.t('generic.failure'),
-                    i18n.t('stories.storyFailure'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
+                setShowModalType(2);
             } finally {
                 setSubmitting(false);
             }
@@ -98,7 +91,7 @@ function NewStoryScreen() {
             });
         } else if (userCommunity?.id !== undefined) {
             navigation.setOptions({
-                // headerShown: !submittedWithSuccess,
+                headerShown: !submittedWithSuccess,
                 headerLeft: () => <BackSvg />,
                 headerTitle: i18n.t('stories.newStory'),
                 headerRight: () => (
@@ -186,12 +179,23 @@ function NewStoryScreen() {
         );
     }
 
+    const modalTitle =
+        showModalType === 1
+            ? i18n.t('generic.success')
+            : i18n.t('generic.failure');
+    const modalText =
+        showModalType === 1
+            ? i18n.t('stories.storyCongrat')
+            : showModalType === 2
+            ? i18n.t('stories.storyFailure')
+            : i18n.t('stories.emptyStoryFailure');
+
     return (
         <>
             <HelpWebview />
             <View style={{ marginHorizontal: 18, marginTop: 14 }}>
                 <Input
-                    label="Story Post Text · Optional"
+                    label={i18n.t('stories.description')}
                     multiline
                     numberOfLines={12}
                     value={storyText}
@@ -231,6 +235,19 @@ function NewStoryScreen() {
                 )}
             </View>
             <Portal>
+                <Modal
+                    title={modalTitle}
+                    visible={showModalType !== -1}
+                    onDismiss={() => setShowModalType(-1)}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Regular',
+                        }}
+                    >
+                        {modalText}
+                    </Text>
+                </Modal>
                 <Modalize
                     ref={modalizeStoryRef}
                     HeaderComponent={renderHeader(
@@ -286,10 +303,7 @@ function NewStoryScreen() {
 }
 
 NewStoryScreen.navigationOptions = () => {
-    return {
-        // headerLeft: () => <BackSvg />,
-        // headerTitle: i18n.t('stories.newStory'),
-    };
+    return {};
 };
 
 export default NewStoryScreen;

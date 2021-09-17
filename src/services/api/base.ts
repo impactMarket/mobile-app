@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
+import { ApiErrorReturn } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import { DevSettings } from 'react-native';
 import * as Sentry from 'sentry-expo';
@@ -145,7 +146,7 @@ async function deleteRequest<T>(
 export interface IApiResult<T> {
     success: boolean;
     data: T;
-    error: any;
+    error: ApiErrorReturn;
     count: number;
 }
 
@@ -161,34 +162,21 @@ class ApiRequests {
     async get<T>(
         endpoint: string,
         useAuthToken = false
-    ): Promise<{ data: T; count?: number }> {
-        // try {
-        let apiResult;
-        if (useAuthToken) {
-            // const requestOptions = {
-            //     headers: {
-            //         Authorization: `Bearer ${this.token}`,
-            //         'Content-Type': 'application/json',
-            //         Accept: 'application/json',
-            //     },
-            // };
-            apiResult = await axios.get(endpoint, await this._requestOptions());
-        } else {
-            apiResult = await axios.get(endpoint);
+    ): Promise<IApiResult<T>> {
+        try {
+            let apiResult;
+            if (useAuthToken) {
+                apiResult = await axios.get(
+                    endpoint,
+                    await this._requestOptions()
+                );
+            } else {
+                apiResult = await axios.get(endpoint);
+            }
+            return apiResult.data;
+        } catch (e) {
+            return e.response.data;
         }
-        // if (result.status >= 400) {
-        //     return undefined;
-        // }
-        const r = apiResult.data as IApiResult<T>;
-        let result: any = { data: r.data as T };
-        if (r.count !== undefined) {
-            result = { ...result, count: r.count };
-        }
-        return result;
-        // } catch (e) {
-        //     //
-        //     return;
-        // }
     }
 
     async post<T>(
@@ -213,42 +201,18 @@ class ApiRequests {
         endpoint: string,
         requestBody: any,
         options?: any
-    ): Promise<{ data: T; error: any }> {
-        // let response: T | undefined;
-        // try {
-        // handle success
-        // const requestOptions = {
-        //     headers: {
-        //         Authorization: `Bearer ${this.token}`,
-        //         'Content-Type': 'application/json',
-        //         Accept: 'application/json',
-        //     },
-        //     ...options,
-        // };
-        const apiResult = await axios.put(
-            endpoint,
-            requestBody,
-            await this._requestOptions(options)
-        );
-        //     if (result.status === 401) {
-        //         await AsyncStorage.clear();
-        //         DevSettings.reload();
-        //         return undefined;
-        //     }
-        //     if (result.status >= 400) {
-        //         return undefined;
-        //     }
-        //     response = result.data as T;
-        const r = apiResult.data as IApiResult<T>;
-        let result: any = { data: r.data as T };
-        if (r.error !== undefined) {
-            result = { ...result, error: r.error };
+    ): Promise<IApiResult<T>> {
+        try {
+            return (
+                await axios.put(
+                    endpoint,
+                    requestBody,
+                    await this._requestOptions(options)
+                )
+            ).data;
+        } catch (e) {
+            return e.response.data;
         }
-        return result;
-        // } catch (e) {
-        //     Sentry.Native.captureException(e);
-        // }
-        // return response;
     }
 
     async delete<T>(endpoint: string, id?: any): Promise<IApiResult<T>> {
