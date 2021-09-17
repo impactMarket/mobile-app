@@ -1,5 +1,6 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
+import Modal from 'components/Modal';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -8,20 +9,14 @@ import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import { ICommunityStory } from 'helpers/types/endpoints';
+import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
-import React, { useLayoutEffect, useState, useRef, useCallback } from 'react';
+import React, { useLayoutEffect, useState, useRef, useEffect } from 'react';
 import { Trans } from 'react-i18next';
-import {
-    View,
-    Text,
-    ImageBackground,
-    Alert,
-    StyleSheet,
-    ScrollView,
-    Dimensions,
-} from 'react-native';
+import { View, Text, ImageBackground, StyleSheet } from 'react-native';
 import { Modalize } from 'react-native-modalize';
+import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
 import { useSelector } from 'react-redux';
 import Api from 'services/api';
@@ -35,10 +30,8 @@ function NewStoryScreen() {
     const [storyText, setStoryText] = useState('');
     const [storyMedia, setStoryMedia] = useState('');
     const [submitting, setSubmitting] = useState(false);
-    const [, setLoadRefs] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(false);
-
-    const [openHelpCenter, setOpenHelpCenter] = useState(false);
+    const [showWebview, setShowWebview] = useState(false);
+    const [showModalType, setShowModalType] = useState(-1);
     const [submitedResult, setSubmitedResult] = useState<
         ICommunityStory | undefined
     >();
@@ -56,94 +49,101 @@ function NewStoryScreen() {
             setSubmitting(true);
             try {
                 if (storyMedia.length > 0 || storyText.length > 0) {
-                    const r = await Api.story.add(
-                        storyMedia.length > 0 ? storyMedia : undefined,
-                        {
-                            communityId: userCommunity.id,
-                            message:
-                                storyText.length > 0 ? storyText : undefined,
-                            mediaId: 0,
-                        }
-                    );
+                    let media: AppMediaContent | undefined;
+                    if (storyMedia.length > 0) {
+                        const d = await Api.story.preSignedUrl(storyMedia);
+                        await Api.story.uploadImage(d, storyMedia);
+                        media = d.media;
+                    }
+                    const r = await Api.story.add({
+                        communityId: userCommunity.id,
+                        message: storyText.length > 0 ? storyText : undefined,
+                        mediaId: media ? media.id : 0,
+                    });
+                    if (r.error !== undefined) {
+                        throw new Error(r.error.name);
+                    }
 
-                    setSubmitedResult(r);
-                    Alert.alert(
-                        i18n.t('generic.success'),
-                        i18n.t('stories.storyCongrat'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
+                    setSubmitedResult(r.data);
+                    setShowModalType(1);
                     setSubmittedWithSuccess(true);
                 } else {
-                    Alert.alert(
-                        i18n.t('generic.failure'),
-                        i18n.t('stories.emptyStoryFailure'),
-                        [{ text: 'OK' }],
-                        { cancelable: false }
-                    );
+                    setShowModalType(3);
                 }
             } catch (e) {
-                Alert.alert(
-                    i18n.t('generic.failure'),
-                    i18n.t('stories.storyFailure'),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
+                setShowModalType(2);
             } finally {
                 setSubmitting(false);
             }
         };
-        if (userCommunity?.id !== undefined) {
+        if (showWebview) {
+            navigation.setOptions({
+                headerTitle: null,
+                headerLeft: null,
+                headerRight: () => (
+                    <CloseStorySvg
+                        style={{ marginRight: 26 }}
+                        onPress={() => {
+                            setShowWebview(false);
+                        }}
+                    />
+                ),
+            });
+        } else if (userCommunity?.id !== undefined) {
             navigation.setOptions({
                 headerShown: !submittedWithSuccess,
+                headerLeft: () => <BackSvg />,
+                headerTitle: i18n.t('stories.newStory'),
                 headerRight: () => (
                     <SubmitStory
                         submit={submitNewStory}
                         submitting={submitting}
-                        disabled={isDisabled}
+                        disabled={false}
                     />
                 ),
             });
-            // TODO: this next line should change though.
         }
     }, [
-        navigation,
         storyText,
         storyMedia,
         submitting,
         userCommunity,
         submittedWithSuccess,
-        isDisabled,
+        showWebview,
     ]);
 
-    useFocusEffect(
-        useCallback(() => {
-            renderAuthModalize();
-        }, [])
-    );
+    useEffect(() => {
+        if (modalizeStoryRef.current !== null) {
+            modalizeStoryRef.current.open();
+        } else {
+            const intervalToOpenModal = setInterval(() => {
+                if (modalizeStoryRef.current !== null) {
+                    modalizeStoryRef.current.open();
+                    clearInterval(intervalToOpenModal);
+                }
+            }, 100);
+        }
+    }, []);
 
-    const renderHelpCenter = () => {
-        if (openHelpCenter) {
-            return (
+    const HelpWebview = () => {
+        if (!showWebview) {
+            return null;
+        }
+        return (
+            <View
+                style={{
+                    zIndex: 5,
+                    height: '100%',
+                }}
+            >
                 <WebView
                     originWhitelist={['*']}
                     source={{ uri: 'https://docs.impactmarket.com/' }}
-                    style={{
-                        height: Dimensions.get('screen').height * 0.85,
-                    }}
+                    javaScriptEnabled
+                    domStorageEnabled
                 />
-            );
-        }
-    };
-
-    const renderAuthModalize = () => {
-        if (modalizeStoryRef.current === null) {
-            setTimeout(() => {
-                setLoadRefs(true);
-            }, 100);
-        } else {
-            modalizeStoryRef.current.open();
-        }
+            </View>
+        );
     };
 
     const pickImage = async () => {
@@ -156,8 +156,6 @@ function NewStoryScreen() {
 
         const result = (await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            // allowsEditing: true,
-            // aspect: [1, 1],
             quality: 1,
         })) as {
             cancelled: false;
@@ -181,123 +179,131 @@ function NewStoryScreen() {
         );
     }
 
-    const renderStoryRules = () => (
-        <ScrollView style={{ maxHeight: 600 }}>
-            <View style={{ width: '100%', paddingHorizontal: 22 }}>
-                <Text style={styles.description}>
-                    <Trans
-                        i18nKey="storyRulesFirstParagraph"
-                        components={{
-                            bold: (
-                                <Text
-                                    style={{
-                                        fontFamily: 'Inter-Bold',
-                                    }}
-                                />
-                            ),
-                        }}
-                    />
-                </Text>
-                <Text style={styles.storySubTitle}>
-                    {i18n.t('stories.storySubTitle')}
-                </Text>
-                <Text style={styles.description}>
-                    {i18n.t('stories.storyRulesSecondParagraph')}
-                </Text>
-                <Button
-                    modeType="gray"
-                    style={{
-                        marginTop: 16,
-                        marginBottom: 16,
-                    }}
-                    labelStyle={{
-                        fontSize: 15,
-                        lineHeight: 28,
-                    }}
-                    onPress={() => {
-                        modalizeStoryRef.current?.close();
-                        setOpenHelpCenter(true);
-                    }}
-                >
-                    {i18n.t('generic.knowMoreHelpCenter')}
-                </Button>
-            </View>
-        </ScrollView>
-    );
+    const modalTitle =
+        showModalType === 1
+            ? i18n.t('generic.success')
+            : i18n.t('generic.failure');
+    const modalText =
+        showModalType === 1
+            ? i18n.t('stories.storyCongrat')
+            : showModalType === 2
+            ? i18n.t('stories.storyFailure')
+            : i18n.t('stories.emptyStoryFailure');
 
     return (
         <>
-            {openHelpCenter ? (
-                renderHelpCenter()
-            ) : (
-                <View style={{ marginHorizontal: 18, marginTop: 14 }}>
-                    <Input
-                        label="Story Post Text · Optional"
-                        multiline
-                        numberOfLines={12}
-                        value={storyText}
-                        maxLength={256}
-                        onChangeText={(value) => setStoryText(value)}
-                        isBig
-                    />
-                    <Button
-                        modeType="default"
-                        bold
-                        icon="image"
-                        onPress={() => pickImage()}
-                        style={{ width: '100%', marginVertical: 24 }}
+            <HelpWebview />
+            <View style={{ marginHorizontal: 18, marginTop: 14 }}>
+                <Input
+                    label={i18n.t('stories.description')}
+                    multiline
+                    numberOfLines={12}
+                    value={storyText}
+                    maxLength={256}
+                    onChangeText={(value) => setStoryText(value)}
+                    isBig
+                />
+                <Button
+                    modeType="default"
+                    bold
+                    icon="image"
+                    onPress={() => pickImage()}
+                    style={{ width: '100%', marginVertical: 24 }}
+                >
+                    {i18n.t('donate.attach')}
+                </Button>
+                {storyMedia.length > 0 && (
+                    <ImageBackground
+                        source={{ uri: storyMedia }}
+                        imageStyle={{
+                            borderRadius: 4,
+                        }}
+                        style={{
+                            width: 148,
+                            height: 100,
+                        }}
                     >
-                        {i18n.t('donate.attach')}
-                    </Button>
-                    {storyMedia.length > 0 && (
-                        <ImageBackground
-                            source={{ uri: storyMedia }}
-                            imageStyle={{
-                                borderRadius: 4,
-                            }}
+                        <CloseStorySvg
                             style={{
-                                width: 148,
-                                height: 100,
+                                alignSelf: 'flex-end',
+                                marginTop: 14,
+                                marginRight: 10,
+                            }}
+                            onPress={() => setStoryMedia('')}
+                        />
+                    </ImageBackground>
+                )}
+            </View>
+            <Portal>
+                <Modal
+                    title={modalTitle}
+                    visible={showModalType !== -1}
+                    onDismiss={() => setShowModalType(-1)}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Regular',
+                        }}
+                    >
+                        {modalText}
+                    </Text>
+                </Modal>
+                <Modalize
+                    ref={modalizeStoryRef}
+                    HeaderComponent={renderHeader(
+                        i18n.t('stories.storyRules'),
+                        modalizeStoryRef,
+                        () => modalizeStoryRef.current?.close()
+                    )}
+                    adjustToContentHeight
+                >
+                    <View style={{ width: '100%', paddingHorizontal: 22 }}>
+                        <Text style={styles.description}>
+                            <Trans
+                                i18nKey="stories.storyRulesFirstParagraph"
+                                components={{
+                                    bold: (
+                                        <Text
+                                            style={{
+                                                fontFamily: 'Inter-Bold',
+                                            }}
+                                        />
+                                    ),
+                                }}
+                            />
+                        </Text>
+                        <Text style={styles.storySubTitle}>
+                            {i18n.t('stories.storySubTitle')}
+                        </Text>
+                        <Text style={styles.description}>
+                            {i18n.t('stories.storyRulesSecondParagraph')}
+                        </Text>
+                        <Button
+                            modeType="gray"
+                            style={{
+                                marginTop: 16,
+                                marginBottom: 16,
+                            }}
+                            labelStyle={{
+                                fontSize: 15,
+                                lineHeight: 28,
+                            }}
+                            onPress={() => {
+                                modalizeStoryRef.current?.close();
+                                setShowWebview(true);
                             }}
                         >
-                            <CloseStorySvg
-                                style={{
-                                    alignSelf: 'flex-end',
-                                    marginTop: 14,
-                                    marginRight: 10,
-                                }}
-                                onPress={() => setStoryMedia('')}
-                            />
-                        </ImageBackground>
-                    )}
-                </View>
-            )}
-
-            <Modalize
-                ref={modalizeStoryRef}
-                modalTopOffset={100}
-                onOpen={() => setIsDisabled(true)}
-                onClose={() => setIsDisabled(false)}
-                HeaderComponent={renderHeader(
-                    i18n.t('stories.storyRules'),
-                    modalizeStoryRef,
-                    () => modalizeStoryRef.current?.close()
-                )}
-            >
-                {renderStoryRules()}
-            </Modalize>
+                            {i18n.t('generic.knowMoreHelpCenter')}
+                        </Button>
+                    </View>
+                </Modalize>
+            </Portal>
         </>
     );
 }
 
 NewStoryScreen.navigationOptions = () => {
-    return {
-        headerLeft: () => <BackSvg />,
-        headerTitle: i18n.t('stories.newStory'),
-        headerTitleContainerStyle: {
-            left: 58,
-        },
-    };
+    return {};
 };
 
 export default NewStoryScreen;

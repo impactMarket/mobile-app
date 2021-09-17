@@ -262,6 +262,7 @@ export default {
     },
     stories: {
         stories: 'Stories',
+        description: 'Story Post Text · Optional',
         emptyStoriesTitle: "Didn't create any story yet?",
         emptyStoriesDescription:
             "Don't miss the opportunity and create one, now!",

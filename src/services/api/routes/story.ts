@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as FileSystem from 'expo-file-system';
 import {
     ICommunitiesListStories,
     ICommunityStories,
@@ -17,69 +16,66 @@ axios.defaults.baseURL = config.baseApiUrl;
 class ApiRouteStory {
     static api = new ApiRequests();
 
-    static async add(
-        uri: string | undefined,
-        story: {
-            communityId: number;
-            message?: string;
-            mediaId?: number;
+    static async preSignedUrl(
+        uri: string
+    ): Promise<{ uploadURL: string; media: AppMediaContent }> {
+        const mimetype = mime
+            .contentType(path.basename(uri))
+            .match(/\/(\w+);?/)[1];
+        const preSigned = (
+            await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
+                '/story/media/' + mimetype,
+                true
+            )
+        ).data;
+        return preSigned;
+    }
+
+    static async uploadImage(
+        preSigned: { uploadURL: string; media: AppMediaContent },
+        uri: string
+    ) {
+        const resp = await fetch(uri);
+        const imageBody = await resp.blob();
+
+        const result = await fetch(preSigned.uploadURL, {
+            method: 'PUT',
+            body: imageBody,
+        });
+        if (result.status >= 400) {
+            throw new Error('not uploaded');
         }
-    ): Promise<ICommunityStory> {
-        if (uri) {
-            const mimetype = mime
-                .contentType(path.basename(uri))
-                .match(/\/(\w+);?/)[1];
-            const preSigned = (
-                await this.api.get<{
-                    uploadURL: string;
-                    media: AppMediaContent;
-                }>('/story/media/' + mimetype, true)
-            ).data;
-            const ru = await FileSystem.uploadAsync(preSigned.uploadURL, uri, {
-                httpMethod: 'PUT',
-                mimeType: mimetype,
-                uploadType: 0, //FileSystemUploadType.BINARY_CONTENT
-                headers: {
-                    'Content-Type': 'image/' + mimetype,
-                },
-            });
-            if (ru.status >= 400) {
-                throw new Error(ru.body.toString());
+        // wait until image exists on real endpoint
+        // TODO: improve this
+        const delay = (ms: number) =>
+            new Promise((resolve) => setTimeout(resolve, ms));
+        let tries = 10;
+        while (tries-- > 0) {
+            delay(1000);
+            const { status } = await this.api.head(preSigned.media.url);
+            if (status === 200) {
+                break;
             }
-            // wait until image exists on real endpoint
-            // TODO: improve this
-            const delay = (ms: number) =>
-                new Promise((resolve) => setTimeout(resolve, ms));
-            let tries = 3;
-            while (tries-- > 0) {
-                delay(1000);
-                const { status } = await this.api.head(preSigned.media.url);
-                if (status === 200) {
-                    break;
-                }
-            }
-            //
-            story = {
-                ...story,
-                mediaId: preSigned.media.id,
-            };
         }
-        return (await this.api.post<ICommunityStory>('/story', story)).data;
+    }
+
+    static async add(story: {
+        communityId: number;
+        message?: string;
+        mediaId?: number;
+    }): Promise<IApiResult<ICommunityStory>> {
+        return this.api.post<ICommunityStory>('/story', story);
     }
 
     static async list<T extends ICommunitiesListStories[]>(
         offset?: number,
         limit?: number
-    ): Promise<{ data: T; count: number }> {
-        const r = await this.api.get<T>(
+    ): Promise<IApiResult<T>> {
+        return this.api.get<T>(
             '/story/list?includeIPCT=true' +
                 (offset !== undefined ? `&offset=${offset}` : '') +
                 (limit !== undefined ? `&limit=${limit}` : '')
         );
-        return {
-            data: r.data,
-            count: r.count!,
-        };
     }
 
     static async getByCommunity(
@@ -94,13 +90,11 @@ class ApiRouteStory {
         ).data;
     }
 
-    static async love(storyId: number): Promise<{ data: unknown; error: any }> {
+    static async love(storyId: number): Promise<IApiResult<any>> {
         return this.api.put('/story/love/' + storyId, {});
     }
 
-    static async inapropriate(
-        storyId: number
-    ): Promise<{ data: unknown; error: any }> {
+    static async inapropriate(storyId: number): Promise<IApiResult<any>> {
         return this.api.put('/story/inapropriate/' + storyId, {});
     }
 
