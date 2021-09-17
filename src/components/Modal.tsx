@@ -1,4 +1,3 @@
-import Card from 'components/core/Card';
 import CloseSvg from 'components/svg/CloseSvg';
 import React, { Component, ReactNode } from 'react';
 import {
@@ -8,6 +7,7 @@ import {
     Platform,
     Pressable,
     Text,
+    StyleProp,
 } from 'react-native';
 import { Modal as ModalRNP } from 'react-native-paper';
 import { ipctColors } from 'styles/index';
@@ -66,15 +66,11 @@ export default class Modal extends Component<IModalProps, IModalState> {
         const { keyboardOpen, bottom } = this.state;
 
         // yeah, modals on iOS get hidden below the keyboard
-        let cardModalStyle = {};
+        let modalStyle: StyleProp<any> = {};
         if (Platform.OS === 'ios') {
-            cardModalStyle = {
-                ...cardModalStyle,
-                position: 'absolute',
-            };
             if (keyboardOpen) {
-                cardModalStyle = {
-                    ...cardModalStyle,
+                modalStyle = {
+                    ...modalStyle,
                     bottom: bottom - 255,
                 };
             }
@@ -85,62 +81,55 @@ export default class Modal extends Component<IModalProps, IModalState> {
                 visible={visible}
                 dismissable={onDismiss !== undefined} // TODO: change to false and test all modals
                 onDismiss={onDismiss}
+                contentContainerStyle={{
+                    backgroundColor: 'white',
+                    marginHorizontal: 22,
+                    paddingHorizontal: 22,
+                    paddingTop: 13,
+                    paddingBottom: 22,
+                    borderRadius: 8,
+                    ...modalStyle,
+                }}
             >
-                <Card
+                <View
                     style={{
-                        marginHorizontal: 22,
-                        alignSelf: 'center',
-                        ...cardModalStyle,
+                        height: 24,
+                        marginTop: 4,
+                        marginBottom: 19,
                     }}
                 >
-                    <Card.Content
+                    <View
                         style={{
-                            paddingHorizontal: 22,
-                            paddingTop: 13,
-                            paddingBottom: 22,
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                         }}
                     >
-                        <View
+                        <Text
                             style={{
-                                height: 24,
-                                marginTop: 4,
-                                marginBottom: 19,
+                                fontFamily: 'Manrope-ExtraBold',
+                                fontSize: 22,
+                                lineHeight: 28,
+                                height: 28,
+                                color: ipctColors.darBlue,
                             }}
                         >
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
+                            {title}
+                        </Text>
+                        {onDismiss !== undefined && (
+                            <Pressable
+                                hitSlop={15}
+                                onPress={onDismiss}
+                                testID="close-modal"
                             >
-                                <Text
-                                    style={{
-                                        fontFamily: 'Manrope-ExtraBold',
-                                        fontSize: 22,
-                                        lineHeight: 28,
-                                        height: 28,
-                                        color: ipctColors.darBlue,
-                                    }}
-                                >
-                                    {title}
-                                </Text>
-                                {onDismiss !== undefined && (
-                                    <Pressable
-                                        hitSlop={15}
-                                        onPress={onDismiss}
-                                        testID="close-modal"
-                                    >
-                                        <CloseSvg />
-                                    </Pressable>
-                                )}
-                            </View>
-                        </View>
-                        {children}
-                        {buttons}
-                    </Card.Content>
-                </Card>
+                                <CloseSvg />
+                            </Pressable>
+                        )}
+                    </View>
+                </View>
+                {children}
+                {buttons}
             </ModalRNP>
         );
     }
