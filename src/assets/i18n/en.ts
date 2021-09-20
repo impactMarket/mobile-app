@@ -35,6 +35,8 @@ export default {
         generic: 'An error happened, please, try again.', // this will be deprecated
         loadingApp:
             'Unfortunately an unexpected error occurred while loading the app. Please restart the app and try again.',
+        notAllowedToDeleteProfile:
+            'You are not allowed to delete your account. A community requires at least two active managers.',
     },
     permissions: {
         title: 'Questing Permission',

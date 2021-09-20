@@ -37,6 +37,8 @@ export default {
         generic: 'Ocorreu um erro, por favor, tente novamente.', // this will be deprecated
         loadingApp:
             'Infelizmente, ocorreu um erro inesperado ao carregar o aplicativo. Reinicie o aplicativo e tente novamente.',
+        notAllowedToDeleteProfile:
+            'Você não pode apagar a sua conta. Uma comunidade tem de ter pelo menos dois gestores ativos.',
     },
     permissions: {
         title: 'Perdido de permissão',
