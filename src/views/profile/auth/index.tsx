@@ -97,6 +97,17 @@ function Auth() {
             } else {
                 modalizeWelcomeRef.current.close();
             }
+        } else {
+            const intervalToOpenModal = setInterval(() => {
+                if (modalizeWelcomeRef.current !== null) {
+                    if (authModalOpen) {
+                        modalizeWelcomeRef.current.open();
+                    } else {
+                        modalizeWelcomeRef.current.close();
+                    }
+                    clearInterval(intervalToOpenModal);
+                }
+            }, 100);
         }
     }, [authModalOpen]);
 
