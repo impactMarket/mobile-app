@@ -3,10 +3,7 @@ import {
     getFocusedRouteNameFromRoute,
     RouteProp,
 } from '@react-navigation/native';
-import {
-    StackNavigationOptions,
-    StackNavigationProp,
-} from '@react-navigation/stack';
+import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'assets/i18n';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -26,15 +23,6 @@ import CommunityManagerScreen from 'views/community/manager';
 import Beneficiary from './header/Beneficiary';
 import CommunityManager from './header/CommunityManager';
 import Logout from './header/Logout';
-
-const headerStyles: Partial<StackNavigationOptions> = {
-    headerTitleStyle: {
-        fontFamily: 'Manrope-Bold',
-        fontSize: ipctFontSize.lowMedium,
-        lineHeight: ipctLineHeight.large,
-        color: ipctColors.darBlue,
-    },
-};
 
 /**
  * Only screens within tabnavigator need to be added here.
@@ -113,7 +101,13 @@ function TabNavigator({
         navigation.setOptions({
             headerLeft: () => headerLeftDetected,
             headerTitle: getHeaderTitle(routeName, defaultValue),
-            ...headerStyles,
+            headerTitleStyle: {
+                fontFamily: 'Manrope-Bold',
+                fontSize: ipctFontSize.lowMedium,
+                lineHeight: ipctLineHeight.large,
+                color: ipctColors.darBlue,
+                backgroundColor: 'red',
+            },
             headerTitleContainerStyle: {
                 left: headerLeftDetected ? 58 : 18,
             },
