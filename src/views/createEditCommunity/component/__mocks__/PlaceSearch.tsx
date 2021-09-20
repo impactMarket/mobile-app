@@ -47,7 +47,6 @@ const MockGooglePlacesAutocomplete = forwardRef(
                 <ScrollView
                     style={{
                         height: 50,
-                        backgroundColor: 'red',
                     }}
                 >
                     <Pressable
