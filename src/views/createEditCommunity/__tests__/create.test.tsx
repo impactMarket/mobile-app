@@ -119,7 +119,9 @@ describe('create community', () => {
             })
         );
 
-        communityUploadCoverMock.mockImplementation(() => Promise.resolve());
+        communityUploadCoverMock.mockImplementation(() =>
+            Promise.resolve(true)
+        );
 
         // communityCreateMock.mockImplementation mocked below
 
@@ -1282,7 +1284,9 @@ describe('create community', () => {
         );
 
         communityUploadCoverMock.mockClear();
-        communityUploadCoverMock.mockImplementation(() => Promise.resolve());
+        communityUploadCoverMock.mockImplementation(() =>
+            Promise.resolve(true)
+        );
         communityCreateMock.mockImplementationOnce(() =>
             Promise.resolve({
                 data: communityDummyData,

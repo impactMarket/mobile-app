@@ -454,7 +454,7 @@ function ProfileScreen() {
                         lineHeight: 24,
                     }}
                 >
-                    {18n.toLocaleString('errors.notAllowedToDeleteProfile')}
+                    {i18n.t('errors.notAllowedToDeleteProfile')}
                 </Text>
             );
         } else if (toggleDeleteAccountModal) {

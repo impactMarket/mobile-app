@@ -224,14 +224,15 @@ class ApiRouteCommunity {
         // TODO: improve this
         const delay = (ms: number) =>
             new Promise((resolve) => setTimeout(resolve, ms));
-        let tries = 10;
+        let tries = 30;
         while (tries-- > 0) {
-            delay(1000);
+            await delay(1000);
             const { status } = await this.api.head(preSigned.media.url);
             if (status === 200) {
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     static async create(

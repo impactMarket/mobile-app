@@ -411,6 +411,7 @@ function CommunityCover(props: { edit?: boolean }) {
                         borderRadius: 12,
                         marginVertical: 22,
                     }}
+                    shimmerStyle={{ borderRadius: 12 }}
                     visible={loadedImage}
                 >
                     <Image
