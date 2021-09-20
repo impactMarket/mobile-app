@@ -1,24 +1,16 @@
-import combinedReducer from 'helpers/redux/reducers';
+import { render } from '@testing-library/react-native';
 import React from 'react';
-import { Provider } from 'react-redux';
-import { create } from 'react-test-renderer';
-import { createStore } from 'redux';
 
 import Welcome from '../index';
 
-const store = createStore(combinedReducer);
-
-const tree = create(
-    <Provider store={store}>
-        <Welcome />
-    </Provider>
-).toJSON();
 describe('Welcome screen test', () => {
     test('should render WelcomeScreen correctly', () => {
+        const tree = render(<Welcome />).toJSON();
         expect(tree).toMatchSnapshot();
     });
 
     test('should render welcomeBtnContainer correctly', () => {
-        expect('welcomeBtnContainer').toBeDefined();
+        const { queryByTestId } = render(<Welcome />);
+        expect(queryByTestId('welcomeBtnContainer')).not.toBeNull();
     });
 });
