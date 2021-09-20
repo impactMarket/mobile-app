@@ -106,7 +106,6 @@ function TabNavigator({
                 fontSize: ipctFontSize.lowMedium,
                 lineHeight: ipctLineHeight.large,
                 color: ipctColors.darBlue,
-                backgroundColor: 'red',
             },
             headerTitleContainerStyle: {
                 left: headerLeftDetected ? 58 : 18,

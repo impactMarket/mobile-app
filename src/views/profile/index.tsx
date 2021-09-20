@@ -114,6 +114,9 @@ function ProfileScreen() {
         null
     );
     const [deleting, setDeleting] = useState(false);
+    const [deleteAccountError, setDeleteAccountError] = useState<
+        string | undefined
+    >();
 
     const [refreshing, setRefreshing] = useState(false);
 
@@ -440,6 +443,86 @@ function ProfileScreen() {
             </RadioButton.Group>
         </View>
     );
+
+    const DeleteAccountModalContent = () => {
+        if (deleteAccountError !== undefined) {
+            return (
+                <Text
+                    style={{
+                        fontFamily: 'Inter-Regular',
+                        fontSize: 14,
+                        lineHeight: 24,
+                    }}
+                >
+                    {18n.toLocaleString('errors.notAllowedToDeleteProfile')}
+                </Text>
+            );
+        } else if (toggleDeleteAccountModal) {
+            return (
+                <>
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Regular',
+                            fontSize: 14,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('profile.deleteAccountWarn.msg1')}
+                    </Text>
+                    <Text
+                        style={{
+                            fontFamily: 'Inter-Bold',
+                            fontSize: 14,
+                            lineHeight: 24,
+                        }}
+                    >
+                        {i18n.t('profile.deleteAccountWarn.msg2')}
+                    </Text>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginTop: 16,
+                        }}
+                    >
+                        <Button
+                            modeType="gray"
+                            style={{ width: '45%' }}
+                            onPress={() => setToggleDeleteAccountModal(false)}
+                            disabled={deleting}
+                        >
+                            {i18n.t('generic.dismiss')}
+                        </Button>
+                        <Button
+                            modeType="default"
+                            style={{ width: '45%' }}
+                            onPress={() => {
+                                setDeleting(true);
+                                Api.user.delete().then((r) => {
+                                    if (r.error !== undefined) {
+                                        setDeleteAccountError(r.error.name);
+                                        setDeleting(false);
+                                    } else {
+                                        logout(dispatch).then(() => {
+                                            // TODO: clear navigator history
+                                            navigation.navigate(
+                                                Screens.Communities
+                                            );
+                                        });
+                                    }
+                                });
+                            }}
+                            loading={deleting}
+                            disabled={deleting}
+                        >
+                            {i18n.t('generic.delete')}
+                        </Button>
+                    </View>
+                </>
+            );
+        }
+        return null;
+    };
 
     if (toggleImageDimensionsModal) {
         return (
@@ -788,61 +871,12 @@ function ProfileScreen() {
                 <Modal
                     title={i18n.t('profile.deleteAccount')}
                     visible={toggleDeleteAccountModal}
-                    onDismiss={() => setToggleDeleteAccountModal(false)}
+                    onDismiss={() => {
+                        setToggleDeleteAccountModal(false);
+                        setDeleteAccountError(undefined);
+                    }}
                 >
-                    <Text
-                        style={{
-                            fontFamily: 'Inter-Regular',
-                            fontSize: 14,
-                            lineHeight: 24,
-                        }}
-                    >
-                        {i18n.t('profile.deleteAccountWarn.msg1')}
-                    </Text>
-                    <Text
-                        style={{
-                            fontFamily: 'Inter-Bold',
-                            fontSize: 14,
-                            lineHeight: 24,
-                        }}
-                    >
-                        {i18n.t('profile.deleteAccountWarn.msg2')}
-                    </Text>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 16,
-                        }}
-                    >
-                        <Button
-                            modeType="gray"
-                            style={{ width: '45%' }}
-                            onPress={() => setToggleDeleteAccountModal(false)}
-                            disabled={deleting}
-                        >
-                            {i18n.t('generic.dismiss')}
-                        </Button>
-                        <Button
-                            modeType="default"
-                            style={{ width: '45%' }}
-                            onPress={() => {
-                                setDeleting(true);
-                                Api.user.delete().then(() => {
-                                    logout(dispatch).then(() => {
-                                        // TODO: clear navigator history
-                                        navigation.navigate(
-                                            Screens.Communities
-                                        );
-                                    });
-                                });
-                            }}
-                            loading={deleting}
-                            disabled={deleting}
-                        >
-                            {i18n.t('generic.delete')}
-                        </Button>
-                    </View>
+                    <DeleteAccountModalContent />
                 </Modal>
                 <Modalize
                     ref={modalizeCurrencyRef}
