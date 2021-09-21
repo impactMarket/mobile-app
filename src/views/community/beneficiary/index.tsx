@@ -20,14 +20,7 @@ import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { Trans } from 'react-i18next';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Alert,
-    RefreshControl,
-    Dimensions,
-} from 'react-native';
+import { StyleSheet, Text, View, Alert, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     ActivityIndicator,
@@ -305,17 +298,7 @@ function BeneficiaryScreen() {
                         </Button>
                     }
                 >
-                    <View
-                        style={{
-                            flex: 1,
-                            justifyContent: 'space-between',
-                            height:
-                                Dimensions.get('window').height -
-                                100 -
-                                84 -
-                                152, // this is the: height - header - navigation - image
-                        }}
-                    >
+                    <ScrollView>
                         <View>
                             <Text
                                 onPress={() =>
@@ -394,7 +377,7 @@ function BeneficiaryScreen() {
                                 )}
                             </Paragraph>
                         </View>
-                    </View>
+                    </ScrollView>
                 </BaseCommunity>
                 {/* {showReportCard !== 'false' && !openModal && (
                     <ReportCard setOpenModal={setOpenModal} />

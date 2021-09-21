@@ -71,7 +71,7 @@ export default class Modal extends Component<IModalProps, IModalState> {
             if (keyboardOpen) {
                 modalStyle = {
                     ...modalStyle,
-                    bottom: bottom - 255,
+                    bottom: +bottom / 2,
                 };
             }
         }

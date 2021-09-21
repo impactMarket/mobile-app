@@ -413,7 +413,7 @@ export default {
     communityFundsRunOut: {
         title: 'Comunidade sem fundos',
         description:
-            'Entendemos o inconveniente e sabemos o quanto você precisa desse valor. <bold> Você será notificado quando os fundos estiverem disponíveis novamente. </bold>',
+            'Entendemos o inconveniente e sabemos o quanto você precisa desse valor.',
         callToAction: 'Por que os fundos acabam?',
     },
     communityWentOutOfFunds:

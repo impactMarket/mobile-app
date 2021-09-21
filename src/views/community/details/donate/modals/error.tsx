@@ -39,8 +39,7 @@ class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
             >
                 <Paragraph
                     style={{
-                        marginHorizontal: 44,
-                        marginVertical: 50,
+                        marginBottom: 16,
                         fontSize: 19,
                         lineHeight: 23,
                         textAlign: 'center',

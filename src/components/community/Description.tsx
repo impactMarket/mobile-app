@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Dot from 'components/Dot';
-import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
+import ShimmerText from 'components/shimmers/Text';
 import { Screens } from 'helpers/constants';
 import { translate } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
@@ -130,33 +130,7 @@ export default function Description(props: {
             </>
         );
     }
-    return (
-        <View>
-            {Array(isShort === true ? 3 : 7)
-                .fill(0)
-                .map((_, i) => (
-                    <ShimmerPlaceholder
-                        key={i}
-                        delay={0}
-                        duration={1000}
-                        isInteraction
-                        width={width - 40}
-                        height={16}
-                        shimmerStyle={{ borderRadius: 12 }}
-                        containerProps={{ marginVertical: 4 }}
-                    />
-                ))}
-            <ShimmerPlaceholder
-                delay={0}
-                duration={1000}
-                isInteraction
-                width={width / 2}
-                height={16}
-                shimmerStyle={{ borderRadius: 12 }}
-                containerProps={{ marginVertical: 4 }}
-            />
-        </View>
-    );
+    return <ShimmerText width={width - 40} isShort={isShort} />;
 }
 
 const styles = StyleSheet.create({
