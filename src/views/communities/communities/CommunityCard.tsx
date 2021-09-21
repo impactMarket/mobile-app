@@ -32,10 +32,7 @@ function CommunityCard(props: {
     navigation: NavigationProp<ParamListBase, string, Readonly<any>, any, any>;
 }) {
     const { community, rates, userCurrency, navigation } = props;
-
-    const [loadedImage, setLoadedImage] = useState(true);
-
-    console.log(community.name === undefined);
+    const [loadedImage, setLoadedImage] = useState(false);
 
     if (community.name === undefined) {
         return (

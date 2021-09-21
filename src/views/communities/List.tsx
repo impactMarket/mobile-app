@@ -3,6 +3,7 @@ import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Dot from 'components/Dot';
+import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
 import IconCommunity from 'components/svg/IconCommunity';
 import BackSvg from 'components/svg/header/BackSvg';
 import NoSuspiciousSvg from 'components/svg/suspicious/NoSuspiciousSvg';
@@ -21,6 +22,7 @@ import {
     Image,
     Pressable,
     StyleSheet,
+    Dimensions,
 } from 'react-native';
 import { ProgressBar } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -43,11 +45,59 @@ function ListItem(props: {
         [key: string]: number;
     };
     navigation: NavigationProp<any, any, any, any, any>;
+    width: number;
 }) {
-    const { community, exchangeRates } = props;
+    const { community, exchangeRates, userCurrency, navigation, width } = props;
+
+    if (community.name === undefined) {
+        return (
+            <View style={styles.container}>
+                <ShimmerPlaceholder
+                    delay={0}
+                    duration={1000}
+                    isInteraction
+                    height={82}
+                    width={82}
+                    shimmerContainerProps={{
+                        width: '100%',
+                        borderRadius: 12,
+                        // marginVertical: 22,
+                    }}
+                    shimmerStyle={{ borderRadius: 12 }}
+                    visible={false}
+                />
+                <View style={{ marginLeft: 16 }}>
+                    <ShimmerPlaceholder
+                        delay={0}
+                        duration={1000}
+                        isInteraction
+                        width={width / 2}
+                        height={16}
+                        shimmerStyle={{ borderRadius: 12 }}
+                        containerProps={{ marginVertical: 4 }}
+                    />
+                    {Array(2)
+                        .fill(0)
+                        .map((_, i) => (
+                            <ShimmerPlaceholder
+                                key={i}
+                                delay={0}
+                                duration={1000}
+                                isInteraction
+                                width={width}
+                                height={16}
+                                shimmerStyle={{ borderRadius: 12 }}
+                                containerProps={{ marginVertical: 4 }}
+                            />
+                        ))}
+                </View>
+            </View>
+        );
+    }
+
     const claimAmount = amountToCurrency(
         community.contract.claimAmount,
-        props.userCurrency,
+        userCurrency,
         exchangeRates
     );
     const claimFrequency =
@@ -71,7 +121,7 @@ function ListItem(props: {
         <Pressable
             style={styles.container}
             onPress={() =>
-                props.navigation.navigate(Screens.CommunityDetails, {
+                navigation.navigate(Screens.CommunityDetails, {
                     communityId: community.id,
                 })
             }
@@ -79,7 +129,7 @@ function ListItem(props: {
             <View>
                 <Image
                     source={{
-                        uri: chooseMediaThumbnail(props.community.cover!, {
+                        uri: chooseMediaThumbnail(community.cover!, {
                             heigth: 88,
                             width: 88,
                         }),
@@ -91,7 +141,7 @@ function ListItem(props: {
                 </View>
             </View>
             <View style={styles.titleView}>
-                <Text style={styles.titleText}>{props.community.name}</Text>
+                <Text style={styles.titleText}>{community.name}</Text>
                 <View>
                     <View style={styles.infoView}>
                         {community.suspect !== undefined &&
@@ -126,7 +176,7 @@ function ListItem(props: {
                                 { fontFamily: 'Inter-Regular', marginLeft: 4 },
                             ]}
                         >
-                            {props.community.state!.beneficiaries}
+                            {community.state!.beneficiaries}
                         </Text>
                     </View>
                     <ProgressBar
@@ -142,6 +192,7 @@ function ListItem(props: {
 
 function ListCommunitiesScreen() {
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
+    const { width } = Dimensions.get('screen');
 
     const navigation = useNavigation();
     const exchangeRates = useSelector(
@@ -229,17 +280,26 @@ function ListCommunitiesScreen() {
 
     return (
         <FlatList
-            data={communities}
-            renderItem={({ item }: { item: CommunityAttributes }) => (
+            data={
+                communities.length === 0
+                    ? (Array(10)
+                          .fill(1)
+                          .map((_, idx) => ({
+                              id: idx,
+                          })) as any[])
+                    : communities
+            }
+            renderItem={({ item }) => (
                 <ListItem
                     community={item}
                     userCurrency={userCurrency}
                     exchangeRates={exchangeRates}
                     navigation={navigation}
+                    width={width - 84 - 16 - 44} // width - image width - space beteen - margins
                 />
             )}
             ref={flatListRef}
-            keyExtractor={(item) => item.publicId}
+            keyExtractor={(item) => item.id.toString()}
             onEndReached={handleOnEndReached}
             showsVerticalScrollIndicator={false}
         />
