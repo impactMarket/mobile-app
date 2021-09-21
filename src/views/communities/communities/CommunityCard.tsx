@@ -1,17 +1,17 @@
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
-import CachedImage from 'components/CacheImage';
 import Dot from 'components/Dot';
+import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
+import ShimmerText from 'components/shimmers/Text';
 import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
+import { chooseMediaThumbnail } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
-import { IRootState } from 'helpers/types/state';
-import React from 'react';
-import { Pressable, Text, View, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { Pressable, Text, View, StyleSheet, Image } from 'react-native';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 const countries: {
@@ -23,14 +23,41 @@ const countries: {
         emoji: string;
     };
 } = countriesJSON;
-function CommunityCard(props: { community: CommunityAttributes }) {
-    const navigation = useNavigation();
-    const { community } = props;
+function CommunityCard(props: {
+    community: CommunityAttributes;
+    rates: {
+        [key: string]: number;
+    };
+    userCurrency: string;
+    navigation: NavigationProp<ParamListBase, string, Readonly<any>, any, any>;
+}) {
+    const { community, rates, userCurrency, navigation } = props;
 
-    const rates = useSelector((state: IRootState) => state.app.exchangeRates);
-    const userCurrency = useSelector(
-        (state: IRootState) => state.user.metadata.currency
-    );
+    const [loadedImage, setLoadedImage] = useState(true);
+
+    console.log(community.name === undefined);
+
+    if (community.name === undefined) {
+        return (
+            <View style={styles.card}>
+                <ShimmerPlaceholder
+                    delay={0}
+                    duration={1000}
+                    isInteraction
+                    height={254}
+                    width={254}
+                    shimmerContainerProps={{
+                        width: '100%',
+                        borderRadius: 8,
+                        // marginVertical: 22,
+                    }}
+                    shimmerStyle={{ borderRadius: 8 }}
+                    visible={false}
+                />
+                <ShimmerText width={254} isShort />
+            </View>
+        );
+    }
 
     const claimAmount = amountToCurrency(
         community.contract.claimAmount,
@@ -42,24 +69,12 @@ function CommunityCard(props: { community: CommunityAttributes }) {
             ? i18n.t('generic.day')
             : i18n.t('generic.week');
 
-    // const setTextSuspects = (suspects: number) => {
-    //     switch (true) {
-    //         case suspects < 1:
-    //             return i18n.t('noSuspiciousActivity');
-
-    //         case suspects < 4:
-    //             return i18n.t('lowSuspiciousActivity');
-
-    //         case suspects < 8:
-    //             return i18n.t('significantSuspiciousActivity');
-
-    //         case suspects > 7:
-    //             return i18n.t('largeSuspiciousActivity');
-
-    //         default:
-    //             return i18n.t('noSuspiciousActivity');
-    //     }
-    // };
+    const coverSource = {
+        uri: chooseMediaThumbnail(community.cover, {
+            heigth: 330,
+            width: 330,
+        }),
+    };
 
     return (
         <Pressable
@@ -71,53 +86,26 @@ function CommunityCard(props: { community: CommunityAttributes }) {
         >
             <View key={community.name} style={styles.card}>
                 <View style={{ position: 'relative' }}>
-                    <CachedImage
-                        style={styles.cardImage}
-                        source={{
-                            uri: community?.cover?.url,
-                        }}
-                    />
-                    {/* TODO: add run out of funds detection algorithm to decide whether show warning or not.  */}
-                    {/* <View
-                        style={{
-                            position: 'absolute',
-                            zIndex: 5,
-                            backgroundColor: ipctColors.white,
-                            left: 20,
-                            bottom: 64,
-                            flexDirection: 'row',
-                            alignItems: 'center',
+                    <ShimmerPlaceholder
+                        delay={0}
+                        duration={1000}
+                        isInteraction
+                        height={254}
+                        width={254}
+                        shimmerContainerProps={{
+                            width: '100%',
                             borderRadius: 8,
-                            padding: 8,
+                            // marginVertical: 22,
                         }}
+                        shimmerStyle={{ borderRadius: 8 }}
+                        visible={loadedImage}
                     >
-                        <WarningTriangle color={ipctColors.warningOrange} />
-                        <Text style={styles.cardCommunityTagText}>
-                            {i18n.t('funds')}
-                        </Text>
-                    </View> */}
-
-                    {/* TODO: add suspect level algorithm.  */}
-                    {/* {!community.suspect && (
-                        <View
-                            style={{
-                                position: 'absolute',
-                                zIndex: 5,
-                                backgroundColor: ipctColors.white,
-                                left: 20,
-                                bottom: 18,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                borderRadius: 8,
-                                padding: 8,
-                            }}
-                        >
-                            <SuspiciousActivityMiddleSvg />
-                            <Text style={styles.cardCommunityTagText}>
-                                {setTextSuspects(Number(community.suspect))}
-                            </Text>
-                        </View>
-                    )} */}
+                        <Image
+                            style={styles.cardImage}
+                            source={coverSource}
+                            onLoadEnd={() => setLoadedImage(true)}
+                        />
+                    </ShimmerPlaceholder>
                     <View style={styles.darkerBackground} />
                 </View>
                 <View
