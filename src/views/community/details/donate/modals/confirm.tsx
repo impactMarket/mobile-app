@@ -91,7 +91,6 @@ class ConfirmModal extends Component<
                         scope.setTag('ipct-activity', 'donate');
                         Sentry.Native.captureException(e);
                     });
-                    console.log(e);
                     analytics('donate', {
                         device: Device.brand,
                         success: 'false',
@@ -101,9 +100,12 @@ class ConfirmModal extends Component<
                         i18n.t('generic.failure'),
                         i18n.t('donate.errorDonating'),
                         [
-                            { text: 'Try again', onPress: () => executeTx() },
                             {
-                                text: 'Go Back',
+                                text: i18n.t('generic.tryAgain'),
+                                onPress: () => executeTx(),
+                            },
+                            {
+                                text: i18n.t('generic.cancel'),
                                 onPress: () => navigationRef.current?.goBack(),
                                 style: 'cancel',
                             },
