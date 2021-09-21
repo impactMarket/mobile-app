@@ -399,7 +399,7 @@ export default {
     communityFundsRunOut: {
         title: 'Community funds run out',
         description:
-            'We understand the inconvenience and we know how much you need this allowance.  <bold>You will be notified when funds are available again.</bold>',
+            'We understand the inconvenience and we know how much you need this allowance.',
         callToAction: 'Why funds run out?',
     },
     communityWentOutOfFunds:

@@ -17,7 +17,6 @@ import { CommunitiesActionTypes, UserActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
 import React from 'react';
-import { Trans } from 'react-i18next';
 import { Alert, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { ActivityIndicator, Text } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
@@ -77,7 +76,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             );
             let notEnoughToClaimOnContract = false;
             if (
-                claimedRatio.gt(new BigNumber(0.97)) ||
+                claimedRatio.gt(new BigNumber(0.95)) ||
                 (await CacheStore.getCommunityHadNoFunds()) !== null
             ) {
                 // if it's above 97, check from contract
@@ -427,20 +426,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     </Text>
                 </View>
                 <Text style={styles.communityFundsRunOutDescription}>
-                    <Trans
-                        i18nKey="communityFundsRunOut.description"
-                        components={{
-                            bold: (
-                                <Text
-                                    style={{
-                                        fontFamily: 'Inter-Bold',
-                                        fontSize: 14,
-                                        color: ipctColors.blueRibbon,
-                                    }}
-                                />
-                            ),
-                        }}
-                    />
+                    {i18n.t('communityFundsRunOut.description')}
                 </Text>
                 <Text
                     style={styles.communityFundsRunOutCallToAction}
@@ -463,6 +449,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     paddingTop: 11,
                     paddingBottom: 17,
                     paddingHorizontal: 27,
+                    marginVertical: 16,
                     borderRadius: 8,
                 }}
                 disabled={claimDisabled}
@@ -577,11 +564,12 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 16,
         marginHorizontal: 22,
+        marginVertical: 16,
         alignItems: 'center',
     },
     communityFundsRunOutHeader: {
         flexDirection: 'row',
-        width: '95%',
+        // width: '95%',
         alignItems: 'center',
         marginBottom: 8,
     },
@@ -590,14 +578,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '800',
         lineHeight: 22,
-        textAlign: 'left',
+        textAlign: 'center',
     },
     communityFundsRunOutDescription: {
         fontFamily: 'Inter-Regular',
         fontSize: 14,
-        fontWeight: '700',
         lineHeight: 24,
-        textAlign: 'left',
+        textAlign: 'center',
         marginBottom: 20,
     },
     communityFundsRunOutCallToAction: {
@@ -605,7 +592,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '700',
         lineHeight: 30,
-        textAlign: 'left',
+        textAlign: 'center',
         color: ipctColors.blueRibbon,
         marginBottom: 12,
     },
