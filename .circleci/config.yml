@@ -5,14 +5,9 @@ jobs:
     working_directory: ~/publish-to-expo
     docker:
       - image: circleci/node:14.15.1
-    resource_class: medium+
+    resource_class: small
     environment:
-      EXPO_API_BASE_URL: $EXPO_API_BASE_URL_STAGING
-      EXPO_JSON_RPC_URL: $EXPO_JSON_RPC_URL_STAGING
-      EXPO_BLOCK_EXPLORER_URL: $EXPO_BLOCK_EXPLORER_URL_STAGING
-      EXPO_CUSD_CONTRACT_ADDRESS: $EXPO_CUSD_CONTRACT_ADDRESS_STAGING
       EXPO_IS_TESTNET: true
-      NODE_OPTIONS: --max_old_space_size=3072
       SENTRY_ORG: impactmarket
       SENTRY_PROJECT: impactmarket
       SENTRY_ENVIRONMENT: dev
@@ -21,39 +16,38 @@ jobs:
       - checkout
 
       - run:
-          name: decrypt google-services.json
-          command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+          name: Decrypt Google Services Files
+          command: |
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+            git config --global user.email "hello@impactmarket.com"
+            git config --global user.name "Hello"
+            git add -f ./src/assets/firebase/google-services.json && git add -f ./src/assets/firebase/GoogleService-Info.plist && git commit -m "fake: so eas don't get bothered"
 
       - run:
-          name: decrypt GoogleService-Info.plist
-          command: openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
-
-      - run:
-          name: Installing dependencies
-          command: yarn
-
-      - run:
-          name: Add global expo-cli
-          command: yarn global add expo-cli
+          name: Installing Dependencies
+          command: |
+            yarn
+            yarn global add expo-cli eas-cli
 
       - run:
           name: Login into Expo
           command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
       - run:
-          name: Publish to Expo and Create release, notify Sentry of deploy
+          name: Publish to Expo and Create Release on Sentry
           command: |
             curl -sL https://sentry.io/get-cli/ | bash
             export SENTRY_RELEASE=$(sentry-cli releases propose-version)
             sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
             sentry-cli releases set-commits $SENTRY_RELEASE --auto
-            npx expo-cli publish --non-interactive --max-workers 1
+            npx eas build -p=android --auto-submit-with-profile=development --no-wait
             sentry-cli releases finalize $SENTRY_RELEASE
             sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
 
       - run:
-          name: Publish to Expo
-          command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"New version deployed! Visit https://expo.io/@impactmarket/projects/impact-market"}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
+          name: Notify Slack Team
+          command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"A new version is being deployed! Visit the build for more details."}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
 
   unit_test:
     working_directory: ~/my-app
@@ -69,7 +63,7 @@ jobs:
           command: yarn
 
       - run:
-          name: test
+          name: Test
           command: yarn test
 
   type_check:
