@@ -11,6 +11,7 @@ import * as Device from 'expo-device';
 import * as Linking from 'expo-linking';
 import * as Localization from 'expo-localization';
 import {
+    Screens,
     STORAGE_USER_ADDRESS,
     STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
@@ -65,8 +66,8 @@ function Auth() {
     const exchangeRates = useSelector(
         (state: IRootState) => state.app.exchangeRates
     );
-    const authModalOpen = useSelector(
-        (state: IRootState) => state.app.authModalOpen
+    const { authModalOpen, fromWelcomeScreen } = useSelector(
+        (state: IRootState) => state.app
     );
     const [dappKitResponse, setDappKitResponse] = useState<
         AccountAuthResponseSuccess | undefined
@@ -97,7 +98,7 @@ function Auth() {
             } else {
                 modalizeWelcomeRef.current.close();
             }
-        } else {
+        } else if (fromWelcomeScreen === Screens.Communities) {
             const intervalToOpenModal = setInterval(() => {
                 if (modalizeWelcomeRef.current !== null) {
                     if (authModalOpen) {
@@ -135,39 +136,37 @@ function Auth() {
                 dispatch,
                 user.user
             );
+
             dispatch(setOpenAuthModal(false));
-            dispatch(userAuthToStateReset());
             setConnecting(false);
             modalizeAccountWarningRef.current.close();
             modalizeWelcomeRef.current.close();
+            dispatch(userAuthToStateReset());
         };
 
-        if (userAuthState.user !== undefined) {
-            if (dappKitResponse !== undefined) {
-                finishAuth();
+        if (connecting) {
+            console.log(userAuthState.user?.user);
+
+            if (userAuthState.user !== undefined) {
+                if (dappKitResponse !== undefined) {
+                    finishAuth();
+                }
+            } else if (userAuthState.error !== undefined) {
+                if (userAuthState.error.name === 'PHONE_CONFLICT') {
+                    setAccountWarningType(1);
+                } else if (userAuthState.error.name === 'DELETION_PROCESS') {
+                    setAccountWarningType(2);
+                } else if (userAuthState.error.name === 'INACTIVE_USER') {
+                    setAccountWarningType(3);
+                }
+                modalizeAccountWarningRef.current.open();
+                modalizeWelcomeRef.current.close();
+                setToggleWarn(true);
+                setConnecting(false);
+                dispatch(userAuthToStateReset());
             }
-        } else if (
-            userAuthState.error !== undefined &&
-            userAuthState.error.name === 'PHONE_CONFLICT'
-        ) {
-            setAccountWarningType(1);
-            modalizeAccountWarningRef.current.open();
-            modalizeWelcomeRef.current.close();
-            setToggleWarn(true);
-            setConnecting(false);
-            dispatch(userAuthToStateReset());
-        } else if (
-            userAuthState.error !== undefined &&
-            userAuthState.error.name === 'DELETION_PROCESS'
-        ) {
-            setAccountWarningType(2);
-            modalizeAccountWarningRef.current.open();
-            modalizeWelcomeRef.current.close();
-            setToggleWarn(true);
-            setConnecting(false);
-            dispatch(userAuthToStateReset());
         }
-    }, [userAuthState, dappKitResponse, dispatch, exchangeRates, kit]);
+    }, [userAuthState, dappKitResponse, connecting]);
 
     const apiAuthRequest = async (props: {
         response?: AccountAuthResponseSuccess;
@@ -396,6 +395,62 @@ function Auth() {
         </View>
     );
 
+    const InactiveAccountView = () => (
+        <View style={{ width: '100%', paddingHorizontal: 22 }}>
+            <Text style={styles.description}>
+                {i18n.t('auth.inactiveMsg1')}
+            </Text>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginBottom: 18,
+                }}
+            >
+                <Button
+                    modeType="gray"
+                    style={{ width: '45%' }}
+                    onPress={() => modalizeAccountWarningRef.current.close()}
+                    disabled={connecting}
+                >
+                    {i18n.t('generic.dismiss')}
+                </Button>
+                <Button
+                    modeType="default"
+                    style={{ width: '45%' }}
+                    onPress={() => {
+                        setConnecting(true);
+                        apiAuthRequest({ overwrite: true });
+                    }}
+                    loading={connecting}
+                    disabled={connecting}
+                >
+                    {i18n.t('auth.recover')}
+                </Button>
+            </View>
+        </View>
+    );
+
+    const modalWarningTitle = (type: number) => {
+        switch (type) {
+            case 1:
+                return i18n.t('auth.duplicatedTitle');
+            default:
+                return i18n.t('auth.welcomeBack');
+        }
+    };
+
+    const modalWarningDescription = (type: number) => {
+        switch (type) {
+            case 1:
+                return <DuplicatedAccountsView />;
+            case 2:
+                return <DeleteAccountView />;
+            default:
+                return <InactiveAccountView />;
+        }
+    };
+
     return (
         <Portal>
             <Modalize
@@ -403,7 +458,7 @@ function Auth() {
                 HeaderComponent={renderHeader(
                     null,
                     modalizeHelpCenterRef,
-                    () => modalizeWelcomeRef.current?.open(),
+                    () => {},
                     true
                 )}
                 adjustToContentHeight
@@ -425,14 +480,12 @@ function Auth() {
                     i18n.t('auth.connectWithValora'),
                     modalizeWelcomeRef,
                     () => {
-                        // navigation.navigate(Screens.Communities);
                         dispatch(setOpenAuthModal(false));
                         setConnecting(false);
                     }
                 )}
                 adjustToContentHeight
                 onClose={() => {
-                    // navigation.navigate(Screens.Communities);
                     dispatch(setOpenAuthModal(false));
                     setConnecting(false);
                 }}
@@ -480,26 +533,20 @@ function Auth() {
             <Modalize
                 ref={modalizeAccountWarningRef}
                 HeaderComponent={renderHeader(
-                    accountWarningType === 1
-                        ? i18n.t('auth.duplicatedTitle')
-                        : i18n.t('auth.welcomeBack'),
+                    modalWarningTitle(accountWarningType),
                     modalizeAccountWarningRef,
-                    () => modalizeAccountWarningRef.current.close()
+                    () => {}
                 )}
                 adjustToContentHeight
             >
-                {accountWarningType === 1 ? (
-                    <DuplicatedAccountsView />
-                ) : (
-                    <DeleteAccountView />
-                )}
+                {modalWarningDescription(accountWarningType)}
             </Modalize>
             <Modalize
                 ref={modalizeWebViewRef}
                 HeaderComponent={renderHeader(
                     null,
                     modalizeWebViewRef,
-                    () => modalizeWelcomeRef.current?.open(),
+                    () => {},
                     true
                 )}
                 adjustToContentHeight
