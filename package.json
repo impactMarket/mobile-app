@@ -168,7 +168,8 @@
         "react-native-bundle-visualizer": "2.2.1",
         "react-test-renderer": "16.13.1",
         "reactotron-react-native": "5.0.0",
-        "typescript": "4.3.5"
+        "typescript": "4.3.5",
+        "eas-cli": "0.28.0"
     },
     "resolutions": {
         "styled-components": "5",
