@@ -16,6 +16,7 @@ import Api from 'services/api';
 
 import config from '../../config';
 import CommunityContractABI from '../contracts/CommunityABI.json';
+import { SetAppFromWelcomeScreen } from './redux/actions/app';
 import {
     setCommunityContract,
     setCommunityMetadata,
@@ -192,6 +193,7 @@ export async function welcomeUser(
             // Setting suspicious activity
             dispatch(setUserIsBlocked(user.blocked));
             dispatch(setUserIsSuspect(user.suspect));
+            dispatch(SetAppFromWelcomeScreen(''));
         }
     });
 }

@@ -456,6 +456,8 @@ export default {
         recover: 'Recover',
         recoverMsg1:
             'Because you have initiated this account deletion process less than 15 days ago, you can recover your private and public data.',
+        inactiveMsg1:
+            'Your account seems to be inactive. Would you like to activate it again?',
     },
     promoter: {
         createdIn: 'Created community on {{date}}',

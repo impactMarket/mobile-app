@@ -48,6 +48,7 @@ function ListItem(props: {
     width: number;
 }) {
     const { community, exchangeRates, userCurrency, navigation, width } = props;
+    const [loadedImage, setLoadedImage] = useState(false);
 
     if (community.name === undefined) {
         return (
@@ -127,18 +128,34 @@ function ListItem(props: {
             }
         >
             <View>
-                <Image
-                    source={{
-                        uri: chooseMediaThumbnail(community.cover!, {
-                            heigth: 88,
-                            width: 88,
-                        }),
+                <ShimmerPlaceholder
+                    delay={0}
+                    duration={1000}
+                    isInteraction
+                    height={82}
+                    width={82}
+                    shimmerContainerProps={{
+                        width: '100%',
+                        borderRadius: 12,
+                        // marginVertical: 22,
                     }}
-                    style={styles.cover}
-                />
-                <View style={styles.countryFlag}>
-                    <Text>{countries[community.country].emoji}</Text>
-                </View>
+                    shimmerStyle={{ borderRadius: 12 }}
+                    visible={loadedImage}
+                >
+                    <Image
+                        source={{
+                            uri: chooseMediaThumbnail(community.cover!, {
+                                heigth: 88,
+                                width: 88,
+                            }),
+                        }}
+                        style={styles.cover}
+                        onLoadEnd={() => setLoadedImage(true)}
+                    />
+                    <View style={styles.countryFlag}>
+                        <Text>{countries[community.country].emoji}</Text>
+                    </View>
+                </ShimmerPlaceholder>
             </View>
             <View style={styles.titleView}>
                 <Text style={styles.titleText}>{community.name}</Text>

@@ -471,6 +471,8 @@ export default {
         recover: 'Recuperar',
         recoverMsg1:
             'Uma vez que iniciou este processo de eliminação de conta há menos de 15 dias, pode recuperar os seus dados privados e públicos.',
+        inactiveMsg1:
+            'Verificamos que a sua conta está inativa. Deseja ativar novamente?',
     },
     promoter: {
         createdIn: 'Criou comunidade em {{date}}',
