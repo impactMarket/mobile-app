@@ -171,7 +171,6 @@ function CreateCommunityScreen() {
         }
     }, [loadingForm, state]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const submitCommunity = async () => {
         const {
             name,
@@ -208,7 +207,6 @@ function CreateCommunityScreen() {
         }
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const uploadImages = () => {
         const profileUpload = async () => {
             if (state.profileImage.length > 0) {
@@ -318,10 +316,6 @@ function CreateCommunityScreen() {
         coverUploadDetails,
         profileUploadDetails,
         isUploadingContent,
-        state.profileImage,
-        userMetadata.avatar,
-        submitCommunity,
-        uploadImages,
     ]);
 
     const updateUIAfterSubmission = async (
@@ -705,11 +699,16 @@ function CreateCommunityScreen() {
                 submission={submittingCover}
                 uploadDetails={coverUploadDetails}
             />
-            <SubmissionActivity
-                description={i18n.t('createCommunity.changeProfileImage')}
-                submission={submittingProfile}
-                uploadDetails={profileUploadDetails}
-            />
+            {state.profileImage.length > 0 &&
+                profileUploadDetails === undefined && (
+                    <SubmissionActivity
+                        description={i18n.t(
+                            'createCommunity.changeProfileImage'
+                        )}
+                        submission={submittingProfile}
+                        uploadDetails={profileUploadDetails}
+                    />
+                )}
             <SubmissionActivity
                 description={i18n.t('createCommunity.communityDetails')}
                 submission={submittingCommunity}
