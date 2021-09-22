@@ -106,10 +106,10 @@ function EditCommunityScreen() {
                 };
             }
             const details = await Api.community.preSignedUrl(_cover);
-            await Api.community.uploadImage(details, _cover);
-            setCoverUploadDetails(details.media);
+            const success = await Api.community.uploadImage(details, _cover);
+            setCoverUploadDetails(success ? details.media : undefined);
             setSubmittingCover(false);
-            return details;
+            return { details, success };
         };
         return Promise.all([coverUpload()]);
     };
@@ -136,8 +136,12 @@ function EditCommunityScreen() {
         }
 
         try {
-            const details = await uploadImages(state.coverImage);
-            await submitCommunity(details);
+            const d = await uploadImages(state.coverImage);
+            if (d[0].success === true) {
+                await submitCommunity([d[0].details]);
+            } else {
+                setSubmittingSuccess(false);
+            }
         } catch (e) {
             // Sentry.Native.captureException(e);
         } finally {
@@ -158,7 +162,7 @@ function EditCommunityScreen() {
         });
         // TODO: this needs refactoring. This methods are used within and outside the effect
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [navigation, submitting, state]);
+    }, [submitting, state]);
 
     const SubmissionActivity = (props: {
         description: string;
@@ -220,13 +224,13 @@ function EditCommunityScreen() {
         >
             {state.coverImage !== cover.url && (
                 <SubmissionActivity
-                    description="Cover"
+                    description={i18n.t('createCommunity.changeCoverImage')}
                     submission={submittingCover}
                     uploadDetails={coverUploadDetails}
                 />
             )}
             <SubmissionActivity
-                description="Community"
+                description={i18n.t('createCommunity.communityDetails')}
                 submission={submittingCommunity}
                 uploadDetails={undefined} // doesn't matter, once it's approved, jumps to another modal
             />
@@ -237,7 +241,6 @@ function EditCommunityScreen() {
         <>
             <View
                 style={{
-                    marginVertical: 16,
                     paddingVertical: 16,
                     paddingHorizontal: 22,
                     borderStyle: 'solid',
@@ -281,40 +284,29 @@ function EditCommunityScreen() {
 
     const SubmissionSucess = () => (
         <>
-            <View
+            <SuccessSvg style={{ alignSelf: 'center' }} />
+            <Text
                 style={{
-                    paddingVertical: 14,
-                    display: 'flex',
-                    // height: sending || sendingSuccess ? 234 : 400,
-                    width: '88%',
-                    alignItems: 'center',
-                    alignSelf: 'center',
+                    fontFamily: 'Inter-Regular',
+                    fontSize: 14,
+                    lineHeight: 24,
+                    color: ipctColors.almostBlack,
+                    width: '100%',
+                    marginVertical: 12,
+                    textAlign: 'center',
                 }}
             >
-                <SuccessSvg />
-                <Text
-                    style={{
-                        fontFamily: 'Inter-Regular',
-                        fontSize: 14,
-                        lineHeight: 24,
-                        color: ipctColors.almostBlack,
-                        width: '100%',
-                        marginVertical: 12,
-                        textAlign: 'center',
-                    }}
-                >
-                    {i18n.t('createCommunity.communityRequestSuccess')}
-                </Text>
-                <Button
-                    modeType="gray"
-                    style={{ width: '100%' }}
-                    onPress={() => {
-                        navigation.goBack();
-                    }}
-                >
-                    {i18n.t('generic.continue')}
-                </Button>
-            </View>
+                {i18n.t('createCommunity.communityRequestSuccess')}
+            </Text>
+            <Button
+                modeType="gray"
+                style={{ width: '100%' }}
+                onPress={() => {
+                    navigation.goBack();
+                }}
+            >
+                {i18n.t('generic.continue')}
+            </Button>
         </>
     );
 
@@ -327,11 +319,6 @@ function EditCommunityScreen() {
                     lineHeight: 24,
                     color: ipctColors.almostBlack,
                     width: '100%',
-                    marginVertical: 12,
-                    // textAlign:
-                    //     sendingSuccess || sending
-                    //         ? 'center'
-                    //         : 'left',
                 }}
             >
                 {i18n.t('createCommunity.communityRequestSending')}
@@ -341,15 +328,12 @@ function EditCommunityScreen() {
                 modeType="gray"
                 style={{ width: '100%' }}
                 onPress={() => {
-                    // setSending(false);
-                    // setToggleInformativeModal(false);
-                    // navigation.goBack();
-                    // navigation.navigate(
-                    //     Screens.CommunityManager
-                    // );
+                    setSubmitting(false);
+                    setShowSubmissionModal(false);
+                    // TODO: [IPCT1-480] cancel edit request
                 }}
             >
-                {i18n.t('cancelSending')}
+                {i18n.t('generic.cancel')}
             </Button>
         </>
     );
@@ -359,8 +343,6 @@ function EditCommunityScreen() {
             <KeyboardAvoidingView
                 style={{
                     flex: 1,
-                    // flexDirection: 'column',
-                    // justifyContent: 'center',
                 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 // enabled
@@ -369,8 +351,6 @@ function EditCommunityScreen() {
                 <ScrollView
                     style={{
                         paddingHorizontal: 20,
-                        // paddingBottom: 20,
-                        // marginTop: 16,
                     }}
                 >
                     <DispatchContext.Provider value={dispatch}>
@@ -437,7 +417,7 @@ function EditCommunityScreen() {
                 </Modal>
                 <Modal
                     visible={showSubmissionModal}
-                    title="Submitting"
+                    title={i18n.t('generic.submitting')}
                     onDismiss={
                         !submitting && !submittingSuccess
                             ? () => {
@@ -446,24 +426,13 @@ function EditCommunityScreen() {
                             : undefined
                     }
                 >
-                    <View
-                        style={{
-                            paddingBottom: 14,
-                            display: 'flex',
-                            // height: sending || sendingSuccess ? 234 : 400,
-                            width: '88%',
-                            alignItems: 'center',
-                            alignSelf: 'center',
-                        }}
-                    >
-                        {submitting ? (
-                            <SubmissionInProgress />
-                        ) : submittingSuccess ? (
-                            <SubmissionSucess />
-                        ) : (
-                            <SubmissionFailed />
-                        )}
-                    </View>
+                    {submitting ? (
+                        <SubmissionInProgress />
+                    ) : submittingSuccess ? (
+                        <SubmissionSucess />
+                    ) : (
+                        <SubmissionFailed />
+                    )}
                 </Modal>
             </Portal>
         </>

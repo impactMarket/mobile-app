@@ -228,10 +228,9 @@ class ApiRequests {
         }
     }
 
-    head(endpoint: string) {
+    async head(endpoint: string) {
         try {
-            const r = fetch(endpoint, { method: 'HEAD' });
-            return r;
+            return await axios.head(endpoint);
         } catch (e) {
             return {
                 status: 404,

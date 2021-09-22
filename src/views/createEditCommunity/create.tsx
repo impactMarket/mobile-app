@@ -253,8 +253,11 @@ function CreateCommunityScreen() {
             }
             try {
                 const r = await Api.community.preSignedUrl(state.coverImage);
-                await Api.community.uploadImage(r, state.coverImage);
-                return r;
+                const success = await Api.community.uploadImage(
+                    r,
+                    state.coverImage
+                );
+                return { details: r, success };
             } catch {
                 setSubmitting(false);
                 setSubmittingCover(false);
@@ -287,10 +290,14 @@ function CreateCommunityScreen() {
             } else if (isUploadingContent) {
                 cancelablePromiseImages = makeCancelable(uploadImages());
                 cancelablePromiseImages.promise
-                    .then((details) => {
-                        setCoverUploadDetails(details[0].media);
-                        if (state.profileImage.length > 0) {
-                            setProfileUploadDetails(details[1].media);
+                    .then((result) => {
+                        if (result[0] !== undefined && !result[0].success) {
+                            setSubmittingSuccess(false);
+                        } else {
+                            setCoverUploadDetails(result[0].details.media);
+                            if (state.profileImage.length > 0) {
+                                setProfileUploadDetails(result[1].media);
+                            }
                         }
                         setSubmittingCover(false);
                         setSubmittingProfile(false);
