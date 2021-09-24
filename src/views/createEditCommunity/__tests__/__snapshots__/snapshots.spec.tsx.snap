@@ -1102,6 +1102,7 @@ Array [
                                     label="City, Country"
                                     maxLength={32}
                                     onChangeText={[Function]}
+                                    onEndEditing={[Function]}
                                     onFocus={[Function]}
                                     rejectResponderTermination={true}
                                     style={
@@ -3694,6 +3695,7 @@ Array [
                                     label="City, Country"
                                     maxLength={32}
                                     onChangeText={[Function]}
+                                    onEndEditing={[Function]}
                                     onFocus={[Function]}
                                     rejectResponderTermination={true}
                                     style={
@@ -6286,6 +6288,7 @@ Array [
                                     label="City, Country"
                                     maxLength={32}
                                     onChangeText={[Function]}
+                                    onEndEditing={[Function]}
                                     onFocus={[Function]}
                                     rejectResponderTermination={true}
                                     style={
