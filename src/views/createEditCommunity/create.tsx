@@ -282,7 +282,8 @@ function CreateCommunityScreen() {
                 coverUploadDetails !== undefined &&
                 ((state.profileImage.length > 0 &&
                     profileUploadDetails !== undefined) ||
-                    userMetadata.avatar.length > 0)
+                    (userMetadata.avatar !== null &&
+                        userMetadata.avatar.length > 0))
             ) {
                 cancelablePromiseCommunity = makeCancelable(submitCommunity());
             } else if (isUploadingContent) {
@@ -497,7 +498,9 @@ function CreateCommunityScreen() {
         const isAnyValid =
             _name ||
             _cover ||
-            (userMetadata.avatar.length === 0 && _profile) ||
+            (userMetadata.avatar !== null &&
+                userMetadata.avatar.length === 0 &&
+                _profile) ||
             _description ||
             _city ||
             _country ||

@@ -222,9 +222,9 @@ function CommunityCity() {
 
     const handleChangeCity = (value: string) => {};
 
-    const handleOnFocus = () => {
-        setToggleModal(true);
-    };
+    const handleOnFocus = () => setToggleModal(true);
+
+    const handleEndEdit = () => validateField(state, dispatch).city();
 
     const error = state.validation.city
         ? undefined
@@ -238,6 +238,7 @@ function CommunityCity() {
                 value={state.city}
                 maxLength={32}
                 onChangeText={handleChangeCity}
+                onEndEditing={handleEndEdit}
                 onFocus={handleOnFocus}
                 error={error}
                 boxStyle={{ marginTop: 28 }}
@@ -252,7 +253,9 @@ function CommunityCity() {
                         }}
                     >
                         <BackSvg
-                            onPress={() => setToggleModal(false)}
+                            onPress={() => {
+                                setToggleModal(false);
+                            }}
                             style={{ marginRight: 18, marginTop: 6 }}
                         />
                         <PlaceSearch

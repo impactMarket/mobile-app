@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import { Screens } from 'helpers/constants';
+import { setOpenAuthModal } from 'helpers/redux/actions/app';
 import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
@@ -92,7 +93,7 @@ export default function Communities() {
                 onPress={() =>
                     address.length > 0
                         ? navigation.navigate(Screens.CreateCommunity)
-                        : null
+                        : dispatch(setOpenAuthModal(true))
                 }
             >
                 <Text style={styles.buttomStoreText}>

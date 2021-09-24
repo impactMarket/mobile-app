@@ -258,21 +258,7 @@ function Auth() {
         const androidURL =
             'https://play.google.com/store/apps/details?id=co.clabs.valora';
         const iosURL = 'https://apps.apple.com/app/id1520414263';
-        if (Device.osName === 'Android') {
-            return (
-                <Button
-                    modeType="default"
-                    bold
-                    style={{ width: '100%' }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() => Linking.openURL(androidURL)}
-                >
-                    <Text style={styles.buttomStoreText}>
-                        {i18n.t('auth.installAndCreateValoraAccount')}
-                    </Text>
-                </Button>
-            );
-        } else if (Device.osName === 'iOS') {
+        if (Device.osName.toLowerCase() === 'ios') {
             return (
                 <Button
                     modeType="default"
@@ -288,26 +274,17 @@ function Auth() {
             );
         }
         return (
-            <>
-                <Button
-                    modeType="default"
-                    bold
-                    style={{ width: '100%', marginBottom: 16 }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() => Linking.openURL(iosURL)}
-                >
-                    <Text style={styles.buttomStoreText}>iOS</Text>
-                </Button>
-                <Button
-                    modeType="default"
-                    bold
-                    style={{ width: '100%' }}
-                    labelStyle={styles.buttomStoreText}
-                    onPress={() => Linking.openURL(androidURL)}
-                >
-                    <Text style={styles.buttomStoreText}>Android</Text>
-                </Button>
-            </>
+            <Button
+                modeType="default"
+                bold
+                style={{ width: '100%' }}
+                labelStyle={styles.buttomStoreText}
+                onPress={() => Linking.openURL(androidURL)}
+            >
+                <Text style={styles.buttomStoreText}>
+                    {i18n.t('auth.installAndCreateValoraAccount')}
+                </Text>
+            </Button>
         );
     };
 
