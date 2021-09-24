@@ -47,7 +47,55 @@ jobs:
 
       - run:
           name: Notify Slack Team
-          command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"A new version is being deployed! Visit the build for more details."}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
+          command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"A new version is being deployed to staging! Visit the build for more details."}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
+
+  publish_internal_release:
+    working_directory: ~/publish-internal-release
+    docker:
+      - image: circleci/node:14.15.1
+    resource_class: small
+    environment:
+      EXPO_IS_TESTNET: false
+      SENTRY_ORG: impactmarket
+      SENTRY_PROJECT: impactmarket
+      SENTRY_ENVIRONMENT: production
+      SENTRY_DEPLOY_ENV: production
+    steps:
+      - checkout
+
+      - run:
+          name: Decrypt Google Services Files
+          command: |
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/google-services.json.enc -out ./src/assets/firebase/google-services.json -d
+            openssl aes-256-cbc -aes-256-cbc -k $DECRYPT_GOOGLE_SERVICES_ENC_KEY -in ./src/assets/firebase/GoogleService-Info.plist.enc -out ./src/assets/firebase/GoogleService-Info.plist -d
+            git config --global user.email "hello@impactmarket.com"
+            git config --global user.name "Hello"
+            git add -f ./src/assets/firebase/google-services.json && git add -f ./src/assets/firebase/GoogleService-Info.plist && git commit -m "fake: so eas don't get bothered"
+
+      - run:
+          name: Installing Dependencies
+          command: |
+            yarn
+            yarn global add expo-cli eas-cli
+
+      - run:
+          name: Login into Expo
+          command: npx expo-cli login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+
+      - run:
+          name: Publish to Expo and Create Release on Sentry
+          command: |
+            curl -sL https://sentry.io/get-cli/ | bash
+            export SENTRY_RELEASE=$(sentry-cli releases propose-version)
+            sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+            sentry-cli releases set-commits $SENTRY_RELEASE --auto
+            npx eas build -p=all --auto-submit-with-profile=release --no-wait
+            sentry-cli releases finalize $SENTRY_RELEASE
+            sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT
+
+      - run:
+          name: Notify Slack Team
+          command: 'curl -X POST -H "Content-type: application/json" --data ''{"text":"A new version is being deployed to internal test! Visit the build for more details."}'' $SLACK_WEBHOOK_DEPLOY_EXPO'
 
   unit_test:
     working_directory: ~/my-app
@@ -100,7 +148,11 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - staging
+      - publish_internal_release:
+          filters:
+            tags:
+              only: /.*/
   everyday:
     jobs:
       - unit_test
