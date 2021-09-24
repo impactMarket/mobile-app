@@ -5,18 +5,10 @@ import { addMyStoriesToStateRequest } from 'helpers/redux/actions/stories';
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
-import Api from 'services/api';
 
 export default function MyStoriesCard() {
     const navigation = useNavigation();
-
     const dispatch = useDispatch();
-
-    const fetchMyStories = async () => {
-        await Api.story.me().then((s) => {
-            dispatch(addMyStoriesToStateRequest(s.stories));
-        });
-    };
 
     return (
         <Pressable
@@ -27,11 +19,10 @@ export default function MyStoriesCard() {
                 marginRight: 11.84,
             }}
             onPress={() => {
-                fetchMyStories().then(() =>
-                    navigation.navigate(Screens.Carousel, {
-                        caller: 'MY_STORIES',
-                    })
-                );
+                dispatch(addMyStoriesToStateRequest());
+                navigation.navigate(Screens.Carousel, {
+                    caller: 'MY_STORIES',
+                });
             }}
         >
             <View

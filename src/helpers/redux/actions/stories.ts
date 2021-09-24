@@ -36,12 +36,9 @@ export function addStoriesToStateFailure(): StoriesActionTypes {
     };
 }
 
-export function addMyStoriesToStateRequest(
-    myStories: ICommunityStory[]
-): StoriesActionTypes {
+export function addMyStoriesToStateRequest(): StoriesActionTypes {
     return {
         type: storiesAction.USER_STORIES_REQUEST,
-        payload: myStories,
     };
 }
 
@@ -54,9 +51,7 @@ export function addMyStoriesToStateSuccess(
     };
 }
 
-export function addMyStoriesToStateFailue(
-    myStories: ICommunityStory[]
-): StoriesActionTypes {
+export function addMyStoriesToStateFailue(): StoriesActionTypes {
     return {
         type: storiesAction.USER_STORIES_FAILURE,
     };
