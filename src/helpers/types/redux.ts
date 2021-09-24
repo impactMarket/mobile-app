@@ -216,7 +216,6 @@ interface InitLoadStoriesActionFailure {
 
 interface LoadMyStoriesActionRequest {
     type: typeof storiesAction.USER_STORIES_REQUEST;
-    payload: ICommunityStory[];
 }
 
 interface LoadMyStoriesActionSuccess {

@@ -57,25 +57,23 @@ function Carousel(props: {
     const { caller } = route.params ?? {};
 
     useEffect(() => {
-        if (caller === 'MY_STORIES' && myStories?.length > 0) {
-            setStories(myStories);
+        if (caller === 'MY_STORIES') {
+            if (myStories?.length > 0) {
+                setStories(myStories);
+            }
         } else {
-            caller !== 'MY_STORIES' &&
-                Api.story
-                    .getByCommunity(props.communityId, userAddress.length > 0)
-                    .then((s) => {
-                        setCommunityStories(s);
-                        setStories(s.stories);
-                        if (userAddress.length > 0) {
-                            setLovedStories(
-                                s.stories.map((ss) => ss.userLoved)
-                            );
-                        } else {
-                            setLovedStories(
-                                Array(s.stories.length).fill(false)
-                            );
-                        }
-                    });
+            console.log('here');
+            Api.story
+                .getByCommunity(props.communityId, userAddress.length > 0)
+                .then((s) => {
+                    setCommunityStories(s);
+                    setStories(s.stories);
+                    if (userAddress.length > 0) {
+                        setLovedStories(s.stories.map((ss) => ss.userLoved));
+                    } else {
+                        setLovedStories(Array(s.stories.length).fill(false));
+                    }
+                });
         }
     }, [caller, myStories, props.communityId, userAddress]);
 

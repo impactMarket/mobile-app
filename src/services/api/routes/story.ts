@@ -103,8 +103,8 @@ class ApiRouteStory {
         return this.api.delete<void>('/story/' + storyId, {});
     }
 
-    static async me(): Promise<ICommunityStories> {
-        return (await this.api.get<ICommunityStories>('/story/me', true)).data;
+    static async me(): Promise<IApiResult<ICommunityStories>> {
+        return await this.api.get<ICommunityStories>('/story/me', true);
     }
 }
 

@@ -38,7 +38,7 @@ export default function Stories() {
             dispatch(addStoriesToStateRequest(0, 5));
             setRefreshing(false);
         });
-    }, [dispatch]);
+    }, []);
 
     return (
         <SafeAreaView>

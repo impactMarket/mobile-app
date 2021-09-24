@@ -1,22 +1,46 @@
 import { storiesAction } from 'helpers/constants';
 import {
+    addMyStoriesToStateSuccess,
+    addMyStoriesToStateFailue,
     addStoriesToStateSuccess,
     addStoriesToStateFailure,
 } from 'helpers/redux/actions/stories';
-import { ICommunitiesListStories } from 'helpers/types/endpoints';
+import {
+    ICommunitiesListStories,
+    ICommunityStories,
+} from 'helpers/types/endpoints';
 import Api from 'services/api';
 import { IApiResult } from 'services/api/base';
 import { takeLatest, call, put, all } from 'typed-redux-saga';
 
-const getStories = (start: number, end: number) =>
-    Api.story.list<ICommunitiesListStories[]>(start, end);
+const apiGetMyStories = async () => await Api.story.me();
+const apiListStories = async (offset: number, limit: number) =>
+    await Api.story.list(offset, limit);
 
-export function* submitAddStoriesToStateRequest({ payload }: any) {
+export function* getMyStories() {
+    try {
+        const stories: IApiResult<ICommunityStories> = yield call(
+            apiGetMyStories
+        );
+        const { data } = stories;
+
+        yield put(addMyStoriesToStateSuccess(data.stories));
+    } catch (err) {
+        yield put(addMyStoriesToStateFailue());
+    }
+}
+
+export function* listStories({
+    payload,
+}: {
+    payload: { start: number; end: number };
+    type: string;
+}) {
     try {
         const { start, end } = payload;
 
         const stories: IApiResult<ICommunitiesListStories[]> = yield call(
-            getStories,
+            apiListStories,
             start,
             end
         );
@@ -29,5 +53,6 @@ export function* submitAddStoriesToStateRequest({ payload }: any) {
 }
 
 export default all([
-    takeLatest(storiesAction.INIT_REQUEST, submitAddStoriesToStateRequest),
+    takeLatest(storiesAction.USER_STORIES_REQUEST, getMyStories),
+    takeLatest(storiesAction.INIT_REQUEST, listStories),
 ]);
