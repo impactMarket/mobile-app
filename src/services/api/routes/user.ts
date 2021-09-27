@@ -15,9 +15,9 @@ export interface AuthParams {
     pushNotificationToken?: string;
 }
 class ApiRouteUser {
-    static api = new ApiRequests();
+    private api = new ApiRequests();
 
-    static async report(
+    async report(
         communityId: number,
         message: string,
         category: string | undefined
@@ -31,7 +31,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async welcome(
+    async welcome(
         pushNotificationToken?: string
     ): Promise<IUserHello | undefined> {
         return (
@@ -46,14 +46,11 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async auth(authParams: AuthParams) {
+    async auth(authParams: AuthParams) {
         return this.api.post<IUserAuth>('/user/auth', authParams);
     }
 
-    static async addClaimLocation(
-        communityId: number,
-        gps: any
-    ): Promise<boolean> {
+    async addClaimLocation(communityId: number, gps: any): Promise<boolean> {
         return (
             await this.api.post<boolean>('/claim-location', {
                 communityId,
@@ -62,7 +59,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async preSignedUrl(
+    async preSignedUrl(
         uri: string
     ): Promise<{ uploadURL: string; media: AppMediaContent }> {
         const mimetype = mime
@@ -70,13 +67,12 @@ class ApiRouteUser {
             .match(/\/(\w+);?/)[1];
         const preSigned = (
             await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
-                '/user/media/' + mimetype,
-                true
+                '/user/media/' + mimetype
             )
         ).data;
         return preSigned;
     }
-    static async uploadPicture(
+    async uploadPicture(
         preSigned: { uploadURL: string; media: AppMediaContent },
         uri: string
     ): Promise<AppMediaContent> {
@@ -109,11 +105,11 @@ class ApiRouteUser {
         return preSigned.media;
     }
 
-    static async exists(address: string): Promise<boolean> {
+    async exists(address: string): Promise<boolean> {
         return (await this.api.get<boolean>('/user/exist/' + address)).data;
     }
 
-    static async setUsername(username: string): Promise<boolean> {
+    async setUsername(username: string): Promise<boolean> {
         return (
             await this.api.post<boolean>('/user/username', {
                 username,
@@ -121,7 +117,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async setCurrency(currency: string): Promise<boolean> {
+    async setCurrency(currency: string): Promise<boolean> {
         return (
             await this.api.post<boolean>('/user/currency', {
                 currency,
@@ -129,7 +125,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async setLanguage(language: string): Promise<boolean> {
+    async setLanguage(language: string): Promise<boolean> {
         return (
             await this.api.post<boolean>('/user/language', {
                 language,
@@ -137,7 +133,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async setGender(gender: string): Promise<boolean> {
+    async setGender(gender: string): Promise<boolean> {
         return (
             await this.api.post<boolean>('/user/gender', {
                 gender,
@@ -145,7 +141,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async setAge(age: number): Promise<boolean> {
+    async setAge(age: number): Promise<boolean> {
         return (
             await this.api.post<boolean>('/user/age', {
                 age,
@@ -153,7 +149,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async setChildren(children: number | null): Promise<boolean> {
+    async setChildren(children: number | null): Promise<boolean> {
         return (
             await this.api.post<boolean>('/user/children', {
                 children,
@@ -161,7 +157,7 @@ class ApiRouteUser {
         ).data;
     }
 
-    static async delete(): Promise<IApiResult<boolean>> {
+    async delete(): Promise<IApiResult<boolean>> {
         return this.api.delete<boolean>('/user');
     }
 }

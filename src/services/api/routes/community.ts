@@ -2,7 +2,6 @@ import {
     CommunityCreationAttributes,
     IManagerDetailsBeneficiary,
     CommunityEditionAttributes,
-    IManagerDetailsManager,
 } from 'helpers/types/endpoints';
 import {
     AppMediaContent,
@@ -20,16 +19,16 @@ import { UbiCommunityState } from 'helpers/types/ubi/ubiCommunityState';
 import path from 'path';
 import * as mime from 'react-native-mime-types';
 
-import { ApiRequests, getRequest } from '../base';
+import { ApiRequests } from '../base';
 
 class ApiRouteCommunity {
-    static api = new ApiRequests();
+    api = new ApiRequests();
 
-    static async getPromoter(communityId: number) {
+    async getPromoter(communityId: number) {
         return this.api.get<UbiPromoter>(`/community/${communityId}/promoter`);
     }
 
-    static async findBeneficiary(
+    async findBeneficiary(
         beneficiaryQuery: string,
         active?: boolean
     ): Promise<IManagerDetailsBeneficiary[]> {
@@ -41,13 +40,12 @@ class ApiRouteCommunity {
                         ? ''
                         : active
                         ? '&active=true'
-                        : '&active=false'),
-                true
+                        : '&active=false')
             )
         ).data;
     }
 
-    static async listBeneficiaries(
+    async listBeneficiaries(
         active: boolean,
         offset: number,
         limit: number
@@ -59,40 +57,20 @@ class ApiRouteCommunity {
                     '&offset=' +
                     offset +
                     '&limit=' +
-                    limit,
-                true
+                    limit
             )
         ).data;
     }
 
-    /**
-     * @deprecated use `listManagers`
-     */
-    static async searchManager(managerQuery: string) {
-        const result = await getRequest<IManagerDetailsManager[]>(
-            '/community/managers/search/' + managerQuery,
-            true
-        );
-        if (result) {
-            return result;
-        }
-        throw new Error("Can't load '/managers/search'");
-    }
-
-    static async listManagers(
-        communityId: number
-    ): Promise<ManagerAttributes[]> {
+    async listManagers(communityId: number): Promise<ManagerAttributes[]> {
         return (
             await this.api.get<ManagerAttributes[]>(
-                '/community/' + communityId + '/managers/',
-                true
+                '/community/' + communityId + '/managers/'
             )
         ).data;
     }
 
-    static async getCampaign(
-        communityId: number
-    ): Promise<CommunityCampaing | null> {
+    async getCampaign(communityId: number): Promise<CommunityCampaing | null> {
         return (
             await this.api.get<CommunityCampaing | null>(
                 '/community/' + communityId + '/campaign/'
@@ -100,7 +78,7 @@ class ApiRouteCommunity {
         ).data;
     }
 
-    static async list(query: {
+    async list(query: {
         offset: number;
         limit: number;
         orderBy?: string;
@@ -121,7 +99,7 @@ class ApiRouteCommunity {
         );
     }
 
-    static async findById(id: number): Promise<CommunityAttributes> {
+    async findById(id: number): Promise<CommunityAttributes> {
         // TODO: should request in parallel
         const community = (await this.api.get<UbiCommunity>(`/community/${id}`))
             .data;
@@ -150,9 +128,7 @@ class ApiRouteCommunity {
         };
     }
 
-    static async findByContractAddress(
-        address: string
-    ): Promise<CommunityAttributes> {
+    async findByContractAddress(address: string): Promise<CommunityAttributes> {
         // TODO: should request in parallel
         const community = (
             await this.api.get<UbiCommunity>(`/community/address/${address}`)
@@ -186,12 +162,12 @@ class ApiRouteCommunity {
         };
     }
 
-    static async pastSSI(id: number): Promise<number[]> {
+    async pastSSI(id: number): Promise<number[]> {
         return (await this.api.get<number[]>('/community/' + id + '/past-ssi'))
             .data;
     }
 
-    static async preSignedUrl(
+    async preSignedUrl(
         uri: string
     ): Promise<{ uploadURL: string; media: AppMediaContent }> {
         const mimetype = mime
@@ -199,14 +175,13 @@ class ApiRouteCommunity {
             .match(/\/(\w+);?/)[1];
         const preSigned = (
             await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
-                '/community/media/' + mimetype,
-                true
+                '/community/media/' + mimetype
             )
         ).data;
         return preSigned;
     }
 
-    static async uploadImage(
+    async uploadImage(
         preSigned: { uploadURL: string; media: AppMediaContent },
         uri: string
     ) {
@@ -235,19 +210,19 @@ class ApiRouteCommunity {
         return false;
     }
 
-    static async create(
+    async create(
         details: CommunityCreationAttributes
     ): Promise<{ data: CommunityAttributes; error: any }> {
         return this.api.post<CommunityAttributes>('/community/create', details);
     }
 
-    static async edit(
+    async edit(
         details: CommunityEditionAttributes
     ): Promise<{ data: CommunityAttributes; error: any }> {
         return this.api.put<CommunityAttributes>('/community', details);
     }
 
-    static async getRequestChangeUbi(
+    async getRequestChangeUbi(
         id: number
     ): Promise<UbiRequestChangeParams | null> {
         return (

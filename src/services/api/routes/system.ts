@@ -1,27 +1,27 @@
-import { getRequest } from '../base';
+import { ApiRequests } from '../base';
 
 class ApiRouteSystem {
-    static async getServerTime(): Promise<number> {
-        const result = await getRequest<number>('/clock');
-        return result ? result : 0;
+    api = new ApiRequests();
+
+    async getServerTime(): Promise<number> {
+        const result = await this.api.get<number>('/clock');
+        return result ? result.data : 0;
     }
 
     /**
      * Must use values from user storage and update when opening app.
      */
-    static async getExchangeRate(): Promise<
-        { currency: string; rate: number }[]
-    > {
-        const result = await getRequest<{ currency: string; rate: number }[]>(
+    async getExchangeRate(): Promise<{ currency: string; rate: number }[]> {
+        const result = await this.api.get<{ currency: string; rate: number }[]>(
             '/exchange-rates'
         );
-        return result ? result : [];
+        return result ? result.data : [];
     }
 
     /**
      * if undefined here happens, it means there's a connection problem
      */
-    static async getMobileVersion(): Promise<
+    async getMobileVersion(): Promise<
         | {
               latest: string;
               minimal: string;
@@ -29,7 +29,7 @@ class ApiRouteSystem {
           }
         | undefined
     > {
-        return await getRequest<any>('/mobile/version');
+        return (await this.api.get<any>('/mobile/version')).data;
     }
 }
 
