@@ -7,11 +7,9 @@ import { AppMediaContent } from 'helpers/types/models';
 import path from 'path';
 import * as mime from 'react-native-mime-types';
 
-import { ApiRequests, IApiResult } from '../base';
+import { ApiRequests as api, IApiResult } from '../base';
 
 class ApiRouteStory {
-    api = new ApiRequests();
-
     async preSignedUrl(
         uri: string
     ): Promise<{ uploadURL: string; media: AppMediaContent }> {
@@ -19,7 +17,7 @@ class ApiRouteStory {
             .contentType(path.basename(uri))
             .match(/\/(\w+);?/)[1];
         const preSigned = (
-            await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
+            await api.get<{ uploadURL: string; media: AppMediaContent }>(
                 '/story/media/' + mimetype
             )
         ).data;
@@ -30,7 +28,7 @@ class ApiRouteStory {
         preSigned: { uploadURL: string; media: AppMediaContent },
         uri: string
     ) {
-        return this.api.uploadImage(preSigned, uri);
+        return api.uploadImage(preSigned, uri);
     }
 
     async add(story: {
@@ -38,14 +36,14 @@ class ApiRouteStory {
         message?: string;
         mediaId?: number;
     }): Promise<IApiResult<ICommunityStory>> {
-        return this.api.post<ICommunityStory>('/story', story);
+        return api.post<ICommunityStory>('/story', story);
     }
 
     async list<T extends ICommunitiesListStories[]>(
         offset?: number,
         limit?: number
     ): Promise<IApiResult<T>> {
-        return this.api.get<T>(
+        return api.get<T>(
             '/story/list?includeIPCT=true' +
                 (offset !== undefined ? `&offset=${offset}` : '') +
                 (limit !== undefined ? `&limit=${limit}` : '')
@@ -54,26 +52,24 @@ class ApiRouteStory {
 
     async getByCommunity(communityId: number): Promise<ICommunityStories> {
         return (
-            await this.api.get<ICommunityStories>(
-                '/story/community/' + communityId
-            )
+            await api.get<ICommunityStories>('/story/community/' + communityId)
         ).data;
     }
 
     async love(storyId: number): Promise<IApiResult<any>> {
-        return this.api.put('/story/love/' + storyId, {});
+        return api.put('/story/love/' + storyId, {});
     }
 
     async inapropriate(storyId: number): Promise<IApiResult<any>> {
-        return this.api.put('/story/inapropriate/' + storyId, {});
+        return api.put('/story/inapropriate/' + storyId, {});
     }
 
     async remove(storyId: number): Promise<IApiResult<void>> {
-        return this.api.delete<void>('/story/' + storyId, {});
+        return api.delete<void>('/story/' + storyId, {});
     }
 
     async me(): Promise<IApiResult<ICommunityStories>> {
-        return await this.api.get<ICommunityStories>('/story/me');
+        return await api.get<ICommunityStories>('/story/me');
     }
 }
 

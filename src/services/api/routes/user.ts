@@ -3,27 +3,25 @@ import { AppMediaContent } from 'helpers/types/models';
 import path from 'path';
 import * as mime from 'react-native-mime-types';
 
-import { ApiRequests, IApiResult } from '../base';
+import { ApiRequests as api, IApiResult } from '../base';
 
 export interface AuthParams {
     address: string;
-    language: string;
-    currency: string;
     phone: string;
+    language?: string;
+    currency?: string;
     overwrite?: boolean;
     recover?: boolean;
     pushNotificationToken?: string;
 }
 class ApiRouteUser {
-    private api = new ApiRequests();
-
     async report(
         communityId: number,
         message: string,
         category: string | undefined
     ): Promise<boolean> {
         return (
-            await this.api.post<boolean>(`/user/report`, {
+            await api.post<boolean>(`/user/report`, {
                 communityId,
                 message,
                 category,
@@ -35,7 +33,7 @@ class ApiRouteUser {
         pushNotificationToken?: string
     ): Promise<IUserHello | undefined> {
         return (
-            await this.api.post<IUserHello | undefined>(
+            await api.post<IUserHello | undefined>(
                 `/user/welcome`,
                 pushNotificationToken
                     ? {
@@ -47,12 +45,12 @@ class ApiRouteUser {
     }
 
     async auth(authParams: AuthParams) {
-        return this.api.post<IUserAuth>('/user/auth', authParams);
+        return api.post<IUserAuth>('/user/auth', authParams);
     }
 
     async addClaimLocation(communityId: number, gps: any): Promise<boolean> {
         return (
-            await this.api.post<boolean>('/claim-location', {
+            await api.post<boolean>('/claim-location', {
                 communityId,
                 gps,
             })
@@ -66,7 +64,7 @@ class ApiRouteUser {
             .contentType(path.basename(uri))
             .match(/\/(\w+);?/)[1];
         const preSigned = (
-            await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
+            await api.get<{ uploadURL: string; media: AppMediaContent }>(
                 '/user/media/' + mimetype
             )
         ).data;
@@ -76,21 +74,21 @@ class ApiRouteUser {
         preSigned: { uploadURL: string; media: AppMediaContent },
         uri: string
     ): Promise<AppMediaContent> {
-        await this.api.uploadImage(preSigned, uri);
+        await api.uploadImage(preSigned, uri);
         //
-        await this.api.put<void>('/user/avatar', {
+        await api.put<void>('/user/avatar', {
             mediaId: preSigned.media.id,
         });
         return preSigned.media;
     }
 
     async exists(address: string): Promise<boolean> {
-        return (await this.api.get<boolean>('/user/exist/' + address)).data;
+        return (await api.get<boolean>('/user/exist/' + address)).data;
     }
 
     async setUsername(username: string): Promise<boolean> {
         return (
-            await this.api.post<boolean>('/user/username', {
+            await api.post<boolean>('/user/username', {
                 username,
             })
         ).data;
@@ -98,7 +96,7 @@ class ApiRouteUser {
 
     async setCurrency(currency: string): Promise<boolean> {
         return (
-            await this.api.post<boolean>('/user/currency', {
+            await api.post<boolean>('/user/currency', {
                 currency,
             })
         ).data;
@@ -106,7 +104,7 @@ class ApiRouteUser {
 
     async setLanguage(language: string): Promise<boolean> {
         return (
-            await this.api.post<boolean>('/user/language', {
+            await api.post<boolean>('/user/language', {
                 language,
             })
         ).data;
@@ -114,7 +112,7 @@ class ApiRouteUser {
 
     async setGender(gender: string): Promise<boolean> {
         return (
-            await this.api.post<boolean>('/user/gender', {
+            await api.post<boolean>('/user/gender', {
                 gender,
             })
         ).data;
@@ -122,7 +120,7 @@ class ApiRouteUser {
 
     async setAge(age: number): Promise<boolean> {
         return (
-            await this.api.post<boolean>('/user/age', {
+            await api.post<boolean>('/user/age', {
                 age,
             })
         ).data;
@@ -130,14 +128,14 @@ class ApiRouteUser {
 
     async setChildren(children: number | null): Promise<boolean> {
         return (
-            await this.api.post<boolean>('/user/children', {
+            await api.post<boolean>('/user/children', {
                 children,
             })
         ).data;
     }
 
     async delete(): Promise<IApiResult<boolean>> {
-        return this.api.delete<boolean>('/user');
+        return api.delete<boolean>('/user');
     }
 }
 
