@@ -7,9 +7,9 @@ import { ApiRequests, IApiResult } from '../base';
 
 export interface AuthParams {
     address: string;
-    language: string;
-    currency: string;
     phone: string;
+    language?: string;
+    currency?: string;
     overwrite?: boolean;
     recover?: boolean;
     pushNotificationToken?: string;

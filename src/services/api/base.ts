@@ -1,12 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import { ApiErrorReturn } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 
-import config from '../../../config';
-
-axios.defaults.baseURL = config.baseApiUrl;
+import axios from '../../config/api';
 
 export interface IApiResult<T> {
     success: boolean;
@@ -132,7 +129,6 @@ export class ApiRequests {
     private async _requestOptions(options?: any) {
         return {
             headers: {
-                Authorization: `Bearer ${this.token}`,
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
             },
