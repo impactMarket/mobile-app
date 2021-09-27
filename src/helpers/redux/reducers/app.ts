@@ -15,6 +15,7 @@ const INITIAL_STATE_APP: IAppState = {
     exchangeRates: undefined as any, // save exhangeRates on load
     suspectWrongDateTime: false,
     authModalOpen: false,
+    faqModalOpen: false,
     hasBeneficiaryAcceptedRulesAlready: false,
     hasManagerAcceptedRulesAlready: false,
     timeDiff: 0,
@@ -60,6 +61,11 @@ export const appReducer = (
             return {
                 ...state,
                 authModalOpen: action.payload,
+            };
+        case appAction.SET_OPEN_FAQ_MODAL:
+            return {
+                ...state,
+                faqModalOpen: action.payload,
             };
         default:
             return state;

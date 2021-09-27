@@ -16,7 +16,7 @@ function ProfileSvg(props: SvgProps) {
     );
     return (
         <Pressable
-            hitSlop={15}
+            hitSlop={5}
             onPress={() =>
                 walletAddress.length > 0
                     ? navigation.navigate(Screens.Profile)

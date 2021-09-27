@@ -163,6 +163,11 @@ interface SetOpenAuthModalAction {
     payload: boolean;
 }
 
+interface SetOpenFaqModalAction {
+    type: typeof appAction.SET_OPEN_FAQ_MODAL;
+    payload: boolean;
+}
+
 interface SetAppEchangeRatesAction {
     type: typeof SET_EXCHANGE_RATES;
     payload: any;
@@ -316,6 +321,7 @@ export type AppActionTypes =
     | SetAppEchangeRatesAction
     | SetAppSuspectWrongDateTime
     | SetAppFromWelcomeScreen
+    | SetOpenFaqModalAction
     | SetOpenAuthModalAction
     | SetAppPushNotificationListeners
     | UserSetBeneficiaryAcceptedRulesAction

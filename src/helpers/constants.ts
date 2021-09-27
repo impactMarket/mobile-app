@@ -69,6 +69,7 @@ export const SET_APP_MANAGER_HAS_ACCEPTED_TERMS =
 export enum appAction {
     SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners',
     SET_OPEN_AUTH_MODAL = 'app/openAuthModal',
+    SET_OPEN_FAQ_MODAL = 'app/openFaqModal',
 }
 
 export enum modalDonateAction {
