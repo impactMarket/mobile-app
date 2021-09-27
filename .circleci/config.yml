@@ -151,8 +151,13 @@ workflows:
                 - staging
       - publish_internal_release:
           filters:
+            # ignore any commit on any branch by default
+            branches:
+              ignore: /.*/
+            # only act on version tags
             tags:
-              only: /.*/
+              only: /^[0-9]+(\.[0-9]+)*$/
+
   everyday:
     jobs:
       - unit_test
