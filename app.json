@@ -1,6 +1,5 @@
 {
     "expo": {
-        "main": "node_modules/expo/AppEntry.js",
         "name": "impactMarket",
         "slug": "impact-market",
         "privacy": "public",
