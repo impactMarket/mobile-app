@@ -185,29 +185,7 @@ class ApiRouteCommunity {
         preSigned: { uploadURL: string; media: AppMediaContent },
         uri: string
     ) {
-        const resp = await fetch(uri);
-        const imageBody = await resp.blob();
-
-        const result = await fetch(preSigned.uploadURL, {
-            method: 'PUT',
-            body: imageBody,
-        });
-        if (result.status >= 400) {
-            throw new Error('not uploaded');
-        }
-        // wait until image exists on real endpoint
-        // TODO: improve this
-        const delay = (ms: number) =>
-            new Promise((resolve) => setTimeout(resolve, ms));
-        let tries = 30;
-        while (tries-- > 0) {
-            await delay(1000);
-            const { status } = await this.api.head(preSigned.media.url);
-            if (status === 200) {
-                return true;
-            }
-        }
-        return false;
+        return this.api.uploadImage(preSigned, uri);
     }
 
     async create(

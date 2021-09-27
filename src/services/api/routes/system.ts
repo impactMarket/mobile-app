@@ -5,7 +5,7 @@ class ApiRouteSystem {
 
     async getServerTime(): Promise<number> {
         const result = await this.api.get<number>('/clock');
-        return result ? result.data : 0;
+        return result ? (result as any) : 0;
     }
 
     /**
@@ -15,7 +15,7 @@ class ApiRouteSystem {
         const result = await this.api.get<{ currency: string; rate: number }[]>(
             '/exchange-rates'
         );
-        return result ? result.data : [];
+        return result ? (result as any) : [];
     }
 
     /**
@@ -29,7 +29,7 @@ class ApiRouteSystem {
           }
         | undefined
     > {
-        return (await this.api.get<any>('/mobile/version')).data;
+        return (await this.api.get<any>('/mobile/version')) as any;
     }
 }
 

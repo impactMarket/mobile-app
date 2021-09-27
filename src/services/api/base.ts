@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import { ApiErrorReturn } from 'helpers/types/endpoints';
+import { AppMediaContent } from 'helpers/types/models';
 
 import config from '../../../config';
 
@@ -97,6 +98,35 @@ export class ApiRequests {
                 status: 404,
             };
         }
+    }
+
+    async uploadImage(
+        preSigned: { uploadURL: string; media: AppMediaContent },
+        uri: string
+    ) {
+        const resp = await fetch(uri);
+        const imageBody = await resp.blob();
+
+        const result = await fetch(preSigned.uploadURL, {
+            method: 'PUT',
+            body: imageBody,
+        });
+        if (result.status >= 400) {
+            throw new Error('not uploaded');
+        }
+        // wait until image exists on real endpoint
+        // TODO: improve this
+        const delay = (ms: number) =>
+            new Promise((resolve) => setTimeout(resolve, ms));
+        let tries = 30;
+        while (tries-- > 0) {
+            await delay(1000);
+            const { status } = await this.head(preSigned.media.url);
+            if (status === 200) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private async _requestOptions(options?: any) {

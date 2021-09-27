@@ -76,28 +76,7 @@ class ApiRouteUser {
         preSigned: { uploadURL: string; media: AppMediaContent },
         uri: string
     ): Promise<AppMediaContent> {
-        const resp = await fetch(uri);
-        const imageBody = await resp.blob();
-
-        const result = await fetch(preSigned.uploadURL, {
-            method: 'PUT',
-            body: imageBody,
-        });
-        if (result.status >= 400) {
-            throw new Error('not uploaded');
-        }
-        // wait until image exists on real endpoint
-        // TODO: improve this
-        const delay = (ms: number) =>
-            new Promise((resolve) => setTimeout(resolve, ms));
-        let tries = 30;
-        while (tries-- > 0) {
-            await delay(1000);
-            const { status } = await this.api.head(preSigned.media.url);
-            if (status === 200) {
-                break;
-            }
-        }
+        await this.api.uploadImage(preSigned, uri);
         //
         await this.api.put<void>('/user/avatar', {
             mediaId: preSigned.media.id,
