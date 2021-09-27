@@ -19,10 +19,10 @@ import { UbiCommunityState } from 'helpers/types/ubi/ubiCommunityState';
 import path from 'path';
 import * as mime from 'react-native-mime-types';
 
-import { ApiRequests as api } from '../base';
+import { ApiRequests as api, IApiResult } from '../base';
 
 class ApiRouteCommunity {
-    async getPromoter(communityId: number) {
+    async getPromoter(communityId: number): Promise<IApiResult<UbiPromoter>> {
         return api.get<UbiPromoter>(`/community/${communityId}/promoter`);
     }
 
@@ -97,22 +97,44 @@ class ApiRouteCommunity {
         );
     }
 
+    async getMetrics(
+        communityId: number
+    ): Promise<IApiResult<UbiCommunityDailyMetrics>> {
+        return api.get<UbiCommunityDailyMetrics>(
+            `/community/${communityId}/metrics`
+        );
+    }
+
+    async getContract(
+        communityId: number
+    ): Promise<IApiResult<UbiCommunityContract>> {
+        return api.get<UbiCommunityContract>(
+            `/community/${communityId}/contract`
+        );
+    }
+
+    async getState(
+        communityId: number
+    ): Promise<IApiResult<UbiCommunityState>> {
+        return api.get<UbiCommunityState>(`/community/${communityId}/state`);
+    }
+
+    async getSuspect(
+        communityId: number
+    ): Promise<IApiResult<UbiCommunitySuspect>> {
+        return api.get<UbiCommunitySuspect>(
+            `/community/${communityId}/suspect`
+        );
+    }
+
     async findById(id: number): Promise<CommunityAttributes> {
         // TODO: should request in parallel
         const community = (await api.get<UbiCommunity>(`/community/${id}`))
             .data;
-        const metrics = (
-            await api.get<UbiCommunityDailyMetrics>(`/community/${id}/metrics`)
-        ).data;
-        const contract = (
-            await api.get<UbiCommunityContract>(`/community/${id}/contract`)
-        ).data;
-        const state = (
-            await api.get<UbiCommunityState>(`/community/${id}/state`)
-        ).data;
-        const suspect = (
-            await api.get<UbiCommunitySuspect>(`/community/${id}/suspect`)
-        ).data;
+        const metrics = (await this.getMetrics(id)).data;
+        const contract = (await this.getContract(id)).data;
+        const state = (await this.getState(id)).data;
+        const suspect = (await this.getSuspect(id)).data;
         return {
             ...community,
             metrics,
@@ -127,24 +149,11 @@ class ApiRouteCommunity {
         const community = (
             await api.get<UbiCommunity>(`/community/address/${address}`)
         ).data;
-        const metrics = (
-            await api.get<UbiCommunityDailyMetrics>(
-                `/community/${community.id}/metrics`
-            )
-        ).data;
-        const contract = (
-            await api.get<UbiCommunityContract>(
-                `/community/${community.id}/contract`
-            )
-        ).data;
-        const state = (
-            await api.get<UbiCommunityState>(`/community/${community.id}/state`)
-        ).data;
-        const suspect = (
-            await api.get<UbiCommunitySuspect>(
-                `/community/${community.id}/suspect`
-            )
-        ).data;
+        const { id } = community;
+        const metrics = (await this.getMetrics(id)).data;
+        const contract = (await this.getContract(id)).data;
+        const state = (await this.getState(id)).data;
+        const suspect = (await this.getSuspect(id)).data;
         return {
             ...community,
             metrics,
@@ -152,10 +161,6 @@ class ApiRouteCommunity {
             state,
             suspect,
         };
-    }
-
-    async pastSSI(id: number): Promise<number[]> {
-        return (await api.get<number[]>('/community/' + id + '/past-ssi')).data;
     }
 
     async preSignedUrl(
