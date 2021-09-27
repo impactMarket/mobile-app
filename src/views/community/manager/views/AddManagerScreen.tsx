@@ -65,8 +65,8 @@ function AddManagerScreen() {
             return;
         }
 
-        const searchResult = await Api.community.searchManager(addressToAdd);
-        if (searchResult.length !== 0) {
+        const searchResult = await Api.community.listManagers(community.id);
+        if (searchResult.findIndex((m) => m.address === addressToAdd) !== -1) {
             Alert.alert(
                 i18n.t('generic.failure'),
                 i18n.t('manager.alreadyInCommunity'),

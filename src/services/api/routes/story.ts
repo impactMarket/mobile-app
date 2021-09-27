@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
     ICommunitiesListStories,
     ICommunityStories,
@@ -8,15 +7,12 @@ import { AppMediaContent } from 'helpers/types/models';
 import path from 'path';
 import * as mime from 'react-native-mime-types';
 
-import config from '../../../../config';
 import { ApiRequests, IApiResult } from '../base';
 
-axios.defaults.baseURL = config.baseApiUrl;
-
 class ApiRouteStory {
-    static api = new ApiRequests();
+    api = new ApiRequests();
 
-    static async preSignedUrl(
+    async preSignedUrl(
         uri: string
     ): Promise<{ uploadURL: string; media: AppMediaContent }> {
         const mimetype = mime
@@ -24,14 +20,13 @@ class ApiRouteStory {
             .match(/\/(\w+);?/)[1];
         const preSigned = (
             await this.api.get<{ uploadURL: string; media: AppMediaContent }>(
-                '/story/media/' + mimetype,
-                true
+                '/story/media/' + mimetype
             )
         ).data;
         return preSigned;
     }
 
-    static async uploadImage(
+    async uploadImage(
         preSigned: { uploadURL: string; media: AppMediaContent },
         uri: string
     ) {
@@ -60,7 +55,7 @@ class ApiRouteStory {
         return false;
     }
 
-    static async add(story: {
+    async add(story: {
         communityId: number;
         message?: string;
         mediaId?: number;
@@ -68,7 +63,7 @@ class ApiRouteStory {
         return this.api.post<ICommunityStory>('/story', story);
     }
 
-    static async list<T extends ICommunitiesListStories[]>(
+    async list<T extends ICommunitiesListStories[]>(
         offset?: number,
         limit?: number
     ): Promise<IApiResult<T>> {
@@ -79,32 +74,28 @@ class ApiRouteStory {
         );
     }
 
-    static async getByCommunity(
-        communityId: number,
-        isUserLogged: boolean // TODO: this must change
-    ): Promise<ICommunityStories> {
+    async getByCommunity(communityId: number): Promise<ICommunityStories> {
         return (
             await this.api.get<ICommunityStories>(
-                '/story/community/' + communityId,
-                isUserLogged
+                '/story/community/' + communityId
             )
         ).data;
     }
 
-    static async love(storyId: number): Promise<IApiResult<any>> {
+    async love(storyId: number): Promise<IApiResult<any>> {
         return this.api.put('/story/love/' + storyId, {});
     }
 
-    static async inapropriate(storyId: number): Promise<IApiResult<any>> {
+    async inapropriate(storyId: number): Promise<IApiResult<any>> {
         return this.api.put('/story/inapropriate/' + storyId, {});
     }
 
-    static async remove(storyId: number): Promise<IApiResult<void>> {
+    async remove(storyId: number): Promise<IApiResult<void>> {
         return this.api.delete<void>('/story/' + storyId, {});
     }
 
-    static async me(): Promise<IApiResult<ICommunityStories>> {
-        return await this.api.get<ICommunityStories>('/story/me', true);
+    async me(): Promise<IApiResult<ICommunityStories>> {
+        return await this.api.get<ICommunityStories>('/story/me');
     }
 }
 
