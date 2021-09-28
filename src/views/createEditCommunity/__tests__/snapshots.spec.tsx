@@ -1,3 +1,4 @@
+import NetInfo from '@react-native-community/netinfo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { act, fireEvent, render } from '@testing-library/react-native';
@@ -30,8 +31,13 @@ function WrappedCreateCommunityScreen() {
 
 describe('create community [snapshot]', () => {
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
+    const useNetInfoMock = NetInfo.useNetInfo as jest.Mock<any, any>;
 
     beforeAll(() => {
+        useNetInfoMock.mockImplementation(() => ({
+            isConnected: true,
+        }));
+
         useSelectorMock.mockImplementation((callback) => {
             return callback({
                 app: {

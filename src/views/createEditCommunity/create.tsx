@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NetInfo from '@react-native-community/netinfo';
+import { useNetInfo } from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
@@ -79,6 +79,7 @@ const makeCancelable = (promise: Promise<any>) => {
 function CreateCommunityScreen() {
     const navigation = useNavigation();
     const dispatchRedux = useDispatch();
+    const netInfo = useNetInfo();
     const [hasPendingForm, setHasPendingForm] = useState(false);
     const [loadingForm, setLoadingForm] = useState(false);
     const [isAlertVisible, setIsAlertVisible] = useState(true);
@@ -385,8 +386,7 @@ function CreateCommunityScreen() {
     };
 
     const submitNewCommunity = async () => {
-        const netState = await NetInfo.fetch();
-        if (!netState.isConnected) {
+        if (!netInfo.isConnected) {
             setIsNoInternetModalOpen(true);
             return;
         }

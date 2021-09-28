@@ -51,6 +51,11 @@ jest.mock('expo-image-picker', () => ({
     launchImageLibraryAsync: jest.fn(),
 }));
 
+jest.mock('@react-native-community/netinfo', () => ({
+    ...(jest.requireActual('@react-native-community/netinfo') as any),
+    useNetInfo: jest.fn(),
+}));
+
 jest.mock('expo-location', () => ({
     ...(jest.requireActual('expo-location') as any),
     requestForegroundPermissionsAsync: jest.fn(),

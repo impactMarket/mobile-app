@@ -1,3 +1,4 @@
+import NetInfo from '@react-native-community/netinfo';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { render, fireEvent, cleanup, act } from '@testing-library/react-native';
@@ -69,6 +70,7 @@ describe('create community', () => {
         updatedAt: new Date(),
     };
 
+    const useNetInfoMock = NetInfo.useNetInfo as jest.Mock<any, any>;
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
     const launchImageLibraryAsyncMock = ImagePicker.launchImageLibraryAsync as jest.Mock<
         any,
@@ -89,6 +91,10 @@ describe('create community', () => {
     const updateCommunityInfoMock = jest.spyOn(helpers, 'updateCommunityInfo');
 
     beforeAll(() => {
+        useNetInfoMock.mockImplementation(() => ({
+            isConnected: true,
+        }));
+
         useSelectorMock.mockImplementation((callback) => {
             return callback({
                 app: {
@@ -1398,4 +1404,8 @@ describe('create community', () => {
     // TODO: test recover past form saved
 
     // TODO: test leaving with half filled form
+
+    // TODO: test leaving with half filled form and then filling again
+
+    // TODO: test mocking internet not available
 });
