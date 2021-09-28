@@ -1,4 +1,8 @@
-import { AppMediaContent, UserAttributes } from './models';
+import {
+    AppMediaContent,
+    BeneficiaryAttributes,
+    UserAttributes,
+} from './models';
 
 export interface ApiErrorReturn {
     name: string;
@@ -70,11 +74,11 @@ export interface CommunityCreationAttributes {
 }
 
 export interface IUserBaseAuth {
-    isBeneficiary: boolean;
     isManager: boolean;
     communityId?: number;
     suspect: UserAttributes['suspect'];
     blocked: boolean;
+    beneficiary: BeneficiaryAttributes | null;
 }
 
 export interface IUserHello extends IUserBaseAuth {}

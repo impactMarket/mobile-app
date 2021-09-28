@@ -132,6 +132,7 @@ export interface BeneficiaryAttributes {
     address: string;
     communityId: string;
     active: boolean;
+    readRules: boolean;
     tx: string;
     txAt: Date;
     claims: number;

@@ -5,7 +5,7 @@ import {
     SET_USER_CELO_INFO,
     SET_USER_EXCHANGE_RATE,
     SET_USER_INFO,
-    SET_USER_IS_BENEFICIARY,
+    SET_USER_BENEFICIARY,
     SET_USER_IS_BLOCKED,
     SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
@@ -35,7 +35,7 @@ const INITIAL_STATE_USER: IUserState = {
     },
     exchangeRate: 1,
     community: {
-        isBeneficiary: false,
+        beneficiary: null,
         isManager: false,
         metadata: undefined as any,
         contract: undefined as any,
@@ -63,8 +63,8 @@ export const userReducer = (
         case SET_USER_LANGUAGE:
             metadata.language = action.payload;
             return { ...state, metadata };
-        case SET_USER_IS_BENEFICIARY:
-            community.isBeneficiary = action.payload;
+        case SET_USER_BENEFICIARY:
+            community.beneficiary = action.payload;
             return { ...state, community };
         case SET_USER_IS_BLOCKED:
             metadata.blocked = action.payload;

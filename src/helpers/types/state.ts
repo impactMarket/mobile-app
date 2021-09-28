@@ -7,7 +7,11 @@ import {
     ICommunityStory,
     IUserAuth,
 } from './endpoints';
-import { CommunityAttributes, UserAttributes } from './models';
+import {
+    BeneficiaryAttributes,
+    CommunityAttributes,
+    UserAttributes,
+} from './models';
 
 export interface IUserWallet {
     address: string;
@@ -22,7 +26,7 @@ export interface IUserState {
     metadata: UserAttributes;
     exchangeRate: number; // it's singular!
     community: {
-        isBeneficiary: boolean;
+        beneficiary: BeneficiaryAttributes | null;
         isManager: boolean;
         metadata: CommunityAttributes;
         contract: any;

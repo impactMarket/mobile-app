@@ -88,7 +88,7 @@ export default function Stories() {
                 contentContainerStyle={{ padding: 14 }}
             >
                 {userAddress.length > 0 &&
-                    (userCommunityMetadata.isBeneficiary ||
+                    (userCommunityMetadata.beneficiary !== null ||
                         userCommunityMetadata.isManager) &&
                     userCommunityMetadata.metadata.status === 'valid' && (
                         <View

@@ -87,13 +87,14 @@ function TabNavigator({
     const fromWelcomeScreen = useSelector(
         (state: IRootState) => state.app.fromWelcomeScreen
     );
-    const { isBeneficiary, isManager } = useSelector(
+    const { beneficiary, isManager } = useSelector(
         (state: IRootState) => state.user.community
     );
 
-    const defaultValue = isBeneficiary
-        ? Screens.Beneficiary
-        : isManager && Screens.CommunityManager;
+    const defaultValue =
+        beneficiary !== null
+            ? Screens.Beneficiary
+            : isManager && Screens.CommunityManager;
 
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
@@ -128,7 +129,7 @@ function TabNavigator({
         navigation,
         route,
         fromWelcomeScreen,
-        isBeneficiary,
+        beneficiary,
         isManager,
         userCommunity,
     ]);
@@ -184,12 +185,12 @@ function TabNavigator({
                 initialRouteName={
                     fromWelcomeScreen.length > 0 // if fromWelcomeScreen is valid, use it
                         ? Screens.Communities
-                        : isBeneficiary
+                        : beneficiary !== null
                         ? Screens.Beneficiary
                         : Screens.CommunityManager
                 }
             >
-                {isBeneficiary && tabBeneficiary}
+                {beneficiary !== null && tabBeneficiary}
                 {isManager && tabManager}
                 {tabCommunities}
             </Tab.Navigator>

@@ -6,7 +6,7 @@ import {
     SET_USER_EXCHANGE_RATE,
     // INIT_USER,
     SET_USER_WALLET_BALANCE,
-    SET_USER_IS_BENEFICIARY,
+    SET_USER_BENEFICIARY,
     SET_USER_IS_BLOCKED,
     SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
@@ -64,8 +64,8 @@ interface UserSetBalanceAction {
     payload: string;
 }
 
-interface UserSetIsBeneficiaryAction {
-    type: typeof SET_USER_IS_BENEFICIARY;
+interface UserSetBeneficiaryAction {
+    type: typeof SET_USER_BENEFICIARY;
     payload: boolean;
 }
 
@@ -297,7 +297,7 @@ interface findCommunityByIdActionClean {
 export type UserActionTypes =
     | UserWalletAction
     | UserSetBalanceAction
-    | UserSetIsBeneficiaryAction
+    | UserSetBeneficiaryAction
     | UserSetIsBlockedAction
     | UserSetIsSuspectAction
     | UserSetIsCommunityManagerAction

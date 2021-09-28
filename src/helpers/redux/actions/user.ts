@@ -4,7 +4,7 @@ import {
     SET_USER_EXCHANGE_RATE,
     SET_USER_LANGUAGE,
     SET_USER_WALLET_BALANCE,
-    SET_USER_IS_BENEFICIARY,
+    SET_USER_BENEFICIARY,
     SET_USER_IS_BLOCKED,
     SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
@@ -12,7 +12,11 @@ import {
     SET_COMMUNITY,
     RESET_USER_APP,
 } from 'helpers/constants';
-import { CommunityAttributes, UserAttributes } from 'helpers/types/models';
+import {
+    BeneficiaryAttributes,
+    CommunityAttributes,
+    UserAttributes,
+} from 'helpers/types/models';
 import { UserActionTypes } from 'helpers/types/redux';
 import { IUserWallet } from 'helpers/types/state';
 
@@ -51,10 +55,12 @@ export function setUserWalletBalance(balance: string): UserActionTypes {
     };
 }
 
-export function setUserIsBeneficiary(isBeneficiary: boolean): UserActionTypes {
+export function setUserBeneficiary(
+    beneficiary: BeneficiaryAttributes
+): UserActionTypes {
     return {
-        type: SET_USER_IS_BENEFICIARY,
-        payload: isBeneficiary,
+        type: SET_USER_BENEFICIARY,
+        payload: beneficiary,
     };
 }
 
