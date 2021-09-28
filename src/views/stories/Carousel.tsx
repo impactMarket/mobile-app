@@ -62,18 +62,15 @@ function Carousel(props: {
                 setStories(myStories);
             }
         } else {
-            console.log('here');
-            Api.story
-                .getByCommunity(props.communityId, userAddress.length > 0)
-                .then((s) => {
-                    setCommunityStories(s);
-                    setStories(s.stories);
-                    if (userAddress.length > 0) {
-                        setLovedStories(s.stories.map((ss) => ss.userLoved));
-                    } else {
-                        setLovedStories(Array(s.stories.length).fill(false));
-                    }
-                });
+            Api.story.getByCommunity(props.communityId).then((s) => {
+                setCommunityStories(s);
+                setStories(s.stories);
+                if (userAddress.length > 0) {
+                    setLovedStories(s.stories.map((ss) => ss.userLoved));
+                } else {
+                    setLovedStories(Array(s.stories.length).fill(false));
+                }
+            });
         }
     }, [caller, myStories, props.communityId, userAddress]);
 

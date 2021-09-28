@@ -1,146 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import * as FileSystem from 'expo-file-system';
-import { STORAGE_USER_AUTH_TOKEN } from 'helpers/constants';
 import { ApiErrorReturn } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
-import { DevSettings } from 'react-native';
-import * as Sentry from 'sentry-expo';
 
-import config from '../../../config';
+import axios from '../../config/api';
 
-axios.defaults.baseURL = config.baseApiUrl;
-
-async function getRequest<T>(
-    endpoint: string,
-    useAuthToken = false
-): Promise<T | undefined> {
-    let response: T | undefined;
-    try {
-        let result;
-        if (useAuthToken) {
-            const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-            const requestOptions = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
-            result = await axios.get(endpoint, requestOptions);
-        } else {
-            result = await axios.get(endpoint);
-        }
-        if (result.status >= 400) {
-            return undefined;
-        }
-        if (result.data === '') {
-            // TODO: this condition should not exist
-            response = undefined;
-        } else {
-            response = result.data as T;
-        }
-    } catch (e) {
-        Sentry.Native.captureException(e);
-    }
-    return response;
-}
-
-async function putRequest<T>(
-    endpoint: string,
-    requestBody: any,
-    options?: any
-): Promise<T | undefined> {
-    let response: T | undefined;
-    try {
-        // handle success
-        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-        const requestOptions = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            ...options,
-        };
-        const result = await axios.put(endpoint, requestBody, requestOptions);
-        if (result.status === 401) {
-            await AsyncStorage.clear();
-            DevSettings.reload();
-            return undefined;
-        }
-        if (result.status >= 400) {
-            return undefined;
-        }
-        response = result.data as T;
-    } catch (e) {
-        Sentry.Native.captureException(e);
-    }
-    return response;
-}
-
-async function postRequest<T>(
-    endpoint: string,
-    requestBody: any,
-    options?: any
-): Promise<T | undefined> {
-    let response: T | undefined;
-    try {
-        // handle success
-        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-        const requestOptions = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            ...options,
-        };
-        const result = await axios.post(endpoint, requestBody, requestOptions);
-        if (result.status === 401) {
-            await AsyncStorage.clear();
-            DevSettings.reload();
-            return undefined;
-        }
-        if (result.status >= 400) {
-            return undefined;
-        }
-
-        response = result.data as T;
-    } catch (e) {
-        Sentry.Native.captureException(e);
-    }
-    return response;
-}
-
-async function deleteRequest<T>(
-    endpoint: string,
-    id?: any
-): Promise<T | undefined> {
-    let response: T | undefined;
-    try {
-        // handle success
-        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-        const requestOptions = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            data: { id },
-        };
-        const result = await axios.delete(endpoint, requestOptions);
-        if (result.status === 401) {
-            await AsyncStorage.clear();
-            DevSettings.reload();
-            return undefined;
-        }
-        if (result.status >= 400) {
-            return undefined;
-        }
-        response = result.data as T;
-    } catch (e) {
-        Sentry.Native.captureException(e);
-    }
-    return response;
+async function _requestOptions(options?: any) {
+    return {
+        headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+        },
+        ...options,
+    };
 }
 
 export interface IApiResult<T> {
@@ -150,34 +20,14 @@ export interface IApiResult<T> {
     count: number;
 }
 
-class ApiRequests {
-    // token: string | null = null;
-
-    // constructor() {
-    //     AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN).then(
-    //         (r) => (this.token = r)
-    //     );
-    // }
-
-    async get<T>(
-        endpoint: string,
-        useAuthToken = false
-    ): Promise<IApiResult<T>> {
+export const ApiRequests = {
+    async get<T>(endpoint: string): Promise<IApiResult<T>> {
         try {
-            let apiResult;
-            if (useAuthToken) {
-                apiResult = await axios.get(
-                    endpoint,
-                    await this._requestOptions()
-                );
-            } else {
-                apiResult = await axios.get(endpoint);
-            }
-            return apiResult.data;
+            return (await axios.get(endpoint)).data;
         } catch (e) {
             return e.response.data;
         }
-    }
+    },
 
     async post<T>(
         endpoint: string,
@@ -189,13 +39,13 @@ class ApiRequests {
                 await axios.post<IApiResult<T>>(
                     endpoint,
                     requestBody,
-                    await this._requestOptions(options)
+                    await _requestOptions(options)
                 )
             ).data;
         } catch (e) {
             return e.response.data;
         }
-    }
+    },
 
     async put<T>(
         endpoint: string,
@@ -207,26 +57,26 @@ class ApiRequests {
                 await axios.put(
                     endpoint,
                     requestBody,
-                    await this._requestOptions(options)
+                    await _requestOptions(options)
                 )
             ).data;
         } catch (e) {
             return e.response.data;
         }
-    }
+    },
 
     async delete<T>(endpoint: string, id?: any): Promise<IApiResult<T>> {
         try {
             return (
                 await axios.delete<IApiResult<T>>(
                     endpoint,
-                    await this._requestOptions({ data: { id } })
+                    await _requestOptions({ data: { id } })
                 )
             ).data;
         } catch (e) {
             return e.response.data;
         }
-    }
+    },
 
     async head(endpoint: string) {
         try {
@@ -236,78 +86,34 @@ class ApiRequests {
                 status: 404,
             };
         }
-    }
+    },
 
-    async uploadImage(endpoint: string, mediaURI: string) {
-        const resp = await fetch(mediaURI);
-        const fileBody = await resp.blob();
-        const fileType = fileBody['type'];
+    async uploadImage(
+        preSigned: { uploadURL: string; media: AppMediaContent },
+        uri: string
+    ) {
+        const resp = await fetch(uri);
+        const imageBody = await resp.blob();
 
-        const base64 = await FileSystem.readAsStringAsync(mediaURI, {
-            encoding: FileSystem.EncodingType.Base64,
-        });
-        const buffer = Buffer.from(base64, 'base64');
-
-        const response = await axios({
+        const result = await fetch(preSigned.uploadURL, {
             method: 'PUT',
-            url: endpoint,
-            data: buffer,
-            headers: { 'Content-Type': fileType ?? 'image/jpeg' },
-            onUploadProgress: (progressEvent: any) => {
-                console.log('progressEvent', progressEvent);
-            },
+            body: imageBody,
         });
-
-        console.log(response.status);
-    }
-
-    async uploadSingleImage(
-        endpoint: string,
-        mediaURI: string
-    ): Promise<AppMediaContent> {
-        // let response;
-        // try {
-        // handle success
-        const uriParts = mediaURI.split('.');
-        const fileType = uriParts[uriParts.length - 1];
-
-        const formData = new FormData();
-        if (mediaURI.length > 0) {
-            formData.append('imageFile', {
-                uri: mediaURI,
-                name: `photo.${fileType}`,
-                type: `image/${fileType}`,
-            } as any);
+        if (result.status >= 400) {
+            throw new Error('not uploaded');
         }
-        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-        const requestHeaders = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json',
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        const result = await axios.post(endpoint, formData, requestHeaders);
-        const r = result.data as IApiResult<any>;
-        return r.data as AppMediaContent;
-        //     response = result.data;
-        // } catch (e) {
-        //     Sentry.Native.captureException(e);
-        // }
-        // return response;
-    }
-
-    private async _requestOptions(options?: any) {
-        const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-        return {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            ...options,
-        };
-    }
-}
-
-export { getRequest, postRequest, deleteRequest, putRequest, ApiRequests };
+        // wait until image exists on real endpoint
+        // TODO: improve this
+        const delay = (ms: number) =>
+            new Promise((resolve) => setTimeout(resolve, ms));
+        let tries = 30;
+        while (tries-- > 0) {
+            await delay(1000);
+            const { status } = await ApiRequests.head(preSigned.media.url);
+            if (status === 200) {
+                return true;
+            }
+        }
+        return false;
+    },
+};
