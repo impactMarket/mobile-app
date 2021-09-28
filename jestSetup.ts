@@ -56,3 +56,9 @@ jest.mock('expo-location', () => ({
     requestForegroundPermissionsAsync: jest.fn(),
     getCurrentPositionAsync: jest.fn(),
 }));
+
+jest.mock('react-native-keyboard-aware-scroll-view', () => {
+    const KeyboardAwareScrollView = ({ children }) => children;
+    // const KeyboardAwareFlatList = FlatList;
+    return { KeyboardAwareScrollView }; //, KeyboardAwareFlatList };
+});
