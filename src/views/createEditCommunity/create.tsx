@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from '@react-native-community/netinfo';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Modal from 'components/Modal';
 import Button from 'components/core/Button';
+import NoConnectionSvg from 'components/svg/NoConnectionSvg';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
@@ -101,6 +103,7 @@ function CreateCommunityScreen() {
     const [submittingCommunity, setSubmittingCommunity] = useState(false);
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
     const [isAnyFieldMissedModal, setIsAnyFieldMissedModal] = useState(false);
+    const [isNoInternetModalOpen, setIsNoInternetModalOpen] = useState(false);
     const [invalidInputAmounts, setInvalidInputAmounts] = useState<
         string | undefined
     >(undefined);
@@ -382,6 +385,12 @@ function CreateCommunityScreen() {
     };
 
     const submitNewCommunity = async () => {
+        const netState = await NetInfo.fetch();
+        if (!netState.isConnected) {
+            setIsNoInternetModalOpen(true);
+            return;
+        }
+
         const validate = validateField(state, dispatch);
         const _name = validate.name();
         const _cover = validate.cover();
@@ -952,6 +961,28 @@ function CreateCommunityScreen() {
                         >
                             {i18n.t('generic.yes')}
                         </Button>
+                    </View>
+                </Modal>
+                <Modal
+                    visible={isNoInternetModalOpen}
+                    onDismiss={() => setIsNoInternetModalOpen(false)}
+                    title="Offline"
+                >
+                    <View style={{ alignItems: 'center' }}>
+                        <NoConnectionSvg />
+                        <Text
+                            style={{
+                                fontFamily: 'Inter-Regular',
+                                fontSize: 21,
+                                lineHeight: 25,
+                                color: ipctColors.almostBlack,
+                                marginTop: 11,
+                                marginHorizontal: 58,
+                                textAlign: 'center',
+                            }}
+                        >
+                            {i18n.t('generic.offline')}
+                        </Text>
                     </View>
                 </Modal>
             </Portal>
