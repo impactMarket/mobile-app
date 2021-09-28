@@ -61,6 +61,7 @@ export interface IAppState {
     exchangeRates: { [key: string]: number };
     suspectWrongDateTime: boolean;
     authModalOpen: boolean;
+    faqModalOpen: boolean;
     hasBeneficiaryAcceptedRulesAlready: boolean;
     hasManagerAcceptedRulesAlready: boolean;
     timeDiff: number;

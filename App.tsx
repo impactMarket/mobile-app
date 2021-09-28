@@ -73,6 +73,7 @@ import { gt as semverGt, gte as semverGte } from 'semver';
 import * as Sentry from 'sentry-expo';
 import CacheStore from 'services/cacheStore';
 import { startNotificationsListeners } from 'services/pushNotifications';
+import FAQ from 'views/faq';
 import Web3 from 'web3';
 
 import config from './config';
@@ -508,6 +509,7 @@ class App extends React.Component<any, IAppState> {
                     >
                         <Host>
                             <Navigator />
+                            <FAQ />
                         </Host>
                     </NavigationContainer>
                 </Provider>

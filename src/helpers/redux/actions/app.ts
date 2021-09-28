@@ -63,6 +63,13 @@ export function setOpenAuthModal(open: boolean): AppActionTypes {
     };
 }
 
+export function setOpenFaqModal(open: boolean): AppActionTypes {
+    return {
+        type: appAction.SET_OPEN_FAQ_MODAL,
+        payload: open,
+    };
+}
+
 export function setAppExchangeRatesAction(exchangeRates: {
     [key: string]: number;
 }): AppActionTypes {

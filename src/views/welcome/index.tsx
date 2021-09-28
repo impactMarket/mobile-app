@@ -3,8 +3,11 @@ import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import DiversitySvg from 'components/svg/welcome/DiversitySvg';
 import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
-import { appAction, Screens } from 'helpers/constants';
-import { SetAppFromWelcomeScreen } from 'helpers/redux/actions/app';
+import { Screens } from 'helpers/constants';
+import {
+    SetAppFromWelcomeScreen,
+    setOpenAuthModal,
+} from 'helpers/redux/actions/app';
 import React, { useState } from 'react';
 import { Dimensions, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-paper';
@@ -76,10 +79,7 @@ function Welcome() {
                     onPress={() => {
                         setRedirecting(true);
                         dispatch(SetAppFromWelcomeScreen(Screens.Communities));
-                        dispatch({
-                            type: appAction.SET_OPEN_AUTH_MODAL,
-                            payload: true,
-                        });
+                        dispatch(setOpenAuthModal(true));
                     }}
                 >
                     {i18n.t('auth.connectWithValora')}
