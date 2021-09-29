@@ -165,6 +165,8 @@ export async function welcomeUser(
                     ...userMetadata,
                     avatar: (user as any).user.avatar
                         ? (user as any).user.avatar.url
+                        : userMetadata.avatar
+                        ? userMetadata.avatar
                         : null, // TODO: avoid this
                 })
             );
