@@ -8,6 +8,7 @@ import * as helpers from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import mockAxios from 'jest-mock-axios';
 import React from 'react';
+import { Button, View } from 'react-native';
 import { Host } from 'react-native-portalize';
 import * as reactRedux from 'react-redux';
 
@@ -29,14 +30,34 @@ jest.mock('../component/PlaceSearch');
  */
 function WrappedCreateCommunityScreen() {
     const Stack = createStackNavigator();
+
+    function HomeScreen({ navigation }: any) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Button
+                    title="Create Community"
+                    testID="create-community-button"
+                    onPress={() => navigation.navigate('CreateCommunity')}
+                />
+            </View>
+        );
+    }
+
     return (
         <Host>
             <NavigationContainer>
-                <Stack.Navigator>
+                <Stack.Navigator initialRouteName="Home">
                     <Stack.Screen
-                        name="Home"
+                        name="CreateCommunity"
                         component={CreateCommunityScreen}
                     />
+                    <Stack.Screen name="Home" component={HomeScreen} />
                 </Stack.Navigator>
             </NavigationContainer>
         </Host>
@@ -140,10 +161,11 @@ describe('create community', () => {
     });
 
     test('try to submit empty', async () => {
-        const { getByText, queryByText } = render(
+        const { getByText, queryByText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -205,10 +227,11 @@ describe('create community', () => {
     });
 
     test('try to submit only name', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -274,10 +297,11 @@ describe('create community', () => {
     });
 
     test('try to submit only description', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -351,6 +375,7 @@ describe('create community', () => {
             getByTestId,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -436,10 +461,11 @@ describe('create community', () => {
     });
 
     test('try to submit only email', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -505,10 +531,11 @@ describe('create community', () => {
     });
 
     test('try to submit invalid email', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.emailInvalidFormat'))
@@ -526,10 +553,11 @@ describe('create community', () => {
     });
 
     test('try to submit too short description', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.communityDescriptionTooShort'))
@@ -557,10 +585,11 @@ describe('create community', () => {
             })
         );
 
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.imageDimensionsNotFit'))
@@ -577,10 +606,11 @@ describe('create community', () => {
     });
 
     test('try to submit only claim amount', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -648,10 +678,11 @@ describe('create community', () => {
     });
 
     test('try to submit only max claim', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -719,10 +750,11 @@ describe('create community', () => {
     });
 
     test('try to submit only increment interval', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -794,6 +826,7 @@ describe('create community', () => {
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -862,10 +895,11 @@ describe('create community', () => {
     });
 
     test('try to submit only base interval', async () => {
-        const { getByText, queryByText, getByLabelText } = render(
+        const { getByText, queryByText, getByLabelText, getByTestId } = render(
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         expect(
             queryByText(i18n.t('createCommunity.coverImageRequired'))
@@ -981,6 +1015,7 @@ describe('create community', () => {
             <WrappedCreateCommunityScreen />
         );
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         await act(async () =>
             fireEvent.press(getByLabelText('image uploader'))
@@ -1049,6 +1084,7 @@ describe('create community', () => {
             queryByText,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         fireEvent.changeText(
             getByLabelText(i18n.t('createCommunity.communityName')),
@@ -1172,6 +1208,7 @@ describe('create community', () => {
             queryByTestId,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         fireEvent.changeText(
             getByLabelText(i18n.t('createCommunity.communityName')),
@@ -1303,6 +1340,7 @@ describe('create community', () => {
             queryByTestId,
         } = render(<WrappedCreateCommunityScreen />);
         await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
         fireEvent.changeText(
             getByLabelText(i18n.t('createCommunity.communityName')),
@@ -1395,7 +1433,85 @@ describe('create community', () => {
 
     // TODO: test without mocking user profile picture
 
-    // TODO: test recover past form saved
+    test('leaving form with half filled, return and recover', async () => {
+        const { getByLabelText, getByTestId, getByText, queryByText } = render(
+            <WrappedCreateCommunityScreen />
+        );
+        await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
 
-    // TODO: test leaving with half filled form
+        fireEvent.changeText(
+            getByLabelText(i18n.t('createCommunity.communityName')),
+            'test community'
+        );
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('createCommunity.shortDescription')),
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
+        );
+
+        await act(async () => fireEvent.press(getByTestId('back-button')));
+
+        expect(
+            queryByText(i18n.t('createCommunity.leave.message'))
+        ).not.toBeNull();
+
+        await act(async () => fireEvent.press(getByText(i18n.t('generic.ok'))));
+
+        await act(async () =>
+            fireEvent.press(getByTestId('create-community-button'))
+        );
+
+        expect(
+            queryByText(i18n.t('createCommunity.recoverForm.message'))
+        ).not.toBeNull();
+
+        await act(async () =>
+            fireEvent.press(getByText(i18n.t('generic.yes')))
+        );
+
+        expect(
+            getByLabelText(i18n.t('createCommunity.communityName')).props.value
+        ).toEqual('test community');
+    });
+
+    test('leaving form with half filled, return and discarding', async () => {
+        const { getByLabelText, getByTestId, getByText, queryByText } = render(
+            <WrappedCreateCommunityScreen />
+        );
+        await act(async () => {});
+        fireEvent.press(getByTestId('create-community-button'));
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('createCommunity.communityName')),
+            'test community'
+        );
+
+        fireEvent.changeText(
+            getByLabelText(i18n.t('createCommunity.shortDescription')),
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lacus ex, sagittis eget odio nec, scelerisque maximus nibh. Proin sit amet est ac dolor eleifend sodales. Etiam dolor lacus, blandit sit amet commodo sit amet, vulputate non mi.'
+        );
+
+        await act(async () => fireEvent.press(getByTestId('back-button')));
+
+        expect(
+            queryByText(i18n.t('createCommunity.leave.message'))
+        ).not.toBeNull();
+
+        await act(async () => fireEvent.press(getByText(i18n.t('generic.ok'))));
+
+        await act(async () =>
+            fireEvent.press(getByTestId('create-community-button'))
+        );
+
+        expect(
+            queryByText(i18n.t('createCommunity.recoverForm.message'))
+        ).not.toBeNull();
+
+        await act(async () => fireEvent.press(getByText(i18n.t('generic.no'))));
+
+        expect(
+            getByLabelText(i18n.t('createCommunity.communityName')).props.value
+        ).toEqual('');
+    });
 });
