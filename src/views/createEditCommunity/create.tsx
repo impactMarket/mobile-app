@@ -21,8 +21,6 @@ import SubmitCommunity from 'navigator/header/SubmitCommunity';
 import React, { useEffect, useLayoutEffect, useReducer, useState } from 'react';
 import {
     ScrollView,
-    KeyboardAvoidingView,
-    Platform,
     View,
     Text,
     Image,
@@ -30,6 +28,7 @@ import {
     Keyboard,
     Pressable,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Portal } from 'react-native-portalize';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { batch, useDispatch, useSelector } from 'react-redux';
@@ -819,19 +818,8 @@ function CreateCommunityScreen() {
 
     return (
         <>
-            <KeyboardAvoidingView
-                style={{
-                    flex: 1,
-                }}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                // enabled
-                // keyboardVerticalOffset={140}
-            >
-                <ScrollView
-                    style={{
-                        paddingHorizontal: 20,
-                    }}
-                >
+            <KeyboardAwareScrollView extraScrollHeight={35}>
+                <ScrollView style={{ paddingHorizontal: 20 }}>
                     <DispatchContext.Provider value={dispatch}>
                         <StateContext.Provider value={state}>
                             <CommunityCreationProcessDisclaimer />
@@ -840,7 +828,7 @@ function CreateCommunityScreen() {
                         </StateContext.Provider>
                     </DispatchContext.Provider>
                 </ScrollView>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
             <Portal>
                 <Modal
                     visible={
