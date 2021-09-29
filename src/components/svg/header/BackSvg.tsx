@@ -7,6 +7,7 @@ function BackSvg(props: { onPress?: () => void }) {
     const navigation = useNavigation();
     return (
         <Pressable
+            testID="back-button"
             onPress={props.onPress ? props.onPress : () => navigation.goBack()}
             hitSlop={15}
         >
