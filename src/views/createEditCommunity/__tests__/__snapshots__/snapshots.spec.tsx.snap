@@ -132,6 +132,7 @@ Array [
                   onResponderTerminate={[Function]}
                   onResponderTerminationRequest={[Function]}
                   onStartShouldSetResponder={[Function]}
+                  testID="back-button"
                 >
                   <RNSVGSvgView
                     align="xMidYMid"
@@ -2704,6 +2705,7 @@ Array [
                   onResponderTerminate={[Function]}
                   onResponderTerminationRequest={[Function]}
                   onStartShouldSetResponder={[Function]}
+                  testID="back-button"
                 >
                   <RNSVGSvgView
                     align="xMidYMid"
@@ -5297,6 +5299,7 @@ Array [
                   onResponderTerminate={[Function]}
                   onResponderTerminationRequest={[Function]}
                   onStartShouldSetResponder={[Function]}
+                  testID="back-button"
                 >
                   <RNSVGSvgView
                     align="xMidYMid"

@@ -1,4 +1,4 @@
-// import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+import mockAsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import 'react-native-gesture-handler/jestSetup';
 
 jest.mock('react-native-reanimated', () => {
@@ -19,7 +19,7 @@ jest.useFakeTimers();
 // jest.mock('react-native-safe-area-context');
 // jest.mock('@react-navigation/stack');
 // jest.mock('expo-constants');
-// jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
+jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
 // const mockedNavigate = jest.fn();
 

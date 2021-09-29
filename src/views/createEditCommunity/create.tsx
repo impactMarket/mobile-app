@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
@@ -124,25 +123,21 @@ function CreateCommunityScreen() {
     const kit = useSelector((state: IRootState) => state.app.kit);
 
     useEffect(() => {
-        AsyncStorage.getItem('@community_form').then((r) => {
+        CacheStore.getCreateCommunityForm().then((r) => {
             if (r !== null) {
-                const previous: CommunityCreationAttributes & {
-                    coverUri: string;
-                    incrementIntervalUnit: number;
-                } = JSON.parse(r);
                 const isValid =
-                    previous.name.length > 0 ||
-                    previous.coverUri.length > 0 ||
-                    previous.description.length > 0 ||
-                    previous.city.length > 0 ||
-                    previous.gps.latitude !== 0 ||
-                    previous.gps.longitude !== 0 ||
-                    previous.email.length > 0 ||
-                    previous.contractParams.maxClaim.length > 0 ||
-                    previous.contractParams.claimAmount.length > 0 ||
-                    previous.contractParams.baseInterval > 0 ||
-                    previous.contractParams.incrementInterval > 0 ||
-                    previous.incrementIntervalUnit > 0;
+                    r.name.length > 0 ||
+                    r.coverUri.length > 0 ||
+                    r.description.length > 0 ||
+                    r.city.length > 0 ||
+                    r.gps.latitude !== 0 ||
+                    r.gps.longitude !== 0 ||
+                    r.email.length > 0 ||
+                    r.contractParams.maxClaim.length > 0 ||
+                    r.contractParams.claimAmount.length > 0 ||
+                    r.contractParams.baseInterval > 0 ||
+                    r.contractParams.incrementInterval > 0 ||
+                    r.incrementIntervalUnit > 0;
 
                 if (isValid) {
                     setHasPendingForm(true);
@@ -910,7 +905,7 @@ function CreateCommunityScreen() {
                     </Text>
                     <View style={styles.modalBoxTwoButtons}>
                         <Button
-                            modeType="default"
+                            modeType="gray"
                             style={{ width: '45%' }}
                             onPress={() => {
                                 setToggleLeaveFormModal(false);
@@ -919,7 +914,7 @@ function CreateCommunityScreen() {
                             {i18n.t('generic.cancel')}
                         </Button>
                         <Button
-                            modeType="gray"
+                            modeType="default"
                             style={{ width: '45%' }}
                             onPress={handleSaveForm}
                         >
