@@ -184,9 +184,7 @@ class ApiRouteCommunity {
         return api.uploadImage(preSigned, uri);
     }
 
-    async create(
-        details: CommunityCreationAttributes
-    ): Promise<{ data: CommunityAttributes; error: any }> {
+    async create(details: CommunityCreationAttributes) {
         return api.post<CommunityAttributes>('/community/create', details);
     }
 

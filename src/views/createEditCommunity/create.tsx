@@ -14,7 +14,10 @@ import {
     setUserIsCommunityManager,
     setUserMetadata,
 } from 'helpers/redux/actions/user';
-import { CommunityCreationAttributes } from 'helpers/types/endpoints';
+import {
+    ApiErrorReturn,
+    CommunityCreationAttributes,
+} from 'helpers/types/endpoints';
 import { AppMediaContent, CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import SubmitCommunity from 'navigator/header/SubmitCommunity';
@@ -315,7 +318,7 @@ function CreateCommunityScreen() {
 
     const updateUIAfterSubmission = async (
         data: CommunityAttributes,
-        error: any
+        error: ApiErrorReturn | undefined
     ) => {
         if (error === undefined) {
             await updateCommunityInfo(data.id, dispatchRedux);
