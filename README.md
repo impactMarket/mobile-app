@@ -26,8 +26,14 @@ If you have an android, you can try our demo [here](https://expo.io/@impactmarke
 
 ## Devices used in manual tests
 
+This are the devices used during development and first phase manual tests. Pre-production tests have a few more devices.
+
+Our goal is to make the app as functional as possible from the most low-end device up to the most top high-end one.
+
 * [BLU Advance L5 (Android 8.1, 4", 512MB RAM, 1.3GHz processor with Mali-400 GPU)](https://www.amazon.com/Advance-A390L-Unlocked-Phone-Camera/dp/B07Z6Q9NCZ/)
 * [SLIDE SP4514 (Android 6.0, 4.5", 1GB RAM, 1GHz processor)](https://www.amazon.com/dp/B06ZZ4KZF9?psc=1&ref=ppx_yo2_dt_b_product_details)
+* [Asus ZenFone 3 Max (Android 7.0, 5.2", 3GB RAM, 1.25GHz quad-core processor)](https://www.gsmarena.com/asus_zenfone_3_max_zc520tl-8207.php)
+* [iPhone 6 (iOS 12, 4.7", 1GB RAM, 1.4GHz dual-core processor)](https://www.gsmarena.com/apple_iphone_6-6378.php)
 
 ## License
 [Apache-2.0](LICENSE)
