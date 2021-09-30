@@ -208,6 +208,7 @@ function ListItem(props: {
 }
 
 function ListCommunitiesScreen() {
+    const loadSlice = 20;
     const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
     const { width } = Dimensions.get('screen');
 
@@ -238,10 +239,10 @@ function ListCommunitiesScreen() {
         Api.community
             .list({
                 offset: 0,
-                limit: 10,
+                limit: loadSlice,
             })
             .then((c) => {
-                if (c.data.length < 10) {
+                if (c.data.length < loadSlice) {
                     setReachedEndList(true);
                 } else {
                     setReachedEndList(false);
@@ -261,7 +262,7 @@ function ListCommunitiesScreen() {
                 filter?: string;
                 lat?: number;
                 lng?: number;
-            } = { offset: communtiesOffset + 10, limit: 10 };
+            } = { offset: communtiesOffset + loadSlice, limit: loadSlice };
             if (
                 communtiesOrder === communityOrderOptions.nearest &&
                 userLocation
@@ -276,7 +277,7 @@ function ListCommunitiesScreen() {
             Api.community
                 .list(queryList)
                 .then((c) => {
-                    if (c.data.length < 10) {
+                    if (c.data.length < loadSlice) {
                         setReachedEndList(true);
                     }
                     // as the users keeps scrolling, communities might get a different order
@@ -289,21 +290,25 @@ function ListCommunitiesScreen() {
                             ])
                         ).values(),
                     ]);
-                    setCommuntiesOffset(communtiesOffset + 10);
+                    setCommuntiesOffset(communtiesOffset + loadSlice);
                 })
                 .finally(() => setRefreshing(false));
         }
     };
 
+    const emptyList: any[] = Array(loadSlice)
+        .fill(1)
+        .map((_, idx) => ({
+            id: idx,
+        }));
+
     return (
         <FlatList
             data={
                 communities.length === 0
-                    ? (Array(10)
-                          .fill(1)
-                          .map((_, idx) => ({
-                              id: idx,
-                          })) as any[])
+                    ? emptyList
+                    : refreshing
+                    ? communities.concat(emptyList)
                     : communities
             }
             renderItem={({ item }) => (
@@ -319,6 +324,7 @@ function ListCommunitiesScreen() {
             keyExtractor={(item) => item.id.toString()}
             onEndReached={handleOnEndReached}
             showsVerticalScrollIndicator={false}
+            onEndReachedThreshold={0.5}
         />
     );
 }

@@ -44,11 +44,11 @@ export default function Stories() {
         <SafeAreaView>
             <View
                 style={{
-                    marginHorizontal: 18,
+                    marginHorizontal: 22,
+                    marginBottom: 8,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: 9,
                 }}
             >
                 <Text
@@ -85,7 +85,7 @@ export default function Stories() {
             <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ padding: 14 }}
+                contentContainerStyle={{ paddingHorizontal: 18 }} // 22 - 4 (horizontal padding container - horizontal padding item)
             >
                 {userAddress.length > 0 &&
                     (userCommunityMetadata.isBeneficiary ||
