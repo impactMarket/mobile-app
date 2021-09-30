@@ -30,6 +30,7 @@ interface HelperProps {
     };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CommunityMinimunExpectedDuration() {
     const state = useContext(StateContext);
 
@@ -583,7 +584,7 @@ export default function Contract() {
                     content: setHelperContent,
                 }}
             />
-            <CommunityMinimunExpectedDuration />
+            {/* <CommunityMinimunExpectedDuration /> */}
             <Portal>
                 <Modalize ref={modalizeHelperRef} adjustToContentHeight>
                     <View

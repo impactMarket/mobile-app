@@ -352,7 +352,10 @@ function CommunityManagerScreen() {
                     >
                         <WebView
                             originWhitelist={['*']}
-                            source={{ uri: 'https://docs.impactmarket.com/' }}
+                            source={{
+                                uri:
+                                    'https://docs.impactmarket.com/general/difficulties-getting-your-ubi',
+                            }}
                             style={{
                                 height: Dimensions.get('screen').height * 0.85,
                             }}

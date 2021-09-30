@@ -99,6 +99,9 @@ function CreateCommunityScreen() {
     const [submittingCommunity, setSubmittingCommunity] = useState(false);
     const [showSubmissionModal, setShowSubmissionModal] = useState(false);
     const [isAnyFieldMissedModal, setIsAnyFieldMissedModal] = useState(false);
+    const [submittedCommunityData, setSubmittedCommunityData] = useState<
+        CommunityAttributes | undefined
+    >();
     const [invalidInputAmounts, setInvalidInputAmounts] = useState<
         string | undefined
     >(undefined);
@@ -320,12 +323,7 @@ function CreateCommunityScreen() {
         if (error === undefined) {
             await updateCommunityInfo(data.id, dispatchRedux);
             const community = await Api.community.findById(data.id);
-            if (community !== undefined) {
-                batch(() => {
-                    dispatchRedux(setCommunityMetadata(community));
-                    dispatchRedux(setUserIsCommunityManager(true));
-                });
-            }
+            setSubmittedCommunityData(community);
             setSubmitting(false);
             setSubmittingSuccess(true);
         } else {
@@ -755,6 +753,14 @@ function CreateCommunityScreen() {
                     style={{ width: '100%' }}
                     onPress={() => {
                         navigation.goBack();
+                        if (submittedCommunityData !== undefined) {
+                            batch(() => {
+                                dispatchRedux(
+                                    setCommunityMetadata(submittedCommunityData)
+                                );
+                                dispatchRedux(setUserIsCommunityManager(true));
+                            });
+                        }
                     }}
                 >
                     {i18n.t('generic.continue')}
