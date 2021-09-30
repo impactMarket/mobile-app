@@ -967,33 +967,6 @@ describe('create community', () => {
         ).not.toBeNull();
     });
 
-    // TODO: this test is important but it's failling for unknown reasons
-    // test('change country', async () => {
-    //     const { getByLabelText, queryAllByTestId, getByA11yLabel } = render(
-    //         <WrappedCreateCommunityScreen />
-    //     );
-    //     await act(async () => {});
-
-    //     fireEvent.press(getByLabelText(i18n.t('generic.country')));
-    //     fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Port');
-    //     await act(async () => expect(getByLabelText('PT')));
-    //     fireEvent.press(getByLabelText('PT'));
-
-    //     expect(queryAllByTestId('selected-value')[0].children).toContain(
-    //         '🇵🇹 Portugal'
-    //     );
-
-    //     await act(async () => {});
-    //     fireEvent.press(getByLabelText(i18n.t('generic.country')));
-    //     fireEvent.changeText(getByA11yLabel(i18n.t('generic.search')), 'Ang');
-    //     await act(async () => expect(getByLabelText('AO')));
-    //     fireEvent.press(getByLabelText('AO'));
-
-    //     expect(queryAllByTestId('selected-value')[0].children).toContain(
-    //         '🇦🇴 Angola'
-    //     );
-    // });
-
     // TODO: claim amount bigger than max claim
 
     // TODO: claim amount zero
@@ -1195,9 +1168,9 @@ describe('create community', () => {
         );
 
         communityUploadCoverMock.mockClear();
-        communityUploadCoverMock.mockImplementationOnce(() => {
-            throw new Error('bruh, wat?');
-        });
+        communityUploadCoverMock.mockImplementationOnce(() =>
+            Promise.resolve(false)
+        );
 
         const {
             getByLabelText,
@@ -1295,9 +1268,9 @@ describe('create community', () => {
         ).toBeNull();
     });
 
-    // // TODO: failed submit (profile)
+    // TODO: failed submit (profile)
 
-    // // TODO: failed submit (community)
+    // TODO: failed submit (community)
 
     test('submit successfully', async () => {
         launchImageLibraryAsyncMock.mockReturnValueOnce(

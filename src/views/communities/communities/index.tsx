@@ -20,6 +20,7 @@ export default function Communities() {
 
     const {
         wallet: { address },
+        community,
         metadata: { currency },
     } = useSelector((state: IRootState) => state.user);
     const { communities, count } = useSelector(
@@ -37,15 +38,48 @@ export default function Communities() {
         );
     }, []);
 
+    const flatListData =
+        communities.length === 0
+            ? (Array(5)
+                  .fill(1)
+                  .map((_, idx) => ({
+                      id: idx,
+                  })) as any[])
+            : communities;
+
+    const ApplyCommunityButton = () => {
+        if (community.isManager && community.metadata?.status === 'valid') {
+            return null;
+        }
+        return (
+            <Button
+                modeType="default"
+                style={{ marginHorizontal: 22, marginVertical: 8 }}
+                labelStyle={styles.buttomStoreText}
+                onPress={() =>
+                    address.length > 0
+                        ? community.isManager
+                            ? navigation.navigate(Screens.CommunityManager)
+                            : navigation.navigate(Screens.CreateCommunity)
+                        : dispatch(setOpenAuthModal(true))
+                }
+            >
+                <Text style={styles.buttomStoreText}>
+                    {i18n.t('createCommunity.applyCommunity')}
+                </Text>
+            </Button>
+        );
+    };
+
     return (
         <View>
             <View
                 style={{
-                    marginHorizontal: 18,
+                    marginHorizontal: 22,
+                    marginVertical: 8,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: 9,
                 }}
             >
                 <Text style={styles.communityHeader}>
@@ -61,15 +95,7 @@ export default function Communities() {
                 </Pressable>
             </View>
             <FlatList
-                data={
-                    communities.length === 0
-                        ? (Array(5)
-                              .fill(1)
-                              .map((_, idx) => ({
-                                  id: idx,
-                              })) as any[])
-                        : communities
-                }
+                data={flatListData}
                 renderItem={({ item }) => (
                     <CommunityCard
                         community={item}
@@ -78,28 +104,13 @@ export default function Communities() {
                         navigation={navigation}
                     />
                 )}
+                contentContainerStyle={{ paddingHorizontal: 14 }} // 22 - 8 (horizontal padding container - horizontal padding item)
                 ref={flatListRef}
                 keyExtractor={(item) => item.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                style={{
-                    marginLeft: 14,
-                }}
             />
-            <Button
-                modeType="default"
-                style={{ marginHorizontal: 22, marginBottom: 36 }}
-                labelStyle={styles.buttomStoreText}
-                onPress={() =>
-                    address.length > 0
-                        ? navigation.navigate(Screens.CreateCommunity)
-                        : dispatch(setOpenAuthModal(true))
-                }
-            >
-                <Text style={styles.buttomStoreText}>
-                    {i18n.t('createCommunity.applyCommunity')}
-                </Text>
-            </Button>
+            <ApplyCommunityButton />
         </View>
     );
 }

@@ -12,7 +12,7 @@ import Communities from './communities';
 
 function CommunitiesScreen() {
     return (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
             <Communities />
             <Stories />
             <Auth />

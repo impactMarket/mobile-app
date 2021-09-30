@@ -138,7 +138,10 @@ function NewStoryScreen() {
             >
                 <WebView
                     originWhitelist={['*']}
-                    source={{ uri: 'https://docs.impactmarket.com/' }}
+                    source={{
+                        uri:
+                            'https://docs.impactmarket.com/general/stories-posts-rules',
+                    }}
                     javaScriptEnabled
                     domStorageEnabled
                 />
