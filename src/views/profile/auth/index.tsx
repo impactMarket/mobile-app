@@ -145,8 +145,6 @@ function Auth() {
         };
 
         if (connecting) {
-            console.log(userAuthState.user?.user);
-
             if (userAuthState.user !== undefined) {
                 if (dappKitResponse !== undefined) {
                     finishAuth();

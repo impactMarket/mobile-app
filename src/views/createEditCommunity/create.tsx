@@ -52,10 +52,10 @@ import {
     validateField,
 } from './state';
 
-const makeCancelable = (promise: Promise<any>) => {
+function makeCancelable<T>(promise: Promise<T>) {
     let hasCanceled_ = false;
 
-    const wrappedPromise = new Promise((resolve, reject) => {
+    const wrappedPromise = new Promise<T>((resolve, reject) => {
         promise.then(
             (val) =>
                 hasCanceled_ ? reject(Error('isCanceled')) : resolve(val),
@@ -70,7 +70,7 @@ const makeCancelable = (promise: Promise<any>) => {
             hasCanceled_ = true;
         },
     };
-};
+}
 
 function CreateCommunityScreen() {
     const navigation = useNavigation();
@@ -205,12 +205,15 @@ function CreateCommunityScreen() {
     };
 
     const uploadImages = () => {
-        const profileUpload = async () => {
+        const profileUpload = async (): Promise<{
+            media?: AppMediaContent;
+            success: boolean;
+        }> => {
             if (state.profileImage.length > 0) {
                 if (profileUploadDetails !== undefined) {
                     return {
-                        uploadURL: '',
                         media: profileUploadDetails,
+                        success: true,
                     };
                 }
                 try {
@@ -230,20 +233,24 @@ function CreateCommunityScreen() {
                             avatar: res.url,
                         })
                     );
-                    return r;
+                    return { media: r.media, success: true };
                 } catch (e) {
                     setSubmitting(false);
                     setSubmittingProfile(false);
                     setSubmittingSuccess(false);
-                    return undefined;
+                    return { success: false };
                 }
             }
+            return { success: true };
         };
-        const coverUpload = async () => {
+        const coverUpload = async (): Promise<{
+            media?: AppMediaContent;
+            success: boolean;
+        }> => {
             if (coverUploadDetails !== undefined) {
                 return {
-                    uploadURL: '',
                     media: coverUploadDetails,
+                    success: true,
                 };
             }
             try {
@@ -252,26 +259,20 @@ function CreateCommunityScreen() {
                     r,
                     state.coverImage
                 );
-                return { details: r, success };
+                return { media: r.media, success };
             } catch {
                 setSubmitting(false);
                 setSubmittingCover(false);
                 setSubmittingSuccess(false);
-                return undefined;
+                return { success: false };
             }
         };
         return Promise.all([coverUpload(), profileUpload()]);
     };
 
     useEffect(() => {
-        let cancelablePromiseImages: {
-            promise: Promise<unknown>;
-            cancel(): void;
-        };
-        let cancelablePromiseCommunity: {
-            promise: Promise<unknown>;
-            cancel(): void;
-        };
+        let cancelablePromiseImages;
+        let cancelablePromiseCommunity;
         if (submitting) {
             // if community cover picture and user profile picture were uploded successfully, move on to upload community
             // ignore user profile picture if the user has already has it
@@ -284,14 +285,18 @@ function CreateCommunityScreen() {
             ) {
                 cancelablePromiseCommunity = makeCancelable(submitCommunity());
             } else if (isUploadingContent) {
-                cancelablePromiseImages = makeCancelable(uploadImages());
-                cancelablePromiseImages.promise
+                const localPromise = makeCancelable(uploadImages());
+                cancelablePromiseImages = localPromise;
+                localPromise.promise
                     .then((result) => {
-                        if (result[0] !== undefined && !result[0].success) {
+                        if (!result[0].success || !result[1].success) {
                             setSubmittingSuccess(false);
-                        } else {
-                            setCoverUploadDetails(result[0].details.media);
-                            if (state.profileImage.length > 0) {
+                            setSubmittingCommunity(false);
+                            setSubmitting(false);
+                        } else if (result[0].success) {
+                            setCoverUploadDetails(result[0].media);
+                        } else if (state.profileImage.length > 0) {
+                            if (result[1].success) {
                                 setProfileUploadDetails(result[1].media);
                             }
                         }
@@ -1052,7 +1057,7 @@ const styles = StyleSheet.create({
         marginRight: 12,
     },
     modalSubmissionContainer: {
-        paddingBottom: 14,
+        paddingBottom: 6,
         display: 'flex',
     },
 });
