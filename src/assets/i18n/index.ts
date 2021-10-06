@@ -1,6 +1,6 @@
+import en from '@impact-market/translations/mobile/en.json';
+import pt from '@impact-market/translations/mobile/pt.json';
 import i18next from 'i18next';
-import en from 'impact-market-translations/mobile/en.json';
-import pt from 'impact-market-translations/mobile/pt.json';
 import { initReactI18next } from 'react-i18next';
 import 'moment/locale/pt';
 
