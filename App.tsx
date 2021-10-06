@@ -76,11 +76,11 @@ import Web3 from 'web3';
 
 import config from './config';
 import i18n, { loadi18n, supportedLanguages } from './src/assets/i18n';
-import AxiosInstance from './src/config/api';
 import { welcomeUser } from './src/helpers';
 import combinedReducer from './src/helpers/redux/reducers';
 import Navigator from './src/navigator';
 import Api from './src/services/api';
+import AxiosInstance from './src/services/api/base';
 import { registerForPushNotifications } from './src/services/pushNotifications';
 import { ipctColors } from './src/styles';
 if (__DEV__) {

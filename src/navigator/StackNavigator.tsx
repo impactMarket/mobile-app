@@ -190,7 +190,11 @@ function StackNavigator() {
                     color: ipctColors.almostBlack,
                 },
             }}
-            initialRouteName={Screens.WelcomeRulesScreen}
+            initialRouteName={
+                beneficiary !== null && !beneficiary.readRules
+                    ? Screens.WelcomeRulesScreen
+                    : fromWelcomeScreen
+            }
         >
             {isAuthenticated || fromWelcomeScreen.length > 0
                 ? commonScreens(Stack, beneficiary !== null || isManager)
