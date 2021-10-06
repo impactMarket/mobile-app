@@ -1,51 +1,22 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BaseCommunity from 'components/BaseCommunity';
-import CommunityRules from 'components/core/CommunityRules';
-import { Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
-import { IRootState, ICallerRouteParams } from 'helpers/types/state';
-import React, { useEffect } from 'react';
+import { IRootState } from 'helpers/types/state';
+import React from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
+import CommunityRules from './CommunityRules';
+
 function WelcomeRulesScreen() {
-    const navigation = useNavigation();
-    const route = useRoute<
-        RouteProp<Record<string, ICallerRouteParams>, string>
-    >();
-
-    const { caller } = route.params;
-
     const community = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
 
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
-
-    const hasBeneficiaryAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasBeneficiaryAcceptedRulesAlready
-    );
-
-    const hasManagerAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasManagerAcceptedRulesAlready
-    );
-
-    useEffect(() => {
-        if (caller === 'BENEFICIARY' && hasBeneficiaryAcceptedRulesAlready) {
-            navigation.navigate(Screens.Beneficiary);
-        } else if (caller === 'MANAGER' && hasManagerAcceptedRulesAlready) {
-            navigation.navigate(Screens.CommunityManager);
-        }
-    }, [
-        hasBeneficiaryAcceptedRulesAlready,
-        hasManagerAcceptedRulesAlready,
-        caller,
-        navigation,
-    ]);
 
     if (community === undefined || community.contract === undefined) {
         return (
@@ -78,38 +49,32 @@ function WelcomeRulesScreen() {
                 >
                     <View style={styles.welcomeBeneficiayContainer}>
                         <Text style={styles.welcomeBeneficiayTitle}>
-                            {caller === 'BENEFICIARY'
-                                ? i18n.t('beneficiary.welcomeBeneficiayTitle', {
-                                      communityName: community.name,
-                                  })
-                                : i18n.t('manager.welcomeManagerTitle', {
-                                      communityName: community.name,
-                                  })}
+                            {i18n.t('beneficiary.welcomeBeneficiayTitle', {
+                                communityName: community.name,
+                            })}
                         </Text>
-                        {caller === 'BENEFICIARY' && (
-                            <Text style={styles.welcomeBeneficiayDescription}>
-                                {i18n.t(
-                                    'beneficiary.welcomeBeneficiaryDecription',
-                                    {
-                                        claimXCCurrency: amountToCurrency(
-                                            community.contract.claimAmount,
-                                            community.currency,
-                                            rates
-                                        ),
-                                        interval:
-                                            community.contract.baseInterval ===
-                                            86400
-                                                ? '24h'
-                                                : '168h',
-                                        minIncrement:
-                                            community.contract
-                                                .incrementInterval / 60,
-                                    }
-                                )}
-                            </Text>
-                        )}
+                        <Text style={styles.welcomeBeneficiayDescription}>
+                            {i18n.t(
+                                'beneficiary.welcomeBeneficiaryDecription',
+                                {
+                                    claimXCCurrency: amountToCurrency(
+                                        community.contract.claimAmount,
+                                        community.currency,
+                                        rates
+                                    ),
+                                    interval:
+                                        community.contract.baseInterval ===
+                                        86400
+                                            ? '24h'
+                                            : '168h',
+                                    minIncrement:
+                                        community.contract.incrementInterval /
+                                        60,
+                                }
+                            )}
+                        </Text>
                     </View>
-                    <CommunityRules caller={caller} />
+                    <CommunityRules caller="beneficiary" />
                 </View>
             </BaseCommunity>
         </ScrollView>

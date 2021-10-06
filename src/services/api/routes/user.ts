@@ -15,6 +15,12 @@ export interface AuthParams {
     pushNotificationToken?: string;
 }
 class ApiRouteUser {
+    async readRules(
+        category: 'beneficiary' | 'manager'
+    ): Promise<IApiResult<boolean>> {
+        return api.put<boolean>(`/user/read-rules/${category}`, {});
+    }
+
     async report(
         communityId: number,
         message: string,

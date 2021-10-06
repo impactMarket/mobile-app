@@ -31,8 +31,6 @@ import {
     setAppSuspectWrongDateTime,
     setCeloKit,
     setPushNotificationListeners,
-    setAppHasBeneficiaryAcceptedTerms,
-    setAppHasManagerAcceptedTerms,
 } from 'helpers/redux/actions/app';
 import { setPushNotificationsToken } from 'helpers/redux/actions/auth';
 import { resetUserApp, setUserLanguage } from 'helpers/redux/actions/user';
@@ -620,7 +618,6 @@ class App extends React.Component<any, IAppState> {
             }
             await this._checkForNewVersion();
             await this._authUser();
-            await this._checkAcceptanceOfRules();
             this.setState({ isAppReady: true });
             // just at the end, so when we hide, app is ready!
             SplashScreen.hideAsync();
@@ -707,23 +704,6 @@ class App extends React.Component<any, IAppState> {
                 await CacheStore.cacheLastVersion(version.latest);
                 this.setState({ infoUserNewAppVersion: true });
             }
-        }
-    };
-
-    _checkAcceptanceOfRules = async () => {
-        const hasBeneficiaryAcceptedRulesAlready = await CacheStore.getBeneficiaryAcceptCommunityRules();
-        const hasManagerAcceptedRulesAlready = await CacheStore.getManagerAcceptCommunityRules();
-
-        if (hasBeneficiaryAcceptedRulesAlready) {
-            store.dispatch(setAppHasBeneficiaryAcceptedTerms(true));
-        } else {
-            store.dispatch(setAppHasBeneficiaryAcceptedTerms(false));
-        }
-
-        if (hasManagerAcceptedRulesAlready) {
-            store.dispatch(setAppHasManagerAcceptedTerms(true));
-        } else {
-            store.dispatch(setAppHasManagerAcceptedTerms(false));
         }
     };
 

@@ -61,10 +61,6 @@ export const SET_USER_AUTH_RESET = 'SET_USER_AUTH_RESET';
 
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
-export const SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS =
-    'app/hasBeneficiaryAcceptedRulesAlready';
-export const SET_APP_MANAGER_HAS_ACCEPTED_TERMS =
-    'app/hasManagerAcceptedRulesAlready';
 
 export enum appAction {
     SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners',
