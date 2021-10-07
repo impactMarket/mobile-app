@@ -12,6 +12,7 @@ import * as Location from 'expo-location';
 import { communityOrderOptions, Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { chooseMediaThumbnail } from 'helpers/index';
+import { CommunityListRequestParams } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useRef, useState } from 'react';
@@ -255,14 +256,10 @@ function ListCommunitiesScreen() {
     const handleOnEndReached = (info: { distanceFromEnd: number }) => {
         if (!refreshing && !reachedEndList) {
             setRefreshing(true);
-            let queryList: {
-                offset: number;
-                limit: number;
-                orderBy?: string;
-                filter?: string;
-                lat?: number;
-                lng?: number;
-            } = { offset: communtiesOffset + loadSlice, limit: loadSlice };
+            let queryList: CommunityListRequestParams = {
+                offset: communtiesOffset + loadSlice,
+                limit: loadSlice,
+            };
             if (
                 communtiesOrder === communityOrderOptions.nearest &&
                 userLocation

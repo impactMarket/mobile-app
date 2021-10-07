@@ -9,6 +9,15 @@ export interface ApiErrorReturn {
     message: string;
 }
 
+export interface CommunityListRequestParams {
+    offset: number;
+    limit: number;
+    orderBy?: string;
+    filter?: 'featured';
+    lat?: number;
+    lng?: number;
+}
+
 /**
  * @deprecated use AppMediaContent
  */

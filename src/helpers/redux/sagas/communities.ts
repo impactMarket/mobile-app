@@ -5,18 +5,13 @@ import {
     findCommunityByIdSuccess,
     findCommunityByIdFailure,
 } from 'helpers/redux/actions/communities';
+import { CommunityListRequestParams } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
 import Api from 'services/api';
 import { call, put, all, takeEvery } from 'typed-redux-saga';
 
-const listCommunities = (query: {
-    offset: number;
-    limit: number;
-    orderBy?: string;
-    filter?: string;
-    lat?: number;
-    lng?: number;
-}) => Api.community.list(query);
+const listCommunities = (query: CommunityListRequestParams) =>
+    Api.community.list(query);
 
 const findCommunityByIdApi = (id: number) => Api.community.findById(id);
 
