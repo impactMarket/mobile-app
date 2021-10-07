@@ -6,6 +6,7 @@ import Input from 'components/core/Input';
 import Select from 'components/core/Select';
 import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
+import { docsURL } from 'helpers/index';
 import { IRootState } from 'helpers/types/state';
 import SubmitStory from 'navigator/header/SubmitStory';
 import React, { useState, useLayoutEffect, useRef } from 'react';
@@ -32,6 +33,9 @@ function AnonymousReportScreen() {
 
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
+    );
+    const { language } = useSelector(
+        (state: IRootState) => state.user.metadata
     );
 
     useLayoutEffect(() => {
@@ -136,8 +140,7 @@ function AnonymousReportScreen() {
                 <WebView
                     originWhitelist={['*']}
                     source={{
-                        uri:
-                            'https://docs.impactmarket.com/general/anonymous-reporting',
+                        uri: docsURL('/general/anonymous-reporting', language),
                     }}
                     javaScriptEnabled
                     domStorageEnabled

@@ -17,6 +17,7 @@ import {
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
 import {
+    docsURL,
     getCurrencyFromPhoneNumber,
     makeDeeplinkUrl,
     welcomeUser,
@@ -59,6 +60,9 @@ function Auth() {
 
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userAuthState = useSelector((state: IRootState) => state.auth);
+    const { language } = useSelector(
+        (state: IRootState) => state.user.metadata
+    );
     // const refreshing = useSelector(
     //     (state: IRootState) => state.auth.refreshing
     // );
@@ -441,8 +445,10 @@ function Auth() {
                 <WebView
                     originWhitelist={['*']}
                     source={{
-                        uri:
-                            'https://docs.impactmarket.com/general/others#app-is-out-of-date',
+                        uri: docsURL(
+                            '/general/others#app-is-out-of-date',
+                            language
+                        ),
                     }}
                     style={{
                         height: Dimensions.get('screen').height * 0.85,

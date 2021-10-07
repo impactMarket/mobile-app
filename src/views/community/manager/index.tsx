@@ -8,7 +8,7 @@ import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import ManageSvg from 'components/svg/ManageSvg';
 import { amountToCurrency } from 'helpers/currency';
-import { updateCommunityInfo } from 'helpers/index';
+import { docsURL, updateCommunityInfo } from 'helpers/index';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import {
@@ -49,6 +49,9 @@ function CommunityManagerScreen() {
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userCurrency = useSelector(
         (state: IRootState) => state.user.metadata.currency
+    );
+    const { language } = useSelector(
+        (state: IRootState) => state.user.metadata
     );
     const userAddress = useSelector(
         (state: IRootState) => state.user.wallet.address
@@ -353,8 +356,10 @@ function CommunityManagerScreen() {
                         <WebView
                             originWhitelist={['*']}
                             source={{
-                                uri:
-                                    'https://docs.impactmarket.com/general/difficulties-getting-your-ubi',
+                                uri: docsURL(
+                                    '/general/difficulties-getting-your-ubi',
+                                    language
+                                ),
                             }}
                             style={{
                                 height: Dimensions.get('screen').height * 0.85,

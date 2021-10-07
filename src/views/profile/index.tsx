@@ -22,6 +22,7 @@ import * as Linking from 'expo-linking';
 import { Screens } from 'helpers/constants';
 import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
 import {
+    docsURL,
     getCountryFromPhoneNumber,
     getUserBalance,
     logout,
@@ -920,8 +921,10 @@ function ProfileScreen() {
                     <WebView
                         originWhitelist={['*']}
                         source={{
-                            uri:
-                                'https://docs.impactmarket.com/general/stolen-lost-phone',
+                            uri: docsURL(
+                                '/general/stolen-lost-phone',
+                                language
+                            ),
                         }}
                         style={{
                             height: Dimensions.get('screen').height * 0.85,
