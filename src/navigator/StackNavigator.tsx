@@ -161,11 +161,8 @@ const managerScreens = (Navigator: typeof Stack) => (
 const Stack = createStackNavigator();
 
 function StackNavigator() {
-    const isManager = useSelector(
-        (state: IRootState) => state.user.community.isManager
-    );
-    const isBeneficiary = useSelector(
-        (state: IRootState) => state.user.community.isBeneficiary
+    const { beneficiary, isManager } = useSelector(
+        (state: IRootState) => state.user.community
     );
     const isAuthenticated = useSelector(
         (state: IRootState) => state.user.wallet.address.length > 0
@@ -193,12 +190,16 @@ function StackNavigator() {
                     color: ipctColors.almostBlack,
                 },
             }}
-            initialRouteName={fromWelcomeScreen}
+            initialRouteName={
+                beneficiary !== null && !beneficiary.readRules
+                    ? Screens.WelcomeRulesScreen
+                    : fromWelcomeScreen
+            }
         >
             {isAuthenticated || fromWelcomeScreen.length > 0
-                ? commonScreens(Stack, isBeneficiary || isManager)
+                ? commonScreens(Stack, beneficiary !== null || isManager)
                 : welcomeScreen(Stack)}
-            {isBeneficiary && beneficiaryScreens(Stack)}
+            {beneficiary !== null && beneficiaryScreens(Stack)}
             {isManager && managerScreens(Stack)}
         </Stack.Navigator>
     );

@@ -88,7 +88,7 @@ export default function Stories() {
                 contentContainerStyle={{ paddingHorizontal: 18 }} // 22 - 4 (horizontal padding container - horizontal padding item)
             >
                 {userAddress.length > 0 &&
-                    (userCommunityMetadata.isBeneficiary ||
+                    (userCommunityMetadata.beneficiary !== null ||
                         userCommunityMetadata.isManager) &&
                     userCommunityMetadata.metadata.status === 'valid' && (
                         <View

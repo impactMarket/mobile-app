@@ -10,10 +10,7 @@ import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
 import { Screens } from 'helpers/constants';
 import { humanifyCurrencyAmount } from 'helpers/currency';
-import {
-    setAppSuspectWrongDateTime,
-    setAppHasBeneficiaryAcceptedTerms,
-} from 'helpers/redux/actions/app';
+import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/app';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
@@ -56,10 +53,6 @@ function BeneficiaryScreen() {
 
     const isUserBlocked = useSelector(
         (state: IRootState) => state.user.metadata.blocked
-    );
-
-    const hasBeneficiaryAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasBeneficiaryAcceptedRulesAlready
     );
 
     const suspectWrongDateTime = useSelector(
@@ -153,18 +146,6 @@ function BeneficiaryScreen() {
             }
         };
     }, [suspectWrongDateTime]);
-
-    useEffect(() => {
-        async function loadCommunityRulesStats() {
-            if (!hasBeneficiaryAcceptedRulesAlready) {
-                dispatch(setAppHasBeneficiaryAcceptedTerms(false));
-                navigation.navigate(Screens.WelcomeRulesScreen, {
-                    caller: 'BENEFICIARY',
-                });
-            }
-        }
-        loadCommunityRulesStats();
-    }, [dispatch, hasBeneficiaryAcceptedRulesAlready, navigation]);
 
     useEffect(() => {
         const isLocationAvailable = async () => {
@@ -518,15 +499,10 @@ function BeneficiaryScreen() {
                         </Card.Content>
                     </Card>
                 </Modal>
+                <Modal visible={isUserBlocked} dismissable={false}>
+                    <BlockedAccount />
+                </Modal>
             </Portal>
-
-            {hasBeneficiaryAcceptedRulesAlready && (
-                <Portal>
-                    <Modal visible={isUserBlocked} dismissable={false}>
-                        <BlockedAccount />
-                    </Modal>
-                </Portal>
-            )}
         </>
     );
 }

@@ -41,7 +41,7 @@ export const SET_USER_WALLET_BALANCE = 'SET_USER_WALLET_BALANCE';
 export const SET_CELO_KIT = 'SET_CELO_KIT';
 export const SET_COMMUNITY_CONTRACT = 'SET_COMMUNITY_CONTRACT';
 export const SET_COMMUNITY = 'SET_COMMUNITY';
-export const SET_USER_IS_BENEFICIARY = 'SET_USER_IS_BENEFICIARY';
+export const SET_USER_BENEFICIARY = 'SET_USER_BENEFICIARY';
 export const SET_USER_IS_BLOCKED = 'SET_USER_IS_BLOCKED';
 export const SET_USER_IS_SUSPECT = 'SET_USER_IS_SUSPECT';
 export const SET_USER_IS_COMMUNITY_MANAGER = 'SET_USER_IS_COMMUNITY_MANAGER';
@@ -61,10 +61,6 @@ export const SET_USER_AUTH_RESET = 'SET_USER_AUTH_RESET';
 
 export const SET_APP_SUSPECT_WRONG_DATETIME = 'app/suspectWrongDateTime';
 export const SET_APP_FROM_WELCOME_SCREEN = 'app/fromWelcomeScreen';
-export const SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS =
-    'app/hasBeneficiaryAcceptedRulesAlready';
-export const SET_APP_MANAGER_HAS_ACCEPTED_TERMS =
-    'app/hasManagerAcceptedRulesAlready';
 
 export enum appAction {
     SET_PUSH_NOTIFICATION_LISTENERS = 'app/setPushNotificationListeners',

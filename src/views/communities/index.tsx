@@ -2,7 +2,7 @@ import i18n from 'assets/i18n';
 import CommunitiesSvg from 'components/svg/CommunitiesSvg';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
-import { ITabBarIconProps } from 'helpers/old-types';
+import { ITabBarIconProps } from 'helpers/types/common';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import Auth from 'views/profile/auth';

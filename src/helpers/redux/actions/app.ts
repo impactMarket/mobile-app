@@ -4,8 +4,6 @@ import {
     appAction,
     SET_APP_FROM_WELCOME_SCREEN,
     SET_APP_SUSPECT_WRONG_DATETIME,
-    SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS,
-    SET_APP_MANAGER_HAS_ACCEPTED_TERMS,
     SET_CELO_KIT,
     SET_EXCHANGE_RATES,
 } from 'helpers/constants';
@@ -28,24 +26,6 @@ export function setAppSuspectWrongDateTime(
             suspect,
             timeDiff,
         },
-    };
-}
-
-export function setAppHasBeneficiaryAcceptedTerms(
-    hasBeneficiaryAcceptedRulesAlready: boolean
-) {
-    return {
-        type: SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS,
-        payload: hasBeneficiaryAcceptedRulesAlready,
-    };
-}
-
-export function setAppHasManagerAcceptedTerms(
-    hasManagerAcceptedRulesAlready: boolean
-) {
-    return {
-        type: SET_APP_MANAGER_HAS_ACCEPTED_TERMS,
-        payload: hasManagerAcceptedRulesAlready,
     };
 }
 

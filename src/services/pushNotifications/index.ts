@@ -6,7 +6,7 @@ import { Screens } from 'helpers/constants';
 import {
     setCommunityContract,
     setCommunityMetadata,
-    setUserIsBeneficiary,
+    setUserBeneficiary,
     setUserIsCommunityManager,
 } from 'helpers/redux/actions/user';
 import { navigationRef } from 'helpers/rootNavigation';
@@ -88,7 +88,15 @@ export const startNotificationsListeners = (
                                     dispatch(setUserIsCommunityManager(true));
                                 }
                                 if (action === 'beneficiary-added') {
-                                    dispatch(setUserIsBeneficiary(true));
+                                    Api.user
+                                        .welcome()
+                                        .then((v) =>
+                                            dispatch(
+                                                setUserBeneficiary(
+                                                    v.beneficiary
+                                                )
+                                            )
+                                        );
                                 }
                                 dispatch(setCommunityMetadata(community));
                                 dispatch(

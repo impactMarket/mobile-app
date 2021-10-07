@@ -1,7 +1,51 @@
-import { ApiErrorReturn } from 'helpers/types/endpoints';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {
+    STORAGE_USER_ADDRESS,
+    STORAGE_USER_PHONE_NUMBER,
+} from 'helpers/constants';
+import { ApiErrorReturn, IUserAuth } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 
-import axios from '../../config/api';
+import config from '../../../config';
+
+const AxiosInstance = axios.create({
+    baseURL: config.baseApiUrl,
+    timeout: 20000,
+});
+
+AxiosInstance.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    async (error) => {
+        const originalRequest = error.config;
+        if (!error.response) {
+            return Promise.reject(new Error('Network Error'));
+        } else if (error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            const address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
+            const phone = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
+            return AxiosInstance.post<IUserAuth>('/user/auth', {
+                address,
+                phone,
+            })
+                .then((response) => {
+                    const authTokenResponse = response.data.token;
+                    AxiosInstance.defaults.headers.common['Authorization'] =
+                        'Bearer ' + authTokenResponse;
+                    originalRequest.headers['Authorization'] =
+                        'Bearer ' + authTokenResponse;
+                    return AxiosInstance(originalRequest);
+                })
+                .catch((err) => err);
+        } else {
+            return error.response;
+        }
+    }
+);
+
+export default AxiosInstance;
 
 async function _requestOptions(options?: any) {
     return {
@@ -23,7 +67,7 @@ export interface IApiResult<T> {
 export const ApiRequests = {
     async get<T>(endpoint: string): Promise<IApiResult<T>> {
         try {
-            return (await axios.get(endpoint)).data;
+            return (await AxiosInstance.get(endpoint)).data;
         } catch (e) {
             return e.response.data;
         }
@@ -36,7 +80,7 @@ export const ApiRequests = {
     ): Promise<IApiResult<T>> {
         try {
             return (
-                await axios.post<IApiResult<T>>(
+                await AxiosInstance.post<IApiResult<T>>(
                     endpoint,
                     requestBody,
                     await _requestOptions(options)
@@ -54,7 +98,7 @@ export const ApiRequests = {
     ): Promise<IApiResult<T>> {
         try {
             return (
-                await axios.put(
+                await AxiosInstance.put(
                     endpoint,
                     requestBody,
                     await _requestOptions(options)
@@ -68,7 +112,7 @@ export const ApiRequests = {
     async delete<T>(endpoint: string, id?: any): Promise<IApiResult<T>> {
         try {
             return (
-                await axios.delete<IApiResult<T>>(
+                await AxiosInstance.delete<IApiResult<T>>(
                     endpoint,
                     await _requestOptions({ data: { id } })
                 )
@@ -80,7 +124,7 @@ export const ApiRequests = {
 
     async head(endpoint: string) {
         try {
-            return await axios.head(endpoint);
+            return await AxiosInstance.head(endpoint);
         } catch (e) {
             return {
                 status: 404,

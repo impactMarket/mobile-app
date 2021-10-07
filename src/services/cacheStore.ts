@@ -9,10 +9,6 @@ const CACHE_STORE_LAST_LOCKED_CLAIM_AT = '@CacheStore:lastLockedClaimAt';
 const CACHE_STORE_FAILED_CLAIM_TRIES = '@CacheStore:failedClaimTries';
 const CACHE_STORE_LAST_FAILED_CLAIM_TRY = '@CacheStore:lastFailedClaimTry';
 const CACHE_STORE_COMMUNITY_HAD_NO_FUNDS = '@CacheStore:communityHadNoFunds';
-const CACHE_STORE_BENEFICIARY_COMMUNITY_RULES_ACCEPTED =
-    '@CacheStore:communityRulesAcceptedByBeneficiary';
-const CACHE_STORE_MANAGER_COMMUNITY_RULES_ACCEPTED =
-    '@CacheStore:communityRulesAcceptedByManager';
 //
 const CACHE_STORE_LAST_VERSION = '@CacheStore:lastVersion';
 const CACHE_STORE_LAST_LAST_VERSION = '@CacheStore:lastLastVersion';
@@ -75,40 +71,6 @@ export default class CacheStore {
 
     static async removeCommunityHadNoFunds() {
         await AsyncStorage.removeItem(CACHE_STORE_COMMUNITY_HAD_NO_FUNDS);
-    }
-
-    static async cacheBeneficiaryAcceptCommunityRules() {
-        await AsyncStorage.setItem(
-            CACHE_STORE_BENEFICIARY_COMMUNITY_RULES_ACCEPTED,
-            'true'
-        );
-    }
-
-    static async cacheManagerAcceptCommunityRules() {
-        await AsyncStorage.setItem(
-            CACHE_STORE_MANAGER_COMMUNITY_RULES_ACCEPTED,
-            'true'
-        );
-    }
-
-    static async getBeneficiaryAcceptCommunityRules() {
-        const beneficiaryAcceptCommunityRules = await AsyncStorage.getItem(
-            CACHE_STORE_BENEFICIARY_COMMUNITY_RULES_ACCEPTED
-        );
-        if (beneficiaryAcceptCommunityRules === null) {
-            return null;
-        }
-        return beneficiaryAcceptCommunityRules === 'true';
-    }
-
-    static async getManagerAcceptCommunityRules() {
-        const managerAcceptCommunityRules = await AsyncStorage.getItem(
-            CACHE_STORE_MANAGER_COMMUNITY_RULES_ACCEPTED
-        );
-        if (managerAcceptCommunityRules === null) {
-            return null;
-        }
-        return managerAcceptCommunityRules === 'true';
     }
 
     /**
