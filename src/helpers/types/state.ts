@@ -66,8 +66,6 @@ export interface IAppState {
     suspectWrongDateTime: boolean;
     authModalOpen: boolean;
     faqModalOpen: boolean;
-    hasBeneficiaryAcceptedRulesAlready: boolean;
-    hasManagerAcceptedRulesAlready: boolean;
     timeDiff: number;
     fromWelcomeScreen: string;
     notificationsListeners?: {

@@ -79,7 +79,7 @@ export async function translate(
 export async function logout(dispatch: Dispatch<any>) {
     await AsyncStorage.clear();
     batch(() => {
-        dispatch(setUserBeneficiary(false));
+        dispatch(setUserBeneficiary(null));
         dispatch(setUserIsCommunityManager(false));
         dispatch(resetUserApp());
     });

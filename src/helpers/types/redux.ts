@@ -11,8 +11,6 @@ import {
     SET_USER_IS_SUSPECT,
     SET_USER_IS_COMMUNITY_MANAGER,
     SET_CELO_KIT,
-    SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS,
-    SET_APP_MANAGER_HAS_ACCEPTED_TERMS,
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
     RESET_USER_APP,
@@ -40,7 +38,11 @@ import {
     ICommunityStory,
     IUserAuth,
 } from './endpoints';
-import { CommunityAttributes, UserAttributes } from './models';
+import {
+    BeneficiaryAttributes,
+    CommunityAttributes,
+    UserAttributes,
+} from './models';
 import { IUserWallet } from './state';
 
 // action
@@ -66,7 +68,7 @@ interface UserSetBalanceAction {
 
 interface UserSetBeneficiaryAction {
     type: typeof SET_USER_BENEFICIARY;
-    payload: boolean;
+    payload: BeneficiaryAttributes;
 }
 
 interface UserSetIsBlockedAction {
@@ -81,16 +83,6 @@ interface UserSetIsSuspectAction {
 
 interface UserSetIsCommunityManagerAction {
     type: typeof SET_USER_IS_COMMUNITY_MANAGER;
-    payload: boolean;
-}
-
-interface UserSetBeneficiaryAcceptedRulesAction {
-    type: typeof SET_APP_BENEFICIARY_HAS_ACCEPTED_TERMS;
-    payload: boolean;
-}
-
-interface UserSetManagerAcceptedRulesAction {
-    type: typeof SET_APP_MANAGER_HAS_ACCEPTED_TERMS;
     payload: boolean;
 }
 
@@ -323,9 +315,7 @@ export type AppActionTypes =
     | SetAppFromWelcomeScreen
     | SetOpenFaqModalAction
     | SetOpenAuthModalAction
-    | SetAppPushNotificationListeners
-    | UserSetBeneficiaryAcceptedRulesAction
-    | UserSetManagerAcceptedRulesAction;
+    | SetAppPushNotificationListeners;
 
 export type ModalActionTypes =
     | OpenModalDonateAction

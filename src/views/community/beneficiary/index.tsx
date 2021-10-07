@@ -55,10 +55,6 @@ function BeneficiaryScreen() {
         (state: IRootState) => state.user.metadata.blocked
     );
 
-    const hasBeneficiaryAcceptedRulesAlready = useSelector(
-        (state: IRootState) => state.app.hasBeneficiaryAcceptedRulesAlready
-    );
-
     const suspectWrongDateTime = useSelector(
         (state: IRootState) => state.app.suspectWrongDateTime
     );
@@ -503,15 +499,10 @@ function BeneficiaryScreen() {
                         </Card.Content>
                     </Card>
                 </Modal>
+                <Modal visible={isUserBlocked} dismissable={false}>
+                    <BlockedAccount />
+                </Modal>
             </Portal>
-
-            {hasBeneficiaryAcceptedRulesAlready && (
-                <Portal>
-                    <Modal visible={isUserBlocked} dismissable={false}>
-                        <BlockedAccount />
-                    </Modal>
-                </Portal>
-            )}
         </>
     );
 }

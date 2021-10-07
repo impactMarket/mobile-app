@@ -50,7 +50,7 @@ export const userReducer = (
     const { metadata, wallet } = state;
     switch (action.type) {
         case RESET_USER_APP:
-            return INITIAL_STATE_USER;
+            return { ...INITIAL_STATE_USER };
         case SET_USER_CELO_INFO:
             return { ...state, wallet: action.payload };
         case SET_USER_INFO:

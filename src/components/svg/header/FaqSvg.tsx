@@ -11,7 +11,6 @@ function FAQSvg(props: SvgProps) {
         <Pressable
             hitSlop={5}
             onPress={() => {
-                console.log('open');
                 dispatch(setOpenFaqModal(true));
             }}
         >
