@@ -1961,6 +1961,10 @@
   resolved "https://registry.yarnpkg.com/@ide/backoff/-/backoff-1.0.0.tgz#466842c25bd4a4833e0642fab41ccff064010176"
   integrity sha512-F0YfUDjvT+Mtt/R4xdl2X0EYCHMMiJqNLdxHD++jDT5ydEFIyqbCHh51Qx2E211dgZprPKhV7sHmnXKpLuvc5g==
 
+"@impact-market/translations@git://github.com/impactMarket/translations.git#master":
+  version "1.0.0"
+  resolved "git://github.com/impactMarket/translations.git#1730180b9d9d763dfd1ddcc372624d6df50064b1"
+
 "@internationalized/message@^3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@internationalized/message/-/message-3.0.2.tgz#c3db2b6b7f75af815819f77da11f8424381416e3"

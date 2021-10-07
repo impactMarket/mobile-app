@@ -595,7 +595,7 @@ Array [
                                 ]
                               }
                             >
-                              After submitting, we’ll will contact you in a few weeks.
+                              After submitting, we will contact you within a few weeks.
                             </Text>
                             <View
                               accessible={true}
@@ -667,7 +667,7 @@ Array [
                                 }
                               }
                             >
-                              Tell more about your community and why access to a basic income could be important for its members.
+                              Tell us more about your community and why access to a basic income could be important for its members.
                             </Text>
                             <View
                               style={
@@ -900,7 +900,7 @@ Array [
                                 }
                               }
                             >
-                              P.S: Communities with all the details completed, including the managers photos, are more likely to get funded.
+                              P.S: Communities with all the details completed, including the managers’ photos, are more likely to get funded.
                             </Text>
                             <View
                               style={
@@ -3154,7 +3154,7 @@ Array [
                                 ]
                               }
                             >
-                              After submitting, we’ll will contact you in a few weeks.
+                              After submitting, we will contact you within a few weeks.
                             </Text>
                             <View
                               accessible={true}
@@ -3247,7 +3247,7 @@ Array [
                                 }
                               }
                             >
-                              Tell more about your community and why access to a basic income could be important for its members.
+                              Tell us more about your community and why access to a basic income could be important for its members.
                             </Text>
                             <View
                               style={
@@ -3480,7 +3480,7 @@ Array [
                                 }
                               }
                             >
-                              P.S: Communities with all the details completed, including the managers photos, are more likely to get funded.
+                              P.S: Communities with all the details completed, including the managers’ photos, are more likely to get funded.
                             </Text>
                             <View
                               style={
@@ -5734,7 +5734,7 @@ Array [
                                 ]
                               }
                             >
-                              After submitting, we’ll will contact you in a few weeks.
+                              After submitting, we will contact you within a few weeks.
                             </Text>
                             <View
                               accessible={true}
@@ -5827,7 +5827,7 @@ Array [
                                 }
                               }
                             >
-                              Tell more about your community and why access to a basic income could be important for its members.
+                              Tell us more about your community and why access to a basic income could be important for its members.
                             </Text>
                             <View
                               style={
@@ -6060,7 +6060,7 @@ Array [
                                 }
                               }
                             >
-                              P.S: Communities with all the details completed, including the managers photos, are more likely to get funded.
+                              P.S: Communities with all the details completed, including the managers’ photos, are more likely to get funded.
                             </Text>
                             <View
                               style={
