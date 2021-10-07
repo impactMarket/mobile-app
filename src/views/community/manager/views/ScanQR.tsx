@@ -57,9 +57,8 @@ class ScanQR extends React.Component<Props, IModalScanQRState> {
                 if (isCeloLink !== -1) {
                     scannedAddress = data.match(/address=([0-9a-zA-Z]+)/)[1];
                 } else {
-                    scannedAddress = this.props.app.kit.web3.utils.toChecksumAddress(
-                        data
-                    );
+                    scannedAddress =
+                        this.props.app.kit.web3.utils.toChecksumAddress(data);
                 }
                 this.props.callback(scannedAddress);
                 this.props.onDismiss();

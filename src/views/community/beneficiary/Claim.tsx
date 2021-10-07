@@ -56,12 +56,8 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
     }
 
     componentDidMount = async () => {
-        const {
-            communityMetadata,
-            cooldownTime,
-            communityContract,
-            kit,
-        } = this.props;
+        const { communityMetadata, cooldownTime, communityContract, kit } =
+            this.props;
         const { state, contract } = communityMetadata;
         if (
             state !== undefined &&
@@ -190,10 +186,10 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     // if enabled but not allowed, request permission
                     // if not enabled but previously allowed, request permission
                     if (enabled) {
-                        const permission = await Location.getForegroundPermissionsAsync();
-                        const {
-                            status,
-                        } = await Location.requestForegroundPermissionsAsync();
+                        const permission =
+                            await Location.getForegroundPermissionsAsync();
+                        const { status } =
+                            await Location.requestForegroundPermissionsAsync();
                         if (
                             permission.status !==
                             Location.PermissionStatus.GRANTED
@@ -203,14 +199,14 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                             }
                         }
                     } else {
-                        const permission = await Location.getForegroundPermissionsAsync();
+                        const permission =
+                            await Location.getForegroundPermissionsAsync();
                         if (
                             permission.status ===
                             Location.PermissionStatus.GRANTED
                         ) {
-                            const {
-                                status,
-                            } = await Location.requestForegroundPermissionsAsync();
+                            const { status } =
+                                await Location.requestForegroundPermissionsAsync();
                             if (status !== Location.PermissionStatus.GRANTED) {
                                 return;
                             }
@@ -304,13 +300,16 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                                         // if it's above 97, check from contract
                                         // because the values aren't 100% correct,
                                         // as we send 5 cents when a beneficiary is added
-                                        const stableToken = await kit.contracts.getStableToken();
-                                        const cUSDBalanceBig = await stableToken.balanceOf(
-                                            communityContract._address
-                                        );
-                                        notEnoughToClaimOnContract = new BigNumber(
-                                            cUSDBalanceBig.toString()
-                                        ).lt(contract.claimAmount);
+                                        const stableToken =
+                                            await kit.contracts.getStableToken();
+                                        const cUSDBalanceBig =
+                                            await stableToken.balanceOf(
+                                                communityContract._address
+                                            );
+                                        notEnoughToClaimOnContract =
+                                            new BigNumber(
+                                                cUSDBalanceBig.toString()
+                                            ).lt(contract.claimAmount);
                                     } else if (
                                         new BigNumber(state.raised)
                                             .minus(state.claimed)
@@ -320,13 +319,16 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                                     } else {
                                         // very rare cases when the two prior conditions don't have a match
                                         // this is the same code has the first condition
-                                        const stableToken = await kit.contracts.getStableToken();
-                                        const cUSDBalanceBig = await stableToken.balanceOf(
-                                            communityContract._address
-                                        );
-                                        notEnoughToClaimOnContract = new BigNumber(
-                                            cUSDBalanceBig.toString()
-                                        ).lt(contract.claimAmount);
+                                        const stableToken =
+                                            await kit.contracts.getStableToken();
+                                        const cUSDBalanceBig =
+                                            await stableToken.balanceOf(
+                                                communityContract._address
+                                            );
+                                        notEnoughToClaimOnContract =
+                                            new BigNumber(
+                                                cUSDBalanceBig.toString()
+                                            ).lt(contract.claimAmount);
                                     }
                                     if (notEnoughToClaimOnContract) {
                                         CacheStore.cacheCommunityHadNoFunds();

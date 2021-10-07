@@ -66,13 +66,10 @@ function CommunityManagerScreen() {
     );
 
     const [refreshing, setRefreshing] = useState(false);
-    const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] = useState(
-        true
-    );
-    const [
-        requiredUbiToChange,
-        setRequiredUbiToChange,
-    ] = useState<UbiRequestChangeParams | null>();
+    const [hasFundsToNewBeneficiary, setHasFundsToNewBeneficiary] =
+        useState(true);
+    const [requiredUbiToChange, setRequiredUbiToChange] =
+        useState<UbiRequestChangeParams | null>();
 
     const [editInProgress, setEditInProgress] = useState(false);
 

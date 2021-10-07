@@ -169,15 +169,8 @@ function CreateCommunityScreen() {
     }, [loadingForm, state]);
 
     const submitCommunity = async () => {
-        const {
-            name,
-            description,
-            currency,
-            city,
-            country,
-            gps,
-            email,
-        } = state;
+        const { name, description, currency, city, country, gps, email } =
+            state;
         const communityDetails: CommunityCreationAttributes = {
             requestByAddress: userAddress,
             name,

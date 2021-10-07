@@ -153,7 +153,8 @@ function NewStoryScreen() {
     };
 
     const pickImage = async () => {
-        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const permissionResult =
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if (permissionResult.granted === false) {
             alert(i18n.t('permissions.cameraMessage'));

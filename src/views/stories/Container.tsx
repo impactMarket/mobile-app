@@ -242,10 +242,11 @@ function Container({
                                                                                     text: i18n.t(
                                                                                         'close'
                                                                                     ),
-                                                                                    onPress: () =>
-                                                                                        navigation.navigate(
-                                                                                            Screens.Communities
-                                                                                        ),
+                                                                                    onPress:
+                                                                                        () =>
+                                                                                            navigation.navigate(
+                                                                                                Screens.Communities
+                                                                                            ),
                                                                                 },
                                                                             ]
                                                                         )
@@ -315,10 +316,11 @@ function Container({
                                                                                 text: i18n.t(
                                                                                     'close'
                                                                                 ),
-                                                                                onPress: () =>
-                                                                                    navigation.navigate(
-                                                                                        Screens.Communities
-                                                                                    ),
+                                                                                onPress:
+                                                                                    () =>
+                                                                                        navigation.navigate(
+                                                                                            Screens.Communities
+                                                                                        ),
                                                                             },
                                                                         ]
                                                                     )

@@ -274,10 +274,8 @@ function CommunityCity() {
                                         `https://maps.googleapis.com/maps/api/place/details/json?place_id=${data.place_id}&key=${config.googleApiKey}`
                                     )
                                     .then((response) => {
-                                        const {
-                                            address_components,
-                                            geometry,
-                                        } = response.data.result;
+                                        const { address_components, geometry } =
+                                            response.data.result;
                                         const { lat, lng } = geometry.location;
                                         dispatch({
                                             type: formAction.SET_GPS,

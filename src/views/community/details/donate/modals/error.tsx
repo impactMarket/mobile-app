@@ -12,12 +12,8 @@ import { connect, ConnectedProps } from 'react-redux';
 interface IErrorModalProps {}
 class ErrorModal extends Component<IErrorModalProps & PropsFromRedux, object> {
     render() {
-        const {
-            visible,
-            dismissModal,
-            userCurrency,
-            goBackToDonateModal,
-        } = this.props;
+        const { visible, dismissModal, userCurrency, goBackToDonateModal } =
+            this.props;
 
         return (
             <Modal
