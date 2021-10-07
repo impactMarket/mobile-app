@@ -1516,6 +1516,16 @@
     "@ethersproject/properties" "^5.4.0"
     "@ethersproject/strings" "^5.4.0"
 
+"@expo-google-fonts/inter@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/inter/-/inter-0.2.0.tgz#2934c1e510d58b652e3a5150ca7f76f55b89e84a"
+  integrity sha512-gIjkti/NxHABPc4xB/AlgSpbLJod/8Iill7DfW+rh2CHv3jjz7I7SLQY8u/3NoF8zZk0GNU8gTZkVwGQibuWcQ==
+
+"@expo-google-fonts/manrope@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/manrope/-/manrope-0.2.0.tgz#6654f3edbd495021d91bc5cff396f43ed0d9e43a"
+  integrity sha512-a7iTZNO/5QC0MsEECWidLkLavdimeKlIgErGpkIdmmp66fpM2nxkgAur2ahxGkfO8VrHfOQTm1UcsoV8n47U9Q==
+
 "@expo/apple-utils@0.0.0-alpha.25":
   version "0.0.0-alpha.25"
   resolved "https://registry.yarnpkg.com/@expo/apple-utils/-/apple-utils-0.0.0-alpha.25.tgz#fea4f5a409cc1bf79a0d2acec3eca52dbd8443c1"
@@ -1964,6 +1974,10 @@
 "@impact-market/translations@git://github.com/impactMarket/translations.git#master":
   version "1.0.0"
   resolved "git://github.com/impactMarket/translations.git#1730180b9d9d763dfd1ddcc372624d6df50064b1"
+"@impact-market/ui-kit@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@impact-market/ui-kit/-/ui-kit-0.0.1.tgz#5bb5af88a6cec90e350637a6e4339fb8a72d9b5f"
+  integrity sha512-bq3GpjhatnwYlfcevguAtcihVWYiPyCeIVZAUU6mMQaS7W1ywmYql6X1jBc3Pgy5I5MHebbrnoV1K0YrLe5J1A==
 
 "@internationalized/message@^3.0.2":
   version "3.0.2"
