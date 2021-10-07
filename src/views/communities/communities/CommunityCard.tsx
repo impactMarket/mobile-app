@@ -1,3 +1,4 @@
+import { NUX, colors } from '@impact-market/ui-kit';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
@@ -92,7 +93,6 @@ function CommunityCard(props: {
                         shimmerContainerProps={{
                             width: '100%',
                             borderRadius: 8,
-                            // marginVertical: 22,
                         }}
                         shimmerStyle={{ borderRadius: 8 }}
                         visible={loadedImage}
@@ -102,8 +102,11 @@ function CommunityCard(props: {
                             source={coverSource}
                             onLoadEnd={() => setLoadedImage(true)}
                         />
+                        <View style={styles.nuxContainer}>
+                            <NUX star={colors.brand.white}>Featured</NUX>
+                        </View>
+                        <View style={styles.darkerBackground} />
                     </ShimmerPlaceholder>
-                    <View style={styles.darkerBackground} />
                 </View>
                 <View
                     style={{
@@ -174,6 +177,12 @@ function CommunityCard(props: {
 }
 
 const styles = StyleSheet.create({
+    nuxContainer: {
+        position: 'absolute',
+        marginTop: 21,
+        marginLeft: 20,
+        zIndex: 1,
+    },
     cardImage: {
         borderRadius: 8,
         width: 254,

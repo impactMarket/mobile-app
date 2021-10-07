@@ -1,15 +1,11 @@
 import { communitiesAction } from 'helpers/constants';
+import { CommunityListRequestParams } from 'helpers/types/endpoints';
 import { CommunityAttributes } from 'helpers/types/models';
 import { CommunitiesActionTypes } from 'helpers/types/redux';
 
-export function fetchCommunitiesListRequest(query: {
-    offset: number;
-    limit: number;
-    orderBy?: string;
-    filter?: string;
-    lat?: number;
-    lng?: number;
-}): CommunitiesActionTypes {
+export function fetchCommunitiesListRequest(
+    query: CommunityListRequestParams
+): CommunitiesActionTypes {
     return {
         type: communitiesAction.INIT_REQUEST,
         payload: query,

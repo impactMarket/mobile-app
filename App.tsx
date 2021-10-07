@@ -1,5 +1,6 @@
 import './global';
 import { newKitFromWeb3 } from '@celo/contractkit';
+import { fontMap } from '@impact-market/ui-kit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import {
@@ -526,6 +527,7 @@ class App extends React.Component<any, IAppState> {
 
     _cacheResourcesAsync = async () => {
         try {
+            await Font.loadAsync(fontMap);
             await Font.loadAsync({
                 // Load a font `Montserrat` from a static resource
                 // Montserrat: require('assets/fonts/Montserrat.ttf'),

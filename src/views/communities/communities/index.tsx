@@ -34,6 +34,7 @@ export default function Communities() {
             fetchCommunitiesListRequest({
                 offset: 0,
                 limit: 5,
+                filter: 'featured',
             })
         );
     }, []);
