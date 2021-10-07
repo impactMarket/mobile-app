@@ -6,9 +6,10 @@ import { setOpenAuthModal } from 'helpers/redux/actions/app';
 import { fetchCommunitiesListRequest } from 'helpers/redux/actions/communities';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, StyleSheet, Text, View, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 import CommunityCard from './CommunityCard';
@@ -23,9 +24,10 @@ export default function Communities() {
         community,
         metadata: { currency },
     } = useSelector((state: IRootState) => state.user);
-    const { communities, count } = useSelector(
+    const { communities } = useSelector(
         (state: IRootState) => state.communities
     );
+    const [count, setCount] = useState(0);
 
     const { exchangeRates } = useSelector((state: IRootState) => state.app);
 
@@ -37,6 +39,10 @@ export default function Communities() {
                 filter: 'featured',
             })
         );
+        const fetchTotalCommunities = () => {
+            Api.global.numbers().then((r) => setCount(r.data.communities));
+        };
+        fetchTotalCommunities();
     }, []);
 
     const flatListData =
