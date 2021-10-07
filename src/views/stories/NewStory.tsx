@@ -8,6 +8,7 @@ import CloseStorySvg from 'components/svg/CloseStorySvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
+import { docsURL } from 'helpers/index';
 import { ICommunityStory } from 'helpers/types/endpoints';
 import { AppMediaContent } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
@@ -39,6 +40,9 @@ function NewStoryScreen() {
     const modalizeStoryRef = useRef<Modalize>(null);
     const userCommunity = useSelector(
         (state: IRootState) => state.user.community.metadata
+    );
+    const { language } = useSelector(
+        (state: IRootState) => state.user.metadata
     );
     const userCommunityStatus = useSelector(
         (state: IRootState) => state.user.community.metadata?.status
@@ -139,8 +143,7 @@ function NewStoryScreen() {
                 <WebView
                     originWhitelist={['*']}
                     source={{
-                        uri:
-                            'https://docs.impactmarket.com/general/stories-posts-rules',
+                        uri: docsURL('/general/stories-posts-rules', language),
                     }}
                     javaScriptEnabled
                     domStorageEnabled

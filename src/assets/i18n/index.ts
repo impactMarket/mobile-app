@@ -19,3 +19,4 @@ export const loadi18n = i18next.use(initReactI18next).init({
 });
 export default i18next;
 export const supportedLanguages = ['en', 'pt'];
+export type supportedLanguagesType = 'en' | 'pt';

@@ -52,6 +52,31 @@ const languages: {
     };
 } = languagesJSON;
 
+/**
+ * Generate URL based on user language.
+ * @param path URL path. Should start with /
+ * @param language User language
+ * @returns Full URL
+ */
+export function docsURL(
+    path: string,
+    language?: string /** supportedLanguagesType */
+) {
+    let version = '';
+    switch (language) {
+        case 'pt':
+            version = '/v/brazil';
+            break;
+        case 'es':
+            version = '/v/espanol';
+            break;
+        case 'fr':
+            version = '/v/francais';
+            break;
+    }
+    return `https://docs.impactmarket.com${version}${path}`;
+}
+
 export async function translate(
     text: string,
     target: string

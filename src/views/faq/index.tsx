@@ -1,4 +1,5 @@
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
+import { docsURL } from 'helpers/index';
 import { setOpenFaqModal } from 'helpers/redux/actions/app';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useRef } from 'react';
@@ -11,6 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 function FAQ() {
     const dispatch = useDispatch();
     const { faqModalOpen } = useSelector((state: IRootState) => state.app);
+    const { language } = useSelector(
+        (state: IRootState) => state.user.metadata
+    );
     const modalizeFaqRef = useRef<Modalize>(null);
 
     useEffect(() => {
@@ -40,8 +44,10 @@ function FAQ() {
                 <WebView
                     originWhitelist={['*']}
                     source={{
-                        uri:
-                            'https://docs.impactmarket.com/general/difficulties-getting-your-ubi',
+                        uri: docsURL(
+                            '/general/difficulties-getting-your-ubi',
+                            language
+                        ),
                     }}
                     style={{
                         height: Dimensions.get('screen').height * 0.85,
