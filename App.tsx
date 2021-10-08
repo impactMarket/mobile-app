@@ -155,7 +155,8 @@ Notifications.setNotificationHandler({
 });
 
 // Construct a new instrumentation instance. This is needed to communicate between the integration and React
-const routingInstrumentation = new Sentry.Native.ReactNavigationV5Instrumentation();
+const routingInstrumentation =
+    new Sentry.Native.ReactNavigationV5Instrumentation();
 
 Sentry.init({
     // release: 'impactmarket@' + process.env.REACT_APP_RELEASE_VERSION, // https://docs.sentry.io/product/sentry-basics/guides/integrate-frontend/upload-source-maps/
@@ -390,7 +391,8 @@ class App extends React.Component<any, IAppState> {
                                             }}
                                             onPress={() =>
                                                 this.setState({
-                                                    infoUserNewAppVersion: false,
+                                                    infoUserNewAppVersion:
+                                                        false,
                                                 })
                                             }
                                         >
@@ -474,8 +476,8 @@ class App extends React.Component<any, IAppState> {
                         theme={navigationTheme}
                         linking={this.linking}
                         onReady={() => {
-                            const currentRouteName = navigationRef.current?.getCurrentRoute()
-                                ?.name;
+                            const currentRouteName =
+                                navigationRef.current?.getCurrentRoute()?.name;
                             if (currentRouteName !== undefined) {
                                 Analytics.setCurrentScreen(currentRouteName);
                             }
@@ -488,8 +490,8 @@ class App extends React.Component<any, IAppState> {
                         }}
                         onStateChange={() => {
                             const previousRouteName = this.currentRouteName;
-                            const currentRouteName = navigationRef.current?.getCurrentRoute()
-                                ?.name;
+                            const currentRouteName =
+                                navigationRef.current?.getCurrentRoute()?.name;
 
                             if (
                                 previousRouteName !== currentRouteName &&
@@ -730,7 +732,8 @@ class App extends React.Component<any, IAppState> {
             );
             store.dispatch(setAppExchangeRatesAction(userRates));
             if (address !== null && phoneNumber !== null) {
-                const pushNotificationToken = await registerForPushNotifications();
+                const pushNotificationToken =
+                    await registerForPushNotifications();
                 if (pushNotificationToken) {
                     store.dispatch(
                         setPushNotificationsToken(pushNotificationToken)

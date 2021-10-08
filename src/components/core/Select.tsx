@@ -20,15 +20,8 @@ interface ISelectProps {
 }
 export default class Select extends Component<ISelectProps, object> {
     render() {
-        const {
-            label,
-            value,
-            help,
-            onPress,
-            onHelpPress,
-            error,
-            testID,
-        } = this.props;
+        const { label, value, help, onPress, onHelpPress, error, testID } =
+            this.props;
         return (
             <>
                 <View

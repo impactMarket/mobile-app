@@ -12,13 +12,15 @@ export function formatInputAmountToTransfer(inputAmount: string) {
 }
 
 export function getCurrencySymbol(currency: string) {
-    return (currenciesJSON as {
-        [key: string]: {
-            symbol: string;
-            name: string;
-            symbol_native: string;
-        };
-    })[currency.toUpperCase()].symbol;
+    return (
+        currenciesJSON as {
+            [key: string]: {
+                symbol: string;
+                name: string;
+                symbol_native: string;
+            };
+        }
+    )[currency.toUpperCase()].symbol;
 }
 
 export function humanifyCurrencyAmount(

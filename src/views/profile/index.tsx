@@ -102,14 +102,10 @@ function ProfileScreen() {
     const [gender, setGender] = useState<string | null>(null);
     const [age, setAge] = useState('');
     const [children, setChildren] = useState('');
-    const [
-        toggleImageDimensionsModal,
-        setToggleImageDimensionsModal,
-    ] = useState<boolean>(false);
-    const [
-        toggleDeleteAccountModal,
-        setToggleDeleteAccountModal,
-    ] = useState<boolean>(false);
+    const [toggleImageDimensionsModal, setToggleImageDimensionsModal] =
+        useState<boolean>(false);
+    const [toggleDeleteAccountModal, setToggleDeleteAccountModal] =
+        useState<boolean>(false);
 
     const [selectedCurrencyId, setSelectedCurrencyId] = useState<string | null>(
         null

@@ -71,7 +71,8 @@ function BeneficiaryScreen() {
     useEffect(() => {
         const loadCommunity = async () => {
             if (community !== undefined && community.contract !== undefined) {
-                const beneficiaryClaimCache = await CacheStore.getBeneficiaryClaim();
+                const beneficiaryClaimCache =
+                    await CacheStore.getBeneficiaryClaim();
                 if (
                     beneficiaryClaimCache !== null &&
                     beneficiaryClaimCache.communityId === community.publicId
@@ -327,7 +328,8 @@ function BeneficiaryScreen() {
                                     <Trans
                                         i18nKey="beneficiary.nextTimeWillWaitClaim"
                                         values={{
-                                            nextWait: formatedTimeNextCooldown(),
+                                            nextWait:
+                                                formatedTimeNextCooldown(),
                                         }}
                                         components={{
                                             a: (
@@ -372,9 +374,8 @@ function BeneficiaryScreen() {
                     label: i18n.t('generic.turnOn'),
                     onPress: async () => {
                         try {
-                            const {
-                                status,
-                            } = await Location.requestForegroundPermissionsAsync();
+                            const { status } =
+                                await Location.requestForegroundPermissionsAsync();
                             if (status !== Location.PermissionStatus.GRANTED) {
                                 Alert.alert(
                                     i18n.t('generic.failure'),
@@ -460,9 +461,10 @@ function BeneficiaryScreen() {
                                             dateTimeDiffModal.getTime() -
                                                 timeDiff
                                         ).format('H[h]mm[m]ss[s]'),
-                                        userTime: moment(
-                                            dateTimeDiffModal
-                                        ).format('H[h]mm[m]ss[s]'),
+                                        userTime:
+                                            moment(dateTimeDiffModal).format(
+                                                'H[h]mm[m]ss[s]'
+                                            ),
                                     })}
                                 </Paragraph>
                             </View>

@@ -743,7 +743,7 @@ exports[`extended details community [snapshot] renders correctly 1`] = `
                                 }
                               }
                             >
-                              Manager since Ago 26, 2021
+                              Manager since ago 26, 2021
                             </Text>
                           </View>
                         </View>
@@ -887,7 +887,7 @@ exports[`extended details community [snapshot] renders correctly 1`] = `
                                 }
                               }
                             >
-                              Manager since Ago 26, 2021
+                              Manager since ago 26, 2021
                             </Text>
                           </View>
                         </View>
@@ -1031,7 +1031,7 @@ exports[`extended details community [snapshot] renders correctly 1`] = `
                                 }
                               }
                             >
-                              Manager since Ago 26, 2021
+                              Manager since ago 26, 2021
                             </Text>
                           </View>
                         </View>

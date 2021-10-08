@@ -40,17 +40,14 @@ function Carousel(props: {
         (state: IRootState) => state.stories.myStories
     );
 
-    const route = useRoute<
-        RouteProp<Record<string, ICallerRouteParams>, string>
-    >();
+    const route =
+        useRoute<RouteProp<Record<string, ICallerRouteParams>, string>>();
 
     const [index, setIndex] = useState(0);
     const [stories, setStories] = useState<ICommunityStory[]>([]);
     const [lovedStories, setLovedStories] = useState<boolean[]>([]);
-    const [
-        communityStories,
-        setCommunityStories,
-    ] = useState<ICommunityStories>();
+    const [communityStories, setCommunityStories] =
+        useState<ICommunityStories>();
     const [openPopup, setOpenPopup] = useState(false);
 
     const togglePopup = () => setOpenPopup(!openPopup);

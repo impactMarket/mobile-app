@@ -74,8 +74,7 @@ const community: CommunityAttributes = {
             {
                 id: 1,
                 mediaContentId: 2,
-                url:
-                    'https://dzrx8kf1cwjv9.cloudfront.net/cover/330x330/1620119095297.jpeg',
+                url: 'https://dzrx8kf1cwjv9.cloudfront.net/cover/330x330/1620119095297.jpeg',
                 width: 330,
                 height: 330,
                 pixelRatio: 1,

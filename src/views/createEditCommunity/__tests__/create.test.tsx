@@ -91,18 +91,12 @@ describe('create community', () => {
     };
 
     const useSelectorMock = reactRedux.useSelector as jest.Mock<any, any>;
-    const launchImageLibraryAsyncMock = ImagePicker.launchImageLibraryAsync as jest.Mock<
-        any,
-        any
-    >;
-    const requestForegroundPermissionsAsyncMock = Location.requestForegroundPermissionsAsync as jest.Mock<
-        any,
-        any
-    >;
-    const getCurrentPositionAsyncMock = Location.getCurrentPositionAsync as jest.Mock<
-        any,
-        any
-    >;
+    const launchImageLibraryAsyncMock =
+        ImagePicker.launchImageLibraryAsync as jest.Mock<any, any>;
+    const requestForegroundPermissionsAsyncMock =
+        Location.requestForegroundPermissionsAsync as jest.Mock<any, any>;
+    const getCurrentPositionAsyncMock =
+        Location.getCurrentPositionAsync as jest.Mock<any, any>;
     const communityPreSignedUrlMock = jest.spyOn(Api.community, 'preSignedUrl');
     const communityUploadCoverMock = jest.spyOn(Api.community, 'uploadImage');
     const communityCreateMock = jest.spyOn(Api.community, 'create');
