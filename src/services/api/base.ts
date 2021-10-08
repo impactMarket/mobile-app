@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import {
     STORAGE_USER_ADDRESS,
     STORAGE_USER_PHONE_NUMBER,
@@ -26,7 +26,10 @@ AxiosInstance.interceptors.response.use(
             originalRequest._retry = true;
             const address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             const phone = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
-            return AxiosInstance.post<IUserAuth>('/user/auth', {
+            return AxiosInstance.post<
+                { address: string; phone: string },
+                AxiosResponse<IUserAuth>
+            >('/user/auth', {
                 address,
                 phone,
             })

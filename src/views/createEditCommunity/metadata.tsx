@@ -1,6 +1,6 @@
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import Modal from 'components/Modal';
 import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
 import Button from 'components/core/Button';
@@ -270,7 +270,23 @@ function CommunityCity() {
                                     payload: true,
                                 });
                                 axios
-                                    .get(
+                                    .get<
+                                        never,
+                                        AxiosResponse<{
+                                            result: {
+                                                address_components: {
+                                                    types: string[];
+                                                    short_name: string;
+                                                }[];
+                                                geometry: {
+                                                    location: {
+                                                        lat: number;
+                                                        lng: number;
+                                                    };
+                                                };
+                                            };
+                                        }>
+                                    >(
                                         `https://maps.googleapis.com/maps/api/place/details/json?place_id=${data.place_id}&key=${config.googleApiKey}`
                                     )
                                     .then((response) => {
