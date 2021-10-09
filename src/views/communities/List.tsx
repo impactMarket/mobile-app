@@ -1,3 +1,4 @@
+import { Image } from '@impact-market/ui-kit';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
@@ -20,7 +21,6 @@ import {
     View,
     Text,
     FlatList,
-    Image,
     Pressable,
     StyleSheet,
     Dimensions,

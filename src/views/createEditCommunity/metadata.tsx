@@ -1,3 +1,4 @@
+import { Image } from '@impact-market/ui-kit';
 import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import axios, { AxiosResponse } from 'axios';
@@ -14,7 +15,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import { IRootState } from 'helpers/types/state';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, Text, Pressable, Image, Modal as RNModal } from 'react-native';
+import { View, Text, Pressable, Modal as RNModal } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Headline, Searchbar } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';

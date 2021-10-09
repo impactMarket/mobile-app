@@ -1,4 +1,4 @@
-import { NUX, colors } from '@impact-market/ui-kit';
+import { Label, Image, colors } from '@impact-market/ui-kit';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
@@ -12,7 +12,7 @@ import { amountToCurrency } from 'helpers/currency';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import React, { useState } from 'react';
-import { Pressable, Text, View, StyleSheet, Image } from 'react-native';
+import { Pressable, Text, View, StyleSheet } from 'react-native';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 
 const countries: {
@@ -103,7 +103,7 @@ function CommunityCard(props: {
                             onLoadEnd={() => setLoadedImage(true)}
                         />
                         <View style={styles.nuxContainer}>
-                            <NUX star={colors.brand.white}>Featured</NUX>
+                            <Label star={colors.brand.white}>Featured</Label>
                         </View>
                         <View style={styles.darkerBackground} />
                     </ShimmerPlaceholder>
