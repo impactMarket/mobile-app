@@ -161,11 +161,9 @@ const managerScreens = (Navigator: typeof Stack) => (
 const Stack = createStackNavigator();
 
 function StackNavigator() {
-    const {
-        beneficiary,
-        manager,
-        metadata: { status, visibility },
-    } = useSelector((state: IRootState) => state.user.community);
+    const { beneficiary, manager, metadata } = useSelector(
+        (state: IRootState) => state.user.community
+    );
     const isAuthenticated = useSelector(
         (state: IRootState) => state.user.wallet.address.length > 0
     );
@@ -174,11 +172,14 @@ function StackNavigator() {
     );
 
     const initialRouteName =
-        (beneficiary !== null && !beneficiary.readRules) ||
+        (beneficiary !== null &&
+            beneficiary !== undefined &&
+            !beneficiary.readRules) ||
         (manager !== null &&
+            manager !== undefined &&
             !manager.readRules &&
-            status === 'valid' &&
-            visibility === 'public')
+            metadata.status === 'valid' &&
+            metadata.visibility === 'public')
             ? Screens.WelcomeRulesScreen
             : fromWelcomeScreen;
 

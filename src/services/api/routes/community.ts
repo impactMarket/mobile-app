@@ -3,6 +3,7 @@ import {
     IManagerDetailsBeneficiary,
     CommunityEditionAttributes,
     CommunityListRequestParams,
+    CommunityListResult,
 } from 'helpers/types/endpoints';
 import {
     AppMediaContent,
@@ -79,8 +80,8 @@ class ApiRouteCommunity {
 
     async list(
         query: CommunityListRequestParams
-    ): Promise<IApiResult<CommunityAttributes[]>> {
-        return await api.get<CommunityAttributes[]>(
+    ): Promise<IApiResult<CommunityListResult[]>> {
+        return await api.get<CommunityListResult[]>(
             '/community/list?extended=true&offset=' +
                 query.offset +
                 '&limit=' +

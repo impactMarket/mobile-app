@@ -298,10 +298,11 @@ function Auth() {
     const DuplicatedAccountsView = () => (
         <View style={{ width: '100%', paddingHorizontal: 22 }}>
             <Text style={styles.descriptionTop}>
-                {i18n.t(
-                    'auth.duplicatedMsg1',
-                    dappKitResponse ? dappKitResponse.phoneNumber : ''
-                )}
+                {i18n.t('auth.duplicatedMsg1', {
+                    phoneNumber: dappKitResponse
+                        ? dappKitResponse.phoneNumber
+                        : '',
+                })}
             </Text>
             <Text style={styles.description}>
                 {i18n.t('auth.duplicatedMsg2')}

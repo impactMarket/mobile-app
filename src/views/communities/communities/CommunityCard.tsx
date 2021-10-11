@@ -64,7 +64,7 @@ function CommunityCard(props: {
     );
     const claimFrequency =
         community.contract.baseInterval === 86400
-            ? i18n.t('generic.day')
+            ? i18n.t('generic.days', { count: 1 })
             : i18n.t('generic.week');
 
     const coverSource = {

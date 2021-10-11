@@ -1,4 +1,5 @@
 import './global';
+import 'intl-pluralrules';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import { fontMap } from '@impact-market/ui-kit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
