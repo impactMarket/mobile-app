@@ -3,7 +3,7 @@ import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import WarningRedCircle from 'components/svg/WarningRedCircle';
-import { setUserBeneficiary } from 'helpers/redux/actions/user';
+import { setUserBeneficiary, setUserManager } from 'helpers/redux/actions/user';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -16,15 +16,23 @@ function CommunityRules({ caller }: { caller: 'beneficiary' | 'manager' }) {
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-    const { beneficiary } = useSelector(
+    const { beneficiary, manager } = useSelector(
         (state: IRootState) => state.user.community
     );
 
     const handleAcceptRules = () => {
-        Api.user.readRules('beneficiary').then((success) => {
+        Api.user.readRules(caller).then((success) => {
             if (success) {
                 dispatch(
-                    setUserBeneficiary({ ...beneficiary, readRules: true })
+                    caller === 'manager'
+                        ? setUserManager({
+                              ...manager,
+                              readRules: true,
+                          })
+                        : setUserBeneficiary({
+                              ...beneficiary,
+                              readRules: true,
+                          })
                 );
                 navigation.navigate('TabNavigator');
             }

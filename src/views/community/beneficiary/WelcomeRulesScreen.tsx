@@ -12,9 +12,10 @@ import { ipctColors } from 'styles/index';
 import CommunityRules from './CommunityRules';
 
 function WelcomeRulesScreen() {
-    const community = useSelector(
-        (state: IRootState) => state.user.community.metadata
+    const { metadata, beneficiary } = useSelector(
+        (state: IRootState) => state.user.community
     );
+    const community = metadata;
 
     const rates = useSelector((state: IRootState) => state.app.exchangeRates);
 
@@ -36,6 +37,52 @@ function WelcomeRulesScreen() {
         );
     }
 
+    if (beneficiary !== null && !beneficiary.readRules) {
+        return (
+            <ScrollView>
+                <BaseCommunity community={community} full>
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: 'space-between',
+                            width: Dimensions.get('window').width,
+                            marginTop: 16,
+                        }}
+                    >
+                        <View style={styles.welcomeBeneficiayContainer}>
+                            <Text style={styles.welcomeBeneficiayTitle}>
+                                {i18n.t('beneficiary.welcomeBeneficiayTitle', {
+                                    communityName: community.name,
+                                })}
+                            </Text>
+                            <Text style={styles.welcomeBeneficiayDescription}>
+                                {i18n.t(
+                                    'beneficiary.welcomeBeneficiaryDecription',
+                                    {
+                                        claimXCCurrency: amountToCurrency(
+                                            community.contract.claimAmount,
+                                            community.currency,
+                                            rates
+                                        ),
+                                        interval:
+                                            community.contract.baseInterval ===
+                                            86400
+                                                ? '24h'
+                                                : '168h',
+                                        minIncrement:
+                                            community.contract
+                                                .incrementInterval / 60,
+                                    }
+                                )}
+                            </Text>
+                        </View>
+                        <CommunityRules caller="beneficiary" />
+                    </View>
+                </BaseCommunity>
+            </ScrollView>
+        );
+    }
+
     return (
         <ScrollView>
             <BaseCommunity community={community} full>
@@ -49,32 +96,12 @@ function WelcomeRulesScreen() {
                 >
                     <View style={styles.welcomeBeneficiayContainer}>
                         <Text style={styles.welcomeBeneficiayTitle}>
-                            {i18n.t('beneficiary.welcomeBeneficiayTitle', {
+                            {i18n.t('manager.welcomeManagerTitle', {
                                 communityName: community.name,
                             })}
                         </Text>
-                        <Text style={styles.welcomeBeneficiayDescription}>
-                            {i18n.t(
-                                'beneficiary.welcomeBeneficiaryDecription',
-                                {
-                                    claimXCCurrency: amountToCurrency(
-                                        community.contract.claimAmount,
-                                        community.currency,
-                                        rates
-                                    ),
-                                    interval:
-                                        community.contract.baseInterval ===
-                                        86400
-                                            ? '24h'
-                                            : '168h',
-                                    minIncrement:
-                                        community.contract.incrementInterval /
-                                        60,
-                                }
-                            )}
-                        </Text>
                     </View>
-                    <CommunityRules caller="beneficiary" />
+                    <CommunityRules caller="manager" />
                 </View>
             </BaseCommunity>
         </ScrollView>

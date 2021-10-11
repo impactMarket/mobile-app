@@ -10,6 +10,7 @@ import {
 import {
     BeneficiaryAttributes,
     CommunityAttributes,
+    ManagerAttributes,
     UserAttributes,
 } from './models';
 
@@ -27,7 +28,7 @@ export interface IUserState {
     exchangeRate: number; // it's singular!
     community: {
         beneficiary: BeneficiaryAttributes | null;
-        isManager: boolean;
+        manager: ManagerAttributes | null;
         metadata: CommunityAttributes;
         contract: any;
     };

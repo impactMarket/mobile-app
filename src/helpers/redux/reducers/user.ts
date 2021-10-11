@@ -8,7 +8,7 @@ import {
     SET_USER_BENEFICIARY,
     SET_USER_IS_BLOCKED,
     SET_USER_IS_SUSPECT,
-    SET_USER_IS_COMMUNITY_MANAGER,
+    SET_USER_MANAGER,
     SET_USER_LANGUAGE,
     SET_USER_WALLET_BALANCE,
 } from 'helpers/constants';
@@ -36,7 +36,7 @@ const INITIAL_STATE_USER: IUserState = {
     exchangeRate: 1,
     community: {
         beneficiary: null,
-        isManager: false,
+        manager: null,
         metadata: undefined as any,
         contract: undefined as any,
     },
@@ -72,8 +72,8 @@ export const userReducer = (
         case SET_USER_IS_SUSPECT:
             metadata.suspect = action.payload;
             return { ...state, community };
-        case SET_USER_IS_COMMUNITY_MANAGER:
-            community.isManager = action.payload;
+        case SET_USER_MANAGER:
+            community.manager = action.payload;
             return { ...state, community };
         case SET_COMMUNITY:
             community.metadata = action.payload;

@@ -55,7 +55,10 @@ export default function Communities() {
             : communities;
 
     const ApplyCommunityButton = () => {
-        if (community.isManager && community.metadata?.status === 'valid') {
+        if (
+            community.manager !== null &&
+            community.metadata?.status === 'valid'
+        ) {
             return null;
         }
         return (
@@ -65,7 +68,7 @@ export default function Communities() {
                 labelStyle={styles.buttomStoreText}
                 onPress={() =>
                     address.length > 0
-                        ? community.isManager
+                        ? community.manager !== null
                             ? navigation.navigate(Screens.CommunityManager)
                             : navigation.navigate(Screens.CreateCommunity)
                         : dispatch(setOpenAuthModal(true))

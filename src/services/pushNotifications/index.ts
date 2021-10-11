@@ -7,7 +7,7 @@ import {
     setCommunityContract,
     setCommunityMetadata,
     setUserBeneficiary,
-    setUserIsCommunityManager,
+    setUserManager,
 } from 'helpers/redux/actions/user';
 import { navigationRef } from 'helpers/rootNavigation';
 import { Platform } from 'react-native';
@@ -86,9 +86,13 @@ export const startNotificationsListeners = (
                                     );
                                 batch(() => {
                                     if (action === 'community-accepted') {
-                                        dispatch(
-                                            setUserIsCommunityManager(true)
-                                        );
+                                        Api.user
+                                            .welcome()
+                                            .then((v) =>
+                                                dispatch(
+                                                    setUserManager(v.manager)
+                                                )
+                                            );
                                     }
                                     if (action === 'beneficiary-added') {
                                         Api.user

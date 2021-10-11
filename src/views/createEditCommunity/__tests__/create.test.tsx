@@ -19,7 +19,7 @@ afterEach(cleanup);
 
 jest.mock('helpers/redux/actions/user', () => ({
     setCommunityMetadata: jest.fn(),
-    setUserIsCommunityManager: jest.fn(),
+    setUserManager: jest.fn(),
 }));
 
 jest.mock('../component/PlaceSearch');

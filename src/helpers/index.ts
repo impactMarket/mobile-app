@@ -22,7 +22,7 @@ import {
     setCommunityMetadata,
     setUserExchangeRate,
     setUserBeneficiary,
-    setUserIsCommunityManager,
+    setUserManager,
     setUserMetadata,
     setUserWallet,
     setUserIsBlocked,
@@ -117,7 +117,7 @@ export async function logout(dispatch: Dispatch<any>) {
     await AsyncStorage.clear();
     batch(() => {
         dispatch(setUserBeneficiary(null));
-        dispatch(setUserIsCommunityManager(false));
+        dispatch(setUserManager(null));
         dispatch(resetUserApp());
     });
 }
@@ -182,7 +182,7 @@ export async function welcomeUser(
         moment.locale(language);
     }
     let community: CommunityAttributes | undefined;
-    if (user.beneficiary !== null || user.isManager) {
+    if (user.beneficiary !== null || user.manager !== null) {
         community = await Api.community.findById(user.communityId!);
     }
     batch(() => {
@@ -228,7 +228,7 @@ export async function welcomeUser(
             dispatch(setCommunityMetadata(community));
             dispatch(setCommunityContract(communityContract));
             dispatch(setUserBeneficiary(user.beneficiary));
-            dispatch(setUserIsCommunityManager(user.isManager));
+            dispatch(setUserManager(user.manager));
             // Setting suspicious activity
             dispatch(setUserIsBlocked(user.blocked));
             dispatch(setUserIsSuspect(user.suspect));
