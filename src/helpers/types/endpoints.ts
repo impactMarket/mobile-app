@@ -2,8 +2,12 @@ import {
     AppMediaContent,
     BeneficiaryAttributes,
     ManagerAttributes,
+    UbiCommunity,
     UserAttributes,
 } from './models';
+import { UbiCommunityContract } from './ubi/ubiCommunityContract';
+import { UbiCommunityState } from './ubi/ubiCommunityState';
+import { UbiCommunitySuspect } from './ubi/ubiCommunitySuspect';
 
 export interface ApiErrorReturn {
     name: string;
@@ -17,6 +21,12 @@ export interface CommunityListRequestParams {
     filter?: 'featured';
     lat?: number;
     lng?: number;
+}
+
+export interface CommunityListResult extends UbiCommunity {
+    suspect?: UbiCommunitySuspect[];
+    contract?: UbiCommunityContract;
+    state?: UbiCommunityState;
 }
 
 /**

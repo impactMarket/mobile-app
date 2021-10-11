@@ -57,6 +57,7 @@
         "@expo-google-fonts/inter": "0.2.0",
         "@expo-google-fonts/manrope": "0.2.0",
         "@expo/metro-config": "0.1.84",
+        "@impact-market/translations": "git://github.com/impactMarket/translations.git#master",
         "@impact-market/ui-kit": "0.0.3",
         "@react-native-async-storage/async-storage": "1.15.0",
         "@react-native-community/masked-view": "0.1.10",
@@ -94,6 +95,7 @@
         "expo-web-browser": "9.2.0",
         "https-browserify": "1.0.0",
         "i18next": "21.2.4",
+        "intl-pluralrules": "1.3.1",
         "libphonenumber-js": "1.9.37",
         "moment": "2.29.1",
         "native-base": "3.0.3",
@@ -135,8 +137,7 @@
         "styled-components": "5.3.1",
         "typed-redux-saga": "1.3.1",
         "url": "0.11.0",
-        "vm-browserify": "1.1.2",
-        "@impact-market/translations": "git://github.com/impactMarket/translations.git#master"
+        "vm-browserify": "1.1.2"
     },
     "devDependencies": {
         "@babel/core": "7.15.8",

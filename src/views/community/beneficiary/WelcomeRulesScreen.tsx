@@ -37,7 +37,11 @@ function WelcomeRulesScreen() {
         );
     }
 
-    if (beneficiary !== null && !beneficiary.readRules) {
+    if (
+        beneficiary !== null &&
+        beneficiary !== undefined &&
+        !beneficiary.readRules
+    ) {
         return (
             <ScrollView>
                 <BaseCommunity community={community} full>

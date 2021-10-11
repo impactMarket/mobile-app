@@ -13,8 +13,10 @@ import * as Location from 'expo-location';
 import { communityOrderOptions, Screens } from 'helpers/constants';
 import { amountToCurrency } from 'helpers/currency';
 import { chooseMediaThumbnail } from 'helpers/index';
-import { CommunityListRequestParams } from 'helpers/types/endpoints';
-import { CommunityAttributes } from 'helpers/types/models';
+import {
+    CommunityListRequestParams,
+    CommunityListResult,
+} from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -40,7 +42,7 @@ const countries: {
 } = countriesJSON;
 
 function ListItem(props: {
-    community: CommunityAttributes;
+    community: CommunityListResult;
     userCurrency: string;
     exchangeRates: {
         [key: string]: number;
@@ -104,7 +106,7 @@ function ListItem(props: {
     );
     const claimFrequency =
         community.contract.baseInterval === 86400
-            ? i18n.t('generic.day')
+            ? i18n.t('generic.days', { count: 1 })
             : i18n.t('generic.week');
 
     let progress = 0;
@@ -163,7 +165,8 @@ function ListItem(props: {
                 <View>
                     <View style={styles.infoView}>
                         {community.suspect !== undefined &&
-                        community.suspect !== null ? (
+                        community.suspect !== null &&
+                        community.suspect.length > 0 ? (
                             <SuspiciousActivityMiddleSvg />
                         ) : (
                             <NoSuspiciousSvg />
@@ -210,7 +213,7 @@ function ListItem(props: {
 
 function ListCommunitiesScreen() {
     const loadSlice = 20;
-    const flatListRef = useRef<FlatList<CommunityAttributes> | null>(null);
+    const flatListRef = useRef<FlatList<CommunityListResult> | null>(null);
     const { width } = Dimensions.get('screen');
 
     const navigation = useNavigation();
@@ -233,7 +236,7 @@ function ListCommunitiesScreen() {
     >(undefined);
 
     const [refreshing, setRefreshing] = useState(true);
-    const [communities, setCommunities] = useState<CommunityAttributes[]>([]);
+    const [communities, setCommunities] = useState<CommunityListResult[]>([]);
     const [reachedEndList, setReachedEndList] = useState(false);
 
     useEffect(() => {

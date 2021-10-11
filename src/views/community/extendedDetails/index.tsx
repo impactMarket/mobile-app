@@ -271,7 +271,7 @@ function CommunityExtendedDetailsScreen() {
                     community.contract.claimAmount
                 )} / ${
                     community.contract.baseInterval === 86400
-                        ? i18n.t('generic.day')
+                        ? i18n.t('generic.days', { count: 1 })
                         : i18n.t('generic.week')
                 }`}
             />
