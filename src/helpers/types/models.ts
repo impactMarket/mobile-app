@@ -147,6 +147,7 @@ export interface ManagerAttributes {
     address: string;
     communityId: string;
     active: boolean;
+    readRules: boolean;
 
     // timestamps
     createdAt: Date;

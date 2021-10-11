@@ -161,15 +161,26 @@ const managerScreens = (Navigator: typeof Stack) => (
 const Stack = createStackNavigator();
 
 function StackNavigator() {
-    const { beneficiary, isManager } = useSelector(
-        (state: IRootState) => state.user.community
-    );
+    const {
+        beneficiary,
+        manager,
+        metadata: { status, visibility },
+    } = useSelector((state: IRootState) => state.user.community);
     const isAuthenticated = useSelector(
         (state: IRootState) => state.user.wallet.address.length > 0
     );
     const fromWelcomeScreen = useSelector(
         (state: IRootState) => state.app.fromWelcomeScreen
     );
+
+    const initialRouteName =
+        (beneficiary !== null && !beneficiary.readRules) ||
+        (manager !== null &&
+            !manager.readRules &&
+            status === 'valid' &&
+            visibility === 'public')
+            ? Screens.WelcomeRulesScreen
+            : fromWelcomeScreen;
 
     return (
         <Stack.Navigator
@@ -190,17 +201,13 @@ function StackNavigator() {
                     color: ipctColors.almostBlack,
                 },
             }}
-            initialRouteName={
-                beneficiary !== null && !beneficiary.readRules
-                    ? Screens.WelcomeRulesScreen
-                    : fromWelcomeScreen
-            }
+            initialRouteName={initialRouteName}
         >
             {isAuthenticated || fromWelcomeScreen.length > 0
-                ? commonScreens(Stack, beneficiary !== null || isManager)
+                ? commonScreens(Stack, beneficiary !== null || manager !== null)
                 : welcomeScreen(Stack)}
             {beneficiary !== null && beneficiaryScreens(Stack)}
-            {isManager && managerScreens(Stack)}
+            {manager !== null && managerScreens(Stack)}
         </Stack.Navigator>
     );
 }

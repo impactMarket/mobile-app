@@ -1,6 +1,7 @@
 import {
     AppMediaContent,
     BeneficiaryAttributes,
+    ManagerAttributes,
     UserAttributes,
 } from './models';
 
@@ -83,11 +84,11 @@ export interface CommunityCreationAttributes {
 }
 
 export interface IUserBaseAuth {
-    isManager: boolean;
     communityId?: number;
     suspect: UserAttributes['suspect'];
     blocked: boolean;
     beneficiary: BeneficiaryAttributes | null;
+    manager: ManagerAttributes | null;
 }
 
 export interface IUserHello extends IUserBaseAuth {}

@@ -7,7 +7,7 @@ import {
     SET_USER_BENEFICIARY,
     SET_USER_IS_BLOCKED,
     SET_USER_IS_SUSPECT,
-    SET_USER_IS_COMMUNITY_MANAGER,
+    SET_USER_MANAGER,
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
     RESET_USER_APP,
@@ -15,6 +15,7 @@ import {
 import {
     BeneficiaryAttributes,
     CommunityAttributes,
+    ManagerAttributes,
     UserAttributes,
 } from 'helpers/types/models';
 import { UserActionTypes } from 'helpers/types/redux';
@@ -78,12 +79,10 @@ export function setUserIsSuspect(isSuspect: boolean): UserActionTypes {
     };
 }
 
-export function setUserIsCommunityManager(
-    isCommunityManager: boolean
-): UserActionTypes {
+export function setUserManager(manager: ManagerAttributes): UserActionTypes {
     return {
-        type: SET_USER_IS_COMMUNITY_MANAGER,
-        payload: isCommunityManager,
+        type: SET_USER_MANAGER,
+        payload: manager,
     };
 }
 

@@ -89,7 +89,7 @@ export default function Stories() {
             >
                 {userAddress.length > 0 &&
                     (userCommunityMetadata.beneficiary !== null ||
-                        userCommunityMetadata.isManager) &&
+                        userCommunityMetadata.manager !== null) &&
                     userCommunityMetadata.metadata.status === 'valid' && (
                         <View
                             style={{

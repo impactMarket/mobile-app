@@ -113,7 +113,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             communityMetadata,
             communityUpdated,
             kit,
-            isManager,
+            manager,
             userBalance,
         } = this.props;
         const { notEnoughToClaimOnContract } = this.state;
@@ -180,7 +180,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                 // do not collect manager claim location nor private communities
                 if (
                     communityMetadata.visibility === 'public' &&
-                    isManager === false
+                    manager === null
                 ) {
                     const enabled = await Location.hasServicesEnabledAsync();
                     // if enabled but not allowed, request permission
@@ -604,7 +604,7 @@ const mapStateToProps = (state: IRootState) => {
     const { metadata, contract } = state.user.community;
     const { currency, address } = state.user.metadata;
     const { balance } = state.user.wallet;
-    const { isManager } = state.user.community;
+    const { manager } = state.user.community;
     const { exchangeRates, kit } = state.app;
     const { community } = state.communities;
     return {
@@ -616,7 +616,7 @@ const mapStateToProps = (state: IRootState) => {
         communityUpdated: community,
         exchangeRates,
         kit,
-        isManager,
+        manager,
     };
 };
 

@@ -11,7 +11,7 @@ import { formatInputAmountToTransfer } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
 import {
     setCommunityMetadata,
-    setUserIsCommunityManager,
+    setUserManager,
     setUserMetadata,
 } from 'helpers/redux/actions/user';
 import { CommunityCreationAttributes } from 'helpers/types/endpoints';
@@ -756,7 +756,18 @@ function CreateCommunityScreen() {
                                 dispatchRedux(
                                     setCommunityMetadata(submittedCommunityData)
                                 );
-                                dispatchRedux(setUserIsCommunityManager(true));
+                                dispatchRedux(
+                                    setUserManager({
+                                        id: 0,
+                                        communityId:
+                                            submittedCommunityData.publicId,
+                                        active: true,
+                                        address: userAddress,
+                                        createdAt: new Date(),
+                                        updatedAt: new Date(),
+                                        readRules: false,
+                                    })
+                                );
                             });
                         }
                     }}

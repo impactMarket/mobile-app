@@ -9,7 +9,7 @@ import {
     SET_USER_BENEFICIARY,
     SET_USER_IS_BLOCKED,
     SET_USER_IS_SUSPECT,
-    SET_USER_IS_COMMUNITY_MANAGER,
+    SET_USER_MANAGER,
     SET_CELO_KIT,
     SET_COMMUNITY_CONTRACT,
     SET_COMMUNITY,
@@ -41,6 +41,7 @@ import {
 import {
     BeneficiaryAttributes,
     CommunityAttributes,
+    ManagerAttributes,
     UserAttributes,
 } from './models';
 import { IUserWallet } from './state';
@@ -81,9 +82,9 @@ interface UserSetIsSuspectAction {
     payload: boolean;
 }
 
-interface UserSetIsCommunityManagerAction {
-    type: typeof SET_USER_IS_COMMUNITY_MANAGER;
-    payload: boolean;
+interface UserSetManagerAction {
+    type: typeof SET_USER_MANAGER;
+    payload: ManagerAttributes;
 }
 
 interface CeloKitAction {
@@ -292,7 +293,7 @@ export type UserActionTypes =
     | UserSetBeneficiaryAction
     | UserSetIsBlockedAction
     | UserSetIsSuspectAction
-    | UserSetIsCommunityManagerAction
+    | UserSetManagerAction
     | ResetUserAction
     | UserMetadataAction
     | UserLanguageAction
