@@ -24,7 +24,7 @@
             "\\.(jpg|jpeg|png|gif)$": "<rootDir>/node_modules/react-native/Libraries/Image/RelativeImageStub"
         },
         "transformIgnorePatterns": [
-            "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+            "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@impact-market/ui-kit|@expo-google-fonts/inter|@expo-google-fonts/manrope|@sentry/.*)"
         ],
         "transform": {
             "^.+\\.[jt]sx?$": "babel-jest"
@@ -57,7 +57,7 @@
         "@expo-google-fonts/inter": "0.2.0",
         "@expo-google-fonts/manrope": "0.2.0",
         "@expo/metro-config": "0.1.84",
-        "@impact-market/ui-kit": "0.0.2",
+        "@impact-market/ui-kit": "0.0.3",
         "@react-native-async-storage/async-storage": "1.15.0",
         "@react-native-community/masked-view": "0.1.10",
         "@react-native-community/netinfo": "6.0.0",
