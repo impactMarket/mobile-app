@@ -397,21 +397,28 @@ Array [
                           </View>
                           <View>
                             <Image
+                              onError={[Function]}
                               source={
                                 Object {
                                   "uri": "https://dzrx8kf1cwjv9.cloudfront.net/cover/330x330/1620119095297.jpeg",
                                 }
                               }
                               style={
-                                Object {
-                                  "alignContent": "center",
-                                  "alignItems": "center",
-                                  "borderRadius": 20,
-                                  "height": 329,
-                                  "justifyContent": "center",
-                                  "marginVertical": 16,
-                                  "width": "100%",
-                                }
+                                Array [
+                                  Object {
+                                    "height": undefined,
+                                    "width": undefined,
+                                  },
+                                  Object {
+                                    "alignContent": "center",
+                                    "alignItems": "center",
+                                    "borderRadius": 20,
+                                    "height": 329,
+                                    "justifyContent": "center",
+                                    "marginVertical": 16,
+                                    "width": "100%",
+                                  },
+                                ]
                               }
                             />
                             <View

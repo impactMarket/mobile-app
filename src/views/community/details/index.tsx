@@ -1,3 +1,4 @@
+import { Image } from '@impact-market/ui-kit';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import CommunityStatus from 'components/CommunityStatus';
@@ -23,7 +24,6 @@ import {
     StyleSheet,
     RefreshControl,
     StatusBar,
-    Image,
     Text,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
