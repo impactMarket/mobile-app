@@ -4,6 +4,7 @@ import {
     CommunityEditionAttributes,
     CommunityListRequestParams,
     CommunityListResult,
+    IBeneficiaryActivities,
 } from 'helpers/types/endpoints';
 import {
     AppMediaContent,
@@ -43,6 +44,16 @@ class ApiRouteCommunity {
                         : '&active=false')
             )
         ).data;
+    }
+
+    getBeneficiaryActivity(
+        beneficiaryAddress: string,
+        offset: number,
+        limit: number
+    ): Promise<IApiResult<IBeneficiaryActivities[]>> {
+        return api.get<IBeneficiaryActivities[]>(
+            `/community/beneficiaries/activity/${beneficiaryAddress}/type=all&offset=${offset}&limit=${limit}`
+        );
     }
 
     async listBeneficiaries(

@@ -63,6 +63,16 @@ export interface IManagerDetailsBeneficiary {
     verifiedPN: boolean | undefined;
     suspect: boolean | undefined;
 }
+export interface IBeneficiaryActivities {
+    id: number;
+    type: string;
+    tx: string;
+    date: Date;
+    withAddress?: string;
+    isFromBeneficiary?: boolean;
+    amount?: string;
+    username?: string;
+}
 export interface CommunityEditionAttributes {
     name: string;
     description: string;

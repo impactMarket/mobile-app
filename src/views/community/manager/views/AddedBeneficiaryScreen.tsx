@@ -1,33 +1,109 @@
+import { Body, colors, Label, Pill, Title } from '@impact-market/ui-kit';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
-import Button from 'components/core/Button';
-import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
-import { amountToCurrency } from 'helpers/currency';
-import { isOutOfTime } from 'helpers/index';
-import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
-import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
-import { IRootState } from 'helpers/types/state';
-import moment from 'moment';
+import { Screens } from 'helpers/constants';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-    StyleSheet,
-    Alert,
     View,
+    Text,
+    SafeAreaView,
+    StatusBar,
+    Image,
+    StyleSheet,
+    Pressable,
     FlatList,
     RefreshControl,
 } from 'react-native';
-import {
-    ActivityIndicator,
-    List,
-    Paragraph,
-    Searchbar,
-} from 'react-native-paper';
-import { useDispatch, useSelector } from 'react-redux';
-import * as Sentry from 'sentry-expo';
-import Api from 'services/api';
-import { celoWalletRequest } from 'services/celoWallet';
-import { ipctColors } from 'styles/index';
 
+import arrow_right_blue from './assets/beneficiary/arrow_right_blue.png';
+import avatar from './assets/beneficiary/avatar.png';
+import filter_icon from './assets/beneficiary/filter_icon.png';
+import lock_orange from './assets/beneficiary/lock_orange.png';
+import red_warning from './assets/beneficiary/red_warning.png';
+import search_icon from './assets/beneficiary/search_icon.png';
+import sort_icon from './assets/beneficiary/sort_icon.png';
+import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
+import { IRootState } from 'helpers/types/state';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import Api from 'services/api';
+import { ScrollView } from 'react-native-gesture-handler';
+import { amountToCurrency } from 'helpers/currency';
+
+function ListItem(props: {
+    userCurrency: string;
+    exchangeRates: {
+        [key: string]: number;
+    };
+    beneficiary: IManagerDetailsBeneficiary;
+}) {
+    const navigation = useNavigation();
+    const { beneficiary, userCurrency, exchangeRates } = props;
+
+    const formatAddressOrName = (from: IManagerDetailsBeneficiary) => {
+        const titleMaxLength = 25;
+        const fromHasName = from.username !== null && from.username.length > 0;
+        let name = '';
+        if (from.username !== null && fromHasName) {
+            name = from.username;
+        }
+
+        return fromHasName
+            ? name
+            : `${from.address.slice(
+                  0,
+                  (titleMaxLength - 4) / 2
+              )}..${from.address.slice(42 - (titleMaxLength - 4) / 2, 42)}`;
+    };
+    return (
+        <Pressable
+            style={{
+                // backgroundColor: 'red',
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 12,
+                // paddingHorizontal: 22,
+                justifyContent: 'space-between',
+            }}
+            onPress={() =>
+                navigation.navigate(Screens.BeneficiaryDetailsScreen, {
+                    beneficiary: beneficiary.address,
+                })
+            }
+        >
+            <View>
+                <View style={{ flexDirection: 'row' }}>
+                    <Title>{formatAddressOrName(beneficiary)}</Title>
+                    <Image source={lock_orange} />
+                </View>
+                <Body style={{ color: colors.text.secondary }}>
+                    {i18n.t('manager.claimedSince', {
+                        amount:
+                            beneficiary.claimed === undefined
+                                ? '0'
+                                : amountToCurrency(
+                                      beneficiary.claimed,
+                                      userCurrency,
+                                      exchangeRates
+                                  ),
+                        date: moment(beneficiary.timestamp).format('MMM, YYYY'),
+                    })}
+                </Body>
+            </View>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                }}
+            >
+                {/* <Image source={avatar} /> */}
+                <Image source={red_warning} resizeMode="contain" />
+                <Image source={arrow_right_blue} resizeMode="contain" />
+            </View>
+        </Pressable>
+    );
+}
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
     const flatListRef = useRef<FlatList<IManagerDetailsBeneficiary> | null>(
@@ -47,7 +123,7 @@ function AddedBeneficiaryScreen() {
     const [beneficiariesOffset, setBeneficiariesOffset] = useState(0);
     const [beneficiaries, setBeneficiaries] = useState<
         IManagerDetailsBeneficiary[]
-    >(undefined as any);
+    >([]);
     const [refreshing, setRefreshing] = React.useState(false);
     const [reachedEndList, setReachedEndList] = useState(false);
     const [searchBeneficiary, setSearchBeneficiary] = useState('');
@@ -79,123 +155,6 @@ function AddedBeneficiaryScreen() {
         loadActiveBeneficiaries();
     }, []);
 
-    const handleRemoveBeneficiary = async (
-        beneficiary: IManagerDetailsBeneficiary,
-        index: number
-    ) => {
-        if (userWallet.balance.length < 16) {
-            Alert.alert(
-                i18n.t('generic.failure'),
-                i18n.t('errors.notEnoughForTransaction'),
-                [{ text: i18n.t('generic.close') }],
-                { cancelable: false }
-            );
-            return;
-        }
-
-        const communityContract = community.contract;
-
-        const newRemoving = removing!;
-        newRemoving[index] = true;
-        setRemoving(() => [...newRemoving]);
-        celoWalletRequest(
-            userWallet.address,
-            communityContract.options.address,
-            await communityContract.methods.removeBeneficiary(
-                beneficiary.address
-            ),
-            'removebeneficiary',
-            kit
-        )
-            .then((tx) => {
-                if (tx === undefined) {
-                    return;
-                }
-                Alert.alert(
-                    i18n.t('generic.success'),
-                    i18n.t('manager.userWasRemoved', {
-                        user: formatAddressOrName(beneficiary),
-                    }),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-                // refresh community details
-                setTimeout(() => {
-                    dispatch(findCommunityByIdRequest(community.metadata.id));
-                    flatListRef.current?.scrollToIndex({ index: 0 });
-                    setRefreshing(true);
-                    Api.community.listBeneficiaries(true, 0, 10).then((l) => {
-                        if (l.length < 10) {
-                            setReachedEndList(true);
-                        }
-                        setBeneficiaries(l);
-                        setBeneficiariesOffset(0);
-                        setRemoving(Array(l.length).fill(false));
-                        setRefreshing(false);
-                    });
-                }, 2500);
-            })
-            .catch(async (e) => {
-                let error = 'errors.unknown';
-                if (e.message.includes('has been reverted')) {
-                    error = 'errors.sync.issues';
-                } else if (
-                    e.message.includes('nonce') ||
-                    e.message.includes('gasprice is less')
-                ) {
-                    error = 'errors.sync.possiblyValora';
-                } else if (e.message.includes('gas required exceeds')) {
-                    error = 'errors.unknown';
-                    // verify clock time
-                    if (await isOutOfTime()) {
-                        error = 'errors.sync.clock';
-                    }
-                } else if (e.message.includes('Invalid JSON RPC response:')) {
-                    if (
-                        e.message.includes('The network connection was lost.')
-                    ) {
-                        error = 'errors.network.connectionLost';
-                    }
-                    error = 'errors.network.rpc';
-                }
-                if (error === 'errors.unknown') {
-                    //only submit to sentry if it's unknown
-                    Sentry.Native.captureException(e);
-                }
-                Alert.alert(
-                    i18n.t('generic.failure'),
-                    i18n.t('manager.errorRemovingBeneficiary', {
-                        error: i18n.t(error),
-                    }),
-                    [{ text: 'OK' }],
-                    { cancelable: false }
-                );
-            })
-            .finally(() => {
-                const newRemoving = removing!;
-                newRemoving[index] = false;
-                setRemoving(() => [...newRemoving]);
-            });
-    };
-
-    if (beneficiaries === undefined || removing === undefined) {
-        return (
-            <View
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-                }}
-            >
-                <ActivityIndicator
-                    animating
-                    size="large"
-                    color={ipctColors.blueRibbon}
-                />
-            </View>
-        );
-    }
-
     const handleOnEndReached = (info: { distanceFromEnd: number }) => {
         if (!refreshing && !reachedEndList) {
             setRefreshing(true);
@@ -215,104 +174,55 @@ function AddedBeneficiaryScreen() {
         }
     };
 
-    const listRenderItem = ({
-        item,
-        index,
-    }: {
-        item: IManagerDetailsBeneficiary;
-        index: number;
-    }) => (
-        <List.Item
-            title={formatAddressOrName(item)}
-            description={i18n.t('manager.claimedSince', {
-                amount:
-                    item.claimed === undefined
-                        ? '0'
-                        : amountToCurrency(
-                              item.claimed,
-                              userCurrency,
-                              exchangeRates
-                          ),
-                date: moment(item.timestamp).format('MMM, YYYY'),
-            })}
-            right={() => (
-                <Button
-                    modeType="gray"
-                    bold
-                    disabled={removing[index]}
-                    loading={removing[index]}
-                    style={{ marginVertical: 5 }}
-                    onPress={() => handleRemoveBeneficiary(item, index)}
-                >
-                    {i18n.t('generic.remove')}
-                </Button>
-            )}
-            left={() =>
-                item.suspect && (
-                    <WarningTriangle style={{ marginVertical: 14 }} />
-                )
-            }
-            titleStyle={styles.textTitle}
-            descriptionStyle={styles.textDescription}
-            style={{
-                paddingLeft: item.suspect ? 8 : 0,
-            }}
-        />
-    );
-
-    const handleSearchBeneficiary = () => {
-        setRefreshing(true);
-        if (beneficiaries.length > 30) {
-            flatListRef.current?.scrollToIndex({ index: 0 });
-        }
-        Api.community
-            .findBeneficiary(searchBeneficiary, true)
-            .then((r) => {
-                if (r.length > 0) {
-                    if (r.length <= 10) {
-                        setReachedEndList(true);
-                    }
-                    setRemoving(Array(r.length).fill(false));
-                }
-                setBeneficiaries(r);
-            })
-            .finally(() => setRefreshing(false));
-    };
-
-    const formatAddressOrName = (from: IManagerDetailsBeneficiary) => {
-        const titleMaxLength = 25;
-        const fromHasName = from.username !== null && from.username.length > 0;
-        let name = '';
-        if (from.username !== null && fromHasName) {
-            name = from.username;
-        }
-
-        return fromHasName
-            ? name
-            : `${from.address.slice(
-                  0,
-                  (titleMaxLength - 4) / 2
-              )}..${from.address.slice(42 - (titleMaxLength - 4) / 2, 42)}`;
-    };
-
-    const renderBeneficiariesList = () => {
-        if (beneficiaries.length === 0) {
-            return (
-                <Paragraph
+    return (
+        <View>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 22,
+                    paddingVertical: 16,
+                    // backgroundColor: 'red',
+                    alignItems: 'center',
+                }}
+            >
+                <View style={{ flexDirection: 'row' }}>
+                    <Pill color={colors.background.dark}>Added</Pill>
+                    <View style={{ width: 8 }} />
+                    <Pill>Removed</Pill>
+                </View>
+            </View>
+            {/* <ScrollView>
+                <View
                     style={{
-                        textAlign: 'center',
-                        fontSize: 18,
+                        backgroundColor: '#E9EDF4',
+                        height: 42,
+                        justifyContent: 'center',
+                        paddingHorizontal: 22,
                     }}
                 >
-                    {i18n.t('generic.noResults')}
-                </Paragraph>
-            );
-        }
-        return (
+                    <Title>Suspicious (2)</Title>
+                </View>
+                {beneficiaries.map((b) => (
+                    <ListItem beneficiary={b} />
+                ))}
+            </ScrollView> */}
             <FlatList
                 data={beneficiaries}
-                style={{ paddingHorizontal: 15 }}
-                renderItem={listRenderItem}
+                style={{ paddingHorizontal: 22 }}
+                renderItem={({
+                    item,
+                    index,
+                }: {
+                    item: IManagerDetailsBeneficiary;
+                    index: number;
+                }) => (
+                    <ListItem
+                        beneficiary={item}
+                        userCurrency={userCurrency}
+                        exchangeRates={exchangeRates}
+                    />
+                )}
                 ref={flatListRef}
                 keyExtractor={(item) => item.address}
                 refreshControl={
@@ -324,43 +234,10 @@ function AddedBeneficiaryScreen() {
                 onEndReachedThreshold={0.5}
                 onEndReached={handleOnEndReached}
             />
-        );
-    };
-
-    return (
-        <>
-            <Searchbar
-                placeholder={i18n.t('generic.search')}
-                style={{
-                    marginHorizontal: 22,
-                    backgroundColor: 'rgba(206, 212, 218, 0.27)',
-                    shadowRadius: 0,
-                    elevation: 0,
-                    borderRadius: 6,
-                    marginBottom: 15,
-                }}
-                onChangeText={(e) => {
-                    if (e.length === 0) {
-                        setRefreshing(true);
-                        Api.community
-                            .listBeneficiaries(true, 0, 10)
-                            .then((l) => {
-                                setReachedEndList(l.length <= 10);
-                                setBeneficiaries(l);
-                                setBeneficiariesOffset(0);
-                                setRemoving(Array(l.length).fill(false));
-                            })
-                            .finally(() => setRefreshing(false));
-                    }
-                    setSearchBeneficiary(e);
-                }}
-                value={searchBeneficiary}
-                onEndEditing={handleSearchBeneficiary}
-            />
-            {renderBeneficiariesList()}
-        </>
+        </View>
     );
 }
+
 AddedBeneficiaryScreen.navigationOptions = () => {
     return {
         headerLeft: () => <BackSvg />,
@@ -369,16 +246,75 @@ AddedBeneficiaryScreen.navigationOptions = () => {
 };
 
 const styles = StyleSheet.create({
-    textTitle: {
-        fontFamily: 'Gelion-Regular',
-        fontSize: 20,
-        letterSpacing: 0,
+    safeAreaContainer: { flex: 1, paddingTop: StatusBar.currentHeight },
+    tagsContainer: { flexDirection: 'row', paddingHorizontal: 25 },
+    tagContainer: { flexDirection: 'row', flex: 1 },
+    activeTag: {
+        color: '#fff',
+        backgroundColor: '#1E3252',
+        paddingHorizontal: 20,
+        fontSize: 15,
+        borderRadius: 25,
+        paddingVertical: 8,
     },
-    textDescription: {
-        fontFamily: 'Gelion-Regular',
-        letterSpacing: 0.25,
-        color: 'grey',
+    inActiveTag: {
+        marginHorizontal: 10,
+        color: '#333239',
+        backgroundColor: '#E9EDF4',
+        paddingHorizontal: 20,
+        fontSize: 15,
+        borderRadius: 25,
+        paddingVertical: 8,
     },
+    filterContainer: { flexDirection: 'row', justifyContent: 'space-around' },
+    filterIconContainer: {
+        backgroundColor: '#E9EDF4',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 35,
+        height: 35,
+        borderRadius: 25,
+        marginHorizontal: 5,
+    },
+    sectionHeaderContainer: {
+        backgroundColor: '#E9EDF4',
+        height: 42,
+        // marginVertical: 16,
+        justifyContent: 'center',
+    },
+    sectionHeaderText: {
+        fontSize: 16,
+        marginHorizontal: 22,
+        fontWeight: 'bold',
+    },
+    sectionItemContainer: {
+        backgroundColor: 'red',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 22,
+    },
+    flex1: { flex: 1 },
+    itemHeader: {
+        fontSize: 18,
+        marginHorizontal: 25,
+        fontWeight: '800',
+        color: '#333239',
+        marginBottom: 3,
+    },
+    itemSubHeader: {
+        fontSize: 16,
+        marginHorizontal: 25,
+        color: '#73839D',
+        marginTop: 3,
+    },
+    avatarContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: 10,
+    },
+    warningImage: { width: 20, height: 20, marginHorizontal: 15 },
+    arrowRight: { width: 20, height: 20 },
 });
 
 export default AddedBeneficiaryScreen;

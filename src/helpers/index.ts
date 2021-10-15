@@ -143,6 +143,13 @@ export function chooseMediaThumbnail(
             }
             return thumbnails[0].url;
         }
+        // const distanceThumbnailSize = media.thumbnails.map((t, i) => ({
+        //     i,
+        //     d:
+        //         Math.abs(t.height - size.heigth) +
+        //         Math.abs(t.width - size.width),
+        // }));
+        // distanceThumbnailSize.reduce((p, c) => p.d >= c.d, { i: 0, d: 0 });
     }
     return media.url;
 }

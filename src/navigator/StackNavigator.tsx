@@ -27,6 +27,7 @@ import StoriesCarouselScreen from 'views/stories/StoriesCarousel';
 import WelcomeScreen from 'views/welcome/index';
 
 import TabNavigator from './TabNavigator';
+import BeneficiaryDetailsScreen from 'views/community/manager/views/BeneficiaryDetailsScreen';
 
 const welcomeScreen = (Navigator: typeof Stack) => (
     <>
@@ -154,6 +155,11 @@ const managerScreens = (Navigator: typeof Stack) => (
             name={Screens.AddedManager}
             component={AddedManagerScreen}
             options={AddedManagerScreen.navigationOptions}
+        />
+        <Navigator.Screen
+            name={Screens.BeneficiaryDetailsScreen}
+            component={BeneficiaryDetailsScreen}
+            options={BeneficiaryDetailsScreen.navigationOptions}
         />
     </>
 );
