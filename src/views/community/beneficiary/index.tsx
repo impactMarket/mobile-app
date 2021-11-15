@@ -2,6 +2,7 @@ import { RouteProp, useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
+import CoreModal from 'components/Modal';
 import Button from 'components/core/Button';
 import Card from 'components/core/Card';
 import ClaimSvg from 'components/svg/ClaimSvg';
@@ -67,6 +68,8 @@ function BeneficiaryScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(false);
     const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
+    const [needsToJoinMigratedCommunity, setNeedsToJoinMigratedCommunity] =
+        useState(false);
 
     useEffect(() => {
         const loadCommunity = async () => {
@@ -126,6 +129,12 @@ function BeneficiaryScreen() {
                     setClaimedProgress(progress.toNumber());
                     setCooldownTime(cooldown);
                     setLastInterval(lastIntv);
+                }
+                const isInNewCommunity =
+                    await communityContract.methods.beneficiaries(userAddress);
+                if (isInNewCommunity.state === 0) {
+                    // TODO: still in old community
+                    setNeedsToJoinMigratedCommunity(true);
                 }
             }
         };
@@ -426,6 +435,21 @@ function BeneficiaryScreen() {
                 {i18n.t('generic.turnOnLocationHint')}
             </Snackbar>
             <Portal>
+                <CoreModal
+                    title={i18n.t('community.joinNewCommunity.title')}
+                    visible={needsToJoinMigratedCommunity}
+                    buttons={
+                        <>
+                            <Button modeType="green" bold>
+                                {i18n.t('community.joinNewCommunity.join')}
+                            </Button>
+                        </>
+                    }
+                >
+                    <Paragraph>
+                        {i18n.t('community.joinNewCommunity.message')}
+                    </Paragraph>
+                </CoreModal>
                 <Modal visible={suspectWrongDateTime} dismissable={false}>
                     <Card style={{ marginHorizontal: 20 }}>
                         <Card.Content>

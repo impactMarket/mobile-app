@@ -1,14 +1,19 @@
+import { Body, Button, colors, WarningIcon } from '@impact-market/ui-kit';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CommunityStatus from 'components/CommunityStatus';
 import Modal from 'components/Modal';
-import Button from 'components/core/Button';
+import CoreButton from 'components/core/Button';
 import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import ManageSvg from 'components/svg/ManageSvg';
 import { amountToCurrency } from 'helpers/currency';
-import { docsURL, updateCommunityInfo } from 'helpers/index';
+import {
+    calculateCommunityRemainedFunds,
+    docsURL,
+    updateCommunityInfo,
+} from 'helpers/index';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import {
@@ -70,6 +75,9 @@ function CommunityManagerScreen() {
         useState(true);
     const [requiredUbiToChange, setRequiredUbiToChange] =
         useState<UbiRequestChangeParams | null>();
+    const [canRequestFunds, setCanRequestFunds] = useState(false);
+    const [needsToJoinMigratedCommunity, setNeedsToJoinMigratedCommunity] =
+        useState(false);
 
     const [editInProgress, setEditInProgress] = useState(false);
 
@@ -86,6 +94,24 @@ function CommunityManagerScreen() {
                         '50000000000000000'
                     )
                 );
+                const isInNewCommunity =
+                    await communityContract.methods.hasRole(
+                        await communityContract.methods.MANAGER_ROLE(),
+                        userAddress
+                    );
+                const isNewCommunity =
+                    await communityContract.methods.impactMarketAddress();
+                if (isInNewCommunity.state === 0) {
+                    setNeedsToJoinMigratedCommunity(true);
+                }
+                if (isNewCommunity === 0) {
+                    const claimedRatio = new BigNumber(
+                        community.state.claimed
+                    ).dividedBy(community.state.raised);
+                    if (claimedRatio.gt(new BigNumber(0.95))) {
+                        setCanRequestFunds(true);
+                    }
+                }
             };
             const verifyRequestToChangeUbiParams = () => {
                 Api.community
@@ -159,6 +185,8 @@ function CommunityManagerScreen() {
             });
     };
 
+    const days = calculateCommunityRemainedFunds(community);
+
     const communityStatus = (_community: CommunityAttributes) => {
         if (
             _community.status === 'valid' &&
@@ -178,6 +206,40 @@ function CommunityManagerScreen() {
                     >
                         <BaseCommunity community={_community}>
                             <View style={styles.container}>
+                                {canRequestFunds && (
+                                    <Card
+                                        style={{ marginTop: 16, padding: 22 }}
+                                    >
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignContent: 'center',
+                                            }}
+                                        >
+                                            <WarningIcon
+                                                color={colors.ui.warning}
+                                            />
+                                            <Body>
+                                                <>
+                                                    {i18n.t(
+                                                        'community.fundsRunOut',
+                                                        {
+                                                            days: Math.floor(
+                                                                days
+                                                            ),
+                                                        }
+                                                    )}{' '}
+                                                    {i18n.t('generic.days', {
+                                                        count: days,
+                                                    })}
+                                                </>
+                                            </Body>
+                                        </View>
+                                        <Button mode="text">
+                                            {i18n.t('community.requestFunds')}
+                                        </Button>
+                                    </Card>
+                                )}
                                 <Beneficiaries
                                     beneficiaries={
                                         _community.state.beneficiaries
@@ -204,15 +266,32 @@ function CommunityManagerScreen() {
                             </View>
                         </BaseCommunity>
                     </ScrollView>
-                    {requiredUbiToChange !== undefined &&
-                        requiredUbiToChange !== null && (
-                            <Portal>
+                    <Portal>
+                        <Modal
+                            title={i18n.t('community.joinNewCommunity.title')}
+                            visible={needsToJoinMigratedCommunity}
+                            buttons={
+                                <>
+                                    <CoreButton modeType="green" bold>
+                                        {i18n.t(
+                                            'community.joinNewCommunity.join'
+                                        )}
+                                    </CoreButton>
+                                </>
+                            }
+                        >
+                            <Paragraph style={styles.ubiChangeModalText}>
+                                {i18n.t('community.joinNewCommunity.message')}
+                            </Paragraph>
+                        </Modal>
+                        {requiredUbiToChange !== undefined &&
+                            requiredUbiToChange !== null && (
                                 <Modal
                                     title={i18n.t('manager.ubiParams')}
                                     visible
                                     buttons={
                                         <>
-                                            <Button
+                                            <CoreButton
                                                 modeType="green"
                                                 bold
                                                 onPress={
@@ -223,7 +302,7 @@ function CommunityManagerScreen() {
                                                 {i18n.t(
                                                     'manager.acceptNewUbiParams'
                                                 )}
-                                            </Button>
+                                            </CoreButton>
                                         </>
                                     }
                                 >
@@ -281,8 +360,8 @@ function CommunityManagerScreen() {
                                             60}{' '}
                                     </Paragraph>
                                 </Modal>
-                            </Portal>
-                        )}
+                            )}
+                    </Portal>
                 </>
             );
         }
@@ -302,7 +381,7 @@ function CommunityManagerScreen() {
                     >
                         {i18n.t('createCommunity.pendingApprovalMessage')}{' '}
                     </Text>
-                    <Button
+                    <CoreButton
                         modeType="gray"
                         style={{
                             marginHorizontal: 18,
@@ -314,7 +393,7 @@ function CommunityManagerScreen() {
                         }}
                     >
                         {i18n.t('generic.openHelpCenter')}
-                    </Button>
+                    </CoreButton>
                     <View style={styles.rulesView}>
                         <Text style={styles.rulesTitle}>
                             {i18n.t('manager.rules.title')}

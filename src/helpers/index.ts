@@ -126,6 +126,9 @@ export function makeDeeplinkUrl() {
     return Linking.makeUrl('/');
 }
 
+/**
+ * @deprecated Migrated to external lib
+ */
 export function chooseMediaThumbnail(
     media: AppMediaContent,
     size: { heigth: number; width: number }
@@ -243,6 +246,9 @@ export async function getUserBalance(kit: ContractKit, address: string) {
     return new BigNumber(cUSDBalanceBig.toString());
 }
 
+/**
+ * @deprecated Migrated to external lib. Use `frequencyToText`
+ */
 export function claimFrequencyToText(frequency: number): string {
     if (frequency === 86400) return i18n.t('createCommunity.daily');
     if (frequency === 604800) return i18n.t('createCommunity.weekly');
@@ -266,6 +272,10 @@ export function calculateCommunityProgress(
     ).div(m.eq(0) ? 1 : m);
     return parseFloat(result.decimalPlaces(5, 1).toString());
 }
+
+/**
+ * @deprecated Migrated to external lib. Use `estimateCommunityRemainFunds`
+ */
 export function calculateCommunityRemainedFunds(
     community: CommunityAttributes
 ): number {
