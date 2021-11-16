@@ -76,8 +76,6 @@ function CommunityManagerScreen() {
     const [requiredUbiToChange, setRequiredUbiToChange] =
         useState<UbiRequestChangeParams | null>();
     const [canRequestFunds, setCanRequestFunds] = useState(false);
-    const [needsToJoinMigratedCommunity, setNeedsToJoinMigratedCommunity] =
-        useState(false);
 
     const [editInProgress, setEditInProgress] = useState(false);
 
@@ -94,16 +92,8 @@ function CommunityManagerScreen() {
                         '50000000000000000'
                     )
                 );
-                const isInNewCommunity =
-                    await communityContract.methods.hasRole(
-                        await communityContract.methods.MANAGER_ROLE(),
-                        userAddress
-                    );
                 const isNewCommunity =
                     await communityContract.methods.impactMarketAddress();
-                if (isInNewCommunity.state === 0) {
-                    setNeedsToJoinMigratedCommunity(true);
-                }
                 if (isNewCommunity === 0) {
                     const claimedRatio = new BigNumber(
                         community.state.claimed
@@ -267,23 +257,6 @@ function CommunityManagerScreen() {
                         </BaseCommunity>
                     </ScrollView>
                     <Portal>
-                        <Modal
-                            title={i18n.t('community.joinNewCommunity.title')}
-                            visible={needsToJoinMigratedCommunity}
-                            buttons={
-                                <>
-                                    <CoreButton modeType="green" bold>
-                                        {i18n.t(
-                                            'community.joinNewCommunity.join'
-                                        )}
-                                    </CoreButton>
-                                </>
-                            }
-                        >
-                            <Paragraph style={styles.ubiChangeModalText}>
-                                {i18n.t('community.joinNewCommunity.message')}
-                            </Paragraph>
-                        </Modal>
                         {requiredUbiToChange !== undefined &&
                             requiredUbiToChange !== null && (
                                 <Modal
