@@ -19,6 +19,8 @@ import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
 
+import CommunityContractABI from '../../../../../contracts/CommunityABI.json';
+
 interface IConfirmModalProps {}
 interface IConfirmModalState {
     donating: boolean;
@@ -47,14 +49,33 @@ class ConfirmModal extends Component<
         }
         // no need to check if enough for tx fee
         this.setState({ donating: true });
-        const stableToken = await this.props.kit.contracts.getStableToken();
-        const cUSDDecimals = await stableToken.decimals();
-        const txObject = stableToken.transfer(
-            community.contractAddress!,
-            new BigNumber(amountInDollars)
-                .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
-                .toString()
-        ).txo;
+
+        let contractAddressTo = '';
+        let txObject;
+        const cUSDAmount = new BigNumber(amountInDollars)
+            .multipliedBy(new BigNumber(10).pow(18))
+            .toString();
+        const communityContract = new kit.web3.eth.Contract(
+            CommunityContractABI as any,
+            community.contractAddress!
+        );
+        const isNewCommunity =
+            await communityContract.methods.impactMarketAddress();
+        if (isNewCommunity.state === 0) {
+            txObject = await communityContract.methods.donate(
+                userAddress,
+                cUSDAmount
+            );
+            contractAddressTo = community.contractAddress;
+        } else {
+            const stableToken = await this.props.kit.contracts.getStableToken();
+            txObject = stableToken.transfer(
+                community.contractAddress!,
+                cUSDAmount
+            ).txo;
+            contractAddressTo = stableToken.address;
+        }
+
         batch(() => {
             this.props.setInProgress(true);
             this.props.dismissModal();
@@ -63,7 +84,7 @@ class ConfirmModal extends Component<
         const executeTx = () =>
             celoWalletRequest(
                 userAddress,
-                stableToken.address,
+                contractAddressTo,
                 txObject,
                 'donatetocommunity',
                 kit

@@ -32,6 +32,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import CacheStore from 'services/cacheStore';
+import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
@@ -45,6 +46,7 @@ function BeneficiaryScreen() {
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
     );
+    const kit = useSelector((state: IRootState) => state.app.kit);
     const community = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
@@ -257,6 +259,36 @@ function BeneficiaryScreen() {
         return next;
     };
 
+    const handleBeneficiaryJoinMigrated = async () => {
+        celoWalletRequest(
+            userAddress,
+            communityContract.options.address,
+            await communityContract.methods.beneficiaryJoinFromMigrated(),
+            'beneficiaryJoinFromMigrated',
+            kit
+        )
+            .then(() => {
+                setNeedsToJoinMigratedCommunity(false);
+            })
+            .catch(() => {
+                Alert.alert(
+                    i18n.t('generic.failure'),
+                    i18n.t('errors.generic'),
+                    [
+                        {
+                            text: i18n.t('generic.tryAgain'),
+                            onPress: async () =>
+                                handleBeneficiaryJoinMigrated(),
+                        },
+                        {
+                            text: i18n.t('generic.cancel'),
+                        },
+                    ],
+                    { cancelable: false }
+                );
+            });
+    };
+
     return (
         <>
             <ScrollView
@@ -440,7 +472,11 @@ function BeneficiaryScreen() {
                     visible={needsToJoinMigratedCommunity}
                     buttons={
                         <>
-                            <Button modeType="green" bold>
+                            <Button
+                                modeType="green"
+                                bold
+                                onPress={handleBeneficiaryJoinMigrated}
+                            >
                                 {i18n.t('community.joinNewCommunity.join')}
                             </Button>
                         </>
