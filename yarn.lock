@@ -1992,10 +1992,10 @@
   version "1.0.0"
   resolved "git://github.com/impactMarket/translations.git#27d19939921470166223e9162fa113bdc24d37fd"
 
-"@impact-market/ui-kit@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@impact-market/ui-kit/-/ui-kit-0.0.3.tgz#f03cf15c7ff064d43fd6be79d0158e7ac821815a"
-  integrity sha512-dTMZsrFEeemUfPjsTirjWmXuyQusAdrFr59Z9CwAQ5HT3kK5u6f+nXnm3S81GtmJgsjuHiNPgl8QR5kIs5r+gA==
+"@impact-market/ui-kit@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@impact-market/ui-kit/-/ui-kit-0.0.4.tgz#0d13aaaf39a2d2f5cda265a96562fc72d897d956"
+  integrity sha512-MQiuaiy3/uDKsYNNAQxVXPnge6lw4GICBnkVzCkUYPB/1jxBNyGjtjcPUj0PMdoZof5O9DbIKjWP0jZtFjVipg==
 
 "@internationalized/message@^3.0.2":
   version "3.0.2"
@@ -5035,9 +5035,9 @@ bip32@2.0.5:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
-"bip39@git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2":
+"bip39@https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2":
   version "3.0.3"
-  resolved "git+https://github.com/bitcoinjs/bip39.git#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
+  resolved "https://github.com/bitcoinjs/bip39#d8ea080a18b40f301d4e2219a2991cd2417e83c2"
   dependencies:
     "@types/node" "11.11.6"
     create-hash "^1.1.0"
@@ -5049,9 +5049,9 @@ blakejs@^1.1.0:
   resolved "https://registry.yarnpkg.com/blakejs/-/blakejs-1.1.1.tgz#bf313053978b2cd4c444a48795710be05c785702"
   integrity sha512-bLG6PHOCZJKNshTjGRBvET0vTciwQE6zFKOKKXPDJfwFBd4Ac0yBfPZqcGvGJap50l7ktvlpFqc2jGVaUgbJgg==
 
-"bls12377js@git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6":
+"bls12377js@https://github.com/celo-org/bls12377js#cb38a4cfb643c778619d79b20ca3e5283a2122a6":
   version "0.1.0"
-  resolved "git+https://github.com/celo-org/bls12377js.git#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
+  resolved "https://github.com/celo-org/bls12377js#cb38a4cfb643c778619d79b20ca3e5283a2122a6"
   dependencies:
     "@stablelib/blake2xs" "0.10.4"
     "@types/node" "^12.11.7"
@@ -8935,7 +8935,7 @@ intl-messageformat@^9.6.12:
     "@formatjs/icu-messageformat-parser" "2.0.12"
     tslib "^2.1.0"
 
-intl-pluralrules@^1.3.1:
+intl-pluralrules@1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/intl-pluralrules/-/intl-pluralrules-1.3.1.tgz#304ec4038a597894f6616633cbf5e66fb3dbee04"
   integrity sha512-sNYPls1Q4fyN0EGLFVJ7TIuaMWln01LupLozfIBt69rHK0DHehghMSz6ejfnSklgRddnyQSEaQPIU6d9TCKH3w==

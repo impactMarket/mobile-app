@@ -1,10 +1,9 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { Body, Modal } from '@impact-market/ui-kit';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
-import CoreModal from 'components/Modal';
 import Button from 'components/core/Button';
-import Card from 'components/core/Card';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
 import * as IntentLauncher from 'expo-intent-launcher';
@@ -22,8 +21,6 @@ import { StyleSheet, Text, View, Alert, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     ActivityIndicator,
-    Headline,
-    Modal,
     Paragraph,
     Portal,
     ProgressBar,
@@ -36,7 +33,6 @@ import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
-import BlockedAccount from './cards/BlockedAccount';
 
 function BeneficiaryScreen() {
     const timeoutTimeDiff = useRef<NodeJS.Timer | undefined>();
@@ -467,113 +463,77 @@ function BeneficiaryScreen() {
                 {i18n.t('generic.turnOnLocationHint')}
             </Snackbar>
             <Portal>
-                <CoreModal
+                <Modal
                     title={i18n.t('community.joinNewCommunity.title')}
                     visible={needsToJoinMigratedCommunity}
-                    buttons={
-                        <>
-                            <Button
-                                modeType="green"
-                                bold
-                                onPress={handleBeneficiaryJoinMigrated}
-                            >
-                                {i18n.t('community.joinNewCommunity.join')}
-                            </Button>
-                        </>
-                    }
+                    buttons={{
+                        props: [
+                            {
+                                text: i18n.t('community.joinNewCommunity.join'),
+                                onPress: handleBeneficiaryJoinMigrated,
+                            },
+                        ],
+                    }}
                 >
-                    <Paragraph>
-                        {i18n.t('community.joinNewCommunity.message')}
-                    </Paragraph>
-                </CoreModal>
-                <Modal visible={suspectWrongDateTime} dismissable={false}>
-                    <Card style={{ marginHorizontal: 20 }}>
-                        <Card.Content>
-                            <View
-                                style={{
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <WaitingRedSvg />
-                                <Headline
-                                    style={{
-                                        fontFamily: 'Gelion-Regular',
-                                        fontSize: 24,
-                                        lineHeight: 24,
-                                        textAlign: 'center',
-                                        color: ipctColors.almostBlack,
-                                        marginVertical: 16,
-                                    }}
-                                >
-                                    {i18n.t('errors.modals.clock.title')}
-                                </Headline>
-                                <Paragraph
-                                    style={{
-                                        fontFamily: 'Gelion-Regular',
-                                        fontSize: 16,
-                                        lineHeight: 19,
-                                        color: ipctColors.almostBlack,
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    {i18n.t('errors.modals.clock.description', {
-                                        serverTime: moment(
-                                            dateTimeDiffModal.getTime() -
-                                                timeDiff
-                                        ).format('H[h]mm[m]ss[s]'),
-                                        userTime:
-                                            moment(dateTimeDiffModal).format(
-                                                'H[h]mm[m]ss[s]'
-                                            ),
-                                    })}
-                                </Paragraph>
-                            </View>
-                            <Button
-                                modeType="default"
-                                style={{
-                                    marginTop: 20,
-                                    marginHorizontal: 5,
-                                }}
-                                bold
-                                onPress={() =>
+                    <Body>{i18n.t('community.joinNewCommunity.message')}</Body>
+                </Modal>
+                <Modal
+                    title={i18n.t('errors.modals.clock.title')}
+                    visible={suspectWrongDateTime}
+                    buttons={{
+                        inline: false,
+                        props: [
+                            {
+                                text: i18n.t('generic.openClockSettings'),
+                                onPress: () =>
                                     IntentLauncher.startActivityAsync(
                                         IntentLauncher.ACTION_DATE_SETTINGS
-                                    )
-                                }
-                            >
-                                {i18n.t('generic.openClockSettings')}
-                            </Button>
-                            <Button
-                                modeType="gray"
-                                style={{
-                                    marginTop: 8,
-                                    marginHorizontal: 5,
-                                }}
-                                bold
-                                onPress={() =>
+                                    ),
+                            },
+                            {
+                                text: i18n.t('generic.dismiss'),
+                                onPress: () =>
                                     dispatch(
                                         setAppSuspectWrongDateTime(false, 0)
-                                    )
-                                }
-                            >
-                                {i18n.t('generic.dismiss')}
-                            </Button>
-                        </Card.Content>
-                    </Card>
+                                    ),
+                                mode: 'gray',
+                            },
+                        ],
+                    }}
+                >
+                    <View
+                        style={{
+                            alignItems: 'center',
+                        }}
+                    >
+                        <WaitingRedSvg />
+                        <Body>
+                            {i18n.t('errors.modals.clock.description', {
+                                serverTime: moment(
+                                    dateTimeDiffModal.getTime() - timeDiff
+                                ).format('H[h]mm[m]ss[s]'),
+                                userTime:
+                                    moment(dateTimeDiffModal).format(
+                                        'H[h]mm[m]ss[s]'
+                                    ),
+                            })}
+                        </Body>
+                    </View>
                 </Modal>
-                <Modal visible={isUserBlocked} dismissable={false}>
-                    <BlockedAccount />
+                <Modal
+                    title={i18n.t('beneficiary.blockedAccountTitle')}
+                    visible={isUserBlocked}
+                >
+                    <Body>
+                        {i18n.t('beneficiary.blockedAccountDescription')}
+                    </Body>
                 </Modal>
             </Portal>
         </>
     );
 }
 
-BeneficiaryScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+BeneficiaryScreen.navigationOptions = () => {
     return {
         headerTitle: i18n.t('beneficiary.claim'),
         tabBarLabel: i18n.t('beneficiary.claim'),
