@@ -19,7 +19,9 @@ import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
 
+import config from '../../../../../../config';
 import CommunityContractABI from '../../../../../contracts/CommunityABI.json';
+import DonationMinerABI from '../../../../../contracts/DonationMinerABI.json';
 
 interface IConfirmModalProps {}
 interface IConfirmModalState {
@@ -59,14 +61,34 @@ class ConfirmModal extends Component<
             CommunityContractABI as any,
             community.contractAddress!
         );
-        const isNewCommunity =
-            await communityContract.methods.impactMarketAddress();
-        if (isNewCommunity.state === 0) {
-            txObject = await communityContract.methods.donate(
+        const isNewCommunity = await communityContract.methods
+            .impactMarketAddress()
+            .call();
+        if (isNewCommunity === '0x0000000000000000000000000000000000000000') {
+            const stableToken = await this.props.kit.contracts.getStableToken();
+            const donationMiner = new this.props.kit.web3.eth.Contract(
+                DonationMinerABI as any,
+                config.donationMinerAddress
+            );
+            txObject = stableToken.approve(
+                community.contractAddress!,
+                cUSDAmount
+            ).txo;
+            contractAddressTo = stableToken.address;
+            // to approve
+            await celoWalletRequest(
                 userAddress,
+                contractAddressTo,
+                txObject,
+                'approve',
+                kit
+            );
+            // to donate
+            txObject = await donationMiner.methods.donateToCommunity(
+                community.contractAddress!,
                 cUSDAmount
             );
-            contractAddressTo = community.contractAddress;
+            contractAddressTo = config.donationMinerAddress;
         } else {
             const stableToken = await this.props.kit.contracts.getStableToken();
             txObject = stableToken.transfer(

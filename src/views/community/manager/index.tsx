@@ -175,7 +175,10 @@ function CommunityManagerScreen() {
             });
     };
 
-    const days = calculateCommunityRemainedFunds(community);
+    let days = 0;
+    if (community.state !== null) {
+        days = calculateCommunityRemainedFunds(community);
+    }
 
     const communityStatus = (_community: CommunityAttributes) => {
         if (

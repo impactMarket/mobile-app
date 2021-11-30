@@ -91,11 +91,20 @@ function BeneficiaryScreen() {
                     communityContract !== undefined &&
                     userAddress.length > 0
                 ) {
-                    const claimed = (
-                        await communityContract.methods
-                            .claimed(userAddress)
-                            .call()
-                    ).toString();
+                    let claimed = '0';
+                    try {
+                        claimed = (
+                            await communityContract.methods
+                                .claimed(userAddress)
+                                .call()
+                        ).toString();
+                    } catch (_) {
+                        claimed = (
+                            await communityContract.methods.beneficiaries(
+                                userAddress
+                            )
+                        ).claimedAmount.toString();
+                    }
                     const cooldown = parseInt(
                         (
                             await communityContract.methods
