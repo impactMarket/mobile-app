@@ -74,53 +74,60 @@ function BeneficiaryScreen() {
             if (community !== undefined && community.contract !== undefined) {
                 const beneficiaryClaimCache =
                     await CacheStore.getBeneficiaryClaim();
-                if (
-                    beneficiaryClaimCache !== null &&
-                    beneficiaryClaimCache.communityId === community.publicId
-                ) {
-                    const progress = new BigNumber(
-                        beneficiaryClaimCache.claimed
-                    ).div(community.contract.maxClaim);
-                    setClaimedAmount(
-                        humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
-                    );
-                    setClaimedProgress(progress.toNumber());
-                    setCooldownTime(beneficiaryClaimCache.cooldown);
-                    setLastInterval(beneficiaryClaimCache.lastInterval);
-                } else if (
-                    communityContract !== undefined &&
-                    userAddress.length > 0
-                ) {
+                // if (
+                //     beneficiaryClaimCache !== null &&
+                //     beneficiaryClaimCache.communityId === community.publicId
+                // ) {
+                //     const progress = new BigNumber(
+                //         beneficiaryClaimCache.claimed
+                //     ).div(community.contract.maxClaim);
+                //     setClaimedAmount(
+                //         humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
+                //     );
+                //     setClaimedProgress(progress.toNumber());
+                //     // setCooldownTime(beneficiaryClaimCache.cooldown);
+                //     // setLastInterval(beneficiaryClaimCache.lastInterval);
+                // } else
+                if (communityContract !== undefined && userAddress.length > 0) {
                     let claimed = '0';
+                    let cooldown = 1;
+                    let lastIntv = 0;
                     try {
                         claimed = (
                             await communityContract.methods
                                 .claimed(userAddress)
                                 .call()
                         ).toString();
+                        cooldown = parseInt(
+                            (
+                                await communityContract.methods
+                                    .cooldown(userAddress)
+                                    .call()
+                            ).toString(),
+                            10
+                        );
+                        lastIntv = parseInt(
+                            (
+                                await communityContract.methods
+                                    .lastInterval(userAddress)
+                                    .call()
+                            ).toString(),
+                            10
+                        );
                     } catch (_) {
-                        claimed = (
-                            await communityContract.methods.beneficiaries(
-                                userAddress
-                            )
-                        ).claimedAmount.toString();
-                    }
-                    const cooldown = parseInt(
-                        (
-                            await communityContract.methods
-                                .cooldown(userAddress)
-                                .call()
-                        ).toString(),
-                        10
-                    );
-                    const lastIntv = parseInt(
-                        (
+                        const _beneficiary = await communityContract.methods
+                            .beneficiaries(userAddress)
+                            .call();
+                        claimed = _beneficiary.claimedAmount.toString();
+                        lastIntv = parseInt(
                             await communityContract.methods
                                 .lastInterval(userAddress)
-                                .call()
-                        ).toString(),
-                        10
-                    );
+                                .call(),
+                            10
+                        );
+                        cooldown =
+                            lastIntv + community.contract.incrementInterval;
+                    }
                     // cache it
                     const beneficiaryClaimCache = {
                         communityId: community.publicId,
