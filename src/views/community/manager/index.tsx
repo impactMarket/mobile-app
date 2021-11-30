@@ -92,15 +92,19 @@ function CommunityManagerScreen() {
                         '50000000000000000'
                     )
                 );
-                const isNewCommunity =
-                    await communityContract.methods.impactMarketAddress();
-                if (isNewCommunity === 0) {
+                const isNewCommunity = await communityContract.methods
+                    .impactMarketAddress()
+                    .call();
+                if (
+                    isNewCommunity ===
+                    '0x0000000000000000000000000000000000000000'
+                ) {
                     const claimedRatio = new BigNumber(
                         community.state.claimed
                     ).dividedBy(community.state.raised);
                     if (claimedRatio.gt(new BigNumber(0.95))) {
-                        setCanRequestFunds(true);
                     }
+                    setCanRequestFunds(true);
                 }
             };
             const verifyRequestToChangeUbiParams = () => {
@@ -175,6 +179,38 @@ function CommunityManagerScreen() {
             });
     };
 
+    const handleRequestFunds = async () => {
+        celoWalletRequest(
+            userAddress,
+            communityContract.options.address,
+            await communityContract.methods.requestFunds(),
+            'requestfunds',
+            kit
+        )
+            .then((tx) => {
+                if (tx === undefined) {
+                    return;
+                }
+
+                Alert.alert(i18n.t('generic.success'), '', [{ text: 'OK' }], {
+                    cancelable: false,
+                });
+            })
+            .catch((e) => {
+                console.log(e);
+                Sentry.Native.captureException(e);
+                Alert.alert(
+                    i18n.t('generic.failure'),
+                    i18n.t('generic.generic'),
+                    [{ text: i18n.t('generic.close') }],
+                    { cancelable: false }
+                );
+            })
+            .finally(() => {
+                setEditInProgress(false);
+            });
+    };
+
     let days = 0;
     if (community.state !== null) {
         days = calculateCommunityRemainedFunds(community);
@@ -201,7 +237,10 @@ function CommunityManagerScreen() {
                             <View style={styles.container}>
                                 {canRequestFunds && (
                                     <Card
-                                        style={{ marginTop: 16, padding: 22 }}
+                                        style={{
+                                            marginVertical: 16,
+                                            padding: 22,
+                                        }}
                                     >
                                         <View
                                             style={{
@@ -228,7 +267,10 @@ function CommunityManagerScreen() {
                                                 </>
                                             </Body>
                                         </View>
-                                        <Button mode="text">
+                                        <Button
+                                            mode="text"
+                                            onPress={handleRequestFunds}
+                                        >
                                             {i18n.t('community.requestFunds')}
                                         </Button>
                                     </Card>
