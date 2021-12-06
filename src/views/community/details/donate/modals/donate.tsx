@@ -1,7 +1,9 @@
+import { Body, Button, colors } from '@impact-market/ui-kit';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
-import Modal from 'components/Modal';
-import Button from 'components/core/Button';
+import Divider from 'components/Divider';
+// import Modal from 'components/Modal';
+// import Button from 'components/core/Button';
 import * as Clipboard from 'expo-clipboard';
 import { modalDonateAction } from 'helpers/constants';
 import {
@@ -15,17 +17,23 @@ import { Text, View, StyleSheet, Alert, TextInput } from 'react-native';
 import { Paragraph, Snackbar } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
+import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 import config from '../../../../../../config';
+import CommunityContractABI from '../../../../../contracts/CommunityABI.json';
+import DonationMinerABI from '../../../../../contracts/DonationMinerABI.json';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
 interface IDonateModalProps {}
 interface IDonateModalState {
     donating: boolean;
+    approving: boolean;
     amountDonate: string;
     showCopiedToClipboard: boolean;
+    approved: boolean;
+    isNew: boolean;
 }
 class DonateModal extends Component<
     IDonateModalProps & PropsFromRedux,
@@ -35,10 +43,32 @@ class DonateModal extends Component<
         super(props);
         this.state = {
             donating: false,
+            approving: false,
             amountDonate: '',
             showCopiedToClipboard: false,
+            approved: false,
+            isNew: true,
         };
     }
+
+    // componentDidMount = async () => {
+    //     // const { kit, community } = this.props;
+    //     // if (community) {
+    //     //     const communityContract = new kit.web3.eth.Contract(
+    //     //         CommunityContractABI as any,
+    //     //         community.contractAddress!
+    //     //     );
+    //     //     const isNewCommunity = await communityContract.methods
+    //     //         .impactMarketAddress()
+    //     //         .call();
+    //     //     if (
+    //     //         isNewCommunity === '0x0000000000000000000000000000000000000000'
+    //     //     ) {
+    //     //         this.setState({ isNew: true });
+    //     //         console.log('1');
+    //     //     }
+    //     // }
+    // };
 
     componentDidUpdate = (prevProps: IDonateModalProps & PropsFromRedux) => {
         if (prevProps.inputAmount !== this.props.inputAmount) {
@@ -108,6 +138,57 @@ class DonateModal extends Component<
         }
     };
 
+    approve = async () => {
+        const { kit, userAddress, community, exchangeRate } = this.props;
+        if (community === undefined) {
+            return;
+        }
+        const { amountDonate } = this.state;
+        const amountInDollars =
+            parseFloat(formatInputAmountToTransfer(amountDonate)) /
+            exchangeRate;
+        // no need to check if enough for tx fee
+        this.setState({ donating: true });
+
+        let contractAddressTo = '';
+        let txObject;
+        const cUSDAmount = new BigNumber(amountInDollars)
+            .multipliedBy(new BigNumber(10).pow(18))
+            .toString();
+        // const communityContract = new kit.web3.eth.Contract(
+        //     CommunityContractABI as any,
+        //     community.contractAddress!
+        // );
+        // // const isNewCommunity = await communityContract.methods
+        // //     .impactMarketAddress()
+        // //     .call();
+        // // if (isNewCommunity === '0x0000000000000000000000000000000000000000') {
+        const stableToken = await this.props.kit.contracts.getStableToken();
+        const donationMiner = new this.props.kit.web3.eth.Contract(
+            DonationMinerABI as any,
+            config.donationMinerAddress
+        );
+        txObject = stableToken.approve(
+            community.contractAddress!,
+            cUSDAmount
+        ).txo;
+        contractAddressTo = stableToken.address;
+        // to approve
+        await celoWalletRequest(
+            userAddress,
+            contractAddressTo,
+            txObject,
+            'approve',
+            kit
+        );
+        // to donate
+        txObject = await donationMiner.methods.donateToCommunity(
+            community.contractAddress!,
+            cUSDAmount
+        );
+        contractAddressTo = config.donationMinerAddress;
+    };
+
     render() {
         const {
             visible,
@@ -119,8 +200,9 @@ class DonateModal extends Component<
             exchangeRates,
             userAddress,
         } = this.props;
-        const { amountDonate, donating, showCopiedToClipboard } = this.state;
+        const { amountDonate, donating, approved } = this.state;
 
+        console.log(community);
         if (
             community === undefined ||
             community.contract === undefined ||
@@ -140,236 +222,255 @@ class DonateModal extends Component<
                 .toNumber() /
             community.state.beneficiaries;
 
-        const donateWithValoraButton =
-            userAddress.length > 0 ? (
-                <Button
-                    modeType="default"
-                    bold
-                    labelStyle={styles.donateLabel}
-                    loading={donating}
-                    disabled={
-                        donating ||
-                        amountDonate.length === 0 ||
-                        isNaN(parseInt(amountDonate, 10)) ||
-                        parseInt(amountDonate, 10) < 0
-                    }
-                    onPress={this.handleConfirmDonateWithCeloWallet}
-                >
-                    {i18n.t('donate.donateWithValora')}
-                </Button>
-            ) : (
-                <Button
-                    icon="alert"
-                    modeType="default"
-                    bold
-                    style={{
-                        backgroundColor: '#f0ad4e',
-                    }}
-                    labelStyle={styles.donateLabel}
-                    onPress={() => {
-                        Alert.alert(
-                            i18n.t('generic.failure'),
-                            i18n.t('generic.youAreNotConnected'),
-                            [{ text: i18n.t('generic.close') }],
-                            { cancelable: false }
-                        );
-                    }}
-                >
-                    {i18n.t('donate.donateWithValora')}
-                </Button>
-            );
-
         return (
             <>
-                <Snackbar
-                    visible={showCopiedToClipboard}
-                    onDismiss={() =>
-                        this.setState({ showCopiedToClipboard: false })
-                    }
-                    action={{
-                        label: i18n.t('generic.close'),
-                        onPress: () =>
-                            this.setState({ showCopiedToClipboard: false }),
+                <View
+                    style={{
+                        backgroundColor: 'white',
+                        // opacity: 0.27,
+                        alignItems: 'center',
+                        borderRadius: 5,
+                        padding: 13,
                     }}
+                    testID="modalDonateWithCelo"
                 >
-                    {i18n.t('donate.addressCopiedClipboard')}
-                </Snackbar>
-                <Modal
-                    title={i18n.t('donate.donateSymbol', {
-                        symbol: userCurrency,
-                    })}
-                    visible={visible}
-                    buttons={
-                        <>
-                            <Button
-                                modeType="gray"
-                                bold
-                                style={{ marginBottom: 10 }}
-                                labelStyle={styles.donateLabel}
-                                onPress={this.handleCopyAddressToClipboard}
-                            >
-                                {i18n.t('community.copyContractAddress')}
-                            </Button>
-                            {donateWithValoraButton}
-                        </>
-                    }
-                    onDismiss={() => {
-                        dismissModal();
-                        this.setState({ amountDonate: '' });
-                    }}
-                >
-                    <View
-                        style={{
-                            backgroundColor: '#F6F6F7',
-                            // opacity: 0.27,
-                            alignItems: 'center',
-                            borderRadius: 5,
-                            padding: 13,
-                        }}
-                        testID="modalDonateWithCelo"
-                    >
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text
-                                style={{
-                                    fontFamily: 'Gelion-Regular',
-                                    fontSize: 50,
-                                    lineHeight: 60,
-                                    height: 60,
-                                    textAlign: 'center',
-                                    color: ipctColors.almostBlack,
-                                    textAlignVertical: 'center',
-                                }}
-                            >
-                                {getCurrencySymbol(userCurrency)}
-                            </Text>
-                            <TextInput
-                                keyboardType="numeric"
-                                maxLength={9}
-                                autoFocus
-                                style={{
-                                    fontFamily: 'Gelion-Regular',
-                                    fontSize: 50,
-                                    lineHeight: 60,
-                                    height: 60,
-                                    textAlign: 'center',
-                                    color: ipctColors.almostBlack,
-                                }}
-                                value={amountDonate}
-                                onChangeText={(text) =>
-                                    this.setState({
-                                        amountDonate: text,
-                                    })
-                                }
-                            />
-                        </View>
-                        <View style={{ height: 19 }}>
-                            <Paragraph
-                                style={{
-                                    fontSize: 16,
-                                    lineHeight: 19,
-                                    height: 19,
-                                    color: 'rgba(0, 0, 0, 0.6)',
-                                    display:
-                                        amountDonate.length > 0 &&
-                                        !isNaN(parseInt(amountDonate, 10)) &&
-                                        parseInt(amountDonate, 10) > 0
-                                            ? 'flex'
-                                            : 'none',
-                                }}
-                            >
-                                ~
-                                {`${getCurrencySymbol(community.currency)}${(
-                                    Math.floor(
-                                        amountInDollars *
-                                            exchangeRates[community.currency] *
-                                            100
-                                    ) / 100
-                                )
-                                    .toString()
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${
-                                    community.currency
-                                }`}
-                            </Paragraph>
-                        </View>
-                    </View>
-                    {/** TODO: fix height */}
-                    <View style={{ height: 23 * 2 + 19 * 2 }}>
-                        <Paragraph
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text
                             style={{
-                                marginVertical: 23,
-                                fontSize: 16,
-                                lineHeight: 19,
-                                height: 19 * 2 /** TODO: fix height */,
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 50,
+                                lineHeight: 60,
+                                height: 60,
                                 textAlign: 'center',
-                                fontStyle: 'italic',
-                                color: ipctColors.regentGray,
-                                display:
-                                    amountDonate.length === 0 ||
-                                    isNaN(parseInt(amountDonate, 10)) ||
-                                    parseInt(amountDonate, 10) < 0 ||
-                                    new BigNumber(
-                                        community.contract.claimAmount
-                                    )
-                                        .dividedBy(10 ** config.cUSDDecimals)
-                                        .gt(amountInDollars)
-                                        ? 'flex'
-                                        : 'none',
+                                color: ipctColors.almostBlack,
+                                textAlignVertical: 'center',
                             }}
                         >
-                            {i18n.t('donate.amountShouldBe', {
-                                claimAmount: parseFloat(
-                                    new BigNumber(
-                                        community.contract.claimAmount
-                                    )
-                                        .dividedBy(10 ** config.cUSDDecimals)
-                                        .decimalPlaces(2, 1)
-                                        .toString()
-                                ),
-                            })}
-                        </Paragraph>
+                            {getCurrencySymbol(userCurrency)}
+                        </Text>
+                        <TextInput
+                            keyboardType="numeric"
+                            maxLength={9}
+                            autoFocus
+                            style={{
+                                fontFamily: 'Gelion-Regular',
+                                fontSize: 50,
+                                lineHeight: 60,
+                                height: 60,
+                                textAlign: 'center',
+                                color: ipctColors.almostBlack,
+                            }}
+                            value={amountDonate}
+                            onChangeText={(text) =>
+                                this.setState({
+                                    amountDonate: text,
+                                })
+                            }
+                        />
+                    </View>
+                    <View style={{ height: 19 }}>
                         <Paragraph
                             style={{
-                                marginVertical: 23,
                                 fontSize: 16,
                                 lineHeight: 19,
                                 height: 19,
-                                textAlign: 'center',
+                                color: 'rgba(0, 0, 0, 0.6)',
                                 display:
                                     amountDonate.length > 0 &&
-                                    new BigNumber(
-                                        community.contract.claimAmount
-                                    )
-                                        .dividedBy(10 ** config.cUSDDecimals)
-                                        .lte(amountInDollars)
+                                    !isNaN(parseInt(amountDonate, 10)) &&
+                                    parseInt(amountDonate, 10) > 0
                                         ? 'flex'
                                         : 'none',
                             }}
                         >
-                            {i18n.t('donate.yourDonationWillBackFor', {
-                                backNBeneficiaries: Math.min(
-                                    community.state.beneficiaries,
-                                    amountDonate.length > 0
-                                        ? Math.floor(
-                                              amountInDollars /
-                                                  new BigNumber(
-                                                      community.contract.claimAmount
-                                                  )
-                                                      .dividedBy(
-                                                          10 **
-                                                              config.cUSDDecimals
-                                                      )
-                                                      .toNumber()
-                                          )
-                                        : 0
-                                ),
-                                backForDays:
-                                    amountDonate.length > 0
-                                        ? Math.max(1, Math.floor(backForDays))
-                                        : 0,
-                            })}
+                            ~
+                            {`${getCurrencySymbol(community.currency)}${(
+                                Math.floor(
+                                    amountInDollars *
+                                        exchangeRates[community.currency] *
+                                        100
+                                ) / 100
+                            )
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${
+                                community.currency
+                            }`}
                         </Paragraph>
                     </View>
-                </Modal>
+                </View>
+                {/** TODO: fix height */}
+                <View style={{ height: 23 * 2 }}>
+                    <Body
+                        style={{
+                            marginVertical: 23,
+                            fontSize: 16,
+                            lineHeight: 19,
+                            height: 19 * 2 /** TODO: fix height */,
+                            textAlign: 'center',
+                            fontStyle: 'italic',
+                            color: ipctColors.regentGray,
+                            display:
+                                amountDonate.length === 0 ||
+                                isNaN(parseInt(amountDonate, 10)) ||
+                                parseInt(amountDonate, 10) < 0 ||
+                                new BigNumber(community.contract.claimAmount)
+                                    .dividedBy(10 ** config.cUSDDecimals)
+                                    .gt(amountInDollars)
+                                    ? 'flex'
+                                    : 'none',
+                        }}
+                    >
+                        {i18n.t('donate.amountShouldBe', {
+                            claimAmount: parseFloat(
+                                new BigNumber(community.contract.claimAmount)
+                                    .dividedBy(10 ** config.cUSDDecimals)
+                                    .decimalPlaces(2, 1)
+                                    .toString()
+                            ),
+                        })}
+                    </Body>
+                    <Body
+                        style={{
+                            marginVertical: 23,
+                            fontSize: 16,
+                            lineHeight: 19,
+                            height: 19,
+                            textAlign: 'center',
+                            display:
+                                amountDonate.length > 0 &&
+                                new BigNumber(community.contract.claimAmount)
+                                    .dividedBy(10 ** config.cUSDDecimals)
+                                    .lte(amountInDollars)
+                                    ? 'flex'
+                                    : 'none',
+                        }}
+                    >
+                        {i18n.t('donate.yourDonationWillBackFor', {
+                            backNBeneficiaries: Math.min(
+                                community.state.beneficiaries,
+                                amountDonate.length > 0
+                                    ? Math.floor(
+                                          amountInDollars /
+                                              new BigNumber(
+                                                  community.contract.claimAmount
+                                              )
+                                                  .dividedBy(
+                                                      10 ** config.cUSDDecimals
+                                                  )
+                                                  .toNumber()
+                                      )
+                                    : 0
+                            ),
+                            backForDays:
+                                amountDonate.length > 0
+                                    ? Math.max(1, Math.floor(backForDays))
+                                    : 0,
+                        })}
+                    </Body>
+                </View>
+                <View style={{ margin: 22 }}>
+                    <View
+                        style={{
+                            marginVertical: 6,
+                            marginHorizontal: 61.25,
+                            flexDirection: 'row',
+                        }}
+                    >
+                        <View
+                            style={{
+                                height: 32,
+                                width: 32,
+                                borderRadius: 16,
+                                alignSelf: 'center',
+                                backgroundColor: approved
+                                    ? colors.ui.success
+                                    : colors.brand.primary,
+                            }}
+                        >
+                            <Body
+                                style={{
+                                    color: 'white',
+                                    alignSelf: 'center',
+                                    lineHeight: 32,
+                                    fontSize: 14,
+                                }}
+                            >
+                                1
+                            </Body>
+                        </View>
+                        <View
+                            style={{
+                                flex: 1,
+                            }}
+                        >
+                            <Divider />
+                        </View>
+                        <View
+                            style={{
+                                height: 32,
+                                width: 32,
+                                borderRadius: 16,
+                                alignSelf: 'center',
+                                backgroundColor: approved
+                                    ? colors.brand.primary
+                                    : colors.background.inputs,
+                            }}
+                        >
+                            <Body
+                                style={{
+                                    color: approved
+                                        ? 'white'
+                                        : colors.text.secondary,
+                                    alignSelf: 'center',
+                                    lineHeight: 32,
+                                    fontSize: 14,
+                                }}
+                            >
+                                2
+                            </Body>
+                        </View>
+                    </View>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <Button
+                            mode={approved ? 'green' : 'default'}
+                            style={{ flex: 1, marginRight: 4 }}
+                            disabled={
+                                donating ||
+                                amountDonate.length === 0 ||
+                                isNaN(parseInt(amountDonate, 10)) ||
+                                parseInt(amountDonate, 10) < 0 ||
+                                approved
+                            }
+                            onPress={this.approve}
+                        >
+                            Approve
+                        </Button>
+                        <Button
+                            mode={approved ? 'default' : 'gray'}
+                            textStyle={styles.donateLabel}
+                            style={{
+                                flex: 1,
+                                marginLeft: 4,
+                            }}
+                            // loading={donating}
+                            disabled={
+                                donating ||
+                                amountDonate.length === 0 ||
+                                isNaN(parseInt(amountDonate, 10)) ||
+                                parseInt(amountDonate, 10) < 0 ||
+                                !approved
+                            }
+                            onPress={this.handleConfirmDonateWithCeloWallet}
+                        >
+                            {i18n.t('donate.donate')}
+                        </Button>
+                    </View>
+                </View>
             </>
         );
     }
@@ -388,7 +489,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: IRootState) => {
-    const { exchangeRates } = state.app;
+    const { exchangeRates, kit } = state.app;
     const { currency, address } = state.user.metadata;
     const { exchangeRate } = state.user;
     const { modalDonateOpen, community, donationValues } = state.modalDonate;
@@ -401,6 +502,7 @@ const mapStateToProps = (state: IRootState) => {
         visible: modalDonateOpen,
         community,
         inputAmount: donationValues.inputAmount,
+        kit,
     };
 };
 

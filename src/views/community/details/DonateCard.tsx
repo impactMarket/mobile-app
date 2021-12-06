@@ -1,4 +1,8 @@
+import { Heading } from '@impact-market/ui-kit';
 import i18n from 'assets/i18n';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
+import CeloDolarSvg from 'components/svg/CeloDolarSvg';
+import EsolidarSvg from 'components/svg/EsolidarSvg';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import React, { useEffect, useRef, useState } from 'react';
@@ -10,13 +14,14 @@ import { WebView } from 'react-native-webview';
 import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
+import DonateView from './donate';
 
-import ConfirmModal from '../views/community/details/donate/modals/confirm';
-import DonateModal from '../views/community/details/donate/modals/donate';
-import ErrorModal from '../views/community/details/donate/modals/error';
-import renderHeader from './core/HeaderBottomSheetTitle';
-import CeloDolarSvg from './svg/CeloDolarSvg';
-import EsolidarSvg from './svg/EsolidarSvg';
+// import ConfirmModal from '../views/community/details/donate/modals/confirm';
+// import DonateModal from '../views/community/details/donate/modals/donate';
+// import ErrorModal from '../views/community/details/donate/modals/error';
+// import renderHeader from './core/HeaderBottomSheetTitle';
+// import CeloDolarSvg from './svg/CeloDolarSvg';
+// import EsolidarSvg from './svg/EsolidarSvg';
 
 interface IDonateProps {
     community: CommunityAttributes;
@@ -28,6 +33,7 @@ export default function DonateCard(props: IDonateProps) {
     const dispatch = useDispatch();
     const [campaignUrl, setCampaignUrl] = useState<string | null>(null);
     const modalizeESolidar = useRef<Modalize>(null);
+    const modalizeWelcomeRef = useRef<Modalize>(null);
 
     useEffect(() => {
         Api.community
@@ -47,12 +53,7 @@ export default function DonateCard(props: IDonateProps) {
                 </Title>
                 <Pressable
                     style={styles.button}
-                    onPress={() =>
-                        dispatch({
-                            type: modalDonateAction.OPEN,
-                            payload: community,
-                        })
-                    }
+                    onPress={() => modalizeWelcomeRef.current?.open()}
                     testID="donateWithCelo"
                 >
                     <View
@@ -139,32 +140,40 @@ export default function DonateCard(props: IDonateProps) {
                 )}
             </View>
             <Portal>
-                <Provider store={useStore()}>
-                    <DonateModal />
-                    <ConfirmModal />
-                    <ErrorModal />
-                    <Modalize
-                        ref={modalizeESolidar}
-                        HeaderComponent={renderHeader(
-                            null,
-                            modalizeESolidar,
-                            () => {},
-                            true
-                        )}
-                        adjustToContentHeight
-                    >
-                        <WebView
-                            originWhitelist={['*']}
-                            source={{
-                                uri: campaignUrl,
-                            }}
-                            style={{
-                                height: Dimensions.get('screen').height * 0.85,
-                            }}
-                            testID="webViewESolidar"
-                        />
-                    </Modalize>
-                </Provider>
+                <Modalize
+                    ref={modalizeWelcomeRef}
+                    HeaderComponent={renderHeader(
+                        'Donate',
+                        modalizeWelcomeRef,
+                        () => {},
+                        false
+                    )}
+                    adjustToContentHeight
+                    onClose={() => {}}
+                >
+                    <DonateView />
+                </Modalize>
+                <Modalize
+                    ref={modalizeESolidar}
+                    HeaderComponent={renderHeader(
+                        null,
+                        modalizeESolidar,
+                        () => {},
+                        true
+                    )}
+                    adjustToContentHeight
+                >
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{
+                            uri: campaignUrl,
+                        }}
+                        style={{
+                            height: Dimensions.get('screen').height * 0.85,
+                        }}
+                        testID="webViewESolidar"
+                    />
+                </Modalize>
             </Portal>
         </>
     );
