@@ -8,23 +8,30 @@ import {
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Divider from 'components/Divider';
-// import Modal from 'components/Modal';
-// import Button from 'components/core/Button';
-import * as Clipboard from 'expo-clipboard';
-import { modalDonateAction } from 'helpers/constants';
+import renderHeader from 'components/core/HeaderBottomSheetTitle';
+import SuccessSvg from 'components/svg/SuccessSvg';
 import {
     formatInputAmountToTransfer,
     getCurrencySymbol,
 } from 'helpers/currency';
 import { getUserBalance } from 'helpers/index';
+import { setOpenAuthModal } from 'helpers/redux/actions/app';
 import { setUserWalletBalance } from 'helpers/redux/actions/user';
-import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
-import React, { Component, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Alert, TextInput } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    Text,
+    View,
+    StyleSheet,
+    Alert,
+    TextInput,
+    Dimensions,
+} from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { Paragraph, Snackbar } from 'react-native-paper';
-import { connect, ConnectedProps, useDispatch, useSelector } from 'react-redux';
-import { Dispatch } from 'redux';
+import { Portal } from 'react-native-portalize';
+import { WebView } from 'react-native-webview';
+import { useDispatch, useSelector } from 'react-redux';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
@@ -34,12 +41,16 @@ import DonationMinerABI from '../../../contracts/DonationMinerABI.json';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
-function DonateView() {
+function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
     const [donating, setDonating] = useState(false);
     const [approving, setApproving] = useState(false);
     const [amountDonate, setAmountDonate] = useState('');
     const [approved, setApproved] = useState(false);
     const [isNew, setIsNew] = useState(false);
+    const [donatedSuccessfully, setDonatedSuccessfully] = useState(false);
+    const [snackbarVisible, setSnackbarVisible] = useState(false);
+
+    const modalizeWebViewRef = useRef<Modalize>(null);
 
     const dispatch = useDispatch();
 
@@ -168,6 +179,7 @@ function DonateView() {
                         ).toString();
                         dispatch(setUserWalletBalance(newBalanceStr));
                     }, 1200);
+                    setDonatedSuccessfully(true);
                 })
                 .catch((_) => {
                     Alert.alert(
@@ -190,6 +202,10 @@ function DonateView() {
                 .finally(() => setDonating(false));
         executeTx();
     };
+
+    const onToggleSnackBar = () => setSnackbarVisible(!snackbarVisible);
+
+    const onDismissSnackBar = () => setSnackbarVisible(false);
 
     if (
         community === undefined ||
@@ -214,6 +230,62 @@ function DonateView() {
         new BigNumber(userBalance)
             .dividedBy(10 ** config.cUSDDecimals)
             .toNumber();
+
+    if (donatedSuccessfully) {
+        return (
+            <View>
+                <View
+                    style={{
+                        alignItems: 'center',
+                    }}
+                >
+                    <SuccessSvg />
+                </View>
+                <View
+                    style={{
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <View>
+                        <Text
+                            style={{
+                                marginTop: 14,
+                                fontFamily: 'Manrope-Bold',
+                                fontSize: 24,
+                                lineHeight: 29,
+                                textAlign: 'center',
+                                color: ipctColors.almostBlack,
+                            }}
+                        >
+                            {i18n.t('generic.thankYou')}
+                        </Text>
+                        <Body
+                            style={{
+                                marginTop: 29,
+                                marginHorizontal: 70,
+                                textAlign: 'center',
+                            }}
+                        >
+                            {i18n.t('donate.yourDonationWillBackFor', {
+                                backNBeneficiaries:
+                                    community.state.beneficiaries,
+                                backForDays,
+                            })}
+                        </Body>
+                    </View>
+                    <Button
+                        mode="default"
+                        style={{
+                            margin: 22,
+                        }}
+                        onPress={() => props.modalDonateRef.current.close()}
+                    >
+                        {i18n.t('generic.continue')}
+                    </Button>
+                </View>
+            </View>
+        );
+    }
 
     return (
         <>
@@ -357,25 +429,23 @@ function DonateView() {
                     })}
                 </Body>
             </View>
-            {notEnoughBalance && (
+            {notEnoughBalance && userAddress.length > 0 && (
                 <View
                     style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
                         paddingVertical: 30,
+                        paddingHorizontal: 30,
                     }}
                 >
                     <WarningIcon color={colors.ui.warning} />
                     <Body
                         style={{
-                            // alignSelf: 'center',
                             marginLeft: 7,
-                            lineHeight: 32,
-                            fontSize: 14,
                         }}
                     >
-                        Not enough funds to continue.
+                        {i18n.t('donate.notEnoughFunds')}
                     </Body>
                 </View>
             )}
@@ -387,8 +457,11 @@ function DonateView() {
                         paddingHorizontal: 22,
                     }}
                 >
-                    <Button mode="green" onPress={() => {}}>
-                        Connect with Valora
+                    <Button
+                        mode="green"
+                        onPress={() => dispatch(setOpenAuthModal(true))}
+                    >
+                        {i18n.t('auth.connectWithValora')}
                     </Button>
                     <View
                         style={{
@@ -398,11 +471,17 @@ function DonateView() {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <ButtonText style={{ color: colors.brand.primary }}>
-                            What is Valora?
+                        <ButtonText
+                            style={{ color: colors.brand.primary }}
+                            onPress={() => modalizeWebViewRef.current?.open()}
+                        >
+                            {i18n.t('auth.whatIsValora')}
                         </ButtonText>
-                        <ButtonText style={{ color: colors.brand.primary }}>
-                            Copy Contract Address
+                        <ButtonText
+                            style={{ color: colors.brand.primary }}
+                            onPress={onToggleSnackBar}
+                        >
+                            {i18n.t('community.copyContractAddress')}
                         </ButtonText>
                     </View>
                 </View>
@@ -530,6 +609,38 @@ function DonateView() {
                         {i18n.t('donate.donate')}
                     </Button>
                 ))}
+            <Portal>
+                <Modalize
+                    ref={modalizeWebViewRef}
+                    HeaderComponent={renderHeader(
+                        null,
+                        modalizeWebViewRef,
+                        () => {},
+                        true
+                    )}
+                    adjustToContentHeight
+                >
+                    <WebView
+                        originWhitelist={['*']}
+                        source={{ uri: 'https://valoraapp.com/' }}
+                        style={{
+                            height: Dimensions.get('screen').height * 0.85,
+                        }}
+                    />
+                </Modalize>
+            </Portal>
+            <Snackbar
+                visible={snackbarVisible}
+                onDismiss={onDismissSnackBar}
+                action={{
+                    label: i18n.t('generic.close'),
+                    onPress: () => {
+                        // Do something
+                    },
+                }}
+            >
+                {i18n.t('donate.addressCopiedClipboard')}
+            </Snackbar>
         </>
     );
 }

@@ -33,7 +33,7 @@ export default function DonateCard(props: IDonateProps) {
     // const dispatch = useDispatch();
     const [campaignUrl, setCampaignUrl] = useState<string | null>(null);
     const modalizeESolidar = useRef<Modalize>(null);
-    const modalizeWelcomeRef = useRef<Modalize>(null);
+    const modalDonateRef = useRef<Modalize>(null);
 
     useEffect(() => {
         Api.community
@@ -53,7 +53,7 @@ export default function DonateCard(props: IDonateProps) {
                 </Title>
                 <Pressable
                     style={styles.button}
-                    onPress={() => modalizeWelcomeRef.current?.open()}
+                    onPress={() => modalDonateRef.current?.open()}
                     testID="donateWithCelo"
                 >
                     <View
@@ -141,17 +141,17 @@ export default function DonateCard(props: IDonateProps) {
             </View>
             <Portal>
                 <Modalize
-                    ref={modalizeWelcomeRef}
+                    ref={modalDonateRef}
                     HeaderComponent={renderHeader(
                         'Donate',
-                        modalizeWelcomeRef,
+                        modalDonateRef,
                         () => {},
                         false
                     )}
                     adjustToContentHeight
                     onClose={() => {}}
                 >
-                    <DonateView />
+                    <DonateView modalDonateRef={modalDonateRef} />
                 </Modalize>
                 <Modalize
                     ref={modalizeESolidar}
