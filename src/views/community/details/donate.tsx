@@ -1,16 +1,23 @@
-import { Body, Button, colors } from '@impact-market/ui-kit';
+import {
+    Body,
+    Button,
+    ButtonText,
+    colors,
+    WarningIcon,
+} from '@impact-market/ui-kit';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Divider from 'components/Divider';
 // import Modal from 'components/Modal';
 // import Button from 'components/core/Button';
 import * as Clipboard from 'expo-clipboard';
-import { getUserBalance } from 'helpers/index';
 import { modalDonateAction } from 'helpers/constants';
 import {
     formatInputAmountToTransfer,
     getCurrencySymbol,
 } from 'helpers/currency';
+import { getUserBalance } from 'helpers/index';
+import { setUserWalletBalance } from 'helpers/redux/actions/user';
 import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component, useEffect, useState } from 'react';
@@ -24,7 +31,6 @@ import { ipctColors } from 'styles/index';
 import config from '../../../../config';
 import CommunityContractABI from '../../../contracts/CommunityABI.json';
 import DonationMinerABI from '../../../contracts/DonationMinerABI.json';
-import { setUserWalletBalance } from 'helpers/redux/actions/user';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
@@ -49,6 +55,9 @@ function DonateView() {
     );
     const userAddress = useSelector(
         (state: IRootState) => state.user.metadata.address
+    );
+    const userBalance = useSelector(
+        (state: IRootState) => state.user.wallet.balance
     );
 
     useEffect(() => {
@@ -200,6 +209,12 @@ function DonateView() {
             .toNumber() /
         community.state.beneficiaries;
 
+    const notEnoughBalance =
+        amountInDollars >
+        new BigNumber(userBalance)
+            .dividedBy(10 ** config.cUSDDecimals)
+            .toNumber();
+
     return (
         <>
             <View
@@ -342,127 +357,179 @@ function DonateView() {
                     })}
                 </Body>
             </View>
-            {isNew ? (
-                <View style={{ margin: 22 }}>
-                    <View
+            {notEnoughBalance && (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingVertical: 30,
+                    }}
+                >
+                    <WarningIcon color={colors.ui.warning} />
+                    <Body
                         style={{
-                            marginVertical: 6,
-                            marginHorizontal: 61.25,
-                            flexDirection: 'row',
+                            // alignSelf: 'center',
+                            marginLeft: 7,
+                            lineHeight: 32,
+                            fontSize: 14,
                         }}
                     >
-                        <View
-                            style={{
-                                height: 32,
-                                width: 32,
-                                borderRadius: 16,
-                                alignSelf: 'center',
-                                backgroundColor: approved
-                                    ? colors.ui.success
-                                    : colors.brand.primary,
-                            }}
-                        >
-                            <Body
-                                style={{
-                                    color: 'white',
-                                    alignSelf: 'center',
-                                    lineHeight: 32,
-                                    fontSize: 14,
-                                }}
-                            >
-                                1
-                            </Body>
-                        </View>
-                        <View
-                            style={{
-                                flex: 1,
-                            }}
-                        >
-                            <Divider />
-                        </View>
-                        <View
-                            style={{
-                                height: 32,
-                                width: 32,
-                                borderRadius: 16,
-                                alignSelf: 'center',
-                                backgroundColor: approved
-                                    ? colors.brand.primary
-                                    : colors.background.inputs,
-                            }}
-                        >
-                            <Body
-                                style={{
-                                    color: approved
-                                        ? 'white'
-                                        : colors.text.secondary,
-                                    alignSelf: 'center',
-                                    lineHeight: 32,
-                                    fontSize: 14,
-                                }}
-                            >
-                                2
-                            </Body>
-                        </View>
-                    </View>
+                        Not enough funds to continue.
+                    </Body>
+                </View>
+            )}
+            {userAddress.length === 0 && (
+                <View
+                    style={{
+                        marginTop: 60,
+                        paddingVertical: 16,
+                        paddingHorizontal: 22,
+                    }}
+                >
+                    <Button mode="green" onPress={() => {}}>
+                        Connect with Valora
+                    </Button>
                     <View
                         style={{
+                            margin: 8,
+                            padding: 8,
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Button
-                            mode={approved ? 'green' : 'default'}
-                            style={{ flex: 1, marginRight: 4 }}
-                            disabled={
-                                approving ||
-                                amountDonate.length === 0 ||
-                                isNaN(parseInt(amountDonate, 10)) ||
-                                parseInt(amountDonate, 10) < 0 ||
-                                approved
-                            }
-                            onPress={approve}
-                        >
-                            Approve
-                        </Button>
-                        <Button
-                            mode={approved ? 'default' : 'gray'}
-                            textStyle={styles.donateLabel}
-                            style={{
-                                flex: 1,
-                                marginLeft: 4,
-                            }}
-                            // loading={donating}
-                            disabled={
-                                donating ||
-                                amountDonate.length === 0 ||
-                                isNaN(parseInt(amountDonate, 10)) ||
-                                parseInt(amountDonate, 10) < 0 ||
-                                !approved
-                            }
-                            onPress={donate}
-                        >
-                            {i18n.t('donate.donate')}
-                        </Button>
+                        <ButtonText style={{ color: colors.brand.primary }}>
+                            What is Valora?
+                        </ButtonText>
+                        <ButtonText style={{ color: colors.brand.primary }}>
+                            Copy Contract Address
+                        </ButtonText>
                     </View>
                 </View>
-            ) : (
-                <Button
-                    mode={approved ? 'default' : 'gray'}
-                    textStyle={styles.donateLabel}
-                    // loading={donating}
-                    style={{ margin: 22 }}
-                    disabled={
-                        donating ||
-                        amountDonate.length === 0 ||
-                        isNaN(parseInt(amountDonate, 10)) ||
-                        parseInt(amountDonate, 10) < 0 ||
-                        !approved
-                    }
-                >
-                    {i18n.t('donate.donate')}
-                </Button>
             )}
+            {userAddress.length > 0 &&
+                (isNew ? (
+                    <View style={{ margin: 22 }}>
+                        <View
+                            style={{
+                                marginVertical: 6,
+                                marginHorizontal: 61.25,
+                                flexDirection: 'row',
+                            }}
+                        >
+                            <View
+                                style={{
+                                    height: 32,
+                                    width: 32,
+                                    borderRadius: 16,
+                                    alignSelf: 'center',
+                                    backgroundColor: approved
+                                        ? colors.ui.success
+                                        : colors.brand.primary,
+                                }}
+                            >
+                                <Body
+                                    style={{
+                                        color: 'white',
+                                        alignSelf: 'center',
+                                        lineHeight: 32,
+                                        fontSize: 14,
+                                    }}
+                                >
+                                    1
+                                </Body>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 1,
+                                }}
+                            >
+                                <Divider />
+                            </View>
+                            <View
+                                style={{
+                                    height: 32,
+                                    width: 32,
+                                    borderRadius: 16,
+                                    alignSelf: 'center',
+                                    backgroundColor: approved
+                                        ? colors.brand.primary
+                                        : colors.background.inputs,
+                                }}
+                            >
+                                <Body
+                                    style={{
+                                        color: approved
+                                            ? 'white'
+                                            : colors.text.secondary,
+                                        alignSelf: 'center',
+                                        lineHeight: 32,
+                                        fontSize: 14,
+                                    }}
+                                >
+                                    2
+                                </Body>
+                            </View>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Button
+                                mode={approved ? 'green' : 'default'}
+                                style={{ flex: 1, marginRight: 4 }}
+                                disabled={
+                                    approving ||
+                                    amountDonate.length === 0 ||
+                                    isNaN(parseInt(amountDonate, 10)) ||
+                                    parseInt(amountDonate, 10) < 0 ||
+                                    approved ||
+                                    notEnoughBalance
+                                }
+                                onPress={approve}
+                            >
+                                Approve
+                            </Button>
+                            <Button
+                                mode={approved ? 'default' : 'gray'}
+                                textStyle={styles.donateLabel}
+                                style={{
+                                    flex: 1,
+                                    marginLeft: 4,
+                                }}
+                                // loading={donating}
+                                disabled={
+                                    donating ||
+                                    amountDonate.length === 0 ||
+                                    isNaN(parseInt(amountDonate, 10)) ||
+                                    parseInt(amountDonate, 10) < 0 ||
+                                    !approved
+                                }
+                                onPress={donate}
+                            >
+                                {i18n.t('donate.donate')}
+                            </Button>
+                        </View>
+                    </View>
+                ) : (
+                    <Button
+                        mode={approved ? 'default' : 'gray'}
+                        textStyle={styles.donateLabel}
+                        // loading={donating}
+                        style={{ margin: 22 }}
+                        disabled={
+                            donating ||
+                            amountDonate.length === 0 ||
+                            isNaN(parseInt(amountDonate, 10)) ||
+                            parseInt(amountDonate, 10) < 0 ||
+                            !approved
+                        }
+                    >
+                        {i18n.t('donate.donate')}
+                    </Button>
+                ))}
         </>
     );
 }

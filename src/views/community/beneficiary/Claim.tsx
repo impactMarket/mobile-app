@@ -1,3 +1,4 @@
+import { ContractKit } from '@celo/contractkit';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import WarningTriangle from 'components/svg/WarningTriangle';
@@ -35,6 +36,7 @@ interface IClaimProps {
     cooldownTime: number;
     updateClaimedAmount: () => void;
     updateCooldownTime: () => Promise<number>;
+    kit: ContractKit;
 }
 interface IClaimState {
     nextClaim: moment.Duration;
@@ -495,13 +497,35 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         );
     }
 
-    _loadAllowance = async (cooldownTime: number) => {
-        const claimDisabled = cooldownTime * 1000 > new Date().getTime();
+    estimateBlockTime = (currentBlock: number, endBlock: number) => {
+        const isFuture = currentBlock > endBlock;
+        const blocksPerDay = 12 * 60 * 24; // ~ amount of blocks in a day
+        const blockTime =
+            (endBlock - currentBlock + (isFuture ? blocksPerDay : 0)) * 5000;
+
+        return new Date(new Date().getTime() + blockTime);
+    };
+
+    _loadAllowance = async (_cooldownTime: number) => {
+        const { kit } = this.props;
+        // if old community
+        console.log(_cooldownTime, await kit.connection.getBlockNumber(), 1);
+        let cooldownTime = 0;
+        const isNew = true;
+        if (isNew) {
+            cooldownTime = this.estimateBlockTime(
+                await kit.connection.getBlockNumber(),
+                _cooldownTime
+            ).getTime();
+        } else {
+            cooldownTime = _cooldownTime * 1000;
+        }
+        const claimDisabled = cooldownTime > new Date().getTime();
         if (claimDisabled) {
             const interval = 1000;
             const updateTimer = () => {
                 const timeLeft = moment.duration(
-                    moment(cooldownTime * 1000).diff(moment())
+                    moment(cooldownTime).diff(moment())
                 );
                 this.setState({ nextClaim: timeLeft });
                 if (timeLeft.asSeconds() < 0) {

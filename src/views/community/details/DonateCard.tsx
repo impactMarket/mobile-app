@@ -1,9 +1,9 @@
-import { Heading } from '@impact-market/ui-kit';
+// import { Heading } from '@impact-market/ui-kit';
 import i18n from 'assets/i18n';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import CeloDolarSvg from 'components/svg/CeloDolarSvg';
 import EsolidarSvg from 'components/svg/EsolidarSvg';
-import { modalDonateAction } from 'helpers/constants';
+// import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
@@ -11,7 +11,7 @@ import { Modalize } from 'react-native-modalize';
 import { Title, Text } from 'react-native-paper';
 import { Portal } from 'react-native-portalize';
 import { WebView } from 'react-native-webview';
-import { useDispatch, Provider, useStore } from 'react-redux';
+// import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
 import DonateView from './donate';
@@ -30,7 +30,7 @@ interface IDonateProps {
 export default function DonateCard(props: IDonateProps) {
     const { width } = Dimensions.get('screen');
     const { community } = props;
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [campaignUrl, setCampaignUrl] = useState<string | null>(null);
     const modalizeESolidar = useRef<Modalize>(null);
     const modalizeWelcomeRef = useRef<Modalize>(null);

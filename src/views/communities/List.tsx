@@ -105,7 +105,8 @@ function ListItem(props: {
         exchangeRates
     );
     const claimFrequency =
-        community.contract.baseInterval === 86400
+        community.contract.baseInterval === 86400 ||
+        community.contract.baseInterval === 17280
             ? i18n.t('generic.days', { count: 1 })
             : i18n.t('generic.week');
 

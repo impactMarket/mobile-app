@@ -357,7 +357,9 @@ function CommunityManagerScreen() {
                                     >
                                         {i18n.t('createCommunity.frequency')}:{' '}
                                         {requiredUbiToChange.baseInterval ===
-                                        86400
+                                            86400 ||
+                                        requiredUbiToChange.baseInterval ===
+                                            17280
                                             ? i18n.t('generic.days', {
                                                   count: 1,
                                               })
