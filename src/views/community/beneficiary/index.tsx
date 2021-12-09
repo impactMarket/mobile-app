@@ -59,6 +59,7 @@ function BeneficiaryScreen() {
     );
     const timeDiff = useSelector((state: IRootState) => state.app.timeDiff);
 
+    const [isNew, setIsNew] = useState(true);
     const [lastInterval, setLastInterval] = useState(0);
     const [cooldownTime, setCooldownTime] = useState(0);
     const [claimedAmount, setClaimedAmount] = useState('');
@@ -72,8 +73,8 @@ function BeneficiaryScreen() {
     useEffect(() => {
         const loadCommunity = async () => {
             if (community !== undefined && community.contract !== undefined) {
-                const beneficiaryClaimCache =
-                    await CacheStore.getBeneficiaryClaim();
+                // const beneficiaryClaimCache =
+                //     await CacheStore.getBeneficiaryClaim();
                 // if (
                 //     beneficiaryClaimCache !== null &&
                 //     beneficiaryClaimCache.communityId === community.publicId
@@ -114,19 +115,23 @@ function BeneficiaryScreen() {
                             ).toString(),
                             10
                         );
+                        setIsNew(false);
                     } catch (_) {
                         const _beneficiary = await communityContract.methods
                             .beneficiaries(userAddress)
                             .call();
                         claimed = _beneficiary.claimedAmount.toString();
-                        lastIntv = parseInt(
-                            await communityContract.methods
-                                .lastInterval(userAddress)
-                                .call(),
-                            10
-                        );
-                        cooldown =
-                            lastIntv + community.contract.incrementInterval;
+                        lastIntv =
+                            parseInt(
+                                await communityContract.methods
+                                    .lastInterval(userAddress)
+                                    .call(),
+                                10
+                            ) * 5;
+                        cooldown = await communityContract.methods
+                            .claimCooldown(userAddress)
+                            .call();
+                        console.log('cooldown', cooldown);
                     }
                     // cache it
                     const beneficiaryClaimCache = {
@@ -198,21 +203,43 @@ function BeneficiaryScreen() {
     };
 
     const updateClaimedAmountAndCache = async () => {
-        const claimed = (
-            await communityContract.methods.claimed(userAddress).call()
-        ).toString();
-        const cooldown = parseInt(
-            (
-                await communityContract.methods.cooldown(userAddress).call()
-            ).toString(),
-            10
-        );
-        const lastIntv = parseInt(
-            (
-                await communityContract.methods.lastInterval(userAddress).call()
-            ).toString(),
-            10
-        );
+        let claimed = '0';
+        let cooldown = 1;
+        let lastIntv = 0;
+        try {
+            claimed = (
+                await communityContract.methods.claimed(userAddress).call()
+            ).toString();
+            cooldown = parseInt(
+                (
+                    await communityContract.methods.cooldown(userAddress).call()
+                ).toString(),
+                10
+            );
+            lastIntv = parseInt(
+                (
+                    await communityContract.methods
+                        .lastInterval(userAddress)
+                        .call()
+                ).toString(),
+                10
+            );
+        } catch (_) {
+            const _beneficiary = await communityContract.methods
+                .beneficiaries(userAddress)
+                .call();
+            claimed = _beneficiary.claimedAmount.toString();
+            lastIntv =
+                parseInt(
+                    await communityContract.methods
+                        .lastInterval(userAddress)
+                        .call(),
+                    10
+                ) * 5;
+            cooldown = await communityContract.methods
+                .claimCooldown(userAddress)
+                .call();
+        }
         // cache it
         const beneficiaryClaimCache = {
             communityId: community.publicId,
@@ -253,8 +280,12 @@ function BeneficiaryScreen() {
     }
 
     const formatedTimeNextCooldown = () => {
+        let incrementInterval = community.contract!.incrementInterval;
+        if (isNew) {
+            incrementInterval *= 5;
+        }
         const nextCooldownTime = moment.duration(
-            (lastInterval + community.contract!.incrementInterval) * 1000
+            (lastInterval + incrementInterval) * 1000
         );
         let next = '';
         if (nextCooldownTime.days() > 0) {

@@ -498,20 +498,20 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
     }
 
     estimateBlockTime = (currentBlock: number, endBlock: number) => {
-        const isFuture = currentBlock > endBlock;
-        const blocksPerDay = 12 * 60 * 24; // ~ amount of blocks in a day
-        const blockTime =
-            (endBlock - currentBlock + (isFuture ? blocksPerDay : 0)) * 5000;
+        // const isFuture = currentBlock > endBlock;
+        // const blocksPerDay = 12 * 60 * 24; // ~ amount of blocks in a day
+        const blockTime = (endBlock - currentBlock) * 5000;
 
         return new Date(new Date().getTime() + blockTime);
     };
 
     _loadAllowance = async (_cooldownTime: number) => {
-        const { kit } = this.props;
+        const { kit, communityContract } = this.props;
         // if old community
-        console.log(_cooldownTime, await kit.connection.getBlockNumber(), 1);
         let cooldownTime = 0;
-        const isNew = true;
+        const isNew = await communityContract.methods
+            .impactMarketAddress()
+            .call();
         if (isNew) {
             cooldownTime = this.estimateBlockTime(
                 await kit.connection.getBlockNumber(),

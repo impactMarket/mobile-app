@@ -87,7 +87,6 @@ function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
                     '0x0000000000000000000000000000000000000000'
                 ) {
                     setIsNew(true);
-                    console.log('1');
                 }
             }
             update();
