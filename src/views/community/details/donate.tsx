@@ -558,6 +558,7 @@ function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
                             <Button
                                 mode={approved ? 'green' : 'default'}
                                 style={{ flex: 1, marginRight: 4 }}
+                                loading={approving}
                                 disabled={
                                     approving ||
                                     amountDonate.length === 0 ||
@@ -577,7 +578,7 @@ function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
                                     flex: 1,
                                     marginLeft: 4,
                                 }}
-                                // loading={donating}
+                                loading={donating}
                                 disabled={
                                     donating ||
                                     amountDonate.length === 0 ||
@@ -593,17 +594,17 @@ function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
                     </View>
                 ) : (
                     <Button
-                        mode={approved ? 'default' : 'gray'}
+                        mode={amountDonate.length > 0 ? 'default' : 'gray'}
                         textStyle={styles.donateLabel}
-                        // loading={donating}
+                        loading={donating}
                         style={{ margin: 22 }}
                         disabled={
                             donating ||
                             amountDonate.length === 0 ||
                             isNaN(parseInt(amountDonate, 10)) ||
-                            parseInt(amountDonate, 10) < 0 ||
-                            !approved
+                            parseInt(amountDonate, 10) < 0
                         }
+                        onPress={donate}
                     >
                         {i18n.t('donate.donate')}
                     </Button>

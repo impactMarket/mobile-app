@@ -1992,10 +1992,10 @@
   version "1.0.0"
   resolved "git://github.com/impactMarket/translations.git#27d19939921470166223e9162fa113bdc24d37fd"
 
-"@impact-market/ui-kit@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@impact-market/ui-kit/-/ui-kit-0.0.4.tgz#0d13aaaf39a2d2f5cda265a96562fc72d897d956"
-  integrity sha512-MQiuaiy3/uDKsYNNAQxVXPnge6lw4GICBnkVzCkUYPB/1jxBNyGjtjcPUj0PMdoZof5O9DbIKjWP0jZtFjVipg==
+"@impact-market/ui-kit@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@impact-market/ui-kit/-/ui-kit-0.0.5.tgz#86f94273ecf56c217d0358293f83f43cc53e285f"
+  integrity sha512-tPT35NtdHITHSPalxsyWUPJA3fz8MJgEwCT3I1B6+e1O0D+Fm5dcNv1UsognSi4vrtNy2F1nyd0Ae3a/aKHmsw==
 
 "@internationalized/message@^3.0.2":
   version "3.0.2"
