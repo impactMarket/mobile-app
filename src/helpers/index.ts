@@ -77,6 +77,9 @@ export function docsURL(
     return `https://docs.impactmarket.com${version}${path}`;
 }
 
+/**
+ * @deprecated -> use utils lib
+ */
 export async function translate(
     text: string,
     target: string

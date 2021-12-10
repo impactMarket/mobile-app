@@ -1,4 +1,5 @@
 import { Body, Button, colors, WarningIcon } from '@impact-market/ui-kit';
+import { estimateCommunityRemainFunds } from '@impact-market/utils';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
@@ -9,11 +10,7 @@ import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import ManageSvg from 'components/svg/ManageSvg';
 import { amountToCurrency } from 'helpers/currency';
-import {
-    calculateCommunityRemainedFunds,
-    docsURL,
-    updateCommunityInfo,
-} from 'helpers/index';
+import { docsURL, updateCommunityInfo } from 'helpers/index';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
 import {
@@ -213,7 +210,10 @@ function CommunityManagerScreen() {
 
     let days = 0;
     if (community.state !== null) {
-        days = calculateCommunityRemainedFunds(community);
+        days = estimateCommunityRemainFunds({
+            contract: community.contract!,
+            state: community.state!,
+        });
     }
 
     const communityStatus = (_community: CommunityAttributes) => {
@@ -253,17 +253,18 @@ function CommunityManagerScreen() {
                                             />
                                             <Body>
                                                 <>
-                                                    {i18n.t(
-                                                        'community.fundsRunOut',
-                                                        {
-                                                            days: Math.floor(
-                                                                days
-                                                            ),
-                                                        }
-                                                    )}{' '}
-                                                    {i18n.t('generic.days', {
-                                                        count: days,
-                                                    })}
+                                                    {days === 0
+                                                        ? i18n.t(
+                                                              'community.fundsRunOut'
+                                                          )
+                                                        : i18n.t(
+                                                              'community.fundsWillRunOut',
+                                                              {
+                                                                  days: Math.floor(
+                                                                      days
+                                                                  ),
+                                                              }
+                                                          )}
                                                 </>
                                             </Body>
                                         </View>
