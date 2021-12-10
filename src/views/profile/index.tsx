@@ -145,23 +145,11 @@ function ProfileScreen() {
         loadProfile();
     }, [userWallet, user, navigation]);
 
-    const updateUserMetadataCache = () => {
+    const updateUserMetadataCache = async (changes: any) => {
+        const cache = await CacheStore.getUser();
         CacheStore.cacheUser({
-            address: userWallet.address,
-            year:
-                age && age.length > 0
-                    ? new Date().getFullYear() - parseInt(age, 10)
-                    : null,
-            children:
-                children && children.length > 0 ? parseInt(children, 10) : null,
-            currency,
-            gender,
-            language,
-            avatar: userAvatarImage, // this does not change
-            username: name,
-            //TODO: Change these props below to be optional
-            blocked: false,
-            suspect: false,
+            ...cache,
+            ...changes,
         });
     };
 
@@ -180,7 +168,7 @@ function ProfileScreen() {
     const handleChangeGender = async (gender: string) => {
         setGender(gender);
         Api.user.setGender(gender);
-        updateUserMetadataCache();
+        updateUserMetadataCache({ gender });
         dispatch(setUserMetadata({ ...user, gender }));
         modalizeGenderRef.current?.close();
     };
@@ -225,7 +213,7 @@ function ProfileScreen() {
     const handleChangeLanguage = async (text: string) => {
         setLanguage(text);
         Api.user.setLanguage(text);
-        updateUserMetadataCache();
+        updateUserMetadataCache({ language: text });
         dispatch(setUserLanguage(text));
         i18n.changeLanguage(text);
         moment.locale(text);
@@ -303,7 +291,7 @@ function ProfileScreen() {
     const handleSelectCurrency = (currency: string) => {
         setCurrency(currency);
         Api.user.setCurrency(currency);
-        updateUserMetadataCache();
+        updateUserMetadataCache({ currency });
         // update exchange rate!
         const exchangeRate = rates[currency.toUpperCase()];
         batch(() => {
@@ -383,6 +371,8 @@ function ProfileScreen() {
             >
                 <RadioButton.Item key="en" label="English" value="en" />
                 <RadioButton.Item key="pt" label="Português" value="pt" />
+                <RadioButton.Item key="es" label="Español" value="es" />
+                <RadioButton.Item key="fr" label="Français" value="fr" />
             </RadioButton.Group>
         </View>
     );
@@ -697,7 +687,7 @@ function ProfileScreen() {
                         maxLength={32}
                         onEndEditing={(_e) => {
                             Api.user.setUsername(name);
-                            updateUserMetadataCache();
+                            updateUserMetadataCache({ username: name });
                             dispatch(
                                 setUserMetadata({ ...user, username: name })
                             );
@@ -724,7 +714,13 @@ function ProfileScreen() {
                                 keyboardType="numeric"
                                 onEndEditing={(_e) => {
                                     Api.user.setAge(parseInt(age, 10));
-                                    updateUserMetadataCache();
+                                    updateUserMetadataCache({
+                                        year:
+                                            age.length > 0
+                                                ? new Date().getFullYear() -
+                                                  parseInt(age, 10)
+                                                : null,
+                                    });
                                     dispatch(
                                         setUserMetadata({
                                             ...user,
@@ -752,7 +748,12 @@ function ProfileScreen() {
                                         ? parseInt(children, 10)
                                         : null
                                 );
-                                updateUserMetadataCache();
+                                updateUserMetadataCache({
+                                    children:
+                                        children.length > 0
+                                            ? parseInt(children, 10)
+                                            : null,
+                                });
                                 dispatch(
                                     setUserMetadata({
                                         ...user,
@@ -776,7 +777,15 @@ function ProfileScreen() {
                     <View style={{ marginTop: 28 }}>
                         <Select
                             label={i18n.t('generic.language')}
-                            value={language === 'en' ? 'English' : ' Português'}
+                            value={
+                                language === 'en'
+                                    ? 'English'
+                                    : language === 'pt'
+                                    ? ' Português'
+                                    : language === 'es'
+                                    ? 'Español'
+                                    : 'Français'
+                            }
                             onPress={() => modalizeLanguageRef.current?.open()}
                         />
                     </View>
