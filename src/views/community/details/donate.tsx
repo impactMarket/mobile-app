@@ -41,7 +41,10 @@ import DonationMinerABI from '../../../contracts/DonationMinerABI.json';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
-function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
+function DonateView(props: {
+    modalDonateRef: React.MutableRefObject<any>;
+    communityContract: string;
+}) {
     const [donating, setDonating] = useState(false);
     const [approving, setApproving] = useState(false);
     const [amountDonate, setAmountDonate] = useState('');
@@ -77,7 +80,7 @@ function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
             async function update() {
                 const communityContract = new kit.web3.eth.Contract(
                     CommunityContractABI as any,
-                    community.contractAddress!
+                    props.communityContract
                 );
                 const isNewCommunity = await communityContract.methods
                     .impactMarketAddress()
@@ -268,7 +271,7 @@ function DonateView(props: { modalDonateRef: React.MutableRefObject<any> }) {
                             {i18n.t('donate.yourDonationWillBackFor', {
                                 backNBeneficiaries:
                                     community.state.beneficiaries,
-                                backForDays,
+                                backForDays: Math.ceil(backForDays),
                             })}
                         </Body>
                     </View>

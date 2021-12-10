@@ -14,6 +14,7 @@ import { WebView } from 'react-native-webview';
 // import { useDispatch, Provider, useStore } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors, ipctFontSize, ipctLineHeight } from 'styles/index';
+
 import DonateView from './donate';
 
 // import ConfirmModal from '../views/community/details/donate/modals/confirm';
@@ -151,7 +152,10 @@ export default function DonateCard(props: IDonateProps) {
                     adjustToContentHeight
                     onClose={() => {}}
                 >
-                    <DonateView modalDonateRef={modalDonateRef} />
+                    <DonateView
+                        modalDonateRef={modalDonateRef}
+                        communityContract={community.contractAddress}
+                    />
                 </Modalize>
                 <Modalize
                     ref={modalizeESolidar}
