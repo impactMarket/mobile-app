@@ -1,9 +1,11 @@
+import { Body, Button, colors, WarningIcon } from '@impact-market/ui-kit';
+import { estimateCommunityRemainFunds } from '@impact-market/utils';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import CommunityStatus from 'components/CommunityStatus';
 import Modal from 'components/Modal';
-import Button from 'components/core/Button';
+import CoreButton from 'components/core/Button';
 import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import ManageSvg from 'components/svg/ManageSvg';
@@ -70,6 +72,7 @@ function CommunityManagerScreen() {
         useState(true);
     const [requiredUbiToChange, setRequiredUbiToChange] =
         useState<UbiRequestChangeParams | null>();
+    const [canRequestFunds, setCanRequestFunds] = useState(false);
 
     const [editInProgress, setEditInProgress] = useState(false);
 
@@ -86,6 +89,20 @@ function CommunityManagerScreen() {
                         '50000000000000000'
                     )
                 );
+                const isNewCommunity = await communityContract.methods
+                    .impactMarketAddress()
+                    .call();
+                if (
+                    isNewCommunity ===
+                    '0x0000000000000000000000000000000000000000'
+                ) {
+                    const claimedRatio = new BigNumber(
+                        community.state.claimed
+                    ).dividedBy(community.state.raised);
+                    if (claimedRatio.gt(new BigNumber(0.95))) {
+                    }
+                    setCanRequestFunds(true);
+                }
             };
             const verifyRequestToChangeUbiParams = () => {
                 Api.community
@@ -159,6 +176,45 @@ function CommunityManagerScreen() {
             });
     };
 
+    const handleRequestFunds = async () => {
+        celoWalletRequest(
+            userAddress,
+            communityContract.options.address,
+            await communityContract.methods.requestFunds(),
+            'requestfunds',
+            kit
+        )
+            .then((tx) => {
+                if (tx === undefined) {
+                    return;
+                }
+
+                Alert.alert(i18n.t('generic.success'), '', [{ text: 'OK' }], {
+                    cancelable: false,
+                });
+            })
+            .catch((e) => {
+                Sentry.Native.captureException(e);
+                Alert.alert(
+                    i18n.t('generic.failure'),
+                    i18n.t('generic.generic'),
+                    [{ text: i18n.t('generic.close') }],
+                    { cancelable: false }
+                );
+            })
+            .finally(() => {
+                setEditInProgress(false);
+            });
+    };
+
+    let days = 0;
+    if (community.state !== null) {
+        days = estimateCommunityRemainFunds({
+            contract: community.contract!,
+            state: community.state!,
+        });
+    }
+
     const communityStatus = (_community: CommunityAttributes) => {
         if (
             _community.status === 'valid' &&
@@ -178,6 +234,47 @@ function CommunityManagerScreen() {
                     >
                         <BaseCommunity community={_community}>
                             <View style={styles.container}>
+                                {canRequestFunds && (
+                                    <Card
+                                        style={{
+                                            marginVertical: 16,
+                                            padding: 22,
+                                        }}
+                                    >
+                                        <View
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignContent: 'center',
+                                            }}
+                                        >
+                                            <WarningIcon
+                                                color={colors.ui.warning}
+                                            />
+                                            <Body>
+                                                <>
+                                                    {days === 0
+                                                        ? i18n.t(
+                                                              'community.fundsRunOut'
+                                                          )
+                                                        : i18n.t(
+                                                              'community.fundsWillRunOut',
+                                                              {
+                                                                  days: Math.floor(
+                                                                      days
+                                                                  ),
+                                                              }
+                                                          )}
+                                                </>
+                                            </Body>
+                                        </View>
+                                        <Button
+                                            mode="text"
+                                            onPress={handleRequestFunds}
+                                        >
+                                            {i18n.t('community.requestFunds')}
+                                        </Button>
+                                    </Card>
+                                )}
                                 <Beneficiaries
                                     beneficiaries={
                                         _community.state.beneficiaries
@@ -204,15 +301,15 @@ function CommunityManagerScreen() {
                             </View>
                         </BaseCommunity>
                     </ScrollView>
-                    {requiredUbiToChange !== undefined &&
-                        requiredUbiToChange !== null && (
-                            <Portal>
+                    <Portal>
+                        {requiredUbiToChange !== undefined &&
+                            requiredUbiToChange !== null && (
                                 <Modal
                                     title={i18n.t('manager.ubiParams')}
                                     visible
                                     buttons={
                                         <>
-                                            <Button
+                                            <CoreButton
                                                 modeType="green"
                                                 bold
                                                 onPress={
@@ -223,7 +320,7 @@ function CommunityManagerScreen() {
                                                 {i18n.t(
                                                     'manager.acceptNewUbiParams'
                                                 )}
-                                            </Button>
+                                            </CoreButton>
                                         </>
                                     }
                                 >
@@ -260,7 +357,9 @@ function CommunityManagerScreen() {
                                     >
                                         {i18n.t('createCommunity.frequency')}:{' '}
                                         {requiredUbiToChange.baseInterval ===
-                                        86400
+                                            86400 ||
+                                        requiredUbiToChange.baseInterval ===
+                                            17280
                                             ? i18n.t('generic.days', {
                                                   count: 1,
                                               })
@@ -281,8 +380,8 @@ function CommunityManagerScreen() {
                                             60}{' '}
                                     </Paragraph>
                                 </Modal>
-                            </Portal>
-                        )}
+                            )}
+                    </Portal>
                 </>
             );
         }
@@ -302,7 +401,7 @@ function CommunityManagerScreen() {
                     >
                         {i18n.t('createCommunity.pendingApprovalMessage')}{' '}
                     </Text>
-                    <Button
+                    <CoreButton
                         modeType="gray"
                         style={{
                             marginHorizontal: 18,
@@ -314,7 +413,7 @@ function CommunityManagerScreen() {
                         }}
                     >
                         {i18n.t('generic.openHelpCenter')}
-                    </Button>
+                    </CoreButton>
                     <View style={styles.rulesView}>
                         <Text style={styles.rulesTitle}>
                             {i18n.t('manager.rules.title')}

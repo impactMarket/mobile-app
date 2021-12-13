@@ -43,4 +43,9 @@ export default {
      * Is it in testnet?
      */
     testnet: process.env.EXPO_IS_TESTNET! === 'true',
+
+    /**
+     * Donation miner address
+     */
+    donationMinerAddress: '0xac66FDe03Efc73879424d2bD61F846e964ce6639',
 };

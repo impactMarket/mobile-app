@@ -19,6 +19,10 @@ import * as Sentry from 'sentry-expo';
 import { analytics } from 'services/analytics';
 import { celoWalletRequest } from 'services/celoWallet';
 
+import config from '../../../../../../config';
+import CommunityContractABI from '../../../../../contracts/CommunityABI.json';
+import DonationMinerABI from '../../../../../contracts/DonationMinerABI.json';
+
 interface IConfirmModalProps {}
 interface IConfirmModalState {
     donating: boolean;
@@ -47,14 +51,53 @@ class ConfirmModal extends Component<
         }
         // no need to check if enough for tx fee
         this.setState({ donating: true });
-        const stableToken = await this.props.kit.contracts.getStableToken();
-        const cUSDDecimals = await stableToken.decimals();
-        const txObject = stableToken.transfer(
-            community.contractAddress!,
-            new BigNumber(amountInDollars)
-                .multipliedBy(new BigNumber(10).pow(cUSDDecimals))
-                .toString()
-        ).txo;
+
+        let contractAddressTo = '';
+        let txObject;
+        const cUSDAmount = new BigNumber(amountInDollars)
+            .multipliedBy(new BigNumber(10).pow(18))
+            .toString();
+        const communityContract = new kit.web3.eth.Contract(
+            CommunityContractABI as any,
+            community.contractAddress!
+        );
+        const isNewCommunity = await communityContract.methods
+            .impactMarketAddress()
+            .call();
+        if (isNewCommunity === '0x0000000000000000000000000000000000000000') {
+            const stableToken = await this.props.kit.contracts.getStableToken();
+            const donationMiner = new this.props.kit.web3.eth.Contract(
+                DonationMinerABI as any,
+                config.donationMinerAddress
+            );
+            txObject = stableToken.approve(
+                community.contractAddress!,
+                cUSDAmount
+            ).txo;
+            contractAddressTo = stableToken.address;
+            // to approve
+            await celoWalletRequest(
+                userAddress,
+                contractAddressTo,
+                txObject,
+                'approve',
+                kit
+            );
+            // to donate
+            txObject = await donationMiner.methods.donateToCommunity(
+                community.contractAddress!,
+                cUSDAmount
+            );
+            contractAddressTo = config.donationMinerAddress;
+        } else {
+            const stableToken = await this.props.kit.contracts.getStableToken();
+            txObject = stableToken.transfer(
+                community.contractAddress!,
+                cUSDAmount
+            ).txo;
+            contractAddressTo = stableToken.address;
+        }
+
         batch(() => {
             this.props.setInProgress(true);
             this.props.dismissModal();
@@ -63,7 +106,7 @@ class ConfirmModal extends Component<
         const executeTx = () =>
             celoWalletRequest(
                 userAddress,
-                stableToken.address,
+                contractAddressTo,
                 txObject,
                 'donatetocommunity',
                 kit

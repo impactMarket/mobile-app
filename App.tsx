@@ -166,8 +166,8 @@ Sentry.init({
             ? process.env.SENTRY_ENVIRONMENT
             : 'dev',
     dsn: process.env.EXPO_SENTRY_DNS,
-    enableInExpoDevelopment: true,
-    debug: true,
+    enableInExpoDevelopment: false,
+    debug: false,
     integrations: [
         new Sentry.Native.ReactNativeTracing({
             routingInstrumentation,
@@ -187,7 +187,7 @@ Sentry.init({
             samplingContext.transactionContext.tags['ipct-activity'] !==
                 undefined
         ) {
-            return 1;
+            return 0.5;
         }
         return 0.1;
     },

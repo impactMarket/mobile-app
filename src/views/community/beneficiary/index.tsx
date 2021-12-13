@@ -1,9 +1,9 @@
-import { RouteProp, useNavigation } from '@react-navigation/native';
+import { Body, Modal } from '@impact-market/ui-kit';
+import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
 import Button from 'components/core/Button';
-import Card from 'components/core/Card';
 import ClaimSvg from 'components/svg/ClaimSvg';
 import WaitingRedSvg from 'components/svg/WaitingRedSvg';
 import * as IntentLauncher from 'expo-intent-launcher';
@@ -21,8 +21,6 @@ import { StyleSheet, Text, View, Alert, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
     ActivityIndicator,
-    Headline,
-    Modal,
     Paragraph,
     Portal,
     ProgressBar,
@@ -31,10 +29,10 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import * as Sentry from 'sentry-expo';
 import CacheStore from 'services/cacheStore';
+import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 import Claim from './Claim';
-import BlockedAccount from './cards/BlockedAccount';
 
 function BeneficiaryScreen() {
     const timeoutTimeDiff = useRef<NodeJS.Timer | undefined>();
@@ -44,6 +42,7 @@ function BeneficiaryScreen() {
     const communityContract = useSelector(
         (state: IRootState) => state.user.community.contract
     );
+    const kit = useSelector((state: IRootState) => state.app.kit);
     const community = useSelector(
         (state: IRootState) => state.user.community.metadata
     );
@@ -60,6 +59,7 @@ function BeneficiaryScreen() {
     );
     const timeDiff = useSelector((state: IRootState) => state.app.timeDiff);
 
+    const [isNew, setIsNew] = useState(true);
     const [lastInterval, setLastInterval] = useState(0);
     const [cooldownTime, setCooldownTime] = useState(0);
     const [claimedAmount, setClaimedAmount] = useState('');
@@ -67,50 +67,71 @@ function BeneficiaryScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(false);
     const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
+    const [needsToJoinMigratedCommunity, setNeedsToJoinMigratedCommunity] =
+        useState(false);
 
     useEffect(() => {
         const loadCommunity = async () => {
             if (community !== undefined && community.contract !== undefined) {
-                const beneficiaryClaimCache =
-                    await CacheStore.getBeneficiaryClaim();
-                if (
-                    beneficiaryClaimCache !== null &&
-                    beneficiaryClaimCache.communityId === community.publicId
-                ) {
-                    const progress = new BigNumber(
-                        beneficiaryClaimCache.claimed
-                    ).div(community.contract.maxClaim);
-                    setClaimedAmount(
-                        humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
-                    );
-                    setClaimedProgress(progress.toNumber());
-                    setCooldownTime(beneficiaryClaimCache.cooldown);
-                    setLastInterval(beneficiaryClaimCache.lastInterval);
-                } else if (
-                    communityContract !== undefined &&
-                    userAddress.length > 0
-                ) {
-                    const claimed = (
-                        await communityContract.methods
-                            .claimed(userAddress)
-                            .call()
-                    ).toString();
-                    const cooldown = parseInt(
-                        (
+                // const beneficiaryClaimCache =
+                //     await CacheStore.getBeneficiaryClaim();
+                // if (
+                //     beneficiaryClaimCache !== null &&
+                //     beneficiaryClaimCache.communityId === community.publicId
+                // ) {
+                //     const progress = new BigNumber(
+                //         beneficiaryClaimCache.claimed
+                //     ).div(community.contract.maxClaim);
+                //     setClaimedAmount(
+                //         humanifyCurrencyAmount(beneficiaryClaimCache.claimed)
+                //     );
+                //     setClaimedProgress(progress.toNumber());
+                //     // setCooldownTime(beneficiaryClaimCache.cooldown);
+                //     // setLastInterval(beneficiaryClaimCache.lastInterval);
+                // } else
+                if (communityContract !== undefined && userAddress.length > 0) {
+                    let claimed = '0';
+                    let cooldown = 1;
+                    let lastIntv = 0;
+                    try {
+                        claimed = (
                             await communityContract.methods
-                                .cooldown(userAddress)
+                                .claimed(userAddress)
                                 .call()
-                        ).toString(),
-                        10
-                    );
-                    const lastIntv = parseInt(
-                        (
-                            await communityContract.methods
-                                .lastInterval(userAddress)
-                                .call()
-                        ).toString(),
-                        10
-                    );
+                        ).toString();
+                        cooldown = parseInt(
+                            (
+                                await communityContract.methods
+                                    .cooldown(userAddress)
+                                    .call()
+                            ).toString(),
+                            10
+                        );
+                        lastIntv = parseInt(
+                            (
+                                await communityContract.methods
+                                    .lastInterval(userAddress)
+                                    .call()
+                            ).toString(),
+                            10
+                        );
+                        setIsNew(false);
+                    } catch (_) {
+                        const _beneficiary = await communityContract.methods
+                            .beneficiaries(userAddress)
+                            .call();
+                        claimed = _beneficiary.claimedAmount.toString();
+                        lastIntv =
+                            parseInt(
+                                await communityContract.methods
+                                    .lastInterval(userAddress)
+                                    .call(),
+                                10
+                            ) * 5;
+                        cooldown = await communityContract.methods
+                            .claimCooldown(userAddress)
+                            .call();
+                    }
                     // cache it
                     const beneficiaryClaimCache = {
                         communityId: community.publicId,
@@ -126,6 +147,12 @@ function BeneficiaryScreen() {
                     setClaimedProgress(progress.toNumber());
                     setCooldownTime(cooldown);
                     setLastInterval(lastIntv);
+                }
+                const isInNewCommunity =
+                    await communityContract.methods.beneficiaries(userAddress);
+                if (isInNewCommunity.state === 0) {
+                    // TODO: still in old community
+                    setNeedsToJoinMigratedCommunity(true);
                 }
             }
         };
@@ -161,12 +188,17 @@ function BeneficiaryScreen() {
     }, []);
 
     const getNewCooldownTime = async () => {
-        return parseInt(
-            (
-                await communityContract.methods.cooldown(userAddress).call()
-            ).toString(),
-            10
-        );
+        let cooldown;
+        try {
+            cooldown = await communityContract.methods
+                .cooldown(userAddress)
+                .call();
+        } catch (_) {
+            cooldown = await communityContract.methods
+                .claimCooldown(userAddress)
+                .call();
+        }
+        return parseInt(cooldown.toString(), 10);
     };
 
     const onRefresh = () => {
@@ -175,21 +207,43 @@ function BeneficiaryScreen() {
     };
 
     const updateClaimedAmountAndCache = async () => {
-        const claimed = (
-            await communityContract.methods.claimed(userAddress).call()
-        ).toString();
-        const cooldown = parseInt(
-            (
-                await communityContract.methods.cooldown(userAddress).call()
-            ).toString(),
-            10
-        );
-        const lastIntv = parseInt(
-            (
-                await communityContract.methods.lastInterval(userAddress).call()
-            ).toString(),
-            10
-        );
+        let claimed = '0';
+        let cooldown = 1;
+        let lastIntv = 0;
+        try {
+            claimed = (
+                await communityContract.methods.claimed(userAddress).call()
+            ).toString();
+            cooldown = parseInt(
+                (
+                    await communityContract.methods.cooldown(userAddress).call()
+                ).toString(),
+                10
+            );
+            lastIntv = parseInt(
+                (
+                    await communityContract.methods
+                        .lastInterval(userAddress)
+                        .call()
+                ).toString(),
+                10
+            );
+        } catch (_) {
+            const _beneficiary = await communityContract.methods
+                .beneficiaries(userAddress)
+                .call();
+            claimed = _beneficiary.claimedAmount.toString();
+            lastIntv =
+                parseInt(
+                    await communityContract.methods
+                        .lastInterval(userAddress)
+                        .call(),
+                    10
+                ) * 5;
+            cooldown = await communityContract.methods
+                .claimCooldown(userAddress)
+                .call();
+        }
         // cache it
         const beneficiaryClaimCache = {
             communityId: community.publicId,
@@ -230,8 +284,12 @@ function BeneficiaryScreen() {
     }
 
     const formatedTimeNextCooldown = () => {
+        let incrementInterval = community.contract!.incrementInterval;
+        if (isNew) {
+            incrementInterval *= 5;
+        }
         const nextCooldownTime = moment.duration(
-            (lastInterval + community.contract!.incrementInterval) * 1000
+            (lastInterval + incrementInterval) * 1000
         );
         let next = '';
         if (nextCooldownTime.days() > 0) {
@@ -246,6 +304,36 @@ function BeneficiaryScreen() {
             next += `${nextCooldownTime.seconds()}s`;
         }
         return next;
+    };
+
+    const handleBeneficiaryJoinMigrated = async () => {
+        celoWalletRequest(
+            userAddress,
+            communityContract.options.address,
+            await communityContract.methods.beneficiaryJoinFromMigrated(),
+            'beneficiaryJoinFromMigrated',
+            kit
+        )
+            .then(() => {
+                setNeedsToJoinMigratedCommunity(false);
+            })
+            .catch(() => {
+                Alert.alert(
+                    i18n.t('generic.failure'),
+                    i18n.t('errors.generic'),
+                    [
+                        {
+                            text: i18n.t('generic.tryAgain'),
+                            onPress: async () =>
+                                handleBeneficiaryJoinMigrated(),
+                        },
+                        {
+                            text: i18n.t('generic.cancel'),
+                        },
+                    ],
+                    { cancelable: false }
+                );
+            });
     };
 
     return (
@@ -426,94 +514,77 @@ function BeneficiaryScreen() {
                 {i18n.t('generic.turnOnLocationHint')}
             </Snackbar>
             <Portal>
-                <Modal visible={suspectWrongDateTime} dismissable={false}>
-                    <Card style={{ marginHorizontal: 20 }}>
-                        <Card.Content>
-                            <View
-                                style={{
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <WaitingRedSvg />
-                                <Headline
-                                    style={{
-                                        fontFamily: 'Gelion-Regular',
-                                        fontSize: 24,
-                                        lineHeight: 24,
-                                        textAlign: 'center',
-                                        color: ipctColors.almostBlack,
-                                        marginVertical: 16,
-                                    }}
-                                >
-                                    {i18n.t('errors.modals.clock.title')}
-                                </Headline>
-                                <Paragraph
-                                    style={{
-                                        fontFamily: 'Gelion-Regular',
-                                        fontSize: 16,
-                                        lineHeight: 19,
-                                        color: ipctColors.almostBlack,
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    {i18n.t('errors.modals.clock.description', {
-                                        serverTime: moment(
-                                            dateTimeDiffModal.getTime() -
-                                                timeDiff
-                                        ).format('H[h]mm[m]ss[s]'),
-                                        userTime:
-                                            moment(dateTimeDiffModal).format(
-                                                'H[h]mm[m]ss[s]'
-                                            ),
-                                    })}
-                                </Paragraph>
-                            </View>
-                            <Button
-                                modeType="default"
-                                style={{
-                                    marginTop: 20,
-                                    marginHorizontal: 5,
-                                }}
-                                bold
-                                onPress={() =>
+                <Modal
+                    title={i18n.t('community.joinNewCommunity.title')}
+                    visible={needsToJoinMigratedCommunity}
+                    buttons={{
+                        props: [
+                            {
+                                text: i18n.t('community.joinNewCommunity.join'),
+                                onPress: handleBeneficiaryJoinMigrated,
+                            },
+                        ],
+                    }}
+                >
+                    <Body>{i18n.t('community.joinNewCommunity.message')}</Body>
+                </Modal>
+                <Modal
+                    title={i18n.t('errors.modals.clock.title')}
+                    visible={suspectWrongDateTime}
+                    buttons={{
+                        inline: false,
+                        props: [
+                            {
+                                text: i18n.t('generic.openClockSettings'),
+                                onPress: () =>
                                     IntentLauncher.startActivityAsync(
                                         IntentLauncher.ACTION_DATE_SETTINGS
-                                    )
-                                }
-                            >
-                                {i18n.t('generic.openClockSettings')}
-                            </Button>
-                            <Button
-                                modeType="gray"
-                                style={{
-                                    marginTop: 8,
-                                    marginHorizontal: 5,
-                                }}
-                                bold
-                                onPress={() =>
+                                    ),
+                            },
+                            {
+                                text: i18n.t('generic.dismiss'),
+                                onPress: () =>
                                     dispatch(
                                         setAppSuspectWrongDateTime(false, 0)
-                                    )
-                                }
-                            >
-                                {i18n.t('generic.dismiss')}
-                            </Button>
-                        </Card.Content>
-                    </Card>
+                                    ),
+                                mode: 'gray',
+                            },
+                        ],
+                    }}
+                >
+                    <View
+                        style={{
+                            alignItems: 'center',
+                        }}
+                    >
+                        <WaitingRedSvg />
+                        <Body>
+                            {i18n.t('errors.modals.clock.description', {
+                                serverTime: moment(
+                                    dateTimeDiffModal.getTime() - timeDiff
+                                ).format('H[h]mm[m]ss[s]'),
+                                userTime:
+                                    moment(dateTimeDiffModal).format(
+                                        'H[h]mm[m]ss[s]'
+                                    ),
+                            })}
+                        </Body>
+                    </View>
                 </Modal>
-                <Modal visible={isUserBlocked} dismissable={false}>
-                    <BlockedAccount />
+                <Modal
+                    title={i18n.t('beneficiary.blockedAccountTitle')}
+                    visible={isUserBlocked}
+                >
+                    <Body>
+                        {i18n.t('beneficiary.blockedAccountDescription')}
+                    </Body>
                 </Modal>
             </Portal>
         </>
     );
 }
 
-BeneficiaryScreen.navigationOptions = ({
-    route,
-}: {
-    route: RouteProp<any, any>;
-}) => {
+BeneficiaryScreen.navigationOptions = () => {
     return {
         headerTitle: i18n.t('beneficiary.claim'),
         tabBarLabel: i18n.t('beneficiary.claim'),

@@ -53,12 +53,14 @@
         "node": "14.15.1"
     },
     "dependencies": {
+        "@celo-tools/use-contractkit": "^2.0.1",
         "@celo/dappkit": "1.2.5",
         "@expo-google-fonts/inter": "0.2.0",
         "@expo-google-fonts/manrope": "0.2.0",
         "@expo/metro-config": "0.1.84",
-        "@impact-market/translations": "git://github.com/impactMarket/translations.git#master",
-        "@impact-market/ui-kit": "0.0.3",
+        "@impact-market/translations": "git://github.com/impactMarket/translations.git#mobile/1.1.21",
+        "@impact-market/ui-kit": "0.0.5",
+        "@impact-market/utils": "^1.0.10",
         "@react-native-async-storage/async-storage": "1.15.0",
         "@react-native-community/masked-view": "0.1.10",
         "@react-native-community/netinfo": "6.0.0",

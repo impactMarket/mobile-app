@@ -2,7 +2,6 @@ import { Image } from '@impact-market/ui-kit';
 import countriesJSON from 'assets/countries.json';
 import i18n from 'assets/i18n';
 import CommunityStatus from 'components/CommunityStatus';
-import DonateCard from 'components/DonateCard';
 import Dot from 'components/Dot';
 import SuspiciousCard from 'components/SuspiciousCard';
 import Description from 'components/community/Description';
@@ -31,6 +30,8 @@ import { ActivityIndicator, Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Api from 'services/api';
 import { ipctColors } from 'styles/index';
+
+import DonateCard from './DonateCard';
 
 interface ICommunityDetailsScreen {
     route: {

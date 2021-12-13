@@ -70,7 +70,9 @@ function WelcomeRulesScreen() {
                                         ),
                                         interval:
                                             community.contract.baseInterval ===
-                                            86400
+                                                86400 ||
+                                            community.contract.baseInterval ===
+                                                17280
                                                 ? '24h'
                                                 : '168h',
                                         minIncrement:

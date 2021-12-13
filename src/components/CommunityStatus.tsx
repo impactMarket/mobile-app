@@ -1,10 +1,8 @@
+import { estimateCommunityRemainFunds } from '@impact-market/utils';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import { amountToCurrency } from 'helpers/currency';
-import {
-    calculateCommunityProgress,
-    calculateCommunityRemainedFunds,
-} from 'helpers/index';
+import { calculateCommunityProgress } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React from 'react';
@@ -36,7 +34,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
         .multipliedBy(community.state.beneficiaries)
         .toString();
 
-    const days = calculateCommunityRemainedFunds(community);
+    const days = estimateCommunityRemainFunds({
+        contract: community.contract!,
+        state: community.state!,
+    });
 
     if (community.contract === undefined || community.state === undefined) {
         return null;
@@ -151,12 +152,11 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                                 },
                             ]}
                         >
-                            {i18n.t('community.fundsRunOut', {
-                                days: Math.floor(days),
-                            })}{' '}
-                            {i18n.t('generic.days', {
-                                count: days,
-                            })}
+                            {days === 0
+                                ? i18n.t('community.fundsRunOut')
+                                : i18n.t('community.fundsWillRunOut', {
+                                      days: Math.floor(days),
+                                  })}
                         </Text>
                     </View>
                 )}

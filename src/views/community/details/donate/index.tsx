@@ -2,10 +2,12 @@ import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import { modalDonateAction } from 'helpers/constants';
 import { CommunityAttributes } from 'helpers/types/models';
-import React from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet } from 'react-native';
+import { Modalize } from 'react-native-modalize';
 import { Portal } from 'react-native-portalize';
 import { useDispatch, Provider, useStore } from 'react-redux';
+import { Heading } from '@impact-market/ui-kit';
 
 import ConfirmModal from '../donate/modals/confirm';
 import DonateModal from '../donate/modals/donate';
@@ -17,6 +19,8 @@ interface IDonateProps {
 
 export default function Donate(props: IDonateProps) {
     const dispatch = useDispatch();
+    const modalizeWelcomeRef = useRef<Modalize>(null);
+
     return (
         <>
             <Button
@@ -28,21 +32,24 @@ export default function Donate(props: IDonateProps) {
                     lineHeight: 23,
                     color: 'white',
                 }}
-                onPress={() =>
-                    dispatch({
-                        type: modalDonateAction.OPEN,
-                        payload: props.community,
-                    })
-                }
+                onPress={() => modalizeWelcomeRef.current?.open()}
             >
                 {i18n.t('donate.donate')}
             </Button>
             <Portal>
-                <Provider store={useStore()}>
+                {/* <Provider store={useStore()}>
                     <DonateModal />
                     <ConfirmModal />
                     <ErrorModal />
-                </Provider>
+                </Provider> */}
+                <Modalize
+                    ref={modalizeWelcomeRef}
+                    HeaderComponent={<Heading>Hello</Heading>}
+                    adjustToContentHeight
+                    onClose={() => {}}
+                >
+                    <DonateModal />
+                </Modalize>
             </Portal>
         </>
     );

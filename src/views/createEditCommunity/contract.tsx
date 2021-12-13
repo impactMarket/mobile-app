@@ -238,9 +238,9 @@ function CommunityIncrementInterval(props: HelperProps) {
                         value={
                             state.incrementIntervalUnit === 0
                                 ? i18n.t('generic.select')
-                                : state.incrementIntervalUnit === 60
+                                : state.incrementIntervalUnit === 12
                                 ? i18n.t('createCommunity.minutes')
-                                : state.incrementIntervalUnit === 3600
+                                : state.incrementIntervalUnit === 720
                                 ? i18n.t('createCommunity.hours')
                                 : i18n.t('createCommunity.days')
                         }
@@ -273,15 +273,15 @@ function CommunityIncrementInterval(props: HelperProps) {
                         >
                             <RadioButton.Item
                                 label={i18n.t('createCommunity.minutes')}
-                                value="60"
+                                value="12"
                             />
                             <RadioButton.Item
                                 label={i18n.t('createCommunity.hours')}
-                                value="3600"
+                                value="720"
                             />
                             <RadioButton.Item
                                 label={i18n.t('createCommunity.days')}
-                                value="86400"
+                                value="17280"
                             />
                         </RadioButton.Group>
                     </View>
@@ -408,7 +408,7 @@ function CommunityClaimFrequency(props: HelperProps) {
                 value={
                     state.baseInterval.length === 0
                         ? i18n.t('generic.select')
-                        : state.baseInterval === '86400'
+                        : state.baseInterval === '17280'
                         ? i18n.t('createCommunity.daily')
                         : i18n.t('createCommunity.weekly')
                 }
@@ -436,11 +436,11 @@ function CommunityClaimFrequency(props: HelperProps) {
                         >
                             <RadioButton.Item
                                 label={i18n.t('createCommunity.daily')}
-                                value="86400"
+                                value="17280"
                             />
                             <RadioButton.Item
                                 label={i18n.t('createCommunity.weekly')}
-                                value="604800"
+                                value="120960"
                             />
                         </RadioButton.Group>
                     </View>
