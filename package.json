@@ -53,6 +53,7 @@
         "node": "14.15.1"
     },
     "dependencies": {
+        "@celo-tools/use-contractkit": "^2.0.1",
         "@celo/dappkit": "1.2.5",
         "@expo-google-fonts/inter": "0.2.0",
         "@expo-google-fonts/manrope": "0.2.0",

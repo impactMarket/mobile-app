@@ -131,7 +131,6 @@ function BeneficiaryScreen() {
                         cooldown = await communityContract.methods
                             .claimCooldown(userAddress)
                             .call();
-                        console.log('cooldown', cooldown);
                     }
                     // cache it
                     const beneficiaryClaimCache = {
@@ -189,12 +188,17 @@ function BeneficiaryScreen() {
     }, []);
 
     const getNewCooldownTime = async () => {
-        return parseInt(
-            (
-                await communityContract.methods.cooldown(userAddress).call()
-            ).toString(),
-            10
-        );
+        let cooldown;
+        try {
+            cooldown = await communityContract.methods
+                .cooldown(userAddress)
+                .call();
+        } catch (_) {
+            cooldown = await communityContract.methods
+                .claimCooldown(userAddress)
+                .call();
+        }
+        return parseInt(cooldown.toString(), 10);
     };
 
     const onRefresh = () => {

@@ -512,7 +512,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         const isNew = await communityContract.methods
             .impactMarketAddress()
             .call();
-        if (isNew) {
+        if (isNew === '0x0000000000000000000000000000000000000000') {
             cooldownTime = this.estimateBlockTime(
                 await kit.connection.getBlockNumber(),
                 _cooldownTime

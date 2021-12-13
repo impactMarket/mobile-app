@@ -194,7 +194,6 @@ function CommunityManagerScreen() {
                 });
             })
             .catch((e) => {
-                console.log(e);
                 Sentry.Native.captureException(e);
                 Alert.alert(
                     i18n.t('generic.failure'),

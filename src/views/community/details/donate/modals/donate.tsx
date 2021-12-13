@@ -51,25 +51,6 @@ class DonateModal extends Component<
         };
     }
 
-    // componentDidMount = async () => {
-    //     // const { kit, community } = this.props;
-    //     // if (community) {
-    //     //     const communityContract = new kit.web3.eth.Contract(
-    //     //         CommunityContractABI as any,
-    //     //         community.contractAddress!
-    //     //     );
-    //     //     const isNewCommunity = await communityContract.methods
-    //     //         .impactMarketAddress()
-    //     //         .call();
-    //     //     if (
-    //     //         isNewCommunity === '0x0000000000000000000000000000000000000000'
-    //     //     ) {
-    //     //         this.setState({ isNew: true });
-    //     //         console.log('1');
-    //     //     }
-    //     // }
-    // };
-
     componentDidUpdate = (prevProps: IDonateModalProps & PropsFromRedux) => {
         if (prevProps.inputAmount !== this.props.inputAmount) {
             // TODO:
@@ -202,7 +183,6 @@ class DonateModal extends Component<
         } = this.props;
         const { amountDonate, donating, approved } = this.state;
 
-        console.log(community);
         if (
             community === undefined ||
             community.contract === undefined ||
