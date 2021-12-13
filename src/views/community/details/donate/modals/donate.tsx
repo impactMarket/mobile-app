@@ -2,8 +2,6 @@ import { Body, Button, colors } from '@impact-market/ui-kit';
 import i18n from 'assets/i18n';
 import { BigNumber } from 'bignumber.js';
 import Divider from 'components/Divider';
-// import Modal from 'components/Modal';
-// import Button from 'components/core/Button';
 import * as Clipboard from 'expo-clipboard';
 import { modalDonateAction } from 'helpers/constants';
 import {
@@ -13,15 +11,14 @@ import {
 import { ModalActionTypes } from 'helpers/types/redux';
 import { IRootState } from 'helpers/types/state';
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Alert, TextInput } from 'react-native';
-import { Paragraph, Snackbar } from 'react-native-paper';
+import { Text, View, StyleSheet, TextInput } from 'react-native';
+import { Paragraph } from 'react-native-paper';
 import { connect, ConnectedProps } from 'react-redux';
 import { Dispatch } from 'redux';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 import config from '../../../../../../config';
-import CommunityContractABI from '../../../../../contracts/CommunityABI.json';
 import DonationMinerABI from '../../../../../contracts/DonationMinerABI.json';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
@@ -171,16 +168,8 @@ class DonateModal extends Component<
     };
 
     render() {
-        const {
-            visible,
-            dismissModal,
-            community,
-            //
-            userCurrency,
-            exchangeRate,
-            exchangeRates,
-            userAddress,
-        } = this.props;
+        const { community, userCurrency, exchangeRate, exchangeRates } =
+            this.props;
         const { amountDonate, donating, approved } = this.state;
 
         if (

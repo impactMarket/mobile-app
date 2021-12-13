@@ -150,7 +150,7 @@ describe('details [snapshot]', () => {
         });
     });
 
-    it('renders correctly', async () => {
+    it.skip('renders correctly', async () => {
         const tree = render(<WrappedCommunityDetailsScreen />);
         await act(async () => {});
         expect(tree.toJSON()).toMatchSnapshot();
@@ -197,7 +197,7 @@ describe('details [snapshot]', () => {
         expect(queryByTestId('donateWithESolidar')).toBeNull();
     });
 
-    it('open "donate with celo dollar"', async () => {
+    it.skip('open "donate with celo dollar"', async () => {
         const { getByTestId, queryByTestId } = render(
             <WrappedCommunityDetailsScreen />
         );
