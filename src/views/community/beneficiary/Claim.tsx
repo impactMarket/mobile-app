@@ -57,6 +57,27 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
         };
     }
 
+    componentDidUpdate = async (prevProps: IClaimProps) => {
+        if (
+            prevProps.cooldownTime !== this.props.cooldownTime &&
+            !this.state.loading
+        ) {
+            const { communityMetadata, communityContract, kit } = this.props;
+            const { state, contract } = communityMetadata;
+            let notEnoughToClaimOnContract = false;
+            if (state !== undefined && contract !== undefined) {
+                const stableToken = await kit.contracts.getStableToken();
+                const cUSDBalanceBig = await stableToken.balanceOf(
+                    communityContract._address
+                );
+                notEnoughToClaimOnContract = new BigNumber(
+                    cUSDBalanceBig.toString()
+                ).lt(contract.claimAmount);
+            }
+            this.setState({ notEnoughToClaimOnContract });
+        }
+    };
+
     componentDidMount = async () => {
         const { communityMetadata, cooldownTime, communityContract, kit } =
             this.props;

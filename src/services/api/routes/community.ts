@@ -82,7 +82,7 @@ class ApiRouteCommunity {
         query: CommunityListRequestParams
     ): Promise<IApiResult<CommunityListResult[]>> {
         return await api.get<CommunityListResult[]>(
-            '/community/list?status=valid&fields=id;name;description;country;city;cover.*;contract.baseInterval;contract.claimAmount;state.beneficiaries;suspect.*&offset=' +
+            '/community/list?extended=true&offset=' +
                 query.offset +
                 '&limit=' +
                 query.limit +
