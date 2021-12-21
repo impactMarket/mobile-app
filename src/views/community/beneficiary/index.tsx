@@ -90,10 +90,14 @@ function BeneficiaryScreen() {
                 //     // setCooldownTime(beneficiaryClaimCache.cooldown);
                 //     // setLastInterval(beneficiaryClaimCache.lastInterval);
                 // } else
-                const isInNewCommunity = await communityContract.methods
-                    .beneficiaries(userAddress)
-                    .call();
-                if (isInNewCommunity.state === '0') {
+                let isInNewCommunityState = -1;
+                try {
+                    const c = await communityContract.methods
+                        .beneficiaries(userAddress)
+                        .call();
+                    isInNewCommunityState = parseInt(c.state, 10);
+                } catch (_) {}
+                if (isInNewCommunityState === 0) {
                     // TODO: still in old community
                     setClaimedAmount('0');
                     setClaimedProgress(0);

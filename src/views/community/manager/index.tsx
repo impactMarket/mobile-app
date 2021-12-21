@@ -262,6 +262,9 @@ function CommunityManagerScreen() {
                                                                   days: Math.floor(
                                                                       days
                                                                   ),
+                                                                  count: Math.floor(
+                                                                      days
+                                                                  ),
                                                               }
                                                           )}
                                                 </>
