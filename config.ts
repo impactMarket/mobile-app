@@ -47,5 +47,7 @@ export default {
     /**
      * Donation miner address
      */
-    donationMinerAddress: '0xac66FDe03Efc73879424d2bD61F846e964ce6639',
+    donationMinerAddress: process.env.EXPO_IS_TESTNET!
+        ? '0xac66FDe03Efc73879424d2bD61F846e964ce6639'
+        : '0x1C51657af2ceBA3D5492bA0c5A17E562F7ba6593',
 };

@@ -67,6 +67,7 @@ function BeneficiaryScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [askLocationOnOpen, setAskLocationOnOpen] = useState(false);
     const [dateTimeDiffModal, setDateTimeDiffModal] = useState(new Date());
+    const [joining, setJoining] = useState(false);
     const [needsToJoinMigratedCommunity, setNeedsToJoinMigratedCommunity] =
         useState(false);
 
@@ -89,7 +90,24 @@ function BeneficiaryScreen() {
                 //     // setCooldownTime(beneficiaryClaimCache.cooldown);
                 //     // setLastInterval(beneficiaryClaimCache.lastInterval);
                 // } else
-                if (communityContract !== undefined && userAddress.length > 0) {
+                let isInNewCommunityState = -1;
+                try {
+                    const c = await communityContract.methods
+                        .beneficiaries(userAddress)
+                        .call();
+                    isInNewCommunityState = parseInt(c.state, 10);
+                } catch (_) {}
+                if (isInNewCommunityState === 0) {
+                    // TODO: still in old community
+                    setClaimedAmount('0');
+                    setClaimedProgress(0);
+                    setCooldownTime(1);
+                    setLastInterval(1);
+                    setNeedsToJoinMigratedCommunity(true);
+                } else if (
+                    communityContract !== undefined &&
+                    userAddress.length > 0
+                ) {
                     let claimed = '0';
                     let cooldown = 1;
                     let lastIntv = 0;
@@ -147,12 +165,6 @@ function BeneficiaryScreen() {
                     setClaimedProgress(progress.toNumber());
                     setCooldownTime(cooldown);
                     setLastInterval(lastIntv);
-                }
-                const isInNewCommunity =
-                    await communityContract.methods.beneficiaries(userAddress);
-                if (isInNewCommunity.state === 0) {
-                    // TODO: still in old community
-                    setNeedsToJoinMigratedCommunity(true);
                 }
             }
         };
@@ -307,6 +319,7 @@ function BeneficiaryScreen() {
     };
 
     const handleBeneficiaryJoinMigrated = async () => {
+        setJoining(true);
         celoWalletRequest(
             userAddress,
             communityContract.options.address,
@@ -314,10 +327,44 @@ function BeneficiaryScreen() {
             'beneficiaryJoinFromMigrated',
             kit
         )
-            .then(() => {
+            .then(async () => {
+                let claimed = '0';
+                let cooldown = 1;
+                let lastIntv = 0;
+                const _beneficiary = await communityContract.methods
+                    .beneficiaries(userAddress)
+                    .call();
+                claimed = _beneficiary.claimedAmount.toString();
+                lastIntv =
+                    parseInt(
+                        await communityContract.methods
+                            .lastInterval(userAddress)
+                            .call(),
+                        10
+                    ) * 5;
+                cooldown = await communityContract.methods
+                    .claimCooldown(userAddress)
+                    .call();
+                // cache it
+                const beneficiaryClaimCache = {
+                    communityId: community.publicId,
+                    claimed,
+                    cooldown,
+                    lastInterval: lastIntv,
+                };
+                CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
+                const progress = new BigNumber(claimed).div(
+                    await communityContract.methods.maxClaim().call()
+                );
+                setClaimedAmount(humanifyCurrencyAmount(claimed));
+                setClaimedProgress(progress.toNumber());
+                setCooldownTime(cooldown);
+                setLastInterval(lastIntv);
                 setNeedsToJoinMigratedCommunity(false);
             })
-            .catch(() => {
+            .catch((e) => {
+                console.log(e);
+                setJoining(false);
                 Alert.alert(
                     i18n.t('generic.failure'),
                     i18n.t('errors.generic'),
@@ -522,6 +569,8 @@ function BeneficiaryScreen() {
                             {
                                 text: i18n.t('community.joinNewCommunity.join'),
                                 onPress: handleBeneficiaryJoinMigrated,
+                                loading: joining,
+                                disabled: joining,
                             },
                         ],
                     }}
