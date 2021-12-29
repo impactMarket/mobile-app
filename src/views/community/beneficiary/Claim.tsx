@@ -74,6 +74,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     cUSDBalanceBig.toString()
                 ).lt(contract.claimAmount);
             }
+            // eslint-disable-next-line react/no-did-update-set-state
             this.setState({ notEnoughToClaimOnContract });
         }
     };
