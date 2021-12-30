@@ -96,10 +96,10 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             );
             let notEnoughToClaimOnContract = false;
             if (
-                claimedRatio.gt(new BigNumber(0.95)) ||
+                claimedRatio.gt(new BigNumber(0.9)) ||
                 (await CacheStore.getCommunityHadNoFunds()) !== null
             ) {
-                // if it's above 97, check from contract
+                // if it's above 90, check from contract
                 // because the values aren't 100% correct,
                 // as we send 5 cents when a beneficiary is added
                 const stableToken = await kit.contracts.getStableToken();

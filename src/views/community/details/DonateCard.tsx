@@ -154,7 +154,7 @@ export default function DonateCard(props: IDonateProps) {
                 >
                     <DonateView
                         modalDonateRef={modalDonateRef}
-                        communityContract={community.contractAddress}
+                        community={community}
                     />
                 </Modalize>
                 <Modalize

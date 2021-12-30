@@ -73,6 +73,7 @@ function CommunityManagerScreen() {
     const [requiredUbiToChange, setRequiredUbiToChange] =
         useState<UbiRequestChangeParams | null>();
     const [canRequestFunds, setCanRequestFunds] = useState(false);
+    const [requestingFunds, setRequestingFunds] = useState(false);
 
     const [editInProgress, setEditInProgress] = useState(false);
 
@@ -96,12 +97,35 @@ function CommunityManagerScreen() {
                     isNewCommunity ===
                     '0x0000000000000000000000000000000000000000'
                 ) {
-                    const claimedRatio = new BigNumber(
-                        community.state.claimed
-                    ).dividedBy(community.state.raised);
-                    if (claimedRatio.gt(new BigNumber(0.95))) {
+                    const lastFundsRequest = parseInt(
+                        await communityContract.methods
+                            .lastFundRequest()
+                            .call(),
+                        10
+                    );
+                    const availableAtBlock =
+                        lastFundsRequest + community.contract!.baseInterval;
+
+                    // console.log(
+                    //     cUSDBalanceBig,
+                    //     await communityContract.methods.minTranche().call(),
+                    //     cUSDBalanceBig.lte(
+                    //         await communityContract.methods.minTranche().call()
+                    //     ),
+                    //     lastFundsRequest,
+                    //     availableAtBlock,
+                    //     await kit.web3.eth.getBlockNumber()
+                    // );
+                    if (
+                        cUSDBalanceBig.lt(
+                            await communityContract.methods.minTranche().call()
+                        ) &&
+                        (lastFundsRequest === 0 ||
+                            availableAtBlock <=
+                                (await kit.web3.eth.getBlockNumber()))
+                    ) {
+                        setCanRequestFunds(true);
                     }
-                    setCanRequestFunds(true);
                 }
             };
             const verifyRequestToChangeUbiParams = () => {
@@ -166,7 +190,7 @@ function CommunityManagerScreen() {
                 Sentry.Native.captureException(e);
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.generic'),
+                    i18n.t('errors.generic'),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
@@ -177,6 +201,7 @@ function CommunityManagerScreen() {
     };
 
     const handleRequestFunds = async () => {
+        setRequestingFunds(true);
         celoWalletRequest(
             userAddress,
             communityContract.options.address,
@@ -192,18 +217,19 @@ function CommunityManagerScreen() {
                 Alert.alert(i18n.t('generic.success'), '', [{ text: 'OK' }], {
                     cancelable: false,
                 });
+                setCanRequestFunds(false);
             })
             .catch((e) => {
                 Sentry.Native.captureException(e);
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.generic'),
+                    i18n.t('errors.generic'),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             })
             .finally(() => {
-                setEditInProgress(false);
+                setRequestingFunds(false);
             });
     };
 
@@ -245,11 +271,15 @@ function CommunityManagerScreen() {
                                             style={{
                                                 flexDirection: 'row',
                                                 alignContent: 'center',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
                                             }}
                                         >
-                                            <WarningIcon
-                                                color={colors.ui.warning}
-                                            />
+                                            <View style={{ marginRight: 8 }}>
+                                                <WarningIcon
+                                                    color={colors.ui.warning}
+                                                />
+                                            </View>
                                             <Body>
                                                 <>
                                                     {days === 0
@@ -273,8 +303,10 @@ function CommunityManagerScreen() {
                                         <Button
                                             mode="text"
                                             onPress={handleRequestFunds}
+                                            loading={requestingFunds}
+                                            disabled={requestingFunds}
                                         >
-                                            {i18n.t('community.requestFunds')}
+                                            {i18n.t('manager.requestFunds')}
                                         </Button>
                                     </Card>
                                 )}
