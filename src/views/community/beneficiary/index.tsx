@@ -12,6 +12,7 @@ import { Screens } from 'helpers/constants';
 import { humanifyCurrencyAmount } from 'helpers/currency';
 import { setAppSuspectWrongDateTime } from 'helpers/redux/actions/app';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
+import { setCommunityContract } from 'helpers/redux/actions/user';
 import { ITabBarIconProps } from 'helpers/types/common';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
@@ -32,6 +33,7 @@ import CacheStore from 'services/cacheStore';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
+import OldCommunityContractABI from '../../../contracts/OldCommunityABI.json';
 import Claim from './Claim';
 
 function BeneficiaryScreen() {
@@ -92,34 +94,99 @@ function BeneficiaryScreen() {
                 // } else
                 let isInNewCommunityState = -1;
                 try {
-                    const c = await communityContract.methods
-                        .beneficiaries(userAddress)
-                        .call();
-                    isInNewCommunityState = parseInt(c.state, 10);
-                } catch (_) {}
-                if (isInNewCommunityState === 0) {
-                    // TODO: still in old community
-                    setClaimedAmount('0');
-                    setClaimedProgress(0);
-                    setCooldownTime(1);
-                    setLastInterval(1);
-                    setNeedsToJoinMigratedCommunity(true);
-                } else if (
-                    communityContract !== undefined &&
-                    userAddress.length > 0
-                ) {
+                    try {
+                        const c = await communityContract.methods
+                            .beneficiaries(userAddress)
+                            .call();
+                        isInNewCommunityState = parseInt(c.state, 10);
+                    } catch (_) {}
+                    if (isInNewCommunityState === 0) {
+                        // TODO: still in old community
+                        setClaimedAmount('0');
+                        setClaimedProgress(0);
+                        setCooldownTime(1);
+                        setLastInterval(1);
+                        setNeedsToJoinMigratedCommunity(true);
+                    } else if (
+                        communityContract !== undefined &&
+                        userAddress.length > 0
+                    ) {
+                        let claimed = '0';
+                        let cooldown = 1;
+                        let lastIntv = 0;
+                        try {
+                            claimed = (
+                                await communityContract.methods
+                                    .claimed(userAddress)
+                                    .call()
+                            ).toString();
+                            cooldown = parseInt(
+                                (
+                                    await communityContract.methods
+                                        .cooldown(userAddress)
+                                        .call()
+                                ).toString(),
+                                10
+                            );
+                            lastIntv = parseInt(
+                                (
+                                    await communityContract.methods
+                                        .lastInterval(userAddress)
+                                        .call()
+                                ).toString(),
+                                10
+                            );
+                            setIsNew(false);
+                        } catch (_) {
+                            const _beneficiary = await communityContract.methods
+                                .beneficiaries(userAddress)
+                                .call();
+                            console.log(_beneficiary);
+                            claimed = _beneficiary.claimedAmount.toString();
+                            lastIntv =
+                                parseInt(
+                                    await communityContract.methods
+                                        .lastInterval(userAddress)
+                                        .call(),
+                                    10
+                                ) * 5;
+                            cooldown = await communityContract.methods
+                                .claimCooldown(userAddress)
+                                .call();
+                        }
+                        // cache it
+                        const beneficiaryClaimCache = {
+                            communityId: community.publicId,
+                            claimed,
+                            cooldown,
+                            lastInterval: lastIntv,
+                        };
+                        CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
+                        const progress = new BigNumber(claimed).div(
+                            community.contract.maxClaim
+                        );
+                        setClaimedAmount(humanifyCurrencyAmount(claimed));
+                        setClaimedProgress(progress.toNumber());
+                        setCooldownTime(cooldown);
+                        setLastInterval(lastIntv);
+                    }
+                } catch (e) {
                     let claimed = '0';
                     let cooldown = 1;
                     let lastIntv = 0;
                     try {
+                        const _communityContract = new kit.web3.eth.Contract(
+                            OldCommunityContractABI as any,
+                            community.contractAddress
+                        );
                         claimed = (
-                            await communityContract.methods
+                            await _communityContract.methods
                                 .claimed(userAddress)
                                 .call()
                         ).toString();
                         cooldown = parseInt(
                             (
-                                await communityContract.methods
+                                await _communityContract.methods
                                     .cooldown(userAddress)
                                     .call()
                             ).toString(),
@@ -127,29 +194,15 @@ function BeneficiaryScreen() {
                         );
                         lastIntv = parseInt(
                             (
-                                await communityContract.methods
+                                await _communityContract.methods
                                     .lastInterval(userAddress)
                                     .call()
                             ).toString(),
                             10
                         );
                         setIsNew(false);
-                    } catch (_) {
-                        const _beneficiary = await communityContract.methods
-                            .beneficiaries(userAddress)
-                            .call();
-                        claimed = _beneficiary.claimedAmount.toString();
-                        lastIntv =
-                            parseInt(
-                                await communityContract.methods
-                                    .lastInterval(userAddress)
-                                    .call(),
-                                10
-                            ) * 5;
-                        cooldown = await communityContract.methods
-                            .claimCooldown(userAddress)
-                            .call();
-                    }
+                        dispatch(setCommunityContract(_communityContract));
+                    } catch (_) {}
                     // cache it
                     const beneficiaryClaimCache = {
                         communityId: community.publicId,
