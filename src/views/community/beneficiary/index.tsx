@@ -62,8 +62,8 @@ function BeneficiaryScreen() {
     const timeDiff = useSelector((state: IRootState) => state.app.timeDiff);
 
     const [isNew, setIsNew] = useState(true);
-    const [lastInterval, setLastInterval] = useState(0);
-    const [cooldownTime, setCooldownTime] = useState(0);
+    const [lastInterval, setLastInterval] = useState(-1);
+    const [cooldownTime, setCooldownTime] = useState(-1);
     const [claimedAmount, setClaimedAmount] = useState('');
     const [claimedProgress, setClaimedProgress] = useState(0.1);
     const [refreshing, setRefreshing] = useState(false);
@@ -328,8 +328,8 @@ function BeneficiaryScreen() {
     if (
         community === undefined ||
         community.contract === undefined ||
-        lastInterval === 0 ||
-        cooldownTime === 0
+        lastInterval === -1 ||
+        cooldownTime === -1
     ) {
         return (
             <View
