@@ -141,7 +141,6 @@ function BeneficiaryScreen() {
                             const _beneficiary = await communityContract.methods
                                 .beneficiaries(userAddress)
                                 .call();
-                            console.log(_beneficiary);
                             claimed = _beneficiary.claimedAmount.toString();
                             lastIntv =
                                 parseInt(
@@ -416,7 +415,6 @@ function BeneficiaryScreen() {
                 setNeedsToJoinMigratedCommunity(false);
             })
             .catch((e) => {
-                console.log(e);
                 setJoining(false);
                 Alert.alert(
                     i18n.t('generic.failure'),

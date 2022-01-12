@@ -183,8 +183,6 @@ function DonateView(props: {
                     setDonatedSuccessfully(true);
                 })
                 .catch((e) => {
-                    console.log('heere');
-                    console.log(e);
                     Alert.alert(
                         i18n.t('generic.failure'),
                         i18n.t('donate.errorDonating'),

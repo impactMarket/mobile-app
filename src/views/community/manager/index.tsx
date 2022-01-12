@@ -47,6 +47,7 @@ function CommunityManagerScreen() {
     const dispatch = useDispatch();
 
     const modalizeHelpCenterRef = useRef<Modalize>(null);
+    const modalRequestFundsRef = useRef<Modalize>(null);
 
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userCurrency = useSelector(
@@ -73,6 +74,7 @@ function CommunityManagerScreen() {
     const [requiredUbiToChange, setRequiredUbiToChange] =
         useState<UbiRequestChangeParams | null>();
     const [canRequestFunds, setCanRequestFunds] = useState(false);
+    const [waitToRequestFunds, setWaitToRequestFunds] = useState(0);
     const [requestingFunds, setRequestingFunds] = useState(false);
 
     const [editInProgress, setEditInProgress] = useState(false);
@@ -106,25 +108,22 @@ function CommunityManagerScreen() {
                     const availableAtBlock =
                         lastFundsRequest + community.contract!.baseInterval;
 
-                    // console.log(
-                    //     cUSDBalanceBig,
-                    //     await communityContract.methods.minTranche().call(),
-                    //     cUSDBalanceBig.lte(
-                    //         await communityContract.methods.minTranche().call()
-                    //     ),
-                    //     lastFundsRequest,
-                    //     availableAtBlock,
-                    //     await kit.web3.eth.getBlockNumber()
-                    // );
+                    const currentBlock = await kit.web3.eth.getBlockNumber();
                     if (
                         cUSDBalanceBig.lt(
                             await communityContract.methods.minTranche().call()
-                        ) &&
-                        (lastFundsRequest === 0 ||
-                            availableAtBlock <=
-                                (await kit.web3.eth.getBlockNumber()))
+                        ) ||
+                        lastFundsRequest === 0
                     ) {
                         setCanRequestFunds(true);
+                        setWaitToRequestFunds(
+                            lastFundsRequest > 0 &&
+                                availableAtBlock > currentBlock
+                                ? Math.ceil(
+                                      (availableAtBlock - currentBlock) / 17280
+                                  )
+                                : 0
+                        );
                     }
                 }
             };
@@ -300,11 +299,45 @@ function CommunityManagerScreen() {
                                                 </>
                                             </Body>
                                         </View>
+                                        {waitToRequestFunds > 0 && (
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignContent: 'center',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <View
+                                                    style={{ marginRight: 8 }}
+                                                >
+                                                    <WarningIcon
+                                                        color={
+                                                            colors.ui.warning
+                                                        }
+                                                    />
+                                                </View>
+                                                <Body>
+                                                    {i18n.t(
+                                                        'manager.requestFundsIn',
+                                                        {
+                                                            days: Math.floor(
+                                                                waitToRequestFunds
+                                                            ),
+                                                            count: Math.floor(
+                                                                waitToRequestFunds
+                                                            ),
+                                                        }
+                                                    )}
+                                                </Body>
+                                            </View>
+                                        )}
                                         <Button
                                             mode="text"
-                                            onPress={handleRequestFunds}
-                                            loading={requestingFunds}
-                                            disabled={requestingFunds}
+                                            disabled={waitToRequestFunds > 0}
+                                            onPress={() =>
+                                                modalRequestFundsRef.current.open()
+                                            }
                                         >
                                             {i18n.t('manager.requestFunds')}
                                         </Button>
@@ -416,6 +449,48 @@ function CommunityManagerScreen() {
                                     </Paragraph>
                                 </Modal>
                             )}
+                        <Modalize
+                            ref={modalRequestFundsRef}
+                            HeaderComponent={renderHeader(
+                                i18n.t('manager.requestFunds'),
+                                modalRequestFundsRef,
+                                () => {},
+                                false
+                            )}
+                            adjustToContentHeight
+                            onClose={() => {}}
+                        >
+                            <View style={{ marginHorizontal: 22 }}>
+                                <Body>
+                                    Are you sure you want to request more funds?
+                                </Body>
+                                <View
+                                    style={{
+                                        marginVertical: 18,
+                                        flexDirection: 'row',
+                                        flex: 2,
+                                    }}
+                                >
+                                    <Button
+                                        mode="gray"
+                                        style={{ flex: 1, marginRight: 8 }}
+                                        onPress={() =>
+                                            modalRequestFundsRef.current.close()
+                                        }
+                                    >
+                                        {i18n.t('generic.no')}
+                                    </Button>
+                                    <Button
+                                        style={{ flex: 1, marginLeft: 8 }}
+                                        onPress={handleRequestFunds}
+                                        loading={requestingFunds}
+                                        disabled={requestingFunds}
+                                    >
+                                        {i18n.t('generic.yes')}
+                                    </Button>
+                                </View>
+                            </View>
+                        </Modalize>
                     </Portal>
                 </>
             );
