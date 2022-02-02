@@ -414,7 +414,7 @@ function BeneficiaryScreen() {
                 setLastInterval(lastIntv);
                 setNeedsToJoinMigratedCommunity(false);
             })
-            .catch((e) => {
+            .catch((_) => {
                 setJoining(false);
                 Alert.alert(
                     i18n.t('generic.failure'),
