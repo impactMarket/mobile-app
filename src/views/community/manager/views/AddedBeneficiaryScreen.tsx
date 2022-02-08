@@ -33,7 +33,7 @@ import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
 
 const httpLink = createHttpLink({
-    uri: 'https://api.thegraph.com/subgraphs/name/impactmarket/alfajores-subgraph',
+    uri: 'https://api.thegraph.com/subgraphs/name/impactmarket/subgraph',
     fetch,
 });
 
