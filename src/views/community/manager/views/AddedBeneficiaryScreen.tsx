@@ -1,7 +1,11 @@
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
+import gql from 'graphql-tag';
 import { amountToCurrency } from 'helpers/currency';
 import { isOutOfTime } from 'helpers/index';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
@@ -27,6 +31,53 @@ import * as Sentry from 'sentry-expo';
 import Api from 'services/api';
 import { celoWalletRequest } from 'services/celoWallet';
 import { ipctColors } from 'styles/index';
+
+const httpLink = createHttpLink({
+    uri: 'https://api.thegraph.com/subgraphs/name/impactmarket/alfajores-subgraph',
+    fetch,
+});
+
+const client = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+});
+
+async function getBeneficiariesNotInCommunity(
+    _addresses: string[],
+    communityAddress: string
+): Promise<any> {
+    const addresses = _addresses.map((a) => `"${a.toLowerCase()}"`);
+    const result = await client.query({
+        query: gql`
+            {
+                beneficiaryEntities(
+                    where: {
+                        id_in: [${addresses}]
+                        community_not: "${communityAddress.toLowerCase()}"
+                        state: 0
+                    }
+                ) {
+                    address
+                }
+            }
+        `,
+    });
+    return result.data.beneficiaryEntities.map((a) => a.address);
+}
+
+async function updateMigratedBeneficiariesList(
+    beneficiaries: IManagerDetailsBeneficiary[],
+    communityAddress: string
+) {
+    const addresses = beneficiaries.map((b) => b.address);
+    const m = await getBeneficiariesNotInCommunity(addresses, communityAddress);
+    for (let index = 0; index < beneficiaries.length; index++) {
+        beneficiaries[index].migrated = !m.includes(
+            beneficiaries[index].address.toLowerCase()
+        );
+    }
+    return beneficiaries;
+}
 
 function AddedBeneficiaryScreen() {
     const dispatch = useDispatch();
@@ -58,10 +109,15 @@ function AddedBeneficiaryScreen() {
             if (l.length < 10) {
                 setReachedEndList(true);
             }
-            setBeneficiaries(l);
-            setBeneficiariesOffset(0);
-            setRemoving(Array(l.length).fill(false));
-            setRefreshing(false);
+            updateMigratedBeneficiariesList(
+                l,
+                community.metadata.contractAddress
+            ).then((al) => {
+                setBeneficiaries(al);
+                setBeneficiariesOffset(0);
+                setRemoving(Array(l.length).fill(false));
+                setRefreshing(false);
+            });
         });
     }, []);
 
@@ -71,9 +127,14 @@ function AddedBeneficiaryScreen() {
                 if (l.length < 10) {
                     setReachedEndList(true);
                 }
-                setBeneficiaries(l);
-                setBeneficiariesOffset(0);
-                setRemoving(Array(l.length).fill(false));
+                updateMigratedBeneficiariesList(
+                    l,
+                    community.metadata.contractAddress
+                ).then((al) => {
+                    setBeneficiaries(al);
+                    setBeneficiariesOffset(0);
+                    setRemoving(Array(l.length).fill(false));
+                });
             });
         };
         loadActiveBeneficiaries();
@@ -128,10 +189,15 @@ function AddedBeneficiaryScreen() {
                         if (l.length < 10) {
                             setReachedEndList(true);
                         }
-                        setBeneficiaries(l);
-                        setBeneficiariesOffset(0);
-                        setRemoving(Array(l.length).fill(false));
-                        setRefreshing(false);
+                        updateMigratedBeneficiariesList(
+                            l,
+                            community.metadata.contractAddress
+                        ).then((al) => {
+                            setBeneficiaries(al);
+                            setBeneficiariesOffset(0);
+                            setRemoving(Array(l.length).fill(false));
+                            setRefreshing(false);
+                        });
                     });
                 }, 2500);
             })
@@ -201,14 +267,18 @@ function AddedBeneficiaryScreen() {
             setRefreshing(true);
             Api.community
                 .listBeneficiaries(true, beneficiariesOffset + 10, 10)
-                .then((l) => {
+                .then(async (l) => {
                     if (l.length < 10) {
                         setReachedEndList(true);
                     }
-                    setBeneficiaries(beneficiaries.concat(l));
+                    const al = await updateMigratedBeneficiariesList(
+                        l,
+                        community.metadata.contractAddress
+                    );
+                    setBeneficiaries(beneficiaries.concat(al));
                     setBeneficiariesOffset(beneficiariesOffset + 10);
                     setRemoving(
-                        Array(beneficiaries.length + l.length).fill(false)
+                        Array(beneficiaries.length + al.length).fill(false)
                     );
                 })
                 .finally(() => setRefreshing(false));
@@ -239,7 +309,7 @@ function AddedBeneficiaryScreen() {
                 <Button
                     modeType="gray"
                     bold
-                    disabled={removing[index]}
+                    disabled={removing[index] || !item.migrated}
                     loading={removing[index]}
                     style={{ marginVertical: 5 }}
                     onPress={() => handleRemoveBeneficiary(item, index)}
@@ -247,11 +317,19 @@ function AddedBeneficiaryScreen() {
                     {i18n.t('generic.remove')}
                 </Button>
             )}
-            left={() =>
-                item.suspect && (
-                    <WarningTriangle style={{ marginVertical: 14 }} />
-                )
-            }
+            left={() => (
+                <>
+                    {item.suspect && (
+                        <WarningTriangle style={{ marginVertical: 14 }} />
+                    )}
+                    {!item.migrated && (
+                        <WarningTriangle
+                            style={{ marginVertical: 14 }}
+                            color="#808080"
+                        />
+                    )}
+                </>
+            )}
             titleStyle={styles.textTitle}
             descriptionStyle={styles.textDescription}
             style={{
@@ -267,14 +345,18 @@ function AddedBeneficiaryScreen() {
         }
         Api.community
             .findBeneficiary(searchBeneficiary, true)
-            .then((r) => {
+            .then(async (r) => {
                 if (r.length > 0) {
                     if (r.length <= 10) {
                         setReachedEndList(true);
                     }
                     setRemoving(Array(r.length).fill(false));
                 }
-                setBeneficiaries(r);
+                const ar = await updateMigratedBeneficiariesList(
+                    r,
+                    community.metadata.contractAddress
+                );
+                setBeneficiaries(ar);
             })
             .finally(() => setRefreshing(false));
     };
@@ -344,9 +426,14 @@ function AddedBeneficiaryScreen() {
                         setRefreshing(true);
                         Api.community
                             .listBeneficiaries(true, 0, 10)
-                            .then((l) => {
+                            .then(async (l) => {
                                 setReachedEndList(l.length <= 10);
-                                setBeneficiaries(l);
+                                const al =
+                                    await updateMigratedBeneficiariesList(
+                                        l,
+                                        community.metadata.contractAddress
+                                    );
+                                setBeneficiaries(al);
                                 setBeneficiariesOffset(0);
                                 setRemoving(Array(l.length).fill(false));
                             })

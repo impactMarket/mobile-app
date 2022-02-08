@@ -384,8 +384,6 @@ function CommunityName() {
 function CommunityCover(props: { edit?: boolean }) {
     const [toggleDimensionsModal, setToggleDimensionsModal] = useState(false);
 
-    const [loadedImage, setLoadedImage] = useState(props.edit !== true);
-
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
@@ -418,49 +416,33 @@ function CommunityCover(props: { edit?: boolean }) {
     if (state.coverImage.length > 0) {
         return (
             <View style={{ flex: 1 }}>
-                <ShimmerPlaceholder
-                    delay={0}
-                    duration={1000}
-                    isInteraction
-                    height={331}
-                    width={350}
-                    shimmerContainerProps={{
+                <Image
+                    style={{
+                        height: 331,
                         width: '100%',
                         borderRadius: 12,
                         marginVertical: 22,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
-                    shimmerStyle={{ borderRadius: 12 }}
-                    visible={loadedImage}
-                >
-                    <Image
-                        style={{
-                            height: 331,
-                            width: '100%',
-                            borderRadius: 12,
-                            marginVertical: 22,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                        source={{
-                            uri: state.coverImage,
-                        }}
-                        onLoadEnd={() => setLoadedImage(true)}
-                    />
-                    <CloseStorySvg
-                        testID="remove-cover"
-                        style={{
-                            position: 'absolute',
-                            top: 38,
-                            right: 14,
-                        }}
-                        onPress={() => {
-                            dispatch({
-                                type: formAction.SET_COVER_IMAGE,
-                                payload: '',
-                            });
-                        }}
-                    />
-                </ShimmerPlaceholder>
+                    source={{
+                        uri: state.coverImage,
+                    }}
+                />
+                <CloseStorySvg
+                    testID="remove-cover"
+                    style={{
+                        position: 'absolute',
+                        top: 38,
+                        right: 14,
+                    }}
+                    onPress={() => {
+                        dispatch({
+                            type: formAction.SET_COVER_IMAGE,
+                            payload: '',
+                        });
+                    }}
+                />
             </View>
         );
     }

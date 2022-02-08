@@ -62,12 +62,13 @@ export interface IManagerDetailsBeneficiary {
     blocked: boolean;
     verifiedPN: boolean | undefined;
     suspect: boolean | undefined;
+    migrated: boolean | undefined;
 }
 export interface CommunityEditionAttributes {
     name: string;
     description: string;
-    currency: string;
-    coverMediaId: number;
+    currency?: string;
+    coverMediaId?: number;
 }
 export interface CommunityCreationAttributes {
     requestByAddress: string;

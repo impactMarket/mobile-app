@@ -76,6 +76,9 @@ export interface IApiResult<T> {
 export const ApiRequests = {
     async get<T>(endpoint: string): Promise<IApiResult<T>> {
         try {
+            AxiosInstance.defaults.headers.common[
+                'Authorization'
+            ] = `Bearer ${await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN)}`;
             return (await AxiosInstance.get(endpoint)).data;
         } catch (e) {
             return e.response.data;
