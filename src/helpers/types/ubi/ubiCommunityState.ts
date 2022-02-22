@@ -5,8 +5,8 @@ export interface UbiCommunityState {
     beneficiaries: number; // only in community
     removedBeneficiaries: number;
     managers: number;
-    raised: string;
-    backers: number;
+    contributed: string;
+    contributors: number;
 
     // timestamps
     createdAt: Date;

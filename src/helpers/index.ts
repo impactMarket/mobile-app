@@ -265,48 +265,22 @@ export function calculateCommunityProgress(
     if (community.contract === undefined || community.state === undefined) {
         return 0;
     }
-    const m = new BigNumber(community.contract.maxClaim).multipliedBy(
+    let m = new BigNumber(community.contract.maxClaim).multipliedBy(
         community.state.beneficiaries
     );
+    if (community.contract.maxClaim.length > 15) {
+        m = new BigNumber(community.contract.maxClaim)
+            .div(10 ** 18)
+            .multipliedBy(community.state.beneficiaries);
+    }
+    const { contributed, claimed } = community.state;
+    if (claimed.length > 15) {
+        m = new BigNumber(claimed).div(10 ** 18);
+    }
     const result = new BigNumber(
-        toCalculte === 'raised'
-            ? community.state.raised
-            : community.state.claimed
+        toCalculte === 'raised' ? contributed : claimed
     ).div(m.eq(0) ? 1 : m);
     return parseFloat(result.decimalPlaces(5, 1).toString());
-}
-
-/**
- * @deprecated Migrated to external lib. Use `estimateCommunityRemainFunds`
- */
-export function calculateCommunityRemainedFunds(
-    community: CommunityAttributes
-): number {
-    if (community.contract === undefined || community.state === undefined) {
-        return 0;
-    }
-
-    const raised = new BigNumber(community.state.raised); // 10.15 string
-    const claimed = new BigNumber(community.state.claimed); // 0
-    const beneficiaryCount = community.state.beneficiaries;
-
-    const remainingFundToBeClaimed = raised.minus(claimed);
-
-    const claimInterval = community.contract.baseInterval;
-
-    const claimAmountPerBeneficiary = new BigNumber(
-        community.contract.claimAmount
-    );
-
-    const communityLimitPerDay =
-        // Check if claimInterval(baseInterval) is daily if not it takes claimAmountPerBeneficiary / 7 days (week) to delivery as a daily rate.
-        claimInterval === 86400
-            ? claimAmountPerBeneficiary.multipliedBy(beneficiaryCount)
-            : claimAmountPerBeneficiary.div(7).multipliedBy(beneficiaryCount);
-
-    const remainingDays = remainingFundToBeClaimed.div(communityLimitPerDay);
-
-    return remainingDays.lte(1) ? 1 : remainingDays.toNumber();
 }
 
 export function getCountryFromPhoneNumber(pnumber: string) {

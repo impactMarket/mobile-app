@@ -26,8 +26,19 @@ export function getCurrencySymbol(currency: string) {
 export function humanifyCurrencyAmount(
     inputNumber: BigNumber | string
 ): string {
-    const decimals = new BigNumber(10).pow(config.cUSDDecimals);
-    const value = new BigNumber(inputNumber).div(decimals);
+    let value: BigNumber = new BigNumber(0);
+    if (
+        inputNumber instanceof BigNumber &&
+        inputNumber.toString().length > 15
+    ) {
+        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
+        value = inputNumber.div(decimals);
+    } else if (!(inputNumber instanceof BigNumber) && inputNumber.length > 15) {
+        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
+        value = new BigNumber(inputNumber).div(decimals);
+    } else {
+        value = new BigNumber(inputNumber);
+    }
     if (value.gte('100000')) {
         return value
             .decimalPlaces(0)

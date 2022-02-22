@@ -30,9 +30,16 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
         (state: IRootState) => state.app.exchangeRates
     );
 
-    const maxClaim = new BigNumber(community.contract.maxClaim)
+    let maxClaim = new BigNumber(community.contract.maxClaim)
         .multipliedBy(community.state.beneficiaries)
         .toString();
+
+    if (community.contract.maxClaim.length > 15) {
+        maxClaim = new BigNumber(community.contract.maxClaim)
+            .div(10 ** 18)
+            .multipliedBy(community.state.beneficiaries)
+            .toString();
+    }
 
     const days = estimateCommunityRemainFunds({
         contract: community.contract!,
@@ -45,7 +52,8 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
 
     const raisedPercentage =
         (
-            (parseFloat(community.state.raised) / parseFloat(maxClaim)) *
+            (parseFloat(community.state.contributed || '0') /
+                parseFloat(maxClaim)) *
             100
         ).toFixed(2) + '%';
 
@@ -72,10 +80,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         ]}
                     >
                         {i18n.t('generic.raisedFrom', {
-                            backers: community.state.backers,
+                            backers: community.state.contributors || 0,
                         })}{' '}
                         {i18n.t('generic.backers', {
-                            count: community.state.backers,
+                            count: community.state.contributors || 0,
                         })}
                     </Text>
                     <Text
@@ -98,7 +106,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                 >
                     <Text style={styles.Text}>
                         {amountToCurrency(
-                            community.state.raised,
+                            community.state.contributed || '0',
                             user.currency,
                             exchangeRates
                         )}
