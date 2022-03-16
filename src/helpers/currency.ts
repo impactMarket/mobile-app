@@ -52,6 +52,28 @@ export function humanifyCurrencyAmount(
 }
 
 export function amountToCurrency(
+    amount: string,
+    currency: string,
+    exchangeRates: { [key: string]: number },
+    showSymbol: boolean = true
+): string {
+    if (amount.length > 15) {
+        const decimals = new BigNumber(10).pow(config.cUSDDecimals);
+        amount = new BigNumber(amount).div(decimals).toString();
+    }
+    const exchangeRate = exchangeRates[currency];
+    const hValue = parseFloat(amount) * exchangeRate;
+    const currencySymbol = getCurrencySymbol(currency);
+    // if (currency.includes('/.')) {
+    //     return hValue.replace('.', currencySymbol);
+    // }
+    if (!showSymbol) {
+        return hValue.toString();
+    }
+    return `${currencySymbol}${hValue}`;
+}
+
+export function amountToCurrencyBN(
     amount: BigNumber | string,
     currency: string,
     exchangeRates: { [key: string]: number },

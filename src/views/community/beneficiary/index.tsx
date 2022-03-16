@@ -141,7 +141,11 @@ function BeneficiaryScreen() {
                             const _beneficiary = await communityContract.methods
                                 .beneficiaries(userAddress)
                                 .call();
-                            claimed = _beneficiary.claimedAmount.toString();
+                            claimed = new BigNumber(
+                                _beneficiary.claimedAmount.toString()
+                            )
+                                .div(10 ** 18)
+                                .toString();
                             lastIntv =
                                 parseInt(
                                     await communityContract.methods
@@ -161,11 +165,11 @@ function BeneficiaryScreen() {
                             lastInterval: lastIntv,
                         };
                         CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
-                        const progress = new BigNumber(claimed).div(
-                            community.contract.maxClaim
-                        );
+                        const progress =
+                            parseFloat(claimed) /
+                            parseFloat(community.contract.maxClaim);
                         setClaimedAmount(humanifyCurrencyAmount(claimed));
-                        setClaimedProgress(progress.toNumber());
+                        setClaimedProgress(progress);
                         setCooldownTime(cooldown);
                         setLastInterval(lastIntv);
                     }
@@ -178,11 +182,15 @@ function BeneficiaryScreen() {
                             OldCommunityContractABI as any,
                             community.contractAddress
                         );
-                        claimed = (
-                            await _communityContract.methods
-                                .claimed(userAddress)
-                                .call()
-                        ).toString();
+                        claimed = new BigNumber(
+                            (
+                                await _communityContract.methods
+                                    .claimed(userAddress)
+                                    .call()
+                            ).toString()
+                        )
+                            .div(10 ** 18)
+                            .toString();
                         cooldown = parseInt(
                             (
                                 await _communityContract.methods
@@ -210,11 +218,11 @@ function BeneficiaryScreen() {
                         lastInterval: lastIntv,
                     };
                     CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
-                    const progress = new BigNumber(claimed).div(
-                        community.contract.maxClaim
-                    );
+                    const progress =
+                        parseFloat(claimed) /
+                        parseFloat(community.contract.maxClaim);
                     setClaimedAmount(humanifyCurrencyAmount(claimed));
-                    setClaimedProgress(progress.toNumber());
+                    setClaimedProgress(progress);
                     setCooldownTime(cooldown);
                     setLastInterval(lastIntv);
                 }
@@ -317,10 +325,9 @@ function BeneficiaryScreen() {
         };
         CacheStore.cacheBeneficiaryClaim(beneficiaryClaimCache);
 
-        const progress = new BigNumber(claimed).div(
-            community.contract!.maxClaim
-        );
-        setClaimedProgress(progress.toNumber());
+        const progress =
+            parseFloat(claimed) / parseFloat(community.contract.maxClaim);
+        setClaimedProgress(progress);
         setClaimedAmount(humanifyCurrencyAmount(claimed.toString()));
     };
 

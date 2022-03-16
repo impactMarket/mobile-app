@@ -1,3 +1,7 @@
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
+import gql from 'graphql-tag';
 import {
     CommunityCreationAttributes,
     IManagerDetailsBeneficiary,
@@ -15,13 +19,125 @@ import {
     CommunityCampaing,
     UbiPromoter,
 } from 'helpers/types/models';
-import { UbiCommunityContract } from 'helpers/types/ubi/ubiCommunityContract';
+// import { UbiCommunityContract } from 'helpers/types/ubi/ubiCommunityContract';
 import { UbiCommunityDailyMetrics } from 'helpers/types/ubi/ubiCommunityDailyMetrics';
-import { UbiCommunityState } from 'helpers/types/ubi/ubiCommunityState';
+// import { UbiCommunityState } from 'helpers/types/ubi/ubiCommunityState';
 import path from 'path';
 import * as mime from 'react-native-mime-types';
 
 import { ApiRequests as api, IApiResult } from '../base';
+
+const httpLink = createHttpLink({
+    uri: 'https://api.thegraph.com/subgraphs/name/impactmarket/subgraph',
+    fetch,
+});
+
+const client = new ApolloClient({
+    link: httpLink,
+    cache: new InMemoryCache(),
+});
+
+const getCommunityState = async (
+    communityAddress: string | null
+): Promise<{
+    claims: number;
+    claimed: string;
+    beneficiaries: number;
+    removedBeneficiaries: number;
+    contributed: string;
+    contributors: number;
+    managers: number;
+}> => {
+    if (!communityAddress) {
+        return {
+            claims: 0,
+            claimed: '0',
+            beneficiaries: 0,
+            removedBeneficiaries: 0,
+            contributed: '0',
+            contributors: 0,
+            managers: 0,
+        };
+    }
+    try {
+        const query = gql`
+            {
+                communityEntity(
+                    id: "${communityAddress.toLowerCase()}"
+                ) {
+                    claims
+                    claimed
+                    beneficiaries
+                    removedBeneficiaries
+                    contributed
+                    contributors
+                    managers
+                }
+            }
+        `;
+
+        const queryResult = await client.query({
+            query,
+        });
+
+        return queryResult.data?.communityEntity;
+    } catch (error) {
+        return {
+            claims: 0,
+            claimed: '0',
+            beneficiaries: 0,
+            removedBeneficiaries: 0,
+            contributed: '0',
+            contributors: 0,
+            managers: 0,
+        };
+    }
+};
+
+const getCommunityUBIParams = async (
+    communityAddress: string | null
+): Promise<{
+    claimAmount: string;
+    maxClaim: string;
+    baseInterval: number;
+    incrementInterval: number;
+}> => {
+    if (!communityAddress) {
+        return {
+            claimAmount: '0',
+            maxClaim: '0',
+            baseInterval: 0,
+            incrementInterval: 0,
+        };
+    }
+    try {
+        const query = gql`
+            {
+                communityEntity(
+                    id: "${communityAddress.toLowerCase()}"
+                ) {
+                    claimAmount
+                    maxClaim
+                    baseInterval
+                    incrementInterval
+                }
+            }
+        `;
+
+        const queryResult = await client.query({
+            query,
+        });
+
+        return queryResult.data?.communityEntity;
+    } catch (error) {
+        return {
+            claimAmount: '0',
+            maxClaim: '0',
+            baseInterval: 0,
+            incrementInterval: 0,
+        };
+    }
+};
 
 class ApiRouteCommunity {
     async getPromoter(communityId: number): Promise<IApiResult<UbiPromoter>> {
@@ -101,19 +217,19 @@ class ApiRouteCommunity {
         );
     }
 
-    async getContract(
-        communityId: number
-    ): Promise<IApiResult<UbiCommunityContract>> {
-        return api.get<UbiCommunityContract>(
-            `/community/${communityId}/contract`
-        );
-    }
+    // async getContract(
+    //     communityId: number
+    // ): Promise<IApiResult<UbiCommunityContract>> {
+    //     return api.get<UbiCommunityContract>(
+    //         `/community/${communityId}/contract`
+    //     );
+    // }
 
-    async getState(
-        communityId: number
-    ): Promise<IApiResult<UbiCommunityState>> {
-        return api.get<UbiCommunityState>(`/community/${communityId}/state`);
-    }
+    // async getState(
+    //     communityId: number
+    // ): Promise<IApiResult<UbiCommunityState>> {
+    //     return api.get<UbiCommunityState>(`/community/${communityId}/state`);
+    // }
 
     async getSuspect(
         communityId: number
@@ -128,9 +244,16 @@ class ApiRouteCommunity {
         const community = (await api.get<UbiCommunity>(`/community/${id}`))
             .data;
         const metrics = (await this.getMetrics(id)).data;
-        const contract = (await this.getContract(id)).data;
-        const state = (await this.getState(id)).data;
         const suspect = (await this.getSuspect(id)).data;
+        if (community.visibility === 'private') {
+            return {
+                ...community,
+                metrics,
+                suspect,
+            };
+        }
+        const contract = await getCommunityUBIParams(community.contractAddress); // (await this.getContract(id)).data;
+        const state = await getCommunityState(community.contractAddress); // (await this.getState(id)).data;
         return {
             ...community,
             metrics,
@@ -147,9 +270,16 @@ class ApiRouteCommunity {
         ).data;
         const { id } = community;
         const metrics = (await this.getMetrics(id)).data;
-        const contract = (await this.getContract(id)).data;
-        const state = (await this.getState(id)).data;
         const suspect = (await this.getSuspect(id)).data;
+        if (community.visibility === 'private') {
+            return {
+                ...community,
+                metrics,
+                suspect,
+            };
+        }
+        const contract = await getCommunityUBIParams(community.contractAddress); // (await this.getContract(id)).data;
+        const state = await getCommunityState(community.contractAddress); // (await this.getState(id)).data;
         return {
             ...community,
             metrics,

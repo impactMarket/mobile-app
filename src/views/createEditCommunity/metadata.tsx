@@ -3,7 +3,7 @@ import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import axios, { AxiosResponse } from 'axios';
 import Modal from 'components/Modal';
-import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
+// import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -262,57 +262,78 @@ function CommunityCity() {
                         <PlaceSearch
                             userLanguage={userLanguage}
                             onPress={(data) => {
-                                dispatch({
-                                    type: formAction.SET_CITY,
-                                    payload: data.description,
-                                });
-                                dispatch({
-                                    type: formAction.SET_CITY_VALID,
-                                    payload: true,
-                                });
-                                axios
-                                    .get<
-                                        never,
-                                        AxiosResponse<{
-                                            result: {
-                                                address_components: {
-                                                    types: string[];
-                                                    short_name: string;
-                                                }[];
-                                                geometry: {
-                                                    location: {
-                                                        lat: number;
-                                                        lng: number;
+                                if (
+                                    data.description.indexOf(',') !== -1 &&
+                                    data.description.indexOf(',') !==
+                                        data.description.lastIndexOf(',')
+                                ) {
+                                    dispatch({
+                                        type: formAction.SET_CITY,
+                                        payload: data.description.substring(
+                                            0,
+                                            data.description.lastIndexOf(',') -
+                                                1
+                                        ),
+                                    });
+                                    dispatch({
+                                        type: formAction.SET_CITY_VALID,
+                                        payload: true,
+                                    });
+                                    axios
+                                        .get<
+                                            never,
+                                            AxiosResponse<{
+                                                result: {
+                                                    address_components: {
+                                                        types: string[];
+                                                        short_name: string;
+                                                    }[];
+                                                    geometry: {
+                                                        location: {
+                                                            lat: number;
+                                                            lng: number;
+                                                        };
                                                     };
                                                 };
-                                            };
-                                        }>
-                                    >(
-                                        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${data.place_id}&key=${config.googleApiKey}`
-                                    )
-                                    .then((response) => {
-                                        const { address_components, geometry } =
-                                            response.data.result;
-                                        const { lat, lng } = geometry.location;
-                                        dispatch({
-                                            type: formAction.SET_GPS,
-                                            payload: {
-                                                latitude: lat,
-                                                longitude: lng,
-                                            },
+                                            }>
+                                        >(
+                                            `https://maps.googleapis.com/maps/api/place/details/json?place_id=${data.place_id}&key=${config.googleApiKey}`
+                                        )
+                                        .then((response) => {
+                                            const {
+                                                address_components,
+                                                geometry,
+                                            } = response.data.result;
+                                            const { lat, lng } =
+                                                geometry.location;
+                                            dispatch({
+                                                type: formAction.SET_GPS,
+                                                payload: {
+                                                    latitude: lat,
+                                                    longitude: lng,
+                                                },
+                                            });
+                                            dispatch({
+                                                type: formAction.SET_COUNTRY,
+                                                payload:
+                                                    address_components.find(
+                                                        (c) =>
+                                                            c.types.includes(
+                                                                'country'
+                                                            )
+                                                    ).short_name,
+                                            });
+                                        })
+                                        .catch((_) => {
+                                            // TODO: do something here
                                         });
-                                        dispatch({
-                                            type: formAction.SET_COUNTRY,
-                                            payload: address_components.find(
-                                                (c) =>
-                                                    c.types.includes('country')
-                                            ).short_name,
-                                        });
-                                    })
-                                    .catch((_) => {
-                                        // TODO: do something here
+                                    setToggleModal(false);
+                                } else {
+                                    dispatch({
+                                        type: formAction.SET_CITY_VALID,
+                                        payload: false,
                                     });
-                                setToggleModal(false);
+                                }
                             }}
                         />
                     </View>

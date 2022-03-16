@@ -1,5 +1,5 @@
 import { Body, Button, colors, WarningIcon } from '@impact-market/ui-kit';
-import { estimateCommunityRemainFunds } from '@impact-market/utils';
+import { frequencyToText } from '@impact-market/utils';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
@@ -9,7 +9,7 @@ import CoreButton from 'components/core/Button';
 import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import ManageSvg from 'components/svg/ManageSvg';
-import { amountToCurrency } from 'helpers/currency';
+import { amountToCurrency, amountToCurrencyBN } from 'helpers/currency';
 import { docsURL, updateCommunityInfo } from 'helpers/index';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
@@ -217,6 +217,7 @@ function CommunityManagerScreen() {
                     cancelable: false,
                 });
                 setCanRequestFunds(false);
+                modalRequestFundsRef.current?.close();
             })
             .catch((e) => {
                 Sentry.Native.captureException(e);
@@ -230,6 +231,37 @@ function CommunityManagerScreen() {
             .finally(() => {
                 setRequestingFunds(false);
             });
+    };
+
+    const estimateCommunityRemainFunds = (community: {
+        contract: {
+            baseInterval: number;
+            claimAmount: string;
+        };
+        state: {
+            beneficiaries: number;
+            contributed: string;
+            claimed: string;
+        };
+    }) => {
+        if (community.contract === undefined || community.state === undefined) {
+            return 0;
+        }
+        let { beneficiaries, contributed, claimed } = community.state;
+        if (community.state.beneficiaries === 0) {
+            beneficiaries = 1;
+        }
+
+        const { baseInterval, claimAmount } = community.contract;
+        const remaining = parseFloat(contributed) - parseFloat(claimed);
+
+        let communityLimitPerDay = parseFloat(claimAmount) * beneficiaries;
+
+        if (frequencyToText(baseInterval) === 'week') {
+            communityLimitPerDay = communityLimitPerDay / 7;
+        }
+
+        return Math.floor(remaining / communityLimitPerDay);
     };
 
     let days = 0;
@@ -401,7 +433,7 @@ function CommunityManagerScreen() {
                                         style={styles.ubiChangeModalText}
                                     >
                                         {i18n.t('createCommunity.claimAmount')}:{' '}
-                                        {amountToCurrency(
+                                        {amountToCurrencyBN(
                                             requiredUbiToChange.claimAmount,
                                             userCurrency,
                                             rates

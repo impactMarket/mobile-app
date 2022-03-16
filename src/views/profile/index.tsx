@@ -20,7 +20,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { ImageInfo } from 'expo-image-picker/build/ImagePicker.types';
 import * as Linking from 'expo-linking';
 import { Screens } from 'helpers/constants';
-import { amountToCurrency, getCurrencySymbol } from 'helpers/currency';
+import {
+    amountToCurrency,
+    amountToCurrencyBN,
+    getCurrencySymbol,
+} from 'helpers/currency';
 import {
     docsURL,
     getCountryFromPhoneNumber,
@@ -203,7 +207,7 @@ function ProfileScreen() {
         } catch (e) {
             Alert.alert(
                 i18n.t('generic.failure'),
-                i18n.t('generic.uploadingAvatar'),
+                i18n.t('errors.uploadingAvatar'),
                 [{ text: 'OK' }],
                 { cancelable: false }
             );
@@ -354,7 +358,7 @@ function ProfileScreen() {
         }
     };
 
-    const userBalance = amountToCurrency(
+    const userBalance = amountToCurrencyBN(
         userCusdBalance,
         user.currency,
         rates,

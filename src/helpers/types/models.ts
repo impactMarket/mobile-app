@@ -1,8 +1,8 @@
 // same as in api/types/models
 
-import { UbiCommunityContract } from './ubi/ubiCommunityContract';
+// import { UbiCommunityContract } from './ubi/ubiCommunityContract';
 import { UbiCommunityDailyMetrics } from './ubi/ubiCommunityDailyMetrics';
-import { UbiCommunityState } from './ubi/ubiCommunityState';
+// import { UbiCommunityState } from './ubi/ubiCommunityState';
 import { UbiOrganization } from './ubi/ubiOrganization';
 
 export interface User {
@@ -63,8 +63,21 @@ export interface UbiCommunity {
 }
 export interface CommunityAttributes extends UbiCommunity {
     metrics?: UbiCommunityDailyMetrics;
-    contract?: UbiCommunityContract;
-    state?: UbiCommunityState;
+    contract?: {
+        claimAmount: string;
+        maxClaim: string;
+        baseInterval: number;
+        incrementInterval: number;
+    };
+    state?: {
+        claims: number;
+        claimed: string;
+        beneficiaries: number;
+        removedBeneficiaries: number;
+        contributed: string;
+        contributors: number;
+        managers: number;
+    };
     suspect?: UbiCommunitySuspect;
     organization?: UbiOrganization;
 }

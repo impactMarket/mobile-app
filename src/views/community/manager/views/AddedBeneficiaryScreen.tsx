@@ -6,7 +6,7 @@ import Button from 'components/core/Button';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
 import gql from 'graphql-tag';
-import { amountToCurrency } from 'helpers/currency';
+import { amountToCurrency, amountToCurrencyBN } from 'helpers/currency';
 import { isOutOfTime } from 'helpers/index';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
@@ -298,7 +298,7 @@ function AddedBeneficiaryScreen() {
                 amount:
                     item.claimed === undefined
                         ? '0'
-                        : amountToCurrency(
+                        : amountToCurrencyBN(
                               item.claimed,
                               userCurrency,
                               exchangeRates

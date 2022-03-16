@@ -30,16 +30,9 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
         (state: IRootState) => state.app.exchangeRates
     );
 
-    let maxClaim = new BigNumber(community.contract.maxClaim)
+    const maxClaim = new BigNumber(community.contract.maxClaim)
         .multipliedBy(community.state.beneficiaries)
         .toString();
-
-    if (community.contract.maxClaim.length > 15) {
-        maxClaim = new BigNumber(community.contract.maxClaim)
-            .div(10 ** 18)
-            .multipliedBy(community.state.beneficiaries)
-            .toString();
-    }
 
     const days = estimateCommunityRemainFunds({
         contract: community.contract!,
@@ -80,10 +73,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         ]}
                     >
                         {i18n.t('generic.raisedFrom', {
-                            backers: community.state.contributors || 0,
+                            backers: community.state.contributors,
                         })}{' '}
                         {i18n.t('generic.backers', {
-                            count: community.state.contributors || 0,
+                            count: community.state.contributors,
                         })}
                     </Text>
                     <Text
@@ -106,7 +99,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                 >
                     <Text style={styles.Text}>
                         {amountToCurrency(
-                            community.state.contributed || '0',
+                            community.state.contributed,
                             user.currency,
                             exchangeRates
                         )}

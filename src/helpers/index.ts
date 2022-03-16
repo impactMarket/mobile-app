@@ -136,7 +136,7 @@ export function chooseMediaThumbnail(
     media: AppMediaContent,
     size: { heigth: number; width: number }
 ) {
-    if (media.thumbnails) {
+    if (media && media.thumbnails && media.thumbnails.length > 0) {
         const thumbnails = media.thumbnails.filter(
             (t) => t.height === size.heigth && t.width === size.width
         );
