@@ -25,7 +25,6 @@ import * as Notifications from 'expo-notifications';
 import * as SplashScreen from 'expo-splash-screen';
 import {
     STORAGE_USER_ADDRESS,
-    STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
 import {
@@ -82,7 +81,6 @@ import { welcomeUser } from './src/helpers';
 import combinedReducer from './src/helpers/redux/reducers';
 import Navigator from './src/navigator';
 import Api from './src/services/api';
-import AxiosInstance from './src/services/api/base';
 import { registerForPushNotifications } from './src/services/pushNotifications';
 import { ipctColors } from './src/styles';
 if (__DEV__) {
@@ -718,11 +716,6 @@ class App extends React.Component<any, IAppState> {
         let loggedIn = false;
         try {
             store.dispatch(setCeloKit(kit));
-            const token = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
-            if (token !== null) {
-                AxiosInstance.defaults.headers.common['Authorization'] =
-                    'Bearer ' + token;
-            }
             address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             phoneNumber = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             const exchangeRates = await Api.system.getExchangeRate();

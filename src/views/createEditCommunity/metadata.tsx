@@ -3,7 +3,7 @@ import currenciesJSON from 'assets/currencies.json';
 import i18n from 'assets/i18n';
 import axios, { AxiosResponse } from 'axios';
 import Modal from 'components/Modal';
-import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
+// import ShimmerPlaceholder from 'components/ShimmerPlaceholder';
 import Button from 'components/core/Button';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import Input from 'components/core/Input';
@@ -262,57 +262,78 @@ function CommunityCity() {
                         <PlaceSearch
                             userLanguage={userLanguage}
                             onPress={(data) => {
-                                dispatch({
-                                    type: formAction.SET_CITY,
-                                    payload: data.description,
-                                });
-                                dispatch({
-                                    type: formAction.SET_CITY_VALID,
-                                    payload: true,
-                                });
-                                axios
-                                    .get<
-                                        never,
-                                        AxiosResponse<{
-                                            result: {
-                                                address_components: {
-                                                    types: string[];
-                                                    short_name: string;
-                                                }[];
-                                                geometry: {
-                                                    location: {
-                                                        lat: number;
-                                                        lng: number;
+                                if (
+                                    data.description.indexOf(',') !== -1 &&
+                                    data.description.indexOf(',') !==
+                                        data.description.lastIndexOf(',')
+                                ) {
+                                    dispatch({
+                                        type: formAction.SET_CITY,
+                                        payload: data.description.substring(
+                                            0,
+                                            data.description.lastIndexOf(',') -
+                                                1
+                                        ),
+                                    });
+                                    dispatch({
+                                        type: formAction.SET_CITY_VALID,
+                                        payload: true,
+                                    });
+                                    axios
+                                        .get<
+                                            never,
+                                            AxiosResponse<{
+                                                result: {
+                                                    address_components: {
+                                                        types: string[];
+                                                        short_name: string;
+                                                    }[];
+                                                    geometry: {
+                                                        location: {
+                                                            lat: number;
+                                                            lng: number;
+                                                        };
                                                     };
                                                 };
-                                            };
-                                        }>
-                                    >(
-                                        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${data.place_id}&key=${config.googleApiKey}`
-                                    )
-                                    .then((response) => {
-                                        const { address_components, geometry } =
-                                            response.data.result;
-                                        const { lat, lng } = geometry.location;
-                                        dispatch({
-                                            type: formAction.SET_GPS,
-                                            payload: {
-                                                latitude: lat,
-                                                longitude: lng,
-                                            },
+                                            }>
+                                        >(
+                                            `https://maps.googleapis.com/maps/api/place/details/json?place_id=${data.place_id}&key=${config.googleApiKey}`
+                                        )
+                                        .then((response) => {
+                                            const {
+                                                address_components,
+                                                geometry,
+                                            } = response.data.result;
+                                            const { lat, lng } =
+                                                geometry.location;
+                                            dispatch({
+                                                type: formAction.SET_GPS,
+                                                payload: {
+                                                    latitude: lat,
+                                                    longitude: lng,
+                                                },
+                                            });
+                                            dispatch({
+                                                type: formAction.SET_COUNTRY,
+                                                payload:
+                                                    address_components.find(
+                                                        (c) =>
+                                                            c.types.includes(
+                                                                'country'
+                                                            )
+                                                    ).short_name,
+                                            });
+                                        })
+                                        .catch((_) => {
+                                            // TODO: do something here
                                         });
-                                        dispatch({
-                                            type: formAction.SET_COUNTRY,
-                                            payload: address_components.find(
-                                                (c) =>
-                                                    c.types.includes('country')
-                                            ).short_name,
-                                        });
-                                    })
-                                    .catch((_) => {
-                                        // TODO: do something here
+                                    setToggleModal(false);
+                                } else {
+                                    dispatch({
+                                        type: formAction.SET_CITY_VALID,
+                                        payload: false,
                                     });
-                                setToggleModal(false);
+                                }
                             }}
                         />
                     </View>
@@ -384,8 +405,6 @@ function CommunityName() {
 function CommunityCover(props: { edit?: boolean }) {
     const [toggleDimensionsModal, setToggleDimensionsModal] = useState(false);
 
-    const [loadedImage, setLoadedImage] = useState(props.edit !== true);
-
     const state = useContext(StateContext);
     const dispatch = useContext(DispatchContext);
 
@@ -418,49 +437,33 @@ function CommunityCover(props: { edit?: boolean }) {
     if (state.coverImage.length > 0) {
         return (
             <View style={{ flex: 1 }}>
-                <ShimmerPlaceholder
-                    delay={0}
-                    duration={1000}
-                    isInteraction
-                    height={331}
-                    width={350}
-                    shimmerContainerProps={{
+                <Image
+                    style={{
+                        height: 331,
                         width: '100%',
                         borderRadius: 12,
                         marginVertical: 22,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                     }}
-                    shimmerStyle={{ borderRadius: 12 }}
-                    visible={loadedImage}
-                >
-                    <Image
-                        style={{
-                            height: 331,
-                            width: '100%',
-                            borderRadius: 12,
-                            marginVertical: 22,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                        source={{
-                            uri: state.coverImage,
-                        }}
-                        onLoadEnd={() => setLoadedImage(true)}
-                    />
-                    <CloseStorySvg
-                        testID="remove-cover"
-                        style={{
-                            position: 'absolute',
-                            top: 38,
-                            right: 14,
-                        }}
-                        onPress={() => {
-                            dispatch({
-                                type: formAction.SET_COVER_IMAGE,
-                                payload: '',
-                            });
-                        }}
-                    />
-                </ShimmerPlaceholder>
+                    source={{
+                        uri: state.coverImage,
+                    }}
+                />
+                <CloseStorySvg
+                    testID="remove-cover"
+                    style={{
+                        position: 'absolute',
+                        top: 38,
+                        right: 14,
+                    }}
+                    onPress={() => {
+                        dispatch({
+                            type: formAction.SET_COVER_IMAGE,
+                            payload: '',
+                        });
+                    }}
+                />
             </View>
         );
     }

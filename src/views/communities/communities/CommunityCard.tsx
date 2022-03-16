@@ -8,7 +8,7 @@ import ShimmerText from 'components/shimmers/Text';
 import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import { Screens } from 'helpers/constants';
-import { amountToCurrency } from 'helpers/currency';
+import { amountToCurrency, amountToCurrencyBN } from 'helpers/currency';
 import { chooseMediaThumbnail } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import React, { useState } from 'react';
@@ -57,7 +57,7 @@ function CommunityCard(props: {
         );
     }
 
-    const claimAmount = amountToCurrency(
+    const claimAmount = amountToCurrencyBN(
         community.contract.claimAmount,
         userCurrency,
         rates

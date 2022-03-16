@@ -4,7 +4,7 @@ jobs:
   publish_to_expo:
     working_directory: ~/publish-to-expo
     docker:
-      - image: circleci/node:14.15.1
+      - image: circleci/node:14.19.0
     resource_class: small
     environment:
       EXPO_IS_TESTNET: true
@@ -52,7 +52,7 @@ jobs:
   publish_internal_release:
     working_directory: ~/publish-internal-release
     docker:
-      - image: circleci/node:14.15.1
+      - image: circleci/node:14.19.0
     resource_class: small
     environment:
       EXPO_IS_TESTNET: false
@@ -100,7 +100,7 @@ jobs:
   unit_test:
     working_directory: ~/my-app
     docker:
-      - image: circleci/node:14.15.1
+      - image: circleci/node:14.19.0
     environment:
       NODE_ENV: development
     steps:
@@ -117,7 +117,7 @@ jobs:
   type_check:
     working_directory: ~/my-app
     docker:
-      - image: circleci/node:14.15.1
+      - image: circleci/node:14.19.0
     resource_class: small
     environment:
       NODE_ENV: development

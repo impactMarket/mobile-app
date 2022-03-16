@@ -1,5 +1,5 @@
 import { Body, Button, colors, WarningIcon } from '@impact-market/ui-kit';
-import { estimateCommunityRemainFunds } from '@impact-market/utils';
+import { frequencyToText } from '@impact-market/utils';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
@@ -9,7 +9,7 @@ import CoreButton from 'components/core/Button';
 import Card from 'components/core/Card';
 import renderHeader from 'components/core/HeaderBottomSheetTitle';
 import ManageSvg from 'components/svg/ManageSvg';
-import { amountToCurrency } from 'helpers/currency';
+import { amountToCurrency, amountToCurrencyBN } from 'helpers/currency';
 import { docsURL, updateCommunityInfo } from 'helpers/index';
 import { findCommunityByIdRequest } from 'helpers/redux/actions/communities';
 import { ITabBarIconProps } from 'helpers/types/common';
@@ -47,6 +47,7 @@ function CommunityManagerScreen() {
     const dispatch = useDispatch();
 
     const modalizeHelpCenterRef = useRef<Modalize>(null);
+    const modalRequestFundsRef = useRef<Modalize>(null);
 
     const kit = useSelector((state: IRootState) => state.app.kit);
     const userCurrency = useSelector(
@@ -73,6 +74,8 @@ function CommunityManagerScreen() {
     const [requiredUbiToChange, setRequiredUbiToChange] =
         useState<UbiRequestChangeParams | null>();
     const [canRequestFunds, setCanRequestFunds] = useState(false);
+    const [waitToRequestFunds, setWaitToRequestFunds] = useState(0);
+    const [requestingFunds, setRequestingFunds] = useState(false);
 
     const [editInProgress, setEditInProgress] = useState(false);
 
@@ -96,12 +99,32 @@ function CommunityManagerScreen() {
                     isNewCommunity ===
                     '0x0000000000000000000000000000000000000000'
                 ) {
-                    const claimedRatio = new BigNumber(
-                        community.state.claimed
-                    ).dividedBy(community.state.raised);
-                    if (claimedRatio.gt(new BigNumber(0.95))) {
+                    const lastFundsRequest = parseInt(
+                        await communityContract.methods
+                            .lastFundRequest()
+                            .call(),
+                        10
+                    );
+                    const availableAtBlock =
+                        lastFundsRequest + community.contract!.baseInterval;
+
+                    const currentBlock = await kit.web3.eth.getBlockNumber();
+                    if (
+                        cUSDBalanceBig.lt(
+                            await communityContract.methods.minTranche().call()
+                        ) ||
+                        lastFundsRequest === 0
+                    ) {
+                        setCanRequestFunds(true);
+                        setWaitToRequestFunds(
+                            lastFundsRequest > 0 &&
+                                availableAtBlock > currentBlock
+                                ? Math.ceil(
+                                      (availableAtBlock - currentBlock) / 17280
+                                  )
+                                : 0
+                        );
                     }
-                    setCanRequestFunds(true);
                 }
             };
             const verifyRequestToChangeUbiParams = () => {
@@ -166,7 +189,7 @@ function CommunityManagerScreen() {
                 Sentry.Native.captureException(e);
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.generic'),
+                    i18n.t('errors.generic'),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
@@ -177,6 +200,7 @@ function CommunityManagerScreen() {
     };
 
     const handleRequestFunds = async () => {
+        setRequestingFunds(true);
         celoWalletRequest(
             userAddress,
             communityContract.options.address,
@@ -192,19 +216,52 @@ function CommunityManagerScreen() {
                 Alert.alert(i18n.t('generic.success'), '', [{ text: 'OK' }], {
                     cancelable: false,
                 });
+                setCanRequestFunds(false);
+                modalRequestFundsRef.current?.close();
             })
             .catch((e) => {
                 Sentry.Native.captureException(e);
                 Alert.alert(
                     i18n.t('generic.failure'),
-                    i18n.t('generic.generic'),
+                    i18n.t('errors.generic'),
                     [{ text: i18n.t('generic.close') }],
                     { cancelable: false }
                 );
             })
             .finally(() => {
-                setEditInProgress(false);
+                setRequestingFunds(false);
             });
+    };
+
+    const estimateCommunityRemainFunds = (community: {
+        contract: {
+            baseInterval: number;
+            claimAmount: string;
+        };
+        state: {
+            beneficiaries: number;
+            contributed: string;
+            claimed: string;
+        };
+    }) => {
+        if (community.contract === undefined || community.state === undefined) {
+            return 0;
+        }
+        let { beneficiaries, contributed, claimed } = community.state;
+        if (community.state.beneficiaries === 0) {
+            beneficiaries = 1;
+        }
+
+        const { baseInterval, claimAmount } = community.contract;
+        const remaining = parseFloat(contributed) - parseFloat(claimed);
+
+        let communityLimitPerDay = parseFloat(claimAmount) * beneficiaries;
+
+        if (frequencyToText(baseInterval) === 'week') {
+            communityLimitPerDay = communityLimitPerDay / 7;
+        }
+
+        return Math.floor(remaining / communityLimitPerDay);
     };
 
     let days = 0;
@@ -245,11 +302,15 @@ function CommunityManagerScreen() {
                                             style={{
                                                 flexDirection: 'row',
                                                 alignContent: 'center',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
                                             }}
                                         >
-                                            <WarningIcon
-                                                color={colors.ui.warning}
-                                            />
+                                            <View style={{ marginRight: 8 }}>
+                                                <WarningIcon
+                                                    color={colors.ui.warning}
+                                                />
+                                            </View>
                                             <Body>
                                                 <>
                                                     {days === 0
@@ -270,11 +331,47 @@ function CommunityManagerScreen() {
                                                 </>
                                             </Body>
                                         </View>
+                                        {waitToRequestFunds > 0 && (
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    alignContent: 'center',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <View
+                                                    style={{ marginRight: 8 }}
+                                                >
+                                                    <WarningIcon
+                                                        color={
+                                                            colors.ui.warning
+                                                        }
+                                                    />
+                                                </View>
+                                                <Body>
+                                                    {i18n.t(
+                                                        'manager.requestFundsIn',
+                                                        {
+                                                            days: Math.floor(
+                                                                waitToRequestFunds
+                                                            ),
+                                                            count: Math.floor(
+                                                                waitToRequestFunds
+                                                            ),
+                                                        }
+                                                    )}
+                                                </Body>
+                                            </View>
+                                        )}
                                         <Button
                                             mode="text"
-                                            onPress={handleRequestFunds}
+                                            disabled={waitToRequestFunds > 0}
+                                            onPress={() =>
+                                                modalRequestFundsRef.current.open()
+                                            }
                                         >
-                                            {i18n.t('community.requestFunds')}
+                                            {i18n.t('manager.requestFunds')}
                                         </Button>
                                     </Card>
                                 )}
@@ -336,7 +433,7 @@ function CommunityManagerScreen() {
                                         style={styles.ubiChangeModalText}
                                     >
                                         {i18n.t('createCommunity.claimAmount')}:{' '}
-                                        {amountToCurrency(
+                                        {amountToCurrencyBN(
                                             requiredUbiToChange.claimAmount,
                                             userCurrency,
                                             rates
@@ -384,6 +481,48 @@ function CommunityManagerScreen() {
                                     </Paragraph>
                                 </Modal>
                             )}
+                        <Modalize
+                            ref={modalRequestFundsRef}
+                            HeaderComponent={renderHeader(
+                                i18n.t('manager.requestFunds'),
+                                modalRequestFundsRef,
+                                () => {},
+                                false
+                            )}
+                            adjustToContentHeight
+                            onClose={() => {}}
+                        >
+                            <View style={{ marginHorizontal: 22 }}>
+                                <Body>
+                                    Are you sure you want to request more funds?
+                                </Body>
+                                <View
+                                    style={{
+                                        marginVertical: 18,
+                                        flexDirection: 'row',
+                                        flex: 2,
+                                    }}
+                                >
+                                    <Button
+                                        mode="gray"
+                                        style={{ flex: 1, marginRight: 8 }}
+                                        onPress={() =>
+                                            modalRequestFundsRef.current.close()
+                                        }
+                                    >
+                                        {i18n.t('generic.no')}
+                                    </Button>
+                                    <Button
+                                        style={{ flex: 1, marginLeft: 8 }}
+                                        onPress={handleRequestFunds}
+                                        loading={requestingFunds}
+                                        disabled={requestingFunds}
+                                    >
+                                        {i18n.t('generic.yes')}
+                                    </Button>
+                                </View>
+                            </View>
+                        </Modalize>
                     </Portal>
                 </>
             );

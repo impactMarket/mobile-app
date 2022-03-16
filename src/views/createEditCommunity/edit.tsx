@@ -60,19 +60,21 @@ function EditCommunityScreen() {
         AppMediaContent | undefined
     >(undefined);
 
-    const submitCommunity = async (
-        details: {
-            uploadURL: string;
-            media: AppMediaContent;
-        }[]
-    ) => {
+    const submitCommunity = async (details?: {
+        uploadURL: string;
+        media: AppMediaContent;
+    }) => {
         const { name, description, currency } = state;
-        const communityDetails: CommunityEditionAttributes = {
+        // eslint-disable-next-line prefer-const
+        let communityDetails: CommunityEditionAttributes = {
             name,
             description,
             currency,
-            coverMediaId: details[0].media.id,
+            coverMediaId: cover.id, // default
         };
+        if (details !== undefined) {
+            communityDetails.coverMediaId = details.media.id;
+        }
         const communityApiRequestResult = await Api.community.edit(
             communityDetails
         );
@@ -136,9 +138,14 @@ function EditCommunityScreen() {
         }
 
         try {
-            const d = await uploadImages(state.coverImage);
-            if (d[0].success === true) {
-                await submitCommunity([d[0].details]);
+            let d;
+            if (state.coverImage !== cover.url) {
+                d = await uploadImages(state.coverImage);
+                if (d[0].success === true) {
+                    await submitCommunity(d[0].details);
+                }
+            } else if (state.coverImage === cover.url) {
+                await submitCommunity();
             } else {
                 setSubmittingSuccess(false);
             }

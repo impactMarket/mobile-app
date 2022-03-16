@@ -488,7 +488,45 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_beneficiaryAddress",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "claimed",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "cooldown",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "beneficiaryAddress_",
                 "type": "address"
             }
         ],
@@ -501,7 +539,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_account",
+                "name": "account_",
                 "type": "address"
             }
         ],
@@ -514,7 +552,7 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "amount_",
                 "type": "uint256"
             }
         ],
@@ -646,7 +684,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_beneficiaryAddress",
+                "name": "beneficiaryAddress_",
                 "type": "address"
             }
         ],
@@ -691,12 +729,12 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_sender",
+                "name": "sender_",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "amount_",
                 "type": "uint256"
             }
         ],
@@ -754,18 +792,18 @@
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "",
+                "name": "role",
                 "type": "bytes32"
             },
             {
                 "internalType": "address",
-                "name": "",
+                "name": "account",
                 "type": "address"
             }
         ],
         "name": "grantRole",
         "outputs": [],
-        "stateMutability": "pure",
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -822,47 +860,47 @@
         "inputs": [
             {
                 "internalType": "address[]",
-                "name": "_managers",
+                "name": "managers_",
                 "type": "address[]"
             },
             {
                 "internalType": "uint256",
-                "name": "_claimAmount",
+                "name": "claimAmount_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_maxClaim",
+                "name": "maxClaim_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_decreaseStep",
+                "name": "decreaseStep_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_baseInterval",
+                "name": "baseInterval_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_incrementInterval",
+                "name": "incrementInterval_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_minTranche",
+                "name": "minTranche_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_maxTranche",
+                "name": "maxTranche_",
                 "type": "uint256"
             },
             {
                 "internalType": "contract ICommunity",
-                "name": "_previousCommunity",
+                "name": "previousCommunity_",
                 "type": "address"
             }
         ],
@@ -872,23 +910,10 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "lastFundRequest",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_beneficiaryAddress",
+                "name": "beneficiaryAddress_",
                 "type": "address"
             }
         ],
@@ -914,7 +939,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_beneficiaryAddress",
+                "name": "beneficiaryAddress_",
                 "type": "address"
             }
         ],
@@ -1018,7 +1043,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_beneficiaryAddress",
+                "name": "beneficiaryAddress_",
                 "type": "address"
             }
         ],
@@ -1031,7 +1056,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_account",
+                "name": "account_",
                 "type": "address"
             }
         ],
@@ -1076,18 +1101,18 @@
         "inputs": [
             {
                 "internalType": "bytes32",
-                "name": "",
+                "name": "role",
                 "type": "bytes32"
             },
             {
                 "internalType": "address",
-                "name": "",
+                "name": "account",
                 "type": "address"
             }
         ],
         "name": "revokeRole",
         "outputs": [],
-        "stateMutability": "pure",
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -1113,17 +1138,17 @@
         "inputs": [
             {
                 "internalType": "contract IERC20",
-                "name": "_token",
+                "name": "token_",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "_to",
+                "name": "to_",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_amount",
+                "name": "amount_",
                 "type": "uint256"
             }
         ],
@@ -1169,7 +1194,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_beneficiaryAddress",
+                "name": "beneficiaryAddress_",
                 "type": "address"
             }
         ],
@@ -1182,27 +1207,27 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_claimAmount",
+                "name": "claimAmount_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_maxClaim",
+                "name": "maxClaim_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_decreaseStep",
+                "name": "decreaseStep_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_baseInterval",
+                "name": "baseInterval_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_incrementInterval",
+                "name": "incrementInterval_",
                 "type": "uint256"
             }
         ],
@@ -1215,7 +1240,7 @@
         "inputs": [
             {
                 "internalType": "contract ICommunityAdmin",
-                "name": "_newCommunityAdmin",
+                "name": "newCommunityAdmin_",
                 "type": "address"
             }
         ],
@@ -1228,12 +1253,12 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_minTranche",
+                "name": "minTranche_",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_maxTranche",
+                "name": "maxTranche_",
                 "type": "uint256"
             }
         ],
@@ -1246,7 +1271,7 @@
         "inputs": [
             {
                 "internalType": "contract ICommunity",
-                "name": "_newPreviousCommunity",
+                "name": "newPreviousCommunity_",
                 "type": "address"
             }
         ],

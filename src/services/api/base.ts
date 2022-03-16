@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosResponse } from 'axios';
 import {
     STORAGE_USER_ADDRESS,
+    STORAGE_USER_AUTH_TOKEN,
     STORAGE_USER_PHONE_NUMBER,
 } from 'helpers/constants';
 import { ApiErrorReturn, IUserAuth } from 'helpers/types/endpoints';
@@ -22,24 +23,26 @@ AxiosInstance.interceptors.response.use(
         const originalRequest = error.config;
         if (!error.response) {
             return Promise.reject(new Error('Network Error'));
-        } else if (error.response.status === 401 && !originalRequest._retry) {
+        } else if (
+            (error.response.status === 401 || error.response.status === 403) &&
+            !originalRequest._retry
+        ) {
             originalRequest._retry = true;
             const address = await AsyncStorage.getItem(STORAGE_USER_ADDRESS);
             const phone = await AsyncStorage.getItem(STORAGE_USER_PHONE_NUMBER);
             return AxiosInstance.post<
                 { address: string; phone: string },
-                AxiosResponse<IUserAuth>
+                AxiosResponse<{ data: IUserAuth }>
             >('/user/auth', {
                 address,
                 phone,
             })
                 .then((response) => {
-                    const authTokenResponse = response.data.token;
-                    AxiosInstance.defaults.headers.common['Authorization'] =
-                        'Bearer ' + authTokenResponse;
-                    originalRequest.headers['Authorization'] =
-                        'Bearer ' + authTokenResponse;
-                    return AxiosInstance(originalRequest);
+                    const authTokenResponse = response.data.data.token;
+                    AsyncStorage.setItem(
+                        STORAGE_USER_AUTH_TOKEN,
+                        authTokenResponse
+                    );
                 })
                 .catch((err) => err);
         } else {
@@ -55,6 +58,9 @@ async function _requestOptions(options?: any) {
         headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json',
+            Authorization: `Bearer ${await AsyncStorage.getItem(
+                STORAGE_USER_AUTH_TOKEN
+            )}`,
         },
         ...options,
     };
@@ -70,6 +76,14 @@ export interface IApiResult<T> {
 export const ApiRequests = {
     async get<T>(endpoint: string): Promise<IApiResult<T>> {
         try {
+            const auth = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+            if (auth !== null) {
+                AxiosInstance.defaults.headers.common[
+                    'Authorization'
+                ] = `Bearer ${await AsyncStorage.getItem(
+                    STORAGE_USER_AUTH_TOKEN
+                )}`;
+            }
             return (await AxiosInstance.get(endpoint)).data;
         } catch (e) {
             return e.response.data;
@@ -82,6 +96,14 @@ export const ApiRequests = {
         options?: any
     ): Promise<IApiResult<T>> {
         try {
+            const auth = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+            if (auth !== null) {
+                AxiosInstance.defaults.headers.common[
+                    'Authorization'
+                ] = `Bearer ${await AsyncStorage.getItem(
+                    STORAGE_USER_AUTH_TOKEN
+                )}`;
+            }
             return (
                 await AxiosInstance.post<IApiResult<T>>(
                     endpoint,
@@ -100,6 +122,14 @@ export const ApiRequests = {
         options?: any
     ): Promise<IApiResult<T>> {
         try {
+            const auth = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+            if (auth !== null) {
+                AxiosInstance.defaults.headers.common[
+                    'Authorization'
+                ] = `Bearer ${await AsyncStorage.getItem(
+                    STORAGE_USER_AUTH_TOKEN
+                )}`;
+            }
             return (
                 await AxiosInstance.put(
                     endpoint,
@@ -114,6 +144,14 @@ export const ApiRequests = {
 
     async delete<T>(endpoint: string, id?: any): Promise<IApiResult<T>> {
         try {
+            const auth = await AsyncStorage.getItem(STORAGE_USER_AUTH_TOKEN);
+            if (auth !== null) {
+                AxiosInstance.defaults.headers.common[
+                    'Authorization'
+                ] = `Bearer ${await AsyncStorage.getItem(
+                    STORAGE_USER_AUTH_TOKEN
+                )}`;
+            }
             return (
                 await AxiosInstance.delete<IApiResult<T>>(
                     endpoint,
@@ -156,8 +194,8 @@ export const ApiRequests = {
         let tries = 30;
         while (tries-- > 0) {
             await delay(1000);
-            const { status } = await ApiRequests.head(preSigned.media.url);
-            if (status === 200) {
+            const res = await ApiRequests.head(preSigned.media.url);
+            if (res !== undefined && res.status === 200) {
                 return true;
             }
         }

@@ -9,6 +9,7 @@ import IconCommunity from 'components/svg/IconCommunity';
 import LocationsSvg from 'components/svg/LocationSvg';
 import BackSvg from 'components/svg/header/BackSvg';
 import FaqSvg from 'components/svg/header/FaqSvg';
+import * as Device from 'expo-device';
 import { modalDonateAction } from 'helpers/constants';
 import { chooseMediaThumbnail } from 'helpers/index';
 import {
@@ -211,7 +212,9 @@ export default function CommunityDetailsScreen(props: ICommunityDetailsScreen) {
                     <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
                         <CommunityStatus community={community} />
                         <View style={styles.divider} />
-                        <DonateCard community={community} />
+                        {Device.brand !== 'Apple' && (
+                            <DonateCard community={community} />
+                        )}
                     </View>
                 </View>
             </ScrollView>

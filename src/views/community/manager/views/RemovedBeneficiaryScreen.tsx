@@ -1,6 +1,6 @@
 import i18n from 'assets/i18n';
 import BackSvg from 'components/svg/header/BackSvg';
-import { amountToCurrency } from 'helpers/currency';
+import { amountToCurrency, amountToCurrencyBN } from 'helpers/currency';
 import { IManagerDetailsBeneficiary } from 'helpers/types/endpoints';
 import { IRootState } from 'helpers/types/state';
 import moment from 'moment';
@@ -97,7 +97,7 @@ function RemovedBeneficiaryScreen() {
                 amount:
                     item.claimed === undefined
                         ? '0'
-                        : amountToCurrency(
+                        : amountToCurrencyBN(
                               item.claimed,
                               userCurrency,
                               exchangeRates

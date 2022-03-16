@@ -17,6 +17,7 @@ import {
 import { getUserBalance } from 'helpers/index';
 import { setOpenAuthModal } from 'helpers/redux/actions/app';
 import { setUserWalletBalance } from 'helpers/redux/actions/user';
+import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -43,7 +44,7 @@ BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 
 function DonateView(props: {
     modalDonateRef: React.MutableRefObject<any>;
-    communityContract: string;
+    community: CommunityAttributes;
 }) {
     const [donating, setDonating] = useState(false);
     const [approving, setApproving] = useState(false);
@@ -60,9 +61,7 @@ function DonateView(props: {
     const { exchangeRates, kit } = useSelector(
         (state: IRootState) => state.app
     );
-    const community = useSelector(
-        (state: IRootState) => state.user.community.metadata
-    );
+    const { community } = props;
     const { exchangeRate } = useSelector((state: IRootState) => state.user);
     const userCurrency = useSelector(
         (state: IRootState) => state.user.metadata.currency
@@ -80,7 +79,7 @@ function DonateView(props: {
             async function update() {
                 const communityContract = new kit.web3.eth.Contract(
                     CommunityContractABI as any,
-                    props.communityContract
+                    community.contractAddress
                 );
                 const isNewCommunity = await communityContract.methods
                     .impactMarketAddress()
@@ -113,7 +112,7 @@ function DonateView(props: {
 
         const stableToken = await kit.contracts.getStableToken();
         const txObject = stableToken.approve(
-            community.contractAddress!,
+            community.contractAddress,
             cUSDAmount
         ).txo;
         contractAddressTo = stableToken.address;
@@ -269,9 +268,26 @@ function DonateView(props: {
                             }}
                         >
                             {i18n.t('donate.yourDonationWillBackFor', {
-                                backNBeneficiaries:
+                                backNBeneficiaries: Math.min(
                                     community.state.beneficiaries,
-                                backForDays: Math.ceil(backForDays),
+                                    amountDonate.length > 0
+                                        ? Math.floor(
+                                              amountInDollars /
+                                                  new BigNumber(
+                                                      community.contract.claimAmount
+                                                  )
+                                                      .dividedBy(
+                                                          10 **
+                                                              config.cUSDDecimals
+                                                      )
+                                                      .toNumber()
+                                          )
+                                        : 0
+                                ),
+                                backForDays:
+                                    amountDonate.length > 0
+                                        ? Math.max(1, Math.floor(backForDays))
+                                        : 0,
                             })}
                         </Body>
                     </View>

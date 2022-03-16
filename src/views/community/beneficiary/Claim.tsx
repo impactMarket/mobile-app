@@ -92,14 +92,14 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
             // check if there's enough funds to enable/disable claim button
 
             const claimedRatio = new BigNumber(state.claimed).dividedBy(
-                state.raised
+                state.contributed
             );
             let notEnoughToClaimOnContract = false;
             if (
-                claimedRatio.gt(new BigNumber(0.95)) ||
+                claimedRatio.gt(new BigNumber(0.9)) ||
                 (await CacheStore.getCommunityHadNoFunds()) !== null
             ) {
-                // if it's above 97, check from contract
+                // if it's above 90, check from contract
                 // because the values aren't 100% correct,
                 // as we send 5 cents when a beneficiary is added
                 const stableToken = await kit.contracts.getStableToken();
@@ -113,7 +113,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                     CacheStore.removeCommunityHadNoFunds();
                 }
             } else if (
-                new BigNumber(state.raised)
+                new BigNumber(state.contributed)
                     .minus(state.claimed)
                     .lt(contract.claimAmount)
             ) {
@@ -318,7 +318,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                                 if (state && contract) {
                                     const claimedRatio = new BigNumber(
                                         state.claimed
-                                    ).dividedBy(state.raised);
+                                    ).dividedBy(state.contributed);
                                     let notEnoughToClaimOnContract = false;
                                     if (claimedRatio.gt(new BigNumber(0.97))) {
                                         // if it's above 97, check from contract
@@ -335,7 +335,7 @@ class Claim extends React.Component<PropsFromRedux & IClaimProps, IClaimState> {
                                                 cUSDBalanceBig.toString()
                                             ).lt(contract.claimAmount);
                                     } else if (
-                                        new BigNumber(state.raised)
+                                        new BigNumber(state.contributed)
                                             .minus(state.claimed)
                                             .lt(contract.claimAmount)
                                     ) {

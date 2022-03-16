@@ -45,7 +45,8 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
 
     const raisedPercentage =
         (
-            (parseFloat(community.state.raised) / parseFloat(maxClaim)) *
+            (parseFloat(community.state.contributed || '0') /
+                parseFloat(maxClaim)) *
             100
         ).toFixed(2) + '%';
 
@@ -72,10 +73,10 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                         ]}
                     >
                         {i18n.t('generic.raisedFrom', {
-                            backers: community.state.backers,
+                            backers: community.state.contributors,
                         })}{' '}
                         {i18n.t('generic.backers', {
-                            count: community.state.backers,
+                            count: community.state.contributors,
                         })}
                     </Text>
                     <Text
@@ -98,7 +99,7 @@ export default function CommunityStatus(props: ICommuntyStatusProps) {
                 >
                     <Text style={styles.Text}>
                         {amountToCurrency(
-                            community.state.raised,
+                            community.state.contributed,
                             user.currency,
                             exchangeRates
                         )}

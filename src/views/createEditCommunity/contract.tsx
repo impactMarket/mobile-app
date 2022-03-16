@@ -300,9 +300,7 @@ function CommunityMaxClaim(props: HelperProps) {
     );
 
     const amountInUserCurrency = amountToCurrency(
-        new BigNumber(state.maxClaim.replace(/,/g, '.')).multipliedBy(
-            new BigNumber(10).pow(config.cUSDDecimals)
-        ),
+        state.maxClaim,
         state.currency.length > 0 ? state.currency : 'USD',
         exchangeRates
     );
@@ -459,9 +457,7 @@ function CommunityClaimAmount(props: HelperProps) {
     );
 
     const amountInUserCurrency = amountToCurrency(
-        new BigNumber(state.claimAmount.replace(/,/g, '.')).multipliedBy(
-            new BigNumber(10).pow(config.cUSDDecimals)
-        ),
+        state.claimAmount,
         state.currency.length > 0 ? state.currency : 'USD',
         exchangeRates
     );

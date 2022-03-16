@@ -2,6 +2,9 @@ const { getDefaultConfig } = require('expo/metro-config');
 
 const config = getDefaultConfig(__dirname);
 
+// config.resolver.sourceExts = ['jsx', 'js', 'ts', 'tsx'];
+config.resolver.assetExts.push('cjs');
+
 config.resolver.extraNodeModules = {
     crypto: require.resolve('crypto-browserify'),
     url: require.resolve('url/'),

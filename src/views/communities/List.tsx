@@ -11,7 +11,7 @@ import NoSuspiciousSvg from 'components/svg/suspicious/NoSuspiciousSvg';
 import SuspiciousActivityMiddleSvg from 'components/svg/suspicious/SuspiciousActivityMiddleSvg';
 import * as Location from 'expo-location';
 import { communityOrderOptions, Screens } from 'helpers/constants';
-import { amountToCurrency } from 'helpers/currency';
+import { amountToCurrency, amountToCurrencyBN } from 'helpers/currency';
 import { chooseMediaThumbnail } from 'helpers/index';
 import {
     CommunityListRequestParams,
@@ -99,7 +99,7 @@ function ListItem(props: {
         );
     }
 
-    const claimAmount = amountToCurrency(
+    const claimAmount = amountToCurrencyBN(
         community.contract.claimAmount,
         userCurrency,
         exchangeRates
@@ -111,16 +111,14 @@ function ListItem(props: {
             : i18n.t('generic.week');
 
     let progress = 0;
-    if (community.state.beneficiaries !== 0 && community.state.raised !== '0') {
-        progress = parseFloat(
-            new BigNumber(community.state.raised)
-                .dividedBy(
-                    new BigNumber(community.contract.maxClaim).multipliedBy(
-                        community.state.beneficiaries
-                    )
-                )
-                .toString()
-        );
+    if (
+        community.state.beneficiaries !== 0 &&
+        community.state.contributed !== '0'
+    ) {
+        progress =
+            parseFloat(community.state.contributed) /
+            (parseFloat(community.contract.maxClaim) *
+                community.state.beneficiaries);
     }
     return (
         <Pressable

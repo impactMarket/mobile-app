@@ -173,7 +173,14 @@ function CreateCommunityScreen() {
             state;
         const communityDetails: CommunityCreationAttributes = {
             requestByAddress: userAddress,
-            name,
+            name: name
+                .trim()
+                .replace(
+                    /\w\S*/g,
+                    (txt) =>
+                        txt.charAt(0).toUpperCase() +
+                        txt.substring(1).toLowerCase()
+                ),
             description,
             language: userMetadata.language,
             currency,
