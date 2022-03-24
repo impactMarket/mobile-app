@@ -105,8 +105,16 @@ function CommunityManagerScreen() {
                             .call(),
                         10
                     );
+                    const communityBaseInterval = parseInt(
+                        (
+                            await communityContract.methods
+                                .baseInterval()
+                                .call()
+                        ).toString(),
+                        10
+                    );
                     const availableAtBlock =
-                        lastFundsRequest + community.contract!.baseInterval;
+                        lastFundsRequest + communityBaseInterval;
 
                     const currentBlock = await kit.web3.eth.getBlockNumber();
                     if (

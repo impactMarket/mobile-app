@@ -62,7 +62,7 @@ export function amountToCurrency(
         amount = new BigNumber(amount).div(decimals).toString();
     }
     const exchangeRate = exchangeRates[currency];
-    const hValue = parseFloat(amount) * exchangeRate;
+    const hValue = Math.round(parseFloat(amount) * exchangeRate * 100) / 100;
     const currencySymbol = getCurrencySymbol(currency);
     // if (currency.includes('/.')) {
     //     return hValue.replace('.', currencySymbol);

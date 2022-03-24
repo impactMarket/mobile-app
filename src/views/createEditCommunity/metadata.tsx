@@ -416,21 +416,21 @@ function CommunityCover(props: { edit?: boolean }) {
             cancelled: false;
         } & ImageInfo;
 
-        const { width, height } = result;
+        // const { width, height } = result;
 
         if (!result.cancelled) {
-            if (width >= 784 && height >= 784) {
-                dispatch({
-                    type: formAction.SET_COVER_IMAGE,
-                    payload: result.uri,
-                });
-                dispatch({
-                    type: formAction.SET_COVER_VALID,
-                    payload: result.uri.length > 0,
-                });
-            } else {
-                setToggleDimensionsModal(true);
-            }
+            // if (width >= 784 && height >= 784) {
+            dispatch({
+                type: formAction.SET_COVER_IMAGE,
+                payload: result.uri,
+            });
+            dispatch({
+                type: formAction.SET_COVER_VALID,
+                payload: result.uri.length > 0,
+            });
+            // } else {
+            //     setToggleDimensionsModal(true);
+            // }
         }
     };
 
@@ -624,21 +624,21 @@ function UserProfilePicture() {
             cancelled: false;
         } & ImageInfo;
 
-        const { width, height } = result;
+        // const { width, height } = result;
 
         if (!result.cancelled) {
-            if (width >= 300 && height >= 300) {
-                dispatch({
-                    type: formAction.SET_PROFILE_IMAGE,
-                    payload: result.uri,
-                });
-                dispatch({
-                    type: formAction.SET_PROFILE_VALID,
-                    payload: result.uri.length > 0,
-                });
-            } else {
-                setToggleDimensionsModal(true);
-            }
+            // if (width >= 300 && height >= 300) {
+            dispatch({
+                type: formAction.SET_PROFILE_IMAGE,
+                payload: result.uri,
+            });
+            dispatch({
+                type: formAction.SET_PROFILE_VALID,
+                payload: result.uri.length > 0,
+            });
+            // } else {
+            //     setToggleDimensionsModal(true);
+            // }
         }
     };
 

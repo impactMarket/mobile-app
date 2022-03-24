@@ -181,7 +181,7 @@ class ApiRouteCommunity {
     async listManagers(communityId: number): Promise<ManagerAttributes[]> {
         return (
             await api.get<ManagerAttributes[]>(
-                '/community/' + communityId + '/managers/'
+                '/community/' + communityId + '/managers?filterByActive=true'
             )
         ).data;
     }
