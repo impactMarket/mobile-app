@@ -14244,6 +14244,11 @@ r2@^2.0.1:
     node-fetch "^2.0.0-alpha.8"
     typedarray-to-buffer "^3.1.2"
 
+ramda@^0.24.1:
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"
+  integrity sha1-w7d1UZfzW43DUCIoJixMkd22uFc=
+
 ramda@^0.26.1:
   version "0.26.1"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
@@ -14449,6 +14454,14 @@ react-native-google-places-autocomplete@2.4.1:
     lodash.debounce "^4.0.8"
     prop-types "^15.7.2"
     qs "~6.9.1"
+
+react-native-hyperlinked-text@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-hyperlinked-text/-/react-native-hyperlinked-text-1.0.2.tgz#4d6f414ce1f892837ec794814a68c880754c34eb"
+  integrity sha512-A26SCWPCKAPzOHSVzAcXHY1tP1GGrMMuqxY0DzG20t99DizVJOqMFxE/n57uq/W8oKOCosQm10RVNHYMOQoIxA==
+  dependencies:
+    prop-types "^15.6.0"
+    ramda "^0.24.1"
 
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0, react-native-iphone-x-helper@^1.3.1:
   version "1.3.1"

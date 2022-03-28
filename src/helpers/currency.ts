@@ -57,7 +57,7 @@ export function amountToCurrency(
     exchangeRates: { [key: string]: number },
     showSymbol: boolean = true
 ): string {
-    if (amount.length > 15) {
+    if (amount.indexOf('.') === -1 && amount.length > 15) {
         const decimals = new BigNumber(10).pow(config.cUSDDecimals);
         amount = new BigNumber(amount).div(decimals).toString();
     }
@@ -70,7 +70,7 @@ export function amountToCurrency(
     if (!showSymbol) {
         return hValue.toString();
     }
-    return `${currencySymbol}${hValue}`;
+    return `${currencySymbol}${hValue.toLocaleString('en-US')}`;
 }
 
 export function amountToCurrencyBN(

@@ -678,14 +678,14 @@ function BeneficiaryScreen() {
                         </Body>
                     </View>
                 </Modal>
-                <Modal
+                {/* <Modal
                     title={i18n.t('beneficiary.blockedAccountTitle')}
                     visible={isUserBlocked}
                 >
                     <Body>
                         {i18n.t('beneficiary.blockedAccountDescription')}
                     </Body>
-                </Modal>
+                </Modal> */}
             </Portal>
         </>
     );

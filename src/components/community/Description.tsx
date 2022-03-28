@@ -2,12 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Dot from 'components/Dot';
 import ShimmerText from 'components/shimmers/Text';
+import * as WebBrowser from 'expo-web-browser';
 import { Screens } from 'helpers/constants';
 import { translate } from 'helpers/index';
 import { CommunityAttributes } from 'helpers/types/models';
 import { IRootState } from 'helpers/types/state';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
+import HyperlinkedText from 'react-native-hyperlinked-text';
 import { useSelector } from 'react-redux';
 import { ipctColors } from 'styles/index';
 
@@ -32,9 +34,11 @@ export default function Description(props: {
             ? community.description
             : community.description.slice(
                   0,
-                  community.description.indexOf('.') !== -1 &&
+                  community.description.indexOf('. ') !== -1 &&
                       community.description.length > 179
-                      ? community.description.indexOf('.', 180) + 1
+                      ? community.description.indexOf('. ', 180) !== -1
+                          ? community.description.indexOf('.', 180) + 1
+                          : community.description.length
                       : community.description.length
               );
 
@@ -103,7 +107,14 @@ export default function Description(props: {
         return (
             <>
                 <Text style={styles.textDescription}>
-                    {description.translatedText}
+                    <HyperlinkedText
+                        linkStyle={{ color: ipctColors.blueRibbon }}
+                        onLinkPress={(text) =>
+                            WebBrowser.openBrowserAsync(text)
+                        }
+                    >
+                        {description.translatedText}
+                    </HyperlinkedText>
                 </Text>
                 <Translated />
                 {props.isShort === true && (
