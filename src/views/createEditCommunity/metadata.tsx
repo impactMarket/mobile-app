@@ -262,17 +262,12 @@ function CommunityCity() {
                         <PlaceSearch
                             userLanguage={userLanguage}
                             onPress={(data) => {
-                                if (
-                                    data.description.indexOf(',') !== -1 &&
-                                    data.description.indexOf(',') !==
-                                        data.description.lastIndexOf(',')
-                                ) {
+                                if (data.description.indexOf(',') !== -1) {
                                     dispatch({
                                         type: formAction.SET_CITY,
                                         payload: data.description.substring(
                                             0,
-                                            data.description.lastIndexOf(',') -
-                                                1
+                                            data.description.lastIndexOf(',')
                                         ),
                                     });
                                     dispatch({

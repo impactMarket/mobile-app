@@ -6,6 +6,7 @@ import Button from 'components/core/Button';
 import SuccessSvg from 'components/svg/SuccessSvg';
 import WarningTriangle from 'components/svg/WarningTriangle';
 import BackSvg from 'components/svg/header/BackSvg';
+import { reloadAsync } from 'expo-updates';
 import { celoNetwork } from 'helpers/constants';
 import { formatInputAmountToTransfer } from 'helpers/currency';
 import { updateCommunityInfo } from 'helpers/index';
@@ -289,6 +290,7 @@ function CreateCommunityScreen() {
                 cancelablePromiseImages = localPromise;
                 localPromise.promise
                     .then((result) => {
+                        console.log(result);
                         if (!result[0].success || !result[1].success) {
                             setSubmittingSuccess(false);
                             setSubmittingCommunity(false);
@@ -328,9 +330,9 @@ function CreateCommunityScreen() {
         if (error === undefined) {
             await updateCommunityInfo(data.id, dispatchRedux);
             const community = await Api.community.findById(data.id);
+            setSubmittingSuccess(true);
             setSubmittedCommunityData(community);
             setSubmitting(false);
-            setSubmittingSuccess(true);
         } else {
             // Sentry.Native.captureException(e);
             setSubmitting(false);
@@ -757,25 +759,25 @@ function CreateCommunityScreen() {
                     modeType="gray"
                     style={{ width: '100%' }}
                     onPress={() => {
-                        navigation.goBack();
                         if (submittedCommunityData !== undefined) {
-                            batch(() => {
-                                dispatchRedux(
-                                    setCommunityMetadata(submittedCommunityData)
-                                );
-                                dispatchRedux(
-                                    setUserManager({
-                                        id: 0,
-                                        communityId:
-                                            submittedCommunityData.publicId,
-                                        active: true,
-                                        address: userAddress,
-                                        createdAt: new Date(),
-                                        updatedAt: new Date(),
-                                        readRules: false,
-                                    })
-                                );
-                            });
+                            // batch(() => {
+                            //     dispatchRedux(
+                            //         setCommunityMetadata(submittedCommunityData)
+                            //     );
+                            //     dispatchRedux(
+                            //         setUserManager({
+                            //             id: 0,
+                            //             communityId:
+                            //                 submittedCommunityData.publicId,
+                            //             active: true,
+                            //             address: userAddress,
+                            //             createdAt: new Date(),
+                            //             updatedAt: new Date(),
+                            //             readRules: false,
+                            //         })
+                            //     );
+                            // });
+                            reloadAsync();
                         }
                     }}
                 >

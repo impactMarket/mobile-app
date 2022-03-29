@@ -189,16 +189,16 @@ export const ApiRequests = {
         }
         // wait until image exists on real endpoint
         // TODO: improve this
-        const delay = (ms: number) =>
-            new Promise((resolve) => setTimeout(resolve, ms));
-        let tries = 30;
-        while (tries-- > 0) {
-            await delay(1000);
-            const res = await ApiRequests.head(preSigned.media.url);
-            if (res !== undefined && res.status === 200) {
-                return true;
-            }
-        }
-        return false;
+        // const delay = (ms: number) =>
+        //     new Promise((resolve) => setTimeout(resolve, ms));
+        // let tries = 30;
+        // while (tries-- > 0) {
+        //     await delay(1000);
+        //     const res = await ApiRequests.head(preSigned.media.url);
+        //     if (res !== undefined && res.status === 200) {
+        //         return true;
+        //     }
+        // }
+        return true;
     },
 };
