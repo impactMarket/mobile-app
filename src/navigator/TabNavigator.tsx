@@ -7,11 +7,11 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import i18n from 'assets/i18n';
 import ProfileSvg from 'components/svg/ProfileSvg';
 import BackSvg from 'components/svg/header/BackSvg';
-import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
+// import ImpactMarketHeaderLogoSVG from 'components/svg/header/ImpactMarketHeaderLogoSVG';
 import { Screens } from 'helpers/constants';
 import { IRootState } from 'helpers/types/state';
 import React, { useLayoutEffect } from 'react';
-import { Platform, Dimensions, View } from 'react-native';
+import { Platform, Dimensions, View, Image } from 'react-native';
 import { Host } from 'react-native-portalize';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
@@ -60,7 +60,14 @@ function getHeaderRight(routeName: string, defaultValue: string) {
 function getHeaderLeft(routeName: string) {
     switch (routeName) {
         case Screens.Communities:
-            return <ImpactMarketHeaderLogoSVG width={107.62} height={36.96} />;
+            return (
+                <Image
+                    source={require('../assets/images/header-logo.png')}
+                    style={{ marginLeft: 18, width: 107.62, height: 36.96 }}
+                    width={107.62}
+                    height={36.96}
+                />
+            );
         case Screens.CommunityManager:
         case Screens.Beneficiary:
         case undefined:

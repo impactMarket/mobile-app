@@ -2,14 +2,13 @@ import { RouteProp } from '@react-navigation/native';
 import i18n from 'assets/i18n';
 import Button from 'components/core/Button';
 import DiversitySvg from 'components/svg/welcome/DiversitySvg';
-import LogoBlueSvg from 'components/svg/welcome/LogoBlueSvg';
 import { Screens } from 'helpers/constants';
 import {
     SetAppFromWelcomeScreen,
     setOpenAuthModal,
 } from 'helpers/redux/actions/app';
 import React, { useState } from 'react';
-import { Dimensions, ScrollView, View } from 'react-native';
+import { Dimensions, ScrollView, View, Image } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
@@ -34,7 +33,12 @@ function Welcome() {
                         alignItems: 'center',
                     }}
                 >
-                    <LogoBlueSvg style={{ height: 74, marginTop: 25 }} />
+                    <Image
+                        source={require('../../assets/images/header-logo.png')}
+                        style={{ width: 250, height: 80 }}
+                        width={250}
+                        height={80}
+                    />
                 </View>
                 <DiversitySvg
                     width={Dimensions.get('screen').width}

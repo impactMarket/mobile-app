@@ -249,15 +249,6 @@ export async function getUserBalance(kit: ContractKit, address: string) {
     return new BigNumber(cUSDBalanceBig.toString());
 }
 
-/**
- * @deprecated Migrated to external lib. Use `frequencyToText`
- */
-export function claimFrequencyToText(frequency: number): string {
-    if (frequency === 86400) return i18n.t('createCommunity.daily');
-    if (frequency === 604800) return i18n.t('createCommunity.weekly');
-    return 'errors.unknown';
-}
-
 export function calculateCommunityProgress(
     toCalculte: string /*'raised' | 'claimed'*/,
     community: CommunityAttributes

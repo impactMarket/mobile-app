@@ -1,4 +1,3 @@
-import { estimateCommunityRemainFunds } from '@impact-market/utils';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import { amountToCurrency } from 'helpers/currency';
@@ -17,6 +16,28 @@ import {
 } from 'styles/index';
 
 import WarningTriangle from './svg/WarningTriangle';
+
+function estimateCommunityRemainFunds(community: {
+    contract: any;
+    state: any;
+}): number {
+    if (community.contract === undefined || community.state === undefined) {
+        return 0;
+    }
+
+    const { beneficiaries, raised, claimed } = community.state;
+    const { baseInterval, claimAmount } = community.contract;
+    const remaining = new BigNumber(raised).minus(new BigNumber(claimed));
+
+    let communityLimitPerDay = new BigNumber(claimAmount).multipliedBy(
+        beneficiaries
+    );
+    if (baseInterval === 120960) {
+        communityLimitPerDay = communityLimitPerDay.div(7);
+    }
+
+    return Math.floor(remaining.div(communityLimitPerDay).toNumber());
+}
 
 interface ICommuntyStatusProps {
     community: CommunityAttributes;

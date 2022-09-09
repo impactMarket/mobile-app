@@ -1,5 +1,6 @@
 import './global';
 import 'intl-pluralrules';
+// import 'text-encoding-polyfill';
 import { newKitFromWeb3 } from '@celo/contractkit';
 import { fontMap } from '@impact-market/ui-kit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,7 +39,7 @@ import { resetUserApp, setUserLanguage } from 'helpers/redux/actions/user';
 import rootSagas from 'helpers/redux/sagas';
 import { isReadyRef, navigationRef } from 'helpers/rootNavigation';
 import moment from 'moment';
-import React from 'react';
+// import React from 'react';
 import {
     Image,
     View,
@@ -83,11 +84,7 @@ import Navigator from './src/navigator';
 import Api from './src/services/api';
 import { registerForPushNotifications } from './src/services/pushNotifications';
 import { ipctColors } from './src/styles';
-if (__DEV__) {
-    import('./ReactotronConfig').then(() =>
-        console.log('Reactotron Configured')
-    );
-}
+import React from 'react';
 
 BigNumber.config({ EXPONENTIAL_AT: [-7, 30] });
 const kit = newKitFromWeb3(new Web3(config.jsonRpc));
@@ -180,14 +177,14 @@ Sentry.init({
         // sampling decision for this transaction
 
         // if ipct-activity is defined, send all error to sentry
-        if (
-            samplingContext.transactionContext.tags &&
-            samplingContext.transactionContext.tags['ipct-activity'] !==
-                undefined
-        ) {
-            return 0.5;
-        }
-        return 0.1;
+        // if (
+        //     samplingContext.transactionContext.tags &&
+        //     samplingContext.transactionContext.tags['ipct-activity'] !==
+        //         undefined
+        // ) {
+        //     return 0.5;
+        // }
+        return 0;
     },
 });
 
@@ -474,37 +471,41 @@ class App extends React.Component<any, IAppState> {
                     <NavigationContainer
                         theme={navigationTheme}
                         linking={this.linking}
-                        onReady={() => {
-                            const currentRouteName =
-                                navigationRef.current?.getCurrentRoute()?.name;
-                            if (currentRouteName !== undefined) {
-                                Analytics.setCurrentScreen(currentRouteName);
-                            }
-                            routingInstrumentation.registerNavigationContainer(
-                                navigationRef
-                            );
-                            // Save the current route name for later comparision
-                            this.currentRouteName = currentRouteName;
-                            (isReadyRef.current as any) = true; // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
-                        }}
-                        onStateChange={() => {
-                            const previousRouteName = this.currentRouteName;
-                            const currentRouteName =
-                                navigationRef.current?.getCurrentRoute()?.name;
+                        // onReady={() => {
+                        //     const currentRouteName =
+                        //         navigationRef.current?.getCurrentRoute()?.name;
+                        //     if (currentRouteName !== undefined) {
+                        //         // Analytics.logEvent('screen_view', {
+                        //         //     screen_name: currentRouteName,
+                        //         // });
+                        //     }
+                        //     routingInstrumentation.registerNavigationContainer(
+                        //         navigationRef
+                        //     );
+                        //     // Save the current route name for later comparision
+                        //     this.currentRouteName = currentRouteName;
+                        //     (isReadyRef.current as any) = true; // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31065
+                        // }}
+                        // onStateChange={() => {
+                        //     const previousRouteName = this.currentRouteName;
+                        //     const currentRouteName =
+                        //         navigationRef.current?.getCurrentRoute()?.name;
 
-                            if (
-                                previousRouteName !== currentRouteName &&
-                                currentRouteName !== undefined
-                            ) {
-                                // The line below uses the expo-firebase-analytics tracker
-                                // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
-                                // Change this line to use another Mobile analytics SDK
-                                Analytics.setCurrentScreen(currentRouteName);
-                            }
+                        //     if (
+                        //         previousRouteName !== currentRouteName &&
+                        //         currentRouteName !== undefined
+                        //     ) {
+                        //         // The line below uses the expo-firebase-analytics tracker
+                        //         // https://docs.expo.io/versions/latest/sdk/firebase-analytics/
+                        //         // Change this line to use another Mobile analytics SDK
+                        //         // Analytics.logEvent('screen_view', {
+                        //         //     screen_name: currentRouteName,
+                        //         // });
+                        //     }
 
-                            // Save the current route name for later comparision
-                            this.currentRouteName = currentRouteName;
-                        }}
+                        //     // Save the current route name for later comparision
+                        //     this.currentRouteName = currentRouteName;
+                        // }}
                         ref={navigationRef}
                     >
                         <Host>

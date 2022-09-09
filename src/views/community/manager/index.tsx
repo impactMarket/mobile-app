@@ -1,5 +1,4 @@
 import { Body, Button, colors, WarningIcon } from '@impact-market/ui-kit';
-import { frequencyToText } from '@impact-market/utils';
 import i18n from 'assets/i18n';
 import BigNumber from 'bignumber.js';
 import BaseCommunity from 'components/BaseCommunity';
@@ -265,7 +264,7 @@ function CommunityManagerScreen() {
 
         let communityLimitPerDay = parseFloat(claimAmount) * beneficiaries;
 
-        if (frequencyToText(baseInterval) === 'week') {
+        if (baseInterval === 120960) {
             communityLimitPerDay = communityLimitPerDay / 7;
         }
 

@@ -49,9 +49,6 @@
             "pre-commit": "lint-staged"
         }
     },
-    "engines": {
-        "node": "14.19.0"
-    },
     "dependencies": {
         "@apollo/client": "^3.5.8",
         "@celo-tools/use-contractkit": "^2.0.1",
@@ -59,7 +56,7 @@
         "@expo-google-fonts/inter": "0.2.0",
         "@expo-google-fonts/manrope": "0.2.0",
         "@expo/metro-config": "0.1.84",
-        "@impact-market/translations": "git://github.com/impactMarket/translations.git",
+        "@impact-market/translations": "impactMarket/translations",
         "@impact-market/ui-kit": "0.0.6",
         "@impact-market/utils": "1.0.10",
         "@react-native-async-storage/async-storage": "1.15.0",
